@@ -2,11 +2,11 @@
   "artifact_type": "scope_closure_map",
   "schema_version": "0.1",
   "source_prd_ref": "docs/product/prd.md",
-  "closure_status": "planned",
+  "closure_status": "partial",
   "items": [
     {
       "scope_item": "Record, contract, replay, report",
-      "status": "planned",
+      "status": "partial",
       "task_refs": [
         "T1",
         "T2",
@@ -15,7 +15,24 @@
         "T5",
         "T6"
       ],
-      "evidence_refs": []
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T1/validation-report.json",
+        ".factory/artifacts/task-runs/T1/work-proof-marker.json"
+      ],
+      "implemented_task_refs": [
+        "T1"
+      ],
+      "remaining_task_refs": [
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6"
+      ],
+      "notes": [
+        "T1 established the pinned Go CLI skeleton, command-result envelope, exit-code constants, config defaults, and validation lanes.",
+        "Record/replay/report scope remains partial until schemas, init/check, record, replay, and report tasks close."
+      ]
     },
     {
       "scope_item": "Live verify, boundaries, CI, share",
@@ -47,6 +64,6 @@
       ]
     }
   ],
-  "full_mvp_closure_rule": "The MVP is complete only when every required acceptance group is implemented or explicitly accepted with documented delivery debt by a human owner."
+  "full_mvp_closure_rule": "The MVP is complete only when every required acceptance group is implemented or explicitly accepted with documented delivery debt by a human owner.",
+  "last_updated_at": "2026-06-08T23:54:09Z"
 }
-

@@ -32,6 +32,8 @@ Every change should improve one or more of:
 - Do not require a hosted Lumyn account for MVP workflows.
 - Do not treat stochastic eval as a default hard CI gate.
 - Do not broaden MVP scope into MCP, event assertions, hosted dashboards, runtime enforcement, production trace import, or multi-provider panels.
+- Build the CLI/core in Go `1.26.4` unless a later approved architecture decision changes the runtime.
+- Keep T1 standard-library-only; new dependencies must be pinned and justified.
 
 ## 4. Required Boundaries
 
@@ -41,7 +43,8 @@ Every change should improve one or more of:
 - `.factory/artifacts/`: durable Factory planning, validation, closure, and handoff artifacts.
 - `.factory/tmp/`: ignored local execution scratch space.
 - `schemas/`: versioned schemas.
-- `src/lumyn/`: implementation.
+- `cmd/lumyn/`: CLI entrypoint.
+- `internal/`: Go implementation packages.
 - `tests/`: automated tests.
 - `examples/`: deterministic examples and fixtures.
 - `workflows/`, `cassettes/`, `baselines/`, `runs/`: Lumyn product artifact surfaces.
@@ -60,3 +63,11 @@ Before PR or merge, run:
 
 If any command is skipped, the validation report must record why.
 
+## 6. Alignment Pins
+
+- Runtime: Go `1.26.4`.
+- Module path: `github.com/Clyra-AI/lumyn`.
+- Distribution: standalone binary first, Homebrew next, PyPI not primary.
+- First eval provider: OpenAI-compatible HTTP adapter behind a provider interface.
+- Artifact namespace: Factory artifacts in `.factory/artifacts/`; transient Factory material in `.factory/tmp/`; product artifacts in `workflows/`, `cassettes/`, `runs/`, `baselines/`, `schemas/`, and `examples/`.
+- Live sandbox, model-key, and network work is blocked until deterministic replay foundation passes and a human approves credential/network posture.

@@ -16,7 +16,8 @@ Post-MVP exclusions include MCP recording, event assertions, hosted dashboards, 
 
 ## Repository Layout
 
-- `src/lumyn/`: implementation
+- `cmd/lumyn/`: CLI entrypoint
+- `internal/`: Go implementation packages
 - `tests/`: tests
 - `schemas/`: versioned schemas
 - `examples/`: deterministic fixtures and examples
@@ -35,3 +36,8 @@ make test-contracts
 make prepush-full
 ```
 
+## Runtime Pins
+
+- Go `1.26.4`
+- Module path `github.com/Clyra-AI/lumyn`
+- Standalone binary first, Homebrew next

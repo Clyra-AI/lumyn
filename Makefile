@@ -1,24 +1,39 @@
-.PHONY: lint-fast test-fast test-contracts prepush-full
+GO ?= go
+PKG_LIST := ./cmd/... ./internal/...
+
+.PHONY: fmt lint-fast test-fast test-contracts build prepush-full
 
 lint-fast:
 	test -f AGENTS.md
 	test -f WORKFLOW.md
 	test -f README.md
 	test -f docs/product/prd.md
+	test -f .tool-versions
+	test -f go.mod
 	test -d .factory/artifacts
-	test -d src/lumyn
+	test -d cmd/lumyn
+	test -d internal
 	test -d tests
-	! grep -RIn "TODO\\|TBD\\|FIXME" AGENTS.md WORKFLOW.md README.md docs src tests pyproject.toml
+	! grep -RIn "TODO\\|TBD\\|FIXME" AGENTS.md WORKFLOW.md README.md docs cmd internal tests
+	grep -q '^golang 1.26.4$$' .tool-versions
+	grep -q '^go 1.26.4$$' go.mod
+	$(GO) vet $(PKG_LIST)
+
+fmt:
+	gofmt -w $$(find cmd internal tests -name '*.go' -type f)
 
 test-fast:
-	python3 -m unittest discover -s tests
+	$(GO) test ./... -count=1
 
 test-contracts:
-	python3 -m unittest discover -s tests
+	$(GO) test ./... -count=1
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json
 
-prepush-full: lint-fast test-fast test-contracts
+build:
+	$(GO) build -o .factory/tmp/lumyn ./cmd/lumyn
+
+prepush-full: fmt lint-fast test-fast test-contracts build

@@ -26,6 +26,7 @@ Lumyn accepts work from:
 - Plan approval is required before implementation work starts.
 - Merge approval is required before protected branch updates.
 - Human approval is required before any live sandbox credential, model key, or non-deterministic eval is used.
+- Human approval is required before changing the pinned runtime, module path, or primary distribution target.
 
 ## Artifact Rules
 
@@ -40,6 +41,15 @@ Lumyn accepts work from:
 - Contract lane: `make test-contracts`
 - Full lane: `make prepush-full`
 
+## Runtime And Distribution Pins
+
+- Go version: `1.26.4`
+- Module path: `github.com/Clyra-AI/lumyn`
+- Primary distribution: standalone binary
+- Secondary distribution: Homebrew
+- Non-primary distribution: PyPI
+- First eval provider: OpenAI-compatible HTTP adapter
+
 ## Stop Conditions
 
 Stop and request human decision if:
@@ -49,4 +59,3 @@ Stop and request human decision if:
 - a proposed change writes outside declared allowed paths
 - redaction confidence is unknown for persisted artifacts
 - implementation would satisfy a command while violating explicit PRD scope exclusions
-

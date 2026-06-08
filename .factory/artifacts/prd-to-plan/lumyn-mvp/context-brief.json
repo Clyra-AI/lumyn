@@ -20,7 +20,9 @@
     }
   ],
   "assumptions": [
-    "Use Python for the initial CLI scaffold unless a human changes the runtime decision.",
+    "Use Go 1.26.4 for the CLI/core runtime.",
+    "Distribute as a standalone binary first, then Homebrew; PyPI is not a primary channel for Go Lumyn.",
+    "Use an OpenAI-compatible HTTP adapter as the first live eval provider interface when eval work starts.",
     "Keep the initial implementation deterministic and local-only.",
     "Treat live sandbox verification and live eval as required MVP work, but blocked until credential and network posture are explicitly approved.",
     "Use repo-relative artifact references only."
@@ -29,17 +31,17 @@
     {
       "id": "runtime_distribution",
       "question": "Should Lumyn remain a Python CLI for the MVP or switch to Go/Node before implementation begins?",
-      "default_assumption": "Python CLI bootstrap."
+      "default_assumption": "Go 1.26.4 CLI, standalone binary first, Homebrew later."
     },
     {
       "id": "first_eval_provider",
       "question": "Which provider adapter should ship first for MVP eval?",
-      "default_assumption": "OpenAI-compatible adapter behind a provider interface."
+      "default_assumption": "OpenAI-compatible HTTP adapter behind a provider interface."
     },
     {
       "id": "sandbox_credential_posture",
       "question": "What sandbox key source and network allowlist should be approved for live verify?",
-      "default_assumption": "No live credentials during deterministic bootstrap."
+      "default_assumption": "No live credentials during deterministic bootstrap; approve sandbox/model/network later."
     }
   ],
   "decision_points": [
@@ -62,6 +64,47 @@
     "ship-pr",
     "post-merge-monitor"
   ],
-  "created_at": "2026-06-08T22:45:00Z"
+  "created_at": "2026-06-08T22:45:00Z",
+  "alignment_decisions": {
+    "runtime": {
+      "language": "go",
+      "go_version": "1.26.4",
+      "module_path": "github.com/Clyra-AI/lumyn",
+      "dependency_policy": "standard library only for T1; add pinned dependencies only when required by later tasks"
+    },
+    "distribution": {
+      "primary": "standalone_binary",
+      "secondary": "homebrew_after_first_binary",
+      "not_primary": "pypi"
+    },
+    "first_eval_provider": {
+      "adapter": "openai_compatible_http",
+      "sdk_policy": "no heavy SDK dependency for MVP bootstrap",
+      "config_fields": [
+        "provider",
+        "model",
+        "temperature",
+        "base_url",
+        "api_key_env"
+      ]
+    },
+    "artifact_namespaces": {
+      "factory_artifacts": ".factory/artifacts/",
+      "factory_transient": ".factory/tmp/",
+      "workflows": "workflows/",
+      "cassettes": "cassettes/",
+      "runs": "runs/",
+      "baselines": "baselines/",
+      "schemas": "schemas/",
+      "examples": "examples/"
+    },
+    "live_work_policy": {
+      "sandbox_network_model_key_work": "defer_until_deterministic_replay_foundation_passes",
+      "requires_human_approval": [
+        "sandbox credential posture",
+        "model credential posture",
+        "network allowlist"
+      ]
+    }
+  }
 }
-
