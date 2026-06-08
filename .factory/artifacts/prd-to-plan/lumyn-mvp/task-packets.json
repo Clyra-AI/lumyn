@@ -1,0 +1,335 @@
+{
+  "artifact_type": "task_packet_set",
+  "schema_version": "0.1",
+  "source_prd_ref": "docs/product/prd.md",
+  "tasks": [
+    {
+      "task_id": "T1",
+      "slice_type": "vertical",
+      "objective": "Create deterministic CLI skeleton, command-result JSON envelope, exit code constants, config discovery, and unit tests.",
+      "risk_class": "low",
+      "blocked_by": [],
+      "allowed_paths": [
+        "src/lumyn/",
+        "tests/",
+        "pyproject.toml",
+        "README.md",
+        "docs/dev/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/",
+        "runs/",
+        "cassettes/"
+      ],
+      "validation_commands": [
+        "make lint-fast",
+        "make test-fast",
+        "make test-contracts"
+      ],
+      "acceptance_checks": [
+        "CLI exposes stable command-result envelope shape.",
+        "Exit-code constants match docs/product/prd.md.",
+        "Tests pass without network, sandbox credentials, or model keys."
+      ]
+    },
+    {
+      "task_id": "T2",
+      "slice_type": "foundation",
+      "objective": "Define initial schemas for workflow contract, command result, proof strength, cassette, evidence event, and redaction config.",
+      "risk_class": "medium",
+      "blocked_by": [
+        "T1"
+      ],
+      "allowed_paths": [
+        "schemas/",
+        "tests/",
+        "docs/architecture/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/"
+      ],
+      "validation_commands": [
+        "make test-fast",
+        "make test-contracts"
+      ],
+      "acceptance_checks": [
+        "Schemas are versioned and test-covered.",
+        "Schema names map to required schemas in docs/product/prd.md."
+      ]
+    },
+    {
+      "task_id": "T3",
+      "slice_type": "vertical",
+      "objective": "Implement `lumyn init` and `lumyn check` for local OpenAPI/docs source intake and workflow-relevant source findings.",
+      "risk_class": "medium",
+      "blocked_by": [
+        "T1",
+        "T2"
+      ],
+      "allowed_paths": [
+        "src/lumyn/",
+        "tests/",
+        "examples/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/"
+      ],
+      "validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "`lumyn init` writes valid config.",
+        "`lumyn check` emits concrete source references."
+      ]
+    },
+    {
+      "task_id": "T4",
+      "slice_type": "vertical",
+      "objective": "Implement record/redact/normalize pipeline and draft workflow/cassette artifacts for a deterministic mock API.",
+      "risk_class": "medium",
+      "blocked_by": [
+        "T2",
+        "T3"
+      ],
+      "allowed_paths": [
+        "src/lumyn/",
+        "tests/",
+        "examples/mock-api/",
+        "examples/workflows/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/"
+      ],
+      "validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "Standard auth headers are redacted before persistence.",
+        "State bindings and validator drafts are generated with confidence labels."
+      ]
+    },
+    {
+      "task_id": "T5",
+      "slice_type": "vertical",
+      "objective": "Implement replay verification, stale cassette detection, `api_state`, and limited `trace_assertion` validators.",
+      "risk_class": "medium",
+      "blocked_by": [
+        "T4"
+      ],
+      "allowed_paths": [
+        "src/lumyn/",
+        "tests/",
+        "examples/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/"
+      ],
+      "validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "Replay is deterministic without network.",
+        "Proof-gap and strong-proof examples are distinguishable."
+      ]
+    },
+    {
+      "task_id": "T6",
+      "slice_type": "vertical",
+      "objective": "Implement local trace/report rendering and `lumyn demo` with bundled reports.",
+      "risk_class": "medium",
+      "blocked_by": [
+        "T5"
+      ],
+      "allowed_paths": [
+        "src/lumyn/",
+        "tests/",
+        "examples/traces/",
+        "README.md"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/"
+      ],
+      "validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "Report first screen shows workflow, result, proof strength, why, evidence, fix target, and next command.",
+        "`lumyn demo` opens bundled reports without model key, sandbox, or hosted account."
+      ]
+    },
+    {
+      "task_id": "T7",
+      "slice_type": "vertical",
+      "objective": "Implement live known-path verify with sandbox config, settle/retry readbacks, cleanup, and orphan evidence.",
+      "risk_class": "high",
+      "blocked_by": [
+        "T5"
+      ],
+      "allowed_paths": [
+        "src/lumyn/",
+        "tests/",
+        "docs/dev/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/"
+      ],
+      "validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "Live verify is disabled without explicit sandbox configuration.",
+        "Cleanup success or orphan evidence is reported."
+      ],
+      "requires_human_approval": [
+        "sandbox credential posture",
+        "network allowlist"
+      ]
+    },
+    {
+      "task_id": "T8",
+      "slice_type": "vertical",
+      "objective": "Implement action-boundary object and deterministic boundary checks.",
+      "risk_class": "high",
+      "blocked_by": [
+        "T5"
+      ],
+      "allowed_paths": [
+        "src/lumyn/",
+        "schemas/",
+        "tests/",
+        "examples/workflows/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/"
+      ],
+      "validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "Final-state pass plus forbidden-path violation fails the workflow.",
+        "Unenforced declared controls never report as passed."
+      ]
+    },
+    {
+      "task_id": "T9",
+      "slice_type": "vertical",
+      "objective": "Implement GitHub Action, JUnit output, PR-comment summary, changed-source mapping, and proof-honest README badge.",
+      "risk_class": "high",
+      "blocked_by": [
+        "T5",
+        "T8"
+      ],
+      "allowed_paths": [
+        ".github/workflows/",
+        "src/lumyn/",
+        "tests/",
+        "README.md"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/"
+      ],
+      "validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "CI emits JUnit-style output.",
+        "PR summary names changed sources and affected workflows.",
+        "Badge never reports stale cassettes as green."
+      ]
+    },
+    {
+      "task_id": "T10",
+      "slice_type": "vertical",
+      "objective": "Implement `lumyn share` with redaction re-check and fail-closed export.",
+      "risk_class": "high",
+      "blocked_by": [
+        "T6"
+      ],
+      "allowed_paths": [
+        "src/lumyn/",
+        "tests/",
+        "examples/traces/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/"
+      ],
+      "validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "Share re-runs redaction before export.",
+        "Share fails closed when any value cannot be confidently redacted."
+      ]
+    },
+    {
+      "task_id": "T11",
+      "slice_type": "vertical",
+      "objective": "Implement live eval provider interface, one provider adapter, stateless run defaults, context modes, repeated runs, and trace capture.",
+      "risk_class": "high",
+      "blocked_by": [
+        "T5",
+        "T8"
+      ],
+      "allowed_paths": [
+        "src/lumyn/",
+        "tests/",
+        "docs/architecture/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/"
+      ],
+      "validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "Eval supports surface_only and contract_assisted modes.",
+        "Eval reports run count and pass rate.",
+        "Eval does not become the default hard CI gate."
+      ],
+      "requires_human_approval": [
+        "model provider",
+        "model credential posture",
+        "network allowlist"
+      ]
+    },
+    {
+      "task_id": "T12",
+      "slice_type": "vertical",
+      "objective": "Implement eval baseline comparison, drift labels, cost/duration reporting, and diagnostic failure classification.",
+      "risk_class": "high",
+      "blocked_by": [
+        "T11"
+      ],
+      "allowed_paths": [
+        "src/lumyn/",
+        "tests/",
+        "baselines/",
+        "examples/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/"
+      ],
+      "validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "Eval compares against saved baseline where configured.",
+        "Model snapshot uncertainty is labeled as drift risk.",
+        "Failures include concrete trace evidence."
+      ]
+    }
+  ]
+}
+

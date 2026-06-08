@@ -1,0 +1,10 @@
+[project]
+name = "lumyn"
+version = "0.0.0"
+description = "Local-first workflow completion evidence CLI."
+requires-python = ">=3.11"
+
+[tool.lumyn]
+prd_path = "docs/product/prd.md"
+factory_artifact_root = ".factory/artifacts"
+

@@ -1,0 +1,76 @@
+{
+  "artifact_type": "execution_plan",
+  "schema_version": "0.1",
+  "plan_id": "lumyn-mvp-execution-001",
+  "source_prd_ref": "docs/product/prd.md",
+  "context_brief_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json",
+  "validation_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+  "risk_class": "medium",
+  "strategy": "serial_by_default_until_boundaries_stabilize",
+  "scope_exclusions": [
+    "MCP recording",
+    "event assertions",
+    "hosted dashboard",
+    "runtime enforcement",
+    "production trace import",
+    "multi-provider eval panels",
+    "training shared models on private artifacts"
+  ],
+  "parallelism_policy": {
+    "default": "serial",
+    "parallel_allowed_after": "schema, artifact, and CLI boundaries are stable",
+    "requires": [
+      "path ownership",
+      "independent validation",
+      "merge coordination"
+    ]
+  },
+  "workstreams": [
+    {
+      "id": "ws1_cli_contracts",
+      "name": "CLI, Command Envelope, And Artifact Contracts",
+      "risk_class": "low",
+      "tasks": [
+        "T1",
+        "T2",
+        "T3"
+      ]
+    },
+    {
+      "id": "ws2_record_replay",
+      "name": "Record, Redact, Normalize, Replay",
+      "risk_class": "medium",
+      "tasks": [
+        "T4",
+        "T5",
+        "T6"
+      ]
+    },
+    {
+      "id": "ws3_live_verify_ci",
+      "name": "Live Verify, Cleanup, Boundaries, CI, Share",
+      "risk_class": "high",
+      "tasks": [
+        "T7",
+        "T8",
+        "T9",
+        "T10"
+      ]
+    },
+    {
+      "id": "ws4_live_eval",
+      "name": "Live Agent Eval",
+      "risk_class": "high",
+      "tasks": [
+        "T11",
+        "T12"
+      ]
+    }
+  ],
+  "initial_slice": {
+    "task_id": "T1",
+    "objective": "Build the deterministic CLI skeleton, command-result envelope, exit-code constants, config path handling, and tests.",
+    "reason": "This creates the executable shell for later PRD acceptance work without requiring live credentials."
+  }
+}
+

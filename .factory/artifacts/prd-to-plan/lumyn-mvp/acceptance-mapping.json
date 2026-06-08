@@ -1,0 +1,56 @@
+{
+  "artifact_type": "acceptance_mapping",
+  "schema_version": "0.1",
+  "source_prd_ref": "docs/product/prd.md#Acceptance Tests",
+  "groups": [
+    {
+      "group_id": "record_contract_replay_report",
+      "required": true,
+      "task_refs": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6"
+      ],
+      "acceptance_refs": [
+        "Record, Contract, Replay, Report Acceptance Tests"
+      ]
+    },
+    {
+      "group_id": "live_verify_boundary_ci_share",
+      "required": true,
+      "task_refs": [
+        "T7",
+        "T8",
+        "T9",
+        "T10"
+      ],
+      "acceptance_refs": [
+        "Live Verify, Boundary, CI, And Share Acceptance Tests"
+      ],
+      "requires_human_approval": [
+        "sandbox credential posture",
+        "network allowlist"
+      ]
+    },
+    {
+      "group_id": "live_agent_eval",
+      "required": true,
+      "task_refs": [
+        "T11",
+        "T12"
+      ],
+      "acceptance_refs": [
+        "Live Agent Eval Acceptance Tests"
+      ],
+      "requires_human_approval": [
+        "model provider",
+        "model credential posture",
+        "network allowlist"
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,52 @@
+{
+  "artifact_type": "scope_closure_map",
+  "schema_version": "0.1",
+  "source_prd_ref": "docs/product/prd.md",
+  "closure_status": "planned",
+  "items": [
+    {
+      "scope_item": "Record, contract, replay, report",
+      "status": "planned",
+      "task_refs": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6"
+      ],
+      "evidence_refs": []
+    },
+    {
+      "scope_item": "Live verify, boundaries, CI, share",
+      "status": "planned",
+      "task_refs": [
+        "T7",
+        "T8",
+        "T9",
+        "T10"
+      ],
+      "evidence_refs": [],
+      "blockers": [
+        "sandbox credential posture",
+        "network allowlist"
+      ]
+    },
+    {
+      "scope_item": "Live agent eval",
+      "status": "planned",
+      "task_refs": [
+        "T11",
+        "T12"
+      ],
+      "evidence_refs": [],
+      "blockers": [
+        "model provider",
+        "model credential posture",
+        "network allowlist"
+      ]
+    }
+  ],
+  "full_mvp_closure_rule": "The MVP is complete only when every required acceptance group is implemented or explicitly accepted with documented delivery debt by a human owner."
+}
+

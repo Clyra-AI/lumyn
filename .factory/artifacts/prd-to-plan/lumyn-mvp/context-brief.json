@@ -1,0 +1,67 @@
+{
+  "artifact_type": "context_brief",
+  "schema_version": "0.1",
+  "brief_id": "lumyn-mvp-context-001",
+  "source_prd_ref": "docs/product/prd.md",
+  "repo_ref": ".",
+  "objective": "Turn the Lumyn OSS MVP PRD into governed implementation slices for a local-first CLI.",
+  "evidence_summary": [
+    {
+      "ref": "docs/product/prd.md#MVP Required Work",
+      "summary": "The full MVP requires record/contract/replay/report, live verify/boundaries/CI, and live agent eval."
+    },
+    {
+      "ref": "docs/product/prd.md#Acceptance Tests",
+      "summary": "The MVP is not complete until all acceptance groups pass."
+    },
+    {
+      "ref": "WORKFLOW.md",
+      "summary": "Deterministic bootstrap cannot use live credentials or network without human approval."
+    }
+  ],
+  "assumptions": [
+    "Use Python for the initial CLI scaffold unless a human changes the runtime decision.",
+    "Keep the initial implementation deterministic and local-only.",
+    "Treat live sandbox verification and live eval as required MVP work, but blocked until credential and network posture are explicitly approved.",
+    "Use repo-relative artifact references only."
+  ],
+  "alignment_questions": [
+    {
+      "id": "runtime_distribution",
+      "question": "Should Lumyn remain a Python CLI for the MVP or switch to Go/Node before implementation begins?",
+      "default_assumption": "Python CLI bootstrap."
+    },
+    {
+      "id": "first_eval_provider",
+      "question": "Which provider adapter should ship first for MVP eval?",
+      "default_assumption": "OpenAI-compatible adapter behind a provider interface."
+    },
+    {
+      "id": "sandbox_credential_posture",
+      "question": "What sandbox key source and network allowlist should be approved for live verify?",
+      "default_assumption": "No live credentials during deterministic bootstrap."
+    }
+  ],
+  "decision_points": [
+    "runtime_distribution",
+    "first_eval_provider",
+    "sandbox_credential_posture",
+    "public_release_visibility"
+  ],
+  "scope_risks": [
+    "The MVP is broad because live verify, CI, share, and eval are all required before closure.",
+    "Credential brokering is not needed for deterministic bootstrap but becomes blocking for live verify and eval.",
+    "Redaction must be designed before any trace/cassette/report persistence is trusted."
+  ],
+  "recommended_worker_chain": [
+    "scout-context",
+    "execution-compiler",
+    "task-executor",
+    "validation-gate",
+    "code-review",
+    "ship-pr",
+    "post-merge-monitor"
+  ],
+  "created_at": "2026-06-08T22:45:00Z"
+}
+

@@ -1,0 +1,40 @@
+{
+  "artifact_type": "risk_classification",
+  "schema_version": "0.1",
+  "source_prd_ref": "docs/product/prd.md",
+  "default_risk_class": "medium",
+  "risk_rules": [
+    {
+      "risk_class": "low",
+      "applies_to": [
+        "repo operating pack",
+        "deterministic CLI skeleton",
+        "local tests with no network"
+      ],
+      "validation_independence": "same agent may write code and tests if red/green evidence is preserved"
+    },
+    {
+      "risk_class": "medium",
+      "applies_to": [
+        "schemas",
+        "record/replay",
+        "redaction pipeline",
+        "report rendering"
+      ],
+      "validation_independence": "validation-gate or code-review must assess test adequacy"
+    },
+    {
+      "risk_class": "high",
+      "applies_to": [
+        "live sandbox credentials",
+        "network allowlists",
+        "model provider keys",
+        "GitHub Actions",
+        "share/export redaction",
+        "action boundaries"
+      ],
+      "validation_independence": "requires independent validation, security review, or human approval before merge"
+    }
+  ]
+}
+

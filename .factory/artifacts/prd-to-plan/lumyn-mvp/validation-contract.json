@@ -1,0 +1,41 @@
+{
+  "artifact_type": "validation_contract",
+  "schema_version": "0.1",
+  "contract_id": "lumyn-mvp-validation-001",
+  "source_prd_ref": "docs/product/prd.md",
+  "required_commands": {
+    "fast": [
+      "make lint-fast",
+      "make test-fast"
+    ],
+    "contract": [
+      "make test-contracts"
+    ],
+    "full": [
+      "make prepush-full"
+    ]
+  },
+  "bootstrap_constraints": [
+    "No live network calls during deterministic bootstrap.",
+    "No sandbox credentials or model keys until human approval.",
+    "No unredacted secrets in committed artifacts.",
+    "All Factory references must be repo-relative."
+  ],
+  "acceptance_groups": [
+    "record_contract_replay_report",
+    "live_verify_boundary_ci_share",
+    "live_agent_eval"
+  ],
+  "proof_requirements": [
+    "Validation reports must record command, exit status, and skipped-command reason when applicable.",
+    "Scope closure must map every MVP acceptance group to implemented, partial, missing, blocked, or deferred.",
+    "Live credential-dependent work must remain blocked until credential posture is approved."
+  ],
+  "stop_conditions": [
+    "implementation requires undeclared live credentials",
+    "implementation writes outside allowed paths",
+    "redaction confidence is unknown for persisted artifacts",
+    "tests pass while explicit PRD scope remains unrepresented in scope closure"
+  ]
+}
+
