@@ -1,0 +1,59 @@
+{
+  "artifact_type": "validation_report",
+  "schema_version": "0.1",
+  "task_id": "T1",
+  "source_task_packet_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T1",
+  "status": "pass",
+  "validated_at": "2026-06-08T23:54:09Z",
+  "commands": [
+    {
+      "command": "make prepush-full",
+      "status": "pass"
+    },
+    {
+      "command": "git diff --check",
+      "status": "pass"
+    },
+    {
+      "command": "rg -n '/Users/|Projects/council|Projects/factory|lumyn_oss_prd_mvp' . --glob '!/.git/**'",
+      "status": "pass",
+      "notes": "No machine-local references found."
+    }
+  ],
+  "acceptance_results": [
+    {
+      "check": "CLI exposes stable command-result envelope shape.",
+      "status": "pass",
+      "evidence": "cmd/lumyn/main_test.go and internal/result/result_test.go"
+    },
+    {
+      "check": "Exit-code constants match docs/product/prd.md.",
+      "status": "pass",
+      "evidence": "internal/exitcode/exitcode.go and internal/exitcode/exitcode_test.go"
+    },
+    {
+      "check": "Go module path is github.com/Clyra-AI/lumyn and Go version is pinned to 1.26.4.",
+      "status": "pass",
+      "evidence": "go.mod and .tool-versions"
+    },
+    {
+      "check": "T1 has no external runtime dependencies unless explicitly justified and pinned.",
+      "status": "pass",
+      "evidence": "go.mod has no require block."
+    },
+    {
+      "check": "Tests pass without network, sandbox credentials, or model keys.",
+      "status": "pass",
+      "evidence": "make prepush-full"
+    },
+    {
+      "check": "Unknown commands fail closed with exit code 2 while still emitting the command-result JSON envelope.",
+      "status": "pass",
+      "evidence": "cmd/lumyn/main_test.go"
+    }
+  ],
+  "skipped_commands": [],
+  "live_work": "not_used",
+  "credential_use": "none",
+  "network_use": "none"
+}

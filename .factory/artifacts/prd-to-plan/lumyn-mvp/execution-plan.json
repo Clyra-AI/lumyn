@@ -69,8 +69,19 @@
   ],
   "initial_slice": {
     "task_id": "T1",
-    "objective": "Build the deterministic CLI skeleton, command-result envelope, exit-code constants, config path handling, and tests.",
+    "objective": "Build the deterministic Go CLI skeleton, command-result envelope, exit-code constants, config path handling, and tests.",
     "reason": "This creates the executable shell for later PRD acceptance work without requiring live credentials."
+  },
+  "alignment_decisions_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json#/alignment_decisions",
+  "runtime": {
+    "language": "go",
+    "go_version": "1.26.4",
+    "module_path": "github.com/Clyra-AI/lumyn",
+    "dependency_policy": "standard library only for T1; add pinned dependencies only when required by later tasks"
+  },
+  "distribution": {
+    "primary": "standalone_binary",
+    "secondary": "homebrew_after_first_binary",
+    "not_primary": "pypi"
   }
 }
-

@@ -6,15 +6,26 @@
     {
       "task_id": "T1",
       "slice_type": "vertical",
-      "objective": "Create deterministic CLI skeleton, command-result JSON envelope, exit code constants, config discovery, and unit tests.",
+      "objective": "Create deterministic Go CLI skeleton, command-result JSON envelope, exit code constants, config discovery, and unit tests.",
       "risk_class": "low",
       "blocked_by": [],
       "allowed_paths": [
-        "src/lumyn/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+        ".factory/artifacts/task-runs/T1/",
+        ".tool-versions",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "cmd/lumyn/",
+        "internal/",
         "tests/",
-        "pyproject.toml",
+        "go.mod",
+        "go.sum",
+        "Makefile",
         "README.md",
-        "docs/dev/"
+        "docs/dev/",
+        "docs/architecture/",
+        "pyproject.toml",
+        "src/lumyn/"
       ],
       "forbidden_paths": [
         ".git/",
@@ -30,7 +41,27 @@
       "acceptance_checks": [
         "CLI exposes stable command-result envelope shape.",
         "Exit-code constants match docs/product/prd.md.",
-        "Tests pass without network, sandbox credentials, or model keys."
+        "Go module path is github.com/Clyra-AI/lumyn and Go version is pinned to 1.26.4.",
+        "T1 has no external runtime dependencies unless explicitly justified and pinned.",
+        "Tests pass without network, sandbox credentials, or model keys.",
+        "Unknown commands fail closed with exit code 2 while still emitting the command-result JSON envelope."
+      ],
+      "runtime": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library only for T1; add pinned dependencies only when required by later tasks"
+      },
+      "distribution": {
+        "primary": "standalone_binary",
+        "secondary": "homebrew_after_first_binary",
+        "not_primary": "pypi"
+      },
+      "scope_note": "T1 includes alignment drift correction from Python placeholder to pinned Go CLI runtime before implementation continues.",
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "scope_closure_map"
       ]
     },
     {
@@ -301,7 +332,18 @@
         "model provider",
         "model credential posture",
         "network allowlist"
-      ]
+      ],
+      "first_eval_provider": {
+        "adapter": "openai_compatible_http",
+        "sdk_policy": "no heavy SDK dependency for MVP bootstrap",
+        "config_fields": [
+          "provider",
+          "model",
+          "temperature",
+          "base_url",
+          "api_key_env"
+        ]
+      }
     },
     {
       "task_id": "T12",
@@ -332,4 +374,3 @@
     }
   ]
 }
-

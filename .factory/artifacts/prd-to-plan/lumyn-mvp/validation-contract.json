@@ -19,7 +19,10 @@
     "No live network calls during deterministic bootstrap.",
     "No sandbox credentials or model keys until human approval.",
     "No unredacted secrets in committed artifacts.",
-    "All Factory references must be repo-relative."
+    "All Factory references must be repo-relative.",
+    "Go toolchain must be pinned to 1.26.4 before implementation proceeds.",
+    "T1 must not add unpinned or floating dependencies.",
+    "Standalone binary is the primary distribution target; Homebrew follows after first binary; PyPI is not primary."
   ],
   "acceptance_groups": [
     "record_contract_replay_report",
@@ -36,6 +39,45 @@
     "implementation writes outside allowed paths",
     "redaction confidence is unknown for persisted artifacts",
     "tests pass while explicit PRD scope remains unrepresented in scope closure"
-  ]
+  ],
+  "runtime_pins": {
+    "language": "go",
+    "go_version": "1.26.4",
+    "module_path": "github.com/Clyra-AI/lumyn",
+    "dependency_policy": "standard library only for T1; add pinned dependencies only when required by later tasks"
+  },
+  "distribution_pins": {
+    "primary": "standalone_binary",
+    "secondary": "homebrew_after_first_binary",
+    "not_primary": "pypi"
+  },
+  "first_eval_provider": {
+    "adapter": "openai_compatible_http",
+    "sdk_policy": "no heavy SDK dependency for MVP bootstrap",
+    "config_fields": [
+      "provider",
+      "model",
+      "temperature",
+      "base_url",
+      "api_key_env"
+    ]
+  },
+  "artifact_namespaces": {
+    "factory_artifacts": ".factory/artifacts/",
+    "factory_transient": ".factory/tmp/",
+    "workflows": "workflows/",
+    "cassettes": "cassettes/",
+    "runs": "runs/",
+    "baselines": "baselines/",
+    "schemas": "schemas/",
+    "examples": "examples/"
+  },
+  "live_work_policy": {
+    "sandbox_network_model_key_work": "defer_until_deterministic_replay_foundation_passes",
+    "requires_human_approval": [
+      "sandbox credential posture",
+      "model credential posture",
+      "network allowlist"
+    ]
+  }
 }
-
