@@ -14,7 +14,7 @@
 
 - `make lint-fast`: repo operating pack and layout checks.
 - `make test-fast`: Go unit tests.
-- `make test-contracts`: unit tests, Factory planning artifact presence, downstream pilot evidence validation, and required schema-file presence.
+- `make test-contracts`: unit tests, Factory planning artifact presence, downstream pilot evidence validation, repo-pack guide propagation validation, and required schema-file presence.
 - `make prepush-full`: full local gate before PR or merge.
 - `make audit-remote-protection`: networked GitHub audit for live `main` branch protection and the `protect-main-from-direct-push` ruleset.
 
@@ -83,6 +83,9 @@ non-applicable reason.
 - Any new dependency must be pinned in `go.mod`, justified in the task evidence, and covered by validation.
 - Schema/artifact changes must include representative validation coverage in `schemas/`.
 - Changes to CI, review, shipping, or post-merge workflow must update `WORKFLOW.md`, this guide, and the relevant Factory planning artifacts in the same branch.
+- Changes that affect T3+ task planning must keep `scripts/validate_repo_pack.py`
+  green so product task packets preserve CI lanes, 12-level test matrix refs,
+  scanner gates, engineering policy refs, and architecture guidance refs.
 
 ## Docs Parity
 
@@ -116,6 +119,7 @@ non-applicable reason.
 - Pilot closure path: `.factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json`.
 - Pilot repair task path: `.factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/task-packet.json`.
 - Scope closure source: `.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json`.
+- Repo-pack propagation validator: `scripts/validate_repo_pack.py`.
 - Evidence must use repo-relative paths and record skipped-command reasons.
 
 ## Distribution Pins
