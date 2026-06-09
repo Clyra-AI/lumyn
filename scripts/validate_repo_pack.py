@@ -60,6 +60,8 @@ STOP_CONDITION_CATEGORIES = {
     "architecture_policies": ["architecture", "systems-thinking", "systems thinking", "adr", "fail-closed"],
 }
 
+TASK_ORDER_RE = re.compile(r"^T(?P<version>\d+(?:\.\d+)*)(?:[A-Za-z].*)?$", re.IGNORECASE)
+
 
 def fail(message: str) -> None:
     raise AssertionError(message)
@@ -116,6 +118,31 @@ def depends_on(task_id_value: str, baseline_task_id: str, tasks_by_id: dict[str,
         fail(f"{task_id_value}.blocked_by must be a list")
     for dependency in [str(value) for value in blocked_by]:
         if dependency == baseline_task_id or depends_on(dependency, baseline_task_id, tasks_by_id, seen):
+            return True
+    return False
+
+
+def task_order_key(value: Any) -> tuple[int, ...] | None:
+    if not isinstance(value, str):
+        return None
+    match = TASK_ORDER_RE.match(value.strip())
+    if not match:
+        return None
+    return tuple(int(part) for part in match.group("version").split("."))
+
+
+def version_gte(candidate: tuple[int, ...], baseline: tuple[int, ...]) -> bool:
+    width = max(len(candidate), len(baseline))
+    return candidate + (0,) * (width - len(candidate)) >= baseline + (0,) * (width - len(baseline))
+
+
+def at_or_after_baseline(task: dict[str, Any], baseline_task_id: str) -> bool:
+    baseline_key = task_order_key(baseline_task_id)
+    if baseline_key is None:
+        return False
+    for value in [task_id(task), task.get("phase")]:
+        candidate_key = task_order_key(value)
+        if candidate_key is not None and version_gte(candidate_key, baseline_key):
             return True
     return False
 
@@ -257,11 +284,14 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
     if not isinstance(tasks, list):
         fail("task-packets.json must contain tasks list")
     tasks_by_id = {task_id(task): task for task in tasks if isinstance(task, dict) and task_id(task)}
-    scoped_tasks = [
-        task
-        for candidate_id, task in tasks_by_id.items()
-        if depends_on(candidate_id, baseline_task_id, tasks_by_id)
-    ]
+    scoped_tasks = []
+    for candidate_id, task in tasks_by_id.items():
+        depends_on_baseline = depends_on(candidate_id, baseline_task_id, tasks_by_id)
+        ordered_after_baseline = at_or_after_baseline(task, baseline_task_id)
+        if ordered_after_baseline and not depends_on_baseline:
+            fail(f"{candidate_id} is at or after propagation baseline {baseline_task_id} but does not depend on it")
+        if depends_on_baseline or ordered_after_baseline:
+            scoped_tasks.append(task)
     if not scoped_tasks:
         fail(f"no task packets are at or after propagation baseline {baseline_task_id}")
     for task in scoped_tasks:
@@ -284,7 +314,74 @@ def validate_validation_contract(contract: dict[str, Any]) -> None:
         fail(f"validation-contract.json stop_conditions missing guide categories: {missing}")
 
 
+def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]:
+    return {
+        "task_id": task_id_value,
+        "blocked_by": blocked_by,
+        "test_matrix_refs": [{"tier": "Tier 1 Unit", "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix"}],
+        "ci_lane_refs": [
+            {
+                "lane": "core",
+                "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+                "command_refs": ["make test-contracts"],
+            }
+        ],
+        "security_scanner_gates": {
+            "required": True,
+            "scanner": "CodeQL",
+            "workflow_ref": ".github/workflows/codeql.yml",
+            "status_check": "CodeQL analyze",
+        },
+        "engineering_policy_refs": [
+            {
+                "policy": "docs_parity",
+                "source_ref": "docs/dev/dev_guides.md#docs-parity",
+                "rule": "docs move with behavior",
+            }
+        ],
+        "architecture_guidance_refs": [
+            {"source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map", "rule": "record state and feedback"}
+        ],
+    }
+
+
+def run_self_test() -> int:
+    valid_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
+    validate_task_packets(valid_packets, "T2.6")
+
+    disconnected_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", [])]}
+    try:
+        validate_task_packets(disconnected_packets, "T2.6")
+    except AssertionError as exc:
+        if "does not depend on it" not in str(exc):
+            raise
+    else:
+        fail("self-test expected disconnected T3 task to fail")
+
+    placeholder_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
+    placeholder_packets["tasks"][1]["ci_lane_refs"] = [{}]
+    try:
+        validate_task_packets(placeholder_packets, "T2.6")
+    except AssertionError as exc:
+        if "ci_lane_refs" not in str(exc):
+            raise
+    else:
+        fail("self-test expected placeholder refs to fail")
+
+    print("repo-pack validator self-test passed")
+    return 0
+
+
 def main() -> int:
+    if sys.argv[1:] == ["--self-test"]:
+        try:
+            return run_self_test()
+        except AssertionError as exc:
+            print(f"repo-pack validator self-test failed: {exc}", file=sys.stderr)
+            return 2
+    if sys.argv[1:]:
+        print("usage: validate_repo_pack.py [--self-test]", file=sys.stderr)
+        return 2
     try:
         validate_guides()
         plan = load_json(EXECUTION_PLAN)
