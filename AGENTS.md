@@ -74,6 +74,12 @@ A PR merged without latest-head Codex review evidence is a process escape and
 must be recorded in PR lifecycle evidence with a follow-up fix or blocker.
 CodeQL Go analysis is the security scanner risk lane. Scanner-gated work cannot
 close without CodeQL status evidence or an approved scanner exception.
+GitHub `main` must be protected by branch protection plus the
+`protect-main-from-direct-push` ruleset. The live control must require pull
+requests, strict `validate` and `CodeQL analyze` checks, admin enforcement,
+conversation resolution, and no force-push or deletion bypass. Verify the live
+remote state with `make audit-remote-protection` when GitHub credentials are
+available.
 
 ## 6. Alignment Pins
 
