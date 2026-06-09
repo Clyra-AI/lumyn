@@ -41,6 +41,8 @@ REQUIRED_TASK_FIELDS = [
     "plan_drift_policy_ref",
     "required_worker_chain",
     "lifecycle_gates",
+    "allowed_paths",
+    "forbidden_paths",
     "worker_type",
     "factoryd_runtime",
     "validation_commands",
@@ -742,6 +744,8 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
         return value == expected_required_worker_chain(task)
     if field == "lifecycle_gates":
         return has_lifecycle_gates(value)
+    if field in ["allowed_paths", "forbidden_paths"]:
+        return has_nonempty_list(value)
     if field == "worker_type":
         return value == "codex_cli"
     if field == "factoryd_runtime":
@@ -1212,6 +1216,8 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
             "pr_lifecycle_report_required": True,
             "skip_policy": "approved_exception_required",
         },
+        "allowed_paths": ["cmd/", "internal/", "schemas/", "tests/", "docs/", ".factory/artifacts/"],
+        "forbidden_paths": [".git/", ".factory/tmp/", ".factoryd/"],
         "worker_type": "codex_cli",
         "factoryd_runtime": {
             "state_dir": ".factoryd/",
