@@ -366,10 +366,12 @@ def contains_machine_local_path(value: Any) -> bool:
 
 def task_slice_type(task: dict[str, Any]) -> str:
     rationale = task.get("slice_rationale")
-    if isinstance(rationale, dict) and has_nonempty_string(rationale.get("slice_type")):
-        return str(rationale["slice_type"])
-    value = task.get("slice_type")
-    return value if isinstance(value, str) else ""
+    nested = str(rationale["slice_type"]) if isinstance(rationale, dict) and has_nonempty_string(rationale.get("slice_type")) else ""
+    top_level = task.get("slice_type")
+    top_level = top_level if isinstance(top_level, str) else ""
+    if nested and top_level and nested != top_level:
+        fail(f"{task_id(task)} has conflicting slice_type declarations")
+    return nested or top_level
 
 
 def iter_required_worker_chains(value: Any, path: str = "$") -> list[tuple[str, list[Any]]]:
@@ -1196,6 +1198,19 @@ def run_self_test() -> int:
     }
     del nested_slice_packets["tasks"][1]["slice_type"]
     validate_task_packets(nested_slice_packets, "T2.6")
+
+    conflicting_slice_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    conflicting_slice_packets["tasks"][1]["slice_type"] = "foundation"
+    conflicting_slice_packets["tasks"][1]["slice_rationale"]["slice_type"] = "vertical"
+    try:
+        validate_task_packets(conflicting_slice_packets, "T2.6")
+    except AssertionError as exc:
+        if "conflicting slice_type declarations" not in str(exc):
+            raise
+    else:
+        fail("self-test expected conflicting slice type declarations to fail")
 
     deprecated_worker_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
