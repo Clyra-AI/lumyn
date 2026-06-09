@@ -56,6 +56,10 @@ non-applicable reason.
 - CI command: `make prepush-full`.
 - PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<task_id>/pr-lifecycle-report.json`.
 - Lifecycle-gated tasks require local validation, CI/status evidence, review evidence when required, ship evidence, post-merge evidence, and a PR lifecycle report or an explicit approved exception.
+- Passive Codex review settle is required before merge when the repository review integration is enabled.
+- Green CI alone is not merge-ready. The latest PR head must have Codex approval, thumbs-up, actionable-resolved, carry-forward, or an approved exception before merge.
+- Do not merge manually through `gh pr merge`, the GitHub UI, or a connector before passive Codex review settles.
+- A PR merged without latest-head Codex review evidence is a process escape and must be recorded in PR lifecycle evidence with a follow-up fix or blocker.
 
 ## Security Scanner Enforcement
 
@@ -102,6 +106,7 @@ non-applicable reason.
 - Validation report path: `.factory/artifacts/task-runs/<task_id>/validation-report.json`.
 - Work-proof marker path: `.factory/artifacts/task-runs/<task_id>/work-proof-marker.json`.
 - PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<task_id>/pr-lifecycle-report.json`.
+- Codex review evidence source: latest-head PR review, thumbs-up, actionable-resolved, carry-forward, or approved exception before merge.
 - Scanner evidence source: GitHub Actions `CodeQL analyze`.
 - Scope closure source: `.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json`.
 - Evidence must use repo-relative paths and record skipped-command reasons.

@@ -23,6 +23,11 @@ lint-fast:
 	grep -q 'make prepush-full' .github/workflows/validate.yml
 	grep -q 'github/codeql-action/init@v3' .github/workflows/codeql.yml
 	grep -q 'languages: go' .github/workflows/codeql.yml
+	grep -q 'Passive Codex review settle is required before merge' AGENTS.md
+	grep -q 'Green CI alone is not merge-ready' WORKFLOW.md
+	grep -q 'Do not merge manually through `gh pr merge`' docs/dev/dev_guides.md
+	grep -q 'process escape' WORKFLOW.md
+	grep -q 'process escape' docs/dev/dev_guides.md
 	$(GO) vet $(PKG_LIST)
 
 fmt:
@@ -42,6 +47,8 @@ test-contracts:
 	test -f .factory/artifacts/task-runs/T2.5/work-proof-marker.json
 	test -f .factory/artifacts/task-runs/T2.6/validation-report.json
 	test -f .factory/artifacts/task-runs/T2.6/work-proof-marker.json
+	test -f .factory/artifacts/pr-lifecycle/T2.5-pr5/pr-lifecycle-report.json
+	python3 -m json.tool .factory/artifacts/pr-lifecycle/T2.5-pr5/pr-lifecycle-report.json >/dev/null
 	test -f schemas/workflow-contract.schema.json
 	test -f schemas/expected-outcome.schema.json
 	test -f schemas/validator.schema.json

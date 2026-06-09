@@ -51,6 +51,10 @@ Lumyn accepts work from:
 - Post-merge monitoring: default branch health must be checked after merge and recorded when the task requires lifecycle evidence.
 - PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<task_id>/pr-lifecycle-report.json`.
 - Unavailable CI or review gates require an explicit approved exception; they are not silently treated as passed.
+- Passive Codex review settle is required before merge when the repository review integration is enabled.
+- Green CI alone is not merge-ready. The latest PR head must have Codex approval, thumbs-up, actionable-resolved, carry-forward, or an approved exception before merge.
+- Do not merge manually through `gh pr merge`, the GitHub UI, or a connector before passive Codex review settles.
+- A PR merged without latest-head Codex review evidence is a process escape and must be recorded in PR lifecycle evidence with a follow-up fix or blocker.
 
 ## Runtime And Distribution Pins
 
@@ -71,6 +75,7 @@ Stop and request human decision if:
 - redaction confidence is unknown for persisted artifacts
 - implementation would satisfy a command while violating explicit PRD scope exclusions
 - lifecycle gates are required but review, ship, CI/status, post-merge, or PR lifecycle evidence is missing without an approved exception
+- a PR is merge-ready by CI but lacks latest-head passive Codex review settle evidence
 - scanner-gated work lacks CodeQL status evidence or an approved scanner exception
 - a product task omits required test-matrix refs, scanner gates, or architecture guidance refs inherited from the repo operating pack
 - a product task omits required CI lane refs, docs parity, output contract, release integrity, provenance, systems-thinking, TDD, ADR, performance, reliability, or fail-closed refs inherited from the repo operating pack

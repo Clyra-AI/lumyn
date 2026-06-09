@@ -65,6 +65,13 @@ If any command is skipped, the validation report must record why.
 GitHub Actions `validate` must run the same full gate for pull requests and
 `main` pushes. Required review, shipping, post-merge, and PR lifecycle evidence
 must be recorded when a task packet declares lifecycle gates.
+Passive Codex review settle is required before merge. Green CI alone is not
+merge-ready when Codex review is enabled.
+Do not merge manually through `gh pr merge`, the GitHub UI, or a connector until
+the latest PR head has Codex approval, thumbs-up, actionable-resolved,
+carry-forward, or an approved exception.
+A PR merged without latest-head Codex review evidence is a process escape and
+must be recorded in PR lifecycle evidence with a follow-up fix or blocker.
 CodeQL Go analysis is the security scanner risk lane. Scanner-gated work cannot
 close without CodeQL status evidence or an approved scanner exception.
 
