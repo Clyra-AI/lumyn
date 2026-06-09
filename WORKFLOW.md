@@ -41,6 +41,16 @@ Lumyn accepts work from:
 - Contract lane: `make test-contracts`
 - Full lane: `make prepush-full`
 
+## PR Lifecycle Baseline
+
+- Local validation gate: `make prepush-full`.
+- CI status check: GitHub Actions workflow `.github/workflows/validate.yml`, check name `validate`, runs `make prepush-full`.
+- Structured review: `code-review` must produce review evidence when risk, workflow policy, validation findings, or review policy require it.
+- Shipping evidence: `ship-pr` must produce or reference a ship packet before merge.
+- Post-merge monitoring: default branch health must be checked after merge and recorded when the task requires lifecycle evidence.
+- PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<task_id>/pr-lifecycle-report.json`.
+- Unavailable CI or review gates require an explicit approved exception; they are not silently treated as passed.
+
 ## Runtime And Distribution Pins
 
 - Go version: `1.26.4`
@@ -59,3 +69,4 @@ Stop and request human decision if:
 - a proposed change writes outside declared allowed paths
 - redaction confidence is unknown for persisted artifacts
 - implementation would satisfy a command while violating explicit PRD scope exclusions
+- lifecycle gates are required but review, ship, CI/status, post-merge, or PR lifecycle evidence is missing without an approved exception

@@ -31,7 +31,14 @@
 - `internal/config/`: config discovery and repo-relative path handling.
 - `internal/version/`: version metadata.
 - `schemas/`: executable JSON Schema contracts for workflow, evidence, cassette, proof, result, redaction, and related artifact models.
+- `.github/workflows/validate.yml`: repository delivery gate that runs `make prepush-full` for PR and `main` validation.
+- `.factory/artifacts/pr-lifecycle/`: Factory delivery evidence tying PR validation, CI/status checks, review, shipping, merge, and post-merge monitoring together.
 
 Use Go `1.26.4`. T1 stays standard-library-only. T2 introduces the pinned
 `github.com/santhosh-tekuri/jsonschema/v5` validator for executable schema
 tests.
+
+The T2.5 lifecycle baseline is delivery infrastructure for Factory-governed
+work. It does not replace the later product-facing T9 work, which remains
+responsible for Lumyn's own GitHub Action/JUnit/PR-comment behavior as an MVP
+feature.

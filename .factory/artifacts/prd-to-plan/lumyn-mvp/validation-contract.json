@@ -22,7 +22,8 @@
     "All Factory references must be repo-relative.",
     "Go toolchain must be pinned to 1.26.4 before implementation proceeds.",
     "T1 must not add unpinned or floating dependencies.",
-    "Standalone binary is the primary distribution target; Homebrew follows after first binary; PyPI is not primary."
+    "Standalone binary is the primary distribution target; Homebrew follows after first binary; PyPI is not primary.",
+    "Repository delivery lifecycle baseline must exist before T3 product implementation starts."
   ],
   "acceptance_groups": [
     "record_contract_replay_report",
@@ -32,13 +33,15 @@
   "proof_requirements": [
     "Validation reports must record command, exit status, and skipped-command reason when applicable.",
     "Scope closure must map every MVP acceptance group to implemented, partial, missing, blocked, or deferred.",
-    "Live credential-dependent work must remain blocked until credential posture is approved."
+    "Live credential-dependent work must remain blocked until credential posture is approved.",
+    "Lifecycle-gated tasks must carry review, ship, post-merge, and PR lifecycle evidence or an explicit approved exception."
   ],
   "stop_conditions": [
     "implementation requires undeclared live credentials",
     "implementation writes outside allowed paths",
     "redaction confidence is unknown for persisted artifacts",
-    "tests pass while explicit PRD scope remains unrepresented in scope closure"
+    "tests pass while explicit PRD scope remains unrepresented in scope closure",
+    "CI/status, review, shipping, post-merge, or PR lifecycle evidence is missing for a lifecycle-gated task"
   ],
   "runtime_pins": {
     "language": "go",
@@ -70,7 +73,8 @@
     "runs": "runs/",
     "baselines": "baselines/",
     "schemas": "schemas/",
-    "examples": "examples/"
+    "examples": "examples/",
+    "pr_lifecycle": ".factory/artifacts/pr-lifecycle/"
   },
   "live_work_policy": {
     "sandbox_network_model_key_work": "defer_until_deterministic_replay_foundation_passes",

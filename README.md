@@ -26,6 +26,7 @@ Post-MVP exclusions include MCP recording, event assertions, hosted dashboards, 
 - `baselines/`: eval baselines
 - `runs/`: Lumyn run outputs
 - `.factory/artifacts/`: Factory planning and evidence artifacts
+- `.factory/artifacts/pr-lifecycle/`: Factory PR lifecycle evidence for validation, CI, review, ship, merge, and post-merge gates
 
 ## Validation
 
@@ -35,6 +36,9 @@ make test-fast
 make test-contracts
 make prepush-full
 ```
+
+GitHub Actions runs `make prepush-full` through the `validate` workflow on pull
+requests and pushes to `main`.
 
 ## Runtime Pins
 

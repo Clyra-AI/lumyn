@@ -1,0 +1,66 @@
+{
+  "artifact_type": "validation_report",
+  "schema_version": "0.1",
+  "task_id": "T2.5",
+  "source_task_packet_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2.5",
+  "status": "pass",
+  "validated_at": "2026-06-09T03:00:29Z",
+  "commands": [
+    {
+      "command": "make lint-fast",
+      "status": "pass"
+    },
+    {
+      "command": "make test-fast",
+      "status": "pass"
+    },
+    {
+      "command": "go build -o .factory/tmp/lumyn ./cmd/lumyn",
+      "status": "pass"
+    },
+    {
+      "command": "python3 -m json.tool .factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json >/dev/null && python3 -m json.tool .factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json >/dev/null && python3 -m json.tool .factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json >/dev/null && python3 -m json.tool .factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json >/dev/null && python3 -m json.tool .factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json >/dev/null",
+      "status": "pass"
+    },
+    {
+      "command": "make test-contracts",
+      "status": "pass"
+    },
+    {
+      "command": "make prepush-full",
+      "status": "pass"
+    }
+  ],
+  "acceptance_results": [
+    {
+      "check": ".github/workflows/validate.yml exists and runs make prepush-full on pull_request and pushes to main.",
+      "status": "pass",
+      "evidence": ".github/workflows/validate.yml"
+    },
+    {
+      "check": "Makefile lint-fast verifies the validate workflow uses Go 1.26.4 and make prepush-full.",
+      "status": "pass",
+      "evidence": "Makefile lint-fast"
+    },
+    {
+      "check": "WORKFLOW.md, AGENTS.md, README.md, docs/dev/dev_guides.md, and docs/architecture/architecture_guides.md document CI/status, review, ship-pr, post-merge, and PR lifecycle evidence.",
+      "status": "pass",
+      "evidence": "repo-local operating pack"
+    },
+    {
+      "check": "T3 and later product implementation depend on the lifecycle baseline.",
+      "status": "pass",
+      "evidence": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json"
+    },
+    {
+      "check": "The later product-facing T9 CI/JUnit/PR-comment feature remains separate from this delivery baseline.",
+      "status": "pass",
+      "evidence": "docs/architecture/architecture_guides.md"
+    }
+  ],
+  "skipped_commands": [],
+  "live_work": "not_used",
+  "credential_use": "none",
+  "network_use": "none",
+  "dependency_changes": []
+}

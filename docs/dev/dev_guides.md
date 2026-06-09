@@ -17,6 +17,14 @@
 - `make test-contracts`: unit tests, Factory planning artifact presence, and required schema-file presence.
 - `make prepush-full`: full local gate before PR or merge.
 
+## CI And PR Lifecycle
+
+- GitHub Actions workflow: `.github/workflows/validate.yml`.
+- Required check name: `validate`.
+- CI command: `make prepush-full`.
+- PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<task_id>/pr-lifecycle-report.json`.
+- Lifecycle-gated tasks require local validation, CI/status evidence, review evidence when required, ship evidence, post-merge evidence, and a PR lifecycle report or an explicit approved exception.
+
 ## Bootstrap Rules
 
 - Deterministic bootstrap must not require network, sandbox credentials, or model keys.
@@ -26,6 +34,7 @@
 - T1 must use the Go standard library only.
 - Any new dependency must be pinned in `go.mod`, justified in the task evidence, and covered by validation.
 - Schema/artifact changes must include representative validation coverage in `schemas/`.
+- Changes to CI, review, shipping, or post-merge workflow must update `WORKFLOW.md`, this guide, and the relevant Factory planning artifacts in the same branch.
 
 ## Distribution Pins
 
