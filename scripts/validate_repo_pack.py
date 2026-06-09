@@ -158,7 +158,7 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
         if not isinstance(scanner, str) or not scanner.strip():
             return False
         if value.get("required") is False:
-            return True
+            return isinstance(value.get("exception_ref"), str) and bool(value["exception_ref"].strip())
         return any(
             isinstance(value.get(key), str) and value[key].strip()
             for key in ["workflow_ref", "status_check", "evidence_ref"]
@@ -395,6 +395,16 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected placeholder refs to fail")
+
+    disabled_scanner_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
+    disabled_scanner_packets["tasks"][1]["security_scanner_gates"] = {"required": False, "scanner": "CodeQL"}
+    try:
+        validate_task_packets(disabled_scanner_packets, "T2.6")
+    except AssertionError as exc:
+        if "security_scanner_gates" not in str(exc):
+            raise
+    else:
+        fail("self-test expected disabled scanner without exception to fail")
 
     print("repo-pack validator self-test passed")
     return 0
