@@ -35,7 +35,7 @@
   "assumptions": [
     "Use Go 1.26.4 for the CLI/core runtime.",
     "Distribute as a standalone binary first, then Homebrew; PyPI is not a primary channel for Go Lumyn.",
-    "Use an OpenAI-compatible HTTP adapter as the first live eval provider interface when eval work starts.",
+    "Use OpenAI-compatible HTTP and Anthropic Messages HTTP adapters behind the live eval provider interface when eval work starts.",
     "Keep the initial implementation deterministic and local-only.",
     "Treat live sandbox verification and live eval as required MVP work, but blocked until credential and network posture are explicitly approved.",
     "Use repo-relative artifact references only.",
@@ -53,8 +53,8 @@
     },
     {
       "id": "first_eval_provider",
-      "question": "Which provider adapter should ship first for MVP eval?",
-      "default_assumption": "OpenAI-compatible HTTP adapter behind a provider interface."
+      "question": "Which provider adapters should ship for MVP eval?",
+      "default_assumption": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters behind a provider interface."
     },
     {
       "id": "sandbox_credential_posture",
@@ -98,14 +98,19 @@
     },
     "first_eval_provider": {
       "adapter": "openai_compatible_http",
-      "sdk_policy": "no heavy SDK dependency for MVP bootstrap",
+      "sdk_policy": "no heavy SDK dependency for MVP bootstrap; use thin HTTP adapters unless a later task justifies a pinned SDK",
       "config_fields": [
         "provider",
         "model",
         "temperature",
         "base_url",
         "api_key_env"
-      ]
+      ],
+      "supported_mvp_adapters": [
+        "openai_compatible_http",
+        "anthropic_messages_http"
+      ],
+      "anthropic_adapter": "anthropic_messages_http"
     },
     "artifact_namespaces": {
       "factory_artifacts": ".factory/artifacts/",
@@ -150,7 +155,7 @@
     "blocking_decisions": [
       "runtime: Go 1.26.4 with module github.com/Clyra-AI/lumyn",
       "distribution: standalone binary first, Homebrew later, PyPI not primary",
-      "provider: OpenAI-compatible HTTP adapter first for eval, no SDK-heavy dependency during deterministic bootstrap",
+      "provider: OpenAI-compatible HTTP and Anthropic Messages HTTP adapters for eval, no SDK-heavy dependency during deterministic bootstrap",
       "artifact namespace: Factory evidence in .factory/artifacts/ and product artifacts in workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
       "credential and live-work posture: no network, sandbox credentials, or model keys until deterministic replay passes and human approval unlocks them",
       "dependency policy: standard library first; pinned dependencies only when required and justified"

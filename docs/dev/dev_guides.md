@@ -135,6 +135,6 @@ non-applicable reason.
 
 ## Provider Pins
 
-- First eval provider: OpenAI-compatible HTTP adapter.
+- MVP eval providers: OpenAI-compatible HTTP and Anthropic Messages HTTP adapters.
 - Provider config shape: `provider`, `model`, `temperature`, `base_url`, `api_key_env`.
 - Eval provider work is blocked until deterministic replay foundation passes and model-key/network posture is approved.
