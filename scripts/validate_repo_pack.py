@@ -99,8 +99,36 @@ ADR_CONTRACT_TOKENS = [
     "proof",
 ]
 
+MACHINE_LOCAL_PATH_RE = re.compile(
+    r"(?<![A-Za-z0-9+.-])(?:/(?:Users|home|workspace|tmp|private/tmp|var/folders|Volumes)(?:/|$)|[A-Za-z]:[\\/])"
+)
+NO_CONTRACT_IMPACT_BREAKERS = [
+    " but ",
+    " except ",
+    " however ",
+    " although ",
+    " changes ",
+    " adds ",
+    " removes ",
+    " modifies ",
+]
+
+
+def declares_no_contract_impact(value: str) -> bool:
+    collapsed = re.sub(r"\s+", " ", value.lower()).strip(" .")
+    normalized = f" {collapsed} "
+    if normalized.strip() in {"none", "n/a", "not applicable"}:
+        return True
+    if not normalized.startswith(" no "):
+        return False
+    if any(breaker in normalized for breaker in NO_CONTRACT_IMPACT_BREAKERS):
+        return False
+    return any(token in normalized for token in [" impact ", " change ", " changes ", " effect ", " effects "])
+
 
 def has_adr_contract_token(value: str) -> bool:
+    if declares_no_contract_impact(value):
+        return False
     normalized = value.lower()
     return any(re.search(rf"\b{re.escape(token)}\b", normalized) for token in ADR_CONTRACT_TOKENS)
 
@@ -261,7 +289,7 @@ def has_required_string_refs(value: Any, expected_refs: list[str]) -> bool:
 
 def contains_machine_local_path(value: Any) -> bool:
     if isinstance(value, str):
-        return "/Users/" in value
+        return bool(MACHINE_LOCAL_PATH_RE.search(value))
     if isinstance(value, list):
         return any(contains_machine_local_path(item) for item in value)
     if isinstance(value, dict):
@@ -406,7 +434,7 @@ def validate_task_planning_skill_fields(task: dict[str, Any]) -> None:
     if has_adr_contract_token(contract_impact) and task.get("adr_required") is not True:
         fail(f"{task_id_value} public or executable contract impact requires adr_required=true")
     if contains_machine_local_path(task):
-        fail(f"{task_id_value} contains a machine-local /Users/ path")
+        fail(f"{task_id_value} contains a machine-local absolute path")
 
 
 def field_has_evidence(task: dict[str, Any], field: str) -> bool:
@@ -892,6 +920,25 @@ def run_self_test() -> int:
     non_contract_specific_text["tasks"][1]["contract_impact"] = "No specific user-visible behavior impact."
     non_contract_specific_text["tasks"][1]["adr_required"] = False
     validate_task_packets(non_contract_specific_text, "T2.6")
+
+    no_public_contract_impact = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    no_public_contract_impact["tasks"][1]["contract_impact"] = "No public API or contract impact."
+    no_public_contract_impact["tasks"][1]["adr_required"] = False
+    validate_task_packets(no_public_contract_impact, "T2.6")
+
+    linux_absolute_path_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    linux_absolute_path_packets["tasks"][1]["artifact_refs"] = ["/workspace/lumyn/.factory/artifacts/run.json"]
+    try:
+        validate_task_packets(linux_absolute_path_packets, "T2.6")
+    except AssertionError as exc:
+        if "machine-local absolute path" not in str(exc):
+            raise
+    else:
+        fail("self-test expected Linux absolute path to fail")
 
     foundation_without_justification = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
