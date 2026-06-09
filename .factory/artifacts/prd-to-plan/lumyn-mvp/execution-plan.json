@@ -155,6 +155,8 @@
       "plan_drift_policy_ref",
       "required_worker_chain",
       "lifecycle_gates",
+      "allowed_paths",
+      "forbidden_paths",
       "worker_type",
       "factoryd_runtime",
       "validation_commands",
@@ -223,6 +225,7 @@
       "public or executable contract-impact tasks must be ADR-gated with adr_required=true",
       "execution plan, validation contract, context brief, and task packets carry factory_compatibility and block deprecated active worker aliases",
       "task packets carry scope_exclusions, alignment_gate_ref, and plan_drift_policy_ref inherited from the execution plan",
+      "task packets carry allowed_paths and forbidden_paths before factoryd dispatch",
       "runtime pins use the current Factory runtime-pins contract including toolchain_version, module_or_package_path, provider_policy, artifact_namespace, and live_work_policy",
       "task packets that are runner-ready carry worker_type, factoryd_runtime, validation_commands, evidence_required, and stop_conditions before factoryd dispatch"
     ],

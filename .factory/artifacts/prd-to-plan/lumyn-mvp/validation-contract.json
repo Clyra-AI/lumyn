@@ -205,6 +205,8 @@
       "plan_drift_policy_ref",
       "required_worker_chain",
       "lifecycle_gates",
+      "allowed_paths",
+      "forbidden_paths",
       "ci_lane_refs",
       "test_matrix_refs",
       "security_scanner_gates",
