@@ -357,8 +357,19 @@ def contains_machine_local_path(value: Any) -> bool:
     if isinstance(value, list):
         return any(contains_machine_local_path(item) for item in value)
     if isinstance(value, dict):
-        return any(contains_machine_local_path(item) for item in value.values())
+        return any(
+            contains_machine_local_path(key) or contains_machine_local_path(item)
+            for key, item in value.items()
+        )
     return False
+
+
+def task_slice_type(task: dict[str, Any]) -> str:
+    rationale = task.get("slice_rationale")
+    if isinstance(rationale, dict) and has_nonempty_string(rationale.get("slice_type")):
+        return str(rationale["slice_type"])
+    value = task.get("slice_type")
+    return value if isinstance(value, str) else ""
 
 
 def iter_required_worker_chains(value: Any, path: str = "$") -> list[tuple[str, list[Any]]]:
@@ -621,7 +632,7 @@ def validate_task_planning_skill_fields(task: dict[str, Any]) -> None:
     ]
     if missing:
         fail(f"{task_id_value} missing planning-skill fields: {', '.join(missing)}")
-    if task.get("slice_type") != "vertical" and not has_nonempty_string(task.get("non_vertical_justification")):
+    if task_slice_type(task) != "vertical" and not has_nonempty_string(task.get("non_vertical_justification")):
         fail(f"{task_id_value} non-vertical task requires non_vertical_justification")
     contract_impact = str(task.get("contract_impact", ""))
     if has_adr_contract_token(contract_impact) and task.get("adr_required") is not True:
@@ -1180,6 +1191,12 @@ def run_self_test() -> int:
     if contains_machine_local_path(".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate"):
         fail("self-test expected repo-relative JSON pointer to remain portable")
 
+    nested_slice_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    del nested_slice_packets["tasks"][1]["slice_type"]
+    validate_task_packets(nested_slice_packets, "T2.6")
+
     deprecated_worker_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
     }
@@ -1371,6 +1388,20 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected Linux absolute path to fail")
+
+    absolute_path_key_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    absolute_path_key_packets["tasks"][1]["source_hashes"] = {
+        "/workspace/lumyn/internal/result/result.go": "sha256:abc123"
+    }
+    try:
+        validate_task_packets(absolute_path_key_packets, "T2.6")
+    except AssertionError as exc:
+        if "machine-local absolute path" not in str(exc):
+            raise
+    else:
+        fail("self-test expected absolute map key path to fail")
 
     foundation_without_justification = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
