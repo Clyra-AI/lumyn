@@ -89,6 +89,6 @@ available.
 - First eval provider: OpenAI-compatible HTTP adapter behind a provider interface.
 - Artifact namespace: Factory artifacts in `.factory/artifacts/`; transient Factory material in `.factory/tmp/`; product artifacts in `workflows/`, `cassettes/`, `runs/`, `baselines/`, `schemas/`, and `examples/`.
 - Live sandbox, model-key, and network work is blocked until deterministic replay foundation passes and a human approves credential/network posture.
-- PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<task_id>/pr-lifecycle-report.json`.
+- PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
 - Test matrix and architecture propagation source: `docs/dev/dev_guides.md` and `docs/architecture/architecture_guides.md`.
 - Product task packets must preserve CI lane refs, docs parity, output contract, release integrity, provenance, systems-thinking, TDD, ADR, performance, reliability, and fail-closed requirements from those guides.

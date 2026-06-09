@@ -2,7 +2,7 @@
   "work_item_id": "lumyn-mvp-downstream-pilot",
   "branch_name": "codex/lumyn-pilot-evidence-closure",
   "commit_set": [
-    "pending-pr-head"
+    "8619839daebe6f9421f25772829e15e65b1f6128"
   ],
   "pr_summary": "Add enforced Factory downstream pilot evidence and PRD scope closure artifacts for the current Lumyn MVP slice.",
   "validation_reference": ".factory/artifacts/pilot/lumyn-mvp-slice/validation-report.json",

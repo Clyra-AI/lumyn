@@ -82,8 +82,10 @@
       "local_validation_required": true,
       "ci_required": true,
       "code_review_required": true,
+      "codex_review_required": true,
       "ship_pr_required": true,
-      "post_merge_monitor_required": true
+      "post_merge_monitor_required": true,
+      "pr_lifecycle_report_required": true
     },
     "required_worker_chain": [
       "task-executor",

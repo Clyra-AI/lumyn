@@ -30,6 +30,9 @@ lint-fast:
 	grep -q 'Do not merge manually through `gh pr merge`' docs/dev/dev_guides.md
 	grep -q 'process escape' WORKFLOW.md
 	grep -q 'process escape' docs/dev/dev_guides.md
+	grep -q 'pr-lifecycle/<work_item_id>/pr-lifecycle-report.json' AGENTS.md
+	grep -q 'pr-lifecycle/<work_item_id>/pr-lifecycle-report.json' WORKFLOW.md
+	grep -q 'pr-lifecycle/<work_item_id>/pr-lifecycle-report.json' docs/dev/dev_guides.md
 	grep -q 'protect-main-from-direct-push' AGENTS.md
 	grep -q 'audit-remote-protection' WORKFLOW.md
 	grep -q 'audit-remote-protection' docs/dev/dev_guides.md
