@@ -48,6 +48,14 @@ DEPRECATED_ACTIVE_WORKERS = {
     "ship-pr": "commit-push",
 }
 
+CANONICAL_REQUIRED_WORKER_CHAIN = [
+    "task-executor",
+    "validation-gate",
+    "code-review",
+    "commit-push",
+    "post-merge-monitor",
+]
+
 REQUIRED_PLAN_LEVEL_FIELDS = [
     "planning_skill_alignment",
     "factory_compatibility",
@@ -427,11 +435,16 @@ def has_lifecycle_gates(value: Any) -> bool:
         "local_validation_required",
         "ci_required",
         "code_review_required",
+        "codex_review_required",
         "ship_pr_required",
         "post_merge_monitor_required",
         "pr_lifecycle_report_required",
     ]
-    return isinstance(value, dict) and all(isinstance(value.get(field), bool) for field in required)
+    if not isinstance(value, dict):
+        return False
+    exception_ref = value.get("exception_ref")
+    has_exception = isinstance(exception_ref, str) and bool(exception_ref.strip())
+    return all(value.get(field) is True or has_exception for field in required)
 
 
 def missing_ci_lane_refs(task: dict[str, Any]) -> list[str]:
@@ -557,8 +570,10 @@ def validate_task_execution_compiler_fields(task: dict[str, Any]) -> None:
         fail(f"{task_id_value}.alignment_gate_ref must cite the execution-plan alignment gate")
     if task.get("plan_drift_policy_ref") != ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy":
         fail(f"{task_id_value}.plan_drift_policy_ref must cite the execution-plan drift policy")
+    if task.get("required_worker_chain") != CANONICAL_REQUIRED_WORKER_CHAIN:
+        fail(f"{task_id_value}.required_worker_chain must match the canonical validation/review/commit-push lifecycle chain")
     if not has_lifecycle_gates(task.get("lifecycle_gates")):
-        fail(f"{task_id_value}.lifecycle_gates must declare local, CI, review, ship, post-merge, and PR lifecycle gates")
+        fail(f"{task_id_value}.lifecycle_gates must enable local, CI, review, Codex review, ship, post-merge, and PR lifecycle gates or cite an approved exception")
 
 
 def field_has_evidence(task: dict[str, Any], field: str) -> bool:
@@ -570,7 +585,7 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
     if field in ["alignment_gate_ref", "plan_drift_policy_ref"]:
         return has_nonempty_string(value)
     if field == "required_worker_chain":
-        return isinstance(value, list) and all(isinstance(item, str) and item.strip() for item in value)
+        return value == CANONICAL_REQUIRED_WORKER_CHAIN
     if field == "lifecycle_gates":
         return has_lifecycle_gates(value)
     if field == "security_scanner_gates":
@@ -1040,6 +1055,30 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected missing alignment gate ref to fail")
+
+    incomplete_worker_chain_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    incomplete_worker_chain_packets["tasks"][1]["required_worker_chain"] = ["task-executor"]
+    try:
+        validate_task_packets(incomplete_worker_chain_packets, "T2.6")
+    except AssertionError as exc:
+        if "required_worker_chain" not in str(exc):
+            raise
+    else:
+        fail("self-test expected incomplete worker chain to fail")
+
+    disabled_lifecycle_gate_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    disabled_lifecycle_gate_packets["tasks"][1]["lifecycle_gates"]["ci_required"] = False
+    try:
+        validate_task_packets(disabled_lifecycle_gate_packets, "T2.6")
+    except AssertionError as exc:
+        if "lifecycle_gates" not in str(exc):
+            raise
+    else:
+        fail("self-test expected disabled lifecycle gate to fail")
 
     disconnected_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3-repair-001", [])]}
     try:
