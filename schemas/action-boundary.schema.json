@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.action_boundary.schema.json",
+  "title": "ActionBoundary",
+  "description": "Lumyn ActionBoundary schema.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "boundary_id",
+    "allowed_paths",
+    "forbidden_paths",
+    "allowed_operations",
+    "forbidden_operations",
+    "classification_policy",
+    "metadata"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.action_boundary"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "boundary_id": {
+      "type": "string"
+    },
+    "allowed_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_operations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_operations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "classification_policy": {
+      "type": "string",
+      "enum": [
+        "fail_closed_on_uncertain_write"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

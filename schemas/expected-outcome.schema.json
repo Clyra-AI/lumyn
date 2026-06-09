@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.expected_outcome.schema.json",
+  "title": "ExpectedOutcome",
+  "description": "Lumyn ExpectedOutcome schema.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "type",
+    "description",
+    "required_validators",
+    "metadata"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.expected_outcome"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "action_completed",
+        "state_reached",
+        "trace_property",
+        "custom"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "required_validators": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,66 @@
+{
+  "artifact_type": "validation_report",
+  "schema_version": "0.1",
+  "task_id": "T2",
+  "source_task_packet_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2",
+  "status": "pass",
+  "validated_at": "2026-06-09T00:13:17Z",
+  "commands": [
+    {
+      "command": "make prepush-full",
+      "status": "pass"
+    },
+    {
+      "command": "git diff --check",
+      "status": "pass"
+    },
+    {
+      "command": "rg -n '/Users/|Projects/council|Projects/factory|lumyn_oss_prd_mvp' . --glob '!/.git/**'",
+      "status": "pass",
+      "notes": "No machine-local references found."
+    }
+  ],
+  "acceptance_results": [
+    {
+      "check": "Schemas are versioned and test-covered.",
+      "status": "pass",
+      "evidence": "schemas/*.schema.json and schemas/schema_test.go"
+    },
+    {
+      "check": "Schema names map to required schemas in docs/product/prd.md.",
+      "status": "pass",
+      "evidence": "schemas/schema_test.go TestRequiredSchemaNamesMatchPRD"
+    },
+    {
+      "check": "All 14 required Phase 0 schema files named in docs/product/prd.md exist under schemas/.",
+      "status": "pass",
+      "evidence": "Makefile test-contracts and schemas/schema_test.go"
+    },
+    {
+      "check": "Schema tests compile every schema with a pinned JSON Schema validator.",
+      "status": "pass",
+      "evidence": "github.com/santhosh-tekuri/jsonschema/v5 v5.3.1 in go.mod/go.sum"
+    },
+    {
+      "check": "Representative artifacts validate for workflow contract, command result, proof strength, cassette, evidence event, redaction config, and related surfaces.",
+      "status": "pass",
+      "evidence": "schemas/schema_test.go TestRepresentativeArtifactsValidate"
+    },
+    {
+      "check": "Invalid command-result output fails schema validation.",
+      "status": "pass",
+      "evidence": "schemas/schema_test.go TestInvalidCommandResultFails"
+    }
+  ],
+  "skipped_commands": [],
+  "live_work": "not_used",
+  "credential_use": "none",
+  "network_use": "none",
+  "dependency_changes": [
+    {
+      "module": "github.com/santhosh-tekuri/jsonschema/v5",
+      "version": "v5.3.1",
+      "reason": "Executable JSON Schema validation for Phase 0 artifact contracts."
+    }
+  ]
+}

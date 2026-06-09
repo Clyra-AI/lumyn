@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.proof_strength.schema.json",
+  "title": "ProofStrength",
+  "description": "Lumyn ProofStrength schema.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "level",
+    "weakest_required_level",
+    "required_validators",
+    "advisory_validators",
+    "summary",
+    "metadata"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.proof_strength"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "strong",
+        "weak",
+        "gap",
+        "unknown"
+      ]
+    },
+    "weakest_required_level": {
+      "type": "string",
+      "enum": [
+        "strong",
+        "weak",
+        "gap",
+        "unknown"
+      ]
+    },
+    "required_validators": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "advisory_validators": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "summary": {
+      "type": "string"
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

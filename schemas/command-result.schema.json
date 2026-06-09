@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.command_result.schema.json",
+  "title": "CommandResult",
+  "description": "Lumyn CommandResult schema.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "command",
+    "status",
+    "mode",
+    "warnings",
+    "errors",
+    "artifacts",
+    "duration_ms",
+    "redaction_status",
+    "metadata"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.command_result"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "command": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "fail",
+        "blocked",
+        "warning"
+      ]
+    },
+    "mode": {
+      "type": "string",
+      "minLength": 1
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "exit_code": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "type"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "duration_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "redaction_status": {
+      "type": "string",
+      "enum": [
+        "not_applicable",
+        "applied",
+        "unsafe_to_persist",
+        "unsafe_to_share",
+        "unknown"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

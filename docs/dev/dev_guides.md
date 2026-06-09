@@ -6,11 +6,15 @@
 |---|---:|
 | Go | `1.26.4` |
 
+## Dependency Pins
+
+- `github.com/santhosh-tekuri/jsonschema/v5 v5.3.1`: executable JSON Schema validation for T2 and later schema/artifact work.
+
 ## Validation Matrix
 
 - `make lint-fast`: repo operating pack and layout checks.
 - `make test-fast`: Go unit tests.
-- `make test-contracts`: unit tests plus Factory planning artifact presence.
+- `make test-contracts`: unit tests, Factory planning artifact presence, and required schema-file presence.
 - `make prepush-full`: full local gate before PR or merge.
 
 ## Bootstrap Rules
@@ -21,6 +25,7 @@
 - Evidence artifacts must use repo-relative paths.
 - T1 must use the Go standard library only.
 - Any new dependency must be pinned in `go.mod`, justified in the task evidence, and covered by validation.
+- Schema/artifact changes must include representative validation coverage in `schemas/`.
 
 ## Distribution Pins
 

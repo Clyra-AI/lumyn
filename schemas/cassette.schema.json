@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.cassette.schema.json",
+  "title": "Cassette",
+  "description": "Lumyn Cassette schema.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "cassette_id",
+    "workflow_id",
+    "recorded_at",
+    "lumyn_version",
+    "source_refs",
+    "redaction_status",
+    "evidence_events",
+    "state_bindings",
+    "validator_inputs",
+    "replay_integrity",
+    "metadata"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.cassette"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "cassette_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workflow_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lumyn_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "hash"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "hash": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "redaction_status": {
+      "type": "string",
+      "enum": [
+        "not_applicable",
+        "applied",
+        "unsafe_to_persist",
+        "unsafe_to_share",
+        "unknown"
+      ]
+    },
+    "evidence_events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "state_bindings": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "validator_inputs": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "replay_integrity": {
+      "type": "object",
+      "required": [
+        "source_hashes",
+        "cassette_hash",
+        "stale_policy"
+      ],
+      "properties": {
+        "source_hashes": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "cassette_hash": {
+          "type": "string"
+        },
+        "stale_policy": {
+          "type": "string",
+          "enum": [
+            "warn_normal_fail_strict"
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

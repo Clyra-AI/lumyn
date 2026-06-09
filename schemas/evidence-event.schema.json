@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.evidence_event.schema.json",
+  "title": "EvidenceEvent",
+  "description": "Lumyn EvidenceEvent schema.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "event_id",
+    "run_id",
+    "timestamp",
+    "source",
+    "kind",
+    "redaction_status",
+    "raw_refs",
+    "classification",
+    "bindings",
+    "confidence",
+    "metadata"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.evidence_event"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "http",
+        "agent",
+        "cli",
+        "validator",
+        "system"
+      ]
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "redaction_status": {
+      "type": "string",
+      "enum": [
+        "not_applicable",
+        "applied",
+        "unsafe_to_persist",
+        "unsafe_to_share",
+        "unknown"
+      ]
+    },
+    "raw_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "classification": {
+      "type": "object",
+      "required": [
+        "action_type",
+        "confidence"
+      ],
+      "properties": {
+        "action_type": {
+          "type": "string",
+          "enum": [
+            "read",
+            "write",
+            "delete",
+            "auth",
+            "retry",
+            "approval",
+            "unknown",
+            "classification_uncertain"
+          ]
+        },
+        "confidence": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            "inferred",
+            "unknown"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "operation": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "operation_id": {
+          "type": "string"
+        },
+        "action_type": {
+          "type": "string",
+          "enum": [
+            "read",
+            "write",
+            "delete",
+            "auth",
+            "retry",
+            "approval",
+            "unknown",
+            "classification_uncertain"
+          ]
+        },
+        "classification_confidence": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            "inferred",
+            "unknown"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string"
+        },
+        "headers_redacted": {
+          "type": "boolean"
+        },
+        "body_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "type": "string"
+        },
+        "status_code": {
+          "type": "integer"
+        },
+        "body_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low",
+        "inferred",
+        "unknown"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

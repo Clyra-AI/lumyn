@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.canonical_trace.schema.json",
+  "title": "CanonicalTrace",
+  "description": "Lumyn CanonicalTrace schema.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "trace_id",
+    "run_id",
+    "workflow_id",
+    "lumyn_version",
+    "started_at",
+    "finished_at",
+    "redaction_status",
+    "events",
+    "proof_strength",
+    "metadata"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.canonical_trace"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "trace_id": {
+      "type": "string"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "workflow_id": {
+      "type": "string"
+    },
+    "lumyn_version": {
+      "type": "string"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "redaction_status": {
+      "type": "string",
+      "enum": [
+        "not_applicable",
+        "applied",
+        "unsafe_to_persist",
+        "unsafe_to_share",
+        "unknown"
+      ]
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "proof_strength": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
