@@ -13,6 +13,11 @@ PLAN_DIR = ROOT / ".factory" / "artifacts" / "prd-to-plan" / "lumyn-mvp"
 EXECUTION_PLAN = PLAN_DIR / "execution-plan.json"
 TASK_PACKETS = PLAN_DIR / "task-packets.json"
 VALIDATION_CONTRACT = PLAN_DIR / "validation-contract.json"
+REPAIR_TASK_PACKETS = [
+    ROOT / ".factory" / "artifacts" / "pilot" / "lumyn-mvp-slice" / "repair-loop" / "task-packet.json"
+]
+TEST_MATRIX_SOURCE_BASE = "docs/dev/dev_guides.md"
+ARCHITECTURE_GUIDE_BASE = "docs/architecture/architecture_guides.md"
 
 REQUIRED_GUIDES = [
     "docs/dev/dev_guides.md",
@@ -136,6 +141,17 @@ def version_gte(candidate: tuple[int, ...], baseline: tuple[int, ...]) -> bool:
     return candidate + (0,) * (width - len(candidate)) >= baseline + (0,) * (width - len(baseline))
 
 
+def source_ref_base(value: Any) -> str:
+    return value.split("#", 1)[0] if isinstance(value, str) else ""
+
+
+def refs_include_base(task: dict[str, Any], field: str, expected_base: str) -> bool:
+    value = task.get(field)
+    if not isinstance(value, list):
+        return False
+    return any(isinstance(item, dict) and source_ref_base(item.get("source_ref")) == expected_base for item in value)
+
+
 def at_or_after_baseline(task: dict[str, Any], baseline_task_id: str) -> bool:
     baseline_key = task_order_key(baseline_task_id)
     if baseline_key is None:
@@ -145,6 +161,14 @@ def at_or_after_baseline(task: dict[str, Any], baseline_task_id: str) -> bool:
         if candidate_key is not None and version_gte(candidate_key, baseline_key):
             return True
     return False
+
+
+def validate_task_guide_sources(task: dict[str, Any]) -> None:
+    task_id_value = task_id(task)
+    if not refs_include_base(task, "test_matrix_refs", TEST_MATRIX_SOURCE_BASE):
+        fail(f"{task_id_value} test_matrix_refs must include source {TEST_MATRIX_SOURCE_BASE}")
+    if not refs_include_base(task, "architecture_guidance_refs", ARCHITECTURE_GUIDE_BASE):
+        fail(f"{task_id_value} architecture_guidance_refs must include source {ARCHITECTURE_GUIDE_BASE}")
 
 
 def field_has_evidence(task: dict[str, Any], field: str) -> bool:
@@ -311,6 +335,22 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
         missing = [field for field in REQUIRED_TASK_FIELDS if not field_has_evidence(task, field)]
         if missing:
             fail(f"{task_id(task)} missing guide propagation fields: {', '.join(missing)}")
+        validate_task_guide_sources(task)
+
+
+def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: str) -> None:
+    task_id_value = task_id(packet)
+    if not task_id_value:
+        fail("standalone task packet missing task_id")
+    if not at_or_after_baseline(packet, baseline_task_id):
+        return
+    blocked_by = packet.get("blocked_by", [])
+    if not isinstance(blocked_by, list) or baseline_task_id not in [str(value) for value in blocked_by]:
+        fail(f"{task_id_value} is at or after propagation baseline {baseline_task_id} but does not depend on it")
+    missing = [field for field in REQUIRED_TASK_FIELDS if not field_has_evidence(packet, field)]
+    if missing:
+        fail(f"{task_id_value} missing guide propagation fields: {', '.join(missing)}")
+    validate_task_guide_sources(packet)
 
 
 def validate_validation_contract(contract: dict[str, Any]) -> None:
@@ -406,6 +446,8 @@ def run_self_test() -> int:
     else:
         fail("self-test expected disabled scanner without exception to fail")
 
+    validate_standalone_task_packet(propagated_task("T3-repair-001", ["T2.6"]), "T2.6")
+
     print("repo-pack validator self-test passed")
     return 0
 
@@ -427,6 +469,8 @@ def main() -> int:
         contract = load_json(VALIDATION_CONTRACT)
         baseline_task_id = validate_execution_plan(plan)
         validate_task_packets(packets, baseline_task_id)
+        for packet_path in REPAIR_TASK_PACKETS:
+            validate_standalone_task_packet(load_json(packet_path), baseline_task_id)
         validate_validation_contract(contract)
     except AssertionError as exc:
         print(f"repo-pack validation failed: {exc}", file=sys.stderr)

@@ -1,6 +1,10 @@
 {
   "task_id": "T3-repair-001",
   "objective": "Repair the first Lumyn MVP closure gap by implementing T3: `lumyn init` and `lumyn check` for local OpenAPI/docs source intake and workflow-relevant source findings.",
+  "blocked_by": [
+    "T2.6",
+    "T3"
+  ],
   "mission_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
   "shared_constraints_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
   "validation_contract_inheritance": {
@@ -64,6 +68,116 @@
     "`lumyn init` writes config without network or credentials.",
     "`lumyn check` emits source references tied to local OpenAPI/docs inputs.",
     "Closure report is rerun and no longer lists T3 as missing."
+  ],
+  "test_matrix_refs": [
+    {
+      "tier": "Tier 1 Unit",
+      "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+      "command_refs": [
+        "go test ./... -count=1"
+      ]
+    },
+    {
+      "tier": "Tier 4 Acceptance",
+      "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+      "status": "planned"
+    },
+    {
+      "tier": "Tier 9 Contract",
+      "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+      "command_refs": [
+        "make test-contracts"
+      ]
+    }
+  ],
+  "ci_lane_refs": [
+    {
+      "lane": "fast",
+      "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+      "command_refs": [
+        "make lint-fast",
+        "make test-fast"
+      ]
+    },
+    {
+      "lane": "core",
+      "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+      "command_refs": [
+        "make test-contracts",
+        "make prepush-full"
+      ]
+    },
+    {
+      "lane": "risk",
+      "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+      "status_check_refs": [
+        "CodeQL analyze"
+      ]
+    }
+  ],
+  "security_scanner_gates": {
+    "required": true,
+    "scanner": "CodeQL",
+    "workflow_ref": ".github/workflows/codeql.yml",
+    "status_check": "CodeQL analyze",
+    "required_for_surfaces": [
+      "dependency additions",
+      "generated-code intake",
+      "CI or workflow changes",
+      "external calls",
+      "redaction/share/live/eval/provider code",
+      "data exposure",
+      "release-sensitive work"
+    ],
+    "exception_policy": "approved_exception_required"
+  },
+  "engineering_policy_refs": [
+    {
+      "policy": "docs_parity",
+      "source_ref": "docs/dev/dev_guides.md#docs-parity",
+      "rule": "Behavior, flags, output shape, exit codes, artifact paths, install paths, and workflow semantics update docs and Factory planning artifacts together."
+    },
+    {
+      "policy": "output_contracts",
+      "source_ref": "docs/dev/dev_guides.md#output-contracts",
+      "rule": "Command-result JSON, exit codes, schemas, and product artifacts are public or executable contracts."
+    },
+    {
+      "policy": "release_integrity",
+      "source_ref": "docs/dev/dev_guides.md#release-integrity",
+      "rule": "Release-sensitive work defines version, changelog, install, artifact-integrity, and UAT evidence before merge."
+    },
+    {
+      "policy": "provenance_evidence",
+      "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
+      "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+    }
+  ],
+  "architecture_guidance_refs": [
+    {
+      "source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map",
+      "rule": "Medium/high risk tasks record state owner, feedback source, blast radius, source-of-truth impact, and rollback/deletion checks."
+    },
+    {
+      "source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations",
+      "rule": "Behavior and schema/output changes use test-first evidence or a structured skipped reason."
+    },
+    {
+      "source_ref": "docs/architecture/architecture_guides.md#adr-and-decision-triggers",
+      "rule": "Boundary, public contract, failure semantics, credential/network, release, or major reliability/perf changes require ADR or decision note."
+    },
+    {
+      "source_ref": "docs/architecture/architecture_guides.md#performance-and-cost-triggers",
+      "rule": "Fan-out, repeated runs, or model calls declare expected cost/performance impact."
+    },
+    {
+      "source_ref": "docs/architecture/architecture_guides.md#reliability-and-recovery-triggers",
+      "rule": "Retry, cleanup, persistence, filesystem mutation, redaction, live network, and provider code require hardening/failure-mode evidence."
+    },
+    {
+      "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
+      "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
+    }
   ],
   "required_worker_chain": [
     "task-executor",
