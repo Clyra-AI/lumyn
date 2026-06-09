@@ -79,6 +79,7 @@ REQUIRED_CHANGELOG_FIELDS = [
 
 ADR_CONTRACT_TOKENS = [
     "public",
+    "api",
     "cli",
     "command",
     "schema",
@@ -821,6 +822,19 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected missing planning-skill fields to fail")
+
+    api_contract_without_adr = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    api_contract_without_adr["tasks"][1]["contract_impact"] = "Changes API response behavior."
+    api_contract_without_adr["tasks"][1]["adr_required"] = False
+    try:
+        validate_task_packets(api_contract_without_adr, "T2.6")
+    except AssertionError as exc:
+        if "requires adr_required=true" not in str(exc):
+            raise
+    else:
+        fail("self-test expected API contract impact without ADR to fail")
 
     foundation_without_justification = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
