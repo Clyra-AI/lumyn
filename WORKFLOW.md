@@ -45,6 +45,7 @@ Lumyn accepts work from:
 
 - Local validation gate: `make prepush-full`.
 - CI status check: GitHub Actions workflow `.github/workflows/validate.yml`, check name `validate`, runs `make prepush-full`.
+- Security scanner: GitHub Actions workflow `.github/workflows/codeql.yml`, status source `CodeQL analyze`, required for dependency additions, generated-code intake, CI/workflow changes, external calls, redaction/share/live/eval/provider code, data exposure, and release-sensitive work.
 - Structured review: `code-review` must produce review evidence when risk, workflow policy, validation findings, or review policy require it.
 - Shipping evidence: `ship-pr` must produce or reference a ship packet before merge.
 - Post-merge monitoring: default branch health must be checked after merge and recorded when the task requires lifecycle evidence.
@@ -70,3 +71,6 @@ Stop and request human decision if:
 - redaction confidence is unknown for persisted artifacts
 - implementation would satisfy a command while violating explicit PRD scope exclusions
 - lifecycle gates are required but review, ship, CI/status, post-merge, or PR lifecycle evidence is missing without an approved exception
+- scanner-gated work lacks CodeQL status evidence or an approved scanner exception
+- a product task omits required test-matrix refs, scanner gates, or architecture guidance refs inherited from the repo operating pack
+- a product task omits required CI lane refs, docs parity, output contract, release integrity, provenance, systems-thinking, TDD, ADR, performance, reliability, or fail-closed refs inherited from the repo operating pack

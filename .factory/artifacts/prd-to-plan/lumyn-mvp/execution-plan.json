@@ -34,6 +34,7 @@
         "T1",
         "T2",
         "T2.5",
+        "T2.6",
         "T3"
       ]
     },
@@ -102,7 +103,8 @@
     "exception_behavior": "block_or_record_approved_exception",
     "notes": [
       "T2.5 establishes the repository delivery lifecycle baseline before T3 product implementation.",
-      "T9 remains the product-facing Lumyn CI/JUnit/PR-comment feature required by the MVP."
+      "T9 remains the product-facing Lumyn CI/JUnit/PR-comment feature required by the MVP.",
+      "T2.6 establishes dev/architecture propagation and CodeQL scanner posture before T3 product implementation."
     ]
   },
   "alignment_decisions_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json#/alignment_decisions",
@@ -116,5 +118,69 @@
     "primary": "standalone_binary",
     "secondary": "homebrew_after_first_binary",
     "not_primary": "pypi"
+  },
+  "dev_architecture_propagation": {
+    "status": "proven",
+    "baseline_task_ref": "T2.6",
+    "test_matrix_source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+    "architecture_guide_ref": "docs/architecture/architecture_guides.md",
+    "security_scanning": {
+      "required": true,
+      "scanner": "CodeQL",
+      "workflow_ref": ".github/workflows/codeql.yml",
+      "status_check": "CodeQL analyze",
+      "exception_policy": "approved_exception_required"
+    },
+    "task_packet_requirements": [
+      "engineering_policy_refs",
+      "ci_lane_refs",
+      "test_matrix_refs",
+      "security_scanner_gates",
+      "architecture_guidance_refs"
+    ],
+    "exception_behavior": "block_or_record_approved_exception",
+    "notes": [
+      "T2.6 maps dev and architecture guide requirements into future product task packets before T3.",
+      "CodeQL is delivery risk-lane infrastructure and remains separate from the product-facing T9 GitHub Action/JUnit/PR-comment feature.",
+      "T2.6 now propagates CI lanes, docs parity, output contracts, release integrity, provenance, systems-thinking, TDD/ADR, performance, reliability, and fail-closed requirements before T3.",
+      "Future T3+ product tasks must carry the inherited guide refs or record an approved exception."
+    ],
+    "ci_lanes": {
+      "fast": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "core": [
+        "make test-contracts",
+        "make prepush-full"
+      ],
+      "acceptance": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+      ],
+      "cross_platform": [
+        "reserved until packaging/distribution work starts"
+      ],
+      "risk": [
+        "GitHub Actions CodeQL analyze",
+        "future hardening/chaos/perf lanes from docs/dev/dev_guides.md"
+      ],
+      "release": [
+        "reserved until standalone binary release packaging starts"
+      ]
+    },
+    "engineering_policies": {
+      "docs_parity": "Behavior, flags, outputs, install paths, and workflow semantics update README, PRD, dev/architecture guides, and Factory planning artifacts together.",
+      "output_contracts": "Command-result envelope, exit codes, schemas, cassettes, evidence, reports, and run artifacts are product contracts.",
+      "release_integrity": "Standalone binary release tasks must define version, changelog, install, artifact-integrity, and UAT evidence before merge.",
+      "provenance_evidence": "Validation reports, work-proof markers, PR lifecycle reports, scanner status, and scope closure evidence remain repo-relative."
+    },
+    "architecture_policies": {
+      "systems_thinking": "Medium/high risk tasks record state owner, feedback source, deletion blast radius, rollback/deletion test, and source-of-truth impact.",
+      "tdd": "Behavior changes require test-first evidence or structured skipped reason; schema/output changes prefer failing fixture or validator expectation first.",
+      "adr_triggers": "Boundary crossings, public contracts, failure classes, state model, performance, security, credential/network, and release posture changes require ADR or decision note.",
+      "performance": "Replay/eval/report hot paths and model-cost paths require budget notes and validation or approved exception.",
+      "reliability": "Retries, cleanup, persistence, filesystem mutation, redaction, live network, and provider work require hardening checks and failure-mode evidence.",
+      "failure_semantics": "Ambiguous proof, redaction, credential, stale cassette, undeclared control, or scanner state fails closed."
+    }
   }
 }

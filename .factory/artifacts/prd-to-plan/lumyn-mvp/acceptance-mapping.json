@@ -14,6 +14,19 @@
       ]
     },
     {
+      "group_id": "factory_dev_architecture_propagation_baseline",
+      "required": true,
+      "task_refs": [
+        "T2.6"
+      ],
+      "acceptance_refs": [
+        "Factory dev guide, architecture guide, test matrix, and security scanner propagation before product implementation",
+        "Factory CI lane propagation before product implementation",
+        "Factory docs/output/release/provenance propagation before product implementation",
+        "Factory systems-thinking/TDD/ADR/performance/reliability/fail-closed propagation before product implementation"
+      ]
+    },
+    {
       "group_id": "record_contract_replay_report",
       "required": true,
       "task_refs": [
