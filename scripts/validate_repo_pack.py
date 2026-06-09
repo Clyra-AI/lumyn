@@ -51,7 +51,14 @@ DEPRECATED_ACTIVE_WORKERS = {
     "ship-pr": "commit-push",
 }
 
-CANONICAL_REQUIRED_WORKER_CHAIN = [
+DEFAULT_REQUIRED_WORKER_CHAIN = [
+    "task-executor",
+    "validation-gate",
+    "commit-push",
+    "post-merge-monitor",
+]
+
+REVIEW_REQUIRED_WORKER_CHAIN = [
     "task-executor",
     "validation-gate",
     "code-review",
@@ -487,10 +494,9 @@ def validate_plan_drift_policy(value: Any, label: str) -> None:
 
 
 def has_lifecycle_gates(value: Any) -> bool:
-    required = [
+    required_true = [
         "local_validation_required",
         "ci_required",
-        "code_review_required",
         "codex_review_required",
         "ship_pr_required",
         "post_merge_monitor_required",
@@ -500,7 +506,15 @@ def has_lifecycle_gates(value: Any) -> bool:
         return False
     exception_ref = value.get("exception_ref")
     has_exception = isinstance(exception_ref, str) and bool(exception_ref.strip())
-    return all(value.get(field) is True or has_exception for field in required)
+    review_gate_is_declared = isinstance(value.get("code_review_required"), bool)
+    return review_gate_is_declared and all(value.get(field) is True or has_exception for field in required_true)
+
+
+def expected_required_worker_chain(task: dict[str, Any]) -> list[str]:
+    gates = task.get("lifecycle_gates")
+    if isinstance(gates, dict) and gates.get("code_review_required") is True:
+        return REVIEW_REQUIRED_WORKER_CHAIN
+    return DEFAULT_REQUIRED_WORKER_CHAIN
 
 
 def missing_ci_lane_refs(task: dict[str, Any]) -> list[str]:
@@ -626,10 +640,10 @@ def validate_task_execution_compiler_fields(task: dict[str, Any]) -> None:
         fail(f"{task_id_value}.alignment_gate_ref must cite the execution-plan alignment gate")
     if task.get("plan_drift_policy_ref") != ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy":
         fail(f"{task_id_value}.plan_drift_policy_ref must cite the execution-plan drift policy")
-    if task.get("required_worker_chain") != CANONICAL_REQUIRED_WORKER_CHAIN:
-        fail(f"{task_id_value}.required_worker_chain must match the canonical validation/review/commit-push lifecycle chain")
     if not has_lifecycle_gates(task.get("lifecycle_gates")):
-        fail(f"{task_id_value}.lifecycle_gates must enable local, CI, review, Codex review, ship, post-merge, and PR lifecycle gates or cite an approved exception")
+        fail(f"{task_id_value}.lifecycle_gates must enable local, CI, Codex review, ship, post-merge, and PR lifecycle gates, and explicitly declare code_review_required true only when review policy requires it")
+    if task.get("required_worker_chain") != expected_required_worker_chain(task):
+        fail(f"{task_id_value}.required_worker_chain must match the lifecycle gates: default validation/commit-push chain, or validation/code-review/commit-push chain when code_review_required=true")
 
 
 def field_has_evidence(task: dict[str, Any], field: str) -> bool:
@@ -641,7 +655,7 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
     if field in ["alignment_gate_ref", "plan_drift_policy_ref"]:
         return has_nonempty_string(value)
     if field == "required_worker_chain":
-        return value == CANONICAL_REQUIRED_WORKER_CHAIN
+        return value == expected_required_worker_chain(task)
     if field == "lifecycle_gates":
         return has_lifecycle_gates(value)
     if field == "security_scanner_gates":
@@ -1021,14 +1035,13 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
         "required_worker_chain": [
             "task-executor",
             "validation-gate",
-            "code-review",
             "commit-push",
             "post-merge-monitor",
         ],
         "lifecycle_gates": {
             "local_validation_required": True,
             "ci_required": True,
-            "code_review_required": True,
+            "code_review_required": False,
             "codex_review_required": True,
             "ship_pr_required": True,
             "post_merge_monitor_required": True,
