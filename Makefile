@@ -11,6 +11,7 @@ lint-fast:
 	test -f .tool-versions
 	test -f go.mod
 	test -f scripts/audit_branch_protection.py
+	test -f scripts/validate_repo_pack.py
 	test -f .github/workflows/validate.yml
 	test -f .github/workflows/codeql.yml
 	test -d .factory/artifacts
@@ -48,6 +49,7 @@ test-contracts:
 	$(GO) test ./... -count=1
 	python3 scripts/audit_branch_protection.py --self-test
 	python3 scripts/validate_factory_pilot_evidence.py
+	python3 scripts/validate_repo_pack.py
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json
