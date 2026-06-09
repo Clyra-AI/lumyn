@@ -27,6 +27,31 @@ REQUIRED_TASK_FIELDS = [
     "architecture_guidance_refs",
 ]
 
+REQUIRED_CI_LANES = [
+    "fast",
+    "core",
+    "acceptance",
+    "cross_platform",
+    "risk",
+    "release",
+]
+
+REQUIRED_ENGINEERING_POLICIES = [
+    "docs_parity",
+    "output_contracts",
+    "release_integrity",
+    "provenance_evidence",
+]
+
+REQUIRED_ARCHITECTURE_POLICIES = [
+    "systems_thinking",
+    "tdd",
+    "adr_triggers",
+    "performance",
+    "reliability",
+    "failure_semantics",
+]
+
 STOP_CONDITION_CATEGORIES = {
     "test_matrix": ["test-matrix", "test matrix", "test_matrix"],
     "ci_lanes": ["ci lane", "ci/status", "status check"],
@@ -182,6 +207,48 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
     missing = [field for field in REQUIRED_TASK_FIELDS if field not in requirements]
     if missing:
         fail(f"dev_architecture_propagation.task_packet_requirements missing {missing}")
+    security_scanning = propagation.get("security_scanning")
+    if not isinstance(security_scanning, dict):
+        fail("dev_architecture_propagation.security_scanning must be an object")
+    if not isinstance(security_scanning.get("required"), bool):
+        fail("dev_architecture_propagation.security_scanning.required must be boolean")
+    if not isinstance(security_scanning.get("scanner"), str) or not security_scanning["scanner"].strip():
+        fail("dev_architecture_propagation.security_scanning.scanner must be non-empty")
+    if security_scanning.get("required") is True and not any(
+        isinstance(security_scanning.get(key), str) and security_scanning[key].strip()
+        for key in ["workflow_ref", "status_check", "exception_policy", "exception_ref"]
+    ):
+        fail("required dev_architecture_propagation.security_scanning needs workflow/status/exception evidence")
+    ci_lanes = propagation.get("ci_lanes")
+    if not isinstance(ci_lanes, dict):
+        fail("dev_architecture_propagation.ci_lanes must be an object")
+    missing_lanes = [
+        lane
+        for lane in REQUIRED_CI_LANES
+        if not isinstance(ci_lanes.get(lane), list) or not ci_lanes[lane]
+    ]
+    if missing_lanes:
+        fail(f"dev_architecture_propagation.ci_lanes missing non-empty lanes: {missing_lanes}")
+    engineering = propagation.get("engineering_policies")
+    if not isinstance(engineering, dict):
+        fail("dev_architecture_propagation.engineering_policies must be an object")
+    missing_engineering = [
+        policy
+        for policy in REQUIRED_ENGINEERING_POLICIES
+        if not isinstance(engineering.get(policy), str) or not engineering[policy].strip()
+    ]
+    if missing_engineering:
+        fail(f"dev_architecture_propagation.engineering_policies missing {missing_engineering}")
+    architecture = propagation.get("architecture_policies")
+    if not isinstance(architecture, dict):
+        fail("dev_architecture_propagation.architecture_policies must be an object")
+    missing_architecture = [
+        policy
+        for policy in REQUIRED_ARCHITECTURE_POLICIES
+        if not isinstance(architecture.get(policy), str) or not architecture[policy].strip()
+    ]
+    if missing_architecture:
+        fail(f"dev_architecture_propagation.architecture_policies missing {missing_architecture}")
     return baseline_task_id
 
 
