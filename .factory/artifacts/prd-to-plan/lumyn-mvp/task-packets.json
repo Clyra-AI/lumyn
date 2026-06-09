@@ -1314,6 +1314,7 @@
         "T2.6"
       ],
       "allowed_paths": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
         ".factory/artifacts/pr-lifecycle/T3/",
         ".factory/artifacts/task-runs/T3/",
         "cmd/lumyn/",
@@ -1621,6 +1622,7 @@
         "T2.6"
       ],
       "allowed_paths": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
         ".factory/artifacts/pr-lifecycle/T4/",
         ".factory/artifacts/task-runs/T4/",
         "cmd/lumyn/",
@@ -1935,6 +1937,7 @@
         "T2.6"
       ],
       "allowed_paths": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
         ".factory/artifacts/pr-lifecycle/T5/",
         ".factory/artifacts/task-runs/T5/",
         "cmd/lumyn/",
@@ -2247,6 +2250,7 @@
         "T2.6"
       ],
       "allowed_paths": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
         ".factory/artifacts/pr-lifecycle/T6/",
         ".factory/artifacts/task-runs/T6/",
         "cmd/lumyn/",
@@ -2559,6 +2563,7 @@
         "T2.6"
       ],
       "allowed_paths": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
         ".factory/artifacts/pr-lifecycle/T7/",
         ".factory/artifacts/task-runs/T7/",
         "cmd/lumyn/",
@@ -2881,6 +2886,7 @@
         "T2.6"
       ],
       "allowed_paths": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
         ".factory/artifacts/pr-lifecycle/T8/",
         ".factory/artifacts/task-runs/T8/",
         "cmd/lumyn/",
@@ -3200,6 +3206,7 @@
         "T2.6"
       ],
       "allowed_paths": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
         ".factory/artifacts/pr-lifecycle/T9/",
         ".factory/artifacts/task-runs/T9/",
         ".github/workflows/",
@@ -3510,6 +3517,7 @@
         "T2.6"
       ],
       "allowed_paths": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
         ".factory/artifacts/pr-lifecycle/T10/",
         ".factory/artifacts/task-runs/T10/",
         "cmd/lumyn/",
@@ -3829,6 +3837,7 @@
         "T2.6"
       ],
       "allowed_paths": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
         ".factory/artifacts/pr-lifecycle/T11/",
         ".factory/artifacts/task-runs/T11/",
         "cmd/lumyn/",
@@ -4174,6 +4183,7 @@
         "T2.6"
       ],
       "allowed_paths": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
         ".factory/artifacts/pr-lifecycle/T12/",
         ".factory/artifacts/task-runs/T12/",
         "cmd/lumyn/",

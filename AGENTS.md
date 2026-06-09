@@ -42,7 +42,8 @@ Every change should improve one or more of:
 - `docs/architecture/`: repo-local architecture guidance.
 - `.factory/artifacts/`: durable Factory planning, validation, closure, and handoff artifacts.
 - `.factory/tmp/`: ignored local execution scratch space.
-- `.factory/factoryd.example.json`: repo-local daemon config template.
+- `.factory/factoryd.example.json`: safe repo-local daemon config template.
+- `.factory/factoryd.autoship.example.json`: explicit full-loop daemon config template for protected GitHub execution.
 - `.factoryd/`: ignored local daemon state, claims, worktrees, events, and run reports.
 - `schemas/`: versioned schemas.
 - `cmd/lumyn/`: CLI entrypoint.
@@ -71,7 +72,8 @@ Passive Codex review settle is required before merge. Green CI alone is not
 merge-ready when Codex review is enabled.
 Do not merge manually through `gh pr merge`, the GitHub UI, or a connector until
 the latest PR head has Codex approval, thumbs-up, actionable-resolved,
-carry-forward, or an approved exception.
+carry-forward, or an approved exception. A configured `factoryd` autoship run may
+use its `github_cli` provider only when all required lifecycle gates pass.
 A PR merged without latest-head Codex review evidence is a process escape and
 must be recorded in PR lifecycle evidence with a follow-up fix or blocker.
 CodeQL Go analysis is the security scanner risk lane. Scanner-gated work cannot
