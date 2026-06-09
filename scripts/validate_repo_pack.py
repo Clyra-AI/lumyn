@@ -18,6 +18,7 @@ ACCEPTANCE_MAPPING = PLAN_DIR / "acceptance-mapping.json"
 SCOPE_CLOSURE_MAP = PLAN_DIR / "scope-closure-map.json"
 RISK_CLASSIFICATION = PLAN_DIR / "risk-classification.json"
 FACTORYD_CONFIG = ROOT / ".factory" / "factoryd.example.json"
+FACTORYD_AUTOSHIP_CONFIG = ROOT / ".factory" / "factoryd.autoship.example.json"
 REPAIR_TASK_PACKETS = [
     ROOT / ".factory" / "artifacts" / "pilot" / "lumyn-mvp-slice" / "repair-loop" / "task-packet.json"
 ]
@@ -1080,9 +1081,11 @@ def validate_validation_contract(contract: dict[str, Any]) -> None:
         fail(f"validation-contract.json stop_conditions missing guide categories: {missing}")
 
 
-def validate_factoryd_config(config: dict[str, Any]) -> None:
+def validate_factoryd_config(config: dict[str, Any], autoship_config: dict[str, Any]) -> None:
     if contains_machine_local_path(config):
         fail(".factory/factoryd.example.json contains a machine-local absolute path")
+    if contains_machine_local_path(autoship_config):
+        fail(".factory/factoryd.autoship.example.json contains a machine-local absolute path")
     repos = config.get("repos")
     if not isinstance(repos, dict) or "lumyn" not in repos:
         fail(".factory/factoryd.example.json must define repos.lumyn")
@@ -1131,6 +1134,36 @@ def validate_factoryd_config(config: dict[str, Any]) -> None:
     ]:
         if shipping.get(key) != "":
             fail(f".factory/factoryd.example.json shipping.{key} must be empty until hooks are approved")
+    autoship_repos = autoship_config.get("repos")
+    if not isinstance(autoship_repos, dict) or "lumyn" not in autoship_repos:
+        fail(".factory/factoryd.autoship.example.json must define repos.lumyn")
+    autoship_lumyn = autoship_repos["lumyn"]
+    if not isinstance(autoship_lumyn, dict):
+        fail(".factory/factoryd.autoship.example.json repos.lumyn must be an object")
+    for key, expected in expected_paths.items():
+        if autoship_lumyn.get(key) != expected:
+            fail(f".factory/factoryd.autoship.example.json repos.lumyn.{key} must be {expected!r}")
+    validate_factoryd_runtime(autoship_lumyn, ".factory/factoryd.autoship.example.json repos.lumyn")
+    autoship_shipping = autoship_lumyn.get("shipping")
+    if not isinstance(autoship_shipping, dict):
+        fail(".factory/factoryd.autoship.example.json repos.lumyn must declare shipping block")
+    if autoship_lumyn.get("auto_ship") is not True or autoship_shipping.get("enabled") is not True:
+        fail(".factory/factoryd.autoship.example.json must explicitly enable auto shipping")
+    if autoship_shipping.get("provider") != "github_cli":
+        fail(".factory/factoryd.autoship.example.json shipping.provider must be github_cli")
+    for key in [
+        "push_required",
+        "pr_required",
+        "ci_required",
+        "codex_review_required",
+        "merge_required",
+        "post_merge_required",
+        "scope_closure_required",
+    ]:
+        if autoship_shipping.get(key) is not True:
+            fail(f".factory/factoryd.autoship.example.json shipping.{key} must be true")
+    if autoship_shipping.get("scope_closure_mode") != "semantic":
+        fail(".factory/factoryd.autoship.example.json shipping.scope_closure_mode must be semantic")
     if ".factoryd/" not in (ROOT / ".gitignore").read_text():
         fail(".gitignore must ignore .factoryd/")
 
@@ -1639,6 +1672,7 @@ def main() -> int:
         packets = load_json(TASK_PACKETS)
         contract = load_json(VALIDATION_CONTRACT)
         factoryd_config = load_json(FACTORYD_CONFIG)
+        factoryd_autoship_config = load_json(FACTORYD_AUTOSHIP_CONFIG)
         acceptance_mapping = load_json(ACCEPTANCE_MAPPING)
         scope_closure_map = load_json(SCOPE_CLOSURE_MAP)
         risk_classification = load_json(RISK_CLASSIFICATION)
@@ -1648,7 +1682,7 @@ def main() -> int:
         for packet_path in REPAIR_TASK_PACKETS:
             validate_standalone_task_packet(load_json(packet_path), baseline_task_id)
         validate_validation_contract(contract)
-        validate_factoryd_config(factoryd_config)
+        validate_factoryd_config(factoryd_config, factoryd_autoship_config)
         validate_acceptance_mapping(acceptance_mapping)
         validate_scope_closure_map(scope_closure_map)
         validate_risk_classification(risk_classification)

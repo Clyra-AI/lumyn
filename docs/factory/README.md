@@ -6,7 +6,8 @@ Factory artifacts for Lumyn live under `.factory/artifacts/`.
 - Task-run evidence: `.factory/artifacts/task-runs/`
 - PR lifecycle evidence: `.factory/artifacts/pr-lifecycle/`
 - Downstream pilot evidence: `.factory/artifacts/pilot/lumyn-mvp-slice/`
-- Daemon config template: `.factory/factoryd.example.json`
+- Safe daemon config template: `.factory/factoryd.example.json`
+- Explicit autoship daemon config template: `.factory/factoryd.autoship.example.json`
 - Local daemon runtime state: `.factoryd/` (gitignored)
 
 The canonical product input is:
@@ -43,11 +44,19 @@ offline product/runtime network posture until a specific live sandbox or model
 provider task is approved.
 
 Approved live approval, credential, or network work must be represented in
-`.factory/factoryd.example.json` through task-scoped `capability_grants`.
+the active `.factory/factoryd*.json` config through task-scoped
+`capability_grants`.
 Do not edit PRD-derived task packets just to bypass a daemon gate.
 
-Autonomous shipping is disabled in `.factory/factoryd.example.json`. Enabling
-it requires explicit command hooks for remote lifecycle phases such as push, PR,
-CI/status wait, passive Codex review settle, merge, post-merge monitoring, and
-scope-closure mutation. Missing required hooks must block rather than being
-treated as successful delivery.
+Autonomous shipping is disabled in `.factory/factoryd.example.json`. The
+explicit `.factory/factoryd.autoship.example.json` template may be used only
+after branch protection, `validate`, CodeQL, passive Codex review, merge,
+post-merge, and semantic scope-closure gates are proven. The autoship template
+uses the `github_cli` provider for remote lifecycle phases and must block rather
+than treating missing or failed required phases as successful delivery.
+
+The expected one-task proof command is:
+
+```text
+FACTORY_REPO=/path/to/factory factoryd run --config .factory/factoryd.autoship.example.json --repo lumyn --loop --max-tasks 1 --json
+```

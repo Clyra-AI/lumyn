@@ -59,7 +59,7 @@ non-applicable reason.
 - Lifecycle-gated tasks require local validation, CI/status evidence, review evidence when required, ship evidence, post-merge evidence, and a PR lifecycle report or an explicit approved exception.
 - Passive Codex review settle is required before merge when the repository review integration is enabled.
 - Green CI alone is not merge-ready. The latest PR head must have Codex approval, thumbs-up, actionable-resolved, carry-forward, or an approved exception before merge.
-- Do not merge manually through `gh pr merge`, the GitHub UI, or a connector before passive Codex review settles.
+- Do not merge manually through `gh pr merge`, the GitHub UI, or a connector before passive Codex review settles. A configured `factoryd` autoship run may use its `github_cli` provider only after required CI, passive Codex review, merge, post-merge, and semantic scope-closure gates pass.
 - A PR merged without latest-head Codex review evidence is a process escape and must be recorded in PR lifecycle evidence with a follow-up fix or blocker.
 - GitHub `main` must be protected by branch protection plus the `protect-main-from-direct-push` ruleset.
 - Required live controls: pull requests required, strict `validate` and `CodeQL analyze` status checks, admin enforcement, conversation resolution, no force pushes, no branch deletion, and no current-user ruleset bypass.

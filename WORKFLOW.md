@@ -30,7 +30,8 @@ Lumyn accepts work from:
 ## Artifact Rules
 
 - Durable Factory artifacts go under `.factory/artifacts/`.
-- `factoryd` config template lives at `.factory/factoryd.example.json`.
+- Safe `factoryd` config template lives at `.factory/factoryd.example.json`.
+- Explicit full-loop `factoryd` config template lives at `.factory/factoryd.autoship.example.json`.
 - Ignored daemon runtime state goes under `.factoryd/`.
 - The canonical MVP PRD path is `docs/product/prd.md`.
 - Factory references must use repo-relative paths, never machine-local absolute paths.
@@ -54,7 +55,7 @@ Lumyn accepts work from:
 - Unavailable CI or review gates require an explicit approved exception; they are not silently treated as passed.
 - Passive Codex review settle is required before merge when the repository review integration is enabled.
 - Green CI alone is not merge-ready. The latest PR head must have Codex approval, thumbs-up, actionable-resolved, carry-forward, or an approved exception before merge.
-- Do not merge manually through `gh pr merge`, the GitHub UI, or a connector before passive Codex review settles.
+- Do not merge manually through `gh pr merge`, the GitHub UI, or a connector before passive Codex review settles. A configured `factoryd` autoship run may use its `github_cli` provider only after required CI, passive Codex review, merge, post-merge, and semantic scope-closure gates pass.
 - A PR merged without latest-head Codex review evidence is a process escape and must be recorded in PR lifecycle evidence with a follow-up fix or blocker.
 - Remote branch protection: GitHub `main` must be protected by branch protection plus the `protect-main-from-direct-push` ruleset.
 - Required live controls: pull requests required, strict `validate` and `CodeQL analyze` status checks, admin enforcement, conversation resolution, no force pushes, no branch deletion, and no current-user ruleset bypass.
