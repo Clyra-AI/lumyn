@@ -18,7 +18,7 @@ Lumyn accepts work from:
 3. `task-executor`
 4. `validation-gate`
 5. `code-review`
-6. `ship-pr`
+6. `commit-push`
 7. `post-merge-monitor`
 
 ## Approval Gates
@@ -47,7 +47,7 @@ Lumyn accepts work from:
 - CI status check: GitHub Actions workflow `.github/workflows/validate.yml`, check name `validate`, runs `make prepush-full`.
 - Security scanner: GitHub Actions workflow `.github/workflows/codeql.yml`, status source `CodeQL analyze`, required for dependency additions, generated-code intake, CI/workflow changes, external calls, redaction/share/live/eval/provider code, data exposure, and release-sensitive work.
 - Structured review: `code-review` must produce review evidence when risk, workflow policy, validation findings, or review policy require it.
-- Shipping evidence: `ship-pr` must produce or reference a ship packet before merge.
+- Shipping evidence: `commit-push` must produce or reference a ship packet before merge.
 - Post-merge monitoring: default branch health must be checked after merge and recorded when the task requires lifecycle evidence.
 - PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
 - Unavailable CI or review gates require an explicit approved exception; they are not silently treated as passed.

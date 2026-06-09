@@ -37,6 +37,10 @@ REQUIRED_PLAN_SKILL_REFS = [
     "factory://skills/execution-compiler",
 ]
 
+DEPRECATED_ACTIVE_WORKERS = {
+    "ship-pr": "commit-push",
+}
+
 REQUIRED_PLAN_LEVEL_FIELDS = [
     "planning_skill_alignment",
     "public_api_and_contract_map",
@@ -265,6 +269,31 @@ def contains_machine_local_path(value: Any) -> bool:
     return False
 
 
+def iter_required_worker_chains(value: Any, path: str = "$") -> list[tuple[str, list[Any]]]:
+    chains: list[tuple[str, list[Any]]] = []
+    if isinstance(value, dict):
+        for key, item in value.items():
+            child_path = f"{path}.{key}"
+            if key == "required_worker_chain" and isinstance(item, list):
+                chains.append((child_path, item))
+            chains.extend(iter_required_worker_chains(item, child_path))
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            chains.extend(iter_required_worker_chains(item, f"{path}[{index}]"))
+    return chains
+
+
+def validate_no_deprecated_active_workers(value: dict[str, Any], label: str) -> None:
+    for path, chain in iter_required_worker_chains(value):
+        for index, worker in enumerate(chain):
+            if isinstance(worker, str) and worker in DEPRECATED_ACTIVE_WORKERS:
+                replacement = DEPRECATED_ACTIVE_WORKERS[worker]
+                fail(
+                    f"{label}{path[1:]}[{index}] uses deprecated worker {worker!r}; "
+                    f"use {replacement!r} in active required_worker_chain values"
+                )
+
+
 def missing_ci_lane_refs(task: dict[str, Any]) -> list[str]:
     value = task.get("ci_lane_refs")
     if not isinstance(value, list):
@@ -449,6 +478,7 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
 
 
 def validate_execution_plan(plan: dict[str, Any]) -> str:
+    validate_no_deprecated_active_workers(plan, "execution-plan.json")
     for field in REQUIRED_PLAN_LEVEL_FIELDS:
         value = plan.get(field)
         if not has_nonempty_collection(value):
@@ -530,6 +560,7 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
 
 
 def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> None:
+    validate_no_deprecated_active_workers(packets, "task-packets.json")
     tasks = packets.get("tasks")
     if not isinstance(tasks, list):
         fail("task-packets.json must contain tasks list")
@@ -568,6 +599,7 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
 
 
 def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: str) -> None:
+    validate_no_deprecated_active_workers(packet, "standalone task packet")
     task_id_value = task_id(packet)
     if not task_id_value:
         fail("standalone task packet missing task_id")
@@ -738,6 +770,18 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
 def run_self_test() -> int:
     valid_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
     validate_task_packets(valid_packets, "T2.6")
+
+    deprecated_worker_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    deprecated_worker_packets["tasks"][1]["required_worker_chain"] = ["task-executor", "ship-pr"]
+    try:
+        validate_task_packets(deprecated_worker_packets, "T2.6")
+    except AssertionError as exc:
+        if "deprecated worker" not in str(exc):
+            raise
+    else:
+        fail("self-test expected deprecated active worker to fail")
 
     disconnected_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3-repair-001", [])]}
     try:

@@ -74,7 +74,7 @@
     "remote_status": "pending_pr_lifecycle_evidence"
   },
   "test_scope": "Repo operating pack, CI lane mapping, CodeQL workflow, 12-level test matrix propagation, docs/output/release/provenance policy propagation, architecture policy propagation, and future task-packet enforcement fields.",
-  "independent_validation": "validation-gate rerun required before PR promotion; CodeQL status observed by ship-pr/PR lifecycle.",
+  "independent_validation": "validation-gate rerun required before PR promotion; CodeQL status observed by commit-push/PR lifecycle.",
   "credential_use": "none",
   "network_use": "none",
   "live_work": "none",

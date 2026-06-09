@@ -91,7 +91,7 @@
       "task-executor",
       "validation-gate",
       "code-review",
-      "ship-pr",
+      "commit-push",
       "post-merge-monitor"
     ],
     "evidence_artifact_types": [
