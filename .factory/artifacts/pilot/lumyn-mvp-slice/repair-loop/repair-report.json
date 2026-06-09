@@ -1,0 +1,17 @@
+{
+  "source": "scope-closure gap for Lumyn MVP record_contract_replay_report",
+  "items_reviewed": 4,
+  "items_implemented": 1,
+  "items_already_satisfied": 1,
+  "items_blocked": 2,
+  "validation_rerun": [
+    "make prepush-full"
+  ],
+  "next_state": "ready_for_recheck",
+  "closure_gap_ref": ".factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json#/closure_items/1",
+  "repair_task_packet_ref": ".factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/task-packet.json",
+  "retry_budget_remaining": 1,
+  "approval_or_debt_status": "not_required",
+  "rerun_scope_closure_report_ref": ".factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json",
+  "terminal_outcome": "ready_for_rerun"
+}

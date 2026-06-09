@@ -1,0 +1,23 @@
+{
+  "artifact_type": "pilot_blocker_record",
+  "schema_version": "0.1",
+  "work_item_id": "lumyn-mvp-downstream-pilot",
+  "blockers": [
+    {
+      "id": "live-sandbox-credential-posture",
+      "scope_items": [
+        "live_verify_boundary_ci_share"
+      ],
+      "status": "blocked_until_approved",
+      "reason": "Live sandbox verification requires scoped credentials and a network allowlist."
+    },
+    {
+      "id": "model-provider-credential-posture",
+      "scope_items": [
+        "live_agent_eval"
+      ],
+      "status": "blocked_until_approved",
+      "reason": "Live eval requires model provider selection, scoped model credentials, and network allowlist approval."
+    }
+  ]
+}

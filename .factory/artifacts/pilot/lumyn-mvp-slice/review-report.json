@@ -1,0 +1,82 @@
+{
+  "work_item_id": "lumyn-mvp-downstream-pilot",
+  "review_type": "code",
+  "review_scope": [
+    ".factory/artifacts/pilot/lumyn-mvp-slice/",
+    "scripts/validate_factory_pilot_evidence.py",
+    "Makefile"
+  ],
+  "reviewer_class": "validation_gate",
+  "risk_class": "medium",
+  "context_isolation": {
+    "allowed_sources": [
+      "Lumyn MVP PRD",
+      "Factory PRD-to-plan artifacts",
+      "task-run validation reports",
+      "work-proof markers",
+      "pilot evidence package"
+    ],
+    "disallowed_sources": [
+      "private builder notes",
+      "unstated local machine paths"
+    ],
+    "builder_notes_authoritative": false
+  },
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "P2",
+      "summary": "The full MVP remains incomplete and must not be represented as closed.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": ".factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json",
+      "failure_scenario": "Factory could overstate pilot completion and continue without a bounded repair task.",
+      "impact": "Operator trust in the downstream pilot evidence would degrade.",
+      "minimum_fix": "Keep overall_status blocked, rerun_required true, and repair task T3-repair-001 linked to the first missing slice.",
+      "promotion_effect": "ready_for_pr",
+      "evidence_refs": [
+        ".factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json",
+        ".factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/task-packet.json"
+      ]
+    }
+  ],
+  "verdict": "approved",
+  "required_fixes": [],
+  "residual_risks": [
+    "T3-T12 still need governed implementation, lifecycle evidence, and rerun closure before the MVP can be called complete.",
+    "Live sandbox and live eval work require credential and network approval."
+  ],
+  "evidence_refs": [
+    ".factory/artifacts/pilot/lumyn-mvp-slice/validation-report.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/work-proof-marker.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/task-packet.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/repair-report.json"
+  ],
+  "approval_effect": {
+    "promotion_decision": "ready_for_pr",
+    "approvals_granted": [
+      "pilot_evidence_package_reviewed"
+    ],
+    "blocks_promotion": false
+  },
+  "systems_questions": {
+    "state_impact": [
+      "The pilot evidence package becomes the current Factory source of truth for Lumyn MVP closure status."
+    ],
+    "source_of_truth_changes": [
+      "Scope closure now points at T3-repair-001 as the first next implementation task."
+    ],
+    "feedback_plan": [
+      "Rerun pilot evidence validation and scope closure after T3."
+    ],
+    "blast_radius": [
+      "Only Factory artifacts, Makefile contract checks, and the pilot evidence validator are changed."
+    ],
+    "rollback_or_deletion_test": [
+      "If the pilot evidence package or validator is removed, make test-contracts must fail."
+    ],
+    "system_model_summary": "The downstream pilot is operational enough to prove task evidence and closure routing, but not a full autonomous daemon or full MVP completion."
+  }
+}

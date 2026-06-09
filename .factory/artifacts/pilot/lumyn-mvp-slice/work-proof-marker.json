@@ -1,0 +1,29 @@
+{
+  "artifact_type": "work_proof_marker",
+  "schema_version": "0.1",
+  "task_id": "pilot-lumyn-mvp-slice-closure",
+  "created_at": "2026-06-09T04:45:00Z",
+  "generated_by": "codex",
+  "workspace_ref": "codex/lumyn-pilot-evidence-closure",
+  "base_ref": "main",
+  "execution_status": "completed",
+  "changed_paths": [
+    "Makefile",
+    "scripts/validate_factory_pilot_evidence.py",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/README.md",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/work-proof-marker.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/validation-report.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/mission-event-log.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/blockers.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/task-packet.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/repair-report.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/review-report.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/ship-packet.json"
+  ],
+  "removed_paths": [],
+  "forbidden_paths_touched": [],
+  "validation_report_ref": ".factory/artifacts/pilot/lumyn-mvp-slice/validation-report.json",
+  "network_used": false,
+  "live_credentials_used": false
+}
