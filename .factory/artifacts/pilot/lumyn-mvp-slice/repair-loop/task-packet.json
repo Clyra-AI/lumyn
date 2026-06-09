@@ -268,8 +268,8 @@
     "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
     "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
   ],
-  "adr_required": false,
-  "adr_trigger_reason": "Not required unless implementation expands public contracts, state ownership, credential/network posture, or failure semantics beyond the packet.",
+  "adr_required": true,
+  "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
   "tdd_first_failing_tests": [
     "Add or update the smallest failing test, fixture, or schema validation for T3-repair-001 acceptance before implementation when practical.",
     "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."

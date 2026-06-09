@@ -44,7 +44,8 @@
     "Medium/high risk architecture work must carry systems-thinking, TDD/skipped-reason, ADR, performance, reliability, and fail-closed evidence as applicable.",
     "Factory planning-skill alignment must be present in the execution plan, validation contract, and task packets.",
     "Task packets must carry changelog/versioning intent, contract/API impact, architecture constraints, ADR posture, TDD-first evidence, cost/perf impact, chaos/failure hypothesis, and semantic invariants.",
-    "Plan drift after alignment must update context brief, execution plan, task packets, and validation contract before implementation continues."
+    "Plan drift after alignment must update context brief, execution plan, task packets, and validation contract before implementation continues.",
+    "Any task with public or executable contract impact must set adr_required=true and carry an ADR or decision-note expectation before closure."
   ],
   "stop_conditions": [
     "implementation requires undeclared live credentials",
@@ -59,7 +60,8 @@
     "systems-thinking, TDD, ADR, performance, reliability, or fail-closed refs are missing for touched architecture surfaces",
     "Factory prd-to-plan or execution-compiler required fields are missing from the execution plan or a task packet",
     "changelog/versioning intent, contract/API impact, ADR posture, TDD-first evidence, cost/perf impact, chaos/failure hypothesis, or semantic invariants are missing for a task",
-    "alignment drift changes runtime, distribution, provider, dependency, artifact namespace, credential, live-work, guide, or validation-contract decisions without updating context brief, execution plan, task packets, and validation contract"
+    "alignment drift changes runtime, distribution, provider, dependency, artifact namespace, credential, live-work, guide, or validation-contract decisions without updating context brief, execution plan, task packets, and validation contract",
+    "public or executable contract impact is declared while adr_required is false or missing"
   ],
   "runtime_pins": {
     "language": "go",
