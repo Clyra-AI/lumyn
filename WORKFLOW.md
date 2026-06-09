@@ -83,4 +83,4 @@ Stop and request human decision if:
 - scanner-gated work lacks CodeQL status evidence or an approved scanner exception
 - a product task omits required test-matrix refs, scanner gates, or architecture guidance refs inherited from the repo operating pack
 - a product task omits required CI lane refs, docs parity, output contract, release integrity, provenance, systems-thinking, TDD, ADR, performance, reliability, or fail-closed refs inherited from the repo operating pack
-- a product task omits Factory `prd-to-plan` / `execution-compiler` fields for runtime pins, slice rationale, changelog/versioning intent, contract impact, ADR posture, TDD-first evidence, cost/perf impact, failure hypotheses, or semantic invariants
+- a product task omits Factory `prd-to-plan` / `execution-compiler` fields for Factory compatibility, explicit scope exclusions, alignment gate refs, plan-drift refs, runtime pins, slice rationale, changelog/versioning intent, contract impact, ADR posture, TDD-first evidence, cost/perf impact, failure hypotheses, semantic invariants, canonical worker chains, or lifecycle gates

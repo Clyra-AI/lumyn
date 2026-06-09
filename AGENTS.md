@@ -92,4 +92,4 @@ available.
 - PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
 - Test matrix and architecture propagation source: `docs/dev/dev_guides.md` and `docs/architecture/architecture_guides.md`.
 - Product task packets must preserve CI lane refs, docs parity, output contract, release integrity, provenance, systems-thinking, TDD, ADR, performance, reliability, and fail-closed requirements from those guides.
-- Product task packets must also preserve Factory `prd-to-plan` / `execution-compiler` fields for runtime pins, slice rationale, changelog/versioning intent, contract impact, architecture constraints, ADR posture, TDD-first evidence, cost/perf impact, failure hypotheses, and semantic invariants.
+- Product task packets must also preserve Factory `prd-to-plan` / `execution-compiler` fields for Factory compatibility, explicit scope exclusions, alignment gate refs, plan-drift refs, runtime pins, slice rationale, changelog/versioning intent, contract impact, architecture constraints, ADR posture, TDD-first evidence, cost/perf impact, failure hypotheses, semantic invariants, canonical worker chains, and lifecycle gates.

@@ -126,5 +126,55 @@
         "network allowlist"
       ]
     }
+  },
+  "factory_compatibility": {
+    "factory_contract_version": "1.0",
+    "profile_ref": "profiles/lumyn.yaml",
+    "skill_vocabulary_version": "2026-06-09",
+    "skill_inventory_ref": "skills/README.md",
+    "generated_by": "prd-to-plan+execution-compiler",
+    "generated_at": "2026-06-09T00:00:00Z",
+    "deprecated_worker_policy": "block_active_aliases",
+    "deprecated_worker_aliases": [
+      {
+        "deprecated": "ship-pr",
+        "replacement": "commit-push",
+        "status": "deprecated",
+        "migration_behavior": "block active task packets until required_worker_chain is migrated"
+      }
+    ]
+  },
+  "alignment_gate": {
+    "status": "resolved",
+    "source_context_brief_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json#/alignment_decisions",
+    "blocking_decisions": [
+      "runtime: Go 1.26.4 with module github.com/Clyra-AI/lumyn",
+      "distribution: standalone binary first, Homebrew later, PyPI not primary",
+      "provider: OpenAI-compatible HTTP adapter first for eval, no SDK-heavy dependency during deterministic bootstrap",
+      "artifact namespace: Factory evidence in .factory/artifacts/ and product artifacts in workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
+      "credential and live-work posture: no network, sandbox credentials, or model keys until deterministic replay passes and human approval unlocks them",
+      "dependency policy: standard library first; pinned dependencies only when required and justified"
+    ],
+    "implementation_may_start": true
+  },
+  "plan_drift_policy": {
+    "drift_triggers": [
+      "runtime or toolchain change",
+      "distribution target change",
+      "provider or credential posture change",
+      "artifact namespace change",
+      "dependency policy change",
+      "live-work posture change",
+      "validation contract change",
+      "Factory contract, profile, skill inventory, or skill vocabulary changes that alter required fields, lifecycle workers, validation gates, or evidence expectations"
+    ],
+    "required_updates": [
+      "context_brief",
+      "execution_plan",
+      "task_packets",
+      "validation_contract",
+      "factory_compatibility"
+    ],
+    "continuation_behavior": "block_until_artifacts_updated"
   }
 }

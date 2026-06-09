@@ -45,7 +45,11 @@
     "Factory planning-skill alignment must be present in the execution plan, validation contract, and task packets.",
     "Task packets must carry changelog/versioning intent, contract/API impact, architecture constraints, ADR posture, TDD-first evidence, cost/perf impact, chaos/failure hypothesis, and semantic invariants.",
     "Plan drift after alignment must update context brief, execution plan, task packets, and validation contract before implementation continues.",
-    "Any task with public or executable contract impact must set adr_required=true and carry an ADR or decision-note expectation before closure."
+    "Any task with public or executable contract impact must set adr_required=true and carry an ADR or decision-note expectation before closure.",
+    "Factory compatibility must be present in context brief, execution plan, validation contract, and task packets.",
+    "Active required_worker_chain values must use commit-push, not deprecated aliases such as ship-pr.",
+    "Task packets must carry explicit scope_exclusions, alignment_gate_ref, and plan_drift_policy_ref inherited from the execution plan.",
+    "Runtime pins must include toolchain_version, module_or_package_path, provider_policy, artifact_namespace, and live_work_policy before implementation starts."
   ],
   "stop_conditions": [
     "implementation requires undeclared live credentials",
@@ -61,13 +65,25 @@
     "Factory prd-to-plan or execution-compiler required fields are missing from the execution plan or a task packet",
     "changelog/versioning intent, contract/API impact, ADR posture, TDD-first evidence, cost/perf impact, chaos/failure hypothesis, or semantic invariants are missing for a task",
     "alignment drift changes runtime, distribution, provider, dependency, artifact namespace, credential, live-work, guide, or validation-contract decisions without updating context brief, execution plan, task packets, and validation contract",
-    "public or executable contract impact is declared while adr_required is false or missing"
+    "public or executable contract impact is declared while adr_required is false or missing",
+    "factory_compatibility is missing from context brief, execution plan, validation contract, or a task packet",
+    "active required_worker_chain contains a deprecated worker alias such as ship-pr",
+    "scope_exclusions, alignment_gate_ref, or plan_drift_policy_ref are missing from a task packet",
+    "runtime_pins omit toolchain_version, module_or_package_path, provider_policy, artifact_namespace, or live_work_policy"
   ],
   "runtime_pins": {
     "language": "go",
     "go_version": "1.26.4",
+    "toolchain_version": "1.26.4",
     "module_path": "github.com/Clyra-AI/lumyn",
-    "dependency_policy": "standard library only for T1; add pinned dependencies only when required by later tasks"
+    "module_or_package_path": "github.com/Clyra-AI/lumyn",
+    "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
+    "distribution_target": "standalone_binary",
+    "secondary_distribution_target": "homebrew_after_first_binary",
+    "not_primary_distribution_target": "pypi",
+    "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+    "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
+    "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture"
   },
   "distribution_pins": {
     "primary": "standalone_binary",
@@ -169,7 +185,11 @@
       "test_matrix_wiring",
       "minimum_now_sequence",
       "explicit_non_goals",
-      "definition_of_done"
+      "definition_of_done",
+      "factory_compatibility",
+      "runtime_pins",
+      "alignment_gate",
+      "plan_drift_policy"
     ],
     "required_task_fields": [
       "planning_skill_refs",
@@ -183,8 +203,56 @@
       "tdd_first_failing_tests",
       "cost_perf_impact",
       "chaos_failure_hypothesis",
-      "semantic_invariants"
+      "semantic_invariants",
+      "factory_compatibility",
+      "scope_exclusions",
+      "alignment_gate_ref",
+      "plan_drift_policy_ref",
+      "required_worker_chain",
+      "lifecycle_gates",
+      "ci_lane_refs",
+      "test_matrix_refs",
+      "security_scanner_gates",
+      "engineering_policy_refs",
+      "architecture_guidance_refs"
     ],
     "validator_ref": "scripts/validate_repo_pack.py"
+  },
+  "factory_compatibility": {
+    "factory_contract_version": "1.0",
+    "profile_ref": "profiles/lumyn.yaml",
+    "skill_vocabulary_version": "2026-06-09",
+    "skill_inventory_ref": "skills/README.md",
+    "generated_by": "prd-to-plan+execution-compiler",
+    "generated_at": "2026-06-09T00:00:00Z",
+    "deprecated_worker_policy": "block_active_aliases",
+    "deprecated_worker_aliases": [
+      {
+        "deprecated": "ship-pr",
+        "replacement": "commit-push",
+        "status": "deprecated",
+        "migration_behavior": "block active task packets until required_worker_chain is migrated"
+      }
+    ]
+  },
+  "plan_drift_policy": {
+    "drift_triggers": [
+      "runtime or toolchain change",
+      "distribution target change",
+      "provider or credential posture change",
+      "artifact namespace change",
+      "dependency policy change",
+      "live-work posture change",
+      "validation contract change",
+      "Factory contract, profile, skill inventory, or skill vocabulary changes that alter required fields, lifecycle workers, validation gates, or evidence expectations"
+    ],
+    "required_updates": [
+      "context_brief",
+      "execution_plan",
+      "task_packets",
+      "validation_contract",
+      "factory_compatibility"
+    ],
+    "continuation_behavior": "block_until_artifacts_updated"
   }
 }

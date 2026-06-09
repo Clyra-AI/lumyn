@@ -10,6 +10,7 @@
       "risk_class": "low",
       "blocked_by": [],
       "allowed_paths": [
+        ".factory/artifacts/pr-lifecycle/T1/",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/",
         ".factory/artifacts/task-runs/T1/",
         ".tool-versions",
@@ -69,7 +70,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -84,7 +85,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "vertical",
@@ -251,7 +256,52 @@
           "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
         }
-      ]
+      ],
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "commit-push",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "codex_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      }
     },
     {
       "task_id": "T2",
@@ -262,6 +312,7 @@
         "T1"
       ],
       "allowed_paths": [
+        ".factory/artifacts/pr-lifecycle/T2/",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/",
         ".factory/artifacts/task-runs/T2/",
         "schemas/",
@@ -310,7 +361,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -325,7 +376,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "foundation",
@@ -501,7 +556,52 @@
           "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
         }
-      ]
+      ],
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "commit-push",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "codex_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      }
     },
     {
       "task_id": "T2.5",
@@ -563,7 +663,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -578,7 +678,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "foundation",
@@ -751,7 +855,52 @@
           "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
         }
-      ]
+      ],
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "commit-push",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "codex_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      }
     },
     {
       "task_id": "T2.6",
@@ -945,7 +1094,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -960,7 +1109,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "foundation",
@@ -1006,7 +1159,52 @@
         "Factory evidence and product artifacts use repo-relative paths only.",
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "commit-push",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "codex_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      }
     },
     {
       "task_id": "T3",
@@ -1049,6 +1247,7 @@
         "local_validation_required": true,
         "ci_required": true,
         "code_review_required": true,
+        "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
@@ -1198,7 +1397,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -1213,7 +1412,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "vertical",
@@ -1258,7 +1461,35 @@
         "Factory evidence and product artifacts use repo-relative paths only.",
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
     },
     {
       "task_id": "T4",
@@ -1301,6 +1532,7 @@
         "local_validation_required": true,
         "ci_required": true,
         "code_review_required": true,
+        "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
@@ -1455,7 +1687,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -1470,7 +1702,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "vertical",
@@ -1517,7 +1753,35 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Schema-backed artifacts must validate against the declared schema version or fail closure."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
     },
     {
       "task_id": "T5",
@@ -1558,6 +1822,7 @@
         "local_validation_required": true,
         "ci_required": true,
         "code_review_required": true,
+        "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
@@ -1712,7 +1977,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -1727,7 +1992,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "vertical",
@@ -1773,7 +2042,35 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Schema-backed artifacts must validate against the declared schema version or fail closure."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
     },
     {
       "task_id": "T6",
@@ -1815,6 +2112,7 @@
         "local_validation_required": true,
         "ci_required": true,
         "code_review_required": true,
+        "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
@@ -1969,7 +2267,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -1984,7 +2282,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "vertical",
@@ -2029,7 +2331,35 @@
         "Factory evidence and product artifacts use repo-relative paths only.",
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
     },
     {
       "task_id": "T7",
@@ -2074,6 +2404,7 @@
         "local_validation_required": true,
         "ci_required": true,
         "code_review_required": true,
+        "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
@@ -2233,7 +2564,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -2248,7 +2579,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "vertical",
@@ -2295,7 +2630,35 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Live credential/network work is disabled by default and cannot run without approved posture evidence."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
     },
     {
       "task_id": "T8",
@@ -2337,6 +2700,7 @@
         "local_validation_required": true,
         "ci_required": true,
         "code_review_required": true,
+        "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
@@ -2496,7 +2860,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -2511,7 +2875,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "vertical",
@@ -2557,7 +2925,35 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Schema-backed artifacts must validate against the declared schema version or fail closure."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
     },
     {
       "task_id": "T9",
@@ -2601,6 +2997,7 @@
         "local_validation_required": true,
         "ci_required": true,
         "code_review_required": true,
+        "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
@@ -2750,7 +3147,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -2765,7 +3162,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "vertical",
@@ -2812,7 +3213,35 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "PR/CI surfaces must distinguish skipped, stale, weak, and strong proof states."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
     },
     {
       "task_id": "T10",
@@ -2853,6 +3282,7 @@
         "local_validation_required": true,
         "ci_required": true,
         "code_review_required": true,
+        "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
@@ -3012,7 +3442,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -3027,7 +3457,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "vertical",
@@ -3074,7 +3508,35 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Schema-backed artifacts must validate against the declared schema version or fail closure."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
     },
     {
       "task_id": "T11",
@@ -3133,6 +3595,7 @@
         "local_validation_required": true,
         "ci_required": true,
         "code_review_required": true,
+        "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
@@ -3292,7 +3755,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -3307,7 +3770,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "vertical",
@@ -3354,7 +3821,35 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Live credential/network work is disabled by default and cannot run without approved posture evidence."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
     },
     {
       "task_id": "T12",
@@ -3397,6 +3892,7 @@
         "local_validation_required": true,
         "ci_required": true,
         "code_review_required": true,
+        "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
@@ -3556,7 +4052,7 @@
         "language": "go",
         "go_version": "1.26.4",
         "module_path": "github.com/Clyra-AI/lumyn",
-        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
@@ -3571,7 +4067,11 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
       },
       "slice_rationale": {
         "slice_type": "vertical",
@@ -3617,7 +4117,35 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Schema-backed artifacts must validate against the declared schema version or fail closure."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
     }
   ]
 }

@@ -10,6 +10,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_DIR = ROOT / ".factory" / "artifacts" / "prd-to-plan" / "lumyn-mvp"
+CONTEXT_BRIEF = PLAN_DIR / "context-brief.json"
 EXECUTION_PLAN = PLAN_DIR / "execution-plan.json"
 TASK_PACKETS = PLAN_DIR / "task-packets.json"
 VALIDATION_CONTRACT = PLAN_DIR / "validation-contract.json"
@@ -30,6 +31,12 @@ REQUIRED_TASK_FIELDS = [
     "security_scanner_gates",
     "engineering_policy_refs",
     "architecture_guidance_refs",
+    "factory_compatibility",
+    "scope_exclusions",
+    "alignment_gate_ref",
+    "plan_drift_policy_ref",
+    "required_worker_chain",
+    "lifecycle_gates",
 ]
 
 REQUIRED_PLAN_SKILL_REFS = [
@@ -43,6 +50,10 @@ DEPRECATED_ACTIVE_WORKERS = {
 
 REQUIRED_PLAN_LEVEL_FIELDS = [
     "planning_skill_alignment",
+    "factory_compatibility",
+    "runtime_pins",
+    "alignment_gate",
+    "plan_drift_policy",
     "public_api_and_contract_map",
     "docs_and_oss_readiness_baseline",
     "test_matrix_wiring",
@@ -69,9 +80,33 @@ REQUIRED_TASK_PLANNING_FIELDS = [
 REQUIRED_RUNTIME_PIN_FIELDS = [
     "language",
     "go_version",
+    "toolchain_version",
     "module_path",
+    "module_or_package_path",
     "dependency_policy",
     "distribution_target",
+    "provider_policy",
+    "artifact_namespace",
+    "live_work_policy",
+]
+
+REQUIRED_FACTORY_COMPATIBILITY_FIELDS = [
+    "factory_contract_version",
+    "profile_ref",
+    "skill_vocabulary_version",
+    "skill_inventory_ref",
+    "generated_by",
+    "generated_at",
+    "deprecated_worker_policy",
+    "deprecated_worker_aliases",
+]
+
+REQUIRED_PLAN_DRIFT_UPDATES = [
+    "context_brief",
+    "execution_plan",
+    "task_packets",
+    "validation_contract",
+    "factory_compatibility",
 ]
 
 REQUIRED_CHANGELOG_FIELDS = [
@@ -322,6 +357,85 @@ def validate_no_deprecated_active_workers(value: dict[str, Any], label: str) -> 
                 )
 
 
+def has_factory_compatibility(value: Any) -> bool:
+    if not isinstance(value, dict):
+        return False
+    if not all(field in value for field in REQUIRED_FACTORY_COMPATIBILITY_FIELDS):
+        return False
+    if value.get("deprecated_worker_policy") != "block_active_aliases":
+        return False
+    aliases = value.get("deprecated_worker_aliases")
+    if not isinstance(aliases, list) or not aliases:
+        return False
+    return any(
+        isinstance(alias, dict)
+        and alias.get("deprecated") == "ship-pr"
+        and alias.get("replacement") == "commit-push"
+        for alias in aliases
+    )
+
+
+def validate_factory_compatibility(value: Any, label: str) -> None:
+    if not has_factory_compatibility(value):
+        fail(f"{label} must include current Factory compatibility metadata and ship-pr -> commit-push alias policy")
+
+
+def has_runtime_pins(value: Any) -> bool:
+    return isinstance(value, dict) and all(has_nonempty_string(value.get(field)) for field in REQUIRED_RUNTIME_PIN_FIELDS)
+
+
+def validate_runtime_pins(value: Any, label: str) -> None:
+    if not isinstance(value, dict):
+        fail(f"{label} must be an object")
+    missing = [field for field in REQUIRED_RUNTIME_PIN_FIELDS if not has_nonempty_string(value.get(field))]
+    if missing:
+        fail(f"{label} missing runtime pin fields: {', '.join(missing)}")
+
+
+def has_alignment_gate(value: Any) -> bool:
+    return (
+        isinstance(value, dict)
+        and value.get("status") == "resolved"
+        and has_nonempty_string(value.get("source_context_brief_ref"))
+        and has_nonempty_list(value.get("blocking_decisions"))
+        and value.get("implementation_may_start") is True
+    )
+
+
+def validate_alignment_gate(value: Any, label: str) -> None:
+    if not has_alignment_gate(value):
+        fail(f"{label} must be resolved, cite the context brief, list blocking decisions, and allow implementation")
+
+
+def has_plan_drift_policy(value: Any) -> bool:
+    if not isinstance(value, dict):
+        return False
+    updates = value.get("required_updates")
+    return (
+        has_nonempty_list(value.get("drift_triggers"))
+        and isinstance(updates, list)
+        and all(required in updates for required in REQUIRED_PLAN_DRIFT_UPDATES)
+        and value.get("continuation_behavior") == "block_until_artifacts_updated"
+    )
+
+
+def validate_plan_drift_policy(value: Any, label: str) -> None:
+    if not has_plan_drift_policy(value):
+        fail(f"{label} must require context brief, execution plan, task packets, validation contract, and factory_compatibility updates before continuing")
+
+
+def has_lifecycle_gates(value: Any) -> bool:
+    required = [
+        "local_validation_required",
+        "ci_required",
+        "code_review_required",
+        "ship_pr_required",
+        "post_merge_monitor_required",
+        "pr_lifecycle_report_required",
+    ]
+    return isinstance(value, dict) and all(isinstance(value.get(field), bool) for field in required)
+
+
 def missing_ci_lane_refs(task: dict[str, Any]) -> list[str]:
     value = task.get("ci_lane_refs")
     if not isinstance(value, list):
@@ -387,9 +501,7 @@ def task_planning_field_has_evidence(task: dict[str, Any], field: str) -> bool:
     if field == "planning_skill_refs":
         return has_required_string_refs(value, REQUIRED_PLAN_SKILL_REFS)
     if field == "runtime_pins":
-        if not has_nonempty_dict(value):
-            return False
-        return all(has_nonempty_string(value.get(pin)) for pin in REQUIRED_RUNTIME_PIN_FIELDS)
+        return has_runtime_pins(value)
     if field == "slice_rationale":
         return (
             has_nonempty_dict(value)
@@ -437,8 +549,32 @@ def validate_task_planning_skill_fields(task: dict[str, Any]) -> None:
         fail(f"{task_id_value} contains a machine-local absolute path")
 
 
+def validate_task_execution_compiler_fields(task: dict[str, Any]) -> None:
+    task_id_value = task_id(task)
+    validate_factory_compatibility(task.get("factory_compatibility"), f"{task_id_value}.factory_compatibility")
+    validate_runtime_pins(task.get("runtime_pins"), f"{task_id_value}.runtime_pins")
+    if not has_nonempty_list(task.get("scope_exclusions")):
+        fail(f"{task_id_value}.scope_exclusions must preserve explicit PRD non-goals")
+    if task.get("alignment_gate_ref") != ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate":
+        fail(f"{task_id_value}.alignment_gate_ref must cite the execution-plan alignment gate")
+    if task.get("plan_drift_policy_ref") != ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy":
+        fail(f"{task_id_value}.plan_drift_policy_ref must cite the execution-plan drift policy")
+    if not has_lifecycle_gates(task.get("lifecycle_gates")):
+        fail(f"{task_id_value}.lifecycle_gates must declare local, CI, review, ship, post-merge, and PR lifecycle gates")
+
+
 def field_has_evidence(task: dict[str, Any], field: str) -> bool:
     value = task.get(field)
+    if field == "factory_compatibility":
+        return has_factory_compatibility(value)
+    if field == "scope_exclusions":
+        return has_nonempty_list(value)
+    if field in ["alignment_gate_ref", "plan_drift_policy_ref"]:
+        return has_nonempty_string(value)
+    if field == "required_worker_chain":
+        return isinstance(value, list) and all(isinstance(item, str) and item.strip() for item in value)
+    if field == "lifecycle_gates":
+        return has_lifecycle_gates(value)
     if field == "security_scanner_gates":
         if not isinstance(value, dict):
             return False
@@ -505,8 +641,20 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
     return False
 
 
+def validate_context_brief(context: dict[str, Any]) -> None:
+    validate_factory_compatibility(context.get("factory_compatibility"), "context-brief.json.factory_compatibility")
+    validate_alignment_gate(context.get("alignment_gate"), "context-brief.json.alignment_gate")
+    validate_plan_drift_policy(context.get("plan_drift_policy"), "context-brief.json.plan_drift_policy")
+    if contains_machine_local_path(context):
+        fail("context-brief.json contains a machine-local absolute path")
+
+
 def validate_execution_plan(plan: dict[str, Any]) -> str:
     validate_no_deprecated_active_workers(plan, "execution-plan.json")
+    validate_factory_compatibility(plan.get("factory_compatibility"), "execution-plan.json.factory_compatibility")
+    validate_runtime_pins(plan.get("runtime_pins"), "execution-plan.json.runtime_pins")
+    validate_alignment_gate(plan.get("alignment_gate"), "execution-plan.json.alignment_gate")
+    validate_plan_drift_policy(plan.get("plan_drift_policy"), "execution-plan.json.plan_drift_policy")
     for field in REQUIRED_PLAN_LEVEL_FIELDS:
         value = plan.get(field)
         if not has_nonempty_collection(value):
@@ -519,7 +667,7 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
     if not has_required_string_refs(alignment.get("source_refs"), REQUIRED_PLAN_SKILL_REFS):
         fail("execution plan planning_skill_alignment.source_refs must include Factory planning skills")
     if contains_machine_local_path(plan):
-        fail("execution plan contains a machine-local /Users/ path")
+        fail("execution plan contains a machine-local absolute path")
 
     propagation = plan.get("dev_architecture_propagation")
     if not isinstance(propagation, dict):
@@ -624,6 +772,7 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
             fail(f"{task_id(task)} missing guide propagation fields: {', '.join(missing)}")
         validate_task_guide_sources(task)
         validate_task_planning_skill_fields(task)
+        validate_task_execution_compiler_fields(task)
 
 
 def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: str) -> None:
@@ -641,9 +790,13 @@ def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: st
         fail(f"{task_id_value} missing guide propagation fields: {', '.join(missing)}")
     validate_task_guide_sources(packet)
     validate_task_planning_skill_fields(packet)
+    validate_task_execution_compiler_fields(packet)
 
 
 def validate_validation_contract(contract: dict[str, Any]) -> None:
+    validate_factory_compatibility(contract.get("factory_compatibility"), "validation-contract.json.factory_compatibility")
+    validate_runtime_pins(contract.get("runtime_pins"), "validation-contract.json.runtime_pins")
+    validate_plan_drift_policy(contract.get("plan_drift_policy"), "validation-contract.json.plan_drift_policy")
     alignment = contract.get("planning_skill_alignment")
     if not isinstance(alignment, dict):
         fail("validation-contract.json missing planning_skill_alignment")
@@ -659,8 +812,14 @@ def validate_validation_contract(contract: dict[str, Any]) -> None:
         field in required_task_fields for field in REQUIRED_TASK_PLANNING_FIELDS
     ):
         fail("validation-contract.json planning_skill_alignment.required_task_fields is incomplete")
+    missing_execution_fields = [field for field in REQUIRED_TASK_FIELDS if field not in required_task_fields]
+    if missing_execution_fields:
+        fail(
+            "validation-contract.json planning_skill_alignment.required_task_fields missing "
+            f"execution-compiler fields: {missing_execution_fields}"
+        )
     if contains_machine_local_path(contract):
-        fail("validation-contract.json contains a machine-local /Users/ path")
+        fail("validation-contract.json contains a machine-local absolute path")
     stop_conditions = contract.get("stop_conditions")
     if not isinstance(stop_conditions, list):
         fail("validation-contract.json must contain stop_conditions list")
@@ -678,6 +837,48 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
     return {
         "task_id": task_id_value,
         "blocked_by": blocked_by,
+        "factory_compatibility": {
+            "factory_contract_version": "1.0",
+            "profile_ref": "profiles/lumyn.yaml",
+            "skill_vocabulary_version": "2026-06-09",
+            "skill_inventory_ref": "skills/README.md",
+            "generated_by": "prd-to-plan+execution-compiler",
+            "generated_at": "2026-06-09T00:00:00Z",
+            "deprecated_worker_policy": "block_active_aliases",
+            "deprecated_worker_aliases": [
+                {
+                    "deprecated": "ship-pr",
+                    "replacement": "commit-push",
+                    "status": "deprecated",
+                    "migration_behavior": "block active task packets until required_worker_chain is migrated",
+                }
+            ],
+        },
+        "scope_exclusions": [
+            "MCP recording",
+            "event assertions",
+            "hosted dashboard",
+            "runtime enforcement",
+        ],
+        "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+        "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+        "required_worker_chain": [
+            "task-executor",
+            "validation-gate",
+            "code-review",
+            "commit-push",
+            "post-merge-monitor",
+        ],
+        "lifecycle_gates": {
+            "local_validation_required": True,
+            "ci_required": True,
+            "code_review_required": True,
+            "codex_review_required": True,
+            "ship_pr_required": True,
+            "post_merge_monitor_required": True,
+            "pr_lifecycle_report_required": True,
+            "skip_policy": "approved_exception_required",
+        },
         "test_matrix_refs": [{"tier": "Tier 1 Unit", "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix"}],
         "ci_lane_refs": [
             {
@@ -766,9 +967,14 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
         "runtime_pins": {
             "language": "go",
             "go_version": "1.26.4",
+            "toolchain_version": "1.26.4",
             "module_path": "github.com/Clyra-AI/lumyn",
+            "module_or_package_path": "github.com/Clyra-AI/lumyn",
             "dependency_policy": "standard library first; pinned dependencies only when task-required",
             "distribution_target": "standalone_binary",
+            "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+            "artifact_namespace": ".factory/artifacts/ for Factory evidence",
+            "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks live work",
         },
         "slice_type": "vertical",
         "slice_rationale": {
@@ -810,6 +1016,30 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected deprecated active worker to fail")
+
+    missing_runtime_pin_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    del missing_runtime_pin_packets["tasks"][1]["runtime_pins"]["provider_policy"]
+    try:
+        validate_task_packets(missing_runtime_pin_packets, "T2.6")
+    except AssertionError as exc:
+        if "runtime_pins" not in str(exc) and "runtime pin fields" not in str(exc):
+            raise
+    else:
+        fail("self-test expected missing runtime pin to fail")
+
+    missing_alignment_ref_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    del missing_alignment_ref_packets["tasks"][1]["alignment_gate_ref"]
+    try:
+        validate_task_packets(missing_alignment_ref_packets, "T2.6")
+    except AssertionError as exc:
+        if "alignment_gate_ref" not in str(exc):
+            raise
+    else:
+        fail("self-test expected missing alignment gate ref to fail")
 
     disconnected_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3-repair-001", [])]}
     try:
@@ -971,9 +1201,11 @@ def main() -> int:
         return 2
     try:
         validate_guides()
+        context = load_json(CONTEXT_BRIEF)
         plan = load_json(EXECUTION_PLAN)
         packets = load_json(TASK_PACKETS)
         contract = load_json(VALIDATION_CONTRACT)
+        validate_context_brief(context)
         baseline_task_id = validate_execution_plan(plan)
         validate_task_packets(packets, baseline_task_id)
         for packet_path in REPAIR_TASK_PACKETS:

@@ -44,9 +44,10 @@ make prepush-full
 `make test-contracts` also runs
 `python3 scripts/validate_factory_pilot_evidence.py` to ensure the downstream
 Factory pilot proof chain remains coherent, and
-`python3 scripts/validate_repo_pack.py` to ensure T3+ task packets keep the dev
-and architecture guide requirements propagated into executable planning
-artifacts.
+`python3 scripts/validate_repo_pack.py` to ensure task packets keep the dev and
+architecture guide requirements plus Factory compatibility, alignment, drift,
+scope, worker-chain, and lifecycle requirements propagated into executable
+planning artifacts.
 
 GitHub Actions runs `make prepush-full` through the `validate` workflow on pull
 requests and pushes to `main`.
