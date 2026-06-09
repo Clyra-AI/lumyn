@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 from copy import deepcopy
-from fnmatch import fnmatchcase
+import re
 import subprocess
 import sys
 from typing import Any
@@ -64,8 +64,36 @@ def status_contexts_from_ruleset(ruleset: dict[str, Any]) -> set[str]:
     return contexts
 
 
+def github_ref_pattern_to_regex(pattern: str) -> re.Pattern[str]:
+    output = ["^"]
+    index = 0
+    while index < len(pattern):
+        if pattern.startswith("**/", index):
+            output.append("(?:[^/]+/)*")
+            index += 3
+            continue
+        char = pattern[index]
+        if char == "*":
+            output.append("[^/]*")
+        elif char == "?":
+            output.append("[^/]")
+        elif char == "[":
+            end = pattern.find("]", index + 1)
+            if end == -1:
+                output.append(re.escape(char))
+            else:
+                output.append(pattern[index : end + 1])
+                index = end
+        else:
+            output.append(re.escape(char))
+        index += 1
+    output.append("$")
+    return re.compile("".join(output))
+
+
 def exclude_pattern_covers_default_branch(pattern: str) -> bool:
-    return any(fnmatchcase(candidate, pattern) for candidate in DEFAULT_BRANCH_REF_CANDIDATES)
+    matcher = github_ref_pattern_to_regex(pattern)
+    return any(matcher.fullmatch(candidate) is not None for candidate in DEFAULT_BRANCH_REF_CANDIDATES)
 
 
 def validate_branch_protection(protection: dict[str, Any], ruleset: dict[str, Any]) -> dict[str, Any]:
@@ -162,7 +190,16 @@ def run_self_test() -> int:
     try:
         validate_branch_protection(fixture_protection(), fixture_ruleset())
 
-        for excluded_ref in ["*", "~DEFAULT_BRANCH", BRANCH, f"refs/heads/{BRANCH}", "refs/heads/*", "refs/heads/ma*"]:
+        for excluded_ref in [
+            "*",
+            "~DEFAULT_BRANCH",
+            BRANCH,
+            f"refs/heads/{BRANCH}",
+            "refs/heads/*",
+            "refs/heads/ma*",
+            "refs/heads/**",
+            "refs/heads/**/main",
+        ]:
             protection = fixture_protection()
             ruleset = deepcopy(fixture_ruleset())
             ruleset["conditions"]["ref_name"]["exclude"] = [excluded_ref]

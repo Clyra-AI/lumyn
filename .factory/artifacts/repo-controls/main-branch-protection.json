@@ -49,6 +49,8 @@
       "~DEFAULT_BRANCH",
       "main",
       "refs/heads/*",
+      "refs/heads/**",
+      "refs/heads/**/main",
       "refs/heads/ma*",
       "refs/heads/main"
     ],
