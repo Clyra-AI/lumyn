@@ -24,6 +24,25 @@
       ]
     },
     {
+      "scope_item": "Factory dev/architecture propagation baseline",
+      "status": "implemented",
+      "task_refs": [
+        "T2.6"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T2.6/validation-report.json",
+        ".factory/artifacts/task-runs/T2.6/work-proof-marker.json"
+      ],
+      "implemented_task_refs": [
+        "T2.6"
+      ],
+      "remaining_task_refs": [],
+      "notes": [
+        "T2.6 established the 12-level test matrix mapping, CI lane mapping, CodeQL workflow, scanner lint checks, docs parity, output contract, release integrity, provenance evidence, systems-thinking, TDD/ADR, performance, reliability, and fail-closed rules.",
+        "T3 and later product tasks now carry ci_lane_refs, test_matrix_refs, security_scanner_gates, engineering_policy_refs, and architecture_guidance_refs."
+      ]
+    },
+    {
       "scope_item": "Record, contract, replay, report",
       "status": "partial",
       "task_refs": [
@@ -87,5 +106,5 @@
     }
   ],
   "full_mvp_closure_rule": "The MVP is complete only when every required acceptance group is implemented or explicitly accepted with documented delivery debt by a human owner.",
-  "last_updated_at": "2026-06-09T03:00:29Z"
+  "last_updated_at": "2026-06-09T03:45:00Z"
 }

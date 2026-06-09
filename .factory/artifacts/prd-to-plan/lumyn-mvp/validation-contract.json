@@ -13,6 +13,9 @@
     ],
     "full": [
       "make prepush-full"
+    ],
+    "security": [
+      "GitHub Actions CodeQL analyze"
     ]
   },
   "bootstrap_constraints": [
@@ -23,7 +26,8 @@
     "Go toolchain must be pinned to 1.26.4 before implementation proceeds.",
     "T1 must not add unpinned or floating dependencies.",
     "Standalone binary is the primary distribution target; Homebrew follows after first binary; PyPI is not primary.",
-    "Repository delivery lifecycle baseline must exist before T3 product implementation starts."
+    "Repository delivery lifecycle baseline must exist before T3 product implementation starts.",
+    "Repository dev/architecture propagation baseline must exist before T3 product implementation starts."
   ],
   "acceptance_groups": [
     "record_contract_replay_report",
@@ -34,14 +38,22 @@
     "Validation reports must record command, exit status, and skipped-command reason when applicable.",
     "Scope closure must map every MVP acceptance group to implemented, partial, missing, blocked, or deferred.",
     "Live credential-dependent work must remain blocked until credential posture is approved.",
-    "Lifecycle-gated tasks must carry review, ship, post-merge, and PR lifecycle evidence or an explicit approved exception."
+    "Lifecycle-gated tasks must carry review, ship, post-merge, and PR lifecycle evidence or an explicit approved exception.",
+    "Scanner-gated tasks must carry CodeQL status evidence or an explicit approved exception.",
+    "CI lane, docs parity, output contract, release integrity, and provenance requirements must be represented in task evidence or approved exceptions.",
+    "Medium/high risk architecture work must carry systems-thinking, TDD/skipped-reason, ADR, performance, reliability, and fail-closed evidence as applicable."
   ],
   "stop_conditions": [
     "implementation requires undeclared live credentials",
     "implementation writes outside allowed paths",
     "redaction confidence is unknown for persisted artifacts",
     "tests pass while explicit PRD scope remains unrepresented in scope closure",
-    "CI/status, review, shipping, post-merge, or PR lifecycle evidence is missing for a lifecycle-gated task"
+    "CI/status, review, shipping, post-merge, or PR lifecycle evidence is missing for a lifecycle-gated task",
+    "CodeQL/security scanner evidence is missing for scanner-gated work",
+    "test-matrix refs, scanner gates, or architecture guidance refs are missing from a product task packet",
+    "CI lane refs are missing from a product task packet",
+    "docs parity, output contract, release integrity, or provenance evidence refs are missing for touched surfaces",
+    "systems-thinking, TDD, ADR, performance, reliability, or fail-closed refs are missing for touched architecture surfaces"
   ],
   "runtime_pins": {
     "language": "go",
@@ -83,5 +95,58 @@
       "model credential posture",
       "network allowlist"
     ]
+  },
+  "security_scanning": {
+    "required": true,
+    "scanner": "CodeQL",
+    "workflow_ref": ".github/workflows/codeql.yml",
+    "status_check": "CodeQL analyze",
+    "required_for_surfaces": [
+      "dependency additions",
+      "generated-code intake",
+      "CI or workflow changes",
+      "external calls",
+      "redaction/share/live/eval/provider code",
+      "data exposure",
+      "release-sensitive work"
+    ],
+    "exception_policy": "approved_exception_required"
+  },
+  "ci_lanes": {
+    "fast": [
+      "make lint-fast",
+      "make test-fast"
+    ],
+    "core": [
+      "make test-contracts",
+      "make prepush-full"
+    ],
+    "acceptance": [
+      ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+    ],
+    "cross_platform": [
+      "reserved until packaging/distribution work starts"
+    ],
+    "risk": [
+      "GitHub Actions CodeQL analyze",
+      "future hardening/chaos/perf lanes from docs/dev/dev_guides.md"
+    ],
+    "release": [
+      "reserved until standalone binary release packaging starts"
+    ]
+  },
+  "engineering_policies": {
+    "docs_parity": "Behavior, flags, outputs, install paths, and workflow semantics update README, PRD, dev/architecture guides, and Factory planning artifacts together.",
+    "output_contracts": "Command-result envelope, exit codes, schemas, cassettes, evidence, reports, and run artifacts are product contracts.",
+    "release_integrity": "Standalone binary release tasks must define version, changelog, install, artifact-integrity, and UAT evidence before merge.",
+    "provenance_evidence": "Validation reports, work-proof markers, PR lifecycle reports, scanner status, and scope closure evidence remain repo-relative."
+  },
+  "architecture_policies": {
+    "systems_thinking": "Medium/high risk tasks record state owner, feedback source, deletion blast radius, rollback/deletion test, and source-of-truth impact.",
+    "tdd": "Behavior changes require test-first evidence or structured skipped reason; schema/output changes prefer failing fixture or validator expectation first.",
+    "adr_triggers": "Boundary crossings, public contracts, failure classes, state model, performance, security, credential/network, and release posture changes require ADR or decision note.",
+    "performance": "Replay/eval/report hot paths and model-cost paths require budget notes and validation or approved exception.",
+    "reliability": "Retries, cleanup, persistence, filesystem mutation, redaction, live network, and provider work require hardening checks and failure-mode evidence.",
+    "failure_semantics": "Ambiguous proof, redaction, credential, stale cassette, undeclared control, or scanner state fails closed."
   }
 }

@@ -1,0 +1,30 @@
+{
+  "artifact_type": "work_proof_marker",
+  "schema_version": "0.1",
+  "task_id": "T2.6",
+  "created_at": "2026-06-09T03:30:00Z",
+  "generated_by": "codex",
+  "workspace_ref": "codex/lumyn-dev-arch-propagation",
+  "base_ref": "main",
+  "execution_status": "completed",
+  "changed_paths": [
+    ".github/workflows/codeql.yml",
+    "AGENTS.md",
+    "WORKFLOW.md",
+    "Makefile",
+    "README.md",
+    "docs/dev/dev_guides.md",
+    "docs/architecture/architecture_guides.md",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+  ],
+  "removed_paths": [],
+  "forbidden_paths_touched": [],
+  "validation_report_ref": ".factory/artifacts/task-runs/T2.6/validation-report.json",
+  "network_used": false,
+  "live_credentials_used": false
+}

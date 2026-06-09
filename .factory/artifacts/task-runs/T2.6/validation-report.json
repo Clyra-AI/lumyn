@@ -1,0 +1,96 @@
+{
+  "artifact_type": "validation_report",
+  "schema_version": "0.1",
+  "task_id": "T2.6",
+  "source_task_packet_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2.6",
+  "status": "passed",
+  "validated_at": "2026-06-09T03:45:00Z",
+  "commands": [
+    {
+      "name": "make lint-fast",
+      "status": "passed",
+      "evidence": "Verified repo operating pack, Go pins, validate workflow, CodeQL workflow presence, CodeQL Go binding, and go vet."
+    },
+    {
+      "name": "make test-contracts",
+      "status": "passed",
+      "evidence": "Verified PRD-to-plan artifacts, T2.5/T2.6 evidence artifacts, required schema files, and Go tests."
+    },
+    {
+      "name": "make prepush-full",
+      "status": "passed",
+      "evidence": "Ran fmt, lint-fast, test-fast, test-contracts, and build."
+    }
+  ],
+  "skipped_commands": [
+    {
+      "name": "GitHub Actions CodeQL analyze",
+      "reason": "CI-only scanner status is observed through PR lifecycle evidence; local validation verifies the workflow configuration and required CodeQL Go binding."
+    }
+  ],
+  "acceptance_results": [
+    {
+      "check": "docs/dev/dev_guides.md preserves all 12 test tiers with active, planned, reserved, or blocked status.",
+      "status": "passed",
+      "evidence_ref": "docs/dev/dev_guides.md#12-level-test-matrix"
+    },
+    {
+      "check": ".github/workflows/codeql.yml exists and configures CodeQL Go analysis for pull_request and main pushes.",
+      "status": "passed",
+      "evidence_ref": ".github/workflows/codeql.yml"
+    },
+    {
+      "check": "T3 and later product task packets carry ci_lane_refs, test_matrix_refs, security_scanner_gates, engineering_policy_refs, and architecture_guidance_refs.",
+      "status": "passed",
+      "evidence_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json"
+    },
+    {
+      "check": "docs/dev/dev_guides.md maps fast, core, acceptance, cross-platform, risk, and release CI lanes.",
+      "status": "passed",
+      "evidence_ref": "docs/dev/dev_guides.md#ci-lane-mapping"
+    },
+    {
+      "check": "docs/dev/dev_guides.md defines docs parity, output contracts, release integrity, and provenance evidence rules.",
+      "status": "passed",
+      "evidence_ref": "docs/dev/dev_guides.md#docs-parity"
+    },
+    {
+      "check": "docs/architecture/architecture_guides.md defines systems thinking, TDD/red-first, ADR, performance, reliability, trust-mode, and fail-closed rules.",
+      "status": "passed",
+      "evidence_ref": "docs/architecture/architecture_guides.md#systems-thinking-map"
+    },
+    {
+      "check": "T3 and later product task packets carry ci_lane_refs, test_matrix_refs, security_scanner_gates, engineering_policy_refs, and architecture_guidance_refs.",
+      "status": "passed",
+      "evidence_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json"
+    }
+  ],
+  "security_scanning": {
+    "required": true,
+    "scanner": "CodeQL",
+    "workflow_ref": ".github/workflows/codeql.yml",
+    "status_check": "CodeQL analyze",
+    "local_status": "workflow_shape_verified",
+    "remote_status": "pending_pr_lifecycle_evidence"
+  },
+  "test_scope": "Repo operating pack, CI lane mapping, CodeQL workflow, 12-level test matrix propagation, docs/output/release/provenance policy propagation, architecture policy propagation, and future task-packet enforcement fields.",
+  "independent_validation": "validation-gate rerun required before PR promotion; CodeQL status observed by ship-pr/PR lifecycle.",
+  "credential_use": "none",
+  "network_use": "none",
+  "live_work": "none",
+  "dependency_changes": "none",
+  "engineering_policies": {
+    "docs_parity": "verified in docs/dev/dev_guides.md and task packets",
+    "output_contracts": "verified in docs/dev/dev_guides.md and task packets",
+    "release_integrity": "reserved lane documented and propagated to task packets",
+    "provenance_evidence": "verified evidence paths and repo-relative proof requirements"
+  },
+  "architecture_policies": {
+    "systems_thinking": "verified in docs/architecture/architecture_guides.md and task packets",
+    "tdd": "verified in docs/architecture/architecture_guides.md and task packets",
+    "adr_triggers": "verified in docs/architecture/architecture_guides.md and task packets",
+    "performance": "verified in docs/architecture/architecture_guides.md and task packets",
+    "reliability": "verified in docs/architecture/architecture_guides.md and task packets",
+    "failure_semantics": "verified fail-closed rules in docs/architecture/architecture_guides.md and task packets"
+  }
+}

@@ -11,6 +11,7 @@ lint-fast:
 	test -f .tool-versions
 	test -f go.mod
 	test -f .github/workflows/validate.yml
+	test -f .github/workflows/codeql.yml
 	test -d .factory/artifacts
 	test -d cmd/lumyn
 	test -d internal
@@ -20,6 +21,8 @@ lint-fast:
 	grep -q '^go 1.26.4$$' go.mod
 	grep -q 'go-version: "1.26.4"' .github/workflows/validate.yml
 	grep -q 'make prepush-full' .github/workflows/validate.yml
+	grep -q 'github/codeql-action/init@v3' .github/workflows/codeql.yml
+	grep -q 'languages: go' .github/workflows/codeql.yml
 	$(GO) vet $(PKG_LIST)
 
 fmt:
@@ -37,6 +40,8 @@ test-contracts:
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json
 	test -f .factory/artifacts/task-runs/T2.5/validation-report.json
 	test -f .factory/artifacts/task-runs/T2.5/work-proof-marker.json
+	test -f .factory/artifacts/task-runs/T2.6/validation-report.json
+	test -f .factory/artifacts/task-runs/T2.6/work-proof-marker.json
 	test -f schemas/workflow-contract.schema.json
 	test -f schemas/expected-outcome.schema.json
 	test -f schemas/validator.schema.json
