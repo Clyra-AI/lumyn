@@ -77,6 +77,23 @@ REQUIRED_CHANGELOG_FIELDS = [
     "semver_marker_override",
 ]
 
+ADR_CONTRACT_TOKENS = [
+    "public",
+    "cli",
+    "command",
+    "schema",
+    "artifact",
+    "output",
+    "json",
+    "contract",
+    "ci",
+    "review",
+    "redaction",
+    "share",
+    "eval",
+    "proof",
+]
+
 REQUIRED_CI_LANES = [
     "fast",
     "core",
@@ -349,6 +366,9 @@ def validate_task_planning_skill_fields(task: dict[str, Any]) -> None:
         fail(f"{task_id_value} missing planning-skill fields: {', '.join(missing)}")
     if task.get("slice_type") != "vertical" and not has_nonempty_string(task.get("non_vertical_justification")):
         fail(f"{task_id_value} non-vertical task requires non_vertical_justification")
+    contract_impact = str(task.get("contract_impact", "")).lower()
+    if any(token in contract_impact for token in ADR_CONTRACT_TOKENS) and task.get("adr_required") is not True:
+        fail(f"{task_id_value} public or executable contract impact requires adr_required=true")
     if contains_machine_local_path(task):
         fail(f"{task_id_value} contains a machine-local /Users/ path")
 
@@ -697,7 +717,7 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
         "contract_impact": "Self-test task changes only its declared contract surface.",
         "versioning_migration_impact": "Pre-1.0 changes must preserve explicit migration notes before release.",
         "architecture_constraints": ["record state owner, feedback source, and fail-closed behavior"],
-        "adr_required": False,
+        "adr_required": True,
         "tdd_first_failing_tests": ["add a failing test or fixture before implementation when practical"],
         "cost_perf_impact": {"level": "low", "measurement_expectation": "no material cost increase expected"},
         "chaos_failure_hypothesis": {

@@ -106,8 +106,8 @@
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
         "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
       ],
-      "adr_required": false,
-      "adr_trigger_reason": "Not required unless implementation expands public contracts, state ownership, credential/network posture, or failure semantics beyond the packet.",
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T1 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
@@ -349,7 +349,7 @@
         "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
       ],
       "adr_required": true,
-      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T2 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
@@ -602,7 +602,7 @@
         "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
       ],
       "adr_required": true,
-      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T2.5 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
@@ -984,7 +984,7 @@
         "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
       ],
       "adr_required": true,
-      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T2.6 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
@@ -1235,8 +1235,8 @@
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
         "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
       ],
-      "adr_required": false,
-      "adr_trigger_reason": "Not required unless implementation expands public contracts, state ownership, credential/network posture, or failure semantics beyond the packet.",
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T3 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
@@ -1493,8 +1493,8 @@
         "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes.",
         "Redaction uncertainty blocks persistence or export and must surface structured failure evidence."
       ],
-      "adr_required": false,
-      "adr_trigger_reason": "Not required unless implementation expands public contracts, state ownership, credential/network posture, or failure semantics beyond the packet.",
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T4 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
@@ -1749,8 +1749,8 @@
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
         "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
       ],
-      "adr_required": false,
-      "adr_trigger_reason": "Not required unless implementation expands public contracts, state ownership, credential/network posture, or failure semantics beyond the packet.",
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T5 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
@@ -2006,8 +2006,8 @@
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
         "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
       ],
-      "adr_required": false,
-      "adr_trigger_reason": "Not required unless implementation expands public contracts, state ownership, credential/network posture, or failure semantics beyond the packet.",
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T6 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
@@ -2272,7 +2272,7 @@
         "Live credential, model-key, and network work remains blocked until explicit human approval and allowlist posture are recorded."
       ],
       "adr_required": true,
-      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T7 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
@@ -2534,7 +2534,7 @@
         "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
       ],
       "adr_required": true,
-      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T8 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
@@ -2789,7 +2789,7 @@
         "CI, JUnit, PR comments, and badges must report proof state honestly and must not hide stale or skipped evidence."
       ],
       "adr_required": true,
-      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T9 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
@@ -3051,7 +3051,7 @@
         "Redaction uncertainty blocks persistence or export and must surface structured failure evidence."
       ],
       "adr_required": true,
-      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T10 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
@@ -3331,7 +3331,7 @@
         "Live credential, model-key, and network work remains blocked until explicit human approval and allowlist posture are recorded."
       ],
       "adr_required": true,
-      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T11 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
@@ -3594,7 +3594,7 @@
         "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
       ],
       "adr_required": true,
-      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
         "Add or update the smallest failing test, fixture, or schema validation for T12 acceptance before implementation when practical.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."

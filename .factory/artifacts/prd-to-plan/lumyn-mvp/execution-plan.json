@@ -208,7 +208,8 @@
       "alignment decisions are resolved before implementation locks runtime, distribution, provider, artifact namespace, credential, live-work, or dependency choices",
       "execution plan carries public API and contract map, docs/OSS readiness baseline, test matrix wiring, minimum-now sequence, explicit non-goals, and definition of done",
       "task packets carry runtime pins, slice rationale, changelog/versioning intent, contract/API impact, architecture constraints, ADR posture, TDD-first tests, cost/perf impact, chaos/failure hypothesis, and semantic invariants",
-      "guide propagation from docs/dev/dev_guides.md and docs/architecture/architecture_guides.md is enforced before T3 product implementation"
+      "guide propagation from docs/dev/dev_guides.md and docs/architecture/architecture_guides.md is enforced before T3 product implementation",
+      "public or executable contract-impact tasks must be ADR-gated with adr_required=true"
     ],
     "evidence_refs": [
       "docs/dev/dev_guides.md",
