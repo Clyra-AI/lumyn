@@ -58,6 +58,7 @@ test-contracts:
 	test -f schemas/redaction-config.schema.json
 
 build:
+	mkdir -p .factory/tmp
 	$(GO) build -o .factory/tmp/lumyn ./cmd/lumyn
 
 prepush-full: fmt lint-fast test-fast test-contracts build
