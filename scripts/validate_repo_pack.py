@@ -98,9 +98,68 @@ def depends_on(task_id_value: str, baseline_task_id: str, tasks_by_id: dict[str,
 def field_has_evidence(task: dict[str, Any], field: str) -> bool:
     value = task.get(field)
     if field == "security_scanner_gates":
-        return isinstance(value, dict) and bool(value.get("scanner"))
-    if isinstance(value, list):
-        return bool(value) and all(isinstance(item, dict) for item in value)
+        if not isinstance(value, dict):
+            return False
+        if isinstance(value.get("exception_ref"), str) and value["exception_ref"].strip():
+            return True
+        scanner = value.get("scanner")
+        if not isinstance(scanner, str) or not scanner.strip():
+            return False
+        if value.get("required") is False:
+            return True
+        return any(
+            isinstance(value.get(key), str) and value[key].strip()
+            for key in ["workflow_ref", "status_check", "evidence_ref"]
+        )
+    if not isinstance(value, list) or not value:
+        return False
+    if field == "test_matrix_refs":
+        return all(
+            isinstance(item, dict)
+            and isinstance(item.get("tier"), str)
+            and item["tier"].strip()
+            and isinstance(item.get("source_ref"), str)
+            and item["source_ref"].strip()
+            for item in value
+        )
+    if field == "ci_lane_refs":
+        return all(
+            isinstance(item, dict)
+            and isinstance(item.get("lane"), str)
+            and item["lane"].strip()
+            and isinstance(item.get("source_ref"), str)
+            and item["source_ref"].strip()
+            and (
+                bool(item.get("command_refs"))
+                or bool(item.get("status_check_refs"))
+                or (isinstance(item.get("exception_ref"), str) and item["exception_ref"].strip())
+            )
+            for item in value
+        )
+    if field == "engineering_policy_refs":
+        return all(
+            isinstance(item, dict)
+            and isinstance(item.get("policy"), str)
+            and item["policy"].strip()
+            and isinstance(item.get("source_ref"), str)
+            and item["source_ref"].strip()
+            and (
+                isinstance(item.get("rule"), str)
+                and item["rule"].strip()
+                or isinstance(item.get("exception_ref"), str)
+                and item["exception_ref"].strip()
+            )
+            for item in value
+        )
+    if field == "architecture_guidance_refs":
+        return all(
+            isinstance(item, dict)
+            and isinstance(item.get("source_ref"), str)
+            and item["source_ref"].strip()
+            and isinstance(item.get("rule"), str)
+            and item["rule"].strip()
+            for item in value
+        )
     return False
 
 
