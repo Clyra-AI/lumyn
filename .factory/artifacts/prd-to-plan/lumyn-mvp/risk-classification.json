@@ -28,13 +28,13 @@
       "applies_to": [
         "live sandbox credentials",
         "network allowlists",
-        "model provider keys",
         "GitHub Actions",
         "share/export redaction",
-        "action boundaries"
+        "action boundaries",
+        "OpenAI-compatible model provider keys",
+        "Anthropic model provider keys"
       ],
       "validation_independence": "requires independent validation, security review, or human approval before merge"
     }
   ]
 }
-

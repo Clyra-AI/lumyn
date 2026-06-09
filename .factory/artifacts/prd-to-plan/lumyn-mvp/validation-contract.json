@@ -49,7 +49,8 @@
     "Factory compatibility must be present in context brief, execution plan, validation contract, and task packets.",
     "Active required_worker_chain values must use commit-push, not deprecated aliases such as ship-pr.",
     "Task packets must carry explicit scope_exclusions, alignment_gate_ref, and plan_drift_policy_ref inherited from the execution plan.",
-    "Runtime pins must include toolchain_version, module_or_package_path, provider_policy, artifact_namespace, and live_work_policy before implementation starts."
+    "Runtime pins must include toolchain_version, module_or_package_path, provider_policy, artifact_namespace, and live_work_policy before implementation starts.",
+    "Live eval MVP closure must cover OpenAI-compatible and Anthropic provider adapters when configured."
   ],
   "stop_conditions": [
     "implementation requires undeclared live credentials",
@@ -69,7 +70,8 @@
     "factory_compatibility is missing from context brief, execution plan, validation contract, or a task packet",
     "active required_worker_chain contains a deprecated worker alias such as ship-pr",
     "scope_exclusions, alignment_gate_ref, or plan_drift_policy_ref are missing from a task packet",
-    "runtime_pins omit toolchain_version, module_or_package_path, provider_policy, artifact_namespace, or live_work_policy"
+    "runtime_pins omit toolchain_version, module_or_package_path, provider_policy, artifact_namespace, or live_work_policy",
+    "live eval provider work omits either OpenAI-compatible or Anthropic adapter coverage without approved scope exception"
   ],
   "runtime_pins": {
     "language": "go",
@@ -93,22 +95,6 @@
     "primary": "standalone_binary",
     "secondary": "homebrew_after_first_binary",
     "not_primary": "pypi"
-  },
-  "first_eval_provider": {
-    "adapter": "openai_compatible_http",
-    "sdk_policy": "no heavy SDK dependency for MVP bootstrap; use thin HTTP adapters unless a later task justifies a pinned SDK",
-    "config_fields": [
-      "provider",
-      "model",
-      "temperature",
-      "base_url",
-      "api_key_env"
-    ],
-    "supported_mvp_adapters": [
-      "openai_compatible_http",
-      "anthropic_messages_http"
-    ],
-    "anthropic_adapter": "anthropic_messages_http"
   },
   "artifact_namespaces": {
     "factory_artifacts": ".factory/artifacts/",
@@ -263,5 +249,24 @@
       "factory_compatibility"
     ],
     "continuation_behavior": "block_until_artifacts_updated"
+  },
+  "mvp_eval_provider_adapters": {
+    "adapters": [
+      "openai_compatible_http",
+      "anthropic_messages_http"
+    ],
+    "adapter_ids": [
+      "openai_compatible_http_adapter",
+      "anthropic_messages_http_adapter"
+    ],
+    "sdk_policy": "no heavy SDK dependency for MVP bootstrap; use thin HTTP adapters unless a later task justifies a pinned SDK",
+    "config_fields": [
+      "provider",
+      "model",
+      "temperature",
+      "base_url",
+      "api_key_env"
+    ],
+    "network_policy": "blocked until deterministic replay foundation passes and human approval unlocks model/network posture"
   }
 }

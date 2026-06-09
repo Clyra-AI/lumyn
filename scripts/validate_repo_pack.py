@@ -14,6 +14,9 @@ CONTEXT_BRIEF = PLAN_DIR / "context-brief.json"
 EXECUTION_PLAN = PLAN_DIR / "execution-plan.json"
 TASK_PACKETS = PLAN_DIR / "task-packets.json"
 VALIDATION_CONTRACT = PLAN_DIR / "validation-contract.json"
+ACCEPTANCE_MAPPING = PLAN_DIR / "acceptance-mapping.json"
+SCOPE_CLOSURE_MAP = PLAN_DIR / "scope-closure-map.json"
+RISK_CLASSIFICATION = PLAN_DIR / "risk-classification.json"
 REPAIR_TASK_PACKETS = [
     ROOT / ".factory" / "artifacts" / "pilot" / "lumyn-mvp-slice" / "repair-loop" / "task-packet.json"
 ]
@@ -102,6 +105,14 @@ REQUIRED_MVP_EVAL_PROVIDERS = [
     "openai_compatible_http_adapter",
     "anthropic_messages_http_adapter",
 ]
+
+REQUIRED_MVP_EVAL_ADAPTERS = [
+    "openai_compatible_http",
+    "anthropic_messages_http",
+]
+
+LEGACY_PROVIDER_FIELD = "first_eval_provider"
+REQUIRED_PROVIDER_DECISION_ID = "mvp_eval_providers"
 
 REQUIRED_FACTORY_COMPATIBILITY_FIELDS = [
     "factory_contract_version",
@@ -357,6 +368,26 @@ def iter_required_worker_chains(value: Any, path: str = "$") -> list[tuple[str, 
     return chains
 
 
+def iter_key_paths(value: Any, target_key: str, path: str = "$") -> list[str]:
+    paths: list[str] = []
+    if isinstance(value, dict):
+        for key, item in value.items():
+            child_path = f"{path}.{key}"
+            if key == target_key:
+                paths.append(child_path)
+            paths.extend(iter_key_paths(item, target_key, child_path))
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            paths.extend(iter_key_paths(item, target_key, f"{path}[{index}]"))
+    return paths
+
+
+def validate_no_legacy_provider_fields(value: Any, label: str) -> None:
+    paths = iter_key_paths(value, LEGACY_PROVIDER_FIELD)
+    if paths:
+        fail(f"{label} uses legacy {LEGACY_PROVIDER_FIELD} fields: {', '.join(paths)}")
+
+
 def validate_no_deprecated_active_workers(value: dict[str, Any], label: str) -> None:
     for path, chain in iter_required_worker_chains(value):
         for index, worker in enumerate(chain):
@@ -410,6 +441,17 @@ def validate_runtime_pins(value: Any, label: str) -> None:
             f"{label}.mvp_eval_providers must include "
             f"{', '.join(REQUIRED_MVP_EVAL_PROVIDERS)}"
         )
+
+
+def validate_mvp_eval_provider_adapters(value: Any, label: str) -> None:
+    if not isinstance(value, dict):
+        fail(f"{label} must be an object")
+    if not has_required_string_refs(value.get("adapters"), REQUIRED_MVP_EVAL_ADAPTERS):
+        fail(f"{label}.adapters must include {', '.join(REQUIRED_MVP_EVAL_ADAPTERS)}")
+    if not has_required_string_refs(value.get("adapter_ids"), REQUIRED_MVP_EVAL_PROVIDERS):
+        fail(f"{label}.adapter_ids must include {', '.join(REQUIRED_MVP_EVAL_PROVIDERS)}")
+    if not has_required_string_refs(value.get("config_fields"), ["provider", "model", "temperature", "base_url", "api_key_env"]):
+        fail(f"{label}.config_fields must include provider/model/temperature/base_url/api_key_env")
 
 
 def has_alignment_gate(value: Any) -> bool:
@@ -669,17 +711,45 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
 
 
 def validate_context_brief(context: dict[str, Any]) -> None:
+    validate_no_legacy_provider_fields(context, "context-brief.json")
     validate_factory_compatibility(context.get("factory_compatibility"), "context-brief.json.factory_compatibility")
     validate_alignment_gate(context.get("alignment_gate"), "context-brief.json.alignment_gate")
     validate_plan_drift_policy(context.get("plan_drift_policy"), "context-brief.json.plan_drift_policy")
+    questions = context.get("alignment_questions")
+    if not isinstance(questions, list):
+        fail("context-brief.json.alignment_questions must be a list")
+    question_ids = {question.get("id") for question in questions if isinstance(question, dict)}
+    if LEGACY_PROVIDER_FIELD in question_ids:
+        fail(f"context-brief.json must not use legacy alignment question id {LEGACY_PROVIDER_FIELD!r}")
+    if REQUIRED_PROVIDER_DECISION_ID not in question_ids:
+        fail(f"context-brief.json must include alignment question id {REQUIRED_PROVIDER_DECISION_ID!r}")
+    decision_points = context.get("decision_points")
+    if not isinstance(decision_points, list):
+        fail("context-brief.json.decision_points must be a list")
+    if LEGACY_PROVIDER_FIELD in decision_points:
+        fail(f"context-brief.json must not use legacy decision point {LEGACY_PROVIDER_FIELD!r}")
+    if REQUIRED_PROVIDER_DECISION_ID not in decision_points:
+        fail(f"context-brief.json must include decision point {REQUIRED_PROVIDER_DECISION_ID!r}")
+    decisions = context.get("alignment_decisions")
+    if not isinstance(decisions, dict):
+        fail("context-brief.json missing alignment_decisions")
+    validate_mvp_eval_provider_adapters(
+        decisions.get("mvp_eval_provider_adapters"),
+        "context-brief.json.alignment_decisions.mvp_eval_provider_adapters",
+    )
     if contains_machine_local_path(context):
         fail("context-brief.json contains a machine-local absolute path")
 
 
 def validate_execution_plan(plan: dict[str, Any]) -> str:
+    validate_no_legacy_provider_fields(plan, "execution-plan.json")
     validate_no_deprecated_active_workers(plan, "execution-plan.json")
     validate_factory_compatibility(plan.get("factory_compatibility"), "execution-plan.json.factory_compatibility")
     validate_runtime_pins(plan.get("runtime_pins"), "execution-plan.json.runtime_pins")
+    validate_mvp_eval_provider_adapters(
+        plan.get("mvp_eval_provider_adapters"),
+        "execution-plan.json.mvp_eval_provider_adapters",
+    )
     validate_alignment_gate(plan.get("alignment_gate"), "execution-plan.json.alignment_gate")
     validate_plan_drift_policy(plan.get("plan_drift_policy"), "execution-plan.json.plan_drift_policy")
     for field in REQUIRED_PLAN_LEVEL_FIELDS:
@@ -763,6 +833,7 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
 
 
 def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> None:
+    validate_no_legacy_provider_fields(packets, "task-packets.json")
     validate_no_deprecated_active_workers(packets, "task-packets.json")
     tasks = packets.get("tasks")
     if not isinstance(tasks, list):
@@ -794,15 +865,25 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
     if not scoped_tasks:
         fail(f"no task packets are at or after propagation baseline {baseline_task_id}")
     for task in all_task_objects:
+        current_task_id = task_id(task)
         missing = [field for field in REQUIRED_TASK_FIELDS if not field_has_evidence(task, field)]
         if missing:
-            fail(f"{task_id(task)} missing guide propagation fields: {', '.join(missing)}")
+            fail(f"{current_task_id} missing guide propagation fields: {', '.join(missing)}")
         validate_task_guide_sources(task)
         validate_task_planning_skill_fields(task)
         validate_task_execution_compiler_fields(task)
+        if current_task_id == "T11":
+            validate_mvp_eval_provider_adapters(
+                task.get("mvp_eval_provider_adapters"),
+                "T11.mvp_eval_provider_adapters",
+            )
+            checks = "\n".join(str(value).lower() for value in task.get("acceptance_checks", []))
+            if "openai-compatible" not in checks or "anthropic" not in checks:
+                fail("T11 acceptance_checks must name both OpenAI-compatible and Anthropic adapter coverage")
 
 
 def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: str) -> None:
+    validate_no_legacy_provider_fields(packet, "standalone task packet")
     validate_no_deprecated_active_workers(packet, "standalone task packet")
     task_id_value = task_id(packet)
     if not task_id_value:
@@ -821,8 +902,13 @@ def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: st
 
 
 def validate_validation_contract(contract: dict[str, Any]) -> None:
+    validate_no_legacy_provider_fields(contract, "validation-contract.json")
     validate_factory_compatibility(contract.get("factory_compatibility"), "validation-contract.json.factory_compatibility")
     validate_runtime_pins(contract.get("runtime_pins"), "validation-contract.json.runtime_pins")
+    validate_mvp_eval_provider_adapters(
+        contract.get("mvp_eval_provider_adapters"),
+        "validation-contract.json.mvp_eval_provider_adapters",
+    )
     validate_plan_drift_policy(contract.get("plan_drift_policy"), "validation-contract.json.plan_drift_policy")
     alignment = contract.get("planning_skill_alignment")
     if not isinstance(alignment, dict):
@@ -858,6 +944,49 @@ def validate_validation_contract(contract: dict[str, Any]) -> None:
     ]
     if missing:
         fail(f"validation-contract.json stop_conditions missing guide categories: {missing}")
+
+
+def validate_acceptance_mapping(mapping: dict[str, Any]) -> None:
+    validate_no_legacy_provider_fields(mapping, "acceptance-mapping.json")
+    groups = mapping.get("groups")
+    if not isinstance(groups, list):
+        fail("acceptance-mapping.json must contain groups list")
+    live_eval = next((group for group in groups if isinstance(group, dict) and group.get("group_id") == "live_agent_eval"), None)
+    if not isinstance(live_eval, dict):
+        fail("acceptance-mapping.json missing live_agent_eval group")
+    if not has_required_string_refs(live_eval.get("provider_adapter_coverage"), REQUIRED_MVP_EVAL_PROVIDERS):
+        fail("live_agent_eval.provider_adapter_coverage must include both MVP provider adapters")
+    approvals = "\n".join(str(value).lower() for value in live_eval.get("requires_human_approval", []))
+    if "openai" not in approvals or "anthropic" not in approvals:
+        fail("live_agent_eval.requires_human_approval must name both provider credential postures")
+
+
+def validate_scope_closure_map(scope: dict[str, Any]) -> None:
+    validate_no_legacy_provider_fields(scope, "scope-closure-map.json")
+    items = scope.get("items")
+    if not isinstance(items, list):
+        fail("scope-closure-map.json must contain items list")
+    live_eval = next((item for item in items if isinstance(item, dict) and item.get("scope_item") == "Live agent eval"), None)
+    if not isinstance(live_eval, dict):
+        fail("scope-closure-map.json missing Live agent eval item")
+    if not has_required_string_refs(live_eval.get("provider_adapter_coverage"), REQUIRED_MVP_EVAL_PROVIDERS):
+        fail("Live agent eval provider_adapter_coverage must include both MVP provider adapters")
+    blockers = "\n".join(str(value).lower() for value in live_eval.get("blockers", []))
+    if "openai" not in blockers or "anthropic" not in blockers:
+        fail("Live agent eval blockers must name both provider credential postures")
+
+
+def validate_risk_classification(risk: dict[str, Any]) -> None:
+    validate_no_legacy_provider_fields(risk, "risk-classification.json")
+    rules = risk.get("risk_rules")
+    if not isinstance(rules, list):
+        fail("risk-classification.json must contain risk_rules list")
+    high = next((rule for rule in rules if isinstance(rule, dict) and rule.get("risk_class") == "high"), None)
+    if not isinstance(high, dict):
+        fail("risk-classification.json missing high risk rule")
+    applies = "\n".join(str(value).lower() for value in high.get("applies_to", []))
+    if "openai-compatible" not in applies or "anthropic" not in applies:
+        fail("high risk rule must name both OpenAI-compatible and Anthropic provider key surfaces")
 
 
 def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]:
@@ -1265,12 +1394,18 @@ def main() -> int:
         plan = load_json(EXECUTION_PLAN)
         packets = load_json(TASK_PACKETS)
         contract = load_json(VALIDATION_CONTRACT)
+        acceptance_mapping = load_json(ACCEPTANCE_MAPPING)
+        scope_closure_map = load_json(SCOPE_CLOSURE_MAP)
+        risk_classification = load_json(RISK_CLASSIFICATION)
         validate_context_brief(context)
         baseline_task_id = validate_execution_plan(plan)
         validate_task_packets(packets, baseline_task_id)
         for packet_path in REPAIR_TASK_PACKETS:
             validate_standalone_task_packet(load_json(packet_path), baseline_task_id)
         validate_validation_contract(contract)
+        validate_acceptance_mapping(acceptance_mapping)
+        validate_scope_closure_map(scope_closure_map)
+        validate_risk_classification(risk_classification)
     except AssertionError as exc:
         print(f"repo-pack validation failed: {exc}", file=sys.stderr)
         return 2

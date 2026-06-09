@@ -100,9 +100,16 @@
       ],
       "evidence_refs": [],
       "blockers": [
-        "model provider",
-        "model credential posture",
+        "OpenAI-compatible model credential posture",
+        "Anthropic model credential posture",
         "network allowlist"
+      ],
+      "provider_adapter_coverage": [
+        "openai_compatible_http_adapter",
+        "anthropic_messages_http_adapter"
+      ],
+      "notes": [
+        "MVP live eval is not closed until both OpenAI-compatible and Anthropic provider adapters are implemented or an explicit human-approved scope exception is recorded."
       ]
     }
   ],
