@@ -95,6 +95,12 @@ ADR_CONTRACT_TOKENS = [
     "proof",
 ]
 
+
+def has_adr_contract_token(value: str) -> bool:
+    normalized = value.lower()
+    return any(re.search(rf"\b{re.escape(token)}\b", normalized) for token in ADR_CONTRACT_TOKENS)
+
+
 REQUIRED_CI_LANES = [
     "fast",
     "core",
@@ -367,8 +373,8 @@ def validate_task_planning_skill_fields(task: dict[str, Any]) -> None:
         fail(f"{task_id_value} missing planning-skill fields: {', '.join(missing)}")
     if task.get("slice_type") != "vertical" and not has_nonempty_string(task.get("non_vertical_justification")):
         fail(f"{task_id_value} non-vertical task requires non_vertical_justification")
-    contract_impact = str(task.get("contract_impact", "")).lower()
-    if any(token in contract_impact for token in ADR_CONTRACT_TOKENS) and task.get("adr_required") is not True:
+    contract_impact = str(task.get("contract_impact", ""))
+    if has_adr_contract_token(contract_impact) and task.get("adr_required") is not True:
         fail(f"{task_id_value} public or executable contract impact requires adr_required=true")
     if contains_machine_local_path(task):
         fail(f"{task_id_value} contains a machine-local /Users/ path")
@@ -835,6 +841,13 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected API contract impact without ADR to fail")
+
+    non_contract_specific_text = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    non_contract_specific_text["tasks"][1]["contract_impact"] = "No specific user-visible behavior impact."
+    non_contract_specific_text["tasks"][1]["adr_required"] = False
+    validate_task_packets(non_contract_specific_text, "T2.6")
 
     foundation_without_justification = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
