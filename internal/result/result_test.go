@@ -9,6 +9,7 @@ func TestCommandResultJSONEnvelope(t *testing.T) {
 	payload := CommandResult{
 		ObjectType:      "lumyn.command_result",
 		SchemaVersion:   "1.0",
+		Metadata:        map[string]any{"lumyn_version": "0.0.0"},
 		Command:         "verify",
 		Status:          "pass",
 		Mode:            "verify",
@@ -30,6 +31,7 @@ func TestCommandResultJSONEnvelope(t *testing.T) {
 	for _, key := range []string{
 		"object_type",
 		"schema_version",
+		"metadata",
 		"command",
 		"status",
 		"mode",

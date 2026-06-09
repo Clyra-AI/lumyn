@@ -50,6 +50,11 @@
       "check": "Invalid command-result output fails schema validation.",
       "status": "pass",
       "evidence": "schemas/schema_test.go TestInvalidCommandResultFails"
+    },
+    {
+      "check": "Schema validator dependency is pinned in go.mod/go.sum and justified in dev guidance.",
+      "status": "pass",
+      "evidence": "go.mod/go.sum pin github.com/santhosh-tekuri/jsonschema/v5 v5.3.1; docs/dev/dev_guides.md dependency policy"
     }
   ],
   "skipped_commands": [],

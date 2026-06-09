@@ -8,6 +8,7 @@ import (
 
 	"github.com/Clyra-AI/lumyn/internal/exitcode"
 	"github.com/Clyra-AI/lumyn/internal/result"
+	"github.com/Clyra-AI/lumyn/internal/version"
 )
 
 func main() {
@@ -31,6 +32,7 @@ func main() {
 	payload := result.CommandResult{
 		ObjectType:      "lumyn.command_result",
 		SchemaVersion:   "1.0",
+		Metadata:        commandMetadata(),
 		Command:         command,
 		Status:          status,
 		Mode:            command,
@@ -48,6 +50,14 @@ func main() {
 		os.Exit(exitcode.InternalError)
 	}
 	os.Exit(exitCode)
+}
+
+func commandMetadata() map[string]any {
+	return map[string]any{
+		"lumyn_version": version.Version,
+		"runtime":       "go",
+		"source":        "cli",
+	}
 }
 
 func isKnownCommand(command string) bool {

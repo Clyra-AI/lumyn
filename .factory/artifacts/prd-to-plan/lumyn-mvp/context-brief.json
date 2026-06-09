@@ -20,7 +20,7 @@
     },
     {
       "ref": "WORKFLOW.md#PR Lifecycle Baseline",
-      "summary": "Factory delivery now requires local validation, CI/status checks, structured review, ship-pr evidence, post-merge monitoring, and PR lifecycle evidence before product implementation continues."
+      "summary": "Factory delivery now requires local validation, CI/status checks, structured review, commit-push evidence, post-merge monitoring, and PR lifecycle evidence before product implementation continues."
     },
     {
       "topic": "Dev And Architecture Propagation Baseline",
@@ -80,7 +80,7 @@
     "task-executor",
     "validation-gate",
     "code-review",
-    "ship-pr",
+    "commit-push",
     "post-merge-monitor"
   ],
   "created_at": "2026-06-08T22:45:00Z",

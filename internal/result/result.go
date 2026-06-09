@@ -3,6 +3,7 @@ package result
 type CommandResult struct {
 	ObjectType      string         `json:"object_type"`
 	SchemaVersion   string         `json:"schema_version"`
+	Metadata        map[string]any `json:"metadata"`
 	Command         string         `json:"command"`
 	Status          string         `json:"status"`
 	Mode            string         `json:"mode"`

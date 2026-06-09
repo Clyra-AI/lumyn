@@ -1,11 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"os/exec"
 	"path/filepath"
 	"testing"
+
+	"github.com/santhosh-tekuri/jsonschema/v5"
 )
 
 func TestCLIEmitsCommandResultEnvelope(t *testing.T) {
@@ -16,10 +19,8 @@ func TestCLIEmitsCommandResultEnvelope(t *testing.T) {
 		t.Fatalf("run lumyn command: %v", err)
 	}
 
-	var payload map[string]any
-	if err := json.Unmarshal(output, &payload); err != nil {
-		t.Fatalf("decode command result: %v\n%s", err, output)
-	}
+	payload := decodeCommandResult(t, output)
+	validateCommandResultSchema(t, payload)
 
 	expected := map[string]string{
 		"object_type":      "lumyn.command_result",
@@ -33,6 +34,13 @@ func TestCLIEmitsCommandResultEnvelope(t *testing.T) {
 		if payload[key] != value {
 			t.Fatalf("%s = %v, want %q", key, payload[key], value)
 		}
+	}
+	metadata, ok := payload["metadata"].(map[string]any)
+	if !ok {
+		t.Fatalf("metadata = %T, want object", payload["metadata"])
+	}
+	if metadata["lumyn_version"] != "0.0.0" {
+		t.Fatalf("metadata.lumyn_version = %v, want 0.0.0", metadata["lumyn_version"])
 	}
 }
 
@@ -51,10 +59,8 @@ func TestCLIRejectsUnknownCommandWithJSONEnvelope(t *testing.T) {
 		t.Fatalf("exit code = %d, want 2", exitErr.ExitCode())
 	}
 
-	var payload map[string]any
-	if err := json.Unmarshal(output, &payload); err != nil {
-		t.Fatalf("decode command result: %v\n%s", err, output)
-	}
+	payload := decodeCommandResult(t, output)
+	validateCommandResultSchema(t, payload)
 	if payload["status"] != "fail" {
 		t.Fatalf("status = %v, want fail", payload["status"])
 	}
@@ -71,4 +77,26 @@ func buildTestBinary(t *testing.T) string {
 		t.Fatalf("build test binary: %v\n%s", err, output)
 	}
 	return binary
+}
+
+func decodeCommandResult(t *testing.T, output []byte) map[string]any {
+	t.Helper()
+	decoder := json.NewDecoder(bytes.NewReader(output))
+	decoder.UseNumber()
+	var payload map[string]any
+	if err := decoder.Decode(&payload); err != nil {
+		t.Fatalf("decode command result: %v\n%s", err, output)
+	}
+	return payload
+}
+
+func validateCommandResultSchema(t *testing.T, payload map[string]any) {
+	t.Helper()
+	schema, err := jsonschema.Compile(filepath.Join("..", "..", "schemas", "command-result.schema.json"))
+	if err != nil {
+		t.Fatalf("compile command-result schema: %v", err)
+	}
+	if err := schema.Validate(payload); err != nil {
+		t.Fatalf("command-result schema validation failed: %v", err)
+	}
 }

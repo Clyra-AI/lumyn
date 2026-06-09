@@ -200,7 +200,7 @@
     "task-executor",
     "validation-gate",
     "code-review",
-    "ship-pr",
+    "commit-push",
     "post-merge-monitor"
   ],
   "lifecycle_gates": {

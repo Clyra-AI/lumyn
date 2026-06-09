@@ -52,7 +52,7 @@
       "evidence": "Makefile build; rm -rf .factory/tmp && make prepush-full"
     },
     {
-      "check": "WORKFLOW.md, AGENTS.md, README.md, docs/dev/dev_guides.md, and docs/architecture/architecture_guides.md document CI/status, review, ship-pr, post-merge, and PR lifecycle evidence.",
+      "check": "WORKFLOW.md, AGENTS.md, README.md, docs/dev/dev_guides.md, and docs/architecture/architecture_guides.md document CI/status, review, commit-push, post-merge, and PR lifecycle evidence.",
       "status": "pass",
       "evidence": "repo-local operating pack"
     },
