@@ -150,7 +150,13 @@
       "tdd_first_failing_tests",
       "cost_perf_impact",
       "chaos_failure_hypothesis",
-      "semantic_invariants"
+      "semantic_invariants",
+      "factory_compatibility",
+      "scope_exclusions",
+      "alignment_gate_ref",
+      "plan_drift_policy_ref",
+      "required_worker_chain",
+      "lifecycle_gates"
     ],
     "exception_behavior": "block_or_record_approved_exception",
     "notes": [
@@ -158,7 +164,9 @@
       "CodeQL is delivery risk-lane infrastructure and remains separate from the product-facing T9 GitHub Action/JUnit/PR-comment feature.",
       "T2.6 now propagates CI lanes, docs parity, output contracts, release integrity, provenance, systems-thinking, TDD/ADR, performance, reliability, and fail-closed requirements before T3.",
       "All current task packets carry inherited guide refs and planning-skill fields; future task packets must do the same or record an approved exception.",
-      "T2.6 now also enforces Factory prd-to-plan and execution-compiler story fields before T3 product implementation."
+      "T2.6 now also enforces Factory prd-to-plan and execution-compiler story fields before T3 product implementation.",
+      "T2.6 now enforces Factory compatibility, alignment-gate refs, plan-drift refs, explicit scope exclusions, canonical worker chains, and lifecycle gates on every task packet.",
+      "Runtime pins now preserve the current Factory profile shape as well as Lumyn-specific Go aliases."
     ],
     "ci_lanes": {
       "fast": [
@@ -209,7 +217,10 @@
       "execution plan carries public API and contract map, docs/OSS readiness baseline, test matrix wiring, minimum-now sequence, explicit non-goals, and definition of done",
       "task packets carry runtime pins, slice rationale, changelog/versioning intent, contract/API impact, architecture constraints, ADR posture, TDD-first tests, cost/perf impact, chaos/failure hypothesis, and semantic invariants",
       "guide propagation from docs/dev/dev_guides.md and docs/architecture/architecture_guides.md is enforced before T3 product implementation",
-      "public or executable contract-impact tasks must be ADR-gated with adr_required=true"
+      "public or executable contract-impact tasks must be ADR-gated with adr_required=true",
+      "execution plan, validation contract, context brief, and task packets carry factory_compatibility and block deprecated active worker aliases",
+      "task packets carry scope_exclusions, alignment_gate_ref, and plan_drift_policy_ref inherited from the execution plan",
+      "runtime pins use the current Factory runtime-pins contract including toolchain_version, module_or_package_path, provider_policy, artifact_namespace, and live_work_policy"
     ],
     "evidence_refs": [
       "docs/dev/dev_guides.md",
@@ -220,7 +231,7 @@
       ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
       "scripts/validate_repo_pack.py"
     ],
-    "drift_policy": "If runtime, distribution, provider, dependency, artifact namespace, credential, live-work, guide, or validation-contract decisions change after planning, update the context brief, execution plan, task packets, and validation contract before implementation continues."
+    "drift_policy": "If runtime, distribution, provider, dependency, artifact namespace, credential, live-work, guide, validation-contract, Factory contract, profile, skill inventory, or skill vocabulary decisions change after planning, update context brief, execution plan, task packets, validation contract, and factory_compatibility before implementation continues."
   },
   "public_api_and_contract_map": {
     "stable_public_surfaces": [
@@ -361,5 +372,69 @@
     "Latest-head passive Codex review is approved, thumbs-up, actionable-resolved, carried forward, or explicitly excepted before merge.",
     "No task writes outside allowed paths, introduces undeclared credentials/network, or does explicitly excluded work.",
     "Docs, changelog/versioning intent, output contracts, architecture constraints, and planning artifacts stay aligned with implemented behavior."
-  ]
+  ],
+  "factory_compatibility": {
+    "factory_contract_version": "1.0",
+    "profile_ref": "profiles/lumyn.yaml",
+    "skill_vocabulary_version": "2026-06-09",
+    "skill_inventory_ref": "skills/README.md",
+    "generated_by": "prd-to-plan+execution-compiler",
+    "generated_at": "2026-06-09T00:00:00Z",
+    "deprecated_worker_policy": "block_active_aliases",
+    "deprecated_worker_aliases": [
+      {
+        "deprecated": "ship-pr",
+        "replacement": "commit-push",
+        "status": "deprecated",
+        "migration_behavior": "block active task packets until required_worker_chain is migrated"
+      }
+    ]
+  },
+  "runtime_pins": {
+    "language": "go",
+    "go_version": "1.26.4",
+    "toolchain_version": "1.26.4",
+    "module_path": "github.com/Clyra-AI/lumyn",
+    "module_or_package_path": "github.com/Clyra-AI/lumyn",
+    "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
+    "distribution_target": "standalone_binary",
+    "secondary_distribution_target": "homebrew_after_first_binary",
+    "not_primary_distribution_target": "pypi",
+    "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+    "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
+    "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture"
+  },
+  "alignment_gate": {
+    "status": "resolved",
+    "source_context_brief_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json#/alignment_decisions",
+    "blocking_decisions": [
+      "runtime: Go 1.26.4 with module github.com/Clyra-AI/lumyn",
+      "distribution: standalone binary first, Homebrew later, PyPI not primary",
+      "provider: OpenAI-compatible HTTP adapter first for eval, no SDK-heavy dependency during deterministic bootstrap",
+      "artifact namespace: Factory evidence in .factory/artifacts/ and product artifacts in workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
+      "credential and live-work posture: no network, sandbox credentials, or model keys until deterministic replay passes and human approval unlocks them",
+      "dependency policy: standard library first; pinned dependencies only when required and justified"
+    ],
+    "implementation_may_start": true
+  },
+  "plan_drift_policy": {
+    "drift_triggers": [
+      "runtime or toolchain change",
+      "distribution target change",
+      "provider or credential posture change",
+      "artifact namespace change",
+      "dependency policy change",
+      "live-work posture change",
+      "validation contract change",
+      "Factory contract, profile, skill inventory, or skill vocabulary changes that alter required fields, lifecycle workers, validation gates, or evidence expectations"
+    ],
+    "required_updates": [
+      "context_brief",
+      "execution_plan",
+      "task_packets",
+      "validation_contract",
+      "factory_compatibility"
+    ],
+    "continuation_behavior": "block_until_artifacts_updated"
+  }
 }

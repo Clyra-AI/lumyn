@@ -86,9 +86,11 @@ non-applicable reason.
 - Changes that affect T3+ task planning must keep `scripts/validate_repo_pack.py`
   green so product task packets preserve CI lanes, 12-level test matrix refs,
   scanner gates, engineering policy refs, architecture guidance refs, and the
-  Factory `prd-to-plan` / `execution-compiler` fields for changelog intent,
-  contract impact, ADR posture, TDD-first evidence, cost/perf impact, failure
-  hypotheses, and semantic invariants.
+  Factory `prd-to-plan` / `execution-compiler` fields for Factory
+  compatibility, explicit scope exclusions, alignment gate refs, plan-drift
+  refs, expanded runtime pins, changelog intent, contract impact, ADR posture,
+  TDD-first evidence, cost/perf impact, failure hypotheses, semantic
+  invariants, canonical worker chains, and lifecycle gates.
 
 ## Docs Parity
 

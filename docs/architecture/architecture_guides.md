@@ -100,6 +100,7 @@ performance/reliability triggers, failure rules, and evidence requirements into
 the execution plan and future task packets before T3 product implementation
 starts. It also preserves the Factory planning-skill contract: public API and
 contract maps, docs/OSS readiness, minimum-now sequencing, explicit non-goals,
-definition of done, changelog/versioning intent, contract impact, ADR posture,
-TDD-first checks, cost/perf posture, failure hypotheses, and semantic
-invariants.
+definition of done, Factory compatibility, explicit scope exclusions, alignment
+gate refs, plan-drift refs, expanded runtime pins, changelog/versioning intent,
+contract impact, ADR posture, TDD-first checks, cost/perf posture, failure
+hypotheses, semantic invariants, canonical worker chains, and lifecycle gates.

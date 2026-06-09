@@ -36,6 +36,7 @@
     ]
   },
   "allowed_paths": [
+    ".factory/artifacts/pr-lifecycle/T3-repair-001/",
     ".factory/artifacts/pr-lifecycle/T3/",
     ".factory/artifacts/task-runs/T3/",
     ".factory/artifacts/pilot/lumyn-mvp-slice/",
@@ -49,9 +50,13 @@
     ".factory/tmp/"
   ],
   "scope_exclusions": [
-    "Do not implement live sandbox verification.",
-    "Do not add model provider credentials or network calls.",
-    "Do not claim full MVP closure before T4-T12 close or receive approved blockers/deferrals."
+    "MCP recording",
+    "event assertions",
+    "hosted dashboard",
+    "runtime enforcement",
+    "production trace import",
+    "multi-provider eval panels",
+    "training shared models on private artifacts"
   ],
   "input_artifacts": [
     "context_brief",
@@ -217,7 +222,7 @@
     "language": "go",
     "go_version": "1.26.4",
     "module_path": "github.com/Clyra-AI/lumyn",
-    "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+    "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
     "distribution_target": "standalone_binary",
     "secondary_distribution_target": "homebrew_after_first_binary",
     "not_primary_distribution_target": "pypi",
@@ -232,9 +237,13 @@
       "schemas": "schemas/",
       "examples": "examples/"
     },
-    "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+    "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+    "toolchain_version": "1.26.4",
+    "module_or_package_path": "github.com/Clyra-AI/lumyn",
+    "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+    "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/"
   },
-  "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json#/alignment_questions",
+  "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
   "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
   "max_iterations": 2,
   "closure_gap_ref": ".factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json#/closure_items/1",
@@ -292,5 +301,22 @@
     "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
   ],
   "plan_drift_policy": "Repair work inherits the T3 task packet and validation contract; any scope expansion updates the main plan artifacts before implementation continues.",
-  "slice_type": "vertical"
+  "slice_type": "vertical",
+  "factory_compatibility": {
+    "factory_contract_version": "1.0",
+    "profile_ref": "profiles/lumyn.yaml",
+    "skill_vocabulary_version": "2026-06-09",
+    "skill_inventory_ref": "skills/README.md",
+    "generated_by": "prd-to-plan+execution-compiler",
+    "generated_at": "2026-06-09T00:00:00Z",
+    "deprecated_worker_policy": "block_active_aliases",
+    "deprecated_worker_aliases": [
+      {
+        "deprecated": "ship-pr",
+        "replacement": "commit-push",
+        "status": "deprecated",
+        "migration_behavior": "block active task packets until required_worker_chain is migrated"
+      }
+    ]
+  }
 }
