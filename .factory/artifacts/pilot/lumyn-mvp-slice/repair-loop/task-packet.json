@@ -27,7 +27,8 @@
       "work_proof_marker",
       "scope_closure_report",
       "review_report",
-      "ship_packet"
+      "ship_packet",
+      "factoryd_run_once_report"
     ],
     "stop_conditions": [
       "closure gap ref is missing",
@@ -321,5 +322,36 @@
         "migration_behavior": "block active task packets until required_worker_chain is migrated"
       }
     ]
-  }
+  },
+  "worker_type": "codex_cli",
+  "factoryd_runtime": {
+    "state_dir": ".factoryd/",
+    "workspace_root": ".factoryd/workspaces/",
+    "branch_prefix": "codex",
+    "worker_type": "codex_cli",
+    "worker_command": "",
+    "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+    "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+    "network_posture": "offline by default until live sandbox/model work is approved"
+  },
+  "validation_commands": [
+    "make prepush-full"
+  ],
+  "evidence_required": [
+    "validation_report",
+    "work_proof_marker",
+    "scope_closure_report",
+    "review_report",
+    "ship_packet",
+    "factoryd_run_once_report"
+  ],
+  "stop_conditions": [
+    "missing runner-ready task contract",
+    "changed path outside allowed_paths",
+    "forbidden path changed",
+    "required validation command failed",
+    "plan drift detected",
+    "required lifecycle evidence missing without approved exception",
+    "credential or network access required before approval posture is unlocked"
+  ]
 }

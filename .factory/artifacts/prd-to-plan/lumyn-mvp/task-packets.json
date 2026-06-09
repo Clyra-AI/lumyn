@@ -60,7 +60,8 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "planning_skill_refs": [
         "factory://skills/prd-to-plan",
@@ -303,7 +304,27 @@
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
         "skip_policy": "approved_exception_required"
-      }
+      },
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     },
     {
       "task_id": "T2",
@@ -353,7 +374,8 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "planning_skill_refs": [
         "factory://skills/prd-to-plan",
@@ -605,7 +627,27 @@
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
         "skip_policy": "approved_exception_required"
-      }
+      },
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     },
     {
       "task_id": "T2.5",
@@ -657,7 +699,8 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "planning_skill_refs": [
         "factory://skills/prd-to-plan",
@@ -906,7 +949,27 @@
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
         "skip_policy": "approved_exception_required"
-      }
+      },
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     },
     {
       "task_id": "T2.6",
@@ -1026,7 +1089,8 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "ci_lane_refs": [
         {
@@ -1212,7 +1276,27 @@
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
         "skip_policy": "approved_exception_required"
-      }
+      },
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     },
     {
       "task_id": "T3",
@@ -1266,7 +1350,8 @@
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "test_matrix_refs": [
         {
@@ -1498,7 +1583,27 @@
         "training shared models on private artifacts"
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
-      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     },
     {
       "task_id": "T4",
@@ -1552,7 +1657,8 @@
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "test_matrix_refs": [
         {
@@ -1791,7 +1897,27 @@
         "training shared models on private artifacts"
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
-      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     },
     {
       "task_id": "T5",
@@ -1843,7 +1969,8 @@
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "test_matrix_refs": [
         {
@@ -2081,7 +2208,27 @@
         "training shared models on private artifacts"
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
-      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     },
     {
       "task_id": "T6",
@@ -2134,7 +2281,8 @@
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "test_matrix_refs": [
         {
@@ -2371,7 +2519,27 @@
         "training shared models on private artifacts"
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
-      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     },
     {
       "task_id": "T7",
@@ -2427,7 +2595,8 @@
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "test_matrix_refs": [
         {
@@ -2671,7 +2840,27 @@
         "training shared models on private artifacts"
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
-      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     },
     {
       "task_id": "T8",
@@ -2724,7 +2913,8 @@
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "test_matrix_refs": [
         {
@@ -2967,7 +3157,27 @@
         "training shared models on private artifacts"
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
-      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     },
     {
       "task_id": "T9",
@@ -3022,7 +3232,8 @@
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "test_matrix_refs": [
         {
@@ -3256,7 +3467,27 @@
         "training shared models on private artifacts"
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
-      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     },
     {
       "task_id": "T10",
@@ -3308,7 +3539,8 @@
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "test_matrix_refs": [
         {
@@ -3552,7 +3784,27 @@
         "training shared models on private artifacts"
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
-      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     },
     {
       "task_id": "T11",
@@ -3613,7 +3865,8 @@
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "test_matrix_refs": [
         {
@@ -3876,7 +4129,27 @@
           "api_key_env"
         ],
         "network_policy": "blocked until deterministic replay foundation passes and human approval unlocks model/network posture"
-      }
+      },
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     },
     {
       "task_id": "T12",
@@ -3930,7 +4203,8 @@
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
-        "scope_closure_map"
+        "scope_closure_map",
+        "factoryd_run_once_report"
       ],
       "test_matrix_refs": [
         {
@@ -4173,7 +4447,27 @@
         "training shared models on private artifacts"
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
-      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved"
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked"
+      ]
     }
   ],
   "runtime_pins": {

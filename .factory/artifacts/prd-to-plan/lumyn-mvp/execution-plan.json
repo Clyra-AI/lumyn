@@ -154,7 +154,12 @@
       "alignment_gate_ref",
       "plan_drift_policy_ref",
       "required_worker_chain",
-      "lifecycle_gates"
+      "lifecycle_gates",
+      "worker_type",
+      "factoryd_runtime",
+      "validation_commands",
+      "evidence_required",
+      "stop_conditions"
     ],
     "exception_behavior": "block_or_record_approved_exception",
     "notes": [
@@ -218,7 +223,8 @@
       "public or executable contract-impact tasks must be ADR-gated with adr_required=true",
       "execution plan, validation contract, context brief, and task packets carry factory_compatibility and block deprecated active worker aliases",
       "task packets carry scope_exclusions, alignment_gate_ref, and plan_drift_policy_ref inherited from the execution plan",
-      "runtime pins use the current Factory runtime-pins contract including toolchain_version, module_or_package_path, provider_policy, artifact_namespace, and live_work_policy"
+      "runtime pins use the current Factory runtime-pins contract including toolchain_version, module_or_package_path, provider_policy, artifact_namespace, and live_work_policy",
+      "task packets that are runner-ready carry worker_type, factoryd_runtime, validation_commands, evidence_required, and stop_conditions before factoryd dispatch"
     ],
     "evidence_refs": [
       "docs/dev/dev_guides.md",
@@ -457,5 +463,15 @@
       "api_key_env"
     ],
     "network_policy": "blocked until deterministic replay foundation passes and human approval unlocks model/network posture"
+  },
+  "factoryd_runtime": {
+    "state_dir": ".factoryd/",
+    "workspace_root": ".factoryd/workspaces/",
+    "branch_prefix": "codex",
+    "worker_type": "codex_cli",
+    "worker_command": "",
+    "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+    "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+    "network_posture": "offline by default until live sandbox/model work is approved"
   }
 }
