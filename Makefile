@@ -1,7 +1,7 @@
 GO ?= go
 PKG_LIST := ./cmd/... ./internal/... ./schemas/...
 
-.PHONY: fmt lint-fast test-fast test-contracts build prepush-full
+.PHONY: fmt lint-fast test-fast test-contracts build audit-remote-protection prepush-full
 
 lint-fast:
 	test -f AGENTS.md
@@ -10,12 +10,14 @@ lint-fast:
 	test -f docs/product/prd.md
 	test -f .tool-versions
 	test -f go.mod
+	test -f scripts/audit_branch_protection.py
 	test -f .github/workflows/validate.yml
 	test -f .github/workflows/codeql.yml
 	test -d .factory/artifacts
 	test -d cmd/lumyn
 	test -d internal
 	test -d tests
+	test -d scripts
 	! grep -RIn "TODO\\|TBD\\|FIXME" AGENTS.md WORKFLOW.md README.md docs cmd internal schemas tests
 	grep -q '^golang 1.26.4$$' .tool-versions
 	grep -q '^go 1.26.4$$' go.mod
@@ -28,6 +30,9 @@ lint-fast:
 	grep -q 'Do not merge manually through `gh pr merge`' docs/dev/dev_guides.md
 	grep -q 'process escape' WORKFLOW.md
 	grep -q 'process escape' docs/dev/dev_guides.md
+	grep -q 'protect-main-from-direct-push' AGENTS.md
+	grep -q 'audit-remote-protection' WORKFLOW.md
+	grep -q 'audit-remote-protection' docs/dev/dev_guides.md
 	$(GO) vet $(PKG_LIST)
 
 fmt:
@@ -49,6 +54,8 @@ test-contracts:
 	test -f .factory/artifacts/task-runs/T2.6/work-proof-marker.json
 	test -f .factory/artifacts/pr-lifecycle/T2.5-pr5/pr-lifecycle-report.json
 	python3 -m json.tool .factory/artifacts/pr-lifecycle/T2.5-pr5/pr-lifecycle-report.json >/dev/null
+	test -f .factory/artifacts/repo-controls/main-branch-protection.json
+	python3 -m json.tool .factory/artifacts/repo-controls/main-branch-protection.json >/dev/null
 	test -f schemas/workflow-contract.schema.json
 	test -f schemas/expected-outcome.schema.json
 	test -f schemas/validator.schema.json
@@ -67,5 +74,8 @@ test-contracts:
 build:
 	mkdir -p .factory/tmp
 	$(GO) build -o .factory/tmp/lumyn ./cmd/lumyn
+
+audit-remote-protection:
+	python3 scripts/audit_branch_protection.py
 
 prepush-full: fmt lint-fast test-fast test-contracts build

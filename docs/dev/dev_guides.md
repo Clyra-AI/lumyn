@@ -16,6 +16,7 @@
 - `make test-fast`: Go unit tests.
 - `make test-contracts`: unit tests, Factory planning artifact presence, and required schema-file presence.
 - `make prepush-full`: full local gate before PR or merge.
+- `make audit-remote-protection`: networked GitHub audit for live `main` branch protection and the `protect-main-from-direct-push` ruleset.
 
 ## CI Lane Mapping
 
@@ -60,6 +61,9 @@ non-applicable reason.
 - Green CI alone is not merge-ready. The latest PR head must have Codex approval, thumbs-up, actionable-resolved, carry-forward, or an approved exception before merge.
 - Do not merge manually through `gh pr merge`, the GitHub UI, or a connector before passive Codex review settles.
 - A PR merged without latest-head Codex review evidence is a process escape and must be recorded in PR lifecycle evidence with a follow-up fix or blocker.
+- GitHub `main` must be protected by branch protection plus the `protect-main-from-direct-push` ruleset.
+- Required live controls: pull requests required, strict `validate` and `CodeQL analyze` status checks, admin enforcement, conversation resolution, no force pushes, no branch deletion, and no current-user ruleset bypass.
+- Verify live remote controls with `make audit-remote-protection` when GitHub credentials are available.
 
 ## Security Scanner Enforcement
 
@@ -108,6 +112,7 @@ non-applicable reason.
 - PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<task_id>/pr-lifecycle-report.json`.
 - Codex review evidence source: latest-head PR review, thumbs-up, actionable-resolved, carry-forward, or approved exception before merge.
 - Scanner evidence source: GitHub Actions `CodeQL analyze`.
+- Branch protection evidence path: `.factory/artifacts/repo-controls/main-branch-protection.json`.
 - Scope closure source: `.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json`.
 - Evidence must use repo-relative paths and record skipped-command reasons.
 

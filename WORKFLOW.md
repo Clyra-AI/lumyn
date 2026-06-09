@@ -55,6 +55,9 @@ Lumyn accepts work from:
 - Green CI alone is not merge-ready. The latest PR head must have Codex approval, thumbs-up, actionable-resolved, carry-forward, or an approved exception before merge.
 - Do not merge manually through `gh pr merge`, the GitHub UI, or a connector before passive Codex review settles.
 - A PR merged without latest-head Codex review evidence is a process escape and must be recorded in PR lifecycle evidence with a follow-up fix or blocker.
+- Remote branch protection: GitHub `main` must be protected by branch protection plus the `protect-main-from-direct-push` ruleset.
+- Required live controls: pull requests required, strict `validate` and `CodeQL analyze` status checks, admin enforcement, conversation resolution, no force pushes, no branch deletion, and no current-user ruleset bypass.
+- Remote audit command: `make audit-remote-protection` when GitHub credentials are available.
 
 ## Runtime And Distribution Pins
 
@@ -76,6 +79,7 @@ Stop and request human decision if:
 - implementation would satisfy a command while violating explicit PRD scope exclusions
 - lifecycle gates are required but review, ship, CI/status, post-merge, or PR lifecycle evidence is missing without an approved exception
 - a PR is merge-ready by CI but lacks latest-head passive Codex review settle evidence
+- GitHub `main` branch protection or the `protect-main-from-direct-push` ruleset is missing, disabled, or bypassable
 - scanner-gated work lacks CodeQL status evidence or an approved scanner exception
 - a product task omits required test-matrix refs, scanner gates, or architecture guidance refs inherited from the repo operating pack
 - a product task omits required CI lane refs, docs parity, output contract, release integrity, provenance, systems-thinking, TDD, ADR, performance, reliability, or fail-closed refs inherited from the repo operating pack
