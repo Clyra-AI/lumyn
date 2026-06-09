@@ -22,6 +22,24 @@ REQUIRED_FILES = [
     "ship-packet.json",
 ]
 
+REQUIRED_WORK_PROOF_CHANGED_PATHS = {
+    "Makefile",
+    "README.md",
+    "docs/dev/dev_guides.md",
+    "docs/factory/README.md",
+    "scripts/validate_factory_pilot_evidence.py",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/README.md",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/work-proof-marker.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/validation-report.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/mission-event-log.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/blockers.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/task-packet.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/repair-report.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/review-report.json",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/ship-packet.json",
+}
+
 
 def fail(message: str) -> None:
     raise AssertionError(message)
@@ -125,10 +143,28 @@ def validate_review_and_ship(review_report: dict[str, Any], ship_packet: dict[st
     require_ref_list(review_report.get("evidence_refs"), "review-report.evidence_refs")
     if ship_packet.get("scope_closure_report_ref") != ".factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json":
         fail("ship-packet must reference the pilot scope closure report")
+    commit_set = ship_packet.get("commit_set")
+    if not isinstance(commit_set, list) or not commit_set or "pending-pr-head" in commit_set:
+        fail("ship-packet.commit_set must record concrete commit refs")
     if ship_packet.get("merge_readiness") != "ready_after_ci_and_codex_review":
         fail("ship-packet.merge_readiness must wait for CI and Codex review")
     require_ref(ship_packet.get("validation_reference", ""), "ship-packet.validation_reference")
     require_ref_list(ship_packet.get("work_proof_marker_refs"), "ship-packet.work_proof_marker_refs")
+
+
+def validate_work_proof(work_proof: dict[str, Any]) -> None:
+    if work_proof.get("execution_status") != "completed":
+        fail("work-proof-marker.execution_status must be completed")
+    changed_paths = work_proof.get("changed_paths")
+    if not isinstance(changed_paths, list):
+        fail("work-proof-marker.changed_paths must be a list")
+    changed_path_set = {str(path) for path in changed_paths}
+    missing = sorted(REQUIRED_WORK_PROOF_CHANGED_PATHS - changed_path_set)
+    if missing:
+        fail(f"work-proof-marker.changed_paths missing pilot proof paths: {missing}")
+    forbidden_paths = work_proof.get("forbidden_paths_touched")
+    if not isinstance(forbidden_paths, list) or forbidden_paths:
+        fail("work-proof-marker.forbidden_paths_touched must be an empty list")
 
 
 def main() -> int:
@@ -148,8 +184,7 @@ def main() -> int:
 
         if validation_report.get("status") != "passed":
             fail("validation-report.status must be passed")
-        if work_proof.get("execution_status") != "completed":
-            fail("work-proof-marker.execution_status must be completed")
+        validate_work_proof(work_proof)
         validate_scope_closure(closure)
         validate_repair_loop(repair_task, repair_report)
         validate_review_and_ship(review_report, ship_packet)

@@ -49,7 +49,7 @@ Lumyn accepts work from:
 - Structured review: `code-review` must produce review evidence when risk, workflow policy, validation findings, or review policy require it.
 - Shipping evidence: `ship-pr` must produce or reference a ship packet before merge.
 - Post-merge monitoring: default branch health must be checked after merge and recorded when the task requires lifecycle evidence.
-- PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<task_id>/pr-lifecycle-report.json`.
+- PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
 - Unavailable CI or review gates require an explicit approved exception; they are not silently treated as passed.
 - Passive Codex review settle is required before merge when the repository review integration is enabled.
 - Green CI alone is not merge-ready. The latest PR head must have Codex approval, thumbs-up, actionable-resolved, carry-forward, or an approved exception before merge.

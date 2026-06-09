@@ -55,7 +55,7 @@ non-applicable reason.
 - GitHub Actions workflow: `.github/workflows/validate.yml`.
 - Required check name: `validate`.
 - CI command: `make prepush-full`.
-- PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<task_id>/pr-lifecycle-report.json`.
+- PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
 - Lifecycle-gated tasks require local validation, CI/status evidence, review evidence when required, ship evidence, post-merge evidence, and a PR lifecycle report or an explicit approved exception.
 - Passive Codex review settle is required before merge when the repository review integration is enabled.
 - Green CI alone is not merge-ready. The latest PR head must have Codex approval, thumbs-up, actionable-resolved, carry-forward, or an approved exception before merge.
@@ -109,7 +109,7 @@ non-applicable reason.
 
 - Validation report path: `.factory/artifacts/task-runs/<task_id>/validation-report.json`.
 - Work-proof marker path: `.factory/artifacts/task-runs/<task_id>/work-proof-marker.json`.
-- PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<task_id>/pr-lifecycle-report.json`.
+- PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
 - Codex review evidence source: latest-head PR review, thumbs-up, actionable-resolved, carry-forward, or approved exception before merge.
 - Scanner evidence source: GitHub Actions `CodeQL analyze`.
 - Branch protection evidence path: `.factory/artifacts/repo-controls/main-branch-protection.json`.

@@ -9,6 +9,9 @@
   "execution_status": "completed",
   "changed_paths": [
     "Makefile",
+    "README.md",
+    "docs/dev/dev_guides.md",
+    "docs/factory/README.md",
     "scripts/validate_factory_pilot_evidence.py",
     ".factory/artifacts/pilot/lumyn-mvp-slice/README.md",
     ".factory/artifacts/pilot/lumyn-mvp-slice/work-proof-marker.json",

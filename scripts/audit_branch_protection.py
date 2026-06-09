@@ -82,7 +82,10 @@ def github_ref_pattern_to_regex(pattern: str) -> re.Pattern[str]:
             if end == -1:
                 output.append(re.escape(char))
             else:
-                output.append(pattern[index : end + 1])
+                character_class = pattern[index : end + 1]
+                if character_class.startswith("[!"):
+                    character_class = "[^" + character_class[2:]
+                output.append(character_class)
                 index = end
         else:
             output.append(re.escape(char))
@@ -199,6 +202,7 @@ def run_self_test() -> int:
             "refs/heads/ma*",
             "refs/heads/**",
             "refs/heads/**/main",
+            "refs/heads/[!z]*",
         ]:
             protection = fixture_protection()
             ruleset = deepcopy(fixture_ruleset())
