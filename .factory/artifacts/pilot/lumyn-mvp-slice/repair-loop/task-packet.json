@@ -108,11 +108,28 @@
       ]
     },
     {
+      "lane": "acceptance",
+      "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+      "command_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+      ]
+    },
+    {
+      "lane": "cross_platform",
+      "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+      "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+    },
+    {
       "lane": "risk",
       "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
       "status_check_refs": [
         "CodeQL analyze"
       ]
+    },
+    {
+      "lane": "release",
+      "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+      "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
     }
   ],
   "security_scanner_gates": {

@@ -161,6 +161,18 @@ def refs_include_base(task: dict[str, Any], field: str, expected_base: str) -> b
     return any(isinstance(item, dict) and source_ref_base(item.get("source_ref")) == expected_base for item in value)
 
 
+def has_nonempty_list(value: Any) -> bool:
+    return isinstance(value, list) and any(isinstance(item, str) and item.strip() for item in value)
+
+
+def missing_ci_lane_refs(task: dict[str, Any]) -> list[str]:
+    value = task.get("ci_lane_refs")
+    if not isinstance(value, list):
+        return list(REQUIRED_CI_LANES)
+    present = {item.get("lane") for item in value if isinstance(item, dict)}
+    return [lane for lane in REQUIRED_CI_LANES if lane not in present]
+
+
 def missing_engineering_policy_refs(task: dict[str, Any]) -> list[str]:
     value = task.get("engineering_policy_refs")
     if not isinstance(value, list):
@@ -202,6 +214,9 @@ def validate_task_guide_sources(task: dict[str, Any]) -> None:
         fail(f"{task_id_value} test_matrix_refs must include source {TEST_MATRIX_SOURCE_BASE}")
     if not refs_include_base(task, "architecture_guidance_refs", ARCHITECTURE_GUIDE_BASE):
         fail(f"{task_id_value} architecture_guidance_refs must include source {ARCHITECTURE_GUIDE_BASE}")
+    missing_lanes = missing_ci_lane_refs(task)
+    if missing_lanes:
+        fail(f"{task_id_value} ci_lane_refs missing: {', '.join(missing_lanes)}")
     missing_engineering = missing_engineering_policy_refs(task)
     if missing_engineering:
         fail(f"{task_id_value} engineering_policy_refs missing: {', '.join(missing_engineering)}")
@@ -245,8 +260,8 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
             and isinstance(item.get("source_ref"), str)
             and item["source_ref"].strip()
             and (
-                bool(item.get("command_refs"))
-                or bool(item.get("status_check_refs"))
+                has_nonempty_list(item.get("command_refs"))
+                or has_nonempty_list(item.get("status_check_refs"))
                 or (isinstance(item.get("exception_ref"), str) and item["exception_ref"].strip())
             )
             for item in value
@@ -413,10 +428,35 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
         "test_matrix_refs": [{"tier": "Tier 1 Unit", "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix"}],
         "ci_lane_refs": [
             {
+                "lane": "fast",
+                "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+                "command_refs": ["make lint-fast", "make test-fast"],
+            },
+            {
                 "lane": "core",
                 "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
                 "command_refs": ["make test-contracts"],
-            }
+            },
+            {
+                "lane": "acceptance",
+                "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+                "command_refs": [".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"],
+            },
+            {
+                "lane": "cross_platform",
+                "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+                "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json",
+            },
+            {
+                "lane": "risk",
+                "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+                "status_check_refs": ["CodeQL analyze"],
+            },
+            {
+                "lane": "release",
+                "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+                "exception_ref": ".factory/artifacts/exceptions/release-deferred.json",
+            },
         ],
         "security_scanner_gates": {
             "required": True,
@@ -531,6 +571,28 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected missing engineering policy refs to fail")
+
+    missing_ci_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
+    missing_ci_packets["tasks"][1]["ci_lane_refs"] = [
+        item for item in missing_ci_packets["tasks"][1]["ci_lane_refs"] if item["lane"] == "core"
+    ]
+    try:
+        validate_task_packets(missing_ci_packets, "T2.6")
+    except AssertionError as exc:
+        if "ci_lane_refs missing" not in str(exc):
+            raise
+    else:
+        fail("self-test expected missing CI lane refs to fail")
+
+    blank_ci_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
+    blank_ci_packets["tasks"][1]["ci_lane_refs"][1]["command_refs"] = [""]
+    try:
+        validate_task_packets(blank_ci_packets, "T2.6")
+    except AssertionError as exc:
+        if "missing guide propagation fields" not in str(exc):
+            raise
+    else:
+        fail("self-test expected blank CI lane evidence to fail")
 
     validate_standalone_task_packet(propagated_task("T3-repair-001", ["T2.6"]), "T2.6")
 
