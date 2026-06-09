@@ -215,13 +215,24 @@
   },
   "runtime_pins": {
     "language": "go",
-    "toolchain_version": "1.26.4",
-    "module_or_package_path": "github.com/Clyra-AI/lumyn",
-    "dependency_policy": "No new dependency unless justified by the task packet and validated by CodeQL.",
-    "distribution_target": "standalone_binary_first",
-    "provider_policy": "No model provider used in T3.",
-    "artifact_namespace": ".factory/artifacts/",
-    "live_work_policy": "deterministic_local_only"
+    "go_version": "1.26.4",
+    "module_path": "github.com/Clyra-AI/lumyn",
+    "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+    "distribution_target": "standalone_binary",
+    "secondary_distribution_target": "homebrew_after_first_binary",
+    "not_primary_distribution_target": "pypi",
+    "first_eval_provider": "openai_compatible_http_adapter",
+    "artifact_namespaces": {
+      "factory_artifacts": ".factory/artifacts/",
+      "factory_transient": ".factory/tmp/",
+      "workflows": "workflows/",
+      "cassettes": "cassettes/",
+      "runs": "runs/",
+      "baselines": "baselines/",
+      "schemas": "schemas/",
+      "examples": "examples/"
+    },
+    "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
   },
   "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json#/alignment_questions",
   "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
@@ -232,5 +243,54 @@
     "retry_budget_remaining": 1,
     "approval_or_debt_status": "not_required",
     "rerun_scope_closure_required": true
-  }
+  },
+  "planning_skill_refs": [
+    "factory://skills/prd-to-plan",
+    "factory://skills/execution-compiler"
+  ],
+  "slice_rationale": {
+    "slice_type": "vertical",
+    "why_this_shape": "T3-repair-001 is scoped to repair the first Lumyn MVP closure gap by implementing T3: `lumyn init` and `lumyn check` for local OpenAPI/docs source intake and workflow-relevant source findings.",
+    "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+  },
+  "changelog": {
+    "impact": "required_when_implemented",
+    "section": "Unreleased",
+    "draft_entry": "Repair `lumyn init` and `lumyn check` closure gaps and update scope-closure evidence.",
+    "semver_marker_override": "pre_1_0_minor_candidate"
+  },
+  "contract_impact": "Adds public `lumyn init` and `lumyn check` behavior, config output, source intake, and workflow-relevant finding output contracts.",
+  "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+  "architecture_constraints": [
+    "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+    "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+    "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+    "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+    "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
+  ],
+  "adr_required": false,
+  "adr_trigger_reason": "Not required unless implementation expands public contracts, state ownership, credential/network posture, or failure semantics beyond the packet.",
+  "tdd_first_failing_tests": [
+    "Add or update the smallest failing test, fixture, or schema validation for T3-repair-001 acceptance before implementation when practical.",
+    "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+  ],
+  "cost_perf_impact": {
+    "level": "medium",
+    "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+    "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+  },
+  "chaos_failure_hypothesis": {
+    "required": false,
+    "hypothesis": "The task must fail closed under invalid input, missing evidence, or ambiguous proof state.",
+    "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+  },
+  "semantic_invariants": [
+    "Every command path emits the stable command-result envelope, including failures.",
+    "Exit codes remain aligned with docs/product/prd.md and tests.",
+    "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+    "Factory evidence and product artifacts use repo-relative paths only.",
+    "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
+  ],
+  "plan_drift_policy": "Repair work inherits the T3 task packet and validation contract; any scope expansion updates the main plan artifacts before implementation continues.",
+  "slice_type": "vertical"
 }
