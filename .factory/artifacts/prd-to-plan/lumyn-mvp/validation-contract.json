@@ -81,9 +81,13 @@
     "distribution_target": "standalone_binary",
     "secondary_distribution_target": "homebrew_after_first_binary",
     "not_primary_distribution_target": "pypi",
-    "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+    "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
     "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
-    "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture"
+    "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+    "mvp_eval_providers": [
+      "openai_compatible_http_adapter",
+      "anthropic_messages_http_adapter"
+    ]
   },
   "distribution_pins": {
     "primary": "standalone_binary",
@@ -92,14 +96,19 @@
   },
   "first_eval_provider": {
     "adapter": "openai_compatible_http",
-    "sdk_policy": "no heavy SDK dependency for MVP bootstrap",
+    "sdk_policy": "no heavy SDK dependency for MVP bootstrap; use thin HTTP adapters unless a later task justifies a pinned SDK",
     "config_fields": [
       "provider",
       "model",
       "temperature",
       "base_url",
       "api_key_env"
-    ]
+    ],
+    "supported_mvp_adapters": [
+      "openai_compatible_http",
+      "anthropic_messages_http"
+    ],
+    "anthropic_adapter": "anthropic_messages_http"
   },
   "artifact_namespaces": {
     "factory_artifacts": ".factory/artifacts/",

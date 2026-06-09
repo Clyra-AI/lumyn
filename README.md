@@ -10,9 +10,9 @@ The MVP includes:
 
 - workflow recording, contract generation, replay verification, and proof-labeled reports
 - live known-path verification, sandbox cleanup, action boundaries, and CI integration
-- live agent eval with one provider adapter, repeated runs, cost/duration reporting, and baseline comparison
+- live agent eval with OpenAI-compatible and Anthropic provider adapters, repeated runs, cost/duration reporting, and baseline comparison
 
-Post-MVP exclusions include MCP recording, event assertions, hosted dashboards, runtime enforcement, production trace import, and multi-provider eval panels.
+Post-MVP exclusions include MCP recording, event assertions, hosted dashboards, runtime enforcement, production trace import, and multi-provider eval panels. OpenAI-compatible and Anthropic adapters are MVP scope; comparative multi-provider panels are not.
 
 ## Repository Layout
 

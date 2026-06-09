@@ -98,6 +98,11 @@ REQUIRED_RUNTIME_PIN_FIELDS = [
     "live_work_policy",
 ]
 
+REQUIRED_MVP_EVAL_PROVIDERS = [
+    "openai_compatible_http_adapter",
+    "anthropic_messages_http_adapter",
+]
+
 REQUIRED_FACTORY_COMPATIBILITY_FIELDS = [
     "factory_contract_version",
     "profile_ref",
@@ -387,7 +392,11 @@ def validate_factory_compatibility(value: Any, label: str) -> None:
 
 
 def has_runtime_pins(value: Any) -> bool:
-    return isinstance(value, dict) and all(has_nonempty_string(value.get(field)) for field in REQUIRED_RUNTIME_PIN_FIELDS)
+    return (
+        isinstance(value, dict)
+        and all(has_nonempty_string(value.get(field)) for field in REQUIRED_RUNTIME_PIN_FIELDS)
+        and has_required_string_refs(value.get("mvp_eval_providers"), REQUIRED_MVP_EVAL_PROVIDERS)
+    )
 
 
 def validate_runtime_pins(value: Any, label: str) -> None:
@@ -396,6 +405,11 @@ def validate_runtime_pins(value: Any, label: str) -> None:
     missing = [field for field in REQUIRED_RUNTIME_PIN_FIELDS if not has_nonempty_string(value.get(field))]
     if missing:
         fail(f"{label} missing runtime pin fields: {', '.join(missing)}")
+    if not has_required_string_refs(value.get("mvp_eval_providers"), REQUIRED_MVP_EVAL_PROVIDERS):
+        fail(
+            f"{label}.mvp_eval_providers must include "
+            f"{', '.join(REQUIRED_MVP_EVAL_PROVIDERS)}"
+        )
 
 
 def has_alignment_gate(value: Any) -> bool:
@@ -985,7 +999,11 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
             "module_or_package_path": "github.com/Clyra-AI/lumyn",
             "dependency_policy": "standard library first; pinned dependencies only when task-required",
             "distribution_target": "standalone_binary",
-            "provider_policy": "OpenAI-compatible HTTP adapter first; no model key or network in deterministic bootstrap",
+            "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+            "mvp_eval_providers": [
+                "openai_compatible_http_adapter",
+                "anthropic_messages_http_adapter",
+            ],
             "artifact_namespace": ".factory/artifacts/ for Factory evidence",
             "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks live work",
         },

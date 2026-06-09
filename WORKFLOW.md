@@ -66,7 +66,7 @@ Lumyn accepts work from:
 - Primary distribution: standalone binary
 - Secondary distribution: Homebrew
 - Non-primary distribution: PyPI
-- First eval provider: OpenAI-compatible HTTP adapter
+- MVP eval providers: OpenAI-compatible HTTP and Anthropic Messages HTTP adapters
 
 ## Stop Conditions
 
