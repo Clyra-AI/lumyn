@@ -74,7 +74,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -369,7 +368,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -675,7 +673,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -1110,7 +1107,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -1417,7 +1413,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -1711,7 +1706,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -2005,7 +1999,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -2299,7 +2292,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -2600,7 +2592,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -2900,7 +2891,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -3191,7 +3181,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -3490,7 +3479,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -3614,29 +3602,15 @@
       "acceptance_checks": [
         "Eval supports surface_only and contract_assisted modes.",
         "Eval reports run count and pass rate.",
-        "Eval does not become the default hard CI gate."
+        "Eval does not become the default hard CI gate.",
+        "Eval runs OpenAI-compatible and Anthropic provider/model adapters when configured.",
+        "Provider config records provider, model, temperature, base_url, and api_key_env."
       ],
       "requires_human_approval": [
-        "model provider",
-        "model credential posture",
+        "OpenAI-compatible model credential posture",
+        "Anthropic model credential posture",
         "network allowlist"
       ],
-      "first_eval_provider": {
-        "adapter": "openai_compatible_http",
-        "sdk_policy": "no heavy SDK dependency for MVP bootstrap; use thin HTTP adapters unless a later task justifies a pinned SDK",
-        "config_fields": [
-          "provider",
-          "model",
-          "temperature",
-          "base_url",
-          "api_key_env"
-        ],
-        "supported_mvp_adapters": [
-          "openai_compatible_http",
-          "anthropic_messages_http"
-        ],
-        "anthropic_adapter": "anthropic_messages_http"
-      },
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
@@ -3812,7 +3786,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -3906,7 +3879,26 @@
         "training shared models on private artifacts"
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
-      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "mvp_eval_provider_adapters": {
+        "adapters": [
+          "openai_compatible_http",
+          "anthropic_messages_http"
+        ],
+        "adapter_ids": [
+          "openai_compatible_http_adapter",
+          "anthropic_messages_http_adapter"
+        ],
+        "sdk_policy": "no heavy SDK dependency for MVP bootstrap; use thin HTTP adapters unless a later task justifies a pinned SDK",
+        "config_fields": [
+          "provider",
+          "model",
+          "temperature",
+          "base_url",
+          "api_key_env"
+        ],
+        "network_policy": "blocked until deterministic replay foundation passes and human approval unlocks model/network posture"
+      }
     },
     {
       "task_id": "T12",
@@ -4113,7 +4105,6 @@
         "distribution_target": "standalone_binary",
         "secondary_distribution_target": "homebrew_after_first_binary",
         "not_primary_distribution_target": "pypi",
-        "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
         "artifact_namespaces": {
           "factory_artifacts": ".factory/artifacts/",
           "factory_transient": ".factory/tmp/",
@@ -4208,5 +4199,11 @@
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
       "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy"
     }
-  ]
+  ],
+  "runtime_pins": {
+    "mvp_eval_providers": [
+      "openai_compatible_http_adapter",
+      "anthropic_messages_http_adapter"
+    ]
+  }
 }

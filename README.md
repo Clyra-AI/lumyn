@@ -62,3 +62,5 @@ available.
 - Go `1.26.4`
 - Module path `github.com/Clyra-AI/lumyn`
 - Standalone binary first, Homebrew next
+- MVP eval providers: OpenAI-compatible HTTP and Anthropic Messages HTTP adapters
+- Live sandbox, model-key, and network work remains blocked until deterministic replay passes and human approval unlocks credential/network posture

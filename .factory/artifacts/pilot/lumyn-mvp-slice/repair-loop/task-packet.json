@@ -226,7 +226,6 @@
     "distribution_target": "standalone_binary",
     "secondary_distribution_target": "homebrew_after_first_binary",
     "not_primary_distribution_target": "pypi",
-    "first_eval_provider": "openai_compatible_http_and_anthropic_messages_http_adapters",
     "artifact_namespaces": {
       "factory_artifacts": ".factory/artifacts/",
       "factory_transient": ".factory/tmp/",

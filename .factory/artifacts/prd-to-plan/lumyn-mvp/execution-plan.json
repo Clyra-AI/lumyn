@@ -440,5 +440,24 @@
       "factory_compatibility"
     ],
     "continuation_behavior": "block_until_artifacts_updated"
+  },
+  "mvp_eval_provider_adapters": {
+    "adapters": [
+      "openai_compatible_http",
+      "anthropic_messages_http"
+    ],
+    "adapter_ids": [
+      "openai_compatible_http_adapter",
+      "anthropic_messages_http_adapter"
+    ],
+    "sdk_policy": "no heavy SDK dependency for MVP bootstrap; use thin HTTP adapters unless a later task justifies a pinned SDK",
+    "config_fields": [
+      "provider",
+      "model",
+      "temperature",
+      "base_url",
+      "api_key_env"
+    ],
+    "network_policy": "blocked until deterministic replay foundation passes and human approval unlocks model/network posture"
   }
 }

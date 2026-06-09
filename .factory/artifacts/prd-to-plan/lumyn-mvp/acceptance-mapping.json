@@ -66,12 +66,18 @@
         "T12"
       ],
       "acceptance_refs": [
-        "Live Agent Eval Acceptance Tests"
+        "Live Agent Eval Acceptance Tests",
+        "OpenAI-compatible provider adapter acceptance",
+        "Anthropic provider adapter acceptance"
       ],
       "requires_human_approval": [
-        "model provider",
-        "model credential posture",
+        "OpenAI-compatible model credential posture",
+        "Anthropic model credential posture",
         "network allowlist"
+      ],
+      "provider_adapter_coverage": [
+        "openai_compatible_http_adapter",
+        "anthropic_messages_http_adapter"
       ]
     }
   ]
