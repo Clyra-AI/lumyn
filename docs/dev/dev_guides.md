@@ -14,7 +14,7 @@
 
 - `make lint-fast`: repo operating pack and layout checks.
 - `make test-fast`: Go unit tests.
-- `make test-contracts`: unit tests, Factory planning artifact presence, and required schema-file presence.
+- `make test-contracts`: unit tests, Factory planning artifact presence, downstream pilot evidence validation, and required schema-file presence.
 - `make prepush-full`: full local gate before PR or merge.
 - `make audit-remote-protection`: networked GitHub audit for live `main` branch protection and the `protect-main-from-direct-push` ruleset.
 
@@ -113,6 +113,8 @@ non-applicable reason.
 - Codex review evidence source: latest-head PR review, thumbs-up, actionable-resolved, carry-forward, or approved exception before merge.
 - Scanner evidence source: GitHub Actions `CodeQL analyze`.
 - Branch protection evidence path: `.factory/artifacts/repo-controls/main-branch-protection.json`.
+- Pilot closure path: `.factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json`.
+- Pilot repair task path: `.factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/task-packet.json`.
 - Scope closure source: `.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json`.
 - Evidence must use repo-relative paths and record skipped-command reasons.
 

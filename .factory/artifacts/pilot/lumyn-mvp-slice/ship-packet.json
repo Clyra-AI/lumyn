@@ -1,0 +1,15 @@
+{
+  "work_item_id": "lumyn-mvp-downstream-pilot",
+  "branch_name": "codex/lumyn-pilot-evidence-closure",
+  "commit_set": [
+    "pending-pr-head"
+  ],
+  "pr_summary": "Add enforced Factory downstream pilot evidence and PRD scope closure artifacts for the current Lumyn MVP slice.",
+  "validation_reference": ".factory/artifacts/pilot/lumyn-mvp-slice/validation-report.json",
+  "work_proof_marker_refs": [
+    ".factory/artifacts/pilot/lumyn-mvp-slice/work-proof-marker.json"
+  ],
+  "scope_closure_report_ref": ".factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json",
+  "review_policy": "Medium-risk evidence package requires validation gate, CI, Codex review, and conversation resolution before merge.",
+  "merge_readiness": "ready_after_ci_and_codex_review"
+}

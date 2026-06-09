@@ -1,0 +1,105 @@
+{
+  "task_id": "T3-repair-001",
+  "objective": "Repair the first Lumyn MVP closure gap by implementing T3: `lumyn init` and `lumyn check` for local OpenAPI/docs source intake and workflow-relevant source findings.",
+  "mission_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+  "shared_constraints_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+  "validation_contract_inheritance": {
+    "source_validation_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+    "acceptance_criteria": [
+      "`lumyn init` writes valid config.",
+      "`lumyn check` emits concrete source references.",
+      "Scope closure reruns after the repair and updates the record/contract/replay/report group."
+    ],
+    "required_checks": [
+      "make prepush-full"
+    ],
+    "required_review": {
+      "required": true,
+      "review_type": "code",
+      "reviewer_class": "peer_agent"
+    },
+    "evidence_required": [
+      "validation_report",
+      "work_proof_marker",
+      "scope_closure_report",
+      "review_report",
+      "ship_packet"
+    ],
+    "stop_conditions": [
+      "closure gap ref is missing",
+      "validation evidence is missing",
+      "scope closure remains unchanged after repair"
+    ]
+  },
+  "allowed_paths": [
+    ".factory/artifacts/pr-lifecycle/T3/",
+    ".factory/artifacts/task-runs/T3/",
+    ".factory/artifacts/pilot/lumyn-mvp-slice/",
+    "cmd/lumyn/",
+    "internal/",
+    "tests/",
+    "examples/"
+  ],
+  "forbidden_paths": [
+    ".git/",
+    ".factory/tmp/"
+  ],
+  "scope_exclusions": [
+    "Do not implement live sandbox verification.",
+    "Do not add model provider credentials or network calls.",
+    "Do not claim full MVP closure before T4-T12 close or receive approved blockers/deferrals."
+  ],
+  "input_artifacts": [
+    "context_brief",
+    "execution_plan",
+    "task_packets",
+    "validation_contract",
+    "scope_closure_report"
+  ],
+  "upstream_debt_refs": [],
+  "commands": [
+    "make prepush-full"
+  ],
+  "acceptance_checks": [
+    "`lumyn init` writes config without network or credentials.",
+    "`lumyn check` emits source references tied to local OpenAPI/docs inputs.",
+    "Closure report is rerun and no longer lists T3 as missing."
+  ],
+  "required_worker_chain": [
+    "task-executor",
+    "validation-gate",
+    "code-review",
+    "ship-pr",
+    "post-merge-monitor"
+  ],
+  "lifecycle_gates": {
+    "local_validation_required": true,
+    "ci_required": true,
+    "code_review_required": true,
+    "codex_review_required": true,
+    "ship_pr_required": true,
+    "post_merge_monitor_required": true,
+    "pr_lifecycle_report_required": true,
+    "skip_policy": "approved_exception_required"
+  },
+  "runtime_pins": {
+    "language": "go",
+    "toolchain_version": "1.26.4",
+    "module_or_package_path": "github.com/Clyra-AI/lumyn",
+    "dependency_policy": "No new dependency unless justified by the task packet and validated by CodeQL.",
+    "distribution_target": "standalone_binary_first",
+    "provider_policy": "No model provider used in T3.",
+    "artifact_namespace": ".factory/artifacts/",
+    "live_work_policy": "deterministic_local_only"
+  },
+  "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json#/alignment_questions",
+  "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+  "max_iterations": 2,
+  "closure_gap_ref": ".factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json#/closure_items/1",
+  "repair_context": {
+    "trigger": "scope_closure_gap",
+    "retry_budget_remaining": 1,
+    "approval_or_debt_status": "not_required",
+    "rerun_scope_closure_required": true
+  }
+}

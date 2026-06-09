@@ -1,0 +1,42 @@
+{
+  "artifact_type": "validation_report",
+  "schema_version": "0.1",
+  "task_id": "pilot-lumyn-mvp-slice-closure",
+  "source_task_packet_ref": ".factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/task-packet.json",
+  "status": "passed",
+  "validated_at": "2026-06-09T04:45:00Z",
+  "commands": [
+    {
+      "name": "python3 scripts/validate_factory_pilot_evidence.py",
+      "status": "passed",
+      "evidence": "Verified pilot proof chain, scope closure, bounded repair task, review report, and ship packet."
+    },
+    {
+      "name": "make prepush-full",
+      "status": "passed",
+      "evidence": "Runs fmt, lint-fast, test-fast, test-contracts, and build."
+    }
+  ],
+  "acceptance_results": [
+    {
+      "check": "Pilot evidence includes work-proof marker, validation report, scope closure report, repair task, review report, and ship packet.",
+      "status": "passed",
+      "evidence_ref": ".factory/artifacts/pilot/lumyn-mvp-slice/"
+    },
+    {
+      "check": "Full MVP closure is not falsely claimed.",
+      "status": "passed",
+      "evidence_ref": ".factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json"
+    },
+    {
+      "check": "First missing MVP slice is converted to a bounded repair task.",
+      "status": "passed",
+      "evidence_ref": ".factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/task-packet.json"
+    }
+  ],
+  "test_scope": "Downstream Factory pilot evidence and PRD scope closure for the current Lumyn MVP slice.",
+  "independent_validation": "Local validation script independently checks evidence refs and closure/repair semantics.",
+  "credential_use": "none",
+  "network_use": "none",
+  "live_work": "none"
+}

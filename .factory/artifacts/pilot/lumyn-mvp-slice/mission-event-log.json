@@ -1,0 +1,26 @@
+{
+  "artifact_type": "mission_event_log",
+  "schema_version": "0.1",
+  "work_item_id": "lumyn-mvp-downstream-pilot",
+  "events": [
+    {
+      "sequence": 1,
+      "event_type": "pilot_evidence_started",
+      "occurred_at": "2026-06-09T04:40:00Z",
+      "summary": "Factory downstream pilot evidence collection started for the current Lumyn MVP slice.",
+      "evidence_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json"
+      ]
+    },
+    {
+      "sequence": 2,
+      "event_type": "scope_closure_derived",
+      "occurred_at": "2026-06-09T04:45:00Z",
+      "summary": "Scope closure classified current implemented work and generated a bounded repair task for the first missing product slice.",
+      "evidence_refs": [
+        ".factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json",
+        ".factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/task-packet.json"
+      ]
+    }
+  ]
+}
