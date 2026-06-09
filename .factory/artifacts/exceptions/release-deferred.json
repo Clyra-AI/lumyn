@@ -1,0 +1,16 @@
+{
+  "artifact_type": "factory_exception",
+  "schema_version": "0.1",
+  "exception_id": "release-deferred",
+  "status": "approved",
+  "scope": "Release CI lane for pre-release MVP task packets",
+  "reason": "Standalone binary release packaging is reserved until release work starts. Current MVP bootstrap and early product tasks are not release-sensitive.",
+  "approved_by": "operator",
+  "approved_at": "2026-06-09",
+  "expires_when": "before release packaging, versioning, changelog, install, or artifact-integrity work begins",
+  "compensating_controls": [
+    "make prepush-full",
+    "GitHub Actions validate",
+    "CodeQL analyze"
+  ]
+}

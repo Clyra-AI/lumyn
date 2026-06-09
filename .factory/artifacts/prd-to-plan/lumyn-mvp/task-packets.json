@@ -310,11 +310,21 @@
           ]
         },
         {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
           "lane": "risk",
           "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
           "status_check_refs": [
             "CodeQL analyze"
           ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
         }
       ],
       "engineering_policy_refs": [
@@ -483,11 +493,21 @@
           ]
         },
         {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
           "lane": "risk",
           "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
           "status_check_refs": [
             "CodeQL analyze"
           ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
         }
       ],
       "engineering_policy_refs": [
@@ -661,11 +681,21 @@
           ]
         },
         {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
           "lane": "risk",
           "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
           "status_check_refs": [
             "CodeQL analyze"
           ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
         }
       ],
       "engineering_policy_refs": [
@@ -837,11 +867,21 @@
           ]
         },
         {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
           "lane": "risk",
           "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
           "status_check_refs": [
             "CodeQL analyze"
           ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
         }
       ],
       "engineering_policy_refs": [
@@ -1014,11 +1054,21 @@
           ]
         },
         {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
           "lane": "risk",
           "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
           "status_check_refs": [
             "CodeQL analyze"
           ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
         }
       ],
       "engineering_policy_refs": [
@@ -1199,11 +1249,21 @@
           ]
         },
         {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
           "lane": "risk",
           "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
           "status_check_refs": [
             "CodeQL analyze"
           ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
         }
       ],
       "engineering_policy_refs": [
@@ -1381,11 +1441,21 @@
           ]
         },
         {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
           "lane": "risk",
           "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
           "status_check_refs": [
             "CodeQL analyze"
           ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
         }
       ],
       "engineering_policy_refs": [
@@ -1555,11 +1625,21 @@
           ]
         },
         {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
           "lane": "risk",
           "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
           "status_check_refs": [
             "CodeQL analyze"
           ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
         }
       ],
       "engineering_policy_refs": [
@@ -1736,11 +1816,21 @@
           ]
         },
         {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
           "lane": "risk",
           "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
           "status_check_refs": [
             "CodeQL analyze"
           ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
         }
       ],
       "engineering_policy_refs": [
@@ -1935,11 +2025,21 @@
           ]
         },
         {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
           "lane": "risk",
           "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
           "status_check_refs": [
             "CodeQL analyze"
           ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
         }
       ],
       "engineering_policy_refs": [
@@ -2118,11 +2218,21 @@
           ]
         },
         {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
           "lane": "risk",
           "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
           "status_check_refs": [
             "CodeQL analyze"
           ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
         }
       ],
       "engineering_policy_refs": [

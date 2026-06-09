@@ -1,0 +1,15 @@
+{
+  "artifact_type": "factory_exception",
+  "schema_version": "0.1",
+  "exception_id": "cross-platform-deferred",
+  "status": "approved",
+  "scope": "Cross-platform CI lane for pre-packaging MVP task packets",
+  "reason": "Cross-platform packaging is reserved until distribution work starts. Current MVP bootstrap and early product tasks still run local validation and GitHub Linux CI.",
+  "approved_by": "operator",
+  "approved_at": "2026-06-09",
+  "expires_when": "before packaging or distribution implementation begins",
+  "compensating_controls": [
+    "make prepush-full",
+    "GitHub Actions validate"
+  ]
+}
