@@ -60,6 +60,197 @@
         "validation_report",
         "work_proof_marker",
         "scope_closure_map"
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T1 is scoped to create deterministic Go CLI skeleton, command-result JSON envelope, exit code constants, config discovery, and unit tests.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Initialize Lumyn Go CLI skeleton, command-result envelope, exit-code constants, config discovery, and local validation commands.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Introduces the public CLI shell, command-result JSON envelope, exit-code constants, and config discovery contract.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
+      ],
+      "adr_required": false,
+      "adr_trigger_reason": "Not required unless implementation expands public contracts, state ownership, credential/network posture, or failure semantics beyond the packet.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T1 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "low",
+        "measurement_expectation": "No measurable runtime or cost increase expected beyond normal local CLI validation.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": false,
+        "hypothesis": "Unknown commands, invalid config paths, and write failures must still emit command-result JSON and fail closed.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "ci_lane_refs": [
+        {
+          "lane": "fast",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make lint-fast",
+            "make test-fast"
+          ]
+        },
+        {
+          "lane": "core",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make test-contracts",
+            "make prepush-full"
+          ]
+        },
+        {
+          "lane": "acceptance",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+          ]
+        },
+        {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
+          "lane": "risk",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "status_check_refs": [
+            "CodeQL analyze"
+          ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
+        }
+      ],
+      "test_matrix_refs": [
+        {
+          "tier": "Tier 1 Unit",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-fast"
+          ]
+        },
+        {
+          "tier": "Tier 9 Contract",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-contracts"
+          ]
+        }
+      ],
+      "security_scanner_gates": {
+        "required": true,
+        "scanner": "CodeQL",
+        "workflow_ref": ".github/workflows/codeql.yml",
+        "status_check": "CodeQL analyze",
+        "required_for_surfaces": [
+          "dependency additions",
+          "generated-code intake",
+          "CI or workflow changes",
+          "external calls",
+          "redaction/share/live/eval/provider code",
+          "data exposure",
+          "release-sensitive work"
+        ],
+        "exception_policy": "approved_exception_required"
+      },
+      "engineering_policy_refs": [
+        {
+          "policy": "docs_parity",
+          "source_ref": "docs/dev/dev_guides.md#docs-parity",
+          "rule": "Behavior, flags, output shape, exit codes, artifact paths, install paths, and workflow semantics update docs and Factory planning artifacts together."
+        },
+        {
+          "policy": "output_contracts",
+          "source_ref": "docs/dev/dev_guides.md#output-contracts",
+          "rule": "Command-result JSON, exit codes, schemas, and product artifacts are public or executable contracts."
+        },
+        {
+          "policy": "release_integrity",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
+          "rule": "Release-sensitive work defines version, changelog, install, artifact-integrity, and UAT evidence before merge."
+        },
+        {
+          "policy": "provenance_evidence",
+          "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
+          "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        }
+      ],
+      "architecture_guidance_refs": [
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map",
+          "rule": "Medium/high risk tasks record state owner, feedback source, blast radius, source-of-truth impact, and rollback/deletion checks."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations",
+          "rule": "Behavior and schema/output changes use test-first evidence or a structured skipped reason."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#adr-and-decision-triggers",
+          "rule": "Boundary, public contract, failure semantics, credential/network, release, or major reliability/perf changes require ADR or decision note."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#performance-and-cost-triggers",
+          "rule": "Fan-out, repeated runs, or model calls declare expected cost/performance impact."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#reliability-and-recovery-triggers",
+          "rule": "Retry, cleanup, persistence, filesystem mutation, redaction, live network, and provider code require hardening/failure-mode evidence."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
+          "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
+        }
       ]
     },
     {
@@ -110,6 +301,206 @@
         "validation_report",
         "work_proof_marker",
         "scope_closure_map"
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "foundation",
+        "why_this_shape": "T2 is scoped to define initial schemas for workflow contract, command result, proof strength, cassette, evidence event, and redaction config.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "non_vertical_justification": "Foundation-only work is allowed here because later product tasks depend on this repo-level contract, validation, or governance baseline before implementation can proceed safely.",
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add executable MVP schema contracts and schema validation coverage for workflow, command result, proof, cassette, evidence, redaction, and related artifacts.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Introduces executable schema contracts for workflows, command results, proof strength, cassettes, evidence, redaction, and related artifacts.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T2 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "low",
+        "measurement_expectation": "No measurable runtime or cost increase expected beyond normal local CLI validation.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": false,
+        "hypothesis": "Malformed examples and invalid schema versions must fail validation without marking contracts complete.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Schema-backed artifacts must validate against the declared schema version or fail closure."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "ci_lane_refs": [
+        {
+          "lane": "fast",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make lint-fast",
+            "make test-fast"
+          ]
+        },
+        {
+          "lane": "core",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make test-contracts",
+            "make prepush-full"
+          ]
+        },
+        {
+          "lane": "acceptance",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+          ]
+        },
+        {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
+          "lane": "risk",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "status_check_refs": [
+            "CodeQL analyze"
+          ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
+        }
+      ],
+      "test_matrix_refs": [
+        {
+          "tier": "Tier 1 Unit",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-fast"
+          ]
+        },
+        {
+          "tier": "Tier 2 Integration",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-contracts"
+          ]
+        },
+        {
+          "tier": "Tier 9 Contract",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-contracts"
+          ]
+        }
+      ],
+      "security_scanner_gates": {
+        "required": true,
+        "scanner": "CodeQL",
+        "workflow_ref": ".github/workflows/codeql.yml",
+        "status_check": "CodeQL analyze",
+        "required_for_surfaces": [
+          "dependency additions",
+          "generated-code intake",
+          "CI or workflow changes",
+          "external calls",
+          "redaction/share/live/eval/provider code",
+          "data exposure",
+          "release-sensitive work"
+        ],
+        "exception_policy": "approved_exception_required"
+      },
+      "engineering_policy_refs": [
+        {
+          "policy": "docs_parity",
+          "source_ref": "docs/dev/dev_guides.md#docs-parity",
+          "rule": "Behavior, flags, output shape, exit codes, artifact paths, install paths, and workflow semantics update docs and Factory planning artifacts together."
+        },
+        {
+          "policy": "output_contracts",
+          "source_ref": "docs/dev/dev_guides.md#output-contracts",
+          "rule": "Command-result JSON, exit codes, schemas, and product artifacts are public or executable contracts."
+        },
+        {
+          "policy": "release_integrity",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
+          "rule": "Release-sensitive work defines version, changelog, install, artifact-integrity, and UAT evidence before merge."
+        },
+        {
+          "policy": "provenance_evidence",
+          "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
+          "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        }
+      ],
+      "architecture_guidance_refs": [
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map",
+          "rule": "Medium/high risk tasks record state owner, feedback source, blast radius, source-of-truth impact, and rollback/deletion checks."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations",
+          "rule": "Behavior and schema/output changes use test-first evidence or a structured skipped reason."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#adr-and-decision-triggers",
+          "rule": "Boundary, public contract, failure semantics, credential/network, release, or major reliability/perf changes require ADR or decision note."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#performance-and-cost-triggers",
+          "rule": "Fan-out, repeated runs, or model calls declare expected cost/performance impact."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#reliability-and-recovery-triggers",
+          "rule": "Retry, cleanup, persistence, filesystem mutation, redaction, live network, and provider code require hardening/failure-mode evidence."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
+          "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
+        }
       ]
     },
     {
@@ -163,6 +554,203 @@
         "validation_report",
         "work_proof_marker",
         "scope_closure_map"
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "foundation",
+        "why_this_shape": "T2.5 is scoped to establish the repo delivery lifecycle baseline: GitHub Actions validation, documented PR lifecycle gates, and Factory PR lifecycle evidence requirements before product implementation continues.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "non_vertical_justification": "Foundation-only work is allowed here because later product tasks depend on this repo-level contract, validation, or governance baseline before implementation can proceed safely.",
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add repository CI validation and Factory PR lifecycle evidence gates for governed Lumyn delivery.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Introduces the repository delivery lifecycle contract for CI/status, review, shipping, post-merge, and PR lifecycle evidence.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T2.5 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "low",
+        "measurement_expectation": "No measurable runtime or cost increase expected beyond normal local CLI validation.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": false,
+        "hypothesis": "Missing CI/status, review, ship, post-merge, or PR lifecycle evidence must block merge readiness.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "ci_lane_refs": [
+        {
+          "lane": "fast",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make lint-fast",
+            "make test-fast"
+          ]
+        },
+        {
+          "lane": "core",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make test-contracts",
+            "make prepush-full"
+          ]
+        },
+        {
+          "lane": "acceptance",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+          ]
+        },
+        {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
+          "lane": "risk",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "status_check_refs": [
+            "CodeQL analyze"
+          ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
+        }
+      ],
+      "test_matrix_refs": [
+        {
+          "tier": "Tier 2 Integration",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-contracts"
+          ]
+        },
+        {
+          "tier": "Tier 4 Acceptance",
+          "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+          "status": "planned"
+        },
+        {
+          "tier": "Tier 9 Contract",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-contracts"
+          ]
+        }
+      ],
+      "security_scanner_gates": {
+        "required": true,
+        "scanner": "CodeQL",
+        "workflow_ref": ".github/workflows/codeql.yml",
+        "status_check": "CodeQL analyze",
+        "required_for_surfaces": [
+          "dependency additions",
+          "generated-code intake",
+          "CI or workflow changes",
+          "external calls",
+          "redaction/share/live/eval/provider code",
+          "data exposure",
+          "release-sensitive work"
+        ],
+        "exception_policy": "approved_exception_required"
+      },
+      "engineering_policy_refs": [
+        {
+          "policy": "docs_parity",
+          "source_ref": "docs/dev/dev_guides.md#docs-parity",
+          "rule": "Behavior, flags, output shape, exit codes, artifact paths, install paths, and workflow semantics update docs and Factory planning artifacts together."
+        },
+        {
+          "policy": "output_contracts",
+          "source_ref": "docs/dev/dev_guides.md#output-contracts",
+          "rule": "Command-result JSON, exit codes, schemas, and product artifacts are public or executable contracts."
+        },
+        {
+          "policy": "release_integrity",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
+          "rule": "Release-sensitive work defines version, changelog, install, artifact-integrity, and UAT evidence before merge."
+        },
+        {
+          "policy": "provenance_evidence",
+          "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
+          "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        }
+      ],
+      "architecture_guidance_refs": [
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map",
+          "rule": "Medium/high risk tasks record state owner, feedback source, blast radius, source-of-truth impact, and rollback/deletion checks."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations",
+          "rule": "Behavior and schema/output changes use test-first evidence or a structured skipped reason."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#adr-and-decision-triggers",
+          "rule": "Boundary, public contract, failure semantics, credential/network, release, or major reliability/perf changes require ADR or decision note."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#performance-and-cost-triggers",
+          "rule": "Fan-out, repeated runs, or model calls declare expected cost/performance impact."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#reliability-and-recovery-triggers",
+          "rule": "Retry, cleanup, persistence, filesystem mutation, redaction, live network, and provider code require hardening/failure-mode evidence."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
+          "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
+        }
       ]
     },
     {
@@ -348,7 +936,77 @@
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
         }
-      ]
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "foundation",
+        "why_this_shape": "T2.6 is scoped to propagate the repo dev and architecture guides into executable planning: 12-level test matrix mapping, CodeQL security scanner baseline, architecture guidance refs, and future task packet gates.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "non_vertical_justification": "Foundation-only work is allowed here because later product tasks depend on this repo-level contract, validation, or governance baseline before implementation can proceed safely.",
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add repo-pack guide and planning-skill propagation so future Lumyn tasks inherit test, scanner, engineering, architecture, and planning contract fields.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Introduces the repo-pack planning contract that propagates test matrix, scanner, engineering policy, architecture policy, and planning-skill fields into future task packets.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T2.6 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "low",
+        "measurement_expectation": "No measurable runtime or cost increase expected beyond normal local CLI validation.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": false,
+        "hypothesis": "Missing guide refs or planning-skill fields in T3+ task packets must fail repo-pack validation.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
     },
     {
       "task_id": "T3",
@@ -531,7 +1189,76 @@
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
         }
-      ]
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T3 is scoped to implement `lumyn init` and `lumyn check` for local OpenAPI/docs source intake and workflow-relevant source findings.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add `lumyn init` and `lumyn check` for local source intake and workflow-relevant findings.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds public `lumyn init` and `lumyn check` behavior, config output, source intake, and workflow-relevant finding output contracts.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
+      ],
+      "adr_required": false,
+      "adr_trigger_reason": "Not required unless implementation expands public contracts, state ownership, credential/network posture, or failure semantics beyond the packet.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T3 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "low",
+        "measurement_expectation": "No measurable runtime or cost increase expected beyond normal local CLI validation.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": false,
+        "hypothesis": "Missing OpenAPI/docs inputs, unreadable paths, or invalid config must produce actionable source findings without network access.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
     },
     {
       "task_id": "T4",
@@ -719,7 +1446,78 @@
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
         }
-      ]
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T4 is scoped to implement record/redact/normalize pipeline and draft workflow/cassette artifacts for a deterministic mock API.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add deterministic record, redact, normalize, workflow draft, and cassette draft behavior.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds record/redact/normalize behavior and workflow/cassette draft artifact contracts.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes.",
+        "Redaction uncertainty blocks persistence or export and must surface structured failure evidence."
+      ],
+      "adr_required": false,
+      "adr_trigger_reason": "Not required unless implementation expands public contracts, state ownership, credential/network posture, or failure semantics beyond the packet.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T4 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "medium",
+        "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": false,
+        "hypothesis": "Redaction uncertainty or unsupported state inference must block persistence or label the output as weak proof.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Schema-backed artifacts must validate against the declared schema version or fail closure."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
     },
     {
       "task_id": "T5",
@@ -905,7 +1703,77 @@
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
         }
-      ]
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T5 is scoped to implement replay verification, stale cassette detection, `api_state`, and limited `trace_assertion` validators.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add deterministic replay verification, stale cassette detection, API state checks, and trace assertions.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds replay verification, stale cassette detection, `api_state`, and validator proof contracts.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
+      ],
+      "adr_required": false,
+      "adr_trigger_reason": "Not required unless implementation expands public contracts, state ownership, credential/network posture, or failure semantics beyond the packet.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T5 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "medium",
+        "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": false,
+        "hypothesis": "Network access, stale cassette data, or proof gaps must fail replay verification rather than reporting green.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Schema-backed artifacts must validate against the declared schema version or fail closure."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
     },
     {
       "task_id": "T6",
@@ -1092,7 +1960,76 @@
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
         }
-      ]
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T6 is scoped to implement local trace/report rendering and `lumyn demo` with bundled reports.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add local trace/report rendering and bundled `lumyn demo` reports.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds trace/report rendering and `lumyn demo` output contracts.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
+      ],
+      "adr_required": false,
+      "adr_trigger_reason": "Not required unless implementation expands public contracts, state ownership, credential/network posture, or failure semantics beyond the packet.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T6 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "low",
+        "measurement_expectation": "No measurable runtime or cost increase expected beyond normal local CLI validation.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": false,
+        "hypothesis": "Reports must preserve proof strength and next-command guidance even when traces are partial or weak.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
     },
     {
       "task_id": "T7",
@@ -1287,7 +2224,78 @@
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
         }
-      ]
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T7 is scoped to implement live known-path verify with sandbox config, settle/retry readbacks, cleanup, and orphan evidence.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add live known-path verification with sandbox config, readback/retry, cleanup, and orphan evidence.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds live known-path verification, sandbox config, retry/readback, cleanup, and orphan evidence contracts.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes.",
+        "Live credential, model-key, and network work remains blocked until explicit human approval and allowlist posture are recorded."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T7 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "medium",
+        "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": true,
+        "hypothesis": "Sandbox setup, retry/readback, cleanup, and orphan handling must surface failure evidence and never hide leaked state.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Live credential/network work is disabled by default and cannot run without approved posture evidence."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
     },
     {
       "task_id": "T8",
@@ -1479,7 +2487,77 @@
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
         }
-      ]
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T8 is scoped to implement action-boundary object and deterministic boundary checks.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add action-boundary objects and deterministic boundary checks.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds action-boundary schema and deterministic boundary-check semantics.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T8 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "medium",
+        "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": true,
+        "hypothesis": "Final-state success plus a forbidden action-boundary violation must fail the workflow.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Schema-backed artifacts must validate against the declared schema version or fail closure."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
     },
     {
       "task_id": "T9",
@@ -1663,7 +2741,78 @@
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
         }
-      ]
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T9 is scoped to implement GitHub Action, JUnit output, PR-comment summary, changed-source mapping, and proof-honest README badge.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add Lumyn GitHub Action integration, JUnit output, PR comment summary, changed-source mapping, and proof-honest badge.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds Lumyn GitHub Action, JUnit, PR comment, changed-source mapping, and proof-honest badge contracts.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes.",
+        "CI, JUnit, PR comments, and badges must report proof state honestly and must not hide stale or skipped evidence."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T9 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "medium",
+        "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": true,
+        "hypothesis": "CI badges and PR comments must not report stale cassettes, skipped checks, or weak proof as green.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "PR/CI surfaces must distinguish skipped, stale, weak, and strong proof states."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
     },
     {
       "task_id": "T10",
@@ -1854,7 +3003,78 @@
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
         }
-      ]
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T10 is scoped to implement `lumyn share` with redaction re-check and fail-closed export.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add `lumyn share` with redaction re-check and fail-closed export.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds `lumyn share` export behavior and redaction re-check/fail-closed contracts.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes.",
+        "Redaction uncertainty blocks persistence or export and must surface structured failure evidence."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T10 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "medium",
+        "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": true,
+        "hypothesis": "Any value that cannot be confidently redacted must stop share export before writing a shareable bundle.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Schema-backed artifacts must validate against the declared schema version or fail closure."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
     },
     {
       "task_id": "T11",
@@ -2063,7 +3283,78 @@
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
         }
-      ]
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T11 is scoped to implement live eval provider interface, one provider adapter, stateless run defaults, context modes, repeated runs, and trace capture.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add live eval provider interface, OpenAI-compatible adapter, context modes, repeated runs, and trace capture.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds live eval provider interface, OpenAI-compatible adapter, context mode, repeated run, and trace capture contracts.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes.",
+        "Live credential, model-key, and network work remains blocked until explicit human approval and allowlist posture are recorded."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T11 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "high",
+        "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": true,
+        "hypothesis": "Provider errors, nondeterminism, missing credentials, or unsafe context modes must be labeled and kept out of default hard CI gates.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Live credential/network work is disabled by default and cannot run without approved posture evidence."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
     },
     {
       "task_id": "T12",
@@ -2256,7 +3547,77 @@
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
         }
-      ]
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; add pinned dependencies only when required by a task and justified in evidence",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "first_eval_provider": "openai_compatible_http_adapter",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "defer sandbox, model-key, and network work until deterministic replay foundation passes and human credential/network posture is approved"
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T12 is scoped to implement eval baseline comparison, drift labels, cost/duration reporting, and diagnostic failure classification.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add eval baseline comparison, drift labeling, cost/duration reporting, and diagnostic failure classification.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds baseline comparison, drift labels, cost/duration, and diagnostic failure classification contracts.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public CLI/schema/artifact, CI/review, credential/network, redaction/share, eval, or proof semantics.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T12 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "high",
+        "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": true,
+        "hypothesis": "Baseline drift, model snapshot uncertainty, high cost, or missing trace evidence must be classified rather than hidden as pass/fail noise.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Schema-backed artifacts must validate against the declared schema version or fail closure."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues."
     }
   ]
 }

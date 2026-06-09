@@ -138,14 +138,27 @@
       "ci_lane_refs",
       "test_matrix_refs",
       "security_scanner_gates",
-      "architecture_guidance_refs"
+      "architecture_guidance_refs",
+      "planning_skill_refs",
+      "runtime_pins",
+      "slice_rationale",
+      "changelog",
+      "contract_impact",
+      "versioning_migration_impact",
+      "architecture_constraints",
+      "adr_required",
+      "tdd_first_failing_tests",
+      "cost_perf_impact",
+      "chaos_failure_hypothesis",
+      "semantic_invariants"
     ],
     "exception_behavior": "block_or_record_approved_exception",
     "notes": [
       "T2.6 maps dev and architecture guide requirements into future product task packets before T3.",
       "CodeQL is delivery risk-lane infrastructure and remains separate from the product-facing T9 GitHub Action/JUnit/PR-comment feature.",
       "T2.6 now propagates CI lanes, docs parity, output contracts, release integrity, provenance, systems-thinking, TDD/ADR, performance, reliability, and fail-closed requirements before T3.",
-      "Future T3+ product tasks must carry the inherited guide refs or record an approved exception."
+      "All current task packets carry inherited guide refs and planning-skill fields; future task packets must do the same or record an approved exception.",
+      "T2.6 now also enforces Factory prd-to-plan and execution-compiler story fields before T3 product implementation."
     ],
     "ci_lanes": {
       "fast": [
@@ -184,5 +197,168 @@
       "reliability": "Retries, cleanup, persistence, filesystem mutation, redaction, live network, and provider work require hardening checks and failure-mode evidence.",
       "failure_semantics": "Ambiguous proof, redaction, credential, stale cassette, undeclared control, or scanner state fails closed."
     }
-  }
+  },
+  "planning_skill_alignment": {
+    "status": "aligned",
+    "source_refs": [
+      "factory://skills/prd-to-plan",
+      "factory://skills/execution-compiler"
+    ],
+    "validated_rules": [
+      "alignment decisions are resolved before implementation locks runtime, distribution, provider, artifact namespace, credential, live-work, or dependency choices",
+      "execution plan carries public API and contract map, docs/OSS readiness baseline, test matrix wiring, minimum-now sequence, explicit non-goals, and definition of done",
+      "task packets carry runtime pins, slice rationale, changelog/versioning intent, contract/API impact, architecture constraints, ADR posture, TDD-first tests, cost/perf impact, chaos/failure hypothesis, and semantic invariants",
+      "guide propagation from docs/dev/dev_guides.md and docs/architecture/architecture_guides.md is enforced before T3 product implementation"
+    ],
+    "evidence_refs": [
+      "docs/dev/dev_guides.md",
+      "docs/architecture/architecture_guides.md",
+      ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json",
+      ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+      ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+      ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+      "scripts/validate_repo_pack.py"
+    ],
+    "drift_policy": "If runtime, distribution, provider, dependency, artifact namespace, credential, live-work, guide, or validation-contract decisions change after planning, update the context brief, execution plan, task packets, and validation contract before implementation continues."
+  },
+  "public_api_and_contract_map": {
+    "stable_public_surfaces": [
+      "CLI commands: lumyn init, check, record, verify, report, demo, share, eval",
+      "command-result JSON envelope and exit-code constants",
+      "schemas/ JSON Schema contracts",
+      "workflow, cassette, run, baseline, evidence, proof, redaction, report, JUnit, and share artifacts",
+      "GitHub Action, PR comment summary, JUnit output, and proof-honest badge"
+    ],
+    "internal_surfaces": [
+      "cmd/lumyn command wiring",
+      "internal/ packages for config, schema, recording, replay, reporting, live verify, sharing, and eval"
+    ],
+    "schema_versioning_policy": "Every machine-readable artifact carries schema_version; incompatible changes require versioning, migration notes, and scope-closure evidence before release.",
+    "error_contract_policy": "Ambiguous proof, redaction, credential, network, stale-cassette, scanner, or control states fail closed with structured command-result evidence.",
+    "contract_refs": [
+      "docs/product/prd.md",
+      "docs/dev/dev_guides.md#output-contracts",
+      "docs/architecture/architecture_guides.md#early-architecture-rules",
+      ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json"
+    ]
+  },
+  "docs_and_oss_readiness_baseline": {
+    "status": "active",
+    "required_docs": [
+      "README.md",
+      "AGENTS.md",
+      "WORKFLOW.md",
+      "docs/product/prd.md",
+      "docs/dev/dev_guides.md",
+      "docs/architecture/architecture_guides.md",
+      "CHANGELOG.md"
+    ],
+    "docs_parity_rule": "Behavior, flags, output shapes, exit codes, artifact paths, install paths, CI/review flow, and workflow semantics update docs and planning artifacts in the same change.",
+    "oss_readiness_rule": "User-facing docs explain workflows before internals, publish proof strength honestly, and avoid claiming unsupported live, release, or cross-platform guarantees.",
+    "release_readiness_rule": "Release-sensitive tasks must define version, changelog, install, artifact integrity, and UAT evidence before merge."
+  },
+  "test_matrix_wiring": {
+    "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+    "policy": "Every task packet cites active/planned/reserved/blocked tiers or records an approved non-applicable reason.",
+    "active_tiers": [
+      "Tier 1 Unit",
+      "Tier 9 Contract"
+    ],
+    "planned_tiers": [
+      "Tier 2 Integration",
+      "Tier 3 End-to-End",
+      "Tier 4 Acceptance",
+      "Tier 5 Hardening",
+      "Tier 11 Scenario"
+    ],
+    "reserved_tiers": [
+      "Tier 6 Chaos",
+      "Tier 7 Performance",
+      "Tier 8 Soak",
+      "Tier 10 UAT"
+    ],
+    "blocked_tiers": [
+      "Tier 12 Cross-System Integration"
+    ],
+    "ci_lane_refs": [
+      "fast",
+      "core",
+      "acceptance",
+      "cross_platform",
+      "risk",
+      "release"
+    ]
+  },
+  "minimum_now_sequence": [
+    {
+      "order": 1,
+      "task_refs": [
+        "T1"
+      ],
+      "why_now": "Establish deterministic CLI/runtime shell before schema or product behavior."
+    },
+    {
+      "order": 2,
+      "task_refs": [
+        "T2"
+      ],
+      "why_now": "Lock executable artifact contracts before source intake, record, replay, report, live, or eval behavior."
+    },
+    {
+      "order": 3,
+      "task_refs": [
+        "T2.5",
+        "T2.6"
+      ],
+      "why_now": "Establish delivery lifecycle, guide propagation, CodeQL, and planning-skill gates before T3 product implementation."
+    },
+    {
+      "order": 4,
+      "task_refs": [
+        "T3",
+        "T4",
+        "T5",
+        "T6"
+      ],
+      "why_now": "Close deterministic record/contract/replay/report foundation without live credentials."
+    },
+    {
+      "order": 5,
+      "task_refs": [
+        "T7",
+        "T8",
+        "T9",
+        "T10"
+      ],
+      "why_now": "Add live verify, boundary, CI, and share behavior after deterministic proof foundation exists."
+    },
+    {
+      "order": 6,
+      "task_refs": [
+        "T11",
+        "T12"
+      ],
+      "why_now": "Add stochastic eval only after deterministic replay, live boundaries, and credential/network posture are approved."
+    }
+  ],
+  "explicit_non_goals": [
+    "MCP recording",
+    "event assertions",
+    "hosted dashboard",
+    "runtime enforcement",
+    "production trace import",
+    "multi-provider eval panels",
+    "training shared models on private artifacts",
+    "Do not treat live eval pass rate as deterministic closure evidence.",
+    "Do not bypass PR lifecycle, CodeQL, branch protection, or latest-head Codex review evidence.",
+    "Do not add production credential brokering or hosted control-plane behavior inside the Lumyn MVP implementation plan."
+  ],
+  "definition_of_done": [
+    "All MVP acceptance groups in docs/product/prd.md are implemented or explicitly accepted with documented delivery debt by a human owner.",
+    "Every task has validation report, work-proof marker, review/ship/PR lifecycle evidence when required, and scope-closure evidence.",
+    "make prepush-full passes locally and required GitHub checks, including validate and CodeQL analyze, are green or have approved exceptions.",
+    "Latest-head passive Codex review is approved, thumbs-up, actionable-resolved, carried forward, or explicitly excepted before merge.",
+    "No task writes outside allowed paths, introduces undeclared credentials/network, or does explicitly excluded work.",
+    "Docs, changelog/versioning intent, output contracts, architecture constraints, and planning artifacts stay aligned with implemented behavior."
+  ]
 }

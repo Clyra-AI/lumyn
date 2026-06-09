@@ -98,4 +98,8 @@ CI lanes, docs parity, output contracts, release integrity, provenance evidence,
 architecture boundaries, systems-thinking prompts, TDD/ADR posture,
 performance/reliability triggers, failure rules, and evidence requirements into
 the execution plan and future task packets before T3 product implementation
-starts.
+starts. It also preserves the Factory planning-skill contract: public API and
+contract maps, docs/OSS readiness, minimum-now sequencing, explicit non-goals,
+definition of done, changelog/versioning intent, contract impact, ADR posture,
+TDD-first checks, cost/perf posture, failure hypotheses, and semantic
+invariants.

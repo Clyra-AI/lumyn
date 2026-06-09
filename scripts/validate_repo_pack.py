@@ -32,6 +32,51 @@ REQUIRED_TASK_FIELDS = [
     "architecture_guidance_refs",
 ]
 
+REQUIRED_PLAN_SKILL_REFS = [
+    "factory://skills/prd-to-plan",
+    "factory://skills/execution-compiler",
+]
+
+REQUIRED_PLAN_LEVEL_FIELDS = [
+    "planning_skill_alignment",
+    "public_api_and_contract_map",
+    "docs_and_oss_readiness_baseline",
+    "test_matrix_wiring",
+    "minimum_now_sequence",
+    "explicit_non_goals",
+    "definition_of_done",
+]
+
+REQUIRED_TASK_PLANNING_FIELDS = [
+    "planning_skill_refs",
+    "runtime_pins",
+    "slice_rationale",
+    "changelog",
+    "contract_impact",
+    "versioning_migration_impact",
+    "architecture_constraints",
+    "adr_required",
+    "tdd_first_failing_tests",
+    "cost_perf_impact",
+    "chaos_failure_hypothesis",
+    "semantic_invariants",
+]
+
+REQUIRED_RUNTIME_PIN_FIELDS = [
+    "language",
+    "go_version",
+    "module_path",
+    "dependency_policy",
+    "distribution_target",
+]
+
+REQUIRED_CHANGELOG_FIELDS = [
+    "impact",
+    "section",
+    "draft_entry",
+    "semver_marker_override",
+]
+
 REQUIRED_CI_LANES = [
     "fast",
     "core",
@@ -72,6 +117,8 @@ STOP_CONDITION_CATEGORIES = {
     "scanner": ["scanner", "security"],
     "engineering_policies": ["docs parity", "output contract", "release integrity", "provenance"],
     "architecture_policies": ["architecture", "systems-thinking", "systems thinking", "adr", "fail-closed"],
+    "planning_skill": ["prd-to-plan", "execution-compiler", "planning-skill", "planning skill"],
+    "contract_discipline": ["changelog", "contract/api", "semantic invariants", "semantic_invariants"],
 }
 
 TASK_ORDER_RE = re.compile(r"^T(?P<version>\d+(?:\.\d+)*)(?:[^.\d].*)?$", re.IGNORECASE)
@@ -165,6 +212,35 @@ def has_nonempty_list(value: Any) -> bool:
     return isinstance(value, list) and any(isinstance(item, str) and item.strip() for item in value)
 
 
+def has_nonempty_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
+def has_nonempty_dict(value: Any) -> bool:
+    return isinstance(value, dict) and bool(value)
+
+
+def has_nonempty_collection(value: Any) -> bool:
+    return (isinstance(value, dict) and bool(value)) or (isinstance(value, list) and bool(value))
+
+
+def has_required_string_refs(value: Any, expected_refs: list[str]) -> bool:
+    if not isinstance(value, list):
+        return False
+    present = {item for item in value if isinstance(item, str) and item.strip()}
+    return all(expected in present for expected in expected_refs)
+
+
+def contains_machine_local_path(value: Any) -> bool:
+    if isinstance(value, str):
+        return "/Users/" in value
+    if isinstance(value, list):
+        return any(contains_machine_local_path(item) for item in value)
+    if isinstance(value, dict):
+        return any(contains_machine_local_path(item) for item in value.values())
+    return False
+
+
 def missing_ci_lane_refs(task: dict[str, Any]) -> list[str]:
     value = task.get("ci_lane_refs")
     if not isinstance(value, list):
@@ -223,6 +299,58 @@ def validate_task_guide_sources(task: dict[str, Any]) -> None:
     missing_architecture = missing_architecture_policy_refs(task)
     if missing_architecture:
         fail(f"{task_id_value} architecture_guidance_refs missing: {', '.join(missing_architecture)}")
+
+
+def task_planning_field_has_evidence(task: dict[str, Any], field: str) -> bool:
+    value = task.get(field)
+    if field == "planning_skill_refs":
+        return has_required_string_refs(value, REQUIRED_PLAN_SKILL_REFS)
+    if field == "runtime_pins":
+        if not has_nonempty_dict(value):
+            return False
+        return all(has_nonempty_string(value.get(pin)) for pin in REQUIRED_RUNTIME_PIN_FIELDS)
+    if field == "slice_rationale":
+        return (
+            has_nonempty_dict(value)
+            and has_nonempty_string(value.get("slice_type"))
+            and has_nonempty_string(value.get("why_this_shape"))
+        )
+    if field == "changelog":
+        if not has_nonempty_dict(value):
+            return False
+        return all(has_nonempty_string(value.get(changelog_field)) for changelog_field in REQUIRED_CHANGELOG_FIELDS)
+    if field in ["contract_impact", "versioning_migration_impact"]:
+        return has_nonempty_string(value)
+    if field in ["architecture_constraints", "tdd_first_failing_tests", "semantic_invariants"]:
+        return has_nonempty_list(value)
+    if field == "adr_required":
+        return isinstance(value, bool)
+    if field == "cost_perf_impact":
+        return (
+            has_nonempty_dict(value)
+            and has_nonempty_string(value.get("level"))
+            and has_nonempty_string(value.get("measurement_expectation"))
+        )
+    if field == "chaos_failure_hypothesis":
+        return (
+            has_nonempty_dict(value)
+            and has_nonempty_string(value.get("hypothesis"))
+            and has_nonempty_string(value.get("expected_fail_closed_behavior"))
+        )
+    return False
+
+
+def validate_task_planning_skill_fields(task: dict[str, Any]) -> None:
+    task_id_value = task_id(task)
+    missing = [
+        field for field in REQUIRED_TASK_PLANNING_FIELDS if not task_planning_field_has_evidence(task, field)
+    ]
+    if missing:
+        fail(f"{task_id_value} missing planning-skill fields: {', '.join(missing)}")
+    if task.get("slice_type") != "vertical" and not has_nonempty_string(task.get("non_vertical_justification")):
+        fail(f"{task_id_value} non-vertical task requires non_vertical_justification")
+    if contains_machine_local_path(task):
+        fail(f"{task_id_value} contains a machine-local /Users/ path")
 
 
 def field_has_evidence(task: dict[str, Any], field: str) -> bool:
@@ -294,6 +422,20 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
 
 
 def validate_execution_plan(plan: dict[str, Any]) -> str:
+    for field in REQUIRED_PLAN_LEVEL_FIELDS:
+        value = plan.get(field)
+        if not has_nonempty_collection(value):
+            fail(f"execution plan missing required planning-skill section {field}")
+    alignment = plan.get("planning_skill_alignment")
+    if not isinstance(alignment, dict):
+        fail("execution plan planning_skill_alignment must be an object")
+    if alignment.get("status") != "aligned":
+        fail("execution plan planning_skill_alignment.status must be aligned")
+    if not has_required_string_refs(alignment.get("source_refs"), REQUIRED_PLAN_SKILL_REFS):
+        fail("execution plan planning_skill_alignment.source_refs must include Factory planning skills")
+    if contains_machine_local_path(plan):
+        fail("execution plan contains a machine-local /Users/ path")
+
     propagation = plan.get("dev_architecture_propagation")
     if not isinstance(propagation, dict):
         fail("execution plan missing dev_architecture_propagation")
@@ -312,6 +454,9 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
     missing = [field for field in REQUIRED_TASK_FIELDS if field not in requirements]
     if missing:
         fail(f"dev_architecture_propagation.task_packet_requirements missing {missing}")
+    missing_planning = [field for field in REQUIRED_TASK_PLANNING_FIELDS if field not in requirements]
+    if missing_planning:
+        fail(f"dev_architecture_propagation.task_packet_requirements missing planning fields {missing_planning}")
     security_scanning = propagation.get("security_scanning")
     if not isinstance(security_scanning, dict):
         fail("dev_architecture_propagation.security_scanning must be an object")
@@ -365,6 +510,7 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
     if baseline_task_id not in tasks_by_id:
         fail(f"task-packets.json missing propagation baseline task {baseline_task_id}")
     scoped_tasks = []
+    all_task_objects = []
     baseline_has_order_key = task_order_key(baseline_task_id) is not None
     baseline_seen = False
     for task in tasks:
@@ -373,6 +519,7 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
         candidate_id = task_id(task)
         if not candidate_id:
             continue
+        all_task_objects.append(task)
         if candidate_id == baseline_task_id:
             baseline_seen = True
         depends_on_baseline = depends_on(candidate_id, baseline_task_id, tasks_by_id)
@@ -385,11 +532,12 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
             scoped_tasks.append(task)
     if not scoped_tasks:
         fail(f"no task packets are at or after propagation baseline {baseline_task_id}")
-    for task in scoped_tasks:
+    for task in all_task_objects:
         missing = [field for field in REQUIRED_TASK_FIELDS if not field_has_evidence(task, field)]
         if missing:
             fail(f"{task_id(task)} missing guide propagation fields: {', '.join(missing)}")
         validate_task_guide_sources(task)
+        validate_task_planning_skill_fields(task)
 
 
 def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: str) -> None:
@@ -405,9 +553,27 @@ def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: st
     if missing:
         fail(f"{task_id_value} missing guide propagation fields: {', '.join(missing)}")
     validate_task_guide_sources(packet)
+    validate_task_planning_skill_fields(packet)
 
 
 def validate_validation_contract(contract: dict[str, Any]) -> None:
+    alignment = contract.get("planning_skill_alignment")
+    if not isinstance(alignment, dict):
+        fail("validation-contract.json missing planning_skill_alignment")
+    if not has_required_string_refs(alignment.get("source_refs"), REQUIRED_PLAN_SKILL_REFS):
+        fail("validation-contract.json planning_skill_alignment.source_refs must include Factory planning skills")
+    required_plan_sections = alignment.get("required_plan_sections")
+    if not isinstance(required_plan_sections, list) or not all(
+        section in required_plan_sections for section in REQUIRED_PLAN_LEVEL_FIELDS
+    ):
+        fail("validation-contract.json planning_skill_alignment.required_plan_sections is incomplete")
+    required_task_fields = alignment.get("required_task_fields")
+    if not isinstance(required_task_fields, list) or not all(
+        field in required_task_fields for field in REQUIRED_TASK_PLANNING_FIELDS
+    ):
+        fail("validation-contract.json planning_skill_alignment.required_task_fields is incomplete")
+    if contains_machine_local_path(contract):
+        fail("validation-contract.json contains a machine-local /Users/ path")
     stop_conditions = contract.get("stop_conditions")
     if not isinstance(stop_conditions, list):
         fail("validation-contract.json must contain stop_conditions list")
@@ -509,6 +675,36 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
                 "rule": "fail-closed trust-mode posture",
             },
         ],
+        "planning_skill_refs": list(REQUIRED_PLAN_SKILL_REFS),
+        "runtime_pins": {
+            "language": "go",
+            "go_version": "1.26.4",
+            "module_path": "github.com/Clyra-AI/lumyn",
+            "dependency_policy": "standard library first; pinned dependencies only when task-required",
+            "distribution_target": "standalone_binary",
+        },
+        "slice_type": "vertical",
+        "slice_rationale": {
+            "slice_type": "vertical",
+            "why_this_shape": "self-test task preserves a vertically scoped implementation contract",
+        },
+        "changelog": {
+            "impact": "required_when_implemented",
+            "section": "Unreleased",
+            "draft_entry": "Self-test task changelog entry.",
+            "semver_marker_override": "pre_1_0_minor_candidate",
+        },
+        "contract_impact": "Self-test task changes only its declared contract surface.",
+        "versioning_migration_impact": "Pre-1.0 changes must preserve explicit migration notes before release.",
+        "architecture_constraints": ["record state owner, feedback source, and fail-closed behavior"],
+        "adr_required": False,
+        "tdd_first_failing_tests": ["add a failing test or fixture before implementation when practical"],
+        "cost_perf_impact": {"level": "low", "measurement_expectation": "no material cost increase expected"},
+        "chaos_failure_hypothesis": {
+            "hypothesis": "invalid evidence must fail closed",
+            "expected_fail_closed_behavior": "do not mark the task complete",
+        },
+        "semantic_invariants": ["evidence remains repo-relative", "closure cannot claim missing PRD scope"],
     }
 
 
@@ -527,7 +723,7 @@ def run_self_test() -> int:
 
     slug_baseline_packets = {
         "tasks": [
-            {"task_id": "task-context", "blocked_by": []},
+            propagated_task("task-context", []),
             propagated_task("task-dev-architecture-propagation", ["task-context"]),
             propagated_task("feature-local-check", []),
         ]
@@ -593,6 +789,31 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected blank CI lane evidence to fail")
+
+    missing_planning_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    del missing_planning_packets["tasks"][1]["changelog"]
+    try:
+        validate_task_packets(missing_planning_packets, "T2.6")
+    except AssertionError as exc:
+        if "missing planning-skill fields" not in str(exc):
+            raise
+    else:
+        fail("self-test expected missing planning-skill fields to fail")
+
+    foundation_without_justification = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    foundation_without_justification["tasks"][1]["slice_type"] = "foundation"
+    foundation_without_justification["tasks"][1]["slice_rationale"]["slice_type"] = "foundation"
+    try:
+        validate_task_packets(foundation_without_justification, "T2.6")
+    except AssertionError as exc:
+        if "non_vertical_justification" not in str(exc):
+            raise
+    else:
+        fail("self-test expected non-vertical task without justification to fail")
 
     validate_standalone_task_packet(propagated_task("T3-repair-001", ["T2.6"]), "T2.6")
 

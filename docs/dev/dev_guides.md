@@ -85,7 +85,10 @@ non-applicable reason.
 - Changes to CI, review, shipping, or post-merge workflow must update `WORKFLOW.md`, this guide, and the relevant Factory planning artifacts in the same branch.
 - Changes that affect T3+ task planning must keep `scripts/validate_repo_pack.py`
   green so product task packets preserve CI lanes, 12-level test matrix refs,
-  scanner gates, engineering policy refs, and architecture guidance refs.
+  scanner gates, engineering policy refs, architecture guidance refs, and the
+  Factory `prd-to-plan` / `execution-compiler` fields for changelog intent,
+  contract impact, ADR posture, TDD-first evidence, cost/perf impact, failure
+  hypotheses, and semantic invariants.
 
 ## Docs Parity
 

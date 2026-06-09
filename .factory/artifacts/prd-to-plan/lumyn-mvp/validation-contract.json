@@ -41,7 +41,10 @@
     "Lifecycle-gated tasks must carry review, ship, post-merge, and PR lifecycle evidence or an explicit approved exception.",
     "Scanner-gated tasks must carry CodeQL status evidence or an explicit approved exception.",
     "CI lane, docs parity, output contract, release integrity, and provenance requirements must be represented in task evidence or approved exceptions.",
-    "Medium/high risk architecture work must carry systems-thinking, TDD/skipped-reason, ADR, performance, reliability, and fail-closed evidence as applicable."
+    "Medium/high risk architecture work must carry systems-thinking, TDD/skipped-reason, ADR, performance, reliability, and fail-closed evidence as applicable.",
+    "Factory planning-skill alignment must be present in the execution plan, validation contract, and task packets.",
+    "Task packets must carry changelog/versioning intent, contract/API impact, architecture constraints, ADR posture, TDD-first evidence, cost/perf impact, chaos/failure hypothesis, and semantic invariants.",
+    "Plan drift after alignment must update context brief, execution plan, task packets, and validation contract before implementation continues."
   ],
   "stop_conditions": [
     "implementation requires undeclared live credentials",
@@ -53,7 +56,10 @@
     "test-matrix refs, scanner gates, or architecture guidance refs are missing from a product task packet",
     "CI lane refs are missing from a product task packet",
     "docs parity, output contract, release integrity, or provenance evidence refs are missing for touched surfaces",
-    "systems-thinking, TDD, ADR, performance, reliability, or fail-closed refs are missing for touched architecture surfaces"
+    "systems-thinking, TDD, ADR, performance, reliability, or fail-closed refs are missing for touched architecture surfaces",
+    "Factory prd-to-plan or execution-compiler required fields are missing from the execution plan or a task packet",
+    "changelog/versioning intent, contract/API impact, ADR posture, TDD-first evidence, cost/perf impact, chaos/failure hypothesis, or semantic invariants are missing for a task",
+    "alignment drift changes runtime, distribution, provider, dependency, artifact namespace, credential, live-work, guide, or validation-contract decisions without updating context brief, execution plan, task packets, and validation contract"
   ],
   "runtime_pins": {
     "language": "go",
@@ -148,5 +154,35 @@
     "performance": "Replay/eval/report hot paths and model-cost paths require budget notes and validation or approved exception.",
     "reliability": "Retries, cleanup, persistence, filesystem mutation, redaction, live network, and provider work require hardening checks and failure-mode evidence.",
     "failure_semantics": "Ambiguous proof, redaction, credential, stale cassette, undeclared control, or scanner state fails closed."
+  },
+  "planning_skill_alignment": {
+    "source_refs": [
+      "factory://skills/prd-to-plan",
+      "factory://skills/execution-compiler"
+    ],
+    "required_plan_sections": [
+      "planning_skill_alignment",
+      "public_api_and_contract_map",
+      "docs_and_oss_readiness_baseline",
+      "test_matrix_wiring",
+      "minimum_now_sequence",
+      "explicit_non_goals",
+      "definition_of_done"
+    ],
+    "required_task_fields": [
+      "planning_skill_refs",
+      "runtime_pins",
+      "slice_rationale",
+      "changelog",
+      "contract_impact",
+      "versioning_migration_impact",
+      "architecture_constraints",
+      "adr_required",
+      "tdd_first_failing_tests",
+      "cost_perf_impact",
+      "chaos_failure_hypothesis",
+      "semantic_invariants"
+    ],
+    "validator_ref": "scripts/validate_repo_pack.py"
   }
 }
