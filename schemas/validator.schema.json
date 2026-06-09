@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.validator.schema.json",
+  "title": "Validator",
+  "description": "Lumyn Validator schema.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "validator_id",
+    "type",
+    "required",
+    "proof_cap",
+    "expect",
+    "metadata"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.validator"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "validator_id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "api_state",
+        "trace_assertion",
+        "action_boundary",
+        "human_annotation"
+      ]
+    },
+    "required": {
+      "type": "boolean"
+    },
+    "proof_cap": {
+      "type": "string",
+      "enum": [
+        "strong",
+        "weak",
+        "gap",
+        "unknown"
+      ]
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "expect": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

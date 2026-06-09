@@ -17,13 +17,15 @@
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T1/validation-report.json",
-        ".factory/artifacts/task-runs/T1/work-proof-marker.json"
+        ".factory/artifacts/task-runs/T1/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2/validation-report.json",
+        ".factory/artifacts/task-runs/T2/work-proof-marker.json"
       ],
       "implemented_task_refs": [
-        "T1"
+        "T1",
+        "T2"
       ],
       "remaining_task_refs": [
-        "T2",
         "T3",
         "T4",
         "T5",
@@ -31,7 +33,8 @@
       ],
       "notes": [
         "T1 established the pinned Go CLI skeleton, command-result envelope, exit-code constants, config defaults, and validation lanes.",
-        "Record/replay/report scope remains partial until schemas, init/check, record, replay, and report tasks close."
+        "Record/replay/report scope remains partial until schemas, init/check, record, replay, and report tasks close.",
+        "T2 established executable Phase 0 schema files and schema validation coverage for workflow, evidence, cassette, proof, command-result, redaction, and related artifact models."
       ]
     },
     {
@@ -65,5 +68,5 @@
     }
   ],
   "full_mvp_closure_rule": "The MVP is complete only when every required acceptance group is implemented or explicitly accepted with documented delivery debt by a human owner.",
-  "last_updated_at": "2026-06-08T23:54:09Z"
+  "last_updated_at": "2026-06-09T00:13:17Z"
 }

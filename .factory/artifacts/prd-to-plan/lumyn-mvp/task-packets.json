@@ -73,9 +73,16 @@
         "T1"
       ],
       "allowed_paths": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+        ".factory/artifacts/task-runs/T2/",
         "schemas/",
         "tests/",
-        "docs/architecture/"
+        "docs/architecture/",
+        "docs/dev/",
+        "Makefile",
+        "go.mod",
+        "go.sum",
+        "CHANGELOG.md"
       ],
       "forbidden_paths": [
         ".git/",
@@ -83,11 +90,28 @@
       ],
       "validation_commands": [
         "make test-fast",
-        "make test-contracts"
+        "make test-contracts",
+        "make prepush-full"
       ],
       "acceptance_checks": [
         "Schemas are versioned and test-covered.",
-        "Schema names map to required schemas in docs/product/prd.md."
+        "Schema names map to required schemas in docs/product/prd.md.",
+        "All 14 required Phase 0 schema files named in docs/product/prd.md exist under schemas/.",
+        "Schema tests compile every schema with a pinned JSON Schema validator.",
+        "Representative artifacts validate for workflow contract, command result, proof strength, cassette, evidence event, redaction config, and related surfaces.",
+        "Invalid command-result output fails schema validation.",
+        "Schema validator dependency is pinned in go.mod/go.sum and justified in dev guidance."
+      ],
+      "runtime": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "Pinned github.com/santhosh-tekuri/jsonschema/v5 v5.3.1 is allowed for executable schema validation from T2 onward."
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "scope_closure_map"
       ]
     },
     {

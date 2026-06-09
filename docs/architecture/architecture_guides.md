@@ -30,5 +30,8 @@
 - `internal/exitcode/`: stable exit-code constants matching `docs/product/prd.md`.
 - `internal/config/`: config discovery and repo-relative path handling.
 - `internal/version/`: version metadata.
+- `schemas/`: executable JSON Schema contracts for workflow, evidence, cassette, proof, result, redaction, and related artifact models.
 
-Use Go `1.26.4` and standard-library-only implementation for T1.
+Use Go `1.26.4`. T1 stays standard-library-only. T2 introduces the pinned
+`github.com/santhosh-tekuri/jsonschema/v5` validator for executable schema
+tests.

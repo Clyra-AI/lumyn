@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.state_binding.schema.json",
+  "title": "StateBinding",
+  "description": "Lumyn StateBinding schema.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "binding_id",
+    "name",
+    "from",
+    "required",
+    "metadata"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.state_binding"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "binding_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "from": {
+      "type": "string"
+    },
+    "required": {
+      "type": "boolean"
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low",
+        "inferred",
+        "unknown"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

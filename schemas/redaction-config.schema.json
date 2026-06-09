@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.redaction_config.schema.json",
+  "title": "RedactionConfig",
+  "description": "Lumyn RedactionConfig schema.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "rules",
+    "default_redactions",
+    "fail_closed",
+    "safe_to_persist_required",
+    "safe_to_share_required",
+    "metadata"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.redaction_config"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "target",
+          "action"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "redact",
+              "drop",
+              "hash"
+            ]
+          },
+          "pattern": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "default_redactions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "fail_closed": {
+      "type": "boolean",
+      "const": true
+    },
+    "safe_to_persist_required": {
+      "type": "boolean",
+      "const": true
+    },
+    "safe_to_share_required": {
+      "type": "boolean",
+      "const": true
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,5 +1,5 @@
 GO ?= go
-PKG_LIST := ./cmd/... ./internal/...
+PKG_LIST := ./cmd/... ./internal/... ./schemas/...
 
 .PHONY: fmt lint-fast test-fast test-contracts build prepush-full
 
@@ -14,7 +14,7 @@ lint-fast:
 	test -d cmd/lumyn
 	test -d internal
 	test -d tests
-	! grep -RIn "TODO\\|TBD\\|FIXME" AGENTS.md WORKFLOW.md README.md docs cmd internal tests
+	! grep -RIn "TODO\\|TBD\\|FIXME" AGENTS.md WORKFLOW.md README.md docs cmd internal schemas tests
 	grep -q '^golang 1.26.4$$' .tool-versions
 	grep -q '^go 1.26.4$$' go.mod
 	$(GO) vet $(PKG_LIST)
@@ -32,6 +32,20 @@ test-contracts:
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json
+	test -f schemas/workflow-contract.schema.json
+	test -f schemas/expected-outcome.schema.json
+	test -f schemas/validator.schema.json
+	test -f schemas/action-boundary.schema.json
+	test -f schemas/human-annotation.schema.json
+	test -f schemas/required-context.schema.json
+	test -f schemas/state-binding.schema.json
+	test -f schemas/canonical-trace.schema.json
+	test -f schemas/evidence-event.schema.json
+	test -f schemas/cassette.schema.json
+	test -f schemas/result-axes.schema.json
+	test -f schemas/proof-strength.schema.json
+	test -f schemas/command-result.schema.json
+	test -f schemas/redaction-config.schema.json
 
 build:
 	$(GO) build -o .factory/tmp/lumyn ./cmd/lumyn

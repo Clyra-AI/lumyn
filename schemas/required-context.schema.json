@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.required_context.schema.json",
+  "title": "RequiredContext",
+  "description": "Lumyn RequiredContext schema.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "sources",
+    "required",
+    "missing_policy",
+    "metadata"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.required_context"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "required": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "missing_policy": {
+      "type": "string",
+      "enum": [
+        "fail_strict_warn_normal",
+        "fail_always"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

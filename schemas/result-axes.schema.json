@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.result_axes.schema.json",
+  "title": "ResultAxes",
+  "description": "Lumyn ResultAxes schema.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "workflow_result",
+    "proof_strength",
+    "freshness",
+    "redaction",
+    "boundary",
+    "metadata"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.result_axes"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "workflow_result": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "fail",
+        "blocked",
+        "warning"
+      ]
+    },
+    "proof_strength": {
+      "type": "string",
+      "enum": [
+        "strong",
+        "weak",
+        "gap",
+        "unknown"
+      ]
+    },
+    "freshness": {
+      "type": "string",
+      "enum": [
+        "fresh",
+        "stale",
+        "unknown"
+      ]
+    },
+    "redaction": {
+      "type": "string",
+      "enum": [
+        "not_applicable",
+        "applied",
+        "unsafe_to_persist",
+        "unsafe_to_share",
+        "unknown"
+      ]
+    },
+    "boundary": {
+      "type": "string",
+      "enum": [
+        "in_bounds",
+        "out_of_bounds",
+        "classification_uncertain",
+        "unknown"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

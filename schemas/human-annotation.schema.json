@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.human_annotation.schema.json",
+  "title": "HumanAnnotation",
+  "description": "Lumyn HumanAnnotation schema.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "annotation_id",
+    "run_id",
+    "author",
+    "verdict",
+    "notes",
+    "metadata"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.human_annotation"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "annotation_id": {
+      "type": "string"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "accepted",
+        "rejected",
+        "needs_fix",
+        "informational"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}
