@@ -60,7 +60,7 @@ STOP_CONDITION_CATEGORIES = {
     "architecture_policies": ["architecture", "systems-thinking", "systems thinking", "adr", "fail-closed"],
 }
 
-TASK_ORDER_RE = re.compile(r"^T(?P<version>\d+(?:\.\d+)*)(?:[A-Za-z].*)?$", re.IGNORECASE)
+TASK_ORDER_RE = re.compile(r"^T(?P<version>\d+(?:\.\d+)*)(?:[^.\d].*)?$", re.IGNORECASE)
 
 
 def fail(message: str) -> None:
@@ -349,7 +349,7 @@ def run_self_test() -> int:
     valid_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
     validate_task_packets(valid_packets, "T2.6")
 
-    disconnected_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", [])]}
+    disconnected_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3-repair-001", [])]}
     try:
         validate_task_packets(disconnected_packets, "T2.6")
     except AssertionError as exc:
