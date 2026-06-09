@@ -235,7 +235,7 @@
   },
   "public_api_and_contract_map": {
     "stable_public_surfaces": [
-      "CLI commands: lumyn init, check, record, verify, report, demo, share, eval",
+      "CLI commands: lumyn init, check, record, verify, trace, demo, share, eval",
       "command-result JSON envelope and exit-code constants",
       "schemas/ JSON Schema contracts",
       "workflow, cassette, run, baseline, evidence, proof, redaction, report, JUnit, and share artifacts",

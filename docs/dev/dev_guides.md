@@ -36,7 +36,7 @@ reserved, or blocked by credential/network approval.
 |---|---|---|
 | Tier 1 Unit | Active | `go test ./... -count=1` through `make test-fast` |
 | Tier 2 Integration | Planned | `make test-contracts`; grows with schema/workflow integration tests |
-| Tier 3 End-to-End | Planned | CLI command invocation tests as `lumyn init`, `check`, `record`, `verify`, `report`, and `eval` mature |
+| Tier 3 End-to-End | Planned | CLI command invocation tests as `lumyn init`, `check`, `record`, `verify`, `trace`, and `eval` mature |
 | Tier 4 Acceptance | Planned | `.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json` against PRD acceptance groups |
 | Tier 5 Hardening | Planned | fail-closed, redaction, stale-cassette, cleanup, retry, and orphan-evidence tests |
 | Tier 6 Chaos | Reserved | controlled failure injection after live verify/retry boundaries exist |

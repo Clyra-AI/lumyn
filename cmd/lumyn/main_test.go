@@ -69,6 +69,24 @@ func TestCLIRejectsUnknownCommandWithJSONEnvelope(t *testing.T) {
 	}
 }
 
+func TestCLIAcceptsRequiredTraceCommand(t *testing.T) {
+	binary := buildTestBinary(t)
+	command := exec.Command(binary, "trace")
+	output, err := command.Output()
+	if err != nil {
+		t.Fatalf("run lumyn trace: %v", err)
+	}
+
+	payload := decodeCommandResult(t, output)
+	validateCommandResultSchema(t, payload)
+	if payload["command"] != "trace" {
+		t.Fatalf("command = %v, want trace", payload["command"])
+	}
+	if payload["status"] != "pass" {
+		t.Fatalf("status = %v, want pass", payload["status"])
+	}
+}
+
 func buildTestBinary(t *testing.T) string {
 	t.Helper()
 	binary := filepath.Join(t.TempDir(), "lumyn")

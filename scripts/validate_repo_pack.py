@@ -134,9 +134,7 @@ ADR_CONTRACT_TOKENS = [
     "proof",
 ]
 
-MACHINE_LOCAL_PATH_RE = re.compile(
-    r"(?<![A-Za-z0-9+.-])(?:/(?:Users|home|workspace|tmp|private/tmp|var/folders|Volumes)(?:/|$)|[A-Za-z]:[\\/])"
-)
+MACHINE_LOCAL_PATH_RE = re.compile(r"(?<![A-Za-z0-9+./#-])(?:/(?!/)[A-Za-z0-9._-][^\s\"'<>]*|[A-Za-z]:[\\/])")
 NO_CONTRACT_IMPACT_BREAKERS = [
     " but ",
     " except ",
@@ -1004,6 +1002,8 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
 def run_self_test() -> int:
     valid_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
     validate_task_packets(valid_packets, "T2.6")
+    if contains_machine_local_path(".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate"):
+        fail("self-test expected repo-relative JSON pointer to remain portable")
 
     deprecated_worker_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
@@ -1161,7 +1161,10 @@ def run_self_test() -> int:
     linux_absolute_path_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
     }
-    linux_absolute_path_packets["tasks"][1]["artifact_refs"] = ["/workspace/lumyn/.factory/artifacts/run.json"]
+    linux_absolute_path_packets["tasks"][1]["artifact_refs"] = [
+        "/workspace/lumyn/.factory/artifacts/run.json",
+        "/root/lumyn/.factory/artifacts/run.json",
+    ]
     try:
         validate_task_packets(linux_absolute_path_packets, "T2.6")
     except AssertionError as exc:
