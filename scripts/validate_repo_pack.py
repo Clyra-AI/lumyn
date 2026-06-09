@@ -57,6 +57,15 @@ REQUIRED_ARCHITECTURE_POLICIES = [
     "failure_semantics",
 ]
 
+ARCHITECTURE_POLICY_TOKENS = {
+    "systems_thinking": ["systems-thinking", "systems thinking"],
+    "tdd": ["tdd", "red-first"],
+    "adr_triggers": ["adr", "decision"],
+    "performance": ["performance", "cost"],
+    "reliability": ["reliability", "recovery"],
+    "failure_semantics": ["fail-closed", "failure", "trust-mode"],
+}
+
 STOP_CONDITION_CATEGORIES = {
     "test_matrix": ["test-matrix", "test matrix", "test_matrix"],
     "ci_lanes": ["ci lane", "ci/status", "status check"],
@@ -152,6 +161,30 @@ def refs_include_base(task: dict[str, Any], field: str, expected_base: str) -> b
     return any(isinstance(item, dict) and source_ref_base(item.get("source_ref")) == expected_base for item in value)
 
 
+def missing_engineering_policy_refs(task: dict[str, Any]) -> list[str]:
+    value = task.get("engineering_policy_refs")
+    if not isinstance(value, list):
+        return list(REQUIRED_ENGINEERING_POLICIES)
+    present = {item.get("policy") for item in value if isinstance(item, dict)}
+    return [policy for policy in REQUIRED_ENGINEERING_POLICIES if policy not in present]
+
+
+def missing_architecture_policy_refs(task: dict[str, Any]) -> list[str]:
+    value = task.get("architecture_guidance_refs")
+    if not isinstance(value, list):
+        return list(REQUIRED_ARCHITECTURE_POLICIES)
+    combined = "\n".join(
+        f"{item.get('source_ref', '')} {item.get('rule', '')}".lower()
+        for item in value
+        if isinstance(item, dict)
+    )
+    return [
+        policy
+        for policy, tokens in ARCHITECTURE_POLICY_TOKENS.items()
+        if not any(token in combined for token in tokens)
+    ]
+
+
 def at_or_after_baseline(task: dict[str, Any], baseline_task_id: str) -> bool:
     baseline_key = task_order_key(baseline_task_id)
     if baseline_key is None:
@@ -169,6 +202,12 @@ def validate_task_guide_sources(task: dict[str, Any]) -> None:
         fail(f"{task_id_value} test_matrix_refs must include source {TEST_MATRIX_SOURCE_BASE}")
     if not refs_include_base(task, "architecture_guidance_refs", ARCHITECTURE_GUIDE_BASE):
         fail(f"{task_id_value} architecture_guidance_refs must include source {ARCHITECTURE_GUIDE_BASE}")
+    missing_engineering = missing_engineering_policy_refs(task)
+    if missing_engineering:
+        fail(f"{task_id_value} engineering_policy_refs missing: {', '.join(missing_engineering)}")
+    missing_architecture = missing_architecture_policy_refs(task)
+    if missing_architecture:
+        fail(f"{task_id_value} architecture_guidance_refs missing: {', '.join(missing_architecture)}")
 
 
 def field_has_evidence(task: dict[str, Any], field: str) -> bool:
@@ -390,10 +429,45 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
                 "policy": "docs_parity",
                 "source_ref": "docs/dev/dev_guides.md#docs-parity",
                 "rule": "docs move with behavior",
-            }
+            },
+            {
+                "policy": "output_contracts",
+                "source_ref": "docs/dev/dev_guides.md#output-contracts",
+                "rule": "output contracts stay stable",
+            },
+            {
+                "policy": "release_integrity",
+                "source_ref": "docs/dev/dev_guides.md#release-integrity",
+                "rule": "release integrity evidence is required",
+            },
+            {
+                "policy": "provenance_evidence",
+                "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
+                "rule": "provenance evidence stays repo-relative",
+            },
         ],
         "architecture_guidance_refs": [
-            {"source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map", "rule": "record state and feedback"}
+            {"source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map", "rule": "record state and feedback"},
+            {
+                "source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations",
+                "rule": "use TDD and red-first evidence",
+            },
+            {
+                "source_ref": "docs/architecture/architecture_guides.md#adr-and-decision-triggers",
+                "rule": "record ADR decision triggers",
+            },
+            {
+                "source_ref": "docs/architecture/architecture_guides.md#performance-and-cost-triggers",
+                "rule": "track performance and cost impact",
+            },
+            {
+                "source_ref": "docs/architecture/architecture_guides.md#reliability-and-recovery-triggers",
+                "rule": "record reliability and recovery evidence",
+            },
+            {
+                "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
+                "rule": "fail-closed trust-mode posture",
+            },
         ],
     }
 
@@ -445,6 +519,18 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected disabled scanner without exception to fail")
+
+    missing_policy_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
+    missing_policy_packets["tasks"][1]["engineering_policy_refs"] = missing_policy_packets["tasks"][1][
+        "engineering_policy_refs"
+    ][:1]
+    try:
+        validate_task_packets(missing_policy_packets, "T2.6")
+    except AssertionError as exc:
+        if "engineering_policy_refs missing" not in str(exc):
+            raise
+    else:
+        fail("self-test expected missing engineering policy refs to fail")
 
     validate_standalone_task_packet(propagated_task("T3-repair-001", ["T2.6"]), "T2.6")
 
