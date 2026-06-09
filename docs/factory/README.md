@@ -42,6 +42,10 @@ credential access. Lumyn task packets still default to no ambient secrets and
 offline product/runtime network posture until a specific live sandbox or model
 provider task is approved.
 
+Approved live approval, credential, or network work must be represented in
+`.factory/factoryd.example.json` through task-scoped `capability_grants`.
+Do not edit PRD-derived task packets just to bypass a daemon gate.
+
 Autonomous shipping is disabled in `.factory/factoryd.example.json`. Enabling
 it requires explicit command hooks for remote lifecycle phases such as push, PR,
 CI/status wait, passive Codex review settle, merge, post-merge monitoring, and
