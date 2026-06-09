@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from copy import deepcopy
+from fnmatch import fnmatchcase
 import subprocess
 import sys
 from typing import Any
@@ -13,7 +14,7 @@ REPO = "lumyn"
 BRANCH = "main"
 RULESET_ID = "17433138"
 REQUIRED_CONTEXTS = {"validate", "CodeQL analyze"}
-FORBIDDEN_DEFAULT_BRANCH_EXCLUDES = {"~DEFAULT_BRANCH", f"refs/heads/{BRANCH}", BRANCH}
+DEFAULT_BRANCH_REF_CANDIDATES = ("~DEFAULT_BRANCH", BRANCH, f"refs/heads/{BRANCH}")
 
 
 def gh_api(path: str) -> dict[str, Any]:
@@ -63,6 +64,10 @@ def status_contexts_from_ruleset(ruleset: dict[str, Any]) -> set[str]:
     return contexts
 
 
+def exclude_pattern_covers_default_branch(pattern: str) -> bool:
+    return any(fnmatchcase(candidate, pattern) for candidate in DEFAULT_BRANCH_REF_CANDIDATES)
+
+
 def validate_branch_protection(protection: dict[str, Any], ruleset: dict[str, Any]) -> dict[str, Any]:
     status_checks = protection.get("required_status_checks")
     require(isinstance(status_checks, dict), "branch protection must require status checks")
@@ -91,9 +96,10 @@ def validate_branch_protection(protection: dict[str, Any], ruleset: dict[str, An
     require(isinstance(ref_includes, list), "ruleset ref_name.include must be a list")
     require(isinstance(ref_excludes, list), "ruleset ref_name.exclude must be a list")
     require("~DEFAULT_BRANCH" in ref_includes, "ruleset must include the default branch")
-    excluded_refs = {ref for ref in ref_excludes if isinstance(ref, str)}
-    forbidden_excludes = sorted(FORBIDDEN_DEFAULT_BRANCH_EXCLUDES.intersection(excluded_refs))
-    require(not forbidden_excludes, f"ruleset must not exclude default branch refs: {forbidden_excludes}")
+    forbidden_excludes = sorted(
+        ref for ref in ref_excludes if isinstance(ref, str) and exclude_pattern_covers_default_branch(ref)
+    )
+    require(not forbidden_excludes, f"ruleset must not exclude default branch refs or patterns: {forbidden_excludes}")
 
     types = rule_types(ruleset)
     for required_rule in {"deletion", "non_fast_forward", "pull_request", "required_status_checks"}:
@@ -156,16 +162,20 @@ def run_self_test() -> int:
     try:
         validate_branch_protection(fixture_protection(), fixture_ruleset())
 
-        for excluded_ref in sorted(FORBIDDEN_DEFAULT_BRANCH_EXCLUDES):
+        for excluded_ref in ["*", "~DEFAULT_BRANCH", BRANCH, f"refs/heads/{BRANCH}", "refs/heads/*", "refs/heads/ma*"]:
             protection = fixture_protection()
             ruleset = deepcopy(fixture_ruleset())
             ruleset["conditions"]["ref_name"]["exclude"] = [excluded_ref]
             try:
                 validate_branch_protection(protection, ruleset)
             except AssertionError as exc:
-                require("must not exclude default branch refs" in str(exc), f"unexpected self-test failure: {exc}")
+                require("must not exclude default branch refs or patterns" in str(exc), f"unexpected self-test failure: {exc}")
                 continue
             raise AssertionError(f"default branch exclude {excluded_ref!r} was accepted")
+
+        allowed_pattern_ruleset = deepcopy(fixture_ruleset())
+        allowed_pattern_ruleset["conditions"]["ref_name"]["exclude"] = ["refs/heads/release/*"]
+        validate_branch_protection(fixture_protection(), allowed_pattern_ruleset)
     except Exception as exc:
         print(f"branch protection audit self-test failed: {exc}", file=sys.stderr)
         return 1

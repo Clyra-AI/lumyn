@@ -44,6 +44,14 @@
       "main",
       "refs/heads/main"
     ],
+    "forbidden_default_branch_exclude_patterns": [
+      "*",
+      "~DEFAULT_BRANCH",
+      "main",
+      "refs/heads/*",
+      "refs/heads/ma*",
+      "refs/heads/main"
+    ],
     "current_user_can_bypass": "never",
     "rules": [
       "deletion",
