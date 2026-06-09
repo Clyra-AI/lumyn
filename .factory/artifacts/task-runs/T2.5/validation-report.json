@@ -4,7 +4,7 @@
   "task_id": "T2.5",
   "source_task_packet_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2.5",
   "status": "pass",
-  "validated_at": "2026-06-09T03:00:29Z",
+  "validated_at": "2026-06-09T03:40:04Z",
   "commands": [
     {
       "command": "make lint-fast",
@@ -29,6 +29,10 @@
     {
       "command": "make prepush-full",
       "status": "pass"
+    },
+    {
+      "command": "rm -rf .factory/tmp && make prepush-full",
+      "status": "pass"
     }
   ],
   "acceptance_results": [
@@ -41,6 +45,11 @@
       "check": "Makefile lint-fast verifies the validate workflow uses Go 1.26.4 and make prepush-full.",
       "status": "pass",
       "evidence": "Makefile lint-fast"
+    },
+    {
+      "check": "Makefile build creates ignored .factory/tmp before writing the Lumyn binary, so a fresh CI checkout passes.",
+      "status": "pass",
+      "evidence": "Makefile build; rm -rf .factory/tmp && make prepush-full"
     },
     {
       "check": "WORKFLOW.md, AGENTS.md, README.md, docs/dev/dev_guides.md, and docs/architecture/architecture_guides.md document CI/status, review, ship-pr, post-merge, and PR lifecycle evidence.",
