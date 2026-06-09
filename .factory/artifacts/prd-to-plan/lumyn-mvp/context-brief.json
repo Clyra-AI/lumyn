@@ -141,7 +141,8 @@
       "worker_command": "",
       "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
       "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-      "network_posture": "offline by default until live sandbox/model work is approved"
+      "network_posture": "offline by default until live sandbox/model work is approved",
+      "capability_grants": []
     },
     "factoryd_dispatch_policy": "runner-ready task packets must declare worker_type, factoryd_runtime, validation_commands, evidence_required, stop_conditions, path policy, lifecycle gates, and scope exclusions before dispatch"
   },

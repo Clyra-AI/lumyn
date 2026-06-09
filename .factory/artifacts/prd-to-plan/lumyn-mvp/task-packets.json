@@ -314,7 +314,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -637,7 +638,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -959,7 +961,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -1286,7 +1289,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -1593,7 +1597,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -1907,7 +1912,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -2218,7 +2224,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -2529,7 +2536,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -2850,7 +2858,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -3167,7 +3176,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -3477,7 +3487,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -3794,7 +3805,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -4139,7 +4151,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -4457,7 +4470,8 @@
         "worker_command": "",
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-        "network_posture": "offline by default until live sandbox/model work is approved"
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
       },
       "stop_conditions": [
         "missing runner-ready task contract",

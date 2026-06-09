@@ -72,6 +72,7 @@ REQUIRED_FACTORYD_RUNTIME_FIELDS = [
     "approval_posture",
     "credential_posture",
     "network_posture",
+    "capability_grants",
 ]
 
 REQUIRED_PLAN_SKILL_REFS = [
@@ -376,6 +377,10 @@ def is_valid_factoryd_runtime(value: Any) -> bool:
     if not isinstance(value, dict):
         return False
     for field in REQUIRED_FACTORYD_RUNTIME_FIELDS:
+        if field == "capability_grants":
+            if not isinstance(value.get(field), list):
+                return False
+            continue
         if field == "worker_command":
             if field not in value:
                 return False
@@ -397,10 +402,12 @@ def validate_factoryd_runtime(value: Any, label: str) -> None:
     missing = [
         field
         for field in REQUIRED_FACTORYD_RUNTIME_FIELDS
-        if field != "worker_command" and not has_nonempty_string(value.get(field))
+        if field not in ["worker_command", "capability_grants"] and not has_nonempty_string(value.get(field))
     ]
     if "worker_command" not in value:
         missing.append("worker_command")
+    if not isinstance(value.get("capability_grants"), list):
+        missing.append("capability_grants")
     if missing:
         fail(f"{label} missing fields: {', '.join(missing)}")
     if value.get("worker_type") != "codex_cli":
@@ -1228,6 +1235,7 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
             "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
             "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
             "network_posture": "offline by default until live sandbox/model work is approved",
+            "capability_grants": [],
         },
         "validation_commands": ["make prepush-full"],
         "evidence_required": ["validation_report", "work_proof_marker", "factoryd_run_once_report"],
