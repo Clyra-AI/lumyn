@@ -48,6 +48,19 @@ REQUIRED_TASK_FIELDS = [
     "stop_conditions",
 ]
 
+REQUIRED_RUNNER_READY_FIELDS = [
+    "worker_type",
+    "factoryd_runtime",
+    "validation_commands",
+    "evidence_required",
+    "stop_conditions",
+    "allowed_paths",
+    "forbidden_paths",
+    "required_worker_chain",
+    "lifecycle_gates",
+    "scope_exclusions",
+]
+
 REQUIRED_FACTORYD_RUNTIME_FIELDS = [
     "state_dir",
     "workspace_root",
@@ -357,6 +370,25 @@ def has_nonempty_dict(value: Any) -> bool:
     return isinstance(value, dict) and bool(value)
 
 
+def is_valid_factoryd_runtime(value: Any) -> bool:
+    if not isinstance(value, dict):
+        return False
+    for field in REQUIRED_FACTORYD_RUNTIME_FIELDS:
+        if field == "worker_command":
+            if field not in value:
+                return False
+            continue
+        if not has_nonempty_string(value.get(field)):
+            return False
+    if value.get("worker_type") != "codex_cli":
+        return False
+    credential_posture = str(value.get("credential_posture", "")).lower()
+    if "no ambient" not in credential_posture:
+        return False
+    network_posture = str(value.get("network_posture", "")).lower()
+    return "offline" in network_posture or "allowlist" in network_posture
+
+
 def validate_factoryd_runtime(value: Any, label: str) -> None:
     if not isinstance(value, dict):
         fail(f"{label} must be an object")
@@ -372,7 +404,7 @@ def validate_factoryd_runtime(value: Any, label: str) -> None:
     if value.get("worker_type") != "codex_cli":
         fail(f"{label}.worker_type must be codex_cli")
     credential_posture = str(value.get("credential_posture", "")).lower()
-    if "ambient" not in credential_posture:
+    if "no ambient" not in credential_posture:
         fail(f"{label}.credential_posture must declare no ambient secrets")
     network_posture = str(value.get("network_posture", "")).lower()
     if "offline" not in network_posture and "allowlist" not in network_posture:
@@ -711,13 +743,9 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
     if field == "lifecycle_gates":
         return has_lifecycle_gates(value)
     if field == "worker_type":
-        return has_nonempty_string(value)
+        return value == "codex_cli"
     if field == "factoryd_runtime":
-        return (
-            isinstance(value, dict)
-            and all(has_nonempty_string(value.get(runtime_field)) or runtime_field == "worker_command" for runtime_field in REQUIRED_FACTORYD_RUNTIME_FIELDS)
-            and "ambient" in str(value.get("credential_posture", "")).lower()
-        )
+        return is_valid_factoryd_runtime(value)
     if field in ["validation_commands", "evidence_required", "stop_conditions"]:
         return has_nonempty_list(value)
     if field == "security_scanner_gates":
@@ -1017,21 +1045,8 @@ def validate_validation_contract(contract: dict[str, Any]) -> None:
         fail("validation-contract.json missing factoryd_runtime_requirements")
     missing_runner_ready = [
         field
-        for field in REQUIRED_TASK_FIELDS
-        if field
-        in {
-            "worker_type",
-            "factoryd_runtime",
-            "validation_commands",
-            "evidence_required",
-            "stop_conditions",
-            "allowed_paths",
-            "forbidden_paths",
-            "required_worker_chain",
-            "lifecycle_gates",
-            "scope_exclusions",
-        }
-        and field not in factoryd_requirements.get("runner_ready_fields", [])
+        for field in REQUIRED_RUNNER_READY_FIELDS
+        if field not in factoryd_requirements.get("runner_ready_fields", [])
     ]
     if missing_runner_ready:
         fail(f"validation-contract.json.factoryd_runtime_requirements.runner_ready_fields missing {missing_runner_ready}")
