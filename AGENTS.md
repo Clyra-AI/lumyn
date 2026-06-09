@@ -42,6 +42,8 @@ Every change should improve one or more of:
 - `docs/architecture/`: repo-local architecture guidance.
 - `.factory/artifacts/`: durable Factory planning, validation, closure, and handoff artifacts.
 - `.factory/tmp/`: ignored local execution scratch space.
+- `.factory/factoryd.example.json`: repo-local daemon config template.
+- `.factoryd/`: ignored local daemon state, claims, worktrees, events, and run reports.
 - `schemas/`: versioned schemas.
 - `cmd/lumyn/`: CLI entrypoint.
 - `internal/`: Go implementation packages.
@@ -93,3 +95,4 @@ available.
 - Test matrix and architecture propagation source: `docs/dev/dev_guides.md` and `docs/architecture/architecture_guides.md`.
 - Product task packets must preserve CI lane refs, docs parity, output contract, release integrity, provenance, systems-thinking, TDD, ADR, performance, reliability, and fail-closed requirements from those guides.
 - Product task packets must also preserve Factory `prd-to-plan` / `execution-compiler` fields for Factory compatibility, explicit scope exclusions, alignment gate refs, plan-drift refs, runtime pins, slice rationale, changelog/versioning intent, contract impact, architecture constraints, ADR posture, TDD-first evidence, cost/perf impact, failure hypotheses, semantic invariants, canonical worker chains, and lifecycle gates.
+- Runner-ready task packets must declare `worker_type`, `factoryd_runtime`, `validation_commands`, `evidence_required`, and `stop_conditions` before daemon dispatch.

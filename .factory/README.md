@@ -2,10 +2,11 @@
 
 - `.factory/artifacts/`: committed planning, validation, closure, and handoff artifacts.
 - `.factory/tmp/`: ignored local scratch space.
+- `.factory/factoryd.example.json`: repo-local daemon configuration template.
+- `.factoryd/`: ignored local daemon state, worktrees, claims, events, and run reports.
 
 The initial PRD-to-plan artifacts are under:
 
 ```text
 .factory/artifacts/prd-to-plan/lumyn-mvp/
 ```
-

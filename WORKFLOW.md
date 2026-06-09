@@ -30,6 +30,8 @@ Lumyn accepts work from:
 ## Artifact Rules
 
 - Durable Factory artifacts go under `.factory/artifacts/`.
+- `factoryd` config template lives at `.factory/factoryd.example.json`.
+- Ignored daemon runtime state goes under `.factoryd/`.
 - The canonical MVP PRD path is `docs/product/prd.md`.
 - Factory references must use repo-relative paths, never machine-local absolute paths.
 - Validation evidence must include command, status, artifact refs, and skipped-command reasons when applicable.
@@ -84,3 +86,4 @@ Stop and request human decision if:
 - a product task omits required test-matrix refs, scanner gates, or architecture guidance refs inherited from the repo operating pack
 - a product task omits required CI lane refs, docs parity, output contract, release integrity, provenance, systems-thinking, TDD, ADR, performance, reliability, or fail-closed refs inherited from the repo operating pack
 - a product task omits Factory `prd-to-plan` / `execution-compiler` fields for Factory compatibility, explicit scope exclusions, alignment gate refs, plan-drift refs, runtime pins, slice rationale, changelog/versioning intent, contract impact, ADR posture, TDD-first evidence, cost/perf impact, failure hypotheses, semantic invariants, canonical worker chains, or lifecycle gates
+- a runner-ready product task omits `worker_type`, `factoryd_runtime`, `validation_commands`, `evidence_required`, or `stop_conditions`

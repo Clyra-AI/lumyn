@@ -17,6 +17,7 @@ VALIDATION_CONTRACT = PLAN_DIR / "validation-contract.json"
 ACCEPTANCE_MAPPING = PLAN_DIR / "acceptance-mapping.json"
 SCOPE_CLOSURE_MAP = PLAN_DIR / "scope-closure-map.json"
 RISK_CLASSIFICATION = PLAN_DIR / "risk-classification.json"
+FACTORYD_CONFIG = ROOT / ".factory" / "factoryd.example.json"
 REPAIR_TASK_PACKETS = [
     ROOT / ".factory" / "artifacts" / "pilot" / "lumyn-mvp-slice" / "repair-loop" / "task-packet.json"
 ]
@@ -40,6 +41,22 @@ REQUIRED_TASK_FIELDS = [
     "plan_drift_policy_ref",
     "required_worker_chain",
     "lifecycle_gates",
+    "worker_type",
+    "factoryd_runtime",
+    "validation_commands",
+    "evidence_required",
+    "stop_conditions",
+]
+
+REQUIRED_FACTORYD_RUNTIME_FIELDS = [
+    "state_dir",
+    "workspace_root",
+    "branch_prefix",
+    "worker_type",
+    "worker_command",
+    "approval_posture",
+    "credential_posture",
+    "network_posture",
 ]
 
 REQUIRED_PLAN_SKILL_REFS = [
@@ -338,6 +355,28 @@ def has_nonempty_string(value: Any) -> bool:
 
 def has_nonempty_dict(value: Any) -> bool:
     return isinstance(value, dict) and bool(value)
+
+
+def validate_factoryd_runtime(value: Any, label: str) -> None:
+    if not isinstance(value, dict):
+        fail(f"{label} must be an object")
+    missing = [
+        field
+        for field in REQUIRED_FACTORYD_RUNTIME_FIELDS
+        if field != "worker_command" and not has_nonempty_string(value.get(field))
+    ]
+    if "worker_command" not in value:
+        missing.append("worker_command")
+    if missing:
+        fail(f"{label} missing fields: {', '.join(missing)}")
+    if value.get("worker_type") != "codex_cli":
+        fail(f"{label}.worker_type must be codex_cli")
+    credential_posture = str(value.get("credential_posture", "")).lower()
+    if "ambient" not in credential_posture:
+        fail(f"{label}.credential_posture must declare no ambient secrets")
+    network_posture = str(value.get("network_posture", "")).lower()
+    if "offline" not in network_posture and "allowlist" not in network_posture:
+        fail(f"{label}.network_posture must be offline or allowlisted")
 
 
 def has_nonempty_collection(value: Any) -> bool:
@@ -671,6 +710,16 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
         return value == expected_required_worker_chain(task)
     if field == "lifecycle_gates":
         return has_lifecycle_gates(value)
+    if field == "worker_type":
+        return has_nonempty_string(value)
+    if field == "factoryd_runtime":
+        return (
+            isinstance(value, dict)
+            and all(has_nonempty_string(value.get(runtime_field)) or runtime_field == "worker_command" for runtime_field in REQUIRED_FACTORYD_RUNTIME_FIELDS)
+            and "ambient" in str(value.get("credential_posture", "")).lower()
+        )
+    if field in ["validation_commands", "evidence_required", "stop_conditions"]:
+        return has_nonempty_list(value)
     if field == "security_scanner_gates":
         if not isinstance(value, dict):
             return False
@@ -760,6 +809,10 @@ def validate_context_brief(context: dict[str, Any]) -> None:
     decisions = context.get("alignment_decisions")
     if not isinstance(decisions, dict):
         fail("context-brief.json missing alignment_decisions")
+    validate_factoryd_runtime(
+        decisions.get("factoryd_runtime"),
+        "context-brief.json.alignment_decisions.factoryd_runtime",
+    )
     validate_mvp_eval_provider_adapters(
         decisions.get("mvp_eval_provider_adapters"),
         "context-brief.json.alignment_decisions.mvp_eval_provider_adapters",
@@ -777,6 +830,7 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
         plan.get("mvp_eval_provider_adapters"),
         "execution-plan.json.mvp_eval_provider_adapters",
     )
+    validate_factoryd_runtime(plan.get("factoryd_runtime"), "execution-plan.json.factoryd_runtime")
     validate_alignment_gate(plan.get("alignment_gate"), "execution-plan.json.alignment_gate")
     validate_plan_drift_policy(plan.get("plan_drift_policy"), "execution-plan.json.plan_drift_policy")
     for field in REQUIRED_PLAN_LEVEL_FIELDS:
@@ -958,6 +1012,33 @@ def validate_validation_contract(contract: dict[str, Any]) -> None:
             "validation-contract.json planning_skill_alignment.required_task_fields missing "
             f"execution-compiler fields: {missing_execution_fields}"
         )
+    factoryd_requirements = contract.get("factoryd_runtime_requirements")
+    if not isinstance(factoryd_requirements, dict):
+        fail("validation-contract.json missing factoryd_runtime_requirements")
+    missing_runner_ready = [
+        field
+        for field in REQUIRED_TASK_FIELDS
+        if field
+        in {
+            "worker_type",
+            "factoryd_runtime",
+            "validation_commands",
+            "evidence_required",
+            "stop_conditions",
+            "allowed_paths",
+            "forbidden_paths",
+            "required_worker_chain",
+            "lifecycle_gates",
+            "scope_exclusions",
+        }
+        and field not in factoryd_requirements.get("runner_ready_fields", [])
+    ]
+    if missing_runner_ready:
+        fail(f"validation-contract.json.factoryd_runtime_requirements.runner_ready_fields missing {missing_runner_ready}")
+    validate_factoryd_runtime(
+        factoryd_requirements.get("runtime"),
+        "validation-contract.json.factoryd_runtime_requirements.runtime",
+    )
     if contains_machine_local_path(contract):
         fail("validation-contract.json contains a machine-local absolute path")
     stop_conditions = contract.get("stop_conditions")
@@ -971,6 +1052,61 @@ def validate_validation_contract(contract: dict[str, Any]) -> None:
     ]
     if missing:
         fail(f"validation-contract.json stop_conditions missing guide categories: {missing}")
+
+
+def validate_factoryd_config(config: dict[str, Any]) -> None:
+    if contains_machine_local_path(config):
+        fail(".factory/factoryd.example.json contains a machine-local absolute path")
+    repos = config.get("repos")
+    if not isinstance(repos, dict) or "lumyn" not in repos:
+        fail(".factory/factoryd.example.json must define repos.lumyn")
+    lumyn = repos["lumyn"]
+    if not isinstance(lumyn, dict):
+        fail(".factory/factoryd.example.json repos.lumyn must be an object")
+    expected_paths = {
+        "repo_path": "..",
+        "task_packets": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+        "scope_closure_map": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        "validation_contract": ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+        "state_dir": "../.factoryd",
+        "workspace_root": "../.factoryd/workspaces",
+    }
+    for key, expected in expected_paths.items():
+        if lumyn.get(key) != expected:
+            fail(f".factory/factoryd.example.json repos.lumyn.{key} must be {expected!r}")
+    validate_factoryd_runtime(lumyn, ".factory/factoryd.example.json repos.lumyn")
+    commands = lumyn.get("validation_commands")
+    if not isinstance(commands, list) or "python3 scripts/validate_repo_pack.py" not in commands:
+        fail(".factory/factoryd.example.json must run validate_repo_pack.py")
+    shipping = lumyn.get("shipping")
+    if not isinstance(shipping, dict):
+        fail(".factory/factoryd.example.json repos.lumyn must declare shipping block")
+    if shipping.get("enabled") is not False or lumyn.get("auto_ship") is not False:
+        fail(".factory/factoryd.example.json must keep auto shipping disabled until remote lifecycle hooks are approved")
+    for key in [
+        "push_required",
+        "pr_required",
+        "ci_required",
+        "codex_review_required",
+        "merge_required",
+        "post_merge_required",
+        "scope_closure_required",
+    ]:
+        if shipping.get(key) is not False:
+            fail(f".factory/factoryd.example.json shipping.{key} must be false until hooks are approved")
+    for key in [
+        "push_command",
+        "open_pr_command",
+        "ci_command",
+        "codex_review_command",
+        "merge_command",
+        "post_merge_command",
+        "scope_closure_command",
+    ]:
+        if shipping.get(key) != "":
+            fail(f".factory/factoryd.example.json shipping.{key} must be empty until hooks are approved")
+    if ".factoryd/" not in (ROOT / ".gitignore").read_text():
+        fail(".gitignore must ignore .factoryd/")
 
 
 def validate_acceptance_mapping(mapping: dict[str, Any]) -> None:
@@ -1061,6 +1197,26 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
             "pr_lifecycle_report_required": True,
             "skip_policy": "approved_exception_required",
         },
+        "worker_type": "codex_cli",
+        "factoryd_runtime": {
+            "state_dir": ".factoryd/",
+            "workspace_root": ".factoryd/workspaces/",
+            "branch_prefix": "codex",
+            "worker_type": "codex_cli",
+            "worker_command": "",
+            "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+            "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+            "network_posture": "offline by default until live sandbox/model work is approved",
+        },
+        "validation_commands": ["make prepush-full"],
+        "evidence_required": ["validation_report", "work_proof_marker", "factoryd_run_once_report"],
+        "stop_conditions": [
+            "missing runner-ready task contract",
+            "changed path outside allowed_paths",
+            "forbidden path changed",
+            "required validation command failed",
+            "plan drift detected",
+        ],
         "test_matrix_refs": [{"tier": "Tier 1 Unit", "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix"}],
         "ci_lane_refs": [
             {
@@ -1453,6 +1609,7 @@ def main() -> int:
         plan = load_json(EXECUTION_PLAN)
         packets = load_json(TASK_PACKETS)
         contract = load_json(VALIDATION_CONTRACT)
+        factoryd_config = load_json(FACTORYD_CONFIG)
         acceptance_mapping = load_json(ACCEPTANCE_MAPPING)
         scope_closure_map = load_json(SCOPE_CLOSURE_MAP)
         risk_classification = load_json(RISK_CLASSIFICATION)
@@ -1462,6 +1619,7 @@ def main() -> int:
         for packet_path in REPAIR_TASK_PACKETS:
             validate_standalone_task_packet(load_json(packet_path), baseline_task_id)
         validate_validation_contract(contract)
+        validate_factoryd_config(factoryd_config)
         validate_acceptance_mapping(acceptance_mapping)
         validate_scope_closure_map(scope_closure_map)
         validate_risk_classification(risk_classification)
