@@ -284,10 +284,23 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
     if not isinstance(tasks, list):
         fail("task-packets.json must contain tasks list")
     tasks_by_id = {task_id(task): task for task in tasks if isinstance(task, dict) and task_id(task)}
+    if baseline_task_id not in tasks_by_id:
+        fail(f"task-packets.json missing propagation baseline task {baseline_task_id}")
     scoped_tasks = []
-    for candidate_id, task in tasks_by_id.items():
+    baseline_has_order_key = task_order_key(baseline_task_id) is not None
+    baseline_seen = False
+    for task in tasks:
+        if not isinstance(task, dict):
+            continue
+        candidate_id = task_id(task)
+        if not candidate_id:
+            continue
+        if candidate_id == baseline_task_id:
+            baseline_seen = True
         depends_on_baseline = depends_on(candidate_id, baseline_task_id, tasks_by_id)
-        ordered_after_baseline = at_or_after_baseline(task, baseline_task_id)
+        ordered_after_baseline = at_or_after_baseline(task, baseline_task_id) or (
+            not baseline_has_order_key and baseline_seen
+        )
         if ordered_after_baseline and not depends_on_baseline:
             fail(f"{candidate_id} is at or after propagation baseline {baseline_task_id} but does not depend on it")
         if depends_on_baseline or ordered_after_baseline:
@@ -357,6 +370,21 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected disconnected T3 task to fail")
+
+    slug_baseline_packets = {
+        "tasks": [
+            {"task_id": "task-context", "blocked_by": []},
+            propagated_task("task-dev-architecture-propagation", ["task-context"]),
+            propagated_task("feature-local-check", []),
+        ]
+    }
+    try:
+        validate_task_packets(slug_baseline_packets, "task-dev-architecture-propagation")
+    except AssertionError as exc:
+        if "does not depend on it" not in str(exc):
+            raise
+    else:
+        fail("self-test expected disconnected task after slug baseline to fail")
 
     placeholder_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
     placeholder_packets["tasks"][1]["ci_lane_refs"] = [{}]
