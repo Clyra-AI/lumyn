@@ -291,14 +291,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -594,14 +593,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -896,14 +894,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -1203,14 +1200,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -1251,14 +1247,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -1268,7 +1263,6 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "review_report",
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
@@ -1539,14 +1533,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -1556,7 +1549,6 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "review_report",
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
@@ -1832,14 +1824,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -1849,7 +1840,6 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "review_report",
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
@@ -2125,14 +2115,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -2142,7 +2131,6 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "review_report",
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
@@ -2420,14 +2408,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -2437,7 +2424,6 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "review_report",
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
@@ -2719,14 +2705,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -2736,7 +2721,6 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "review_report",
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
@@ -3019,14 +3003,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -3036,7 +3019,6 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "review_report",
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
@@ -3307,14 +3289,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -3324,7 +3305,6 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "review_report",
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
@@ -3614,14 +3594,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -3631,7 +3610,6 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "review_report",
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
@@ -3933,14 +3911,13 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
-        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": true,
+        "code_review_required": false,
         "codex_review_required": true,
         "ship_pr_required": true,
         "post_merge_monitor_required": true,
@@ -3950,7 +3927,6 @@
       "evidence_required": [
         "validation_report",
         "work_proof_marker",
-        "review_report",
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",

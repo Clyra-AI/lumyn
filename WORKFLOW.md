@@ -17,9 +17,8 @@ Lumyn accepts work from:
 2. `execution-compiler`
 3. `task-executor`
 4. `validation-gate`
-5. `code-review`
-6. `commit-push`
-7. `post-merge-monitor`
+5. `commit-push`
+6. `post-merge-monitor`
 
 ## Approval Gates
 
@@ -46,7 +45,7 @@ Lumyn accepts work from:
 - Local validation gate: `make prepush-full`.
 - CI status check: GitHub Actions workflow `.github/workflows/validate.yml`, check name `validate`, runs `make prepush-full`.
 - Security scanner: GitHub Actions workflow `.github/workflows/codeql.yml`, status source `CodeQL analyze`, required for dependency additions, generated-code intake, CI/workflow changes, external calls, redaction/share/live/eval/provider code, data exposure, and release-sensitive work.
-- Structured review: `code-review` must produce review evidence when risk, workflow policy, validation findings, or review policy require it.
+- Structured review: `code-review` must produce review evidence only when risk, workflow policy, validation findings, pre-release posture, or explicit review policy require it.
 - Shipping evidence: `commit-push` must produce or reference a ship packet before merge.
 - Post-merge monitoring: default branch health must be checked after merge and recorded when the task requires lifecycle evidence.
 - PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
@@ -77,7 +76,8 @@ Stop and request human decision if:
 - a proposed change writes outside declared allowed paths
 - redaction confidence is unknown for persisted artifacts
 - implementation would satisfy a command while violating explicit PRD scope exclusions
-- lifecycle gates are required but review, ship, CI/status, post-merge, or PR lifecycle evidence is missing without an approved exception
+- lifecycle gates are required but ship, CI/status, passive Codex review, post-merge, or PR lifecycle evidence is missing without an approved exception
+- structured `code-review` is required by risk, pre-release posture, validation findings, or review policy but review evidence is missing without an approved exception
 - a PR is merge-ready by CI but lacks latest-head passive Codex review settle evidence
 - GitHub `main` branch protection or the `protect-main-from-direct-push` ruleset is missing, disabled, or bypassable
 - scanner-gated work lacks CodeQL status evidence or an approved scanner exception

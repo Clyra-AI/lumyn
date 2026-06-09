@@ -21,7 +21,7 @@
         "redaction pipeline",
         "report rendering"
       ],
-      "validation_independence": "validation-gate or code-review must assess test adequacy"
+      "validation_independence": "validation-gate must assess test adequacy; code-review is reserved for pre-release, high-risk, validation-failed, or explicit review-policy escalation"
     },
     {
       "risk_class": "high",
