@@ -62,7 +62,7 @@ func commandMetadata() map[string]any {
 
 func isKnownCommand(command string) bool {
 	switch command {
-	case "help", "version", "init", "check", "record", "verify", "demo", "share", "eval":
+	case "help", "version", "init", "check", "record", "verify", "trace", "demo", "share", "eval":
 		return true
 	default:
 		return false
