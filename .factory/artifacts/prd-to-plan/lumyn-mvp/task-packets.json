@@ -23,9 +23,7 @@
         "Makefile",
         "README.md",
         "docs/dev/",
-        "docs/architecture/",
-        "pyproject.toml",
-        "src/lumyn/"
+        "docs/architecture/"
       ],
       "forbidden_paths": [
         ".git/",
@@ -115,16 +113,73 @@
       ]
     },
     {
-      "task_id": "T3",
-      "slice_type": "vertical",
-      "objective": "Implement `lumyn init` and `lumyn check` for local OpenAPI/docs source intake and workflow-relevant source findings.",
+      "task_id": "T2.5",
+      "slice_type": "foundation",
+      "objective": "Establish the repo delivery lifecycle baseline: GitHub Actions validation, documented PR lifecycle gates, and Factory PR lifecycle evidence requirements before product implementation continues.",
       "risk_class": "medium",
       "blocked_by": [
         "T1",
         "T2"
       ],
       "allowed_paths": [
-        "src/lumyn/",
+        ".github/workflows/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+        ".factory/artifacts/task-runs/T2.5/",
+        ".factory/artifacts/pr-lifecycle/T2.5/",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "Makefile",
+        "README.md",
+        "docs/dev/",
+        "docs/architecture/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/",
+        "runs/",
+        "cassettes/",
+        "workflows/",
+        "baselines/"
+      ],
+      "validation_commands": [
+        "make lint-fast",
+        "make test-contracts",
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        ".github/workflows/validate.yml exists and runs make prepush-full on pull_request and pushes to main.",
+        "Makefile lint-fast verifies the validate workflow uses Go 1.26.4 and make prepush-full.",
+        "WORKFLOW.md, AGENTS.md, README.md, docs/dev/dev_guides.md, and docs/architecture/architecture_guides.md document CI/status, review, ship-pr, post-merge, and PR lifecycle evidence.",
+        "T3 and later product implementation depend on the lifecycle baseline.",
+        "The later product-facing T9 CI/JUnit/PR-comment feature remains separate from this delivery baseline."
+      ],
+      "runtime": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "No new runtime dependency is required for the delivery lifecycle baseline."
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "scope_closure_map"
+      ]
+    },
+    {
+      "task_id": "T3",
+      "slice_type": "vertical",
+      "objective": "Implement `lumyn init` and `lumyn check` for local OpenAPI/docs source intake and workflow-relevant source findings.",
+      "risk_class": "medium",
+      "blocked_by": [
+        "T1",
+        "T2",
+        "T2.5"
+      ],
+      "allowed_paths": [
+        ".factory/artifacts/pr-lifecycle/T3/",
+        ".factory/artifacts/task-runs/T3/",
+        "cmd/lumyn/",
+        "internal/",
         "tests/",
         "examples/"
       ],
@@ -138,6 +193,31 @@
       "acceptance_checks": [
         "`lumyn init` writes valid config.",
         "`lumyn check` emits concrete source references."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "ship-pr",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "review_report",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map"
       ]
     },
     {
@@ -150,7 +230,10 @@
         "T3"
       ],
       "allowed_paths": [
-        "src/lumyn/",
+        ".factory/artifacts/pr-lifecycle/T4/",
+        ".factory/artifacts/task-runs/T4/",
+        "cmd/lumyn/",
+        "internal/",
         "tests/",
         "examples/mock-api/",
         "examples/workflows/"
@@ -165,6 +248,31 @@
       "acceptance_checks": [
         "Standard auth headers are redacted before persistence.",
         "State bindings and validator drafts are generated with confidence labels."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "ship-pr",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "review_report",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map"
       ]
     },
     {
@@ -176,7 +284,10 @@
         "T4"
       ],
       "allowed_paths": [
-        "src/lumyn/",
+        ".factory/artifacts/pr-lifecycle/T5/",
+        ".factory/artifacts/task-runs/T5/",
+        "cmd/lumyn/",
+        "internal/",
         "tests/",
         "examples/"
       ],
@@ -190,6 +301,31 @@
       "acceptance_checks": [
         "Replay is deterministic without network.",
         "Proof-gap and strong-proof examples are distinguishable."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "ship-pr",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "review_report",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map"
       ]
     },
     {
@@ -201,7 +337,10 @@
         "T5"
       ],
       "allowed_paths": [
-        "src/lumyn/",
+        ".factory/artifacts/pr-lifecycle/T6/",
+        ".factory/artifacts/task-runs/T6/",
+        "cmd/lumyn/",
+        "internal/",
         "tests/",
         "examples/traces/",
         "README.md"
@@ -216,6 +355,31 @@
       "acceptance_checks": [
         "Report first screen shows workflow, result, proof strength, why, evidence, fix target, and next command.",
         "`lumyn demo` opens bundled reports without model key, sandbox, or hosted account."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "ship-pr",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "review_report",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map"
       ]
     },
     {
@@ -227,7 +391,10 @@
         "T5"
       ],
       "allowed_paths": [
-        "src/lumyn/",
+        ".factory/artifacts/pr-lifecycle/T7/",
+        ".factory/artifacts/task-runs/T7/",
+        "cmd/lumyn/",
+        "internal/",
         "tests/",
         "docs/dev/"
       ],
@@ -245,6 +412,31 @@
       "requires_human_approval": [
         "sandbox credential posture",
         "network allowlist"
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "ship-pr",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "review_report",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map"
       ]
     },
     {
@@ -256,7 +448,10 @@
         "T5"
       ],
       "allowed_paths": [
-        "src/lumyn/",
+        ".factory/artifacts/pr-lifecycle/T8/",
+        ".factory/artifacts/task-runs/T8/",
+        "cmd/lumyn/",
+        "internal/",
         "schemas/",
         "tests/",
         "examples/workflows/"
@@ -271,6 +466,31 @@
       "acceptance_checks": [
         "Final-state pass plus forbidden-path violation fails the workflow.",
         "Unenforced declared controls never report as passed."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "ship-pr",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "review_report",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map"
       ]
     },
     {
@@ -283,8 +503,11 @@
         "T8"
       ],
       "allowed_paths": [
+        ".factory/artifacts/pr-lifecycle/T9/",
+        ".factory/artifacts/task-runs/T9/",
         ".github/workflows/",
-        "src/lumyn/",
+        "cmd/lumyn/",
+        "internal/",
         "tests/",
         "README.md"
       ],
@@ -299,6 +522,31 @@
         "CI emits JUnit-style output.",
         "PR summary names changed sources and affected workflows.",
         "Badge never reports stale cassettes as green."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "ship-pr",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "review_report",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map"
       ]
     },
     {
@@ -310,7 +558,10 @@
         "T6"
       ],
       "allowed_paths": [
-        "src/lumyn/",
+        ".factory/artifacts/pr-lifecycle/T10/",
+        ".factory/artifacts/task-runs/T10/",
+        "cmd/lumyn/",
+        "internal/",
         "tests/",
         "examples/traces/"
       ],
@@ -324,6 +575,31 @@
       "acceptance_checks": [
         "Share re-runs redaction before export.",
         "Share fails closed when any value cannot be confidently redacted."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "ship-pr",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "review_report",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map"
       ]
     },
     {
@@ -336,7 +612,10 @@
         "T8"
       ],
       "allowed_paths": [
-        "src/lumyn/",
+        ".factory/artifacts/pr-lifecycle/T11/",
+        ".factory/artifacts/task-runs/T11/",
+        "cmd/lumyn/",
+        "internal/",
         "tests/",
         "docs/architecture/"
       ],
@@ -367,7 +646,32 @@
           "base_url",
           "api_key_env"
         ]
-      }
+      },
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "ship-pr",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "review_report",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map"
+      ]
     },
     {
       "task_id": "T12",
@@ -378,7 +682,10 @@
         "T11"
       ],
       "allowed_paths": [
-        "src/lumyn/",
+        ".factory/artifacts/pr-lifecycle/T12/",
+        ".factory/artifacts/task-runs/T12/",
+        "cmd/lumyn/",
+        "internal/",
         "tests/",
         "baselines/",
         "examples/"
@@ -394,6 +701,31 @@
         "Eval compares against saved baseline where configured.",
         "Model snapshot uncertainty is labeled as drift risk.",
         "Failures include concrete trace evidence."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "code-review",
+        "ship-pr",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "review_report",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map"
       ]
     }
   ]

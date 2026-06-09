@@ -4,6 +4,16 @@
   "source_prd_ref": "docs/product/prd.md#Acceptance Tests",
   "groups": [
     {
+      "group_id": "factory_delivery_lifecycle_baseline",
+      "required": true,
+      "task_refs": [
+        "T2.5"
+      ],
+      "acceptance_refs": [
+        "Factory PR lifecycle baseline before first product implementation"
+      ]
+    },
+    {
       "group_id": "record_contract_replay_report",
       "required": true,
       "task_refs": [
@@ -53,4 +63,3 @@
     }
   ]
 }
-

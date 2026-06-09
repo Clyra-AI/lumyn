@@ -17,6 +17,10 @@
     {
       "ref": "WORKFLOW.md",
       "summary": "Deterministic bootstrap cannot use live credentials or network without human approval."
+    },
+    {
+      "ref": "WORKFLOW.md#PR Lifecycle Baseline",
+      "summary": "Factory delivery now requires local validation, CI/status checks, structured review, ship-pr evidence, post-merge monitoring, and PR lifecycle evidence before product implementation continues."
     }
   ],
   "assumptions": [
@@ -25,7 +29,8 @@
     "Use an OpenAI-compatible HTTP adapter as the first live eval provider interface when eval work starts.",
     "Keep the initial implementation deterministic and local-only.",
     "Treat live sandbox verification and live eval as required MVP work, but blocked until credential and network posture are explicitly approved.",
-    "Use repo-relative artifact references only."
+    "Use repo-relative artifact references only.",
+    "Keep Factory delivery lifecycle evidence separate from Lumyn product artifacts."
   ],
   "alignment_questions": [
     {
@@ -53,7 +58,8 @@
   "scope_risks": [
     "The MVP is broad because live verify, CI, share, and eval are all required before closure.",
     "Credential brokering is not needed for deterministic bootstrap but becomes blocking for live verify and eval.",
-    "Redaction must be designed before any trace/cassette/report persistence is trusted."
+    "Redaction must be designed before any trace/cassette/report persistence is trusted.",
+    "T1 and T2 used local validation and manual PR shipping; T2.5 closes the missing delivery-lifecycle baseline before T3."
   ],
   "recommended_worker_chain": [
     "scout-context",
@@ -90,6 +96,7 @@
     },
     "artifact_namespaces": {
       "factory_artifacts": ".factory/artifacts/",
+      "factory_pr_lifecycle": ".factory/artifacts/pr-lifecycle/",
       "factory_transient": ".factory/tmp/",
       "workflows": "workflows/",
       "cassettes": "cassettes/",

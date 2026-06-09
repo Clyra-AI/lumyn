@@ -62,6 +62,9 @@ Before PR or merge, run:
 - `make prepush-full`
 
 If any command is skipped, the validation report must record why.
+GitHub Actions `validate` must run the same full gate for pull requests and
+`main` pushes. Required review, shipping, post-merge, and PR lifecycle evidence
+must be recorded when a task packet declares lifecycle gates.
 
 ## 6. Alignment Pins
 
@@ -71,3 +74,4 @@ If any command is skipped, the validation report must record why.
 - First eval provider: OpenAI-compatible HTTP adapter behind a provider interface.
 - Artifact namespace: Factory artifacts in `.factory/artifacts/`; transient Factory material in `.factory/tmp/`; product artifacts in `workflows/`, `cassettes/`, `runs/`, `baselines/`, `schemas/`, and `examples/`.
 - Live sandbox, model-key, and network work is blocked until deterministic replay foundation passes and a human approves credential/network posture.
+- PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<task_id>/pr-lifecycle-report.json`.
