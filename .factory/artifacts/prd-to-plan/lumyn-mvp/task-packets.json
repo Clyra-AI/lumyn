@@ -5289,6 +5289,22 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "gated_by_acceptance_items": [
+        {
+          "acceptance_item_id": "PULL-001",
+          "required_status": "implemented",
+          "reason": "Live eval work must not start until product pull shows a user recorded more than one workflow.",
+          "source_ref": "docs/product/prd.md#product-pull",
+          "evidence_mode": "product_signal"
+        },
+        {
+          "acceptance_item_id": "PULL-004",
+          "required_status": "implemented",
+          "reason": "Live eval work must not start until product pull shows a user asked to run live eval before an API/docs release.",
+          "source_ref": "docs/product/prd.md#product-pull",
+          "evidence_mode": "product_signal"
+        }
       ]
     },
     {
@@ -5714,6 +5730,22 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "gated_by_acceptance_items": [
+        {
+          "acceptance_item_id": "PULL-001",
+          "required_status": "implemented",
+          "reason": "Live eval work must not start until product pull shows a user recorded more than one workflow.",
+          "source_ref": "docs/product/prd.md#product-pull",
+          "evidence_mode": "product_signal"
+        },
+        {
+          "acceptance_item_id": "PULL-004",
+          "required_status": "implemented",
+          "reason": "Live eval work must not start until product pull shows a user asked to run live eval before an API/docs release.",
+          "source_ref": "docs/product/prd.md#product-pull",
+          "evidence_mode": "product_signal"
+        }
       ]
     }
   ],

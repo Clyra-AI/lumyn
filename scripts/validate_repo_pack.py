@@ -124,6 +124,7 @@ REQUIRED_ACCEPTANCE_ITEM_IDS = {
 ACCEPTANCE_LEDGER_REF = ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
 ACCEPTANCE_MAPPING_REF = ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json"
 SCOPE_CLOSURE_MAP_REF = ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+REQUIRED_LIVE_EVAL_DISPATCH_GATES = {"PULL-001", "PULL-004"}
 
 REQUIRED_ACCEPTANCE_TASK_REFS = {
     "FR14": {"T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
@@ -965,6 +966,7 @@ def validate_task_execution_compiler_fields(task: dict[str, Any]) -> None:
     unknown_item_ids = sorted(str(value) for value in item_ids if str(value) not in REQUIRED_ACCEPTANCE_ITEM_IDS)
     if unknown_item_ids:
         fail(f"{task_id_value}.acceptance_item_ids references unknown ids: {unknown_item_ids}")
+    validate_acceptance_item_gates(task)
     inherited = task.get("validation_contract_inheritance")
     if isinstance(inherited, dict):
         if inherited.get("acceptance_ledger_ref") != ACCEPTANCE_LEDGER_REF:
@@ -984,6 +986,52 @@ def validate_task_execution_compiler_fields(task: dict[str, Any]) -> None:
     missing_forbidden = [path for path in RUNTIME_CONTROL_FORBIDDEN_PATHS if path not in forbidden_paths]
     if missing_forbidden:
         fail(f"{task_id_value}.forbidden_paths missing runtime-owned control paths: {missing_forbidden}")
+
+
+def validate_acceptance_item_gates(task: dict[str, Any]) -> None:
+    task_id_value = task_id(task)
+    gates = task.get("gated_by_acceptance_items")
+    if gates is None:
+        return
+    if not isinstance(gates, list) or not gates:
+        fail(f"{task_id_value}.gated_by_acceptance_items must be a non-empty list when present")
+    seen: set[str] = set()
+    for index, gate in enumerate(gates):
+        if not isinstance(gate, dict):
+            fail(f"{task_id_value}.gated_by_acceptance_items[{index}] must be an object")
+        item_id_value = str(gate.get("acceptance_item_id", "")).strip()
+        if not item_id_value:
+            fail(f"{task_id_value}.gated_by_acceptance_items[{index}].acceptance_item_id is required")
+        if item_id_value not in REQUIRED_ACCEPTANCE_ITEM_IDS:
+            fail(f"{task_id_value}.gated_by_acceptance_items[{index}] references unknown acceptance item {item_id_value}")
+        if item_id_value in seen:
+            fail(f"{task_id_value}.gated_by_acceptance_items contains duplicate gate {item_id_value}")
+        seen.add(item_id_value)
+        if gate.get("required_status") not in {"implemented", "deferred_with_approval"}:
+            fail(f"{task_id_value}.gated_by_acceptance_items[{index}].required_status must be implemented or deferred_with_approval")
+        if not has_nonempty_string(gate.get("reason")):
+            fail(f"{task_id_value}.gated_by_acceptance_items[{index}].reason is required")
+
+
+def validate_live_eval_dispatch_gates(task: dict[str, Any]) -> None:
+    task_id_value = task_id(task)
+    gates = task.get("gated_by_acceptance_items")
+    if not isinstance(gates, list):
+        fail(f"{task_id_value}.gated_by_acceptance_items must gate live eval dispatch")
+    by_id = {
+        str(gate.get("acceptance_item_id")): gate
+        for gate in gates
+        if isinstance(gate, dict)
+    }
+    missing = sorted(REQUIRED_LIVE_EVAL_DISPATCH_GATES - set(by_id))
+    if missing:
+        fail(f"{task_id_value}.gated_by_acceptance_items missing live eval pull gates: {missing}")
+    for required_id in REQUIRED_LIVE_EVAL_DISPATCH_GATES:
+        gate = by_id[required_id]
+        if gate.get("required_status") != "implemented":
+            fail(f"{task_id_value}.gated_by_acceptance_items[{required_id}].required_status must be implemented")
+        if gate.get("evidence_mode") != "product_signal":
+            fail(f"{task_id_value}.gated_by_acceptance_items[{required_id}].evidence_mode must be product_signal")
 
 
 def field_has_evidence(task: dict[str, Any], field: str) -> bool:
@@ -1279,6 +1327,8 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
             checks = "\n".join(str(value).lower() for value in task.get("acceptance_checks", []))
             if "openai-compatible" not in checks or "anthropic" not in checks:
                 fail("T11 acceptance_checks must name both OpenAI-compatible and Anthropic adapter coverage")
+        if current_task_id in {"T11", "T12"}:
+            validate_live_eval_dispatch_gates(task)
 
 
 def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: str) -> None:
@@ -1842,6 +1892,22 @@ def run_self_test() -> int:
     validate_task_packets(valid_packets, "T2.6")
     if contains_machine_local_path(".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate"):
         fail("self-test expected repo-relative JSON pointer to remain portable")
+
+    unknown_gate_task = propagated_task("T3", ["T2.6"])
+    unknown_gate_task["gated_by_acceptance_items"] = [
+        {
+            "acceptance_item_id": "PULL-999",
+            "required_status": "implemented",
+            "reason": "intentional invalid gate for self-test",
+        }
+    ]
+    try:
+        validate_task_execution_compiler_fields(unknown_gate_task)
+    except AssertionError as exc:
+        if "unknown acceptance item" not in str(exc):
+            raise
+    else:
+        fail("self-test expected unknown acceptance item gate to fail")
 
     nested_slice_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
