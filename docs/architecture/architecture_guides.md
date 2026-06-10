@@ -29,7 +29,7 @@
 
 - State lives in repo-local config, workflow contracts, cassettes, run artifacts, baselines, schemas, and Factory evidence artifacts.
 - Source of truth for MVP scope is `docs/product/prd.md`; source of truth for governed delivery state is `.factory/artifacts/prd-to-plan/lumyn-mvp/`.
-- Feedback lives in command-result JSON, schema validation, tests, CodeQL status, validation reports, PR lifecycle reports, and scope closure.
+- Feedback lives in command-result JSON, schema validation, tests, coverage gates, CodeQL status, validation reports, PR lifecycle reports, and scope closure.
 - Deleting schemas breaks artifact validation; deleting cassettes breaks replay; deleting redaction rules risks unsafe persistence; deleting Factory evidence breaks governed closure.
 - Medium/high risk tasks must record blast radius and rollback or deletion checks in task evidence or review evidence.
 
@@ -81,6 +81,7 @@ Require an ADR or decision note when a task changes:
 - `schemas/`: executable JSON Schema contracts for workflow, evidence, cassette, proof, result, redaction, and related artifact models.
 - `.github/workflows/validate.yml`: repository delivery gate that runs `make prepush-full` for PR and `main` validation.
 - `.github/workflows/codeql.yml`: repository risk-lane security scanner for CodeQL Go analysis.
+- `.factory/tmp/coverage.out`: ignored local/CI coverage profile emitted by `make test-coverage`.
 - `.factory/artifacts/pr-lifecycle/`: Factory delivery evidence tying PR validation, CI/status checks, review, shipping, merge, and post-merge monitoring together.
 
 Use Go `1.26.4`. T1 stays standard-library-only. T2 introduces the pinned

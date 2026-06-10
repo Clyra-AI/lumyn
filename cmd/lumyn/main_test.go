@@ -7,7 +7,9 @@ import (
 	"os/exec"
 	"path/filepath"
 	"testing"
+	"time"
 
+	"github.com/Clyra-AI/lumyn/internal/exitcode"
 	"github.com/santhosh-tekuri/jsonschema/v5"
 )
 
@@ -85,6 +87,74 @@ func TestCLIAcceptsRequiredTraceCommand(t *testing.T) {
 	if payload["status"] != "pass" {
 		t.Fatalf("status = %v, want pass", payload["status"])
 	}
+}
+
+func TestCommandResultForArgsDefaultsToHelp(t *testing.T) {
+	payload, code := commandResultForArgs(nil, time.Now())
+	if code != exitcode.Success {
+		t.Fatalf("exit code = %d, want %d", code, exitcode.Success)
+	}
+	if payload.Command != "help" {
+		t.Fatalf("command = %q, want help", payload.Command)
+	}
+	if payload.Status != "pass" {
+		t.Fatalf("status = %q, want pass", payload.Status)
+	}
+	if payload.Metadata["runtime"] != "go" {
+		t.Fatalf("metadata.runtime = %v, want go", payload.Metadata["runtime"])
+	}
+}
+
+func TestCommandResultForArgsRejectsUnknownCommand(t *testing.T) {
+	payload, code := commandResultForArgs([]string{"nope"}, time.Now())
+	if code != exitcode.InvalidUsageOrInput {
+		t.Fatalf("exit code = %d, want %d", code, exitcode.InvalidUsageOrInput)
+	}
+	if payload.Status != "fail" {
+		t.Fatalf("status = %q, want fail", payload.Status)
+	}
+	if len(payload.Errors) != 1 || payload.Errors[0].Code != "unknown_command" {
+		t.Fatalf("errors = %#v, want unknown_command", payload.Errors)
+	}
+}
+
+func TestCommandFromArgsUsesFirstArg(t *testing.T) {
+	if got := commandFromArgs([]string{"verify", "ignored"}); got != "verify" {
+		t.Fatalf("commandFromArgs = %q, want verify", got)
+	}
+}
+
+func TestRunWritesEnvelopeAndReturnsExitCode(t *testing.T) {
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	code := run([]string{"check"}, &stdout, &stderr, time.Now())
+	if code != exitcode.Success {
+		t.Fatalf("exit code = %d, want %d", code, exitcode.Success)
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("stderr = %q, want empty", stderr.String())
+	}
+	payload := decodeCommandResult(t, stdout.Bytes())
+	if payload["command"] != "check" {
+		t.Fatalf("command = %v, want check", payload["command"])
+	}
+}
+
+func TestRunReturnsInternalErrorWhenEncodeFails(t *testing.T) {
+	var stderr bytes.Buffer
+	code := run([]string{"check"}, errWriter{}, &stderr, time.Now())
+	if code != exitcode.InternalError {
+		t.Fatalf("exit code = %d, want %d", code, exitcode.InternalError)
+	}
+	if !bytes.Contains(stderr.Bytes(), []byte("encode command result")) {
+		t.Fatalf("stderr = %q, want encode error", stderr.String())
+	}
+}
+
+type errWriter struct{}
+
+func (errWriter) Write([]byte) (int, error) {
+	return 0, errors.New("write failed")
 }
 
 func buildTestBinary(t *testing.T) string {

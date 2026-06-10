@@ -35,6 +35,7 @@
       "validation_commands": [
         "make lint-fast",
         "make test-fast",
+        "make test-coverage",
         "make test-contracts"
       ],
       "acceptance_checks": [
@@ -61,7 +62,8 @@
         "validation_report",
         "work_proof_marker",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "planning_skill_refs": [
         "factory://skills/prd-to-plan",
@@ -324,8 +326,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     },
     {
       "task_id": "T2",
@@ -354,6 +383,7 @@
       ],
       "validation_commands": [
         "make test-fast",
+        "make test-coverage",
         "make test-contracts",
         "make prepush-full"
       ],
@@ -376,7 +406,8 @@
         "validation_report",
         "work_proof_marker",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "planning_skill_refs": [
         "factory://skills/prd-to-plan",
@@ -648,8 +679,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     },
     {
       "task_id": "T2.5",
@@ -682,6 +740,7 @@
       ],
       "validation_commands": [
         "make lint-fast",
+        "make test-coverage",
         "make test-contracts",
         "make prepush-full"
       ],
@@ -702,7 +761,8 @@
         "validation_report",
         "work_proof_marker",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "planning_skill_refs": [
         "factory://skills/prd-to-plan",
@@ -971,8 +1031,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     },
     {
       "task_id": "T2.6",
@@ -1006,6 +1093,7 @@
       ],
       "validation_commands": [
         "make lint-fast",
+        "make test-coverage",
         "make test-contracts",
         "make prepush-full"
       ],
@@ -1013,7 +1101,7 @@
         "docs/dev/dev_guides.md preserves all 12 test tiers with active, planned, reserved, or blocked status.",
         ".github/workflows/codeql.yml exists and configures CodeQL Go analysis for pull_request and main pushes.",
         "Makefile lint-fast verifies the CodeQL workflow and Go language binding are present.",
-        "T3 and later product task packets carry test_matrix_refs, security_scanner_gates, and architecture_guidance_refs.",
+        "T3 and later product task packets carry test_matrix_refs, coverage_policy_refs, security_scanner_gates, and architecture_guidance_refs.",
         "The validation contract has a security_scanning block and stop conditions for missing scanner evidence.",
         "docs/dev/dev_guides.md maps fast, core, acceptance, cross-platform, risk, and release lanes.",
         "docs/dev/dev_guides.md defines docs parity, output contracts, release integrity, and provenance evidence rules.",
@@ -1093,7 +1181,8 @@
         "validation_report",
         "work_proof_marker",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "ci_lane_refs": [
         {
@@ -1299,8 +1388,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     },
     {
       "task_id": "T3",
@@ -1327,6 +1443,7 @@
         ".factory/tmp/"
       ],
       "validation_commands": [
+        "make test-coverage",
         "make prepush-full"
       ],
       "acceptance_checks": [
@@ -1356,7 +1473,8 @@
         "post_merge_report",
         "pr_lifecycle_report",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "test_matrix_refs": [
         {
@@ -1608,8 +1726,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     },
     {
       "task_id": "T4",
@@ -1636,6 +1781,7 @@
         ".factory/tmp/"
       ],
       "validation_commands": [
+        "make test-coverage",
         "make prepush-full"
       ],
       "acceptance_checks": [
@@ -1665,7 +1811,8 @@
         "post_merge_report",
         "pr_lifecycle_report",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "test_matrix_refs": [
         {
@@ -1924,8 +2071,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     },
     {
       "task_id": "T5",
@@ -1950,6 +2124,7 @@
         ".factory/tmp/"
       ],
       "validation_commands": [
+        "make test-coverage",
         "make prepush-full"
       ],
       "acceptance_checks": [
@@ -1979,7 +2154,8 @@
         "post_merge_report",
         "pr_lifecycle_report",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "test_matrix_refs": [
         {
@@ -2237,8 +2413,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     },
     {
       "task_id": "T6",
@@ -2264,6 +2467,7 @@
         ".factory/tmp/"
       ],
       "validation_commands": [
+        "make test-coverage",
         "make prepush-full"
       ],
       "acceptance_checks": [
@@ -2293,7 +2497,8 @@
         "post_merge_report",
         "pr_lifecycle_report",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "test_matrix_refs": [
         {
@@ -2550,8 +2755,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     },
     {
       "task_id": "T7",
@@ -2576,6 +2808,7 @@
         ".factory/tmp/"
       ],
       "validation_commands": [
+        "make test-coverage",
         "make prepush-full"
       ],
       "acceptance_checks": [
@@ -2609,7 +2842,8 @@
         "post_merge_report",
         "pr_lifecycle_report",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "test_matrix_refs": [
         {
@@ -2873,8 +3107,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     },
     {
       "task_id": "T8",
@@ -2900,6 +3161,7 @@
         ".factory/tmp/"
       ],
       "validation_commands": [
+        "make test-coverage",
         "make prepush-full"
       ],
       "acceptance_checks": [
@@ -2929,7 +3191,8 @@
         "post_merge_report",
         "pr_lifecycle_report",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "test_matrix_refs": [
         {
@@ -3192,8 +3455,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     },
     {
       "task_id": "T9",
@@ -3220,6 +3510,7 @@
         ".factory/tmp/"
       ],
       "validation_commands": [
+        "make test-coverage",
         "make prepush-full"
       ],
       "acceptance_checks": [
@@ -3250,7 +3541,8 @@
         "post_merge_report",
         "pr_lifecycle_report",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "test_matrix_refs": [
         {
@@ -3504,8 +3796,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     },
     {
       "task_id": "T10",
@@ -3530,6 +3849,7 @@
         ".factory/tmp/"
       ],
       "validation_commands": [
+        "make test-coverage",
         "make prepush-full"
       ],
       "acceptance_checks": [
@@ -3559,7 +3879,8 @@
         "post_merge_report",
         "pr_lifecycle_report",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "test_matrix_refs": [
         {
@@ -3823,8 +4144,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     },
     {
       "task_id": "T11",
@@ -3850,6 +4198,7 @@
         ".factory/tmp/"
       ],
       "validation_commands": [
+        "make test-coverage",
         "make prepush-full"
       ],
       "acceptance_checks": [
@@ -3887,7 +4236,8 @@
         "post_merge_report",
         "pr_lifecycle_report",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "test_matrix_refs": [
         {
@@ -4170,8 +4520,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     },
     {
       "task_id": "T12",
@@ -4197,6 +4574,7 @@
         ".factory/tmp/"
       ],
       "validation_commands": [
+        "make test-coverage",
         "make prepush-full"
       ],
       "acceptance_checks": [
@@ -4227,7 +4605,8 @@
         "post_merge_report",
         "pr_lifecycle_report",
         "scope_closure_map",
-        "factoryd_run_once_report"
+        "factoryd_run_once_report",
+        "coverage_gate_result"
       ],
       "test_matrix_refs": [
         {
@@ -4490,8 +4869,35 @@
         "required validation command failed",
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
-        "credential or network access required before approval posture is unlocked"
-      ]
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      }
     }
   ],
   "runtime_pins": {

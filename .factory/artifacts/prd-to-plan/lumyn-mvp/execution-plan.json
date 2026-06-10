@@ -135,6 +135,7 @@
       "engineering_policy_refs",
       "ci_lane_refs",
       "test_matrix_refs",
+      "coverage_policy_refs",
       "security_scanner_gates",
       "architecture_guidance_refs",
       "planning_skill_refs",
@@ -171,7 +172,8 @@
       "All current task packets carry inherited guide refs and planning-skill fields; future task packets must do the same or record an approved exception.",
       "T2.6 now also enforces Factory prd-to-plan and execution-compiler story fields before T3 product implementation.",
       "T2.6 now enforces Factory compatibility, alignment-gate refs, plan-drift refs, explicit scope exclusions, canonical worker chains, and lifecycle gates on every task packet.",
-      "Runtime pins now preserve the current Factory profile shape as well as Lumyn-specific Go aliases."
+      "Runtime pins now preserve the current Factory profile shape as well as Lumyn-specific Go aliases.",
+      "T2.6 now propagates coverage gates and coverage exceptions from docs/dev/dev_guides.md before T3 product implementation."
     ],
     "ci_lanes": {
       "fast": [
@@ -209,6 +211,32 @@
       "performance": "Replay/eval/report hot paths and model-cost paths require budget notes and validation or approved exception.",
       "reliability": "Retries, cleanup, persistence, filesystem mutation, redaction, live network, and provider work require hardening checks and failure-mode evidence.",
       "failure_semantics": "Ambiguous proof, redaction, credential, stale cassette, undeclared control, or scanner state fails closed."
+    },
+    "coverage_policy": {
+      "required": true,
+      "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+      "minimums": [
+        {
+          "scope": "go_first_party_packages_overall",
+          "threshold": 75,
+          "command_refs": [
+            "make test-coverage"
+          ]
+        },
+        {
+          "scope": "go_stable_command_or_core_packages",
+          "threshold": 85,
+          "command_refs": [
+            "make test-coverage"
+          ],
+          "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+        }
+      ],
+      "command_refs": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
     }
   },
   "planning_skill_alignment": {
@@ -227,7 +255,8 @@
       "task packets carry scope_exclusions, alignment_gate_ref, and plan_drift_policy_ref inherited from the execution plan",
       "task packets carry allowed_paths and forbidden_paths before factoryd dispatch",
       "runtime pins use the current Factory runtime-pins contract including toolchain_version, module_or_package_path, provider_policy, artifact_namespace, and live_work_policy",
-      "task packets that are runner-ready carry worker_type, factoryd_runtime, validation_commands, evidence_required, and stop_conditions before factoryd dispatch"
+      "task packets that are runner-ready carry worker_type, factoryd_runtime, validation_commands, evidence_required, and stop_conditions before factoryd dispatch",
+      "task packets carry coverage_policy_refs for first-party code, tests, CI, package-boundary, and generated-code work"
     ],
     "evidence_refs": [
       "docs/dev/dev_guides.md",

@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"time"
 
@@ -12,11 +13,23 @@ import (
 )
 
 func main() {
-	started := time.Now()
-	command := "help"
-	if len(os.Args) > 1 {
-		command = os.Args[1]
+	os.Exit(run(os.Args[1:], os.Stdout, os.Stderr, time.Now()))
+}
+
+func run(args []string, stdout io.Writer, stderr io.Writer, started time.Time) int {
+	payload, exitCode := commandResultForArgs(args, started)
+
+	encoder := json.NewEncoder(stdout)
+	encoder.SetIndent("", "  ")
+	if err := encoder.Encode(payload); err != nil {
+		fmt.Fprintf(stderr, "encode command result: %v\n", err)
+		return exitcode.InternalError
 	}
+	return exitCode
+}
+
+func commandResultForArgs(args []string, started time.Time) (result.CommandResult, int) {
+	command := commandFromArgs(args)
 	status := "pass"
 	exitCode := exitcode.Success
 	errors := []result.CommandError{}
@@ -43,13 +56,14 @@ func main() {
 		RedactionStatus: "not_applicable",
 	}
 
-	encoder := json.NewEncoder(os.Stdout)
-	encoder.SetIndent("", "  ")
-	if err := encoder.Encode(payload); err != nil {
-		fmt.Fprintf(os.Stderr, "encode command result: %v\n", err)
-		os.Exit(exitcode.InternalError)
+	return payload, exitCode
+}
+
+func commandFromArgs(args []string) string {
+	if len(args) == 0 {
+		return "help"
 	}
-	os.Exit(exitCode)
+	return args[0]
 }
 
 func commandMetadata() map[string]any {

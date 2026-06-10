@@ -37,6 +37,7 @@ Post-MVP exclusions include MCP recording, event assertions, hosted dashboards, 
 ```bash
 make lint-fast
 make test-fast
+make test-coverage
 make test-contracts
 make prepush-full
 ```
@@ -52,6 +53,8 @@ planning artifacts.
 GitHub Actions runs `make prepush-full` through the `validate` workflow on pull
 requests and pushes to `main`.
 GitHub Actions also runs CodeQL Go analysis through the `codeql` workflow.
+Coverage-gated changes require `make test-coverage` evidence or an approved
+scoped exception.
 Scanner-gated changes require CodeQL status evidence or an approved exception.
 GitHub `main` branch protection and the `protect-main-from-direct-push` ruleset
 can be audited with `make audit-remote-protection` when GitHub credentials are

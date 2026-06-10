@@ -40,6 +40,7 @@ Lumyn accepts work from:
 ## Bootstrap Validation Lanes
 
 - Fast lane: `make lint-fast`, `make test-fast`
+- Coverage lane: `make test-coverage`
 - Contract lane: `make test-contracts`
 - Full lane: `make prepush-full`
 
@@ -48,6 +49,7 @@ Lumyn accepts work from:
 - Local validation gate: `make prepush-full`.
 - CI status check: GitHub Actions workflow `.github/workflows/validate.yml`, check name `validate`, runs `make prepush-full`.
 - Security scanner: GitHub Actions workflow `.github/workflows/codeql.yml`, status source `CodeQL analyze`, required for dependency additions, generated-code intake, CI/workflow changes, external calls, redaction/share/live/eval/provider code, data exposure, and release-sensitive work.
+- Coverage gate: `make test-coverage`, included in `make prepush-full`, required for first-party code, tests, CI, generated code, or package-boundary work unless an approved scoped exception is recorded.
 - Structured review: `code-review` must produce review evidence only when risk, workflow policy, validation findings, pre-release posture, or explicit review policy require it.
 - Shipping evidence: `commit-push` must produce or reference a ship packet before merge.
 - Post-merge monitoring: default branch health must be checked after merge and recorded when the task requires lifecycle evidence.

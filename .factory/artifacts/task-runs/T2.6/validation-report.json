@@ -40,7 +40,7 @@
       "evidence_ref": ".github/workflows/codeql.yml"
     },
     {
-      "check": "T3 and later product task packets carry ci_lane_refs, test_matrix_refs, security_scanner_gates, engineering_policy_refs, and architecture_guidance_refs.",
+      "check": "T3 and later product task packets carry ci_lane_refs, test_matrix_refs, coverage_policy_refs, security_scanner_gates, engineering_policy_refs, and architecture_guidance_refs.",
       "status": "passed",
       "evidence_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json"
     },
@@ -60,7 +60,7 @@
       "evidence_ref": "docs/architecture/architecture_guides.md#systems-thinking-map"
     },
     {
-      "check": "T3 and later product task packets carry ci_lane_refs, test_matrix_refs, security_scanner_gates, engineering_policy_refs, and architecture_guidance_refs.",
+      "check": "T3 and later product task packets carry ci_lane_refs, test_matrix_refs, coverage_policy_refs, security_scanner_gates, engineering_policy_refs, and architecture_guidance_refs.",
       "status": "passed",
       "evidence_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json"
     }
