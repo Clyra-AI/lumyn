@@ -147,6 +147,7 @@ TASK_VERSION_SLICE_REFS = {
     for task_ref in spec["task_refs"]
 }
 TASK_VERSION_SLICE_REFS["T10"] = {"v0.0", "v0.1"}
+DOTTED_TASK_PARENT_SLICE_EXEMPTIONS = {"T2.5", "T2.6"}
 
 REQUIRED_ACCEPTANCE_TASK_REFS = {
     "FR14": {"T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
@@ -567,7 +568,14 @@ def base_task_id(value: Any) -> str:
     if not isinstance(value, str):
         return ""
     match = re.match(r"^(T\d+(?:\.\d+)*)", value.strip(), re.IGNORECASE)
-    return match.group(1) if match else value.strip()
+    candidate = match.group(1) if match else value.strip()
+    if candidate in TASK_VERSION_SLICE_REFS or candidate in DOTTED_TASK_PARENT_SLICE_EXEMPTIONS:
+        return candidate
+    if "." in candidate:
+        parent = candidate.split(".", 1)[0]
+        if parent in TASK_VERSION_SLICE_REFS:
+            return parent
+    return candidate
 
 
 def expected_task_version_slices(task_id_value: str) -> set[str]:
@@ -2066,6 +2074,10 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
 def run_self_test() -> int:
     valid_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
     validate_task_packets(valid_packets, "T2.6")
+    if expected_task_version_slices("T11.1") != {"v0.2"}:
+        fail("self-test expected dotted live-eval task to inherit parent v0.2 delivery slice")
+    if expected_task_version_slices("T2.5"):
+        fail("self-test expected T2.5 lifecycle baseline task to remain delivery-slice exempt")
     if contains_machine_local_path(".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate"):
         fail("self-test expected repo-relative JSON pointer to remain portable")
 
@@ -2133,6 +2145,18 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected missing delivery_slice_refs to fail")
+
+    missing_dotted_delivery_slice_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T11.1", ["T2.6", "T11"])]
+    }
+    missing_dotted_delivery_slice_packets["tasks"][1].pop("delivery_slice_refs", None)
+    try:
+        validate_task_packets(missing_dotted_delivery_slice_packets, "T2.6")
+    except AssertionError as exc:
+        if "delivery_slice_refs" not in str(exc):
+            raise
+    else:
+        fail("self-test expected dotted task missing delivery_slice_refs to fail")
 
     deprecated_worker_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
