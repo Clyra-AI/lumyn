@@ -168,6 +168,56 @@
       ]
     },
     {
+      "group_id": "activation_success_metrics",
+      "title": "Activation success metrics",
+      "source_ref": "docs/product/prd.md#success-metrics",
+      "required": true,
+      "task_refs": [
+        "T6",
+        "T3",
+        "T4",
+        "T5"
+      ],
+      "acceptance_refs": [
+        "ACT-001",
+        "ACT-002",
+        "ACT-003",
+        "ACT-004"
+      ],
+      "acceptance_item_ids": [
+        "ACT-001",
+        "ACT-002",
+        "ACT-003",
+        "ACT-004"
+      ]
+    },
+    {
+      "group_id": "product_pull_success_metrics",
+      "title": "Product pull success metrics",
+      "source_ref": "docs/product/prd.md#success-metrics",
+      "required": true,
+      "task_refs": [
+        "T11",
+        "T9",
+        "T7",
+        "T6"
+      ],
+      "acceptance_refs": [
+        "PULL-001",
+        "PULL-002",
+        "PULL-003",
+        "PULL-004",
+        "PULL-005"
+      ],
+      "acceptance_item_ids": [
+        "PULL-001",
+        "PULL-002",
+        "PULL-003",
+        "PULL-004",
+        "PULL-005"
+      ]
+    },
+    {
       "group_id": "functional_requirements",
       "title": "Functional requirements",
       "source_ref": "docs/product/prd.md#functional-requirements",
