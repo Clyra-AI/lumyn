@@ -87,6 +87,12 @@ requests, strict `validate` and `CodeQL analyze` checks, admin enforcement,
 conversation resolution, and no force-push or deletion bypass. Verify the live
 remote state with `make audit-remote-protection` when GitHub credentials are
 available.
+`.github/required-checks.json` must list the required checks that protect
+`main`. `.github/CODEOWNERS` must cover workflow, policy, schema, Factory
+artifact, CLI, and core implementation paths. GitHub Actions workflows must
+declare least-privilege permissions, concurrency cancellation, job timeouts, and
+toolchain setup from pinned repo files. Non-SHA action refs require audited
+exception records in `.github/action-ref-exceptions.yaml`.
 
 ## 6. Alignment Pins
 
@@ -99,5 +105,9 @@ available.
 - PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
 - Test matrix and architecture propagation source: `docs/dev/dev_guides.md` and `docs/architecture/architecture_guides.md`.
 - Product task packets must preserve CI lane refs, docs parity, output contract, release integrity, provenance, systems-thinking, TDD, ADR, performance, reliability, and fail-closed requirements from those guides.
+- Product task packets touching CI, workflow, policy, scanner, shipping, or
+  lifecycle gates must preserve required-check metadata, workflow permissions,
+  concurrency, timeout, toolchain-pin, owner-review, action-ref, and branch
+  protection evidence or approved exceptions.
 - Product task packets must also preserve Factory `prd-to-plan` / `execution-compiler` fields for Factory compatibility, explicit scope exclusions, alignment gate refs, plan-drift refs, runtime pins, slice rationale, changelog/versioning intent, contract impact, architecture constraints, ADR posture, TDD-first evidence, cost/perf impact, failure hypotheses, semantic invariants, canonical worker chains, and lifecycle gates.
 - Runner-ready task packets must declare `worker_type`, `factoryd_runtime`, `validation_commands`, `evidence_required`, and `stop_conditions` before daemon dispatch.

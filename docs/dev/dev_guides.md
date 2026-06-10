@@ -74,6 +74,10 @@ coverage exception.
 - GitHub Actions workflow: `.github/workflows/validate.yml`.
 - Required check name: `validate`.
 - CI command: `make prepush-full`.
+- Required-check manifest: `.github/required-checks.json`, expected checks `validate` and `CodeQL analyze`.
+- Owner-review coverage: `.github/CODEOWNERS`, covering workflow, policy, Factory artifact, schema, CLI, and core implementation paths.
+- Workflow hardening: validate and CodeQL workflows declare least-privilege permissions, concurrency cancellation, job timeouts, and toolchain setup from pinned repo files.
+- Action-ref posture: `.github/action-ref-exceptions.yaml` records audited exceptions for non-SHA action refs with owner, reason, scope, expiry, and review command.
 - PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
 - Lifecycle-gated tasks require local validation, CI/status evidence, review evidence when required, ship evidence, post-merge evidence, and a PR lifecycle report or an explicit approved exception.
 - Passive Codex review settle is required before merge when the repository review integration is enabled.
@@ -102,6 +106,10 @@ coverage exception.
 - Any new dependency must be pinned in `go.mod`, justified in the task evidence, and covered by validation.
 - Schema/artifact changes must include representative validation coverage in `schemas/`.
 - Changes to CI, review, shipping, or post-merge workflow must update `WORKFLOW.md`, this guide, and the relevant Factory planning artifacts in the same branch.
+- Changes to CI, workflow, policy, or lifecycle gates must keep
+  `.github/required-checks.json`, `.github/CODEOWNERS`,
+  `.github/action-ref-exceptions.yaml`, `scripts/validate_repo_pack.py`, and
+  the workflow files aligned.
 - Changes that affect T3+ task planning must keep `scripts/validate_repo_pack.py`
   green so product task packets preserve CI lanes, 12-level test matrix refs,
   scanner gates, engineering policy refs, architecture guidance refs, and the

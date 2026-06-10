@@ -4,7 +4,7 @@
   "task_id": "T2.5",
   "source_task_packet_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2.5",
   "status": "pass",
-  "validated_at": "2026-06-09T03:40:04Z",
+  "validated_at": "2026-06-10T00:00:00Z",
   "commands": [
     {
       "command": "make lint-fast",
@@ -32,6 +32,14 @@
     },
     {
       "command": "rm -rf .factory/tmp && make prepush-full",
+      "status": "pass"
+    },
+    {
+      "command": "python3 scripts/validate_repo_pack.py",
+      "status": "pass"
+    },
+    {
+      "command": "make test-coverage",
       "status": "pass"
     }
   ],
@@ -65,6 +73,31 @@
       "check": "The later product-facing T9 CI/JUnit/PR-comment feature remains separate from this delivery baseline.",
       "status": "pass",
       "evidence": "docs/architecture/architecture_guides.md"
+    },
+    {
+      "check": ".github/required-checks.json lists validate and CodeQL analyze as required checks.",
+      "status": "pass",
+      "evidence": ".github/required-checks.json"
+    },
+    {
+      "check": ".github/workflows/validate.yml and .github/workflows/codeql.yml declare permissions, concurrency, timeouts, and toolchain setup from go.mod.",
+      "status": "pass",
+      "evidence": ".github/workflows/validate.yml; .github/workflows/codeql.yml"
+    },
+    {
+      "check": ".github/CODEOWNERS covers workflow, policy, Factory artifact, schema, CLI, and core implementation paths.",
+      "status": "pass",
+      "evidence": ".github/CODEOWNERS"
+    },
+    {
+      "check": ".github/action-ref-exceptions.yaml records audited exceptions for non-SHA GitHub Action refs.",
+      "status": "pass",
+      "evidence": ".github/action-ref-exceptions.yaml"
+    },
+    {
+      "check": "scripts/validate_repo_pack.py enforces the CI control set.",
+      "status": "pass",
+      "evidence": "scripts/validate_repo_pack.py"
     }
   ],
   "skipped_commands": [],
