@@ -1348,6 +1348,8 @@ def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: st
     validate_task_guide_sources(packet)
     validate_task_planning_skill_fields(packet)
     validate_task_execution_compiler_fields(packet)
+    if task_id_value in {"T11", "T12"}:
+        validate_live_eval_dispatch_gates(packet)
 
 
 def validate_validation_contract(contract: dict[str, Any]) -> None:
@@ -1908,6 +1910,15 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected unknown acceptance item gate to fail")
+
+    missing_standalone_live_eval_gate = propagated_task("T11", ["T2.6"])
+    try:
+        validate_standalone_task_packet(missing_standalone_live_eval_gate, "T2.6")
+    except AssertionError as exc:
+        if "must gate live eval dispatch" not in str(exc):
+            raise
+    else:
+        fail("self-test expected standalone live-eval packet without pull gates to fail")
 
     nested_slice_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
