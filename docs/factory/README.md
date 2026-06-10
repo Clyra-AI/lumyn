@@ -27,16 +27,27 @@ CI, docs, and product evidence.
 Start with non-mutating proof:
 
 ```text
+export FACTORY_REPO=../factory
 factoryd doctor --config .factory/factoryd.example.json --repo lumyn --json
 factoryd run --config .factory/factoryd.example.json --repo lumyn --dry-run --json
 ```
 
-Run implementation only after the selected task packet has allowed paths,
-forbidden paths, validation commands, evidence requirements, lifecycle gates,
-and stop conditions:
+Run one implementation task without remote shipping only after the selected
+task packet has allowed paths, forbidden paths, validation commands, evidence
+requirements, lifecycle gates, and stop conditions:
 
 ```text
-FACTORY_REPO=/path/to/factory factoryd run --config .factory/factoryd.autoship.example.json --repo lumyn --loop --max-tasks 1 --json
+export FACTORY_REPO=../factory
+factoryd run --config .factory/factoryd.example.json --repo lumyn --once --json
+```
+
+Use autoship only after branch protection, required `validate` and
+`CodeQL analyze` checks, passive Codex review settle, merge policy, post-merge
+monitoring, and semantic scope-closure evidence are all verified:
+
+```text
+export FACTORY_REPO=../factory
+factoryd run --config .factory/factoryd.autoship.example.json --repo lumyn --loop --max-tasks 1 --json
 ```
 
 The one-task loop is intentional. It keeps PRs small, allows CI and passive
