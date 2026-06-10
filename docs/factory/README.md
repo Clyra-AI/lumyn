@@ -18,6 +18,31 @@ docs/product/prd.md
 
 This path is repo-relative so Factory profiles and downstream workers do not depend on machine-local paths.
 
+## Operator Flow
+
+Use Factory to change shared contracts and planning rules. Use `factoryd` to
+execute Lumyn task packets. Use Lumyn commits and PRs to change product code,
+CI, docs, and product evidence.
+
+Start with non-mutating proof:
+
+```text
+factoryd doctor --config .factory/factoryd.example.json --repo lumyn --json
+factoryd run --config .factory/factoryd.example.json --repo lumyn --dry-run --json
+```
+
+Run implementation only after the selected task packet has allowed paths,
+forbidden paths, validation commands, evidence requirements, lifecycle gates,
+and stop conditions:
+
+```text
+FACTORY_REPO=/path/to/factory factoryd run --config .factory/factoryd.autoship.example.json --repo lumyn --loop --max-tasks 1 --json
+```
+
+The one-task loop is intentional. It keeps PRs small, allows CI and passive
+review to settle per task, and produces task-scoped work-proof, validation,
+PR lifecycle, post-merge, scope-closure, and repair evidence.
+
 The current downstream pilot evidence package intentionally marks the full MVP
 as blocked, not complete. It closes only the bootstrap/planning baseline and
 routes the first missing product slice to `T3-repair-001`.
