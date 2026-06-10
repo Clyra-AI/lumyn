@@ -1,7 +1,8 @@
 GO ?= go
 PKG_LIST := ./cmd/... ./internal/... ./schemas/...
+COVERAGE_MIN ?= 75
 
-.PHONY: fmt lint-fast test-fast test-contracts build audit-remote-protection prepush-full
+.PHONY: fmt lint-fast test-fast test-coverage test-contracts build audit-remote-protection prepush-full
 
 lint-fast:
 	test -f AGENTS.md
@@ -11,6 +12,7 @@ lint-fast:
 	test -f .tool-versions
 	test -f go.mod
 	test -f scripts/audit_branch_protection.py
+	test -f scripts/check_go_coverage.py
 	test -f scripts/validate_repo_pack.py
 	test -f .github/workflows/validate.yml
 	test -f .github/workflows/codeql.yml
@@ -31,6 +33,7 @@ lint-fast:
 	grep -q 'Do not merge manually through `gh pr merge`' docs/dev/dev_guides.md
 	grep -q 'process escape' WORKFLOW.md
 	grep -q 'process escape' docs/dev/dev_guides.md
+	grep -q 'make test-coverage' docs/dev/dev_guides.md
 	grep -q 'pr-lifecycle/<work_item_id>/pr-lifecycle-report.json' AGENTS.md
 	grep -q 'pr-lifecycle/<work_item_id>/pr-lifecycle-report.json' WORKFLOW.md
 	grep -q 'pr-lifecycle/<work_item_id>/pr-lifecycle-report.json' docs/dev/dev_guides.md
@@ -44,6 +47,11 @@ fmt:
 
 test-fast:
 	$(GO) test ./... -count=1
+
+test-coverage:
+	mkdir -p .factory/tmp
+	$(GO) test $(PKG_LIST) -count=1 -covermode=atomic -coverprofile=.factory/tmp/coverage.out
+	python3 scripts/check_go_coverage.py .factory/tmp/coverage.out $(COVERAGE_MIN)
 
 test-contracts:
 	$(GO) test ./... -count=1
@@ -86,4 +94,4 @@ build:
 audit-remote-protection:
 	python3 scripts/audit_branch_protection.py
 
-prepush-full: fmt lint-fast test-fast test-contracts build
+prepush-full: fmt lint-fast test-fast test-coverage test-contracts build

@@ -14,6 +14,7 @@
 
 - `make lint-fast`: repo operating pack and layout checks.
 - `make test-fast`: Go unit tests.
+- `make test-coverage`: Go coverage gate over first-party CLI/schema packages.
 - `make test-contracts`: unit tests, Factory planning artifact presence, downstream pilot evidence validation, repo-pack guide propagation validation, and required schema-file presence.
 - `make prepush-full`: full local gate before PR or merge.
 - `make audit-remote-protection`: networked GitHub audit for live `main` branch protection and the `protect-main-from-direct-push` ruleset.
@@ -49,6 +50,24 @@ reserved, or blocked by credential/network approval.
 
 Future task packets must cite the applicable tiers or record an approved
 non-applicable reason.
+
+## Coverage Gates
+
+Lumyn inherits the org-wide Factory coverage policy derived from Wrkr's launch
+bar.
+
+| Scope | Threshold | Enforcement |
+|---|---:|---|
+| Go first-party packages overall (`cmd/`, `internal/`, `schemas/`) | `>= 75%` | `make test-coverage`, included in `make prepush-full` and CI |
+| Go stable command or core packages | `>= 85%` | Required once the package contains stable product-bearing logic; exceptions must name owner, reason, expiry or follow-up task, and compensating validation |
+
+Coverage output is written to `.factory/tmp/coverage.out`. The gate is a
+false-green guard, not a replacement for command-result schema tests, acceptance
+closure, replay scenarios, CodeQL, or future live eval validation.
+
+Future task packets that touch first-party code, tests, CI, generated code, or
+package boundaries must cite `coverage_policy_refs` or record an approved
+coverage exception.
 
 ## CI And PR Lifecycle
 

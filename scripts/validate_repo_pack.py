@@ -23,6 +23,7 @@ REPAIR_TASK_PACKETS = [
     ROOT / ".factory" / "artifacts" / "pilot" / "lumyn-mvp-slice" / "repair-loop" / "task-packet.json"
 ]
 TEST_MATRIX_SOURCE_BASE = "docs/dev/dev_guides.md"
+COVERAGE_POLICY_SOURCE_BASE = "docs/dev/dev_guides.md"
 ARCHITECTURE_GUIDE_BASE = "docs/architecture/architecture_guides.md"
 
 REQUIRED_GUIDES = [
@@ -33,6 +34,7 @@ REQUIRED_GUIDES = [
 REQUIRED_TASK_FIELDS = [
     "ci_lane_refs",
     "test_matrix_refs",
+    "coverage_policy_refs",
     "security_scanner_gates",
     "engineering_policy_refs",
     "architecture_guidance_refs",
@@ -269,6 +271,7 @@ STOP_CONDITION_CATEGORIES = {
     "test_matrix": ["test-matrix", "test matrix", "test_matrix"],
     "ci_lanes": ["ci lane", "ci/status", "status check"],
     "scanner": ["scanner", "security"],
+    "coverage_policy": ["coverage", "test-coverage"],
     "engineering_policies": ["docs parity", "output contract", "release integrity", "provenance"],
     "architecture_policies": ["architecture", "systems-thinking", "systems thinking", "adr", "fail-closed"],
     "planning_skill": ["prd-to-plan", "execution-compiler", "planning-skill", "planning skill"],
@@ -303,12 +306,20 @@ def validate_guides() -> None:
     for relative_path in REQUIRED_GUIDES:
         require_existing(relative_path)
     dev_guide = (ROOT / "docs/dev/dev_guides.md").read_text()
+    dev_guide_lower = dev_guide.lower()
     tiers = set(re.findall(r"\|\s*Tier\s+(\d+)\b", dev_guide))
     expected = {str(index) for index in range(1, 13)}
     if tiers != expected:
         fail(f"docs/dev/dev_guides.md must preserve all 12 test tiers; found {sorted(tiers)}")
+    for token in ["coverage gates", "make test-coverage", ">= 75%"]:
+        if token not in dev_guide_lower:
+            fail(f"docs/dev/dev_guides.md missing coverage token {token!r}")
+    makefile = (ROOT / "Makefile").read_text()
+    for token in ["test-coverage:", "check_go_coverage.py", "prepush-full: fmt lint-fast test-fast test-coverage"]:
+        if token not in makefile:
+            fail(f"Makefile missing coverage gate token {token!r}")
     arch_guide = (ROOT / "docs/architecture/architecture_guides.md").read_text().lower()
-    for token in ["systems thinking", "tdd", "adr", "performance", "reliability", "fail-closed"]:
+    for token in ["systems thinking", "tdd", "adr", "performance", "reliability", "fail-closed", "coverage gates"]:
         if token not in arch_guide:
             fail(f"docs/architecture/architecture_guides.md missing architecture token {token!r}")
 
@@ -360,6 +371,12 @@ def refs_include_base(task: dict[str, Any], field: str, expected_base: str) -> b
     if not isinstance(value, list):
         return False
     return any(isinstance(item, dict) and source_ref_base(item.get("source_ref")) == expected_base for item in value)
+
+
+def object_source_ref_base(value: Any) -> str:
+    if not isinstance(value, dict):
+        return ""
+    return source_ref_base(value.get("source_ref"))
 
 
 def has_nonempty_list(value: Any) -> bool:
@@ -658,6 +675,8 @@ def validate_task_guide_sources(task: dict[str, Any]) -> None:
     task_id_value = task_id(task)
     if not refs_include_base(task, "test_matrix_refs", TEST_MATRIX_SOURCE_BASE):
         fail(f"{task_id_value} test_matrix_refs must include source {TEST_MATRIX_SOURCE_BASE}")
+    if object_source_ref_base(task.get("coverage_policy_refs")) != COVERAGE_POLICY_SOURCE_BASE:
+        fail(f"{task_id_value} coverage_policy_refs must include source {COVERAGE_POLICY_SOURCE_BASE}")
     if not refs_include_base(task, "architecture_guidance_refs", ARCHITECTURE_GUIDE_BASE):
         fail(f"{task_id_value} architecture_guidance_refs must include source {ARCHITECTURE_GUIDE_BASE}")
     missing_lanes = missing_ci_lane_refs(task)
@@ -773,6 +792,22 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
         return any(
             isinstance(value.get(key), str) and value[key].strip()
             for key in ["workflow_ref", "status_check", "evidence_ref"]
+        )
+    if field == "coverage_policy_refs":
+        if not isinstance(value, dict):
+            return False
+        if value.get("required") is False and isinstance(value.get("exception_ref"), str) and value["exception_ref"].strip():
+            return True
+        if value.get("required") is not True:
+            return False
+        if has_nonempty_list(value.get("command_refs")) or has_nonempty_list(value.get("evidence_refs")):
+            return True
+        if isinstance(value.get("exception_ref"), str) and value["exception_ref"].strip():
+            return True
+        minimums = value.get("minimums")
+        return isinstance(minimums, list) and any(
+            isinstance(item, dict) and has_nonempty_list(item.get("command_refs"))
+            for item in minimums
         )
     if not isinstance(value, list) or not value:
         return False
@@ -899,6 +934,15 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
         fail("dev_architecture_propagation.test_matrix_source_ref must point at docs/dev/dev_guides.md")
     if propagation.get("architecture_guide_ref") != "docs/architecture/architecture_guides.md":
         fail("dev_architecture_propagation.architecture_guide_ref must point at docs/architecture/architecture_guides.md")
+    coverage_policy = propagation.get("coverage_policy")
+    if not isinstance(coverage_policy, dict):
+        fail("dev_architecture_propagation.coverage_policy must be an object")
+    if coverage_policy.get("source_ref") != "docs/dev/dev_guides.md#coverage-gates":
+        fail("dev_architecture_propagation.coverage_policy.source_ref must point at docs/dev/dev_guides.md#coverage-gates")
+    if coverage_policy.get("required") is not True:
+        fail("dev_architecture_propagation.coverage_policy.required must be true")
+    if not has_nonempty_list(coverage_policy.get("command_refs")):
+        fail("dev_architecture_propagation.coverage_policy.command_refs must be non-empty")
     requirements = propagation.get("task_packet_requirements")
     if not isinstance(requirements, list):
         fail("dev_architecture_propagation.task_packet_requirements must be a list")
@@ -1312,6 +1356,18 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
                 "exception_ref": ".factory/artifacts/exceptions/release-deferred.json",
             },
         ],
+        "coverage_policy_refs": {
+            "required": True,
+            "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+            "minimums": [
+                {
+                    "scope": "go_first_party_packages_overall",
+                    "threshold": 75,
+                    "command_refs": ["make test-coverage"],
+                }
+            ],
+            "command_refs": ["make test-coverage"],
+        },
         "security_scanner_gates": {
             "required": True,
             "scanner": "CodeQL",

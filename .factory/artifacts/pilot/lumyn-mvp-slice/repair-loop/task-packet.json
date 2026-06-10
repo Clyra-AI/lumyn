@@ -15,6 +15,7 @@
       "Scope closure reruns after the repair and updates the record/contract/replay/report group."
     ],
     "required_checks": [
+      "make test-coverage",
       "make prepush-full"
     ],
     "required_review": {
@@ -28,12 +29,14 @@
       "scope_closure_report",
       "review_report",
       "ship_packet",
-      "factoryd_run_once_report"
+      "factoryd_run_once_report",
+      "coverage_gate_result"
     ],
     "stop_conditions": [
       "closure gap ref is missing",
       "validation evidence is missing",
-      "scope closure remains unchanged after repair"
+      "scope closure remains unchanged after repair",
+      "coverage policy evidence is missing or below threshold without an approved scoped exception"
     ]
   },
   "allowed_paths": [
@@ -68,6 +71,7 @@
   ],
   "upstream_debt_refs": [],
   "commands": [
+    "make test-coverage",
     "make prepush-full"
   ],
   "acceptance_checks": [
@@ -336,6 +340,7 @@
     "capability_grants": []
   },
   "validation_commands": [
+    "make test-coverage",
     "make prepush-full"
   ],
   "evidence_required": [
@@ -344,7 +349,8 @@
     "scope_closure_report",
     "review_report",
     "ship_packet",
-    "factoryd_run_once_report"
+    "factoryd_run_once_report",
+    "coverage_gate_result"
   ],
   "stop_conditions": [
     "missing runner-ready task contract",
@@ -353,6 +359,33 @@
     "required validation command failed",
     "plan drift detected",
     "required lifecycle evidence missing without approved exception",
-    "credential or network access required before approval posture is unlocked"
-  ]
+    "credential or network access required before approval posture is unlocked",
+    "coverage policy evidence is missing or below threshold without an approved scoped exception"
+  ],
+  "coverage_policy_refs": {
+    "required": true,
+    "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+    "minimums": [
+      {
+        "scope": "go_first_party_packages_overall",
+        "threshold": 75,
+        "command_refs": [
+          "make test-coverage"
+        ]
+      },
+      {
+        "scope": "go_stable_command_or_core_packages",
+        "threshold": 85,
+        "command_refs": [
+          "make test-coverage"
+        ],
+        "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+      }
+    ],
+    "command_refs": [
+      "make test-coverage",
+      "make prepush-full"
+    ],
+    "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+  }
 }

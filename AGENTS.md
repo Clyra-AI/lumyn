@@ -58,6 +58,7 @@ For normal changes, run:
 
 - `make lint-fast`
 - `make test-fast`
+- `make test-coverage`
 - `make test-contracts`
 
 Before PR or merge, run:
@@ -78,6 +79,8 @@ A PR merged without latest-head Codex review evidence is a process escape and
 must be recorded in PR lifecycle evidence with a follow-up fix or blocker.
 CodeQL Go analysis is the security scanner risk lane. Scanner-gated work cannot
 close without CodeQL status evidence or an approved scanner exception.
+Coverage-gated work cannot close without `make test-coverage` evidence or an
+approved scoped exception. `make prepush-full` includes the coverage gate.
 GitHub `main` must be protected by branch protection plus the
 `protect-main-from-direct-push` ruleset. The live control must require pull
 requests, strict `validate` and `CodeQL analyze` checks, admin enforcement,

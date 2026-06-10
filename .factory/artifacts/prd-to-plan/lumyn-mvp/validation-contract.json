@@ -16,6 +16,9 @@
     ],
     "security": [
       "GitHub Actions CodeQL analyze"
+    ],
+    "coverage": [
+      "make test-coverage"
     ]
   },
   "bootstrap_constraints": [
@@ -50,7 +53,8 @@
     "Active required_worker_chain values must use commit-push, not deprecated aliases such as ship-pr.",
     "Task packets must carry explicit scope_exclusions, alignment_gate_ref, and plan_drift_policy_ref inherited from the execution plan.",
     "Runtime pins must include toolchain_version, module_or_package_path, provider_policy, artifact_namespace, and live_work_policy before implementation starts.",
-    "Live eval MVP closure must cover OpenAI-compatible and Anthropic provider adapters when configured."
+    "Live eval MVP closure must cover OpenAI-compatible and Anthropic provider adapters when configured.",
+    "Coverage-gated tasks must carry make test-coverage evidence or an approved scoped coverage exception."
   ],
   "stop_conditions": [
     "implementation requires undeclared live credentials",
@@ -71,7 +75,9 @@
     "active required_worker_chain contains a deprecated worker alias such as ship-pr",
     "scope_exclusions, alignment_gate_ref, or plan_drift_policy_ref are missing from a task packet",
     "runtime_pins omit toolchain_version, module_or_package_path, provider_policy, artifact_namespace, or live_work_policy",
-    "live eval provider work omits either OpenAI-compatible or Anthropic adapter coverage without approved scope exception"
+    "live eval provider work omits either OpenAI-compatible or Anthropic adapter coverage without approved scope exception",
+    "coverage policy refs or coverage evidence are missing from a product task packet",
+    "make test-coverage is below threshold without an approved scoped exception"
   ],
   "runtime_pins": {
     "language": "go",
@@ -209,6 +215,7 @@
       "forbidden_paths",
       "ci_lane_refs",
       "test_matrix_refs",
+      "coverage_policy_refs",
       "security_scanner_gates",
       "engineering_policy_refs",
       "architecture_guidance_refs",
@@ -287,6 +294,7 @@
       "forbidden_paths",
       "required_worker_chain",
       "lifecycle_gates",
+      "coverage_policy_refs",
       "scope_exclusions"
     ],
     "runtime": {
@@ -301,5 +309,31 @@
       "capability_grants": []
     },
     "failure_behavior": "block dispatch and emit repair evidence when runner-ready fields, path policy, validation commands, or lifecycle evidence are missing"
+  },
+  "coverage_policy": {
+    "required": true,
+    "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+    "minimums": [
+      {
+        "scope": "go_first_party_packages_overall",
+        "threshold": 75,
+        "command_refs": [
+          "make test-coverage"
+        ]
+      },
+      {
+        "scope": "go_stable_command_or_core_packages",
+        "threshold": 85,
+        "command_refs": [
+          "make test-coverage"
+        ],
+        "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+      }
+    ],
+    "command_refs": [
+      "make test-coverage",
+      "make prepush-full"
+    ],
+    "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
   }
 }

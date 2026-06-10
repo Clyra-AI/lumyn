@@ -39,7 +39,7 @@
       "remaining_task_refs": [],
       "notes": [
         "T2.6 established the 12-level test matrix mapping, CI lane mapping, CodeQL workflow, scanner lint checks, docs parity, output contract, release integrity, provenance evidence, systems-thinking, TDD/ADR, performance, reliability, and fail-closed rules.",
-        "All current task packets now carry ci_lane_refs, test_matrix_refs, security_scanner_gates, engineering_policy_refs, and architecture_guidance_refs; future task packets must keep them or record an approved exception.",
+        "All current task packets now carry ci_lane_refs, test_matrix_refs, coverage_policy_refs, security_scanner_gates, engineering_policy_refs, and architecture_guidance_refs; future task packets must keep them or record an approved exception.",
         "T2.6 planning now also preserves Factory prd-to-plan and execution-compiler fields: public contract map, docs/OSS readiness, test matrix wiring, changelog/versioning intent, contract impact, ADR/TDD posture, cost/perf, failure hypotheses, and semantic invariants."
       ]
     },
