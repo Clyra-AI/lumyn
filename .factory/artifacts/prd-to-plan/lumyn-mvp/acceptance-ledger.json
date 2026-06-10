@@ -1078,7 +1078,7 @@
     {
       "acceptance_item_id": "REC-QUALITY-001",
       "group_id": "record_contract_replay_report",
-      "source_ref": "docs/product/prd.md#phase-1-recorder-and-contract-generator",
+      "source_ref": "docs/product/prd.md#phase-1-recorder-spike",
       "source_text": "At least 70% of drafted assertions, read-back candidates, and state bindings are accepted without edit on simple REST/OpenAPI workflows.",
       "kind": "quality_gate",
       "evidence_mode": "manual_review",

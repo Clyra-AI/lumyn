@@ -1462,6 +1462,14 @@ def validate_acceptance_ledger(ledger: dict[str, Any]) -> set[str]:
         fail(f"acceptance-ledger.json missing required item ids: {missing}")
     if "REC-QUALITY-001" not in seen:
         fail("acceptance-ledger.json must include recorder 70 percent quality gate")
+    recorder_quality = next(
+        (item for item in items if isinstance(item, dict) and item.get("acceptance_item_id") == "REC-QUALITY-001"),
+        None,
+    )
+    if not isinstance(recorder_quality, dict):
+        fail("acceptance-ledger.json missing REC-QUALITY-001")
+    if recorder_quality.get("source_ref") != "docs/product/prd.md#phase-1-recorder-spike":
+        fail("REC-QUALITY-001 source_ref must point at the Phase 1 recorder spike PRD anchor")
     for item_id, required_task_refs in REQUIRED_ACCEPTANCE_TASK_REFS.items():
         actual_task_refs = task_refs_by_item_id.get(item_id, set())
         missing_task_refs = sorted(required_task_refs - actual_task_refs)
