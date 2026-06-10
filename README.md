@@ -86,6 +86,7 @@ truth for the PRD, code, CI, branch policy, and product evidence.
 Safe operator path:
 
 ```bash
+export FACTORY_REPO=../factory
 factoryd doctor --config .factory/factoryd.example.json --repo lumyn --json
 factoryd run --config .factory/factoryd.example.json --repo lumyn --dry-run --json
 ```
@@ -95,5 +96,6 @@ Use the autoship config only after branch protection, required `validate` and
 monitoring, and semantic scope-closure evidence are all verified:
 
 ```bash
-FACTORY_REPO=/path/to/factory factoryd run --config .factory/factoryd.autoship.example.json --repo lumyn --loop --max-tasks 1 --json
+export FACTORY_REPO=../factory
+factoryd run --config .factory/factoryd.autoship.example.json --repo lumyn --loop --max-tasks 1 --json
 ```
