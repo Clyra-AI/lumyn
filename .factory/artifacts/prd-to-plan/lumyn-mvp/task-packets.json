@@ -391,6 +391,9 @@
       ],
       "mvp_required_version_slices": [
         "v0.0"
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
       ]
     },
     {
@@ -783,6 +786,9 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "mvp_required_version_slices": [
+        "v0.0"
+      ],
+      "delivery_slice_refs": [
         "v0.0"
       ]
     },
@@ -1974,6 +1980,9 @@
       ],
       "mvp_required_version_slices": [
         "v0.0"
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
       ]
     },
     {
@@ -2407,6 +2416,9 @@
       ],
       "mvp_required_version_slices": [
         "v0.0"
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
       ]
     },
     {
@@ -2824,6 +2836,9 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "mvp_required_version_slices": [
+        "v0.0"
+      ],
+      "delivery_slice_refs": [
         "v0.0"
       ]
     },
@@ -3246,6 +3261,9 @@
       ],
       "mvp_required_version_slices": [
         "v0.0"
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
       ]
     },
     {
@@ -3662,6 +3680,9 @@
       ],
       "mvp_required_version_slices": [
         "v0.1"
+      ],
+      "delivery_slice_refs": [
+        "v0.1"
       ]
     },
     {
@@ -4062,6 +4083,9 @@
       ],
       "mvp_required_version_slices": [
         "v0.1"
+      ],
+      "delivery_slice_refs": [
+        "v0.1"
       ]
     },
     {
@@ -4448,6 +4472,9 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "mvp_required_version_slices": [
+        "v0.1"
+      ],
+      "delivery_slice_refs": [
         "v0.1"
       ]
     },
@@ -4857,6 +4884,10 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "mvp_required_version_slices": [
+        "v0.0",
+        "v0.1"
+      ],
+      "delivery_slice_refs": [
         "v0.0",
         "v0.1"
       ]
@@ -5339,6 +5370,9 @@
       ],
       "mvp_required_version_slices": [
         "v0.2"
+      ],
+      "delivery_slice_refs": [
+        "v0.2"
       ]
     },
     {
@@ -5782,6 +5816,9 @@
         }
       ],
       "mvp_required_version_slices": [
+        "v0.2"
+      ],
+      "delivery_slice_refs": [
         "v0.2"
       ]
     }

@@ -604,6 +604,37 @@ def validate_mvp_version_slice_coverage(value: Any, label: str) -> None:
             fail(f"{label}.{slice_id}.acceptance_group_refs must include {spec['capability_group_id']}")
 
 
+def validate_delivery_slice_coverage(value: Any, label: str) -> None:
+    if not isinstance(value, list) or not value:
+        fail(f"{label} must be a non-empty list")
+    by_id = {
+        str(item.get("slice_id")): item
+        for item in value
+        if isinstance(item, dict) and str(item.get("slice_id", "")).strip()
+    }
+    missing_slices = sorted(set(REQUIRED_MVP_VERSION_SLICES) - set(by_id))
+    if missing_slices:
+        fail(f"{label} missing required delivery slices: {missing_slices}")
+    for slice_id, spec in REQUIRED_MVP_VERSION_SLICES.items():
+        item = by_id[slice_id]
+        if item.get("required_for_completion") is not True:
+            fail(f"{label}.{slice_id}.required_for_completion must be true")
+        if item.get("public_release_boundary") is not False:
+            fail(f"{label}.{slice_id}.public_release_boundary must be false")
+        if not has_nonempty_string(item.get("source_ref")):
+            fail(f"{label}.{slice_id}.source_ref is required")
+        task_refs = {str(task_ref) for task_ref in item.get("task_refs", [])}
+        missing_task_refs = sorted(spec["task_refs"] - task_refs)
+        if missing_task_refs:
+            fail(f"{label}.{slice_id}.task_refs missing {missing_task_refs}")
+        group_refs = {str(group_ref) for group_ref in item.get("acceptance_group_refs", [])}
+        if spec["capability_group_id"] not in group_refs:
+            fail(f"{label}.{slice_id}.acceptance_group_refs must include {spec['capability_group_id']}")
+        item_ids = item.get("acceptance_item_ids")
+        if not isinstance(item_ids, list) or not item_ids:
+            fail(f"{label}.{slice_id}.acceptance_item_ids must preserve item-level closure refs")
+
+
 def source_ref_base(value: Any) -> str:
     return value.split("#", 1)[0] if isinstance(value, str) else ""
 
@@ -1120,6 +1151,15 @@ def validate_task_version_slice_refs(task: dict[str, Any]) -> None:
     missing = sorted(expected - {str(value) for value in actual})
     if missing:
         fail(f"{task_id_value}.mvp_required_version_slices missing {missing}")
+    delivery_refs = task.get("delivery_slice_refs")
+    if not isinstance(delivery_refs, list) or not delivery_refs:
+        fail(f"{task_id_value}.delivery_slice_refs must map task to generic delivery slices")
+    delivery_missing = sorted(expected - {str(value) for value in delivery_refs})
+    if delivery_missing:
+        fail(f"{task_id_value}.delivery_slice_refs missing {delivery_missing}")
+    unexpected = sorted({str(value) for value in delivery_refs} - {str(value) for value in actual})
+    if unexpected:
+        fail(f"{task_id_value}.delivery_slice_refs has refs not present in mvp_required_version_slices: {unexpected}")
 
 
 def field_has_evidence(task: dict[str, Any], field: str) -> bool:
@@ -1280,6 +1320,10 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
     validate_mvp_version_slice_coverage(
         plan.get("mvp_required_version_slices"),
         "execution-plan.json.mvp_required_version_slices",
+    )
+    validate_delivery_slice_coverage(
+        plan.get("delivery_slices"),
+        "execution-plan.json.delivery_slices",
     )
     for field in REQUIRED_PLAN_LEVEL_FIELDS:
         value = plan.get(field)
@@ -1459,6 +1503,10 @@ def validate_validation_contract(contract: dict[str, Any]) -> None:
     validate_mvp_version_slice_coverage(
         contract.get("mvp_required_version_slices"),
         "validation-contract.json.mvp_required_version_slices",
+    )
+    validate_delivery_slice_coverage(
+        contract.get("delivery_slices"),
+        "validation-contract.json.delivery_slices",
     )
     validate_mvp_eval_provider_adapters(
         contract.get("mvp_eval_provider_adapters"),
@@ -1672,6 +1720,10 @@ def validate_acceptance_mapping(mapping: dict[str, Any], ledger_ids: set[str], c
         mapping.get("mvp_required_version_slices"),
         "acceptance-mapping.json.mvp_required_version_slices",
     )
+    validate_delivery_slice_coverage(
+        mapping.get("delivery_slices"),
+        "acceptance-mapping.json.delivery_slices",
+    )
     groups = mapping.get("groups")
     if not isinstance(groups, list):
         fail("acceptance-mapping.json must contain groups list")
@@ -1726,6 +1778,10 @@ def validate_scope_closure_map(scope: dict[str, Any], ledger_ids: set[str]) -> N
         scope.get("mvp_required_version_slices"),
         "scope-closure-map.json.mvp_required_version_slices",
     )
+    validate_delivery_slice_coverage(
+        scope.get("delivery_slices"),
+        "scope-closure-map.json.delivery_slices",
+    )
     items = scope.get("items")
     if not isinstance(items, list):
         fail("scope-closure-map.json must contain items list")
@@ -1746,6 +1802,9 @@ def validate_scope_closure_map(scope: dict[str, Any], ledger_ids: set[str]) -> N
             actual_slices = {str(value) for value in item.get("mvp_required_version_slices", [])}
             if slice_id not in actual_slices:
                 fail(f"scope item {scope_item_id} missing mvp_required_version_slices entry {slice_id}")
+            delivery_slices = {str(value) for value in item.get("delivery_slice_refs", [])}
+            if slice_id not in delivery_slices:
+                fail(f"scope item {scope_item_id} missing delivery_slice_refs entry {slice_id}")
         status_ids = {str(status.get("acceptance_item_id")) for status in statuses if isinstance(status, dict)}
         missing_status = sorted(str(value) for value in item_ids if str(value) not in status_ids)
         if missing_status:
@@ -1787,6 +1846,7 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
         "task_id": task_id_value,
         "blocked_by": blocked_by,
         "mvp_required_version_slices": sorted(expected_task_version_slices(task_id_value)),
+        "delivery_slice_refs": sorted(expected_task_version_slices(task_id_value)),
         "factory_compatibility": {
             "factory_contract_version": "1.0",
             "profile_ref": "profiles/lumyn.yaml",
@@ -2061,6 +2121,18 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected conflicting slice type declarations to fail")
+
+    missing_delivery_slice_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    missing_delivery_slice_packets["tasks"][1].pop("delivery_slice_refs", None)
+    try:
+        validate_task_packets(missing_delivery_slice_packets, "T2.6")
+    except AssertionError as exc:
+        if "delivery_slice_refs" not in str(exc):
+            raise
+    else:
+        fail("self-test expected missing delivery_slice_refs to fail")
 
     deprecated_worker_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]

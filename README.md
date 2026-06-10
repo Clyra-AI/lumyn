@@ -3,6 +3,11 @@
 Lumyn is a local-first OSS CLI for proving whether API workflows can be completed, verified, bounded, and explained with durable evidence.
 
 The full MVP product contract is [docs/product/prd.md](docs/product/prd.md).
+Factory planning artifacts map the full MVP through acceptance item IDs plus
+generic `delivery_slices` / task `delivery_slice_refs` for the internal
+`v0.0`, `v0.1`, and `v0.2` capability slices. The slice refs are coverage
+metadata, not separate release boundaries or replacements for item-level scope
+closure.
 
 ## MVP Scope
 

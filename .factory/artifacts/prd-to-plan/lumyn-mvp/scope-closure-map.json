@@ -251,6 +251,9 @@
       ],
       "mvp_required_version_slices": [
         "v0.0"
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
       ]
     },
     {
@@ -349,6 +352,9 @@
         "T10"
       ],
       "mvp_required_version_slices": [
+        "v0.1"
+      ],
+      "delivery_slice_refs": [
         "v0.1"
       ]
     },
@@ -466,6 +472,9 @@
         "T12"
       ],
       "mvp_required_version_slices": [
+        "v0.2"
+      ],
+      "delivery_slice_refs": [
         "v0.2"
       ]
     },
@@ -898,6 +907,116 @@
         "live_agent_eval",
         "product_pull_success_metrics"
       ]
+    }
+  ],
+  "delivery_slices": [
+    {
+      "slice_id": "v0.0",
+      "name": "Record, Contract, Replay, Report",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report",
+      "required_for_completion": true,
+      "public_release_boundary": false,
+      "task_refs": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T10"
+      ],
+      "acceptance_group_refs": [
+        "record_contract_replay_report",
+        "activation_success_metrics"
+      ],
+      "acceptance_item_ids": [
+        "FDN-001",
+        "FDN-002",
+        "RCRR-001",
+        "RCRR-002",
+        "RCRR-003",
+        "RCRR-004",
+        "RCRR-005",
+        "RCRR-006",
+        "RCRR-007",
+        "RCRR-008",
+        "RCRR-009",
+        "RCRR-010",
+        "RCRR-011",
+        "ACT-001",
+        "ACT-002",
+        "ACT-003",
+        "ACT-004",
+        "PULL-005",
+        "REC-QUALITY-001"
+      ],
+      "legacy_slice_ref": "v0.0"
+    },
+    {
+      "slice_id": "v0.1",
+      "name": "Live Known-Path Verify, Basic Boundaries, CI, And Share",
+      "source_ref": "docs/product/prd.md#live-known-path-verify-basic-boundaries-and-ci",
+      "required_for_completion": true,
+      "public_release_boundary": false,
+      "task_refs": [
+        "T7",
+        "T8",
+        "T9",
+        "T10"
+      ],
+      "acceptance_group_refs": [
+        "live_verify_boundary_ci_share",
+        "product_pull_success_metrics"
+      ],
+      "acceptance_item_ids": [
+        "LVCIS-001",
+        "LVCIS-002",
+        "LVCIS-003",
+        "LVCIS-004",
+        "LVCIS-005",
+        "LVCIS-006",
+        "LVCIS-007",
+        "LVCIS-008",
+        "PULL-002",
+        "PULL-003",
+        "PULL-001",
+        "PULL-004",
+        "PULL-005"
+      ],
+      "legacy_slice_ref": "v0.1"
+    },
+    {
+      "slice_id": "v0.2",
+      "name": "Live Agent Eval",
+      "source_ref": "docs/product/prd.md#live-agent-eval",
+      "required_for_completion": true,
+      "public_release_boundary": false,
+      "task_refs": [
+        "T11",
+        "T12"
+      ],
+      "acceptance_group_refs": [
+        "live_agent_eval",
+        "product_pull_success_metrics"
+      ],
+      "acceptance_item_ids": [
+        "EVAL-001",
+        "EVAL-002",
+        "EVAL-003",
+        "EVAL-004",
+        "EVAL-005",
+        "EVAL-006",
+        "EVAL-007",
+        "EVAL-008",
+        "EVAL-009",
+        "EVAL-010",
+        "PULL-001",
+        "PULL-004",
+        "PULL-002",
+        "PULL-003",
+        "PULL-005"
+      ],
+      "legacy_slice_ref": "v0.2"
     }
   ]
 }

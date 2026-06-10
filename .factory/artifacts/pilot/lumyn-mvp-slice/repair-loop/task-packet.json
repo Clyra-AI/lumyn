@@ -415,5 +415,8 @@
   ],
   "mvp_required_version_slices": [
     "v0.0"
+  ],
+  "delivery_slice_refs": [
+    "v0.0"
   ]
 }

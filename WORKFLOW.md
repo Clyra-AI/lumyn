@@ -36,6 +36,10 @@ Lumyn accepts work from:
 - The canonical MVP PRD path is `docs/product/prd.md`.
 - Factory references must use repo-relative paths, never machine-local absolute paths.
 - Validation evidence must include command, status, artifact refs, and skipped-command reasons when applicable.
+- MVP `v0.0`, `v0.1`, and `v0.2` labels are internal delivery slices.
+  Planning artifacts must preserve them through generic `delivery_slices` and
+  task `delivery_slice_refs`, while acceptance item IDs remain the closure
+  source of truth.
 
 ## Bootstrap Validation Lanes
 
