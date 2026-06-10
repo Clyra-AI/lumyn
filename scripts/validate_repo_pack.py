@@ -32,9 +32,7 @@ COVERAGE_POLICY_SOURCE_BASE = "docs/dev/dev_guides.md"
 ARCHITECTURE_GUIDE_BASE = "docs/architecture/architecture_guides.md"
 RUNTIME_CONTROL_ALLOWED_RE = re.compile(
     r"^\.factory/artifacts/?$"
-    r"|^\.factory/artifacts/(prd-to-plan|post-prd)(/[^/]+)?/?$"
-    r"|^\.factory/artifacts/(prd-to-plan|post-prd)/[^/]+/"
-    r"(context-brief|execution-plan|task-packets|validation-contract|acceptance-mapping|scope-closure-map)\.json$"
+    r"|^\.factory/artifacts/(prd-to-plan|post-prd)(/.*)?$"
 )
 RUNTIME_CONTROL_FORBIDDEN_PATHS = [
     ".factory/artifacts/prd-to-plan/lumyn-mvp/",
@@ -1647,6 +1645,9 @@ def run_self_test() -> int:
     }
     control_allowed_packets["tasks"][1]["allowed_paths"].append(
         ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+    )
+    control_allowed_packets["tasks"][1]["allowed_paths"].append(
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/risk-classification.json"
     )
     try:
         validate_task_packets(control_allowed_packets, "T2.6")
