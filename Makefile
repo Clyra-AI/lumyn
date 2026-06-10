@@ -45,6 +45,9 @@ lint-fast:
 	grep -q 'concurrency:' .github/workflows/codeql.yml
 	grep -q 'timeout-minutes:' .github/workflows/codeql.yml
 	grep -q 'actions/checkout@v6.0.2' .github/workflows/codeql.yml
+	grep -q 'actions/setup-go@v6.3.0' .github/workflows/codeql.yml
+	grep -q 'go-version-file: go.mod' .github/workflows/codeql.yml
+	grep -q 'check-latest: false' .github/workflows/codeql.yml
 	grep -q 'github/codeql-action/init@v3' .github/workflows/codeql.yml
 	grep -q 'languages: go' .github/workflows/codeql.yml
 	grep -q 'Passive Codex review settle is required before merge' AGENTS.md
