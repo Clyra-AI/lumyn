@@ -62,7 +62,9 @@
     "Live eval MVP closure must cover OpenAI-compatible and Anthropic provider adapters when configured.",
     "Coverage-gated tasks must carry make test-coverage evidence or an approved scoped coverage exception.",
     "CI control-set evidence must prove required-check metadata, least-privilege workflow permissions, concurrency, timeouts, toolchain-pin source, owner-review coverage, action-ref posture, and branch-protection expectations for lifecycle, workflow, policy, scanner, or autonomous shipping work.",
-    "Version-slice coverage must map legacy v0.0, v0.1, and v0.2 internal slices to task refs, acceptance groups, and scope-closure entries before any full MVP completion claim."
+    "Version-slice coverage must map legacy v0.0, v0.1, and v0.2 internal slices to task refs, acceptance groups, and scope-closure entries before any full MVP completion claim.",
+    "Safety/corpus-ready evidence must preserve finding kind, proof strength, boundary status, security relevance, fix target, surface fingerprint, provider/model metadata when applicable, eval mode, and corpus_eligible false by default.",
+    "Safety/corpus-ready tasks must carry safety_corpus_ready_evidence_refs that cite docs/product/prd.md#safety-and-corpus-ready-evidence and the relevant acceptance-ledger item."
   ],
   "stop_conditions": [
     "implementation requires undeclared live credentials",
@@ -88,7 +90,9 @@
     "make test-coverage is below threshold without an approved scoped exception",
     "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
     "acceptance ledger item missing, unmapped, or closed only at group level",
-    "required MVP version slice v0.0, v0.1, or v0.2 lacks task, acceptance mapping, validation-contract, or scope-closure coverage"
+    "required MVP version slice v0.0, v0.1, or v0.2 lacks task, acceptance mapping, validation-contract, or scope-closure coverage",
+    "safety/corpus-ready acceptance items are missing from task packets, scope closure, validation contract, or delivery slices",
+    "normalized failure evidence omits corpus_eligible false by default or implies hosted telemetry/upload without approved scope change"
   ],
   "runtime_pins": {
     "language": "go",
@@ -375,10 +379,11 @@
   },
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
   "acceptance_mapping_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-  "acceptance_item_count": 82,
+  "acceptance_item_count": 87,
   "acceptance_criteria": [
     "FDN-001: Create the Go CLI skeleton, command-result JSON envelope, exit-code constants, command dispatch, and repo-local validation baseline needed before product commands are implemented.",
     "FDN-002: Define initial workflow, command-result, proof-strength, cassette, evidence-event, state-binding, redaction-config, and related schema contracts before feature implementation.",
+    "FDN-003: Normalized result and failure contracts preserve finding kind, proof strength, boundary status, security relevance, fix target, surface fingerprint, provider/model metadata when applicable, eval mode, and default corpus_eligible: false posture.",
     "FDL-001: Repository CI validation, required-check metadata, workflow hardening, owner review, action-ref posture, branch protection evidence, and PR lifecycle evidence are established before product implementation continues.",
     "FDAP-001: Repo dev guide, architecture guide, 12-level test matrix, coverage policy, security scanner posture, docs/output/release/provenance rules, and architecture boundary rules are propagated into executable planning.",
     "FR1: FR1: Product Surface Under Test - Lumyn must frame the customer's API/docs surface as the system under test and agents as probes.",
@@ -432,6 +437,7 @@
     "RCRR-009: Standard auth headers and configured sensitive fields are redacted in all artifacts.",
     "RCRR-010: Bundled static traces open without model key, sandbox, or hosted account.",
     "RCRR-011: `lumyn demo` opens the bundled agent-failure and proof-gap reports with no install, model key, sandbox, or hosted account.",
+    "RCRR-012: `lumyn demo` includes bundled examples that show proof-gap and boundary-violation/safety findings without requiring a hosted account, model key, or sandbox.",
     "LVCIS-001: `lumyn verify --strategy live` executes the recorded path against sandbox.",
     "LVCIS-002: Live read-back confirms expected state on the happy path.",
     "LVCIS-003: A changed sandbox response causes a verification failure.",
@@ -440,6 +446,8 @@
     "LVCIS-006: Request and write-operation budgets are enforced.",
     "LVCIS-007: The GitHub Action runs `verify` in CI and posts a PR-comment summary naming changed sources and the workflows they affect.",
     "LVCIS-008: `lumyn share` re-runs redaction at export and produces a single self-contained artifact of a trace that opens with no Lumyn install or account; it fails closed if any value cannot be confidently redacted.",
+    "LVCIS-009: Action-boundary violations that indicate scope escalation, data exposure risk, or out-of-policy action are labeled safety/security-relevant and fail even when final state passes.",
+    "LVCIS-010: CI, JUnit, and PR-comment output surface completion result, proof strength, boundary status, safety/security finding count, and fix target.",
     "EVAL-001: `lumyn eval` runs OpenAI-compatible and Anthropic provider/model adapters when configured.",
     "EVAL-002: Eval supports `surface_only` mode.",
     "EVAL-003: Eval supports `contract_assisted` mode.",
@@ -450,6 +458,7 @@
     "EVAL-008: Eval compares to a saved baseline where configured.",
     "EVAL-009: Eval labels baseline drift risk when model snapshots are unavailable.",
     "EVAL-010: Eval is diagnostic by default unless an explicit gate is configured.",
+    "EVAL-011: Eval emits normalized local failure events for wrong turns, boundary violations, proof gaps, docs/API ambiguity, model-specific failures, stochastic variance, cost/duration, provider/model/eval mode, and fix target.",
     "ACT-001: First trace opened in under 5 minutes.",
     "ACT-002: `init` plus `check` completed in under 10 minutes.",
     "ACT-003: First workflow recorded and replay-verified in under 30 minutes.",
@@ -477,7 +486,8 @@
         "T4",
         "T5",
         "T6",
-        "T10"
+        "T10",
+        "T2.7"
       ],
       "acceptance_group_refs": [
         "record_contract_replay_report",
@@ -542,7 +552,8 @@
         "T4",
         "T5",
         "T6",
-        "T10"
+        "T10",
+        "T2.7"
       ],
       "acceptance_group_refs": [
         "record_contract_replay_report",
@@ -567,7 +578,9 @@
         "ACT-003",
         "ACT-004",
         "PULL-005",
-        "REC-QUALITY-001"
+        "REC-QUALITY-001",
+        "FDN-003",
+        "RCRR-012"
       ],
       "legacy_slice_ref": "v0.0"
     },
@@ -600,7 +613,9 @@
         "PULL-003",
         "PULL-001",
         "PULL-004",
-        "PULL-005"
+        "PULL-005",
+        "LVCIS-009",
+        "LVCIS-010"
       ],
       "legacy_slice_ref": "v0.1"
     },
@@ -633,7 +648,8 @@
         "PULL-004",
         "PULL-002",
         "PULL-003",
-        "PULL-005"
+        "PULL-005",
+        "EVAL-011"
       ],
       "legacy_slice_ref": "v0.2"
     }

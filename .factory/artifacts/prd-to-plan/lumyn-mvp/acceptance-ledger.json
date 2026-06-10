@@ -52,6 +52,28 @@
       "notes": []
     },
     {
+      "acceptance_item_id": "FDN-003",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#safety-and-corpus-ready-evidence",
+      "source_text": "Normalized result and failure contracts preserve finding kind, proof strength, boundary status, security relevance, fix target, surface fingerprint, provider/model metadata when applicable, eval mode, and default corpus_eligible: false posture.",
+      "kind": "quality_gate",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "implementation"
+      ],
+      "task_refs": [
+        "T2.7"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2.7/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "This is a local contract and schema requirement only; MVP artifacts must not upload telemetry or private traces by default."
+      ]
+    },
+    {
       "acceptance_item_id": "FDL-001",
       "group_id": "factory_delivery_lifecycle_baseline",
       "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/lifecycle_baseline",
@@ -1323,6 +1345,26 @@
       "notes": []
     },
     {
+      "acceptance_item_id": "RCRR-012",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#safety-and-corpus-ready-evidence",
+      "source_text": "`lumyn demo` includes bundled examples that show proof-gap and boundary-violation/safety findings without requiring a hosted account, model key, or sandbox.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T6"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
       "acceptance_item_id": "LVCIS-001",
       "group_id": "live_verify_boundary_ci_share",
       "source_ref": "docs/product/prd.md#live-verify-boundary-ci-and-share-acceptance-tests",
@@ -1485,6 +1527,48 @@
       ],
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "LVCIS-009",
+      "group_id": "live_verify_boundary_ci_share",
+      "source_ref": "docs/product/prd.md#safety-and-corpus-ready-evidence",
+      "source_text": "Action-boundary violations that indicate scope escalation, data exposure risk, or out-of-policy action are labeled safety/security-relevant and fail even when final state passes.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T8"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "high",
+      "notes": [
+        "This preserves the enterprise safety finding without positioning the MVP as a broad agent security platform."
+      ]
+    },
+    {
+      "acceptance_item_id": "LVCIS-010",
+      "group_id": "live_verify_boundary_ci_share",
+      "source_ref": "docs/product/prd.md#safety-and-corpus-ready-evidence",
+      "source_text": "CI, JUnit, and PR-comment output surface completion result, proof strength, boundary status, safety/security finding count, and fix target.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T9"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1697,6 +1781,30 @@
       "notes": []
     },
     {
+      "acceptance_item_id": "EVAL-011",
+      "group_id": "live_agent_eval",
+      "source_ref": "docs/product/prd.md#safety-and-corpus-ready-evidence",
+      "source_text": "Eval emits normalized local failure events for wrong turns, boundary violations, proof gaps, docs/API ambiguity, model-specific failures, stochastic variance, cost/duration, provider/model/eval mode, and fix target.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T11",
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Events remain local/private by default and are corpus-ready only for a future opt-in workflow."
+      ]
+    },
+    {
       "acceptance_item_id": "ACT-001",
       "group_id": "activation_success_metrics",
       "source_ref": "docs/product/prd.md#activation",
@@ -1899,5 +2007,5 @@
       ]
     }
   ],
-  "acceptance_item_count": 82
+  "acceptance_item_count": 87
 }

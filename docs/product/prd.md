@@ -2,10 +2,10 @@
 
 | Field | Value |
 |-------|-------|
-| Version | 1.7 |
+| Version | 1.8 |
 | Status | Ready for MVP execution |
 | Owner | Product and Engineering |
-| Last Updated | 2026-06-08 |
+| Last Updated | 2026-06-10 |
 | Primary Audience | Engineers building Lumyn OSS, plus technical founders reviewing scope |
 | MVP Scope | Full MVP: record/contract/replay, live verify/boundaries/CI, and live agent eval |
 
@@ -129,6 +129,21 @@ record known-good workflow -> Lumyn drafts workflow YAML -> user reviews/edits/a
 ```
 
 YAML is a prerequisite for `verify` and `eval`; it is not the first empty screen users should face.
+
+### Safety And Corpus-Ready Evidence
+
+The MVP must keep the developer wedge as concrete workflow completion, but it must also make unsafe completion visible. A workflow that reaches the expected final state while violating a configured `action_boundary` is not a generic DX failure; it is a safety-relevant finding. Reports, traces, JSON output, CI output, and PR comments must preserve enough structure to distinguish:
+
+- completion gaps
+- proof gaps
+- boundary violations
+- redaction/share failures
+- eval failures
+- model-specific or stochastic failures
+
+Boundary violations that indicate scope escalation, data exposure risk, or out-of-policy action should be labeled as safety/security-relevant findings while avoiding a broad "agent security platform" claim in the MVP.
+
+The MVP must also keep normalized failure evidence portable for a future opt-in corpus and contract/validator registry without uploading private artifacts by default. Normalized result and failure records should preserve fields such as finding kind, proof strength, boundary status, security relevance, fix target, surface fingerprint, provider/model metadata when applicable, eval mode, and a default `corpus_eligible: false` posture. Shared telemetry, hosted failure databases, community registries, and broad failure clustering remain post-MVP.
 
 ---
 
