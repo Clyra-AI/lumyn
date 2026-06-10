@@ -92,8 +92,8 @@ Safe operator path:
 
 ```bash
 export FACTORY_REPO=../factory
-factoryd doctor --config .factory/factoryd.example.json --repo lumyn --json
-factoryd run --config .factory/factoryd.example.json --repo lumyn --dry-run --json
+factoryd doctor --config .factory/factoryd.json --repo lumyn --json
+factoryd run --config .factory/factoryd.json --repo lumyn --dry-run --json
 ```
 
 Use the autoship config only after branch protection, required `validate` and

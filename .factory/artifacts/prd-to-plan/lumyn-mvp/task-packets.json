@@ -2400,9 +2400,9 @@
       ]
     },
     {
-      "task_id": "T4",
+      "task_id": "T4.1",
       "slice_type": "vertical",
-      "objective": "Implement record/redact/normalize pipeline and draft workflow/cassette artifacts for a deterministic mock API.",
+      "objective": "Implement deterministic HTTP recorder capture, redaction, and normalized event persistence for the bundled mock API.",
       "risk_class": "medium",
       "blocked_by": [
         "T2",
@@ -2410,13 +2410,14 @@
         "T2.6"
       ],
       "allowed_paths": [
-        ".factory/artifacts/pr-lifecycle/T4/",
-        ".factory/artifacts/task-runs/T4/",
+        ".factory/artifacts/pr-lifecycle/T4.1/",
+        ".factory/artifacts/task-runs/T4.1/",
         "cmd/lumyn/",
         "internal/",
         "tests/",
         "examples/mock-api/",
-        "examples/workflows/"
+        "examples/cassettes/",
+        "schemas/"
       ],
       "forbidden_paths": [
         ".git/",
@@ -2435,24 +2436,844 @@
         "make prepush-full"
       ],
       "acceptance_checks": [
-        "Standard auth headers are redacted before persistence.",
-        "State bindings and validator drafts are generated with confidence labels.",
+        "Recorder writes repo-relative workflow, cassette, trace, and state-binding draft artifacts for the deterministic mock API.",
+        "Standard auth headers and configured sensitive fields are redacted before persistence; unsafe persistence fails closed.",
         "RCRR-003: `lumyn record create_customer_with_readback` writes workflow YAML, cassette, trace, and state bindings.",
-        "RCRR-004: Generated workflow YAML is readable and editable without a custom UI.",
         "RCRR-009: Standard auth headers and configured sensitive fields are redacted in all artifacts.",
-        "ACT-003: First workflow recorded and replay-verified in under 30 minutes.",
+        "FR6: FR6: Recording As Authoring - Lumyn must record known-good HTTP traffic and draft workflow contracts, validators, state bindings, cassettes, and cleanup suggestions.",
+        "FR8: FR8: Capture-Time Redaction - Secrets must be redacted before requests, responses, cassettes, traces, or reports are persisted.",
+        "NFR5: NFR5: Security - Redaction must happen before artifact persistence. If a value cannot be confidently redacted, Lumyn must fail closed: mark the artifact unsafe to persist rather than write a possibly-unredacted secret. Silent persistence of an unrecognized secret is a trust bug, not an edge case.",
+        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
+        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "commit-push",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": false,
+        "codex_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map",
+        "factoryd_run_once_report",
+        "coverage_gate_result"
+      ],
+      "test_matrix_refs": [
+        {
+          "tier": "Tier 1 Unit",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "go test ./... -count=1"
+          ]
+        },
+        {
+          "tier": "Tier 9 Contract",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-contracts"
+          ]
+        },
+        {
+          "tier": "Tier 4 Acceptance",
+          "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+          "status": "planned"
+        },
+        {
+          "tier": "Tier 11 Scenario",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "status": "planned"
+        }
+      ],
+      "security_scanner_gates": {
+        "required": true,
+        "scanner": "CodeQL",
+        "workflow_ref": ".github/workflows/codeql.yml",
+        "status_check": "CodeQL analyze",
+        "required_for_surfaces": [
+          "dependency additions",
+          "generated-code intake",
+          "CI or workflow changes",
+          "external calls",
+          "redaction/share/live/eval/provider code",
+          "data exposure",
+          "release-sensitive work"
+        ],
+        "exception_policy": "approved_exception_required"
+      },
+      "architecture_guidance_refs": [
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map",
+          "rule": "Medium/high risk tasks record state owner, feedback source, blast radius, source-of-truth impact, and rollback/deletion checks."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations",
+          "rule": "Behavior and schema/output changes use test-first evidence or a structured skipped reason."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#adr-and-decision-triggers",
+          "rule": "Boundary, public contract, failure semantics, credential/network, release, or major reliability/perf changes require ADR or decision note."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#performance-and-cost-triggers",
+          "rule": "Fan-out, repeated runs, or model calls declare expected cost/performance impact."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#reliability-and-recovery-triggers",
+          "rule": "Retry, cleanup, persistence, filesystem mutation, redaction, live network, and provider code require hardening/failure-mode evidence."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
+          "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
+        }
+      ],
+      "ci_lane_refs": [
+        {
+          "lane": "fast",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make lint-fast",
+            "make test-fast"
+          ]
+        },
+        {
+          "lane": "core",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make test-contracts",
+            "make prepush-full"
+          ]
+        },
+        {
+          "lane": "acceptance",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+          ]
+        },
+        {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
+          "lane": "risk",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "status_check_refs": [
+            "CodeQL analyze"
+          ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
+        }
+      ],
+      "engineering_policy_refs": [
+        {
+          "policy": "docs_parity",
+          "source_ref": "docs/dev/dev_guides.md#docs-parity",
+          "rule": "Behavior, flags, output shape, exit codes, artifact paths, install paths, and workflow semantics update docs and Factory planning artifacts together."
+        },
+        {
+          "policy": "output_contracts",
+          "source_ref": "docs/dev/dev_guides.md#output-contracts",
+          "rule": "Command-result JSON, exit codes, schemas, and product artifacts are public or executable contracts."
+        },
+        {
+          "policy": "release_integrity",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
+          "rule": "Release-sensitive work defines version, changelog, install, artifact-integrity, and UAT evidence before merge."
+        },
+        {
+          "policy": "provenance_evidence",
+          "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
+          "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
+        }
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
+        "mvp_eval_providers": [
+          "openai_compatible_http_adapter",
+          "anthropic_messages_http_adapter"
+        ]
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T4.1 closes the recorder capture/redaction path before workflow drafting and quality measurement build on it.",
+        "vertical_slice_preference": "T4 was split so each recorder slice has independent implementation, validation, and closure evidence."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add deterministic record, redact, normalize, workflow draft, and cassette draft behavior.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds record/redact/normalize behavior and schema-backed persisted event/cassette evidence.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes.",
+        "Redaction uncertainty blocks persistence or export and must surface structured failure evidence."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
+      "tdd_first_failing_tests": [
+        "Add failing recorder/redaction fixture proving secrets are not persisted before implementing capture.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "medium",
+        "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": false,
+        "hypothesis": "Redaction uncertainty or unsupported state inference must block persistence or label the output as weak proof.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Schema-backed artifacts must validate against the declared schema version or fail closure."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts",
+        "Do not implement replay verification; T5 owns replay behavior.",
+        "Do not implement report rendering or demo UX; T6 owns report/demo behavior."
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "RCRR-003",
+        "RCRR-009",
+        "FR6",
+        "FR8",
+        "NFR5",
+        "NFR6",
+        "FR2",
+        "FR14",
+        "NFR9",
+        "NFR12"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "RCRR-003",
+          "RCRR-009",
+          "FR6",
+          "FR8",
+          "NFR5",
+          "NFR6",
+          "FR2",
+          "FR14",
+          "NFR9",
+          "NFR12"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "docs/product/prd.md"
+      ],
+      "mvp_required_version_slices": [
+        "v0.0"
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
+      ]
+    },
+    {
+      "task_id": "T4.2",
+      "slice_type": "vertical",
+      "objective": "Implement editable workflow/cassette draft generation with approval, readability, confidence labels, and inference-humility metadata.",
+      "risk_class": "medium",
+      "blocked_by": [
+        "T4.1",
+        "T2.6"
+      ],
+      "allowed_paths": [
+        ".factory/artifacts/pr-lifecycle/T4.2/",
+        ".factory/artifacts/task-runs/T4.2/",
+        "cmd/lumyn/",
+        "internal/",
+        "tests/",
+        "examples/workflows/",
+        "examples/cassettes/",
+        "schemas/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "validation_commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "Generated workflow YAML remains readable and editable without a custom UI.",
+        "Validators, state bindings, cleanup suggestions, and approval state carry confidence labels and explicit user-approval posture.",
+        "RCRR-004: Generated workflow YAML is readable and editable without a custom UI.",
         "ACT-004: Generated workflow contract accepted with limited edits.",
-        "REC-QUALITY-001: At least 70% of drafted assertions, read-back candidates, and state bindings are accepted without edit on simple REST/OpenAPI workflows.",
         "FR5: FR5: Workflow Contract Schema - Lumyn must define a versioned YAML workflow contract with goal, expected outcome, validators, state bindings, context, constraints, and cleanup.",
         "FR6: FR6: Recording As Authoring - Lumyn must record known-good HTTP traffic and draft workflow contracts, validators, state bindings, cassettes, and cleanup suggestions.",
         "FR7: FR7: User Approval - Generated workflow contracts must be editable and approved before being treated as stable.",
-        "FR8: FR8: Capture-Time Redaction - Secrets must be redacted before requests, responses, cassettes, traces, or reports are persisted.",
-        "NFR2: NFR2: Fast First Workflow - A technical user should record and replay-verify one simple workflow in under 30 minutes.",
-        "NFR5: NFR5: Security - Redaction must happen before artifact persistence. If a value cannot be confidently redacted, Lumyn must fail closed: mark the artifact unsafe to persist rather than write a possibly-unredacted secret. Silent persistence of an unrecognized secret is a trust bug, not an edge case.",
+        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
         "NFR7: NFR7: Contract Readability - Workflow YAML must be understandable by engineers without a custom UI.",
         "NFR13: NFR13: Inference Humility - Recorder-generated validators, bindings, boundaries, and cleanup suggestions must be confidence-labeled.",
         "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
+        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "commit-push",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": false,
+        "codex_review_required": true,
+        "ship_pr_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required"
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map",
+        "factoryd_run_once_report",
+        "coverage_gate_result"
+      ],
+      "test_matrix_refs": [
+        {
+          "tier": "Tier 1 Unit",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "go test ./... -count=1"
+          ]
+        },
+        {
+          "tier": "Tier 9 Contract",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-contracts"
+          ]
+        },
+        {
+          "tier": "Tier 4 Acceptance",
+          "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+          "status": "planned"
+        },
+        {
+          "tier": "Tier 11 Scenario",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "status": "planned"
+        }
+      ],
+      "security_scanner_gates": {
+        "required": true,
+        "scanner": "CodeQL",
+        "workflow_ref": ".github/workflows/codeql.yml",
+        "status_check": "CodeQL analyze",
+        "required_for_surfaces": [
+          "dependency additions",
+          "generated-code intake",
+          "CI or workflow changes",
+          "external calls",
+          "redaction/share/live/eval/provider code",
+          "data exposure",
+          "release-sensitive work"
+        ],
+        "exception_policy": "approved_exception_required"
+      },
+      "architecture_guidance_refs": [
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map",
+          "rule": "Medium/high risk tasks record state owner, feedback source, blast radius, source-of-truth impact, and rollback/deletion checks."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations",
+          "rule": "Behavior and schema/output changes use test-first evidence or a structured skipped reason."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#adr-and-decision-triggers",
+          "rule": "Boundary, public contract, failure semantics, credential/network, release, or major reliability/perf changes require ADR or decision note."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#performance-and-cost-triggers",
+          "rule": "Fan-out, repeated runs, or model calls declare expected cost/performance impact."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#reliability-and-recovery-triggers",
+          "rule": "Retry, cleanup, persistence, filesystem mutation, redaction, live network, and provider code require hardening/failure-mode evidence."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
+          "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
+        }
+      ],
+      "ci_lane_refs": [
+        {
+          "lane": "fast",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make lint-fast",
+            "make test-fast"
+          ]
+        },
+        {
+          "lane": "core",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make test-contracts",
+            "make prepush-full"
+          ]
+        },
+        {
+          "lane": "acceptance",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+          ]
+        },
+        {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
+          "lane": "risk",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "status_check_refs": [
+            "CodeQL analyze"
+          ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
+        }
+      ],
+      "engineering_policy_refs": [
+        {
+          "policy": "docs_parity",
+          "source_ref": "docs/dev/dev_guides.md#docs-parity",
+          "rule": "Behavior, flags, output shape, exit codes, artifact paths, install paths, and workflow semantics update docs and Factory planning artifacts together."
+        },
+        {
+          "policy": "output_contracts",
+          "source_ref": "docs/dev/dev_guides.md#output-contracts",
+          "rule": "Command-result JSON, exit codes, schemas, and product artifacts are public or executable contracts."
+        },
+        {
+          "policy": "release_integrity",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
+          "rule": "Release-sensitive work defines version, changelog, install, artifact-integrity, and UAT evidence before merge."
+        },
+        {
+          "policy": "provenance_evidence",
+          "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
+          "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
+        }
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
+        "mvp_eval_providers": [
+          "openai_compatible_http_adapter",
+          "anthropic_messages_http_adapter"
+        ]
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T4.2 turns captured traffic into human-editable workflow and cassette drafts without mixing in quality-corpus scoring.",
+        "vertical_slice_preference": "T4 was split so each recorder slice has independent implementation, validation, and closure evidence."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add deterministic record, redact, normalize, workflow draft, and cassette draft behavior.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds workflow/cassette draft authoring contracts and approval/readability evidence.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes.",
+        "Redaction uncertainty blocks persistence or export and must surface structured failure evidence."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
+      "tdd_first_failing_tests": [
+        "Add failing workflow draft fixture proving confidence labels and editable approval posture are required.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "medium",
+        "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": false,
+        "hypothesis": "Redaction uncertainty or unsupported state inference must block persistence or label the output as weak proof.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Schema-backed artifacts must validate against the declared schema version or fail closure."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts",
+        "Do not implement replay verification; T5 owns replay behavior.",
+        "Do not implement report rendering or demo UX; T6 owns report/demo behavior."
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "RCRR-004",
+        "ACT-004",
+        "FR5",
+        "FR6",
+        "FR7",
+        "FR9",
+        "NFR7",
+        "NFR13",
+        "FR2",
+        "FR14",
+        "NFR9",
+        "NFR12",
+        "NFR6"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "RCRR-004",
+          "ACT-004",
+          "FR5",
+          "FR6",
+          "FR7",
+          "FR9",
+          "NFR7",
+          "NFR13",
+          "FR2",
+          "FR14",
+          "NFR9",
+          "NFR12",
+          "NFR6"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "docs/product/prd.md"
+      ],
+      "mvp_required_version_slices": [
+        "v0.0"
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
+      ]
+    },
+    {
+      "task_id": "T4.3",
+      "slice_type": "vertical",
+      "objective": "Add recorder quality measurement harness over strong-spec and weak-spec REST/OpenAPI fixtures for the 70 percent draft-acceptance gate.",
+      "risk_class": "medium",
+      "blocked_by": [
+        "T4.2",
+        "T2.6"
+      ],
+      "allowed_paths": [
+        ".factory/artifacts/pr-lifecycle/T4.3/",
+        ".factory/artifacts/task-runs/T4.3/",
+        "cmd/lumyn/",
+        "internal/",
+        "tests/",
+        "examples/recorder-quality/",
+        "examples/openapi/",
+        "docs/dev/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "validation_commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "The 70 percent REC-QUALITY-001 gate is calculated as accepted_without_edit divided by recorder confidence claims across strong-spec and weak-spec fixtures.",
+        "REC-QUALITY-001 denominator is measured only over recorder confidence claims across strong-spec and weak-spec simple REST/OpenAPI fixtures.",
+        "needs_user_input and coverage_gap items are counted as non-claims, not failed drafts.",
+        "Quality evidence records accepted_without_edit, edited, rejected, needs_user_input, and coverage_gap counts.",
+        "REC-QUALITY-001: At least 70% of drafted assertions, read-back candidates, and state bindings are accepted without edit on simple REST/OpenAPI workflows.",
+        "ACT-003: First workflow recorded and replay-verified in under 30 minutes.",
+        "FR6: FR6: Recording As Authoring - Lumyn must record known-good HTTP traffic and draft workflow contracts, validators, state bindings, cassettes, and cleanup suggestions.",
         "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+        "NFR2: NFR2: Fast First Workflow - A technical user should record and replay-verify one simple workflow in under 30 minutes.",
+        "NFR13: NFR13: Inference Humility - Recorder-generated validators, bindings, boundaries, and cleanup suggestions must be confidence-labeled.",
+        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
         "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
         "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
         "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
@@ -2655,8 +3476,8 @@
       },
       "slice_rationale": {
         "slice_type": "vertical",
-        "why_this_shape": "T4 is scoped to implement record/redact/normalize pipeline and draft workflow/cassette artifacts for a deterministic mock API.",
-        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+        "why_this_shape": "T4.3 isolates the quantified recorder-quality gate from the implementation of capture and draft generation.",
+        "vertical_slice_preference": "T4 was split so each recorder slice has independent implementation, validation, and closure evidence."
       },
       "changelog": {
         "impact": "required_when_implemented",
@@ -2664,7 +3485,7 @@
         "draft_entry": "Add deterministic record, redact, normalize, workflow draft, and cassette draft behavior.",
         "semver_marker_override": "pre_1_0_minor_candidate"
       },
-      "contract_impact": "Adds record/redact/normalize behavior and workflow/cassette draft artifact contracts.",
+      "contract_impact": "Adds a deterministic recorder-quality measurement corpus and closure evidence for the 70 percent gate.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
         "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
@@ -2677,7 +3498,7 @@
       "adr_required": true,
       "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
       "tdd_first_failing_tests": [
-        "Add or update the smallest failing test, fixture, or schema validation for T4 acceptance before implementation when practical.",
+        "Add failing quality-harness fixture proving non-claims are excluded from the 70 percent denominator.",
         "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
       ],
       "cost_perf_impact": {
@@ -2723,7 +3544,9 @@
         "runtime enforcement",
         "production trace import",
         "multi-provider eval panels",
-        "training shared models on private artifacts"
+        "training shared models on private artifacts",
+        "Do not implement replay verification; T5 owns replay behavior.",
+        "Do not implement report rendering or demo UX; T6 owns report/demo behavior."
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
       "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
@@ -2779,22 +3602,13 @@
       },
       "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
       "acceptance_item_ids": [
-        "RCRR-003",
-        "RCRR-004",
-        "RCRR-009",
-        "ACT-003",
-        "ACT-004",
         "REC-QUALITY-001",
-        "FR5",
+        "ACT-003",
         "FR6",
-        "FR7",
-        "FR8",
+        "FR9",
         "NFR2",
-        "NFR5",
-        "NFR7",
         "NFR13",
         "FR2",
-        "FR9",
         "FR14",
         "NFR6",
         "NFR9",
@@ -2803,22 +3617,13 @@
       "validation_contract_inheritance": {
         "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
         "acceptance_item_ids": [
-          "RCRR-003",
-          "RCRR-004",
-          "RCRR-009",
-          "ACT-003",
-          "ACT-004",
           "REC-QUALITY-001",
-          "FR5",
+          "ACT-003",
           "FR6",
-          "FR7",
-          "FR8",
+          "FR9",
           "NFR2",
-          "NFR5",
-          "NFR7",
           "NFR13",
           "FR2",
-          "FR9",
           "FR14",
           "NFR6",
           "NFR9",
@@ -2826,7 +3631,8 @@
         ]
       },
       "input_artifacts": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "docs/product/prd.md"
       ],
       "mvp_required_version_slices": [
         "v0.0"
@@ -2841,7 +3647,7 @@
       "objective": "Implement replay verification, stale cassette detection, `api_state`, and limited `trace_assertion` validators.",
       "risk_class": "medium",
       "blocked_by": [
-        "T4",
+        "T4.3",
         "T2.6"
       ],
       "allowed_paths": [
@@ -3287,6 +4093,7 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
+        "make smoke-first-session",
         "make test-coverage",
         "make prepush-full"
       ],
@@ -3310,7 +4117,9 @@
         "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
         "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
         "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
-        "RCRR-012: `lumyn demo` includes bundled proof-gap and boundary-violation/safety finding examples without requiring a hosted account, model key, or sandbox."
+        "RCRR-012: `lumyn demo` includes bundled proof-gap and boundary-violation/safety finding examples without requiring a hosted account, model key, or sandbox.",
+        "First-session smoke script runs init, check, demo report open/render probe, record, and replay verification against bundled local fixtures with elapsed-time evidence.",
+        "First-session smoke evidence records ACT-001 under 5 minutes, ACT-002 under 10 minutes, and ACT-003 under 30 minutes without model key, sandbox, hosted account, or network."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -3336,7 +4145,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "first_session_smoke_report"
       ],
       "test_matrix_refs": [
         {
@@ -3577,7 +4387,8 @@
         "runtime enforcement",
         "production trace import",
         "multi-provider eval panels",
-        "training shared models on private artifacts"
+        "training shared models on private artifacts",
+        "Do not satisfy first-session acceptance with manual-only notes when deterministic smoke evidence can be captured."
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
       "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
@@ -3650,7 +4461,8 @@
         "FR9",
         "FR14",
         "NFR12",
-        "RCRR-012"
+        "RCRR-012",
+        "ACT-002"
       ],
       "validation_contract_inheritance": {
         "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
@@ -3672,7 +4484,8 @@
           "FR9",
           "FR14",
           "NFR12",
-          "RCRR-012"
+          "RCRR-012",
+          "ACT-002"
         ]
       },
       "input_artifacts": [
@@ -3693,7 +4506,23 @@
           "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json#/items/RCRR-012",
           "rule": "Bundled examples show proof-gap and boundary-violation safety findings locally."
         }
-      ]
+      ],
+      "first_session_smoke": {
+        "required": true,
+        "command": "make smoke-first-session",
+        "report_ref": ".factory/artifacts/task-runs/T6/first-session-smoke.json",
+        "acceptance_item_ids": [
+          "ACT-001",
+          "ACT-002",
+          "ACT-003"
+        ],
+        "time_budgets": {
+          "ACT-001": "5m",
+          "ACT-002": "10m",
+          "ACT-003": "30m"
+        },
+        "network_posture": "offline"
+      }
     },
     {
       "task_id": "T7",
