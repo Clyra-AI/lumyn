@@ -6,6 +6,7 @@ Factory artifacts for Lumyn live under `.factory/artifacts/`.
 - Task-run evidence: `.factory/artifacts/task-runs/`
 - PR lifecycle evidence: `.factory/artifacts/pr-lifecycle/`
 - Downstream pilot evidence: `.factory/artifacts/pilot/lumyn-mvp-slice/`
+- Active safe attended daemon config: `.factory/factoryd.json`
 - Safe daemon config template: `.factory/factoryd.example.json`
 - Explicit autoship daemon config template: `.factory/factoryd.autoship.example.json`
 - Local daemon runtime state: `.factoryd/` (gitignored)
@@ -28,8 +29,8 @@ Start with non-mutating proof:
 
 ```text
 export FACTORY_REPO=../factory
-factoryd doctor --config .factory/factoryd.example.json --repo lumyn --json
-factoryd run --config .factory/factoryd.example.json --repo lumyn --dry-run --json
+factoryd doctor --config .factory/factoryd.json --repo lumyn --json
+factoryd run --config .factory/factoryd.json --repo lumyn --dry-run --json
 ```
 
 Run one implementation task without remote shipping only after the selected
@@ -38,7 +39,7 @@ requirements, lifecycle gates, and stop conditions:
 
 ```text
 export FACTORY_REPO=../factory
-factoryd run --config .factory/factoryd.example.json --repo lumyn --once --json
+factoryd run --config .factory/factoryd.json --repo lumyn --once --json
 ```
 
 Use autoship only after branch protection, required `validate` and

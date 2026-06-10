@@ -46,6 +46,7 @@ Every change should improve one or more of:
 - `docs/architecture/`: repo-local architecture guidance.
 - `.factory/artifacts/`: durable Factory planning, validation, closure, and handoff artifacts.
 - `.factory/tmp/`: ignored local execution scratch space.
+- `.factory/factoryd.json`: active safe attended daemon config.
 - `.factory/factoryd.example.json`: safe repo-local daemon config template.
 - `.factory/factoryd.autoship.example.json`: explicit full-loop daemon config template for protected GitHub execution.
 - `.factoryd/`: ignored local daemon state, claims, worktrees, events, and run reports.

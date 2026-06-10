@@ -19,6 +19,7 @@ ACCEPTANCE_MAPPING = PLAN_DIR / "acceptance-mapping.json"
 SCOPE_CLOSURE_MAP = PLAN_DIR / "scope-closure-map.json"
 RISK_CLASSIFICATION = PLAN_DIR / "risk-classification.json"
 FACTORYD_CONFIG = ROOT / ".factory" / "factoryd.example.json"
+FACTORYD_ACTIVE_CONFIG = ROOT / ".factory" / "factoryd.json"
 FACTORYD_AUTOSHIP_CONFIG = ROOT / ".factory" / "factoryd.autoship.example.json"
 REQUIRED_CHECKS = ROOT / ".github" / "required-checks.json"
 CODEOWNERS = ROOT / ".github" / "CODEOWNERS"
@@ -131,7 +132,7 @@ REQUIRED_LIVE_EVAL_DISPATCH_GATES = {"PULL-001", "PULL-004"}
 REQUIRED_MVP_VERSION_SLICES = {
     "v0.0": {
         "capability_group_id": "record_contract_replay_report",
-        "task_refs": {"T1", "T2", "T2.7", "T3", "T4", "T5", "T6", "T10"},
+        "task_refs": {"T1", "T2", "T2.7", "T3", "T4.1", "T4.2", "T4.3", "T5", "T6", "T10"},
     },
     "v0.1": {
         "capability_group_id": "live_verify_boundary_ci_share",
@@ -157,12 +158,12 @@ REQUIRED_ACCEPTANCE_TASK_REFS = {
     "LVCIS-009": {"T8"},
     "LVCIS-010": {"T9"},
     "EVAL-011": {"T11", "T12"},
-    "FR14": {"T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
-    "NFR9": {"T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
-    "NFR12": {"T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
-    "FR9": {"T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
-    "FR2": {"T3", "T4", "T5", "T6", "T10", "T11", "T12"},
-    "NFR6": {"T4", "T5", "T6", "T7", "T10", "T11", "T12"},
+    "FR14": {"T3", "T4.1", "T4.2", "T4.3", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
+    "NFR9": {"T3", "T4.1", "T4.2", "T4.3", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
+    "NFR12": {"T4.1", "T4.2", "T4.3", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
+    "FR9": {"T4.2", "T4.3", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
+    "FR2": {"T3", "T4.1", "T4.2", "T4.3", "T5", "T6", "T10", "T11", "T12"},
+    "NFR6": {"T4.1", "T4.2", "T4.3", "T5", "T6", "T7", "T10", "T11", "T12"},
 }
 
 REQUIRED_FACTORYD_RUNTIME_FIELDS = [
@@ -1481,6 +1482,65 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
                 fail("T11 acceptance_checks must name both OpenAI-compatible and Anthropic adapter coverage")
         if is_live_eval_dispatch_task(task):
             validate_live_eval_dispatch_gates(task)
+    if any(task_ref in tasks_by_id for task_ref in ["T4", "T4.1", "T4.2", "T4.3"]):
+        validate_recorder_task_split(tasks_by_id)
+    if "T6" in tasks_by_id:
+        validate_first_session_smoke_task(tasks_by_id)
+
+
+def validate_recorder_task_split(tasks_by_id: dict[str, dict[str, Any]]) -> None:
+    if "T4" in tasks_by_id:
+        fail("task-packets.json must split broad T4 into T4.1, T4.2, and T4.3 before recorder dispatch")
+    required = {
+        "T4.1": {"RCRR-003", "RCRR-009", "FR8", "NFR5"},
+        "T4.2": {"RCRR-004", "ACT-004", "FR5", "FR7", "NFR7", "NFR13"},
+        "T4.3": {"REC-QUALITY-001", "ACT-003", "NFR2"},
+    }
+    for task_id_value, item_ids in required.items():
+        task = tasks_by_id.get(task_id_value)
+        if not isinstance(task, dict):
+            fail(f"task-packets.json missing recorder split task {task_id_value}")
+        actual_ids = {str(value) for value in task.get("acceptance_item_ids", [])}
+        missing = sorted(item_ids - actual_ids)
+        if missing:
+            fail(f"{task_id_value}.acceptance_item_ids missing recorder split ids: {missing}")
+        if "v0.0" not in {str(value) for value in task.get("delivery_slice_refs", [])}:
+            fail(f"{task_id_value}.delivery_slice_refs must include v0.0")
+    t42_deps = {str(value) for value in tasks_by_id["T4.2"].get("blocked_by", [])}
+    if "T4.1" not in t42_deps:
+        fail("T4.2 must depend on T4.1")
+    t43_deps = {str(value) for value in tasks_by_id["T4.3"].get("blocked_by", [])}
+    if "T4.2" not in t43_deps:
+        fail("T4.3 must depend on T4.2")
+    t5_deps = {str(value) for value in tasks_by_id["T5"].get("blocked_by", [])}
+    if "T4.3" not in t5_deps or "T4" in t5_deps:
+        fail("T5 must depend on T4.3, not the removed broad T4 packet")
+    quality_checks = "\n".join(str(value).lower() for value in tasks_by_id["T4.3"].get("acceptance_checks", []))
+    for token in ["strong-spec", "weak-spec", "non-claims", "70 percent"]:
+        if token not in quality_checks:
+            fail(f"T4.3 acceptance_checks must define REC-QUALITY-001 measurement token {token!r}")
+
+
+def validate_first_session_smoke_task(tasks_by_id: dict[str, dict[str, Any]]) -> None:
+    task = tasks_by_id.get("T6")
+    if not isinstance(task, dict):
+        fail("task-packets.json missing T6")
+    smoke = task.get("first_session_smoke")
+    if not isinstance(smoke, dict):
+        fail("T6.first_session_smoke is required")
+    if smoke.get("required") is not True:
+        fail("T6.first_session_smoke.required must be true")
+    if smoke.get("command") != "make smoke-first-session":
+        fail("T6.first_session_smoke.command must be make smoke-first-session")
+    if smoke.get("report_ref") != ".factory/artifacts/task-runs/T6/first-session-smoke.json":
+        fail("T6.first_session_smoke.report_ref must be task-scoped")
+    smoke_ids = {str(value) for value in smoke.get("acceptance_item_ids", [])}
+    if not {"ACT-001", "ACT-002", "ACT-003"}.issubset(smoke_ids):
+        fail("T6.first_session_smoke.acceptance_item_ids must cover ACT-001, ACT-002, and ACT-003")
+    if "first_session_smoke_report" not in {str(value) for value in task.get("evidence_required", [])}:
+        fail("T6.evidence_required must include first_session_smoke_report")
+    if "make smoke-first-session" not in {str(value) for value in task.get("validation_commands", [])}:
+        fail("T6.validation_commands must include make smoke-first-session")
 
 
 def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: str) -> None:
@@ -1689,9 +1749,11 @@ def validate_safety_corpus_ready_plan(
             fail(f"execution-plan.json missing safety/corpus plan token: {token}")
 
 
-def validate_factoryd_config(config: dict[str, Any], autoship_config: dict[str, Any]) -> None:
+def validate_factoryd_config(config: dict[str, Any], active_config: dict[str, Any], autoship_config: dict[str, Any]) -> None:
     if contains_machine_local_path(config):
         fail(".factory/factoryd.example.json contains a machine-local absolute path")
+    if contains_machine_local_path(active_config):
+        fail(".factory/factoryd.json contains a machine-local absolute path")
     if contains_machine_local_path(autoship_config):
         fail(".factory/factoryd.autoship.example.json contains a machine-local absolute path")
     repos = config.get("repos")
@@ -1743,6 +1805,14 @@ def validate_factoryd_config(config: dict[str, Any], autoship_config: dict[str, 
     ]:
         if shipping.get(key) != "":
             fail(f".factory/factoryd.example.json shipping.{key} must be empty until hooks are approved")
+    active_repos = active_config.get("repos")
+    if not isinstance(active_repos, dict) or "lumyn" not in active_repos:
+        fail(".factory/factoryd.json must define repos.lumyn")
+    if active_repos["lumyn"] != lumyn:
+        fail(".factory/factoryd.json repos.lumyn must match the safe attended example config")
+    active_factory = active_config.get("factory")
+    if not isinstance(active_factory, dict) or active_factory.get("repo_path") != "../../factory":
+        fail(".factory/factoryd.json factory.repo_path must point to sibling ../../factory")
     autoship_repos = autoship_config.get("repos")
     if not isinstance(autoship_repos, dict) or "lumyn" not in autoship_repos:
         fail(".factory/factoryd.autoship.example.json must define repos.lumyn")
@@ -2556,6 +2626,7 @@ def main() -> int:
         packets = load_json(TASK_PACKETS)
         contract = load_json(VALIDATION_CONTRACT)
         factoryd_config = load_json(FACTORYD_CONFIG)
+        factoryd_active_config = load_json(FACTORYD_ACTIVE_CONFIG)
         factoryd_autoship_config = load_json(FACTORYD_AUTOSHIP_CONFIG)
         acceptance_ledger = load_json(ACCEPTANCE_LEDGER)
         acceptance_mapping = load_json(ACCEPTANCE_MAPPING)
@@ -2568,7 +2639,7 @@ def main() -> int:
         for packet_path in REPAIR_TASK_PACKETS:
             validate_standalone_task_packet(load_json(packet_path), baseline_task_id)
         validate_validation_contract(contract)
-        validate_factoryd_config(factoryd_config, factoryd_autoship_config)
+        validate_factoryd_config(factoryd_config, factoryd_active_config, factoryd_autoship_config)
         validate_acceptance_mapping(acceptance_mapping, ledger_ids, contract)
         validate_scope_closure_map(scope_closure_map, ledger_ids)
         validate_safety_corpus_ready_plan(

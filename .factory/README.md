@@ -2,6 +2,7 @@
 
 - `.factory/artifacts/`: committed planning, validation, closure, and handoff artifacts.
 - `.factory/tmp/`: ignored local scratch space.
+- `.factory/factoryd.json`: active safe attended daemon configuration.
 - `.factory/factoryd.example.json`: safe repo-local daemon configuration template.
 - `.factory/factoryd.autoship.example.json`: explicit full-loop daemon configuration template for protected GitHub execution.
 - `.factoryd/`: ignored local daemon state, worktrees, claims, events, and run reports.
