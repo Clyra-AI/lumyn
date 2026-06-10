@@ -302,6 +302,28 @@ def require_existing(relative_path: str) -> None:
         fail(f"missing required repo-pack file: {relative_path}")
 
 
+def ref_file_exists(ref: Any) -> bool:
+    if not isinstance(ref, str) or not ref.strip():
+        return False
+    path_part = ref.split("#", 1)[0]
+    return bool(path_part) and (ROOT / path_part).exists()
+
+
+def validate_coverage_policy_refs(value: Any, label: str) -> None:
+    if not isinstance(value, dict):
+        fail(f"{label} must be an object")
+    for key in ["exception_ref", "evidence_ref"]:
+        if isinstance(value.get(key), str) and value[key].strip() and not ref_file_exists(value[key]):
+            fail(f"{label}.{key} points to missing file {value[key]}")
+    minimums = value.get("minimums")
+    if isinstance(minimums, list):
+        for index, item in enumerate(minimums):
+            if not isinstance(item, dict):
+                continue
+            if isinstance(item.get("exception_ref"), str) and item["exception_ref"].strip() and not ref_file_exists(item["exception_ref"]):
+                fail(f"{label}.minimums[{index}].exception_ref points to missing file {item['exception_ref']}")
+
+
 def validate_guides() -> None:
     for relative_path in REQUIRED_GUIDES:
         require_existing(relative_path)
@@ -677,6 +699,7 @@ def validate_task_guide_sources(task: dict[str, Any]) -> None:
         fail(f"{task_id_value} test_matrix_refs must include source {TEST_MATRIX_SOURCE_BASE}")
     if object_source_ref_base(task.get("coverage_policy_refs")) != COVERAGE_POLICY_SOURCE_BASE:
         fail(f"{task_id_value} coverage_policy_refs must include source {COVERAGE_POLICY_SOURCE_BASE}")
+    validate_coverage_policy_refs(task.get("coverage_policy_refs"), f"{task_id_value}.coverage_policy_refs")
     if not refs_include_base(task, "architecture_guidance_refs", ARCHITECTURE_GUIDE_BASE):
         fail(f"{task_id_value} architecture_guidance_refs must include source {ARCHITECTURE_GUIDE_BASE}")
     missing_lanes = missing_ci_lane_refs(task)
@@ -943,6 +966,7 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
         fail("dev_architecture_propagation.coverage_policy.required must be true")
     if not has_nonempty_list(coverage_policy.get("command_refs")):
         fail("dev_architecture_propagation.coverage_policy.command_refs must be non-empty")
+    validate_coverage_policy_refs(coverage_policy, "dev_architecture_propagation.coverage_policy")
     requirements = propagation.get("task_packet_requirements")
     if not isinstance(requirements, list):
         fail("dev_architecture_propagation.task_packet_requirements must be a list")
@@ -1075,6 +1099,7 @@ def validate_validation_contract(contract: dict[str, Any]) -> None:
         "validation-contract.json.mvp_eval_provider_adapters",
     )
     validate_plan_drift_policy(contract.get("plan_drift_policy"), "validation-contract.json.plan_drift_policy")
+    validate_coverage_policy_refs(contract.get("coverage_policy"), "validation-contract.json.coverage_policy")
     alignment = contract.get("planning_skill_alignment")
     if not isinstance(alignment, dict):
         fail("validation-contract.json missing planning_skill_alignment")
