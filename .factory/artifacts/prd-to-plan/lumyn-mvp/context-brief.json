@@ -192,7 +192,10 @@
       "execution_plan",
       "task_packets",
       "validation_contract",
-      "factory_compatibility"
+      "factory_compatibility",
+      "acceptance_ledger",
+      "acceptance_mapping",
+      "scope_closure_map"
     ],
     "continuation_behavior": "block_until_artifacts_updated"
   },

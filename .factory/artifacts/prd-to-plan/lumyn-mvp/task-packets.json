@@ -150,7 +150,7 @@
         "Factory evidence and product artifacts use repo-relative paths only.",
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "ci_lane_refs": [
         {
           "lane": "fast",
@@ -531,7 +531,7 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Schema-backed artifacts must validate against the declared schema version or fail closure."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "ci_lane_refs": [
         {
           "lane": "fast",
@@ -929,7 +929,7 @@
         "Factory evidence and product artifacts use repo-relative paths only.",
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "ci_lane_refs": [
         {
           "lane": "fast",
@@ -1462,7 +1462,7 @@
         "Factory evidence and product artifacts use repo-relative paths only.",
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "factory_compatibility": {
         "factory_contract_version": "1.0",
         "profile_ref": "profiles/lumyn.yaml",
@@ -1854,7 +1854,7 @@
         "Factory evidence and product artifacts use repo-relative paths only.",
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "factory_compatibility": {
         "factory_contract_version": "1.0",
         "profile_ref": "profiles/lumyn.yaml",
@@ -2266,7 +2266,7 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Schema-backed artifacts must validate against the declared schema version or fail closure."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "factory_compatibility": {
         "factory_contract_version": "1.0",
         "profile_ref": "profiles/lumyn.yaml",
@@ -2689,7 +2689,7 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Schema-backed artifacts must validate against the declared schema version or fail closure."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "factory_compatibility": {
         "factory_contract_version": "1.0",
         "profile_ref": "profiles/lumyn.yaml",
@@ -3105,7 +3105,7 @@
         "Factory evidence and product artifacts use repo-relative paths only.",
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "factory_compatibility": {
         "factory_contract_version": "1.0",
         "profile_ref": "profiles/lumyn.yaml",
@@ -3528,7 +3528,7 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Live credential/network work is disabled by default and cannot run without approved posture evidence."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "factory_compatibility": {
         "factory_contract_version": "1.0",
         "profile_ref": "profiles/lumyn.yaml",
@@ -3933,7 +3933,7 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Schema-backed artifacts must validate against the declared schema version or fail closure."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "factory_compatibility": {
         "factory_contract_version": "1.0",
         "profile_ref": "profiles/lumyn.yaml",
@@ -4321,7 +4321,7 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "PR/CI surfaces must distinguish skipped, stale, weak, and strong proof states."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "factory_compatibility": {
         "factory_contract_version": "1.0",
         "profile_ref": "profiles/lumyn.yaml",
@@ -4717,7 +4717,7 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Schema-backed artifacts must validate against the declared schema version or fail closure."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "factory_compatibility": {
         "factory_contract_version": "1.0",
         "profile_ref": "profiles/lumyn.yaml",
@@ -5141,7 +5141,7 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Live credential/network work is disabled by default and cannot run without approved posture evidence."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "factory_compatibility": {
         "factory_contract_version": "1.0",
         "profile_ref": "profiles/lumyn.yaml",
@@ -5591,7 +5591,7 @@
         "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
         "Schema-backed artifacts must validate against the declared schema version or fail closure."
       ],
-      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, or validation-contract decisions, update context brief, execution plan, task packets, and validation contract before implementation continues.",
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
       "factory_compatibility": {
         "factory_contract_version": "1.0",
         "profile_ref": "profiles/lumyn.yaml",
