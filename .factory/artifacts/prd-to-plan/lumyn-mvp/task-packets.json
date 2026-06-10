@@ -36,7 +36,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make lint-fast",
@@ -50,7 +51,10 @@
         "Go module path is github.com/Clyra-AI/lumyn and Go version is pinned to 1.26.4.",
         "T1 has no external runtime dependencies unless explicitly justified and pinned.",
         "Tests pass without network, sandbox credentials, or model keys.",
-        "Unknown commands fail closed with exit code 2 while still emitting the command-result JSON envelope."
+        "Unknown commands fail closed with exit code 2 while still emitting the command-result JSON envelope.",
+        "FDN-001: Create the Go CLI skeleton, command-result JSON envelope, exit-code constants, command dispatch, and repo-local validation baseline needed before product commands are implemented.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible."
       ],
       "runtime": {
         "language": "go",
@@ -339,7 +343,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -366,7 +371,24 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "FDN-001",
+        "FR14",
+        "NFR9"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "FDN-001",
+          "FR14",
+          "NFR9"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     },
     {
       "task_id": "T2",
@@ -397,7 +419,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make test-fast",
@@ -412,7 +435,11 @@
         "Schema tests compile every schema with a pinned JSON Schema validator.",
         "Representative artifacts validate for workflow contract, command result, proof strength, cassette, evidence event, redaction config, and related surfaces.",
         "Invalid command-result output fails schema validation.",
-        "Schema validator dependency is pinned in go.mod/go.sum and justified in dev guidance."
+        "Schema validator dependency is pinned in go.mod/go.sum and justified in dev guidance.",
+        "FDN-002: Define initial workflow, command-result, proof-strength, cassette, evidence-event, state-binding, redaction-config, and related schema contracts before feature implementation.",
+        "FR5: FR5: Workflow Contract Schema - Lumyn must define a versioned YAML workflow contract with goal, expected outcome, validators, state bindings, context, constraints, and cleanup.",
+        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
       ],
       "runtime": {
         "language": "go",
@@ -704,7 +731,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -731,7 +759,26 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "FDN-002",
+        "FR5",
+        "FR9",
+        "NFR12"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "FDN-002",
+          "FR5",
+          "FR9",
+          "NFR12"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     },
     {
       "task_id": "T2.5",
@@ -770,7 +817,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make lint-fast",
@@ -788,7 +836,8 @@
         ".github/workflows/validate.yml and .github/workflows/codeql.yml declare least-privilege permissions, concurrency cancellation, job timeouts, and toolchain setup from go.mod.",
         ".github/CODEOWNERS covers workflow, policy, Factory artifact, schema, CLI, and core implementation paths.",
         ".github/action-ref-exceptions.yaml records audited exceptions for non-SHA GitHub Action refs.",
-        "scripts/validate_repo_pack.py fails when the CI control set drifts."
+        "scripts/validate_repo_pack.py fails when the CI control set drifts.",
+        "FDL-001: Repository CI validation, required-check metadata, workflow hardening, owner review, action-ref posture, branch protection evidence, and PR lifecycle evidence are established before product implementation continues."
       ],
       "runtime": {
         "language": "go",
@@ -1078,7 +1127,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -1121,7 +1171,20 @@
           "toolchain_pin_source": "go.mod"
         },
         "validator_ref": "scripts/validate_repo_pack.py"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "FDL-001"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "FDL-001"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     },
     {
       "task_id": "T2.6",
@@ -1157,7 +1220,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make lint-fast",
@@ -1174,7 +1238,8 @@
         "docs/dev/dev_guides.md maps fast, core, acceptance, cross-platform, risk, and release lanes.",
         "docs/dev/dev_guides.md defines docs parity, output contracts, release integrity, and provenance evidence rules.",
         "docs/architecture/architecture_guides.md defines systems thinking, TDD/red-first, ADR, performance, reliability, and trust-mode/fail-closed rules.",
-        "T3 and later product task packets carry ci_lane_refs, engineering_policy_refs, architecture_guidance_refs, test_matrix_refs, and security_scanner_gates."
+        "T3 and later product task packets carry ci_lane_refs, engineering_policy_refs, architecture_guidance_refs, test_matrix_refs, and security_scanner_gates.",
+        "FDAP-001: Repo dev guide, architecture guide, 12-level test matrix, coverage policy, security scanner posture, docs/output/release/provenance rules, and architecture boundary rules are propagated into executable planning."
       ],
       "runtime": {
         "language": "go",
@@ -1463,7 +1528,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -1490,7 +1556,20 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "FDAP-001"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "FDAP-001"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     },
     {
       "task_id": "T3",
@@ -1520,7 +1599,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make test-coverage",
@@ -1528,7 +1608,18 @@
       ],
       "acceptance_checks": [
         "`lumyn init` writes valid config.",
-        "`lumyn check` emits concrete source references."
+        "`lumyn check` emits concrete source references.",
+        "RCRR-001: `lumyn init` writes valid config and source-check artifacts.",
+        "RCRR-002: `lumyn check` emits a workflow-relevant source finding with a concrete reference.",
+        "ACT-002: `init` plus `check` completed in under 10 minutes.",
+        "FR1: FR1: Product Surface Under Test - Lumyn must frame the customer's API/docs surface as the system under test and agents as probes.",
+        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+        "FR3: FR3: OpenAPI And Local Docs Intake - Lumyn must ingest an OpenAPI file and local docs folder.",
+        "FR4: FR4: Agent-Relevant Source Checks - Lumyn must run structural checks that affect agent tool choice, validation, auth handling, retries, and workflow proof.",
+        "NFR1: NFR1: Fast First Value - A technical user should run `init`, `check`, and open bundled traces in under 10 minutes.",
+        "NFR8: NFR8: Parser-First - OpenAPI checks should use structured parsers and schema-aware libraries where possible.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -1813,7 +1904,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -1840,7 +1932,40 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "RCRR-001",
+        "RCRR-002",
+        "ACT-002",
+        "FR1",
+        "FR2",
+        "FR3",
+        "FR4",
+        "NFR1",
+        "NFR8",
+        "NFR9",
+        "FR14"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "RCRR-001",
+          "RCRR-002",
+          "ACT-002",
+          "FR1",
+          "FR2",
+          "FR3",
+          "FR4",
+          "NFR1",
+          "NFR8",
+          "NFR9",
+          "FR14"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     },
     {
       "task_id": "T4",
@@ -1870,7 +1995,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make test-coverage",
@@ -1878,7 +2004,27 @@
       ],
       "acceptance_checks": [
         "Standard auth headers are redacted before persistence.",
-        "State bindings and validator drafts are generated with confidence labels."
+        "State bindings and validator drafts are generated with confidence labels.",
+        "RCRR-003: `lumyn record create_customer_with_readback` writes workflow YAML, cassette, trace, and state bindings.",
+        "RCRR-004: Generated workflow YAML is readable and editable without a custom UI.",
+        "RCRR-009: Standard auth headers and configured sensitive fields are redacted in all artifacts.",
+        "ACT-003: First workflow recorded and replay-verified in under 30 minutes.",
+        "ACT-004: Generated workflow contract accepted with limited edits.",
+        "REC-QUALITY-001: At least 70% of drafted assertions, read-back candidates, and state bindings are accepted without edit on simple REST/OpenAPI workflows.",
+        "FR5: FR5: Workflow Contract Schema - Lumyn must define a versioned YAML workflow contract with goal, expected outcome, validators, state bindings, context, constraints, and cleanup.",
+        "FR6: FR6: Recording As Authoring - Lumyn must record known-good HTTP traffic and draft workflow contracts, validators, state bindings, cassettes, and cleanup suggestions.",
+        "FR7: FR7: User Approval - Generated workflow contracts must be editable and approved before being treated as stable.",
+        "FR8: FR8: Capture-Time Redaction - Secrets must be redacted before requests, responses, cassettes, traces, or reports are persisted.",
+        "NFR2: NFR2: Fast First Workflow - A technical user should record and replay-verify one simple workflow in under 30 minutes.",
+        "NFR5: NFR5: Security - Redaction must happen before artifact persistence. If a value cannot be confidently redacted, Lumyn must fail closed: mark the artifact unsafe to persist rather than write a possibly-unredacted secret. Silent persistence of an unrecognized secret is a trust bug, not an edge case.",
+        "NFR7: NFR7: Contract Readability - Workflow YAML must be understandable by engineers without a custom UI.",
+        "NFR13: NFR13: Inference Humility - Recorder-generated validators, bindings, boundaries, and cleanup suggestions must be confidence-labeled.",
+        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -2170,7 +2316,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -2197,7 +2344,58 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "RCRR-003",
+        "RCRR-004",
+        "RCRR-009",
+        "ACT-003",
+        "ACT-004",
+        "REC-QUALITY-001",
+        "FR5",
+        "FR6",
+        "FR7",
+        "FR8",
+        "NFR2",
+        "NFR5",
+        "NFR7",
+        "NFR13",
+        "FR2",
+        "FR9",
+        "FR14",
+        "NFR6",
+        "NFR9",
+        "NFR12"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "RCRR-003",
+          "RCRR-004",
+          "RCRR-009",
+          "ACT-003",
+          "ACT-004",
+          "REC-QUALITY-001",
+          "FR5",
+          "FR6",
+          "FR7",
+          "FR8",
+          "NFR2",
+          "NFR5",
+          "NFR7",
+          "NFR13",
+          "FR2",
+          "FR9",
+          "FR14",
+          "NFR6",
+          "NFR9",
+          "NFR12"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     },
     {
       "task_id": "T5",
@@ -2225,7 +2423,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make test-coverage",
@@ -2233,7 +2432,23 @@
       ],
       "acceptance_checks": [
         "Replay is deterministic without network.",
-        "Proof-gap and strong-proof examples are distinguishable."
+        "Proof-gap and strong-proof examples are distinguishable.",
+        "RCRR-005: `lumyn verify --strategy replay` is deterministic on repeated runs.",
+        "RCRR-006: Strong-proof workflow reports `confirmed by API read-back`.",
+        "RCRR-007: Proof-gap workflow reports `not provable from current surface`.",
+        "ACT-003: First workflow recorded and replay-verified in under 30 minutes.",
+        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+        "FR10: FR10: Replay Verify - Lumyn must support deterministic replay verification without network calls.",
+        "FR11: FR11: API State Validation - Lumyn must support `api_state` validators and explicit proof-gap reporting when no reliable read-back exists.",
+        "FR12: FR12: Trace Assertions - Lumyn must support a limited deterministic `trace_assertion` vocabulary.",
+        "NFR2: NFR2: Fast First Workflow - A technical user should record and replay-verify one simple workflow in under 30 minutes.",
+        "NFR3: NFR3: Deterministic Replay - Repeated replay verification on unchanged artifacts must produce the same result.",
+        "NFR4: NFR4: Proof Honesty - Reports must clearly distinguish confirmed read-back proof, trace-only evidence, and proof gaps.",
+        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -2524,7 +2739,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -2551,7 +2767,50 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "RCRR-005",
+        "RCRR-006",
+        "RCRR-007",
+        "ACT-003",
+        "FR9",
+        "FR10",
+        "FR11",
+        "FR12",
+        "NFR2",
+        "NFR3",
+        "NFR4",
+        "FR2",
+        "FR14",
+        "NFR6",
+        "NFR9",
+        "NFR12"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "RCRR-005",
+          "RCRR-006",
+          "RCRR-007",
+          "ACT-003",
+          "FR9",
+          "FR10",
+          "FR11",
+          "FR12",
+          "NFR2",
+          "NFR3",
+          "NFR4",
+          "FR2",
+          "FR14",
+          "NFR6",
+          "NFR9",
+          "NFR12"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     },
     {
       "task_id": "T6",
@@ -2580,7 +2839,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make test-coverage",
@@ -2588,7 +2848,24 @@
       ],
       "acceptance_checks": [
         "Report first screen shows workflow, result, proof strength, why, evidence, fix target, and next command.",
-        "`lumyn demo` opens bundled reports without model key, sandbox, or hosted account."
+        "`lumyn demo` opens bundled reports without model key, sandbox, or hosted account.",
+        "RCRR-008: Local HTML report identifies the fix target.",
+        "RCRR-010: Bundled static traces open without model key, sandbox, or hosted account.",
+        "RCRR-011: `lumyn demo` opens the bundled agent-failure and proof-gap reports with no install, model key, sandbox, or hosted account.",
+        "ACT-001: First trace opened in under 5 minutes.",
+        "ACT-003: First workflow recorded and replay-verified in under 30 minutes.",
+        "PULL-005: User fixes docs, OpenAPI descriptions, auth guidance, endpoint ambiguity, or read-back gaps based on Lumyn output.",
+        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+        "FR13: FR13: Local Trace And Report - Lumyn must produce a local JSON trace and HTML report.",
+        "FR25: FR25: Portable Artifacts - Workflow contracts, cassettes, traces, reports, and baselines must remain useful outside a hosted service.",
+        "NFR1: NFR1: Fast First Value - A technical user should run `init`, `check`, and open bundled traces in under 10 minutes.",
+        "NFR4: NFR4: Proof Honesty - Reports must clearly distinguish confirmed read-back proof, trace-only evidence, and proof gaps.",
+        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR14: NFR14: No Dashboard Dependency - The MVP must explain value through local CLI output and local reports.",
+        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -2878,7 +3155,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -2905,7 +3183,52 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "RCRR-008",
+        "RCRR-010",
+        "RCRR-011",
+        "ACT-001",
+        "ACT-003",
+        "PULL-005",
+        "FR2",
+        "FR13",
+        "FR25",
+        "NFR1",
+        "NFR4",
+        "NFR6",
+        "NFR9",
+        "NFR14",
+        "FR9",
+        "FR14",
+        "NFR12"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "RCRR-008",
+          "RCRR-010",
+          "RCRR-011",
+          "ACT-001",
+          "ACT-003",
+          "PULL-005",
+          "FR2",
+          "FR13",
+          "FR25",
+          "NFR1",
+          "NFR4",
+          "NFR6",
+          "NFR9",
+          "NFR14",
+          "FR9",
+          "FR14",
+          "NFR12"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     },
     {
       "task_id": "T7",
@@ -2933,7 +3256,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make test-coverage",
@@ -2941,7 +3265,19 @@
       ],
       "acceptance_checks": [
         "Live verify is disabled without explicit sandbox configuration.",
-        "Cleanup success or orphan evidence is reported."
+        "Cleanup success or orphan evidence is reported.",
+        "LVCIS-001: `lumyn verify --strategy live` executes the recorded path against sandbox.",
+        "LVCIS-002: Live read-back confirms expected state on the happy path.",
+        "LVCIS-003: A changed sandbox response causes a verification failure.",
+        "LVCIS-004: Cleanup removes created resources or reports orphaned resources.",
+        "PULL-003: User configures live sandbox verify.",
+        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+        "FR15: FR15: Live Known-Path Verify - Lumyn must support live known-path verification against sandbox.",
+        "FR16: FR16: Cleanup And Sandbox Hygiene - Lumyn must support cleanup steps, run IDs, idempotency where practical, and basic orphan detection.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
       ],
       "requires_human_approval": [
         "sandbox credential posture",
@@ -3242,7 +3578,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -3269,7 +3606,42 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "LVCIS-001",
+        "LVCIS-002",
+        "LVCIS-003",
+        "LVCIS-004",
+        "PULL-003",
+        "FR9",
+        "FR15",
+        "FR16",
+        "FR14",
+        "NFR6",
+        "NFR9",
+        "NFR12"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "LVCIS-001",
+          "LVCIS-002",
+          "LVCIS-003",
+          "LVCIS-004",
+          "PULL-003",
+          "FR9",
+          "FR15",
+          "FR16",
+          "FR14",
+          "NFR6",
+          "NFR9",
+          "NFR12"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     },
     {
       "task_id": "T8",
@@ -3298,7 +3670,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make test-coverage",
@@ -3306,7 +3679,15 @@
       ],
       "acceptance_checks": [
         "Final-state pass plus forbidden-path violation fails the workflow.",
-        "Unenforced declared controls never report as passed."
+        "Unenforced declared controls never report as passed.",
+        "LVCIS-005: A forbidden path call fails the workflow even when final state passes.",
+        "LVCIS-006: Request and write-operation budgets are enforced.",
+        "FR17: FR17: Action Boundary - Lumyn must support a first-class action-boundary object and deterministic boundary checks.",
+        "FR18: FR18: Boundary Failure Semantics - Lumyn must fail a workflow when expected final state passes but configured action boundaries are violated.",
+        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -3602,7 +3983,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -3629,7 +4011,34 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "LVCIS-005",
+        "LVCIS-006",
+        "FR17",
+        "FR18",
+        "FR9",
+        "FR14",
+        "NFR9",
+        "NFR12"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "LVCIS-005",
+          "LVCIS-006",
+          "FR17",
+          "FR18",
+          "FR9",
+          "FR14",
+          "NFR9",
+          "NFR12"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     },
     {
       "task_id": "T9",
@@ -3659,7 +4068,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make test-coverage",
@@ -3668,7 +4078,13 @@
       "acceptance_checks": [
         "CI emits JUnit-style output.",
         "PR summary names changed sources and affected workflows.",
-        "Badge never reports stale cassettes as green."
+        "Badge never reports stale cassettes as green.",
+        "LVCIS-007: The GitHub Action runs `verify` in CI and posts a PR-comment summary naming changed sources and the workflows they affect.",
+        "PULL-002: User adds `verify --strategy replay` to CI.",
+        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -3955,7 +4371,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -3982,7 +4399,30 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "LVCIS-007",
+        "PULL-002",
+        "FR9",
+        "FR14",
+        "NFR9",
+        "NFR12"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "LVCIS-007",
+          "PULL-002",
+          "FR9",
+          "FR14",
+          "NFR9",
+          "NFR12"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     },
     {
       "task_id": "T10",
@@ -4010,7 +4450,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make test-coverage",
@@ -4018,7 +4459,18 @@
       ],
       "acceptance_checks": [
         "Share re-runs redaction before export.",
-        "Share fails closed when any value cannot be confidently redacted."
+        "Share fails closed when any value cannot be confidently redacted.",
+        "RCRR-009: Standard auth headers and configured sensitive fields are redacted in all artifacts.",
+        "LVCIS-008: `lumyn share` re-runs redaction at export and produces a single self-contained artifact of a trace that opens with no Lumyn install or account; it fails closed if any value cannot be confidently redacted.",
+        "FR8: FR8: Capture-Time Redaction - Secrets must be redacted before requests, responses, cassettes, traces, or reports are persisted.",
+        "FR25: FR25: Portable Artifacts - Workflow contracts, cassettes, traces, reports, and baselines must remain useful outside a hosted service.",
+        "NFR5: NFR5: Security - Redaction must happen before artifact persistence. If a value cannot be confidently redacted, Lumyn must fail closed: mark the artifact unsafe to persist rather than write a possibly-unredacted secret. Silent persistence of an unrecognized secret is a trust bug, not an edge case.",
+        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
+        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -4315,7 +4767,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -4342,7 +4795,40 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "RCRR-009",
+        "LVCIS-008",
+        "FR8",
+        "FR25",
+        "NFR5",
+        "NFR6",
+        "FR2",
+        "FR9",
+        "FR14",
+        "NFR9",
+        "NFR12"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "RCRR-009",
+          "LVCIS-008",
+          "FR8",
+          "FR25",
+          "NFR5",
+          "NFR6",
+          "FR2",
+          "FR9",
+          "FR14",
+          "NFR9",
+          "NFR12"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     },
     {
       "task_id": "T11",
@@ -4371,7 +4857,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make test-coverage",
@@ -4382,7 +4869,27 @@
         "Eval reports run count and pass rate.",
         "Eval does not become the default hard CI gate.",
         "Eval runs OpenAI-compatible and Anthropic provider/model adapters when configured.",
-        "Provider config records provider, model, temperature, base_url, and api_key_env."
+        "Provider config records provider, model, temperature, base_url, and api_key_env.",
+        "EVAL-001: `lumyn eval` runs OpenAI-compatible and Anthropic provider/model adapters when configured.",
+        "EVAL-002: Eval supports `surface_only` mode.",
+        "EVAL-003: Eval supports `contract_assisted` mode.",
+        "EVAL-004: Eval reports run count and pass rate.",
+        "EVAL-005: Eval reports selected endpoints and wrong turns.",
+        "EVAL-007: Eval writes a local trace/report.",
+        "EVAL-010: Eval is diagnostic by default unless an explicit gate is configured.",
+        "PULL-001: User records more than one workflow.",
+        "PULL-004: User asks to run live eval before an API/docs release.",
+        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+        "FR19: FR19: Live Agent Eval - Lumyn must support live agent probes using OpenAI-compatible and Anthropic provider adapters behind a pluggable provider interface.",
+        "FR20: FR20: Eval Context Modes - Lumyn eval must support `surface_only` and `contract_assisted` modes.",
+        "FR21: FR21: Eval Repetition - Lumyn eval must support repeated runs and report pass rate instead of hiding stochastic behavior.",
+        "FR24: FR24: Least-Privilege Agent Runs - Lumyn eval must default to stateless local runs, explicit context, allowlisted env vars, and no ambient workspace access.",
+        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
+        "NFR11: NFR11: Stochastic Honesty - Eval must report run counts and pass rates. It must not hide variability behind a deterministic-looking boolean.",
+        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
       ],
       "requires_human_approval": [
         "OpenAI-compatible model credential posture",
@@ -4703,7 +5210,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -4730,7 +5238,58 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "EVAL-001",
+        "EVAL-002",
+        "EVAL-003",
+        "EVAL-004",
+        "EVAL-005",
+        "EVAL-007",
+        "EVAL-010",
+        "PULL-001",
+        "PULL-004",
+        "FR9",
+        "FR19",
+        "FR20",
+        "FR21",
+        "FR24",
+        "NFR6",
+        "NFR11",
+        "FR2",
+        "FR14",
+        "NFR9",
+        "NFR12"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "EVAL-001",
+          "EVAL-002",
+          "EVAL-003",
+          "EVAL-004",
+          "EVAL-005",
+          "EVAL-007",
+          "EVAL-010",
+          "PULL-001",
+          "PULL-004",
+          "FR9",
+          "FR19",
+          "FR20",
+          "FR21",
+          "FR24",
+          "NFR6",
+          "NFR11",
+          "FR2",
+          "FR14",
+          "NFR9",
+          "NFR12"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     },
     {
       "task_id": "T12",
@@ -4759,7 +5318,8 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
         "make test-coverage",
@@ -4768,7 +5328,24 @@
       "acceptance_checks": [
         "Eval compares against saved baseline where configured.",
         "Model snapshot uncertainty is labeled as drift risk.",
-        "Failures include concrete trace evidence."
+        "Failures include concrete trace evidence.",
+        "EVAL-006: Eval reports cost and duration.",
+        "EVAL-007: Eval writes a local trace/report.",
+        "EVAL-008: Eval compares to a saved baseline where configured.",
+        "EVAL-009: Eval labels baseline drift risk when model snapshots are unavailable.",
+        "EVAL-010: Eval is diagnostic by default unless an explicit gate is configured.",
+        "FR22: FR22: Model Pinning - Lumyn must record provider, model, temperature, and model snapshot where available.",
+        "FR23: FR23: Baseline Comparison - Lumyn eval must compare against a saved baseline where configured and label drift risk when model snapshots are unavailable.",
+        "FR24: FR24: Least-Privilege Agent Runs - Lumyn eval must default to stateless local runs, explicit context, allowlisted env vars, and no ambient workspace access.",
+        "FR25: FR25: Portable Artifacts - Workflow contracts, cassettes, traces, reports, and baselines must remain useful outside a hosted service.",
+        "NFR10: NFR10: Cost Visibility - Live evals must show token and estimated cost information.",
+        "NFR11: NFR11: Stochastic Honesty - Eval must report run counts and pass rates. It must not hide variability behind a deterministic-looking boolean.",
+        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -5064,7 +5641,8 @@
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
-        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -5091,7 +5669,52 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
-      }
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "EVAL-006",
+        "EVAL-007",
+        "EVAL-008",
+        "EVAL-009",
+        "EVAL-010",
+        "FR22",
+        "FR23",
+        "FR24",
+        "FR25",
+        "NFR10",
+        "NFR11",
+        "FR2",
+        "FR9",
+        "FR14",
+        "NFR6",
+        "NFR9",
+        "NFR12"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "EVAL-006",
+          "EVAL-007",
+          "EVAL-008",
+          "EVAL-009",
+          "EVAL-010",
+          "FR22",
+          "FR23",
+          "FR24",
+          "FR25",
+          "NFR10",
+          "NFR11",
+          "FR2",
+          "FR9",
+          "FR14",
+          "NFR6",
+          "NFR9",
+          "NFR12"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ]
     }
   ],
   "runtime_pins": {
@@ -5099,5 +5722,7 @@
       "openai_compatible_http_adapter",
       "anthropic_messages_http_adapter"
     ]
-  }
+  },
+  "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+  "acceptance_item_count": 82
 }

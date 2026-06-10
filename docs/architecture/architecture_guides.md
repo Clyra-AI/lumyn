@@ -28,7 +28,7 @@
 ## Systems Thinking Map
 
 - State lives in repo-local config, workflow contracts, cassettes, run artifacts, baselines, schemas, and Factory evidence artifacts.
-- Source of truth for MVP scope is `docs/product/prd.md`; source of truth for governed delivery state is `.factory/artifacts/prd-to-plan/lumyn-mvp/`.
+- Source of truth for MVP scope is `docs/product/prd.md`; source of truth for itemized PRD closure is `.factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json`; source of truth for governed delivery state is `.factory/artifacts/prd-to-plan/lumyn-mvp/`.
 - Feedback lives in command-result JSON, schema validation, tests, coverage gates, CodeQL status, validation reports, PR lifecycle reports, and scope closure.
 - Deleting schemas breaks artifact validation; deleting cassettes breaks replay; deleting redaction rules risks unsafe persistence; deleting Factory evidence breaks governed closure.
 - Medium/high risk tasks must record blast radius and rollback or deletion checks in task evidence or review evidence.

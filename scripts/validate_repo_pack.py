@@ -14,6 +14,7 @@ CONTEXT_BRIEF = PLAN_DIR / "context-brief.json"
 EXECUTION_PLAN = PLAN_DIR / "execution-plan.json"
 TASK_PACKETS = PLAN_DIR / "task-packets.json"
 VALIDATION_CONTRACT = PLAN_DIR / "validation-contract.json"
+ACCEPTANCE_LEDGER = PLAN_DIR / "acceptance-ledger.json"
 ACCEPTANCE_MAPPING = PLAN_DIR / "acceptance-mapping.json"
 SCOPE_CLOSURE_MAP = PLAN_DIR / "scope-closure-map.json"
 RISK_CLASSIFICATION = PLAN_DIR / "risk-classification.json"
@@ -40,6 +41,7 @@ RUNTIME_CONTROL_FORBIDDEN_PATHS = [
     ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
     ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
     ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
     ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
     ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
 ]
@@ -69,6 +71,8 @@ REQUIRED_TASK_FIELDS = [
     "validation_commands",
     "evidence_required",
     "stop_conditions",
+    "acceptance_ledger_ref",
+    "acceptance_item_ids",
 ]
 
 
@@ -98,7 +102,35 @@ REQUIRED_RUNNER_READY_FIELDS = [
     "required_worker_chain",
     "lifecycle_gates",
     "scope_exclusions",
+    "acceptance_ledger_ref",
+    "acceptance_item_ids",
 ]
+
+REQUIRED_ACCEPTANCE_ITEM_IDS = {
+    "FDN-001",
+    "FDN-002",
+    "FDL-001",
+    "FDAP-001",
+    "REC-QUALITY-001",
+    *{f"FR{index}" for index in range(1, 26)},
+    *{f"NFR{index}" for index in range(1, 15)},
+    *{f"RCRR-{index:03d}" for index in range(1, 12)},
+    *{f"LVCIS-{index:03d}" for index in range(1, 9)},
+    *{f"EVAL-{index:03d}" for index in range(1, 11)},
+    *{f"ACT-{index:03d}" for index in range(1, 5)},
+    *{f"PULL-{index:03d}" for index in range(1, 6)},
+}
+
+ACCEPTANCE_LEDGER_REF = ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+
+REQUIRED_ACCEPTANCE_TASK_REFS = {
+    "FR14": {"T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
+    "NFR9": {"T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
+    "NFR12": {"T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
+    "FR9": {"T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
+    "FR2": {"T3", "T4", "T5", "T6", "T10", "T11", "T12"},
+    "NFR6": {"T4", "T5", "T6", "T7", "T10", "T11", "T12"},
+}
 
 REQUIRED_FACTORYD_RUNTIME_FIELDS = [
     "state_dir",
@@ -893,6 +925,21 @@ def validate_task_execution_compiler_fields(task: dict[str, Any]) -> None:
         fail(f"{task_id_value}.alignment_gate_ref must cite the execution-plan alignment gate")
     if task.get("plan_drift_policy_ref") != ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy":
         fail(f"{task_id_value}.plan_drift_policy_ref must cite the execution-plan drift policy")
+    if task.get("acceptance_ledger_ref") != ACCEPTANCE_LEDGER_REF:
+        fail(f"{task_id_value}.acceptance_ledger_ref must cite {ACCEPTANCE_LEDGER_REF}")
+    item_ids = task.get("acceptance_item_ids")
+    if not isinstance(item_ids, list) or not item_ids:
+        fail(f"{task_id_value}.acceptance_item_ids must be non-empty")
+    unknown_item_ids = sorted(str(value) for value in item_ids if str(value) not in REQUIRED_ACCEPTANCE_ITEM_IDS)
+    if unknown_item_ids:
+        fail(f"{task_id_value}.acceptance_item_ids references unknown ids: {unknown_item_ids}")
+    inherited = task.get("validation_contract_inheritance")
+    if isinstance(inherited, dict):
+        if inherited.get("acceptance_ledger_ref") != ACCEPTANCE_LEDGER_REF:
+            fail(f"{task_id_value}.validation_contract_inheritance.acceptance_ledger_ref must cite {ACCEPTANCE_LEDGER_REF}")
+        inherited_ids = inherited.get("acceptance_item_ids")
+        if not isinstance(inherited_ids, list) or not set(str(value) for value in item_ids).issubset({str(value) for value in inherited_ids}):
+            fail(f"{task_id_value}.validation_contract_inheritance.acceptance_item_ids must include task acceptance_item_ids")
     if not has_lifecycle_gates(task.get("lifecycle_gates")):
         fail(f"{task_id_value}.lifecycle_gates must enable local, CI, Codex review, ship, post-merge, and PR lifecycle gates, and explicitly declare code_review_required true only when review policy requires it")
     if task.get("required_worker_chain") != expected_required_worker_chain(task):
@@ -913,7 +960,7 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
         return has_factory_compatibility(value)
     if field == "scope_exclusions":
         return has_nonempty_list(value)
-    if field in ["alignment_gate_ref", "plan_drift_policy_ref"]:
+    if field in ["alignment_gate_ref", "plan_drift_policy_ref", "acceptance_ledger_ref"]:
         return has_nonempty_string(value)
     if field == "required_worker_chain":
         return value == expected_required_worker_chain(task)
@@ -959,6 +1006,8 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
         )
     if not isinstance(value, list) or not value:
         return False
+    if field == "acceptance_item_ids":
+        return all(has_nonempty_string(item) for item in value)
     if field == "test_matrix_refs":
         return all(
             isinstance(item, dict)
@@ -1219,6 +1268,12 @@ def validate_validation_contract(contract: dict[str, Any]) -> None:
     validate_no_legacy_provider_fields(contract, "validation-contract.json")
     validate_factory_compatibility(contract.get("factory_compatibility"), "validation-contract.json.factory_compatibility")
     validate_runtime_pins(contract.get("runtime_pins"), "validation-contract.json.runtime_pins")
+    if contract.get("acceptance_ledger_ref") != ACCEPTANCE_LEDGER_REF:
+        fail("validation-contract.json must cite acceptance-ledger.json")
+    if contract.get("acceptance_item_count") != len(REQUIRED_ACCEPTANCE_ITEM_IDS):
+        fail("validation-contract.json acceptance_item_count must match acceptance-ledger item count")
+    if not has_nonempty_list(contract.get("acceptance_criteria")):
+        fail("validation-contract.json must include itemized acceptance_criteria")
     validate_mvp_eval_provider_adapters(
         contract.get("mvp_eval_provider_adapters"),
         "validation-contract.json.mvp_eval_provider_adapters",
@@ -1288,6 +1343,7 @@ def validate_factoryd_config(config: dict[str, Any], autoship_config: dict[str, 
         fail(".factory/factoryd.example.json repos.lumyn must be an object")
     expected_paths = {
         "repo_path": "..",
+        "acceptance_ledger": ACCEPTANCE_LEDGER_REF,
         "task_packets": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
         "scope_closure_map": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
         "validation_contract": ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
@@ -1362,11 +1418,76 @@ def validate_factoryd_config(config: dict[str, Any], autoship_config: dict[str, 
         fail(".gitignore must ignore .factoryd/")
 
 
-def validate_acceptance_mapping(mapping: dict[str, Any]) -> None:
+def validate_acceptance_ledger(ledger: dict[str, Any]) -> set[str]:
+    validate_no_legacy_provider_fields(ledger, "acceptance-ledger.json")
+    if ledger.get("artifact_type") != "acceptance_ledger":
+        fail("acceptance-ledger.json artifact_type must be acceptance_ledger")
+    if ledger.get("source_prd_ref") != "docs/product/prd.md":
+        fail("acceptance-ledger.json source_prd_ref must point at docs/product/prd.md")
+    policy = ledger.get("coverage_policy")
+    if not isinstance(policy, dict):
+        fail("acceptance-ledger.json coverage_policy must be an object")
+    if policy.get("enumerated_items_required") is not True:
+        fail("acceptance-ledger.json coverage_policy.enumerated_items_required must be true")
+    if policy.get("group_only_refs_allowed") is not False:
+        fail("acceptance-ledger.json coverage_policy.group_only_refs_allowed must be false")
+    if policy.get("closure_unit") != "acceptance_item":
+        fail("acceptance-ledger.json coverage_policy.closure_unit must be acceptance_item")
+    items = ledger.get("items")
+    if not isinstance(items, list) or not items:
+        fail("acceptance-ledger.json must contain items")
+    seen: set[str] = set()
+    task_refs_by_item_id: dict[str, set[str]] = {}
+    for index, item in enumerate(items):
+        if not isinstance(item, dict):
+            fail(f"acceptance-ledger.json items[{index}] must be an object")
+        item_id = str(item.get("acceptance_item_id", "")).strip()
+        if not item_id:
+            fail(f"acceptance-ledger.json items[{index}] missing acceptance_item_id")
+        if item_id in seen:
+            fail(f"acceptance-ledger.json duplicate acceptance_item_id {item_id}")
+        seen.add(item_id)
+        for key in ["group_id", "source_ref", "source_text", "kind", "evidence_mode", "status", "risk_class"]:
+            if not has_nonempty_string(item.get(key)):
+                fail(f"acceptance-ledger.json {item_id} missing {key}")
+        if not has_nonempty_list(item.get("closure_required_for")):
+            fail(f"acceptance-ledger.json {item_id} missing closure_required_for")
+        if not has_nonempty_list(item.get("task_refs")):
+            fail(f"acceptance-ledger.json {item_id} missing task_refs")
+        task_refs_by_item_id[item_id] = {str(value) for value in item.get("task_refs", [])}
+        if item.get("status") == "implemented" and not has_nonempty_list(item.get("validation_refs")):
+            fail(f"acceptance-ledger.json {item_id} implemented item missing validation_refs")
+    missing = sorted(REQUIRED_ACCEPTANCE_ITEM_IDS - seen)
+    if missing:
+        fail(f"acceptance-ledger.json missing required item ids: {missing}")
+    if "REC-QUALITY-001" not in seen:
+        fail("acceptance-ledger.json must include recorder 70 percent quality gate")
+    for item_id, required_task_refs in REQUIRED_ACCEPTANCE_TASK_REFS.items():
+        actual_task_refs = task_refs_by_item_id.get(item_id, set())
+        missing_task_refs = sorted(required_task_refs - actual_task_refs)
+        if missing_task_refs:
+            fail(f"acceptance-ledger.json {item_id} missing required task_refs: {missing_task_refs}")
+    return seen
+
+
+def validate_acceptance_mapping(mapping: dict[str, Any], ledger_ids: set[str]) -> None:
     validate_no_legacy_provider_fields(mapping, "acceptance-mapping.json")
+    if mapping.get("acceptance_ledger_ref") != ACCEPTANCE_LEDGER_REF:
+        fail("acceptance-mapping.json must cite acceptance-ledger.json")
     groups = mapping.get("groups")
     if not isinstance(groups, list):
         fail("acceptance-mapping.json must contain groups list")
+    mapped_ids: set[str] = set()
+    for group in groups:
+        if not isinstance(group, dict):
+            continue
+        item_ids = group.get("acceptance_item_ids")
+        if not isinstance(item_ids, list) or not item_ids:
+            fail(f"acceptance group {group.get('group_id')} missing acceptance_item_ids")
+        unknown = sorted(str(value) for value in item_ids if str(value) not in ledger_ids)
+        if unknown:
+            fail(f"acceptance group {group.get('group_id')} references unknown acceptance item ids: {unknown}")
+        mapped_ids.update(str(value) for value in item_ids)
     live_eval = next((group for group in groups if isinstance(group, dict) and group.get("group_id") == "live_agent_eval"), None)
     if not isinstance(live_eval, dict):
         fail("acceptance-mapping.json missing live_agent_eval group")
@@ -1375,13 +1496,36 @@ def validate_acceptance_mapping(mapping: dict[str, Any]) -> None:
     approvals = "\n".join(str(value).lower() for value in live_eval.get("requires_human_approval", []))
     if "openai" not in approvals or "anthropic" not in approvals:
         fail("live_agent_eval.requires_human_approval must name both provider credential postures")
+    for required_id in ["EVAL-001", "PULL-001", "PULL-004"]:
+        if required_id not in set(str(value) for value in live_eval.get("acceptance_item_ids", [])):
+            fail(f"live_agent_eval acceptance mapping missing {required_id}")
+    missing = sorted(ledger_ids - mapped_ids)
+    if missing:
+        fail(f"acceptance-mapping.json does not map ledger ids: {missing}")
 
 
-def validate_scope_closure_map(scope: dict[str, Any]) -> None:
+def validate_scope_closure_map(scope: dict[str, Any], ledger_ids: set[str]) -> None:
     validate_no_legacy_provider_fields(scope, "scope-closure-map.json")
+    if scope.get("acceptance_ledger_ref") != ACCEPTANCE_LEDGER_REF:
+        fail("scope-closure-map.json must cite acceptance-ledger.json")
     items = scope.get("items")
     if not isinstance(items, list):
         fail("scope-closure-map.json must contain items list")
+    closure_ids: set[str] = set()
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        item_ids = item.get("acceptance_item_ids")
+        statuses = item.get("acceptance_item_statuses")
+        if not isinstance(item_ids, list) or not item_ids:
+            fail(f"scope item {item.get('scope_item')} missing acceptance_item_ids")
+        if not isinstance(statuses, list) or not statuses:
+            fail(f"scope item {item.get('scope_item')} missing acceptance_item_statuses")
+        status_ids = {str(status.get("acceptance_item_id")) for status in statuses if isinstance(status, dict)}
+        missing_status = sorted(str(value) for value in item_ids if str(value) not in status_ids)
+        if missing_status:
+            fail(f"scope item {item.get('scope_item')} missing item statuses for {missing_status}")
+        closure_ids.update(str(value) for value in item_ids)
     live_eval = next((item for item in items if isinstance(item, dict) and item.get("scope_item") == "Live agent eval"), None)
     if not isinstance(live_eval, dict):
         fail("scope-closure-map.json missing Live agent eval item")
@@ -1390,6 +1534,9 @@ def validate_scope_closure_map(scope: dict[str, Any]) -> None:
     blockers = "\n".join(str(value).lower() for value in live_eval.get("blockers", []))
     if "openai" not in blockers or "anthropic" not in blockers:
         fail("Live agent eval blockers must name both provider credential postures")
+    missing = sorted(ledger_ids - closure_ids)
+    if missing:
+        fail(f"scope-closure-map.json does not cover ledger ids: {missing}")
 
 
 def validate_risk_classification(risk: dict[str, Any]) -> None:
@@ -1434,6 +1581,12 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
         ],
         "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
         "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+        "acceptance_ledger_ref": ACCEPTANCE_LEDGER_REF,
+        "acceptance_item_ids": ["RCRR-001"],
+        "validation_contract_inheritance": {
+            "acceptance_ledger_ref": ACCEPTANCE_LEDGER_REF,
+            "acceptance_item_ids": ["RCRR-001"],
+        },
         "required_worker_chain": [
             "task-executor",
             "validation-gate",
@@ -1706,6 +1859,18 @@ def run_self_test() -> int:
     else:
         fail("self-test expected missing alignment gate ref to fail")
 
+    missing_acceptance_item_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    del missing_acceptance_item_packets["tasks"][1]["acceptance_item_ids"]
+    try:
+        validate_task_packets(missing_acceptance_item_packets, "T2.6")
+    except AssertionError as exc:
+        if "acceptance_item_ids" not in str(exc):
+            raise
+    else:
+        fail("self-test expected missing acceptance item ids to fail")
+
     incomplete_worker_chain_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
     }
@@ -1914,18 +2079,20 @@ def main() -> int:
         contract = load_json(VALIDATION_CONTRACT)
         factoryd_config = load_json(FACTORYD_CONFIG)
         factoryd_autoship_config = load_json(FACTORYD_AUTOSHIP_CONFIG)
+        acceptance_ledger = load_json(ACCEPTANCE_LEDGER)
         acceptance_mapping = load_json(ACCEPTANCE_MAPPING)
         scope_closure_map = load_json(SCOPE_CLOSURE_MAP)
         risk_classification = load_json(RISK_CLASSIFICATION)
         validate_context_brief(context)
         baseline_task_id = validate_execution_plan(plan)
+        ledger_ids = validate_acceptance_ledger(acceptance_ledger)
         validate_task_packets(packets, baseline_task_id)
         for packet_path in REPAIR_TASK_PACKETS:
             validate_standalone_task_packet(load_json(packet_path), baseline_task_id)
         validate_validation_contract(contract)
         validate_factoryd_config(factoryd_config, factoryd_autoship_config)
-        validate_acceptance_mapping(acceptance_mapping)
-        validate_scope_closure_map(scope_closure_map)
+        validate_acceptance_mapping(acceptance_mapping, ledger_ids)
+        validate_scope_closure_map(scope_closure_map, ledger_ids)
         validate_risk_classification(risk_classification)
     except AssertionError as exc:
         print(f"repo-pack validation failed: {exc}", file=sys.stderr)

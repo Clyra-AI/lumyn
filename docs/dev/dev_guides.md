@@ -23,7 +23,7 @@
 
 - Fast lane: `make lint-fast`, `make test-fast`.
 - Core lane: `make test-contracts`, `make prepush-full`.
-- Acceptance lane: PRD scope closure in `.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json`.
+- Acceptance lane: PRD item coverage in `.factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json` and item status in `.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json`.
 - Cross-platform lane: reserved until standalone binary packaging starts.
 - Risk lane: GitHub Actions `CodeQL analyze`, plus future hardening/chaos/perf checks as replay, live verify, share, and eval mature.
 - Release lane: reserved until standalone binary release packaging starts.
@@ -38,7 +38,7 @@ reserved, or blocked by credential/network approval.
 | Tier 1 Unit | Active | `go test ./... -count=1` through `make test-fast` |
 | Tier 2 Integration | Planned | `make test-contracts`; grows with schema/workflow integration tests |
 | Tier 3 End-to-End | Planned | CLI command invocation tests as `lumyn init`, `check`, `record`, `verify`, `trace`, and `eval` mature |
-| Tier 4 Acceptance | Planned | `.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json` against PRD acceptance groups |
+| Tier 4 Acceptance | Planned | `.factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json` and `.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json` against PRD acceptance item IDs |
 | Tier 5 Hardening | Planned | fail-closed, redaction, stale-cassette, cleanup, retry, and orphan-evidence tests |
 | Tier 6 Chaos | Reserved | controlled failure injection after live verify/retry boundaries exist |
 | Tier 7 Performance | Reserved | runtime, cost, and duration budgets after replay/eval paths exist |
@@ -115,9 +115,10 @@ coverage exception.
   scanner gates, engineering policy refs, architecture guidance refs, and the
   Factory `prd-to-plan` / `execution-compiler` fields for Factory
   compatibility, explicit scope exclusions, alignment gate refs, plan-drift
-  refs, expanded runtime pins, changelog intent, contract impact, ADR posture,
-  TDD-first evidence, cost/perf impact, failure hypotheses, semantic
-  invariants, canonical worker chains, and lifecycle gates.
+  refs, acceptance-ledger refs, acceptance item IDs, expanded runtime pins,
+  changelog intent, contract impact, ADR posture, TDD-first evidence,
+  cost/perf impact, failure hypotheses, semantic invariants, canonical worker
+  chains, and lifecycle gates.
 
 ## Docs Parity
 
@@ -150,6 +151,7 @@ coverage exception.
 - Branch protection evidence path: `.factory/artifacts/repo-controls/main-branch-protection.json`.
 - Pilot closure path: `.factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json`.
 - Pilot repair task path: `.factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/task-packet.json`.
+- Acceptance item source: `.factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json`.
 - Scope closure source: `.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json`.
 - Repo-pack propagation validator: `scripts/validate_repo_pack.py`.
 - Evidence must use repo-relative paths and record skipped-command reasons.

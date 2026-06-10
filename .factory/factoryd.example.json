@@ -52,7 +52,8 @@
         "max_worker_tokens": 0,
         "max_worker_cost_usd": 0,
         "max_run_seconds": 0
-      }
+      },
+      "acceptance_ledger": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
     }
   }
 }

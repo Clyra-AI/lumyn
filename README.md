@@ -93,7 +93,8 @@ factoryd run --config .factory/factoryd.example.json --repo lumyn --dry-run --js
 
 Use the autoship config only after branch protection, required `validate` and
 `CodeQL analyze` checks, passive Codex review settle, merge policy, post-merge
-monitoring, and semantic scope-closure evidence are all verified:
+monitoring, itemized acceptance-ledger coverage, and semantic scope-closure
+evidence are all verified:
 
 ```bash
 export FACTORY_REPO=../factory

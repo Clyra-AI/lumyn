@@ -85,6 +85,7 @@ test-contracts:
 	python3 scripts/validate_repo_pack.py
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json
+	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json
 	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json

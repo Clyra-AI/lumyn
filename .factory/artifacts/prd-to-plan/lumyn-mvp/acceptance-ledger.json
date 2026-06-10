@@ -1,0 +1,1903 @@
+{
+  "artifact_type": "acceptance_ledger",
+  "schema_version": "1.0",
+  "source_ref": "docs/product/prd.md",
+  "source_prd_ref": "docs/product/prd.md",
+  "generated_by": "prd-to-plan",
+  "generated_at": "2026-06-10T00:00:00Z",
+  "coverage_policy": {
+    "enumerated_items_required": true,
+    "group_only_refs_allowed": false,
+    "closure_unit": "acceptance_item"
+  },
+  "items": [
+    {
+      "acceptance_item_id": "FDN-001",
+      "group_id": "record_contract_replay_report",
+      "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/tasks/T1",
+      "source_text": "Create the Go CLI skeleton, command-result JSON envelope, exit-code constants, command dispatch, and repo-local validation baseline needed before product commands are implemented.",
+      "kind": "quality_gate",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "implementation"
+      ],
+      "task_refs": [
+        "T1"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/task-runs/T1/validation-report.json"
+      ],
+      "status": "implemented",
+      "risk_class": "low",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "FDN-002",
+      "group_id": "record_contract_replay_report",
+      "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/tasks/T2",
+      "source_text": "Define initial workflow, command-result, proof-strength, cassette, evidence-event, state-binding, redaction-config, and related schema contracts before feature implementation.",
+      "kind": "quality_gate",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "implementation"
+      ],
+      "task_refs": [
+        "T2"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/task-runs/T2/validation-report.json"
+      ],
+      "status": "implemented",
+      "risk_class": "low",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "FDL-001",
+      "group_id": "factory_delivery_lifecycle_baseline",
+      "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/lifecycle_baseline",
+      "source_text": "Repository CI validation, required-check metadata, workflow hardening, owner review, action-ref posture, branch protection evidence, and PR lifecycle evidence are established before product implementation continues.",
+      "kind": "quality_gate",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "implementation"
+      ],
+      "task_refs": [
+        "T2.5"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/task-runs/T2.5/validation-report.json"
+      ],
+      "status": "implemented",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "FDAP-001",
+      "group_id": "factory_dev_architecture_propagation_baseline",
+      "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/dev_architecture_propagation",
+      "source_text": "Repo dev guide, architecture guide, 12-level test matrix, coverage policy, security scanner posture, docs/output/release/provenance rules, and architecture boundary rules are propagated into executable planning.",
+      "kind": "quality_gate",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "implementation"
+      ],
+      "task_refs": [
+        "T2.6"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/task-runs/T2.6/validation-report.json"
+      ],
+      "status": "implemented",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "FR1",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR1: Product Surface Under Test - Lumyn must frame the customer's API/docs surface as the system under test and agents as probes.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T3"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR2",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
+        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR3",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR3: OpenAPI And Local Docs Intake - Lumyn must ingest an OpenAPI file and local docs folder.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T3"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR4",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR4: Agent-Relevant Source Checks - Lumyn must run structural checks that affect agent tool choice, validation, auth handling, retries, and workflow proof.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T3"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR5",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR5: Workflow Contract Schema - Lumyn must define a versioned YAML workflow contract with goal, expected outcome, validators, state bindings, context, constraints, and cleanup.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T2",
+        "T4"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR6",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR6: Recording As Authoring - Lumyn must record known-good HTTP traffic and draft workflow contracts, validators, state bindings, cassettes, and cleanup suggestions.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T4"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR7",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR7: User Approval - Generated workflow contracts must be editable and approved before being treated as stable.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T4"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR8",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR8: Capture-Time Redaction - Secrets must be redacted before requests, responses, cassettes, traces, or reports are persisted.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T4",
+        "T10"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR9",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T2",
+        "T4",
+        "T5",
+        "T6",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
+        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR10",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR10: Replay Verify - Lumyn must support deterministic replay verification without network calls.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T5"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR11",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR11: API State Validation - Lumyn must support `api_state` validators and explicit proof-gap reporting when no reliable read-back exists.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T5"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR12",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR12: Trace Assertions - Lumyn must support a limited deterministic `trace_assertion` vocabulary.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T5"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR13",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR13: Local Trace And Report - Lumyn must produce a local JSON trace and HTML report.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T6"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR14",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T1",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T1/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
+        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR15",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR15: Live Known-Path Verify - Lumyn must support live known-path verification against sandbox.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T7"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR16",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR16: Cleanup And Sandbox Hygiene - Lumyn must support cleanup steps, run IDs, idempotency where practical, and basic orphan detection.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T7"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR17",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR17: Action Boundary - Lumyn must support a first-class action-boundary object and deterministic boundary checks.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T8"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR18",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR18: Boundary Failure Semantics - Lumyn must fail a workflow when expected final state passes but configured action boundaries are violated.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T8"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR19",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR19: Live Agent Eval - Lumyn must support live agent probes using OpenAI-compatible and Anthropic provider adapters behind a pluggable provider interface.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T11"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR20",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR20: Eval Context Modes - Lumyn eval must support `surface_only` and `contract_assisted` modes.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T11"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR21",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR21: Eval Repetition - Lumyn eval must support repeated runs and report pass rate instead of hiding stochastic behavior.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T11"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR22",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR22: Model Pinning - Lumyn must record provider, model, temperature, and model snapshot where available.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR23",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR23: Baseline Comparison - Lumyn eval must compare against a saved baseline where configured and label drift risk when model snapshots are unavailable.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR24",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR24: Least-Privilege Agent Runs - Lumyn eval must default to stateless local runs, explicit context, allowlisted env vars, and no ambient workspace access.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T11",
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "FR25",
+      "group_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "source_text": "FR25: Portable Artifacts - Workflow contracts, cassettes, traces, reports, and baselines must remain useful outside a hosted service.",
+      "kind": "functional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T6",
+        "T10",
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR1",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR1: Fast First Value - A technical user should run `init`, `check`, and open bundled traces in under 10 minutes.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "manual_review",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T3",
+        "T6"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR2",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR2: Fast First Workflow - A technical user should record and replay-verify one simple workflow in under 30 minutes.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "manual_review",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T4",
+        "T5"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR3",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR3: Deterministic Replay - Repeated replay verification on unchanged artifacts must produce the same result.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T5"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR4",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR4: Proof Honesty - Reports must clearly distinguish confirmed read-back proof, trace-only evidence, and proof gaps.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T5",
+        "T6"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR5",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR5: Security - Redaction must happen before artifact persistence. If a value cannot be confidently redacted, Lumyn must fail closed: mark the artifact unsafe to persist rather than write a possibly-unredacted secret. Silent persistence of an unrecognized secret is a trust bug, not an edge case.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T4",
+        "T10"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "high",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR6",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T4",
+        "T5",
+        "T6",
+        "T7",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
+        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR7",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR7: Contract Readability - Workflow YAML must be understandable by engineers without a custom UI.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "manual_review",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T4"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR8",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR8: Parser-First - OpenAPI checks should use structured parsers and schema-aware libraries where possible.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T3"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR9",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T1",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T1/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
+        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR10",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR10: Cost Visibility - Live evals must show token and estimated cost information.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR11",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR11: Stochastic Honesty - Eval must report run counts and pass rates. It must not hide variability behind a deterministic-looking boolean.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T11",
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR12",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T2",
+        "T4",
+        "T5",
+        "T6",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
+        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR13",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR13: Inference Humility - Recorder-generated validators, bindings, boundaries, and cleanup suggestions must be confidence-labeled.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "manual_review",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T4"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR14",
+      "group_id": "nonfunctional_requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
+      "source_text": "NFR14: No Dashboard Dependency - The MVP must explain value through local CLI output and local reports.",
+      "kind": "nonfunctional_requirement",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T6"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+      ]
+    },
+    {
+      "acceptance_item_id": "REC-QUALITY-001",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#phase-1-recorder-and-contract-generator",
+      "source_text": "At least 70% of drafted assertions, read-back candidates, and state bindings are accepted without edit on simple REST/OpenAPI workflows.",
+      "kind": "quality_gate",
+      "evidence_mode": "manual_review",
+      "closure_required_for": [
+        "mvp",
+        "release"
+      ],
+      "task_refs": [
+        "T4"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Quantified recorder quality gate requires measured corpus evidence before MVP closure."
+      ]
+    },
+    {
+      "acceptance_item_id": "RCRR-001",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report-acceptance-tests",
+      "source_text": "`lumyn init` writes valid config and source-check artifacts.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T3"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "low",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "RCRR-002",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report-acceptance-tests",
+      "source_text": "`lumyn check` emits a workflow-relevant source finding with a concrete reference.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T3"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "low",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "RCRR-003",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report-acceptance-tests",
+      "source_text": "`lumyn record create_customer_with_readback` writes workflow YAML, cassette, trace, and state bindings.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T4"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "low",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "RCRR-004",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report-acceptance-tests",
+      "source_text": "Generated workflow YAML is readable and editable without a custom UI.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T4"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "low",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "RCRR-005",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report-acceptance-tests",
+      "source_text": "`lumyn verify --strategy replay` is deterministic on repeated runs.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T5"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "low",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "RCRR-006",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report-acceptance-tests",
+      "source_text": "Strong-proof workflow reports `confirmed by API read-back`.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T5"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "low",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "RCRR-007",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report-acceptance-tests",
+      "source_text": "Proof-gap workflow reports `not provable from current surface`.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T5"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "low",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "RCRR-008",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report-acceptance-tests",
+      "source_text": "Local HTML report identifies the fix target.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T6"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "low",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "RCRR-009",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report-acceptance-tests",
+      "source_text": "Standard auth headers and configured sensitive fields are redacted in all artifacts.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T4",
+        "T10"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Redaction must be proven by fixtures and fail-closed checks."
+      ]
+    },
+    {
+      "acceptance_item_id": "RCRR-010",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report-acceptance-tests",
+      "source_text": "Bundled static traces open without model key, sandbox, or hosted account.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T6"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "low",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "RCRR-011",
+      "group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report-acceptance-tests",
+      "source_text": "`lumyn demo` opens the bundled agent-failure and proof-gap reports with no install, model key, sandbox, or hosted account.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T6"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "low",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "LVCIS-001",
+      "group_id": "live_verify_boundary_ci_share",
+      "source_ref": "docs/product/prd.md#live-verify-boundary-ci-and-share-acceptance-tests",
+      "source_text": "`lumyn verify --strategy live` executes the recorded path against sandbox.",
+      "kind": "acceptance_test",
+      "evidence_mode": "external",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T7"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Live sandbox/network execution requires approved capability grants before closure."
+      ]
+    },
+    {
+      "acceptance_item_id": "LVCIS-002",
+      "group_id": "live_verify_boundary_ci_share",
+      "source_ref": "docs/product/prd.md#live-verify-boundary-ci-and-share-acceptance-tests",
+      "source_text": "Live read-back confirms expected state on the happy path.",
+      "kind": "acceptance_test",
+      "evidence_mode": "external",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T7"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Live sandbox/network execution requires approved capability grants before closure."
+      ]
+    },
+    {
+      "acceptance_item_id": "LVCIS-003",
+      "group_id": "live_verify_boundary_ci_share",
+      "source_ref": "docs/product/prd.md#live-verify-boundary-ci-and-share-acceptance-tests",
+      "source_text": "A changed sandbox response causes a verification failure.",
+      "kind": "acceptance_test",
+      "evidence_mode": "external",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T7"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Live sandbox/network execution requires approved capability grants before closure."
+      ]
+    },
+    {
+      "acceptance_item_id": "LVCIS-004",
+      "group_id": "live_verify_boundary_ci_share",
+      "source_ref": "docs/product/prd.md#live-verify-boundary-ci-and-share-acceptance-tests",
+      "source_text": "Cleanup removes created resources or reports orphaned resources.",
+      "kind": "acceptance_test",
+      "evidence_mode": "external",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T7"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Live sandbox/network execution requires approved capability grants before closure."
+      ]
+    },
+    {
+      "acceptance_item_id": "LVCIS-005",
+      "group_id": "live_verify_boundary_ci_share",
+      "source_ref": "docs/product/prd.md#live-verify-boundary-ci-and-share-acceptance-tests",
+      "source_text": "A forbidden path call fails the workflow even when final state passes.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T8"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "LVCIS-006",
+      "group_id": "live_verify_boundary_ci_share",
+      "source_ref": "docs/product/prd.md#live-verify-boundary-ci-and-share-acceptance-tests",
+      "source_text": "Request and write-operation budgets are enforced.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T8"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "LVCIS-007",
+      "group_id": "live_verify_boundary_ci_share",
+      "source_ref": "docs/product/prd.md#live-verify-boundary-ci-and-share-acceptance-tests",
+      "source_text": "The GitHub Action runs `verify` in CI and posts a PR-comment summary naming changed sources and the workflows they affect.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T9"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "LVCIS-008",
+      "group_id": "live_verify_boundary_ci_share",
+      "source_ref": "docs/product/prd.md#live-verify-boundary-ci-and-share-acceptance-tests",
+      "source_text": "`lumyn share` re-runs redaction at export and produces a single self-contained artifact of a trace that opens with no Lumyn install or account; it fails closed if any value cannot be confidently redacted.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T10"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "EVAL-001",
+      "group_id": "live_agent_eval",
+      "source_ref": "docs/product/prd.md#live-agent-eval-acceptance-tests",
+      "source_text": "`lumyn eval` runs OpenAI-compatible and Anthropic provider/model adapters when configured.",
+      "kind": "acceptance_test",
+      "evidence_mode": "external",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T11"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "high",
+      "notes": [
+        "Provider credentials for OpenAI-compatible and Anthropic adapters require explicit approval before live closure."
+      ]
+    },
+    {
+      "acceptance_item_id": "EVAL-002",
+      "group_id": "live_agent_eval",
+      "source_ref": "docs/product/prd.md#live-agent-eval-acceptance-tests",
+      "source_text": "Eval supports `surface_only` mode.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T11"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "EVAL-003",
+      "group_id": "live_agent_eval",
+      "source_ref": "docs/product/prd.md#live-agent-eval-acceptance-tests",
+      "source_text": "Eval supports `contract_assisted` mode.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T11"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "EVAL-004",
+      "group_id": "live_agent_eval",
+      "source_ref": "docs/product/prd.md#live-agent-eval-acceptance-tests",
+      "source_text": "Eval reports run count and pass rate.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T11"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "EVAL-005",
+      "group_id": "live_agent_eval",
+      "source_ref": "docs/product/prd.md#live-agent-eval-acceptance-tests",
+      "source_text": "Eval reports selected endpoints and wrong turns.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T11"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "EVAL-006",
+      "group_id": "live_agent_eval",
+      "source_ref": "docs/product/prd.md#live-agent-eval-acceptance-tests",
+      "source_text": "Eval reports cost and duration.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "EVAL-007",
+      "group_id": "live_agent_eval",
+      "source_ref": "docs/product/prd.md#live-agent-eval-acceptance-tests",
+      "source_text": "Eval writes a local trace/report.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T11",
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "EVAL-008",
+      "group_id": "live_agent_eval",
+      "source_ref": "docs/product/prd.md#live-agent-eval-acceptance-tests",
+      "source_text": "Eval compares to a saved baseline where configured.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "EVAL-009",
+      "group_id": "live_agent_eval",
+      "source_ref": "docs/product/prd.md#live-agent-eval-acceptance-tests",
+      "source_text": "Eval labels baseline drift risk when model snapshots are unavailable.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "EVAL-010",
+      "group_id": "live_agent_eval",
+      "source_ref": "docs/product/prd.md#live-agent-eval-acceptance-tests",
+      "source_text": "Eval is diagnostic by default unless an explicit gate is configured.",
+      "kind": "acceptance_test",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T11",
+        "T12"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": []
+    },
+    {
+      "acceptance_item_id": "ACT-001",
+      "group_id": "activation_success_metrics",
+      "source_ref": "docs/product/prd.md#activation",
+      "source_text": "First trace opened in under 5 minutes.",
+      "kind": "quality_gate",
+      "evidence_mode": "manual_review",
+      "closure_required_for": [
+        "release"
+      ],
+      "task_refs": [
+        "T6"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Activation metrics require timed/manual evidence or approved deferral before release closure."
+      ]
+    },
+    {
+      "acceptance_item_id": "ACT-002",
+      "group_id": "activation_success_metrics",
+      "source_ref": "docs/product/prd.md#activation",
+      "source_text": "`init` plus `check` completed in under 10 minutes.",
+      "kind": "quality_gate",
+      "evidence_mode": "manual_review",
+      "closure_required_for": [
+        "release"
+      ],
+      "task_refs": [
+        "T3"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Activation metrics require timed/manual evidence or approved deferral before release closure."
+      ]
+    },
+    {
+      "acceptance_item_id": "ACT-003",
+      "group_id": "activation_success_metrics",
+      "source_ref": "docs/product/prd.md#activation",
+      "source_text": "First workflow recorded and replay-verified in under 30 minutes.",
+      "kind": "quality_gate",
+      "evidence_mode": "manual_review",
+      "closure_required_for": [
+        "release"
+      ],
+      "task_refs": [
+        "T4",
+        "T5",
+        "T6"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Activation metrics require timed/manual evidence or approved deferral before release closure."
+      ]
+    },
+    {
+      "acceptance_item_id": "ACT-004",
+      "group_id": "activation_success_metrics",
+      "source_ref": "docs/product/prd.md#activation",
+      "source_text": "Generated workflow contract accepted with limited edits.",
+      "kind": "quality_gate",
+      "evidence_mode": "manual_review",
+      "closure_required_for": [
+        "release"
+      ],
+      "task_refs": [
+        "T4"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Activation metrics require timed/manual evidence or approved deferral before release closure."
+      ]
+    },
+    {
+      "acceptance_item_id": "PULL-001",
+      "group_id": "product_pull_success_metrics",
+      "source_ref": "docs/product/prd.md#product-pull",
+      "source_text": "User records more than one workflow.",
+      "kind": "product_pull_signal",
+      "evidence_mode": "product_signal",
+      "closure_required_for": [
+        "release"
+      ],
+      "task_refs": [
+        "T11"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Product-pull signal requires human/product evidence or approved deferral; it must not be auto-closed by implementation tests."
+      ]
+    },
+    {
+      "acceptance_item_id": "PULL-002",
+      "group_id": "product_pull_success_metrics",
+      "source_ref": "docs/product/prd.md#product-pull",
+      "source_text": "User adds `verify --strategy replay` to CI.",
+      "kind": "product_pull_signal",
+      "evidence_mode": "product_signal",
+      "closure_required_for": [
+        "release"
+      ],
+      "task_refs": [
+        "T9"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Product-pull signal requires human/product evidence or approved deferral; it must not be auto-closed by implementation tests."
+      ]
+    },
+    {
+      "acceptance_item_id": "PULL-003",
+      "group_id": "product_pull_success_metrics",
+      "source_ref": "docs/product/prd.md#product-pull",
+      "source_text": "User configures live sandbox verify.",
+      "kind": "product_pull_signal",
+      "evidence_mode": "product_signal",
+      "closure_required_for": [
+        "release"
+      ],
+      "task_refs": [
+        "T7"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Product-pull signal requires human/product evidence or approved deferral; it must not be auto-closed by implementation tests."
+      ]
+    },
+    {
+      "acceptance_item_id": "PULL-004",
+      "group_id": "product_pull_success_metrics",
+      "source_ref": "docs/product/prd.md#product-pull",
+      "source_text": "User asks to run live eval before an API/docs release.",
+      "kind": "product_pull_signal",
+      "evidence_mode": "product_signal",
+      "closure_required_for": [
+        "release"
+      ],
+      "task_refs": [
+        "T11"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Product-pull signal requires human/product evidence or approved deferral; it must not be auto-closed by implementation tests."
+      ]
+    },
+    {
+      "acceptance_item_id": "PULL-005",
+      "group_id": "product_pull_success_metrics",
+      "source_ref": "docs/product/prd.md#product-pull",
+      "source_text": "User fixes docs, OpenAPI descriptions, auth guidance, endpoint ambiguity, or read-back gaps based on Lumyn output.",
+      "kind": "product_pull_signal",
+      "evidence_mode": "product_signal",
+      "closure_required_for": [
+        "release"
+      ],
+      "task_refs": [
+        "T6"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "medium",
+      "notes": [
+        "Product-pull signal requires human/product evidence or approved deferral; it must not be auto-closed by implementation tests."
+      ]
+    }
+  ],
+  "acceptance_item_count": 82
+}
