@@ -47,7 +47,12 @@
       "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
       "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
       "network_posture": "offline by default until live sandbox/model work is approved",
-      "capability_grants": []
+      "capability_grants": [],
+      "budget": {
+        "max_worker_tokens": 0,
+        "max_worker_cost_usd": 0,
+        "max_run_seconds": 0
+      }
     }
   }
 }
