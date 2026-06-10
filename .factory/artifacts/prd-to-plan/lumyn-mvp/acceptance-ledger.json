@@ -1890,12 +1890,10 @@
         "release"
       ],
       "task_refs": [
-        "T4.3",
         "T5",
         "T6"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.3/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
       ],
