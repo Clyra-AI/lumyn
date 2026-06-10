@@ -28,23 +28,23 @@ exceptions:
     expires: 2026-09-30
     review_command: python3 scripts/validate_repo_pack.py
   - workflow: .github/workflows/codeql.yml
-    action: github/codeql-action/init@v3
+    action: github/codeql-action/init@v4
     owner: delivery-infra
-    reason: CodeQL action major tag is reviewed through GitHub Advanced Security compatibility
+    reason: CodeQL Action v4 avoids Node20 deprecation warnings and is reviewed through GitHub Advanced Security compatibility
     scope: CodeQL initialization only
     expires: 2026-09-30
     review_command: python3 scripts/validate_repo_pack.py
   - workflow: .github/workflows/codeql.yml
-    action: github/codeql-action/autobuild@v3
+    action: github/codeql-action/autobuild@v4
     owner: delivery-infra
-    reason: CodeQL action major tag is reviewed through GitHub Advanced Security compatibility
+    reason: CodeQL Action v4 avoids Node20 deprecation warnings and is reviewed through GitHub Advanced Security compatibility
     scope: CodeQL autobuild only
     expires: 2026-09-30
     review_command: python3 scripts/validate_repo_pack.py
   - workflow: .github/workflows/codeql.yml
-    action: github/codeql-action/analyze@v3
+    action: github/codeql-action/analyze@v4
     owner: delivery-infra
-    reason: CodeQL action major tag is reviewed through GitHub Advanced Security compatibility
+    reason: CodeQL Action v4 avoids Node20 deprecation warnings and is reviewed through GitHub Advanced Security compatibility
     scope: CodeQL analysis only
     expires: 2026-09-30
     review_command: python3 scripts/validate_repo_pack.py
