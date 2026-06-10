@@ -1470,7 +1470,7 @@ def validate_acceptance_ledger(ledger: dict[str, Any]) -> set[str]:
     return seen
 
 
-def validate_acceptance_mapping(mapping: dict[str, Any], ledger_ids: set[str]) -> None:
+def validate_acceptance_mapping(mapping: dict[str, Any], ledger_ids: set[str], contract: dict[str, Any]) -> None:
     validate_no_legacy_provider_fields(mapping, "acceptance-mapping.json")
     if mapping.get("acceptance_ledger_ref") != ACCEPTANCE_LEDGER_REF:
         fail("acceptance-mapping.json must cite acceptance-ledger.json")
@@ -1478,9 +1478,14 @@ def validate_acceptance_mapping(mapping: dict[str, Any], ledger_ids: set[str]) -
     if not isinstance(groups, list):
         fail("acceptance-mapping.json must contain groups list")
     mapped_ids: set[str] = set()
+    mapped_groups: set[str] = set()
     for group in groups:
         if not isinstance(group, dict):
             continue
+        group_id = str(group.get("group_id", "")).strip()
+        if not group_id:
+            fail("acceptance-mapping.json group missing group_id")
+        mapped_groups.add(group_id)
         item_ids = group.get("acceptance_item_ids")
         if not isinstance(item_ids, list) or not item_ids:
             fail(f"acceptance group {group.get('group_id')} missing acceptance_item_ids")
@@ -1499,6 +1504,12 @@ def validate_acceptance_mapping(mapping: dict[str, Any], ledger_ids: set[str]) -
     for required_id in ["EVAL-001", "PULL-001", "PULL-004"]:
         if required_id not in set(str(value) for value in live_eval.get("acceptance_item_ids", [])):
             fail(f"live_agent_eval acceptance mapping missing {required_id}")
+    contract_groups = contract.get("acceptance_groups")
+    if not isinstance(contract_groups, list) or not contract_groups:
+        fail("validation-contract.json must declare acceptance_groups")
+    missing_contract_groups = sorted(str(group_id) for group_id in contract_groups if str(group_id) not in mapped_groups)
+    if missing_contract_groups:
+        fail(f"acceptance-mapping.json missing validation-contract groups: {missing_contract_groups}")
     missing = sorted(ledger_ids - mapped_ids)
     if missing:
         fail(f"acceptance-mapping.json does not map ledger ids: {missing}")
@@ -2091,7 +2102,7 @@ def main() -> int:
             validate_standalone_task_packet(load_json(packet_path), baseline_task_id)
         validate_validation_contract(contract)
         validate_factoryd_config(factoryd_config, factoryd_autoship_config)
-        validate_acceptance_mapping(acceptance_mapping, ledger_ids)
+        validate_acceptance_mapping(acceptance_mapping, ledger_ids, contract)
         validate_scope_closure_map(scope_closure_map, ledger_ids)
         validate_risk_classification(risk_classification)
     except AssertionError as exc:
