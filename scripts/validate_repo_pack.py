@@ -126,6 +126,28 @@ ACCEPTANCE_MAPPING_REF = ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ma
 SCOPE_CLOSURE_MAP_REF = ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
 REQUIRED_LIVE_EVAL_DISPATCH_GATES = {"PULL-001", "PULL-004"}
 
+REQUIRED_MVP_VERSION_SLICES = {
+    "v0.0": {
+        "capability_group_id": "record_contract_replay_report",
+        "task_refs": {"T1", "T2", "T3", "T4", "T5", "T6", "T10"},
+    },
+    "v0.1": {
+        "capability_group_id": "live_verify_boundary_ci_share",
+        "task_refs": {"T7", "T8", "T9", "T10"},
+    },
+    "v0.2": {
+        "capability_group_id": "live_agent_eval",
+        "task_refs": {"T11", "T12"},
+    },
+}
+
+TASK_VERSION_SLICE_REFS = {
+    task_ref: {slice_id}
+    for slice_id, spec in REQUIRED_MVP_VERSION_SLICES.items()
+    for task_ref in spec["task_refs"]
+}
+TASK_VERSION_SLICE_REFS["T10"] = {"v0.0", "v0.1"}
+
 REQUIRED_ACCEPTANCE_TASK_REFS = {
     "FR14": {"T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
     "NFR9": {"T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
@@ -178,6 +200,7 @@ REQUIRED_PLAN_LEVEL_FIELDS = [
     "alignment_gate",
     "plan_drift_policy",
     "acceptance_ledger_coverage",
+    "mvp_required_version_slices",
     "public_api_and_contract_map",
     "docs_and_oss_readiness_baseline",
     "test_matrix_wiring",
@@ -540,6 +563,47 @@ def version_gte(candidate: tuple[int, ...], baseline: tuple[int, ...]) -> bool:
     return candidate + (0,) * (width - len(candidate)) >= baseline + (0,) * (width - len(baseline))
 
 
+def base_task_id(value: Any) -> str:
+    if not isinstance(value, str):
+        return ""
+    match = re.match(r"^(T\d+(?:\.\d+)*)", value.strip(), re.IGNORECASE)
+    return match.group(1) if match else value.strip()
+
+
+def expected_task_version_slices(task_id_value: str) -> set[str]:
+    return set(TASK_VERSION_SLICE_REFS.get(base_task_id(task_id_value), set()))
+
+
+def validate_mvp_version_slice_coverage(value: Any, label: str) -> None:
+    if not isinstance(value, list) or not value:
+        fail(f"{label} must be a non-empty list")
+    by_id = {
+        str(item.get("slice_id")): item
+        for item in value
+        if isinstance(item, dict) and str(item.get("slice_id", "")).strip()
+    }
+    missing_slices = sorted(set(REQUIRED_MVP_VERSION_SLICES) - set(by_id))
+    if missing_slices:
+        fail(f"{label} missing required MVP version slices: {missing_slices}")
+    for slice_id, spec in REQUIRED_MVP_VERSION_SLICES.items():
+        item = by_id[slice_id]
+        if item.get("required_for_full_mvp") is not True:
+            fail(f"{label}.{slice_id}.required_for_full_mvp must be true")
+        if item.get("public_release_boundary") is not False:
+            fail(f"{label}.{slice_id}.public_release_boundary must be false")
+        if item.get("capability_group_id") != spec["capability_group_id"]:
+            fail(f"{label}.{slice_id}.capability_group_id must be {spec['capability_group_id']}")
+        if not has_nonempty_string(item.get("source_ref")):
+            fail(f"{label}.{slice_id}.source_ref is required")
+        task_refs = {str(task_ref) for task_ref in item.get("task_refs", [])}
+        missing_task_refs = sorted(spec["task_refs"] - task_refs)
+        if missing_task_refs:
+            fail(f"{label}.{slice_id}.task_refs missing {missing_task_refs}")
+        group_refs = {str(group_ref) for group_ref in item.get("acceptance_group_refs", [])}
+        if spec["capability_group_id"] not in group_refs:
+            fail(f"{label}.{slice_id}.acceptance_group_refs must include {spec['capability_group_id']}")
+
+
 def source_ref_base(value: Any) -> str:
     return value.split("#", 1)[0] if isinstance(value, str) else ""
 
@@ -806,6 +870,9 @@ def validate_acceptance_ledger_coverage(value: Any, label: str) -> None:
         fail(f"{label}.status must be mapped")
     if not has_nonempty_list(value.get("required_groups")):
         fail(f"{label}.required_groups must be non-empty")
+    required_slices = value.get("required_version_slices")
+    if not isinstance(required_slices, list) or set(str(item) for item in required_slices) != set(REQUIRED_MVP_VERSION_SLICES):
+        fail(f"{label}.required_version_slices must list v0.0, v0.1, and v0.2")
 
 
 def has_lifecycle_gates(value: Any) -> bool:
@@ -1042,6 +1109,19 @@ def validate_live_eval_dispatch_gates(task: dict[str, Any]) -> None:
             fail(f"{task_id_value}.gated_by_acceptance_items[{required_id}].evidence_mode must be product_signal")
 
 
+def validate_task_version_slice_refs(task: dict[str, Any]) -> None:
+    task_id_value = task_id(task)
+    expected = expected_task_version_slices(task_id_value)
+    if not expected:
+        return
+    actual = task.get("mvp_required_version_slices")
+    if not isinstance(actual, list) or not actual:
+        fail(f"{task_id_value}.mvp_required_version_slices must map task to required MVP version slices")
+    missing = sorted(expected - {str(value) for value in actual})
+    if missing:
+        fail(f"{task_id_value}.mvp_required_version_slices missing {missing}")
+
+
 def field_has_evidence(task: dict[str, Any], field: str) -> bool:
     value = task.get(field)
     if field == "factory_compatibility":
@@ -1197,6 +1277,10 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
         plan.get("acceptance_ledger_coverage"),
         "execution-plan.json.acceptance_ledger_coverage",
     )
+    validate_mvp_version_slice_coverage(
+        plan.get("mvp_required_version_slices"),
+        "execution-plan.json.mvp_required_version_slices",
+    )
     for field in REQUIRED_PLAN_LEVEL_FIELDS:
         value = plan.get(field)
         if not has_nonempty_collection(value):
@@ -1327,6 +1411,7 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
         validate_task_guide_sources(task)
         validate_task_planning_skill_fields(task)
         validate_task_execution_compiler_fields(task)
+        validate_task_version_slice_refs(task)
         if current_task_id == "T11":
             validate_mvp_eval_provider_adapters(
                 task.get("mvp_eval_provider_adapters"),
@@ -1356,6 +1441,7 @@ def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: st
     validate_task_guide_sources(packet)
     validate_task_planning_skill_fields(packet)
     validate_task_execution_compiler_fields(packet)
+    validate_task_version_slice_refs(packet)
     if is_live_eval_dispatch_task(packet):
         validate_live_eval_dispatch_gates(packet)
 
@@ -1370,6 +1456,10 @@ def validate_validation_contract(contract: dict[str, Any]) -> None:
         fail("validation-contract.json acceptance_item_count must match acceptance-ledger item count")
     if not has_nonempty_list(contract.get("acceptance_criteria")):
         fail("validation-contract.json must include itemized acceptance_criteria")
+    validate_mvp_version_slice_coverage(
+        contract.get("mvp_required_version_slices"),
+        "validation-contract.json.mvp_required_version_slices",
+    )
     validate_mvp_eval_provider_adapters(
         contract.get("mvp_eval_provider_adapters"),
         "validation-contract.json.mvp_eval_provider_adapters",
@@ -1578,6 +1668,10 @@ def validate_acceptance_mapping(mapping: dict[str, Any], ledger_ids: set[str], c
     validate_no_legacy_provider_fields(mapping, "acceptance-mapping.json")
     if mapping.get("acceptance_ledger_ref") != ACCEPTANCE_LEDGER_REF:
         fail("acceptance-mapping.json must cite acceptance-ledger.json")
+    validate_mvp_version_slice_coverage(
+        mapping.get("mvp_required_version_slices"),
+        "acceptance-mapping.json.mvp_required_version_slices",
+    )
     groups = mapping.get("groups")
     if not isinstance(groups, list):
         fail("acceptance-mapping.json must contain groups list")
@@ -1628,6 +1722,10 @@ def validate_scope_closure_map(scope: dict[str, Any], ledger_ids: set[str]) -> N
     validate_no_legacy_provider_fields(scope, "scope-closure-map.json")
     if scope.get("acceptance_ledger_ref") != ACCEPTANCE_LEDGER_REF:
         fail("scope-closure-map.json must cite acceptance-ledger.json")
+    validate_mvp_version_slice_coverage(
+        scope.get("mvp_required_version_slices"),
+        "scope-closure-map.json.mvp_required_version_slices",
+    )
     items = scope.get("items")
     if not isinstance(items, list):
         fail("scope-closure-map.json must contain items list")
@@ -1641,6 +1739,13 @@ def validate_scope_closure_map(scope: dict[str, Any], ledger_ids: set[str]) -> N
             fail(f"scope item {item.get('scope_item')} missing acceptance_item_ids")
         if not isinstance(statuses, list) or not statuses:
             fail(f"scope item {item.get('scope_item')} missing acceptance_item_statuses")
+        scope_item_id = str(item.get("scope_item_id", "")).strip()
+        for slice_id, spec in REQUIRED_MVP_VERSION_SLICES.items():
+            if scope_item_id != spec["capability_group_id"]:
+                continue
+            actual_slices = {str(value) for value in item.get("mvp_required_version_slices", [])}
+            if slice_id not in actual_slices:
+                fail(f"scope item {scope_item_id} missing mvp_required_version_slices entry {slice_id}")
         status_ids = {str(status.get("acceptance_item_id")) for status in statuses if isinstance(status, dict)}
         missing_status = sorted(str(value) for value in item_ids if str(value) not in status_ids)
         if missing_status:
@@ -1681,6 +1786,7 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
     return {
         "task_id": task_id_value,
         "blocked_by": blocked_by,
+        "mvp_required_version_slices": sorted(expected_task_version_slices(task_id_value)),
         "factory_compatibility": {
             "factory_contract_version": "1.0",
             "profile_ref": "profiles/lumyn.yaml",

@@ -61,7 +61,8 @@
     "Runtime pins must include toolchain_version, module_or_package_path, provider_policy, artifact_namespace, and live_work_policy before implementation starts.",
     "Live eval MVP closure must cover OpenAI-compatible and Anthropic provider adapters when configured.",
     "Coverage-gated tasks must carry make test-coverage evidence or an approved scoped coverage exception.",
-    "CI control-set evidence must prove required-check metadata, least-privilege workflow permissions, concurrency, timeouts, toolchain-pin source, owner-review coverage, action-ref posture, and branch-protection expectations for lifecycle, workflow, policy, scanner, or autonomous shipping work."
+    "CI control-set evidence must prove required-check metadata, least-privilege workflow permissions, concurrency, timeouts, toolchain-pin source, owner-review coverage, action-ref posture, and branch-protection expectations for lifecycle, workflow, policy, scanner, or autonomous shipping work.",
+    "Version-slice coverage must map legacy v0.0, v0.1, and v0.2 internal slices to task refs, acceptance groups, and scope-closure entries before any full MVP completion claim."
   ],
   "stop_conditions": [
     "implementation requires undeclared live credentials",
@@ -86,7 +87,8 @@
     "coverage policy refs or coverage evidence are missing from a product task packet",
     "make test-coverage is below threshold without an approved scoped exception",
     "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
-    "acceptance ledger item missing, unmapped, or closed only at group level"
+    "acceptance ledger item missing, unmapped, or closed only at group level",
+    "required MVP version slice v0.0, v0.1, or v0.2 lacks task, acceptance mapping, validation-contract, or scope-closure coverage"
   ],
   "runtime_pins": {
     "language": "go",
@@ -200,7 +202,8 @@
       "runtime_pins",
       "alignment_gate",
       "plan_drift_policy",
-      "acceptance_ledger_coverage"
+      "acceptance_ledger_coverage",
+      "mvp_required_version_slices"
     ],
     "required_task_fields": [
       "planning_skill_refs",
@@ -456,5 +459,73 @@
     "PULL-003: User configures live sandbox verify.",
     "PULL-004: User asks to run live eval before an API/docs release.",
     "PULL-005: User fixes docs, OpenAPI descriptions, auth guidance, endpoint ambiguity, or read-back gaps based on Lumyn output."
+  ],
+  "mvp_required_version_slices": [
+    {
+      "slice_id": "v0.0",
+      "legacy_label": "v0.0",
+      "name": "Record, Contract, Replay, Report",
+      "capability_group_id": "record_contract_replay_report",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report",
+      "required_for_full_mvp": true,
+      "public_release_boundary": false,
+      "completion_policy": "Required internal capability slice; not a standalone public release or MVP completion point.",
+      "task_refs": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T10"
+      ],
+      "acceptance_group_refs": [
+        "record_contract_replay_report",
+        "activation_success_metrics"
+      ]
+    },
+    {
+      "slice_id": "v0.1",
+      "legacy_label": "v0.1",
+      "name": "Live Known-Path Verify, Basic Boundaries, CI, And Share",
+      "capability_group_id": "live_verify_boundary_ci_share",
+      "source_ref": "docs/product/prd.md#live-known-path-verify-basic-boundaries-and-ci",
+      "required_for_full_mvp": true,
+      "public_release_boundary": false,
+      "completion_policy": "Required internal capability slice; live sandbox/network work remains gated by approved credential posture.",
+      "task_refs": [
+        "T7",
+        "T8",
+        "T9",
+        "T10"
+      ],
+      "acceptance_group_refs": [
+        "live_verify_boundary_ci_share",
+        "product_pull_success_metrics"
+      ]
+    },
+    {
+      "slice_id": "v0.2",
+      "legacy_label": "v0.2",
+      "name": "Live Agent Eval",
+      "capability_group_id": "live_agent_eval",
+      "source_ref": "docs/product/prd.md#live-agent-eval",
+      "required_for_full_mvp": true,
+      "public_release_boundary": false,
+      "completion_policy": "Required internal capability slice; live eval dispatch remains gated by product-pull evidence and approved model/network posture.",
+      "task_refs": [
+        "T11",
+        "T12"
+      ],
+      "acceptance_group_refs": [
+        "live_agent_eval",
+        "product_pull_success_metrics"
+      ]
+    }
+  ],
+  "required_version_slices": [
+    "v0.0",
+    "v0.1",
+    "v0.2"
   ]
 }

@@ -388,6 +388,9 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.0"
       ]
     },
     {
@@ -778,6 +781,9 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.0"
       ]
     },
     {
@@ -1965,6 +1971,9 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.0"
       ]
     },
     {
@@ -2395,6 +2404,9 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.0"
       ]
     },
     {
@@ -2810,6 +2822,9 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.0"
       ]
     },
     {
@@ -3228,6 +3243,9 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.0"
       ]
     },
     {
@@ -3641,6 +3659,9 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.1"
       ]
     },
     {
@@ -4038,6 +4059,9 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.1"
       ]
     },
     {
@@ -4422,6 +4446,9 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.1"
       ]
     },
     {
@@ -4828,6 +4855,10 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.0",
+        "v0.1"
       ]
     },
     {
@@ -5305,6 +5336,9 @@
           "source_ref": "docs/product/prd.md#product-pull",
           "evidence_mode": "product_signal"
         }
+      ],
+      "mvp_required_version_slices": [
+        "v0.2"
       ]
     },
     {
@@ -5746,6 +5780,9 @@
           "source_ref": "docs/product/prd.md#product-pull",
           "evidence_mode": "product_signal"
         }
+      ],
+      "mvp_required_version_slices": [
+        "v0.2"
       ]
     }
   ],
