@@ -74,9 +74,18 @@ REQUIRED_TASK_FIELDS = [
 
 def normalize_repo_path(value: object) -> str:
     path = str(value).strip().replace("\\", "/")
-    while path.startswith("./"):
-        path = path[2:]
-    return path
+    parts: list[str] = []
+    for part in path.split("/"):
+        if part in {"", "."}:
+            continue
+        if part == "..":
+            if parts:
+                parts.pop()
+            else:
+                parts.append(part)
+            continue
+        parts.append(part)
+    return "/".join(parts)
 
 REQUIRED_RUNNER_READY_FIELDS = [
     "worker_type",
@@ -1652,6 +1661,9 @@ def run_self_test() -> int:
     }
     control_allowed_packets["tasks"][1]["allowed_paths"].append(
         "./.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+    )
+    control_allowed_packets["tasks"][1]["allowed_paths"].append(
+        ".factory/artifacts/task-runs/T3/../../prd-to-plan/lumyn-mvp/scope-closure-map.json"
     )
     control_allowed_packets["tasks"][1]["allowed_paths"].append(
         ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
