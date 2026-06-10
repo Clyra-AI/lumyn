@@ -271,9 +271,9 @@ REQUIRED_STATUS_CHECKS = [
 REQUIRED_ACTION_REFS = [
     "actions/checkout@v6.0.2",
     "actions/setup-go@v6.3.0",
-    "github/codeql-action/init@v3",
-    "github/codeql-action/autobuild@v3",
-    "github/codeql-action/analyze@v3",
+    "github/codeql-action/init@v4",
+    "github/codeql-action/autobuild@v4",
+    "github/codeql-action/analyze@v4",
 ]
 
 ARCHITECTURE_POLICY_TOKENS = {
@@ -414,9 +414,9 @@ def validate_ci_control_set() -> None:
         "actions/setup-go@v6.3.0",
         "go-version-file: go.mod",
         "check-latest: false",
-        "github/codeql-action/init@v3",
-        "github/codeql-action/autobuild@v3",
-        "github/codeql-action/analyze@v3",
+        "github/codeql-action/init@v4",
+        "github/codeql-action/autobuild@v4",
+        "github/codeql-action/analyze@v4",
         "languages: go",
     ]
     for token in codeql_tokens:

@@ -40,7 +40,7 @@ lint-fast:
 	grep -Fq '/.github/** @davidahmann' .github/CODEOWNERS
 	grep -q 'actions/checkout@v6.0.2' .github/action-ref-exceptions.yaml
 	grep -q 'actions/setup-go@v6.3.0' .github/action-ref-exceptions.yaml
-	grep -q 'github/codeql-action/init@v3' .github/action-ref-exceptions.yaml
+	grep -q 'github/codeql-action/init@v4' .github/action-ref-exceptions.yaml
 	grep -q 'permissions:' .github/workflows/codeql.yml
 	grep -q 'concurrency:' .github/workflows/codeql.yml
 	grep -q 'timeout-minutes:' .github/workflows/codeql.yml
@@ -48,7 +48,9 @@ lint-fast:
 	grep -q 'actions/setup-go@v6.3.0' .github/workflows/codeql.yml
 	grep -q 'go-version-file: go.mod' .github/workflows/codeql.yml
 	grep -q 'check-latest: false' .github/workflows/codeql.yml
-	grep -q 'github/codeql-action/init@v3' .github/workflows/codeql.yml
+	grep -q 'github/codeql-action/init@v4' .github/workflows/codeql.yml
+	grep -q 'github/codeql-action/autobuild@v4' .github/workflows/codeql.yml
+	grep -q 'github/codeql-action/analyze@v4' .github/workflows/codeql.yml
 	grep -q 'languages: go' .github/workflows/codeql.yml
 	grep -q 'Passive Codex review settle is required before merge' AGENTS.md
 	grep -q 'Green CI alone is not merge-ready' WORKFLOW.md
