@@ -875,6 +875,14 @@ def at_or_after_baseline(task: dict[str, Any], baseline_task_id: str) -> bool:
     return False
 
 
+def is_live_eval_dispatch_task(task: dict[str, Any]) -> bool:
+    for value in [task_id(task), task.get("phase")]:
+        key = task_order_key(value)
+        if key is not None and key[:1] in {(11,), (12,)}:
+            return True
+    return False
+
+
 def validate_task_guide_sources(task: dict[str, Any]) -> None:
     task_id_value = task_id(task)
     if not refs_include_base(task, "test_matrix_refs", TEST_MATRIX_SOURCE_BASE):
@@ -1327,7 +1335,7 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
             checks = "\n".join(str(value).lower() for value in task.get("acceptance_checks", []))
             if "openai-compatible" not in checks or "anthropic" not in checks:
                 fail("T11 acceptance_checks must name both OpenAI-compatible and Anthropic adapter coverage")
-        if current_task_id in {"T11", "T12"}:
+        if is_live_eval_dispatch_task(task):
             validate_live_eval_dispatch_gates(task)
 
 
@@ -1348,7 +1356,7 @@ def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: st
     validate_task_guide_sources(packet)
     validate_task_planning_skill_fields(packet)
     validate_task_execution_compiler_fields(packet)
-    if task_id_value in {"T11", "T12"}:
+    if is_live_eval_dispatch_task(packet):
         validate_live_eval_dispatch_gates(packet)
 
 
@@ -1919,6 +1927,15 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected standalone live-eval packet without pull gates to fail")
+
+    missing_repair_live_eval_gate = propagated_task("T11-repair-001", ["T2.6"])
+    try:
+        validate_standalone_task_packet(missing_repair_live_eval_gate, "T2.6")
+    except AssertionError as exc:
+        if "must gate live eval dispatch" not in str(exc):
+            raise
+    else:
+        fail("self-test expected live-eval repair packet without pull gates to fail")
 
     nested_slice_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
