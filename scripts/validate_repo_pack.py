@@ -1541,6 +1541,10 @@ def validate_first_session_smoke_task(tasks_by_id: dict[str, dict[str, Any]]) ->
         fail("T6.evidence_required must include first_session_smoke_report")
     if "make smoke-first-session" not in {str(value) for value in task.get("validation_commands", [])}:
         fail("T6.validation_commands must include make smoke-first-session")
+    allowed_paths = {str(value) for value in task.get("allowed_paths", [])}
+    missing_paths = sorted({"Makefile", "scripts/"} - allowed_paths)
+    if missing_paths:
+        fail(f"T6.allowed_paths must include smoke target implementation paths: {missing_paths}")
 
 
 def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: str) -> None:
