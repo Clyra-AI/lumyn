@@ -683,7 +683,7 @@
     {
       "scope_item": "Non-functional requirements",
       "scope_item_id": "nonfunctional_requirements",
-      "source_ref": "docs/product/prd.md#nonfunctional-requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
       "status": "partial",
       "task_refs": [
         "T1",
