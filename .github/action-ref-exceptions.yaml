@@ -21,6 +21,13 @@ exceptions:
     expires: 2026-09-30
     review_command: python3 scripts/validate_repo_pack.py
   - workflow: .github/workflows/codeql.yml
+    action: actions/setup-go@v6.3.0
+    owner: delivery-infra
+    reason: audited Node24-ready Go setup action kept on upstream release tag until SHA pin refresh automation lands
+    scope: CodeQL workflow Go setup only
+    expires: 2026-09-30
+    review_command: python3 scripts/validate_repo_pack.py
+  - workflow: .github/workflows/codeql.yml
     action: github/codeql-action/init@v3
     owner: delivery-infra
     reason: CodeQL action major tag is reviewed through GitHub Advanced Security compatibility
