@@ -1,0 +1,21 @@
+{
+  "artifact_type": "approved_exception",
+  "schema_version": "0.1",
+  "exception_id": "stable-command-core-coverage-deferred",
+  "scope": "go_stable_command_or_core_packages",
+  "policy_ref": "docs/dev/dev_guides.md#coverage-gates",
+  "status": "approved_deferred_gate",
+  "owner": "factory-operator",
+  "reason": "Lumyn is still in deterministic MVP bootstrap. Overall first-party coverage is enforced at >=75%, while the stricter >=85% stable command/core threshold becomes fully binding once the command surface contains product-bearing logic beyond the skeleton and T3 local source intake.",
+  "compensating_validation": [
+    "make test-coverage",
+    "make prepush-full",
+    "command-result schema validation in cmd/lumyn tests",
+    "repo-pack propagation validation in scripts/validate_repo_pack.py"
+  ],
+  "follow_up_task_refs": [
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3"
+  ],
+  "expires_when": "T3 implementation adds lumyn init/check product-bearing command logic or the next task changes cmd/lumyn coverage-sensitive behavior",
+  "created_at": "2026-06-10T01:26:00Z"
+}
