@@ -10,7 +10,10 @@
         "T2.5"
       ],
       "acceptance_refs": [
-        "Factory PR lifecycle baseline before first product implementation"
+        "FDL-001"
+      ],
+      "acceptance_item_ids": [
+        "FDL-001"
       ]
     },
     {
@@ -20,10 +23,10 @@
         "T2.6"
       ],
       "acceptance_refs": [
-        "Factory dev guide, architecture guide, test matrix, and security scanner propagation before product implementation",
-        "Factory CI lane propagation before product implementation",
-        "Factory docs/output/release/provenance propagation before product implementation",
-        "Factory systems-thinking/TDD/ADR/performance/reliability/fail-closed propagation before product implementation"
+        "FDAP-001"
+      ],
+      "acceptance_item_ids": [
+        "FDAP-001"
       ]
     },
     {
@@ -35,10 +38,50 @@
         "T3",
         "T4",
         "T5",
-        "T6"
+        "T6",
+        "T10"
       ],
       "acceptance_refs": [
-        "Record, Contract, Replay, Report Acceptance Tests"
+        "FDN-001",
+        "FDN-002",
+        "RCRR-001",
+        "RCRR-002",
+        "RCRR-003",
+        "RCRR-004",
+        "RCRR-005",
+        "RCRR-006",
+        "RCRR-007",
+        "RCRR-008",
+        "RCRR-009",
+        "RCRR-010",
+        "RCRR-011",
+        "ACT-001",
+        "ACT-002",
+        "ACT-003",
+        "ACT-004",
+        "PULL-005",
+        "REC-QUALITY-001"
+      ],
+      "acceptance_item_ids": [
+        "FDN-001",
+        "FDN-002",
+        "RCRR-001",
+        "RCRR-002",
+        "RCRR-003",
+        "RCRR-004",
+        "RCRR-005",
+        "RCRR-006",
+        "RCRR-007",
+        "RCRR-008",
+        "RCRR-009",
+        "RCRR-010",
+        "RCRR-011",
+        "ACT-001",
+        "ACT-002",
+        "ACT-003",
+        "ACT-004",
+        "PULL-005",
+        "REC-QUALITY-001"
       ]
     },
     {
@@ -51,11 +94,32 @@
         "T10"
       ],
       "acceptance_refs": [
-        "Live Verify, Boundary, CI, And Share Acceptance Tests"
+        "LVCIS-001",
+        "LVCIS-002",
+        "LVCIS-003",
+        "LVCIS-004",
+        "LVCIS-005",
+        "LVCIS-006",
+        "LVCIS-007",
+        "LVCIS-008",
+        "PULL-002",
+        "PULL-003"
       ],
       "requires_human_approval": [
         "sandbox credential posture",
         "network allowlist"
+      ],
+      "acceptance_item_ids": [
+        "LVCIS-001",
+        "LVCIS-002",
+        "LVCIS-003",
+        "LVCIS-004",
+        "LVCIS-005",
+        "LVCIS-006",
+        "LVCIS-007",
+        "LVCIS-008",
+        "PULL-002",
+        "PULL-003"
       ]
     },
     {
@@ -66,9 +130,18 @@
         "T12"
       ],
       "acceptance_refs": [
-        "Live Agent Eval Acceptance Tests",
-        "OpenAI-compatible provider adapter acceptance",
-        "Anthropic provider adapter acceptance"
+        "EVAL-001",
+        "EVAL-002",
+        "EVAL-003",
+        "EVAL-004",
+        "EVAL-005",
+        "EVAL-006",
+        "EVAL-007",
+        "EVAL-008",
+        "EVAL-009",
+        "EVAL-010",
+        "PULL-001",
+        "PULL-004"
       ],
       "requires_human_approval": [
         "OpenAI-compatible model credential posture",
@@ -78,7 +151,162 @@
       "provider_adapter_coverage": [
         "openai_compatible_http_adapter",
         "anthropic_messages_http_adapter"
+      ],
+      "acceptance_item_ids": [
+        "EVAL-001",
+        "EVAL-002",
+        "EVAL-003",
+        "EVAL-004",
+        "EVAL-005",
+        "EVAL-006",
+        "EVAL-007",
+        "EVAL-008",
+        "EVAL-009",
+        "EVAL-010",
+        "PULL-001",
+        "PULL-004"
+      ]
+    },
+    {
+      "group_id": "functional_requirements",
+      "title": "Functional requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "task_refs": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "criteria": [],
+      "suggested_validation": [
+        "make prepush-full"
+      ],
+      "requires_credentials": false,
+      "requires_network": false,
+      "judgment_only": false,
+      "closure_status": "partial",
+      "acceptance_item_ids": [
+        "FR1",
+        "FR2",
+        "FR3",
+        "FR4",
+        "FR5",
+        "FR6",
+        "FR7",
+        "FR8",
+        "FR9",
+        "FR10",
+        "FR11",
+        "FR12",
+        "FR13",
+        "FR14",
+        "FR15",
+        "FR16",
+        "FR17",
+        "FR18",
+        "FR19",
+        "FR20",
+        "FR21",
+        "FR22",
+        "FR23",
+        "FR24",
+        "FR25"
+      ],
+      "acceptance_refs": [
+        "FR1",
+        "FR2",
+        "FR3",
+        "FR4",
+        "FR5",
+        "FR6",
+        "FR7",
+        "FR8",
+        "FR9",
+        "FR10",
+        "FR11",
+        "FR12",
+        "FR13",
+        "FR14",
+        "FR15",
+        "FR16",
+        "FR17",
+        "FR18",
+        "FR19",
+        "FR20",
+        "FR21",
+        "FR22",
+        "FR23",
+        "FR24",
+        "FR25"
+      ]
+    },
+    {
+      "group_id": "nonfunctional_requirements",
+      "title": "Non-functional requirements",
+      "source_ref": "docs/product/prd.md#nonfunctional-requirements",
+      "task_refs": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "criteria": [],
+      "suggested_validation": [
+        "make prepush-full"
+      ],
+      "requires_credentials": false,
+      "requires_network": false,
+      "judgment_only": false,
+      "closure_status": "partial",
+      "acceptance_item_ids": [
+        "NFR1",
+        "NFR2",
+        "NFR3",
+        "NFR4",
+        "NFR5",
+        "NFR6",
+        "NFR7",
+        "NFR8",
+        "NFR9",
+        "NFR10",
+        "NFR11",
+        "NFR12",
+        "NFR13",
+        "NFR14"
+      ],
+      "acceptance_refs": [
+        "NFR1",
+        "NFR2",
+        "NFR3",
+        "NFR4",
+        "NFR5",
+        "NFR6",
+        "NFR7",
+        "NFR8",
+        "NFR9",
+        "NFR10",
+        "NFR11",
+        "NFR12",
+        "NFR13",
+        "NFR14"
       ]
     }
-  ]
+  ],
+  "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
 }

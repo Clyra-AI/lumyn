@@ -33,9 +33,15 @@
     "Repository dev/architecture propagation baseline must exist before T3 product implementation starts."
   ],
   "acceptance_groups": [
+    "factory_delivery_lifecycle_baseline",
+    "factory_dev_architecture_propagation_baseline",
     "record_contract_replay_report",
     "live_verify_boundary_ci_share",
-    "live_agent_eval"
+    "live_agent_eval",
+    "activation_success_metrics",
+    "product_pull_success_metrics",
+    "functional_requirements",
+    "nonfunctional_requirements"
   ],
   "proof_requirements": [
     "Validation reports must record command, exit status, and skipped-command reason when applicable.",
@@ -79,7 +85,8 @@
     "live eval provider work omits either OpenAI-compatible or Anthropic adapter coverage without approved scope exception",
     "coverage policy refs or coverage evidence are missing from a product task packet",
     "make test-coverage is below threshold without an approved scoped exception",
-    "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
+    "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+    "acceptance ledger item missing, unmapped, or closed only at group level"
   ],
   "runtime_pins": {
     "language": "go",
@@ -192,7 +199,8 @@
       "factory_compatibility",
       "runtime_pins",
       "alignment_gate",
-      "plan_drift_policy"
+      "plan_drift_policy",
+      "acceptance_ledger_coverage"
     ],
     "required_task_fields": [
       "planning_skill_refs",
@@ -226,7 +234,9 @@
       "validation_commands",
       "evidence_required",
       "stop_conditions",
-      "ci_control_set_refs_or_evidence"
+      "ci_control_set_refs_or_evidence",
+      "acceptance_ledger_ref",
+      "acceptance_item_ids"
     ],
     "validator_ref": "scripts/validate_repo_pack.py"
   },
@@ -298,7 +308,9 @@
       "required_worker_chain",
       "lifecycle_gates",
       "coverage_policy_refs",
-      "scope_exclusions"
+      "scope_exclusions",
+      "acceptance_ledger_ref",
+      "acceptance_item_ids"
     ],
     "runtime": {
       "state_dir": ".factoryd/",
@@ -354,5 +366,92 @@
       "toolchain_pin_source": "go.mod"
     },
     "validator_ref": "scripts/validate_repo_pack.py"
-  }
+  },
+  "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+  "acceptance_mapping_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
+  "acceptance_item_count": 82,
+  "acceptance_criteria": [
+    "FDN-001: Create the Go CLI skeleton, command-result JSON envelope, exit-code constants, command dispatch, and repo-local validation baseline needed before product commands are implemented.",
+    "FDN-002: Define initial workflow, command-result, proof-strength, cassette, evidence-event, state-binding, redaction-config, and related schema contracts before feature implementation.",
+    "FDL-001: Repository CI validation, required-check metadata, workflow hardening, owner review, action-ref posture, branch protection evidence, and PR lifecycle evidence are established before product implementation continues.",
+    "FDAP-001: Repo dev guide, architecture guide, 12-level test matrix, coverage policy, security scanner posture, docs/output/release/provenance rules, and architecture boundary rules are propagated into executable planning.",
+    "FR1: FR1: Product Surface Under Test - Lumyn must frame the customer's API/docs surface as the system under test and agents as probes.",
+    "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+    "FR3: FR3: OpenAPI And Local Docs Intake - Lumyn must ingest an OpenAPI file and local docs folder.",
+    "FR4: FR4: Agent-Relevant Source Checks - Lumyn must run structural checks that affect agent tool choice, validation, auth handling, retries, and workflow proof.",
+    "FR5: FR5: Workflow Contract Schema - Lumyn must define a versioned YAML workflow contract with goal, expected outcome, validators, state bindings, context, constraints, and cleanup.",
+    "FR6: FR6: Recording As Authoring - Lumyn must record known-good HTTP traffic and draft workflow contracts, validators, state bindings, cassettes, and cleanup suggestions.",
+    "FR7: FR7: User Approval - Generated workflow contracts must be editable and approved before being treated as stable.",
+    "FR8: FR8: Capture-Time Redaction - Secrets must be redacted before requests, responses, cassettes, traces, or reports are persisted.",
+    "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+    "FR10: FR10: Replay Verify - Lumyn must support deterministic replay verification without network calls.",
+    "FR11: FR11: API State Validation - Lumyn must support `api_state` validators and explicit proof-gap reporting when no reliable read-back exists.",
+    "FR12: FR12: Trace Assertions - Lumyn must support a limited deterministic `trace_assertion` vocabulary.",
+    "FR13: FR13: Local Trace And Report - Lumyn must produce a local JSON trace and HTML report.",
+    "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+    "FR15: FR15: Live Known-Path Verify - Lumyn must support live known-path verification against sandbox.",
+    "FR16: FR16: Cleanup And Sandbox Hygiene - Lumyn must support cleanup steps, run IDs, idempotency where practical, and basic orphan detection.",
+    "FR17: FR17: Action Boundary - Lumyn must support a first-class action-boundary object and deterministic boundary checks.",
+    "FR18: FR18: Boundary Failure Semantics - Lumyn must fail a workflow when expected final state passes but configured action boundaries are violated.",
+    "FR19: FR19: Live Agent Eval - Lumyn must support live agent probes using OpenAI-compatible and Anthropic provider adapters behind a pluggable provider interface.",
+    "FR20: FR20: Eval Context Modes - Lumyn eval must support `surface_only` and `contract_assisted` modes.",
+    "FR21: FR21: Eval Repetition - Lumyn eval must support repeated runs and report pass rate instead of hiding stochastic behavior.",
+    "FR22: FR22: Model Pinning - Lumyn must record provider, model, temperature, and model snapshot where available.",
+    "FR23: FR23: Baseline Comparison - Lumyn eval must compare against a saved baseline where configured and label drift risk when model snapshots are unavailable.",
+    "FR24: FR24: Least-Privilege Agent Runs - Lumyn eval must default to stateless local runs, explicit context, allowlisted env vars, and no ambient workspace access.",
+    "FR25: FR25: Portable Artifacts - Workflow contracts, cassettes, traces, reports, and baselines must remain useful outside a hosted service.",
+    "NFR1: NFR1: Fast First Value - A technical user should run `init`, `check`, and open bundled traces in under 10 minutes.",
+    "NFR2: NFR2: Fast First Workflow - A technical user should record and replay-verify one simple workflow in under 30 minutes.",
+    "NFR3: NFR3: Deterministic Replay - Repeated replay verification on unchanged artifacts must produce the same result.",
+    "NFR4: NFR4: Proof Honesty - Reports must clearly distinguish confirmed read-back proof, trace-only evidence, and proof gaps.",
+    "NFR5: NFR5: Security - Redaction must happen before artifact persistence. If a value cannot be confidently redacted, Lumyn must fail closed: mark the artifact unsafe to persist rather than write a possibly-unredacted secret. Silent persistence of an unrecognized secret is a trust bug, not an edge case.",
+    "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
+    "NFR7: NFR7: Contract Readability - Workflow YAML must be understandable by engineers without a custom UI.",
+    "NFR8: NFR8: Parser-First - OpenAPI checks should use structured parsers and schema-aware libraries where possible.",
+    "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+    "NFR10: NFR10: Cost Visibility - Live evals must show token and estimated cost information.",
+    "NFR11: NFR11: Stochastic Honesty - Eval must report run counts and pass rates. It must not hide variability behind a deterministic-looking boolean.",
+    "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
+    "NFR13: NFR13: Inference Humility - Recorder-generated validators, bindings, boundaries, and cleanup suggestions must be confidence-labeled.",
+    "NFR14: NFR14: No Dashboard Dependency - The MVP must explain value through local CLI output and local reports.",
+    "REC-QUALITY-001: At least 70% of drafted assertions, read-back candidates, and state bindings are accepted without edit on simple REST/OpenAPI workflows.",
+    "RCRR-001: `lumyn init` writes valid config and source-check artifacts.",
+    "RCRR-002: `lumyn check` emits a workflow-relevant source finding with a concrete reference.",
+    "RCRR-003: `lumyn record create_customer_with_readback` writes workflow YAML, cassette, trace, and state bindings.",
+    "RCRR-004: Generated workflow YAML is readable and editable without a custom UI.",
+    "RCRR-005: `lumyn verify --strategy replay` is deterministic on repeated runs.",
+    "RCRR-006: Strong-proof workflow reports `confirmed by API read-back`.",
+    "RCRR-007: Proof-gap workflow reports `not provable from current surface`.",
+    "RCRR-008: Local HTML report identifies the fix target.",
+    "RCRR-009: Standard auth headers and configured sensitive fields are redacted in all artifacts.",
+    "RCRR-010: Bundled static traces open without model key, sandbox, or hosted account.",
+    "RCRR-011: `lumyn demo` opens the bundled agent-failure and proof-gap reports with no install, model key, sandbox, or hosted account.",
+    "LVCIS-001: `lumyn verify --strategy live` executes the recorded path against sandbox.",
+    "LVCIS-002: Live read-back confirms expected state on the happy path.",
+    "LVCIS-003: A changed sandbox response causes a verification failure.",
+    "LVCIS-004: Cleanup removes created resources or reports orphaned resources.",
+    "LVCIS-005: A forbidden path call fails the workflow even when final state passes.",
+    "LVCIS-006: Request and write-operation budgets are enforced.",
+    "LVCIS-007: The GitHub Action runs `verify` in CI and posts a PR-comment summary naming changed sources and the workflows they affect.",
+    "LVCIS-008: `lumyn share` re-runs redaction at export and produces a single self-contained artifact of a trace that opens with no Lumyn install or account; it fails closed if any value cannot be confidently redacted.",
+    "EVAL-001: `lumyn eval` runs OpenAI-compatible and Anthropic provider/model adapters when configured.",
+    "EVAL-002: Eval supports `surface_only` mode.",
+    "EVAL-003: Eval supports `contract_assisted` mode.",
+    "EVAL-004: Eval reports run count and pass rate.",
+    "EVAL-005: Eval reports selected endpoints and wrong turns.",
+    "EVAL-006: Eval reports cost and duration.",
+    "EVAL-007: Eval writes a local trace/report.",
+    "EVAL-008: Eval compares to a saved baseline where configured.",
+    "EVAL-009: Eval labels baseline drift risk when model snapshots are unavailable.",
+    "EVAL-010: Eval is diagnostic by default unless an explicit gate is configured.",
+    "ACT-001: First trace opened in under 5 minutes.",
+    "ACT-002: `init` plus `check` completed in under 10 minutes.",
+    "ACT-003: First workflow recorded and replay-verified in under 30 minutes.",
+    "ACT-004: Generated workflow contract accepted with limited edits.",
+    "PULL-001: User records more than one workflow.",
+    "PULL-002: User adds `verify --strategy replay` to CI.",
+    "PULL-003: User configures live sandbox verify.",
+    "PULL-004: User asks to run live eval before an API/docs release.",
+    "PULL-005: User fixes docs, OpenAPI descriptions, auth guidance, endpoint ambiguity, or read-back gaps based on Lumyn output."
+  ]
 }
