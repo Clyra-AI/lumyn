@@ -122,6 +122,8 @@ REQUIRED_ACCEPTANCE_ITEM_IDS = {
 }
 
 ACCEPTANCE_LEDGER_REF = ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+ACCEPTANCE_MAPPING_REF = ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json"
+SCOPE_CLOSURE_MAP_REF = ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
 
 REQUIRED_ACCEPTANCE_TASK_REFS = {
     "FR14": {"T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
@@ -174,6 +176,7 @@ REQUIRED_PLAN_LEVEL_FIELDS = [
     "runtime_pins",
     "alignment_gate",
     "plan_drift_policy",
+    "acceptance_ledger_coverage",
     "public_api_and_contract_map",
     "docs_and_oss_readiness_baseline",
     "test_matrix_wiring",
@@ -240,6 +243,9 @@ REQUIRED_PLAN_DRIFT_UPDATES = [
     "task_packets",
     "validation_contract",
     "factory_compatibility",
+    "acceptance_ledger",
+    "acceptance_mapping",
+    "scope_closure_map",
 ]
 
 REQUIRED_CHANGELOG_FIELDS = [
@@ -772,7 +778,33 @@ def has_plan_drift_policy(value: Any) -> bool:
 
 def validate_plan_drift_policy(value: Any, label: str) -> None:
     if not has_plan_drift_policy(value):
-        fail(f"{label} must require context brief, execution plan, task packets, validation contract, and factory_compatibility updates before continuing")
+        fail(
+            f"{label} must require context brief, execution plan, task packets, validation contract, "
+            "factory_compatibility, acceptance_ledger, acceptance_mapping, and scope_closure_map updates before continuing"
+        )
+
+
+def validate_acceptance_ledger_coverage(value: Any, label: str) -> None:
+    if not isinstance(value, dict):
+        fail(f"{label} must be an object")
+    expected_refs = {
+        "ledger_ref": ACCEPTANCE_LEDGER_REF,
+        "acceptance_mapping_ref": ACCEPTANCE_MAPPING_REF,
+        "scope_closure_map_ref": SCOPE_CLOSURE_MAP_REF,
+    }
+    for field, expected in expected_refs.items():
+        if value.get(field) != expected:
+            fail(f"{label}.{field} must cite {expected}")
+    if value.get("coverage_unit") != "acceptance_item":
+        fail(f"{label}.coverage_unit must be acceptance_item")
+    if value.get("group_only_refs_allowed") is not False:
+        fail(f"{label}.group_only_refs_allowed must be false")
+    if value.get("required_item_count") != len(REQUIRED_ACCEPTANCE_ITEM_IDS):
+        fail(f"{label}.required_item_count must match acceptance-ledger item count")
+    if value.get("status") != "mapped":
+        fail(f"{label}.status must be mapped")
+    if not has_nonempty_list(value.get("required_groups")):
+        fail(f"{label}.required_groups must be non-empty")
 
 
 def has_lifecycle_gates(value: Any) -> bool:
@@ -1105,6 +1137,10 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
     validate_factoryd_runtime(plan.get("factoryd_runtime"), "execution-plan.json.factoryd_runtime")
     validate_alignment_gate(plan.get("alignment_gate"), "execution-plan.json.alignment_gate")
     validate_plan_drift_policy(plan.get("plan_drift_policy"), "execution-plan.json.plan_drift_policy")
+    validate_acceptance_ledger_coverage(
+        plan.get("acceptance_ledger_coverage"),
+        "execution-plan.json.acceptance_ledger_coverage",
+    )
     for field in REQUIRED_PLAN_LEVEL_FIELDS:
         value = plan.get(field)
         if not has_nonempty_collection(value):
