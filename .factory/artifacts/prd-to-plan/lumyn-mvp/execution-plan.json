@@ -35,6 +35,7 @@
         "T2",
         "T2.5",
         "T2.6",
+        "T2.7",
         "T3"
       ]
     },
@@ -294,7 +295,8 @@
       "task packets carry allowed_paths and forbidden_paths before factoryd dispatch",
       "runtime pins use the current Factory runtime-pins contract including toolchain_version, module_or_package_path, provider_policy, artifact_namespace, and live_work_policy",
       "task packets that are runner-ready carry worker_type, factoryd_runtime, validation_commands, evidence_required, and stop_conditions before factoryd dispatch",
-      "task packets carry coverage_policy_refs for first-party code, tests, CI, package-boundary, and generated-code work"
+      "task packets carry coverage_policy_refs for first-party code, tests, CI, package-boundary, and generated-code work",
+      "safety/corpus-ready evidence requirements are itemized in the acceptance ledger, mapped into task packets, and kept local/private by default"
     ],
     "evidence_refs": [
       "docs/dev/dev_guides.md",
@@ -305,7 +307,7 @@
       ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
       "scripts/validate_repo_pack.py"
     ],
-    "drift_policy": "If runtime, distribution, provider, dependency, artifact namespace, credential, live-work, guide, validation-contract, Factory contract, profile, skill inventory, or skill vocabulary decisions change after planning, update context brief, execution plan, task packets, validation contract, and factory_compatibility before implementation continues."
+    "drift_policy": "If runtime, distribution, provider, dependency, artifact namespace, credential, live-work, guide, validation-contract, Factory contract, profile, skill inventory, or skill vocabulary decisions change after planning, update context brief, execution plan, task packets, validation contract, and factory_compatibility before implementation continues, safety/corpus-ready evidence artifacts, and corpus posture artifacts before continuing."
   },
   "public_api_and_contract_map": {
     "stable_public_surfaces": [
@@ -401,12 +403,13 @@
     {
       "order": 4,
       "task_refs": [
+        "T2.7",
         "T3",
         "T4",
         "T5",
         "T6"
       ],
-      "why_now": "Close deterministic record/contract/replay/report foundation without live credentials."
+      "why_now": "Close safety/corpus-ready local evidence contracts, then close deterministic record/contract/replay/report foundation without live credentials."
     },
     {
       "order": 5,
@@ -437,7 +440,9 @@
     "training shared models on private artifacts",
     "Do not treat live eval pass rate as deterministic closure evidence.",
     "Do not bypass PR lifecycle, CodeQL, branch protection, or latest-head Codex review evidence.",
-    "Do not add production credential brokering or hosted control-plane behavior inside the Lumyn MVP implementation plan."
+    "Do not add production credential brokering or hosted control-plane behavior inside the Lumyn MVP implementation plan.",
+    "Do not upload normalized failure evidence, traces, cassettes, or reports to a hosted corpus in the MVP.",
+    "Do not position Lumyn MVP as a broad agent security platform; surface action-boundary safety findings as evidence inside the workflow completion product."
   ],
   "definition_of_done": [
     "All MVP acceptance groups in docs/product/prd.md are implemented or explicitly accepted with documented delivery debt by a human owner.",
@@ -446,7 +451,9 @@
     "Latest-head passive Codex review is approved, thumbs-up, actionable-resolved, carried forward, or explicitly excepted before merge.",
     "No task writes outside allowed paths, introduces undeclared credentials/network, or does explicitly excluded work.",
     "Docs, changelog/versioning intent, output contracts, architecture constraints, and planning artifacts stay aligned with implemented behavior.",
-    "Required-check metadata, owner-review coverage, workflow hardening, action-ref posture, and branch-protection expectations are proven or explicitly excepted for CI/workflow/policy/lifecycle work."
+    "Required-check metadata, owner-review coverage, workflow hardening, action-ref posture, and branch-protection expectations are proven or explicitly excepted for CI/workflow/policy/lifecycle work.",
+    "Reports, traces, JSON output, CI output, PR comments, and eval evidence distinguish completion gaps, proof gaps, boundary violations, safety/security relevance, redaction/share failures, stochastic failures, and fix targets.",
+    "Normalized local failure evidence is corpus-ready for future opt-in use while defaulting to corpus_eligible: false and no hosted upload."
   ],
   "factory_compatibility": {
     "factory_contract_version": "1.0",
@@ -555,7 +562,7 @@
     "acceptance_mapping_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
     "scope_closure_map_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
     "coverage_unit": "acceptance_item",
-    "required_item_count": 82,
+    "required_item_count": 87,
     "required_groups": [
       "activation_success_metrics",
       "factory_delivery_lifecycle_baseline",
@@ -594,7 +601,8 @@
         "T4",
         "T5",
         "T6",
-        "T10"
+        "T10",
+        "T2.7"
       ],
       "acceptance_group_refs": [
         "record_contract_replay_report",
@@ -660,7 +668,8 @@
         "T4",
         "T5",
         "T6",
-        "T10"
+        "T10",
+        "T2.7"
       ],
       "acceptance_group_refs": [
         "record_contract_replay_report",
@@ -685,7 +694,9 @@
         "ACT-003",
         "ACT-004",
         "PULL-005",
-        "REC-QUALITY-001"
+        "REC-QUALITY-001",
+        "FDN-003",
+        "RCRR-012"
       ],
       "legacy_slice_ref": "v0.0"
     },
@@ -718,7 +729,9 @@
         "PULL-003",
         "PULL-001",
         "PULL-004",
-        "PULL-005"
+        "PULL-005",
+        "LVCIS-009",
+        "LVCIS-010"
       ],
       "legacy_slice_ref": "v0.1"
     },
@@ -751,7 +764,8 @@
         "PULL-004",
         "PULL-002",
         "PULL-003",
-        "PULL-005"
+        "PULL-005",
+        "EVAL-011"
       ],
       "legacy_slice_ref": "v0.2"
     }

@@ -39,7 +39,8 @@
         "T4",
         "T5",
         "T6",
-        "T10"
+        "T10",
+        "T2.7"
       ],
       "acceptance_refs": [
         "FDN-001",
@@ -60,7 +61,9 @@
         "ACT-003",
         "ACT-004",
         "PULL-005",
-        "REC-QUALITY-001"
+        "REC-QUALITY-001",
+        "FDN-003",
+        "RCRR-012"
       ],
       "acceptance_item_ids": [
         "FDN-001",
@@ -81,7 +84,9 @@
         "ACT-003",
         "ACT-004",
         "PULL-005",
-        "REC-QUALITY-001"
+        "REC-QUALITY-001",
+        "FDN-003",
+        "RCRR-012"
       ]
     },
     {
@@ -103,7 +108,9 @@
         "LVCIS-007",
         "LVCIS-008",
         "PULL-002",
-        "PULL-003"
+        "PULL-003",
+        "LVCIS-009",
+        "LVCIS-010"
       ],
       "requires_human_approval": [
         "sandbox credential posture",
@@ -119,7 +126,9 @@
         "LVCIS-007",
         "LVCIS-008",
         "PULL-002",
-        "PULL-003"
+        "PULL-003",
+        "LVCIS-009",
+        "LVCIS-010"
       ]
     },
     {
@@ -141,7 +150,8 @@
         "EVAL-009",
         "EVAL-010",
         "PULL-001",
-        "PULL-004"
+        "PULL-004",
+        "EVAL-011"
       ],
       "requires_human_approval": [
         "OpenAI-compatible model credential posture",
@@ -164,7 +174,8 @@
         "EVAL-009",
         "EVAL-010",
         "PULL-001",
-        "PULL-004"
+        "PULL-004",
+        "EVAL-011"
       ]
     },
     {
@@ -376,7 +387,8 @@
         "T4",
         "T5",
         "T6",
-        "T10"
+        "T10",
+        "T2.7"
       ],
       "acceptance_group_refs": [
         "record_contract_replay_report",
@@ -436,7 +448,8 @@
         "T4",
         "T5",
         "T6",
-        "T10"
+        "T10",
+        "T2.7"
       ],
       "acceptance_group_refs": [
         "record_contract_replay_report",
@@ -461,7 +474,9 @@
         "ACT-003",
         "ACT-004",
         "PULL-005",
-        "REC-QUALITY-001"
+        "REC-QUALITY-001",
+        "FDN-003",
+        "RCRR-012"
       ],
       "legacy_slice_ref": "v0.0"
     },
@@ -494,7 +509,9 @@
         "PULL-003",
         "PULL-001",
         "PULL-004",
-        "PULL-005"
+        "PULL-005",
+        "LVCIS-009",
+        "LVCIS-010"
       ],
       "legacy_slice_ref": "v0.1"
     },
@@ -527,7 +544,8 @@
         "PULL-004",
         "PULL-002",
         "PULL-003",
-        "PULL-005"
+        "PULL-005",
+        "EVAL-011"
       ],
       "legacy_slice_ref": "v0.2"
     }
