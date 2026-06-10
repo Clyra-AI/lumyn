@@ -1663,6 +1663,9 @@ def run_self_test() -> int:
         "./.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
     )
     control_allowed_packets["tasks"][1]["allowed_paths"].append(
+        ".factory//artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+    )
+    control_allowed_packets["tasks"][1]["allowed_paths"].append(
         ".factory/artifacts/task-runs/T3/../../prd-to-plan/lumyn-mvp/scope-closure-map.json"
     )
     control_allowed_packets["tasks"][1]["allowed_paths"].append(
