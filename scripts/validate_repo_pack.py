@@ -19,6 +19,11 @@ SCOPE_CLOSURE_MAP = PLAN_DIR / "scope-closure-map.json"
 RISK_CLASSIFICATION = PLAN_DIR / "risk-classification.json"
 FACTORYD_CONFIG = ROOT / ".factory" / "factoryd.example.json"
 FACTORYD_AUTOSHIP_CONFIG = ROOT / ".factory" / "factoryd.autoship.example.json"
+REQUIRED_CHECKS = ROOT / ".github" / "required-checks.json"
+CODEOWNERS = ROOT / ".github" / "CODEOWNERS"
+ACTION_REF_EXCEPTIONS = ROOT / ".github" / "action-ref-exceptions.yaml"
+VALIDATE_WORKFLOW = ROOT / ".github" / "workflows" / "validate.yml"
+CODEQL_WORKFLOW = ROOT / ".github" / "workflows" / "codeql.yml"
 REPAIR_TASK_PACKETS = [
     ROOT / ".factory" / "artifacts" / "pilot" / "lumyn-mvp-slice" / "repair-loop" / "task-packet.json"
 ]
@@ -258,6 +263,19 @@ REQUIRED_ARCHITECTURE_POLICIES = [
     "failure_semantics",
 ]
 
+REQUIRED_STATUS_CHECKS = [
+    "validate",
+    "CodeQL analyze",
+]
+
+REQUIRED_ACTION_REFS = [
+    "actions/checkout@v6.0.2",
+    "actions/setup-go@v6.3.0",
+    "github/codeql-action/init@v3",
+    "github/codeql-action/autobuild@v3",
+    "github/codeql-action/analyze@v3",
+]
+
 ARCHITECTURE_POLICY_TOKENS = {
     "systems_thinking": ["systems-thinking", "systems thinking"],
     "tdd": ["tdd", "red-first"],
@@ -344,6 +362,73 @@ def validate_guides() -> None:
     for token in ["systems thinking", "tdd", "adr", "performance", "reliability", "fail-closed", "coverage gates"]:
         if token not in arch_guide:
             fail(f"docs/architecture/architecture_guides.md missing architecture token {token!r}")
+
+
+def validate_ci_control_set() -> None:
+    for path in [REQUIRED_CHECKS, CODEOWNERS, ACTION_REF_EXCEPTIONS, VALIDATE_WORKFLOW, CODEQL_WORKFLOW]:
+        if not path.exists():
+            fail(f"missing CI control file: {path.relative_to(ROOT)}")
+
+    required_checks = load_json(REQUIRED_CHECKS).get("required_checks")
+    if not isinstance(required_checks, list):
+        fail(".github/required-checks.json.required_checks must be a list")
+    missing_checks = [check for check in REQUIRED_STATUS_CHECKS if check not in required_checks]
+    if missing_checks:
+        fail(f".github/required-checks.json missing required checks: {missing_checks}")
+
+    validate_workflow = VALIDATE_WORKFLOW.read_text()
+    validate_tokens = [
+        "pull_request:",
+        "push:",
+        "branches:",
+        "- main",
+        "permissions:",
+        "contents: read",
+        "concurrency:",
+        "cancel-in-progress: true",
+        "timeout-minutes:",
+        "actions/checkout@v6.0.2",
+        "actions/setup-go@v6.3.0",
+        "go-version-file: go.mod",
+        "check-latest: false",
+        "cache: true",
+        "make prepush-full",
+    ]
+    for token in validate_tokens:
+        if token not in validate_workflow:
+            fail(f".github/workflows/validate.yml missing CI control token {token!r}")
+
+    codeql_workflow = CODEQL_WORKFLOW.read_text()
+    codeql_tokens = [
+        "pull_request:",
+        "push:",
+        "branches:",
+        "- main",
+        "permissions:",
+        "security-events: write",
+        "contents: read",
+        "concurrency:",
+        "cancel-in-progress: true",
+        "timeout-minutes:",
+        "actions/checkout@v6.0.2",
+        "github/codeql-action/init@v3",
+        "github/codeql-action/autobuild@v3",
+        "github/codeql-action/analyze@v3",
+        "languages: go",
+    ]
+    for token in codeql_tokens:
+        if token not in codeql_workflow:
+            fail(f".github/workflows/codeql.yml missing CI control token {token!r}")
+
+    codeowners = CODEOWNERS.read_text()
+    for token in ["*", "/.github/**", "/schemas/**", "/cmd/**", "/internal/**"]:
+        if token not in codeowners:
+            fail(f".github/CODEOWNERS missing owner token {token!r}")
+
+    action_exceptions = ACTION_REF_EXCEPTIONS.read_text()
+    for token in REQUIRED_ACTION_REFS + ["owner:", "reason:", "scope:", "expires:", "review_command:"]:
+        if token not in action_exceptions:
+            fail(f".github/action-ref-exceptions.yaml missing action-ref token {token!r}")
 
 
 def task_id(task: dict[str, Any]) -> str:
@@ -1748,6 +1833,7 @@ def main() -> int:
         return 2
     try:
         validate_guides()
+        validate_ci_control_set()
         context = load_json(CONTEXT_BRIEF)
         plan = load_json(EXECUTION_PLAN)
         packets = load_json(TASK_PACKETS)

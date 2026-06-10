@@ -14,6 +14,9 @@ lint-fast:
 	test -f scripts/audit_branch_protection.py
 	test -f scripts/check_go_coverage.py
 	test -f scripts/validate_repo_pack.py
+	test -f .github/required-checks.json
+	test -f .github/CODEOWNERS
+	test -f .github/action-ref-exceptions.yaml
 	test -f .github/workflows/validate.yml
 	test -f .github/workflows/codeql.yml
 	test -d .factory/artifacts
@@ -24,8 +27,24 @@ lint-fast:
 	! grep -RIn "TODO\\|TBD\\|FIXME" AGENTS.md WORKFLOW.md README.md docs cmd internal schemas tests
 	grep -q '^golang 1.26.4$$' .tool-versions
 	grep -q '^go 1.26.4$$' go.mod
-	grep -q 'go-version: "1.26.4"' .github/workflows/validate.yml
+	grep -q 'go-version-file: go.mod' .github/workflows/validate.yml
+	grep -q 'check-latest: false' .github/workflows/validate.yml
+	grep -q 'actions/checkout@v6.0.2' .github/workflows/validate.yml
+	grep -q 'actions/setup-go@v6.3.0' .github/workflows/validate.yml
+	grep -q 'permissions:' .github/workflows/validate.yml
+	grep -q 'concurrency:' .github/workflows/validate.yml
+	grep -q 'timeout-minutes:' .github/workflows/validate.yml
 	grep -q 'make prepush-full' .github/workflows/validate.yml
+	grep -q '"validate"' .github/required-checks.json
+	grep -q '"CodeQL analyze"' .github/required-checks.json
+	grep -Fq '/.github/** @davidahmann' .github/CODEOWNERS
+	grep -q 'actions/checkout@v6.0.2' .github/action-ref-exceptions.yaml
+	grep -q 'actions/setup-go@v6.3.0' .github/action-ref-exceptions.yaml
+	grep -q 'github/codeql-action/init@v3' .github/action-ref-exceptions.yaml
+	grep -q 'permissions:' .github/workflows/codeql.yml
+	grep -q 'concurrency:' .github/workflows/codeql.yml
+	grep -q 'timeout-minutes:' .github/workflows/codeql.yml
+	grep -q 'actions/checkout@v6.0.2' .github/workflows/codeql.yml
 	grep -q 'github/codeql-action/init@v3' .github/workflows/codeql.yml
 	grep -q 'languages: go' .github/workflows/codeql.yml
 	grep -q 'Passive Codex review settle is required before merge' AGENTS.md

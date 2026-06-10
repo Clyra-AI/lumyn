@@ -50,6 +50,10 @@ Lumyn accepts work from:
 - CI status check: GitHub Actions workflow `.github/workflows/validate.yml`, check name `validate`, runs `make prepush-full`.
 - Security scanner: GitHub Actions workflow `.github/workflows/codeql.yml`, status source `CodeQL analyze`, required for dependency additions, generated-code intake, CI/workflow changes, external calls, redaction/share/live/eval/provider code, data exposure, and release-sensitive work.
 - Coverage gate: `make test-coverage`, included in `make prepush-full`, required for first-party code, tests, CI, generated code, or package-boundary work unless an approved scoped exception is recorded.
+- Required-check manifest: `.github/required-checks.json` must name `validate` and `CodeQL analyze`.
+- Owner-review policy: `.github/CODEOWNERS` must cover workflow, policy, schema, Factory artifact, CLI, and core implementation paths.
+- Workflow hardening: GitHub Actions workflows must declare least-privilege permissions, concurrency cancellation, job timeouts, and toolchain setup from pinned repo files.
+- Action-ref posture: non-SHA GitHub Action refs require audited exception records in `.github/action-ref-exceptions.yaml`.
 - Structured review: `code-review` must produce review evidence only when risk, workflow policy, validation findings, pre-release posture, or explicit review policy require it.
 - Shipping evidence: `commit-push` must produce or reference a ship packet before merge.
 - Post-merge monitoring: default branch health must be checked after merge and recorded when the task requires lifecycle evidence.
@@ -85,6 +89,9 @@ Stop and request human decision if:
 - structured `code-review` is required by risk, pre-release posture, validation findings, or review policy but review evidence is missing without an approved exception
 - a PR is merge-ready by CI but lacks latest-head passive Codex review settle evidence
 - GitHub `main` branch protection or the `protect-main-from-direct-push` ruleset is missing, disabled, or bypassable
+- required-check metadata, owner-review coverage, workflow permissions,
+  concurrency, timeouts, toolchain-pin setup, or action-ref exception posture is
+  missing for CI/workflow/policy/lifecycle work
 - scanner-gated work lacks CodeQL status evidence or an approved scanner exception
 - a product task omits required test-matrix refs, scanner gates, or architecture guidance refs inherited from the repo operating pack
 - a product task omits required CI lane refs, docs parity, output contract, release integrity, provenance, systems-thinking, TDD, ADR, performance, reliability, or fail-closed refs inherited from the repo operating pack

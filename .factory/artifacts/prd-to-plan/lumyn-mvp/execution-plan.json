@@ -104,8 +104,26 @@
     "notes": [
       "T2.5 establishes the repository delivery lifecycle baseline before T3 product implementation.",
       "T9 remains the product-facing Lumyn CI/JUnit/PR-comment feature required by the MVP.",
-      "T2.6 establishes dev/architecture propagation and CodeQL scanner posture before T3 product implementation."
-    ]
+      "T2.6 establishes dev/architecture propagation and CodeQL scanner posture before T3 product implementation.",
+      "T2.5 now also establishes required-check metadata, CODEOWNERS owner-review coverage, workflow permissions/concurrency/timeouts, pinned toolchain setup from go.mod, and action-ref exception posture.",
+      "Required-check metadata must stay aligned with branch protection and commit-push required checks before autoship or merge."
+    ],
+    "required_ci_controls": {
+      "required_check_manifest": ".github/required-checks.json",
+      "required_checks": [
+        "validate",
+        "CodeQL analyze"
+      ],
+      "owner_review": ".github/CODEOWNERS",
+      "action_ref_exceptions": ".github/action-ref-exceptions.yaml",
+      "workflow_hardening": {
+        "permissions_required": true,
+        "concurrency_required": true,
+        "timeouts_required": true,
+        "toolchain_pin_source": "go.mod"
+      },
+      "validator_ref": "scripts/validate_repo_pack.py"
+    }
   },
   "alignment_decisions_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json#/alignment_decisions",
   "runtime": {
@@ -162,7 +180,8 @@
       "factoryd_runtime",
       "validation_commands",
       "evidence_required",
-      "stop_conditions"
+      "stop_conditions",
+      "ci_control_set_refs_or_evidence"
     ],
     "exception_behavior": "block_or_record_approved_exception",
     "notes": [
@@ -173,7 +192,8 @@
       "T2.6 now also enforces Factory prd-to-plan and execution-compiler story fields before T3 product implementation.",
       "T2.6 now enforces Factory compatibility, alignment-gate refs, plan-drift refs, explicit scope exclusions, canonical worker chains, and lifecycle gates on every task packet.",
       "Runtime pins now preserve the current Factory profile shape as well as Lumyn-specific Go aliases.",
-      "T2.6 now propagates coverage gates and coverage exceptions from docs/dev/dev_guides.md before T3 product implementation."
+      "T2.6 now propagates coverage gates and coverage exceptions from docs/dev/dev_guides.md before T3 product implementation.",
+      "Future CI/workflow/policy/lifecycle tasks must preserve the required CI control set or record an approved exception before implementation continues."
     ],
     "ci_lanes": {
       "fast": [
@@ -237,6 +257,22 @@
         "make prepush-full"
       ],
       "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+    },
+    "ci_control_set": {
+      "required_check_manifest": ".github/required-checks.json",
+      "required_checks": [
+        "validate",
+        "CodeQL analyze"
+      ],
+      "owner_review": ".github/CODEOWNERS",
+      "action_ref_exceptions": ".github/action-ref-exceptions.yaml",
+      "workflow_hardening": {
+        "permissions_required": true,
+        "concurrency_required": true,
+        "timeouts_required": true,
+        "toolchain_pin_source": "go.mod"
+      },
+      "validator_ref": "scripts/validate_repo_pack.py"
     }
   },
   "planning_skill_alignment": {
@@ -407,7 +443,8 @@
     "make prepush-full passes locally and required GitHub checks, including validate and CodeQL analyze, are green or have approved exceptions.",
     "Latest-head passive Codex review is approved, thumbs-up, actionable-resolved, carried forward, or explicitly excepted before merge.",
     "No task writes outside allowed paths, introduces undeclared credentials/network, or does explicitly excluded work.",
-    "Docs, changelog/versioning intent, output contracts, architecture constraints, and planning artifacts stay aligned with implemented behavior."
+    "Docs, changelog/versioning intent, output contracts, architecture constraints, and planning artifacts stay aligned with implemented behavior.",
+    "Required-check metadata, owner-review coverage, workflow hardening, action-ref posture, and branch-protection expectations are proven or explicitly excepted for CI/workflow/policy/lifecycle work."
   ],
   "factory_compatibility": {
     "factory_contract_version": "1.0",

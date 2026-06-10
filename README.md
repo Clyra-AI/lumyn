@@ -28,6 +28,9 @@ Post-MVP exclusions include MCP recording, event assertions, hosted dashboards, 
 - `.factory/artifacts/`: Factory planning and evidence artifacts
 - `.factory/artifacts/pr-lifecycle/`: Factory PR lifecycle evidence for validation, CI, review, ship, merge, and post-merge gates
 - `.factory/artifacts/pilot/lumyn-mvp-slice/`: downstream Factory pilot evidence, current PRD closure status, and bounded T3 repair task
+- `.github/required-checks.json`: required status-check contract for branch protection and `commit-push`
+- `.github/CODEOWNERS`: owner-review coverage for workflow, policy, Factory artifact, schema, CLI, and core implementation paths
+- `.github/action-ref-exceptions.yaml`: audited exception records for non-SHA GitHub Action refs
 - `.github/workflows/codeql.yml`: CodeQL Go security scanner risk lane
 - `docs/dev/dev_guides.md`: toolchain, CI lanes, 12-level test matrix, scanner, docs parity, output contract, release, and provenance rules
 - `docs/architecture/architecture_guides.md`: boundaries, systems-thinking, TDD, ADR, performance, reliability, trust-mode, and fail-closed rules
@@ -53,6 +56,9 @@ planning artifacts.
 GitHub Actions runs `make prepush-full` through the `validate` workflow on pull
 requests and pushes to `main`.
 GitHub Actions also runs CodeQL Go analysis through the `codeql` workflow.
+The required check manifest lists `validate` and `CodeQL analyze`, and the
+workflow files declare least-privilege permissions, concurrency cancellation,
+job timeouts, and toolchain setup from `go.mod`.
 Coverage-gated changes require `make test-coverage` evidence or an approved
 scoped exception.
 Scanner-gated changes require CodeQL status evidence or an approved exception.

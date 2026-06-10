@@ -81,6 +81,9 @@ Require an ADR or decision note when a task changes:
 - `schemas/`: executable JSON Schema contracts for workflow, evidence, cassette, proof, result, redaction, and related artifact models.
 - `.github/workflows/validate.yml`: repository delivery gate that runs `make prepush-full` for PR and `main` validation.
 - `.github/workflows/codeql.yml`: repository risk-lane security scanner for CodeQL Go analysis.
+- `.github/required-checks.json`: branch-protection and `commit-push` status-check contract.
+- `.github/CODEOWNERS`: owner-review map for workflow, policy, schema, Factory artifact, CLI, and core implementation paths.
+- `.github/action-ref-exceptions.yaml`: audited exception records for non-SHA action refs.
 - `.factory/tmp/coverage.out`: ignored local/CI coverage profile emitted by `make test-coverage`.
 - `.factory/artifacts/pr-lifecycle/`: Factory delivery evidence tying PR validation, CI/status checks, review, shipping, merge, and post-merge monitoring together.
 
@@ -89,7 +92,10 @@ Use Go `1.26.4`. T1 stays standard-library-only. T2 introduces the pinned
 tests.
 
 The T2.5 lifecycle baseline is delivery infrastructure for Factory-governed
-work. It does not replace the later product-facing T9 work, which remains
+work. It includes required-check metadata, workflow hardening, owner-review
+coverage, action-ref posture, branch-protection expectations, CI/status,
+review, shipping, post-merge, and PR lifecycle evidence. It does not replace
+the later product-facing T9 work, which remains
 responsible for Lumyn's own GitHub Action/JUnit/PR-comment behavior as an MVP
 feature.
 

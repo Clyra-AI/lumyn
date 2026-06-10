@@ -54,7 +54,8 @@
     "Task packets must carry explicit scope_exclusions, alignment_gate_ref, and plan_drift_policy_ref inherited from the execution plan.",
     "Runtime pins must include toolchain_version, module_or_package_path, provider_policy, artifact_namespace, and live_work_policy before implementation starts.",
     "Live eval MVP closure must cover OpenAI-compatible and Anthropic provider adapters when configured.",
-    "Coverage-gated tasks must carry make test-coverage evidence or an approved scoped coverage exception."
+    "Coverage-gated tasks must carry make test-coverage evidence or an approved scoped coverage exception.",
+    "CI control-set evidence must prove required-check metadata, least-privilege workflow permissions, concurrency, timeouts, toolchain-pin source, owner-review coverage, action-ref posture, and branch-protection expectations for lifecycle, workflow, policy, scanner, or autonomous shipping work."
   ],
   "stop_conditions": [
     "implementation requires undeclared live credentials",
@@ -77,7 +78,8 @@
     "runtime_pins omit toolchain_version, module_or_package_path, provider_policy, artifact_namespace, or live_work_policy",
     "live eval provider work omits either OpenAI-compatible or Anthropic adapter coverage without approved scope exception",
     "coverage policy refs or coverage evidence are missing from a product task packet",
-    "make test-coverage is below threshold without an approved scoped exception"
+    "make test-coverage is below threshold without an approved scoped exception",
+    "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
   ],
   "runtime_pins": {
     "language": "go",
@@ -223,7 +225,8 @@
       "factoryd_runtime",
       "validation_commands",
       "evidence_required",
-      "stop_conditions"
+      "stop_conditions",
+      "ci_control_set_refs_or_evidence"
     ],
     "validator_ref": "scripts/validate_repo_pack.py"
   },
@@ -335,5 +338,21 @@
       "make prepush-full"
     ],
     "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+  },
+  "ci_control_set": {
+    "required_check_manifest": ".github/required-checks.json",
+    "required_checks": [
+      "validate",
+      "CodeQL analyze"
+    ],
+    "owner_review": ".github/CODEOWNERS",
+    "action_ref_exceptions": ".github/action-ref-exceptions.yaml",
+    "workflow_hardening": {
+      "permissions_required": true,
+      "concurrency_required": true,
+      "timeouts_required": true,
+      "toolchain_pin_source": "go.mod"
+    },
+    "validator_ref": "scripts/validate_repo_pack.py"
   }
 }

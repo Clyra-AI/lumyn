@@ -235,6 +235,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "architecture_guidance_refs": [
@@ -327,7 +332,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -588,6 +594,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "architecture_guidance_refs": [
@@ -680,7 +691,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -712,7 +724,7 @@
     {
       "task_id": "T2.5",
       "slice_type": "foundation",
-      "objective": "Establish the repo delivery lifecycle baseline: GitHub Actions validation, documented PR lifecycle gates, and Factory PR lifecycle evidence requirements before product implementation continues.",
+      "objective": "Establish the repo delivery lifecycle baseline: GitHub Actions validation, required-check metadata, workflow hardening, owner review, action-ref posture, documented PR lifecycle gates, and Factory PR lifecycle evidence requirements before product implementation continues.",
       "risk_class": "medium",
       "blocked_by": [
         "T1",
@@ -728,7 +740,11 @@
         "Makefile",
         "README.md",
         "docs/dev/",
-        "docs/architecture/"
+        "docs/architecture/",
+        ".github/required-checks.json",
+        ".github/CODEOWNERS",
+        ".github/action-ref-exceptions.yaml",
+        ".github/workflows/codeql.yml"
       ],
       "forbidden_paths": [
         ".git/",
@@ -749,7 +765,12 @@
         "Makefile lint-fast verifies the validate workflow uses Go 1.26.4 and make prepush-full.",
         "WORKFLOW.md, AGENTS.md, README.md, docs/dev/dev_guides.md, and docs/architecture/architecture_guides.md document CI/status, review, commit-push, post-merge, and PR lifecycle evidence.",
         "T3 and later product implementation depend on the lifecycle baseline.",
-        "The later product-facing T9 CI/JUnit/PR-comment feature remains separate from this delivery baseline."
+        "The later product-facing T9 CI/JUnit/PR-comment feature remains separate from this delivery baseline.",
+        ".github/required-checks.json lists validate and CodeQL analyze as required checks.",
+        ".github/workflows/validate.yml and .github/workflows/codeql.yml declare least-privilege permissions, concurrency cancellation, job timeouts, and toolchain setup from go.mod.",
+        ".github/CODEOWNERS covers workflow, policy, Factory artifact, schema, CLI, and core implementation paths.",
+        ".github/action-ref-exceptions.yaml records audited exceptions for non-SHA GitHub Action refs.",
+        "scripts/validate_repo_pack.py fails when the CI control set drifts."
       ],
       "runtime": {
         "language": "go",
@@ -762,7 +783,8 @@
         "work_proof_marker",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "ci_control_set_evidence"
       ],
       "planning_skill_refs": [
         "factory://skills/prd-to-plan",
@@ -798,17 +820,17 @@
       },
       "slice_rationale": {
         "slice_type": "foundation",
-        "why_this_shape": "T2.5 is scoped to establish the repo delivery lifecycle baseline: GitHub Actions validation, documented PR lifecycle gates, and Factory PR lifecycle evidence requirements before product implementation continues.",
+        "why_this_shape": "Establish the repo delivery lifecycle baseline: GitHub Actions validation, required-check metadata, workflow hardening, owner review, action-ref posture, documented PR lifecycle gates, and Factory PR lifecycle evidence requirements before product implementation continues.",
         "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
       },
       "non_vertical_justification": "Foundation-only work is allowed here because later product tasks depend on this repo-level contract, validation, or governance baseline before implementation can proceed safely.",
       "changelog": {
         "impact": "required_when_implemented",
         "section": "Unreleased",
-        "draft_entry": "Add repository CI validation and Factory PR lifecycle evidence gates for governed Lumyn delivery.",
+        "draft_entry": "Add repository CI validation, required-check metadata, workflow hardening, owner-review coverage, action-ref posture, and Factory PR lifecycle evidence gates for governed Lumyn delivery.",
         "semver_marker_override": "pre_1_0_minor_candidate"
       },
-      "contract_impact": "Introduces the repository delivery lifecycle contract for CI/status, review, shipping, post-merge, and PR lifecycle evidence.",
+      "contract_impact": "Introduces the repository delivery lifecycle contract for CI/status, required-check metadata, workflow hardening, owner-review coverage, action-ref posture, review, shipping, post-merge, and PR lifecycle evidence.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
         "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
@@ -940,6 +962,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "architecture_guidance_refs": [
@@ -1032,7 +1059,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -1059,6 +1087,22 @@
           "make prepush-full"
         ],
         "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      },
+      "ci_control_set": {
+        "required_check_manifest": ".github/required-checks.json",
+        "required_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "owner_review": ".github/CODEOWNERS",
+        "action_ref_exceptions": ".github/action-ref-exceptions.yaml",
+        "workflow_hardening": {
+          "permissions_required": true,
+          "concurrency_required": true,
+          "timeouts_required": true,
+          "toolchain_pin_source": "go.mod"
+        },
+        "validator_ref": "scripts/validate_repo_pack.py"
       }
     },
     {
@@ -1246,6 +1290,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "planning_skill_refs": [
@@ -1389,7 +1438,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -1601,6 +1651,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "planning_skill_refs": [
@@ -1727,7 +1782,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -1944,6 +2000,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "planning_skill_refs": [
@@ -2072,7 +2133,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -2287,6 +2349,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "planning_skill_refs": [
@@ -2414,7 +2481,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -2630,6 +2698,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "planning_skill_refs": [
@@ -2756,7 +2829,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -2980,6 +3054,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "planning_skill_refs": [
@@ -3108,7 +3187,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -3329,6 +3409,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "planning_skill_refs": [
@@ -3456,7 +3541,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -3669,6 +3755,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "planning_skill_refs": [
@@ -3797,7 +3888,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -4017,6 +4109,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "planning_skill_refs": [
@@ -4145,7 +4242,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -4374,6 +4472,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "planning_skill_refs": [
@@ -4521,7 +4624,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -4743,6 +4847,11 @@
           "policy": "provenance_evidence",
           "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
           "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
         }
       ],
       "planning_skill_refs": [
@@ -4870,7 +4979,8 @@
         "plan drift detected",
         "required lifecycle evidence missing without approved exception",
         "credential or network access required before approval posture is unlocked",
-        "coverage policy evidence is missing or below threshold without an approved scoped exception"
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work"
       ],
       "coverage_policy_refs": {
         "required": true,
