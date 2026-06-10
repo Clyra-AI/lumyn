@@ -117,3 +117,7 @@ exception records in `.github/action-ref-exceptions.yaml`.
   `.factory/artifacts/pr-lifecycle/<task_id>/`; trusted runtime/planning code
   owns task DAG, validation contract, acceptance mapping, and scope-closure
   mutation.
+- Factory is the contract source; `factoryd` is the executable runtime; Lumyn is
+  the product source of truth. Product workers may use daemon-selected task
+  packets, but they must not edit daemon state or generated control artifacts to
+  bypass lifecycle, validation, review, credential, network, or closure gates.

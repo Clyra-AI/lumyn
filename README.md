@@ -73,3 +73,27 @@ available.
 - Standalone binary first, Homebrew next
 - MVP eval providers: OpenAI-compatible HTTP and Anthropic Messages HTTP adapters
 - Live sandbox, model-key, and network work remains blocked until deterministic replay passes and human approval unlocks credential/network posture
+
+## Factory And factoryd Operation
+
+Factory is the contract source for Lumyn's planning artifacts, task packets,
+validation contracts, repo-pack requirements, and worker-chain expectations.
+`factoryd` is the executable runtime that may consume those artifacts to select
+tasks, run Codex or another bounded worker, validate evidence, ship PRs, update
+scope closure, and generate repair tasks. Lumyn remains the product source of
+truth for the PRD, code, CI, branch policy, and product evidence.
+
+Safe operator path:
+
+```bash
+factoryd doctor --config .factory/factoryd.example.json --repo lumyn --json
+factoryd run --config .factory/factoryd.example.json --repo lumyn --dry-run --json
+```
+
+Use the autoship config only after branch protection, required `validate` and
+`CodeQL analyze` checks, passive Codex review settle, merge policy, post-merge
+monitoring, and semantic scope-closure evidence are all verified:
+
+```bash
+FACTORY_REPO=/path/to/factory factoryd run --config .factory/factoryd.autoship.example.json --repo lumyn --loop --max-tasks 1 --json
+```
