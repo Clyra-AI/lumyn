@@ -412,5 +412,11 @@
     "RCRR-001",
     "RCRR-002",
     "ACT-002"
+  ],
+  "mvp_required_version_slices": [
+    "v0.0"
+  ],
+  "delivery_slice_refs": [
+    "v0.0"
   ]
 }

@@ -32,6 +32,10 @@ Every change should improve one or more of:
 - Do not require a hosted Lumyn account for MVP workflows.
 - Do not treat stochastic eval as a default hard CI gate.
 - Do not broaden MVP scope into MCP, event assertions, hosted dashboards, runtime enforcement, production trace import, or multi-provider panels.
+- Do not treat `v0.0`, `v0.1`, or `v0.2` as standalone releases or alternate
+  closure units. They are internal delivery slices represented by
+  `delivery_slices` and task `delivery_slice_refs`; acceptance item IDs remain
+  the closure source of truth.
 - Build the CLI/core in Go `1.26.4` unless a later approved architecture decision changes the runtime.
 - Keep T1 standard-library-only; new dependencies must be pinned and justified.
 

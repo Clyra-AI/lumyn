@@ -124,6 +124,30 @@ REQUIRED_ACCEPTANCE_ITEM_IDS = {
 ACCEPTANCE_LEDGER_REF = ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
 ACCEPTANCE_MAPPING_REF = ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json"
 SCOPE_CLOSURE_MAP_REF = ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+REQUIRED_LIVE_EVAL_DISPATCH_GATES = {"PULL-001", "PULL-004"}
+
+REQUIRED_MVP_VERSION_SLICES = {
+    "v0.0": {
+        "capability_group_id": "record_contract_replay_report",
+        "task_refs": {"T1", "T2", "T3", "T4", "T5", "T6", "T10"},
+    },
+    "v0.1": {
+        "capability_group_id": "live_verify_boundary_ci_share",
+        "task_refs": {"T7", "T8", "T9", "T10"},
+    },
+    "v0.2": {
+        "capability_group_id": "live_agent_eval",
+        "task_refs": {"T11", "T12"},
+    },
+}
+
+TASK_VERSION_SLICE_REFS = {
+    task_ref: {slice_id}
+    for slice_id, spec in REQUIRED_MVP_VERSION_SLICES.items()
+    for task_ref in spec["task_refs"]
+}
+TASK_VERSION_SLICE_REFS["T10"] = {"v0.0", "v0.1"}
+DOTTED_TASK_PARENT_SLICE_EXEMPTIONS = {"T2.5", "T2.6"}
 
 REQUIRED_ACCEPTANCE_TASK_REFS = {
     "FR14": {"T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
@@ -177,6 +201,7 @@ REQUIRED_PLAN_LEVEL_FIELDS = [
     "alignment_gate",
     "plan_drift_policy",
     "acceptance_ledger_coverage",
+    "mvp_required_version_slices",
     "public_api_and_contract_map",
     "docs_and_oss_readiness_baseline",
     "test_matrix_wiring",
@@ -539,6 +564,85 @@ def version_gte(candidate: tuple[int, ...], baseline: tuple[int, ...]) -> bool:
     return candidate + (0,) * (width - len(candidate)) >= baseline + (0,) * (width - len(baseline))
 
 
+def base_task_id(value: Any) -> str:
+    if not isinstance(value, str):
+        return ""
+    match = re.match(r"^(T\d+(?:\.\d+)*)", value.strip(), re.IGNORECASE)
+    candidate = match.group(1) if match else value.strip()
+    if candidate in TASK_VERSION_SLICE_REFS or candidate in DOTTED_TASK_PARENT_SLICE_EXEMPTIONS:
+        return candidate
+    if "." in candidate:
+        parent = candidate.split(".", 1)[0]
+        if parent in TASK_VERSION_SLICE_REFS:
+            return parent
+    return candidate
+
+
+def expected_task_version_slices(task_id_value: str) -> set[str]:
+    return set(TASK_VERSION_SLICE_REFS.get(base_task_id(task_id_value), set()))
+
+
+def validate_mvp_version_slice_coverage(value: Any, label: str) -> None:
+    if not isinstance(value, list) or not value:
+        fail(f"{label} must be a non-empty list")
+    by_id = {
+        str(item.get("slice_id")): item
+        for item in value
+        if isinstance(item, dict) and str(item.get("slice_id", "")).strip()
+    }
+    missing_slices = sorted(set(REQUIRED_MVP_VERSION_SLICES) - set(by_id))
+    if missing_slices:
+        fail(f"{label} missing required MVP version slices: {missing_slices}")
+    for slice_id, spec in REQUIRED_MVP_VERSION_SLICES.items():
+        item = by_id[slice_id]
+        if item.get("required_for_full_mvp") is not True:
+            fail(f"{label}.{slice_id}.required_for_full_mvp must be true")
+        if item.get("public_release_boundary") is not False:
+            fail(f"{label}.{slice_id}.public_release_boundary must be false")
+        if item.get("capability_group_id") != spec["capability_group_id"]:
+            fail(f"{label}.{slice_id}.capability_group_id must be {spec['capability_group_id']}")
+        if not has_nonempty_string(item.get("source_ref")):
+            fail(f"{label}.{slice_id}.source_ref is required")
+        task_refs = {str(task_ref) for task_ref in item.get("task_refs", [])}
+        missing_task_refs = sorted(spec["task_refs"] - task_refs)
+        if missing_task_refs:
+            fail(f"{label}.{slice_id}.task_refs missing {missing_task_refs}")
+        group_refs = {str(group_ref) for group_ref in item.get("acceptance_group_refs", [])}
+        if spec["capability_group_id"] not in group_refs:
+            fail(f"{label}.{slice_id}.acceptance_group_refs must include {spec['capability_group_id']}")
+
+
+def validate_delivery_slice_coverage(value: Any, label: str) -> None:
+    if not isinstance(value, list) or not value:
+        fail(f"{label} must be a non-empty list")
+    by_id = {
+        str(item.get("slice_id")): item
+        for item in value
+        if isinstance(item, dict) and str(item.get("slice_id", "")).strip()
+    }
+    missing_slices = sorted(set(REQUIRED_MVP_VERSION_SLICES) - set(by_id))
+    if missing_slices:
+        fail(f"{label} missing required delivery slices: {missing_slices}")
+    for slice_id, spec in REQUIRED_MVP_VERSION_SLICES.items():
+        item = by_id[slice_id]
+        if item.get("required_for_completion") is not True:
+            fail(f"{label}.{slice_id}.required_for_completion must be true")
+        if item.get("public_release_boundary") is not False:
+            fail(f"{label}.{slice_id}.public_release_boundary must be false")
+        if not has_nonempty_string(item.get("source_ref")):
+            fail(f"{label}.{slice_id}.source_ref is required")
+        task_refs = {str(task_ref) for task_ref in item.get("task_refs", [])}
+        missing_task_refs = sorted(spec["task_refs"] - task_refs)
+        if missing_task_refs:
+            fail(f"{label}.{slice_id}.task_refs missing {missing_task_refs}")
+        group_refs = {str(group_ref) for group_ref in item.get("acceptance_group_refs", [])}
+        if spec["capability_group_id"] not in group_refs:
+            fail(f"{label}.{slice_id}.acceptance_group_refs must include {spec['capability_group_id']}")
+        item_ids = item.get("acceptance_item_ids")
+        if not isinstance(item_ids, list) or not item_ids:
+            fail(f"{label}.{slice_id}.acceptance_item_ids must preserve item-level closure refs")
+
+
 def source_ref_base(value: Any) -> str:
     return value.split("#", 1)[0] if isinstance(value, str) else ""
 
@@ -805,6 +909,9 @@ def validate_acceptance_ledger_coverage(value: Any, label: str) -> None:
         fail(f"{label}.status must be mapped")
     if not has_nonempty_list(value.get("required_groups")):
         fail(f"{label}.required_groups must be non-empty")
+    required_slices = value.get("required_version_slices")
+    if not isinstance(required_slices, list) or set(str(item) for item in required_slices) != set(REQUIRED_MVP_VERSION_SLICES):
+        fail(f"{label}.required_version_slices must list v0.0, v0.1, and v0.2")
 
 
 def has_lifecycle_gates(value: Any) -> bool:
@@ -870,6 +977,14 @@ def at_or_after_baseline(task: dict[str, Any], baseline_task_id: str) -> bool:
     for value in [task_id(task), task.get("phase")]:
         candidate_key = task_order_key(value)
         if candidate_key is not None and version_gte(candidate_key, baseline_key):
+            return True
+    return False
+
+
+def is_live_eval_dispatch_task(task: dict[str, Any]) -> bool:
+    for value in [task_id(task), task.get("phase")]:
+        key = task_order_key(value)
+        if key is not None and key[:1] in {(11,), (12,)}:
             return True
     return False
 
@@ -965,6 +1080,7 @@ def validate_task_execution_compiler_fields(task: dict[str, Any]) -> None:
     unknown_item_ids = sorted(str(value) for value in item_ids if str(value) not in REQUIRED_ACCEPTANCE_ITEM_IDS)
     if unknown_item_ids:
         fail(f"{task_id_value}.acceptance_item_ids references unknown ids: {unknown_item_ids}")
+    validate_acceptance_item_gates(task)
     inherited = task.get("validation_contract_inheritance")
     if isinstance(inherited, dict):
         if inherited.get("acceptance_ledger_ref") != ACCEPTANCE_LEDGER_REF:
@@ -984,6 +1100,74 @@ def validate_task_execution_compiler_fields(task: dict[str, Any]) -> None:
     missing_forbidden = [path for path in RUNTIME_CONTROL_FORBIDDEN_PATHS if path not in forbidden_paths]
     if missing_forbidden:
         fail(f"{task_id_value}.forbidden_paths missing runtime-owned control paths: {missing_forbidden}")
+
+
+def validate_acceptance_item_gates(task: dict[str, Any]) -> None:
+    task_id_value = task_id(task)
+    gates = task.get("gated_by_acceptance_items")
+    if gates is None:
+        return
+    if not isinstance(gates, list) or not gates:
+        fail(f"{task_id_value}.gated_by_acceptance_items must be a non-empty list when present")
+    seen: set[str] = set()
+    for index, gate in enumerate(gates):
+        if not isinstance(gate, dict):
+            fail(f"{task_id_value}.gated_by_acceptance_items[{index}] must be an object")
+        item_id_value = str(gate.get("acceptance_item_id", "")).strip()
+        if not item_id_value:
+            fail(f"{task_id_value}.gated_by_acceptance_items[{index}].acceptance_item_id is required")
+        if item_id_value not in REQUIRED_ACCEPTANCE_ITEM_IDS:
+            fail(f"{task_id_value}.gated_by_acceptance_items[{index}] references unknown acceptance item {item_id_value}")
+        if item_id_value in seen:
+            fail(f"{task_id_value}.gated_by_acceptance_items contains duplicate gate {item_id_value}")
+        seen.add(item_id_value)
+        if gate.get("required_status") not in {"implemented", "deferred_with_approval"}:
+            fail(f"{task_id_value}.gated_by_acceptance_items[{index}].required_status must be implemented or deferred_with_approval")
+        if not has_nonempty_string(gate.get("reason")):
+            fail(f"{task_id_value}.gated_by_acceptance_items[{index}].reason is required")
+
+
+def validate_live_eval_dispatch_gates(task: dict[str, Any]) -> None:
+    task_id_value = task_id(task)
+    gates = task.get("gated_by_acceptance_items")
+    if not isinstance(gates, list):
+        fail(f"{task_id_value}.gated_by_acceptance_items must gate live eval dispatch")
+    by_id = {
+        str(gate.get("acceptance_item_id")): gate
+        for gate in gates
+        if isinstance(gate, dict)
+    }
+    missing = sorted(REQUIRED_LIVE_EVAL_DISPATCH_GATES - set(by_id))
+    if missing:
+        fail(f"{task_id_value}.gated_by_acceptance_items missing live eval pull gates: {missing}")
+    for required_id in REQUIRED_LIVE_EVAL_DISPATCH_GATES:
+        gate = by_id[required_id]
+        if gate.get("required_status") != "implemented":
+            fail(f"{task_id_value}.gated_by_acceptance_items[{required_id}].required_status must be implemented")
+        if gate.get("evidence_mode") != "product_signal":
+            fail(f"{task_id_value}.gated_by_acceptance_items[{required_id}].evidence_mode must be product_signal")
+
+
+def validate_task_version_slice_refs(task: dict[str, Any]) -> None:
+    task_id_value = task_id(task)
+    expected = expected_task_version_slices(task_id_value)
+    if not expected:
+        return
+    actual = task.get("mvp_required_version_slices")
+    if not isinstance(actual, list) or not actual:
+        fail(f"{task_id_value}.mvp_required_version_slices must map task to required MVP version slices")
+    missing = sorted(expected - {str(value) for value in actual})
+    if missing:
+        fail(f"{task_id_value}.mvp_required_version_slices missing {missing}")
+    delivery_refs = task.get("delivery_slice_refs")
+    if not isinstance(delivery_refs, list) or not delivery_refs:
+        fail(f"{task_id_value}.delivery_slice_refs must map task to generic delivery slices")
+    delivery_missing = sorted(expected - {str(value) for value in delivery_refs})
+    if delivery_missing:
+        fail(f"{task_id_value}.delivery_slice_refs missing {delivery_missing}")
+    unexpected = sorted({str(value) for value in delivery_refs} - {str(value) for value in actual})
+    if unexpected:
+        fail(f"{task_id_value}.delivery_slice_refs has refs not present in mvp_required_version_slices: {unexpected}")
 
 
 def field_has_evidence(task: dict[str, Any], field: str) -> bool:
@@ -1141,6 +1325,14 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
         plan.get("acceptance_ledger_coverage"),
         "execution-plan.json.acceptance_ledger_coverage",
     )
+    validate_mvp_version_slice_coverage(
+        plan.get("mvp_required_version_slices"),
+        "execution-plan.json.mvp_required_version_slices",
+    )
+    validate_delivery_slice_coverage(
+        plan.get("delivery_slices"),
+        "execution-plan.json.delivery_slices",
+    )
     for field in REQUIRED_PLAN_LEVEL_FIELDS:
         value = plan.get(field)
         if not has_nonempty_collection(value):
@@ -1271,6 +1463,7 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
         validate_task_guide_sources(task)
         validate_task_planning_skill_fields(task)
         validate_task_execution_compiler_fields(task)
+        validate_task_version_slice_refs(task)
         if current_task_id == "T11":
             validate_mvp_eval_provider_adapters(
                 task.get("mvp_eval_provider_adapters"),
@@ -1279,6 +1472,8 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
             checks = "\n".join(str(value).lower() for value in task.get("acceptance_checks", []))
             if "openai-compatible" not in checks or "anthropic" not in checks:
                 fail("T11 acceptance_checks must name both OpenAI-compatible and Anthropic adapter coverage")
+        if is_live_eval_dispatch_task(task):
+            validate_live_eval_dispatch_gates(task)
 
 
 def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: str) -> None:
@@ -1298,6 +1493,9 @@ def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: st
     validate_task_guide_sources(packet)
     validate_task_planning_skill_fields(packet)
     validate_task_execution_compiler_fields(packet)
+    validate_task_version_slice_refs(packet)
+    if is_live_eval_dispatch_task(packet):
+        validate_live_eval_dispatch_gates(packet)
 
 
 def validate_validation_contract(contract: dict[str, Any]) -> None:
@@ -1310,6 +1508,14 @@ def validate_validation_contract(contract: dict[str, Any]) -> None:
         fail("validation-contract.json acceptance_item_count must match acceptance-ledger item count")
     if not has_nonempty_list(contract.get("acceptance_criteria")):
         fail("validation-contract.json must include itemized acceptance_criteria")
+    validate_mvp_version_slice_coverage(
+        contract.get("mvp_required_version_slices"),
+        "validation-contract.json.mvp_required_version_slices",
+    )
+    validate_delivery_slice_coverage(
+        contract.get("delivery_slices"),
+        "validation-contract.json.delivery_slices",
+    )
     validate_mvp_eval_provider_adapters(
         contract.get("mvp_eval_provider_adapters"),
         "validation-contract.json.mvp_eval_provider_adapters",
@@ -1518,6 +1724,14 @@ def validate_acceptance_mapping(mapping: dict[str, Any], ledger_ids: set[str], c
     validate_no_legacy_provider_fields(mapping, "acceptance-mapping.json")
     if mapping.get("acceptance_ledger_ref") != ACCEPTANCE_LEDGER_REF:
         fail("acceptance-mapping.json must cite acceptance-ledger.json")
+    validate_mvp_version_slice_coverage(
+        mapping.get("mvp_required_version_slices"),
+        "acceptance-mapping.json.mvp_required_version_slices",
+    )
+    validate_delivery_slice_coverage(
+        mapping.get("delivery_slices"),
+        "acceptance-mapping.json.delivery_slices",
+    )
     groups = mapping.get("groups")
     if not isinstance(groups, list):
         fail("acceptance-mapping.json must contain groups list")
@@ -1568,6 +1782,14 @@ def validate_scope_closure_map(scope: dict[str, Any], ledger_ids: set[str]) -> N
     validate_no_legacy_provider_fields(scope, "scope-closure-map.json")
     if scope.get("acceptance_ledger_ref") != ACCEPTANCE_LEDGER_REF:
         fail("scope-closure-map.json must cite acceptance-ledger.json")
+    validate_mvp_version_slice_coverage(
+        scope.get("mvp_required_version_slices"),
+        "scope-closure-map.json.mvp_required_version_slices",
+    )
+    validate_delivery_slice_coverage(
+        scope.get("delivery_slices"),
+        "scope-closure-map.json.delivery_slices",
+    )
     items = scope.get("items")
     if not isinstance(items, list):
         fail("scope-closure-map.json must contain items list")
@@ -1581,6 +1803,16 @@ def validate_scope_closure_map(scope: dict[str, Any], ledger_ids: set[str]) -> N
             fail(f"scope item {item.get('scope_item')} missing acceptance_item_ids")
         if not isinstance(statuses, list) or not statuses:
             fail(f"scope item {item.get('scope_item')} missing acceptance_item_statuses")
+        scope_item_id = str(item.get("scope_item_id", "")).strip()
+        for slice_id, spec in REQUIRED_MVP_VERSION_SLICES.items():
+            if scope_item_id != spec["capability_group_id"]:
+                continue
+            actual_slices = {str(value) for value in item.get("mvp_required_version_slices", [])}
+            if slice_id not in actual_slices:
+                fail(f"scope item {scope_item_id} missing mvp_required_version_slices entry {slice_id}")
+            delivery_slices = {str(value) for value in item.get("delivery_slice_refs", [])}
+            if slice_id not in delivery_slices:
+                fail(f"scope item {scope_item_id} missing delivery_slice_refs entry {slice_id}")
         status_ids = {str(status.get("acceptance_item_id")) for status in statuses if isinstance(status, dict)}
         missing_status = sorted(str(value) for value in item_ids if str(value) not in status_ids)
         if missing_status:
@@ -1621,6 +1853,8 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
     return {
         "task_id": task_id_value,
         "blocked_by": blocked_by,
+        "mvp_required_version_slices": sorted(expected_task_version_slices(task_id_value)),
+        "delivery_slice_refs": sorted(expected_task_version_slices(task_id_value)),
         "factory_compatibility": {
             "factory_contract_version": "1.0",
             "profile_ref": "profiles/lumyn.yaml",
@@ -1840,8 +2074,46 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
 def run_self_test() -> int:
     valid_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
     validate_task_packets(valid_packets, "T2.6")
+    if expected_task_version_slices("T11.1") != {"v0.2"}:
+        fail("self-test expected dotted live-eval task to inherit parent v0.2 delivery slice")
+    if expected_task_version_slices("T2.5"):
+        fail("self-test expected T2.5 lifecycle baseline task to remain delivery-slice exempt")
     if contains_machine_local_path(".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate"):
         fail("self-test expected repo-relative JSON pointer to remain portable")
+
+    unknown_gate_task = propagated_task("T3", ["T2.6"])
+    unknown_gate_task["gated_by_acceptance_items"] = [
+        {
+            "acceptance_item_id": "PULL-999",
+            "required_status": "implemented",
+            "reason": "intentional invalid gate for self-test",
+        }
+    ]
+    try:
+        validate_task_execution_compiler_fields(unknown_gate_task)
+    except AssertionError as exc:
+        if "unknown acceptance item" not in str(exc):
+            raise
+    else:
+        fail("self-test expected unknown acceptance item gate to fail")
+
+    missing_standalone_live_eval_gate = propagated_task("T11", ["T2.6"])
+    try:
+        validate_standalone_task_packet(missing_standalone_live_eval_gate, "T2.6")
+    except AssertionError as exc:
+        if "must gate live eval dispatch" not in str(exc):
+            raise
+    else:
+        fail("self-test expected standalone live-eval packet without pull gates to fail")
+
+    missing_repair_live_eval_gate = propagated_task("T11-repair-001", ["T2.6"])
+    try:
+        validate_standalone_task_packet(missing_repair_live_eval_gate, "T2.6")
+    except AssertionError as exc:
+        if "must gate live eval dispatch" not in str(exc):
+            raise
+    else:
+        fail("self-test expected live-eval repair packet without pull gates to fail")
 
     nested_slice_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
@@ -1861,6 +2133,30 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected conflicting slice type declarations to fail")
+
+    missing_delivery_slice_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    missing_delivery_slice_packets["tasks"][1].pop("delivery_slice_refs", None)
+    try:
+        validate_task_packets(missing_delivery_slice_packets, "T2.6")
+    except AssertionError as exc:
+        if "delivery_slice_refs" not in str(exc):
+            raise
+    else:
+        fail("self-test expected missing delivery_slice_refs to fail")
+
+    missing_dotted_delivery_slice_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T11.1", ["T2.6", "T11"])]
+    }
+    missing_dotted_delivery_slice_packets["tasks"][1].pop("delivery_slice_refs", None)
+    try:
+        validate_task_packets(missing_dotted_delivery_slice_packets, "T2.6")
+    except AssertionError as exc:
+        if "delivery_slice_refs" not in str(exc):
+            raise
+    else:
+        fail("self-test expected dotted task missing delivery_slice_refs to fail")
 
     deprecated_worker_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
