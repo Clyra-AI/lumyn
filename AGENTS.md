@@ -111,3 +111,9 @@ exception records in `.github/action-ref-exceptions.yaml`.
   protection evidence or approved exceptions.
 - Product task packets must also preserve Factory `prd-to-plan` / `execution-compiler` fields for Factory compatibility, explicit scope exclusions, alignment gate refs, plan-drift refs, runtime pins, slice rationale, changelog/versioning intent, contract impact, architecture constraints, ADR posture, TDD-first evidence, cost/perf impact, failure hypotheses, semantic invariants, canonical worker chains, and lifecycle gates.
 - Runner-ready task packets must declare `worker_type`, `factoryd_runtime`, `validation_commands`, `evidence_required`, and `stop_conditions` before daemon dispatch.
+- Runner-ready product workers must not mutate PRD-derived control truth under
+  `.factory/artifacts/prd-to-plan/lumyn-mvp/`. They may write task-scoped
+  evidence under `.factory/artifacts/task-runs/<task_id>/` and
+  `.factory/artifacts/pr-lifecycle/<task_id>/`; trusted runtime/planning code
+  owns task DAG, validation contract, acceptance mapping, and scope-closure
+  mutation.

@@ -51,7 +51,14 @@
   ],
   "forbidden_paths": [
     ".git/",
-    ".factory/tmp/"
+    ".factory/tmp/",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
   ],
   "scope_exclusions": [
     "MCP recording",

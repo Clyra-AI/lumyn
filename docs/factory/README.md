@@ -38,6 +38,12 @@ Durable evidence remains under `.factory/artifacts/`; claims, worktrees, daemon
 events, and single-task run reports remain under `.factoryd/` unless promoted
 into a committed Factory artifact.
 
+PRD-derived control truth under `.factory/artifacts/prd-to-plan/lumyn-mvp/` is
+trusted runtime/planning state. Product workers must not edit the context brief,
+execution plan, task packets, validation contract, acceptance mapping, or
+scope-closure map directly. They emit task-scoped evidence; `factoryd` updates
+scope closure only through the configured semantic shipping phase.
+
 Codex CLI authentication used by a Factory daemon worker is not Lumyn product
 credential access. Lumyn task packets still default to no ambient secrets and
 offline product/runtime network posture until a specific live sandbox or model

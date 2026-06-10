@@ -30,6 +30,21 @@ REPAIR_TASK_PACKETS = [
 TEST_MATRIX_SOURCE_BASE = "docs/dev/dev_guides.md"
 COVERAGE_POLICY_SOURCE_BASE = "docs/dev/dev_guides.md"
 ARCHITECTURE_GUIDE_BASE = "docs/architecture/architecture_guides.md"
+RUNTIME_CONTROL_ALLOWED_RE = re.compile(
+    r"^\.factory/artifacts/?$"
+    r"|^\.factory/artifacts/(prd-to-plan|post-prd)(/[^/]+)?/?$"
+    r"|^\.factory/artifacts/(prd-to-plan|post-prd)/[^/]+/"
+    r"(context-brief|execution-plan|task-packets|validation-contract|acceptance-mapping|scope-closure-map)\.json$"
+)
+RUNTIME_CONTROL_FORBIDDEN_PATHS = [
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+]
 
 REQUIRED_GUIDES = [
     "docs/dev/dev_guides.md",
@@ -868,6 +883,14 @@ def validate_task_execution_compiler_fields(task: dict[str, Any]) -> None:
         fail(f"{task_id_value}.lifecycle_gates must enable local, CI, Codex review, ship, post-merge, and PR lifecycle gates, and explicitly declare code_review_required true only when review policy requires it")
     if task.get("required_worker_chain") != expected_required_worker_chain(task):
         fail(f"{task_id_value}.required_worker_chain must match the lifecycle gates: default validation/commit-push chain, or validation/code-review/commit-push chain when code_review_required=true")
+    allowed_paths = [str(value).strip() for value in task.get("allowed_paths", [])]
+    bad_allowed = [path for path in allowed_paths if RUNTIME_CONTROL_ALLOWED_RE.match(path)]
+    if bad_allowed:
+        fail(f"{task_id_value}.allowed_paths includes runtime-owned control artifact paths: {bad_allowed}")
+    forbidden_paths = set(str(value).strip() for value in task.get("forbidden_paths", []))
+    missing_forbidden = [path for path in RUNTIME_CONTROL_FORBIDDEN_PATHS if path not in forbidden_paths]
+    if missing_forbidden:
+        fail(f"{task_id_value}.forbidden_paths missing runtime-owned control paths: {missing_forbidden}")
 
 
 def field_has_evidence(task: dict[str, Any], field: str) -> bool:
@@ -1413,8 +1436,16 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
             "pr_lifecycle_report_required": True,
             "skip_policy": "approved_exception_required",
         },
-        "allowed_paths": ["cmd/", "internal/", "schemas/", "tests/", "docs/", ".factory/artifacts/"],
-        "forbidden_paths": [".git/", ".factory/tmp/", ".factoryd/"],
+        "allowed_paths": [
+            "cmd/",
+            "internal/",
+            "schemas/",
+            "tests/",
+            "docs/",
+            f".factory/artifacts/task-runs/{task_id_value}/",
+            f".factory/artifacts/pr-lifecycle/{task_id_value}/",
+        ],
+        "forbidden_paths": [".git/", ".factory/tmp/", ".factoryd/", *RUNTIME_CONTROL_FORBIDDEN_PATHS],
         "worker_type": "codex_cli",
         "factoryd_runtime": {
             "state_dir": ".factoryd/",
@@ -1610,6 +1641,20 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected deprecated active worker to fail")
+
+    control_allowed_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    control_allowed_packets["tasks"][1]["allowed_paths"].append(
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+    )
+    try:
+        validate_task_packets(control_allowed_packets, "T2.6")
+    except AssertionError as exc:
+        if "runtime-owned control artifact" not in str(exc):
+            raise
+    else:
+        fail("self-test expected runtime-owned control artifact allowed path to fail")
 
     missing_runtime_pin_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
