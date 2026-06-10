@@ -1494,7 +1494,7 @@ def validate_recorder_task_split(tasks_by_id: dict[str, dict[str, Any]]) -> None
     required = {
         "T4.1": {"RCRR-003", "RCRR-009", "FR8", "NFR5"},
         "T4.2": {"RCRR-004", "ACT-004", "FR5", "FR7", "NFR7", "NFR13"},
-        "T4.3": {"REC-QUALITY-001", "ACT-003", "NFR2"},
+        "T4.3": {"REC-QUALITY-001", "NFR2"},
     }
     for task_id_value, item_ids in required.items():
         task = tasks_by_id.get(task_id_value)
@@ -1506,6 +1506,10 @@ def validate_recorder_task_split(tasks_by_id: dict[str, dict[str, Any]]) -> None
             fail(f"{task_id_value}.acceptance_item_ids missing recorder split ids: {missing}")
         if "v0.0" not in {str(value) for value in task.get("delivery_slice_refs", [])}:
             fail(f"{task_id_value}.delivery_slice_refs must include v0.0")
+    t43_ids = {str(value) for value in tasks_by_id["T4.3"].get("acceptance_item_ids", [])}
+    t43_acceptance_checks = "\n".join(str(value) for value in tasks_by_id["T4.3"].get("acceptance_checks", []))
+    if "ACT-003" in t43_ids or "ACT-003" in t43_acceptance_checks:
+        fail("T4.3 must not own ACT-003 because replay-verified timing belongs to T5/T6")
     t42_deps = {str(value) for value in tasks_by_id["T4.2"].get("blocked_by", [])}
     if "T4.1" not in t42_deps:
         fail("T4.2 must depend on T4.1")

@@ -3268,7 +3268,6 @@
         "needs_user_input and coverage_gap items are counted as non-claims, not failed drafts.",
         "Quality evidence records accepted_without_edit, edited, rejected, needs_user_input, and coverage_gap counts.",
         "REC-QUALITY-001: At least 70% of drafted assertions, read-back candidates, and state bindings are accepted without edit on simple REST/OpenAPI workflows.",
-        "ACT-003: First workflow recorded and replay-verified in under 30 minutes.",
         "FR6: FR6: Recording As Authoring - Lumyn must record known-good HTTP traffic and draft workflow contracts, validators, state bindings, cassettes, and cleanup suggestions.",
         "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
         "NFR2: NFR2: Fast First Workflow - A technical user should record and replay-verify one simple workflow in under 30 minutes.",
@@ -3603,7 +3602,6 @@
       "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
       "acceptance_item_ids": [
         "REC-QUALITY-001",
-        "ACT-003",
         "FR6",
         "FR9",
         "NFR2",
@@ -3618,7 +3616,6 @@
         "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
         "acceptance_item_ids": [
           "REC-QUALITY-001",
-          "ACT-003",
           "FR6",
           "FR9",
           "NFR2",
