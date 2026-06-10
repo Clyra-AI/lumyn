@@ -1510,6 +1510,11 @@ def validate_acceptance_mapping(mapping: dict[str, Any], ledger_ids: set[str], c
     missing_contract_groups = sorted(str(group_id) for group_id in contract_groups if str(group_id) not in mapped_groups)
     if missing_contract_groups:
         fail(f"acceptance-mapping.json missing validation-contract groups: {missing_contract_groups}")
+    nfr_group = next((group for group in groups if isinstance(group, dict) and group.get("group_id") == "nonfunctional_requirements"), None)
+    if not isinstance(nfr_group, dict):
+        fail("acceptance-mapping.json missing nonfunctional_requirements group")
+    if nfr_group.get("source_ref") != "docs/product/prd.md#non-functional-requirements":
+        fail("nonfunctional_requirements source_ref must match PRD heading anchor")
     missing = sorted(ledger_ids - mapped_ids)
     if missing:
         fail(f"acceptance-mapping.json does not map ledger ids: {missing}")
@@ -1548,6 +1553,11 @@ def validate_scope_closure_map(scope: dict[str, Any], ledger_ids: set[str]) -> N
     missing = sorted(ledger_ids - closure_ids)
     if missing:
         fail(f"scope-closure-map.json does not cover ledger ids: {missing}")
+    nfr_item = next((item for item in items if isinstance(item, dict) and item.get("scope_item_id") == "nonfunctional_requirements"), None)
+    if not isinstance(nfr_item, dict):
+        fail("scope-closure-map.json missing nonfunctional_requirements scope item")
+    if nfr_item.get("source_ref") != "docs/product/prd.md#non-functional-requirements":
+        fail("nonfunctional_requirements scope source_ref must match PRD heading anchor")
 
 
 def validate_risk_classification(risk: dict[str, Any]) -> None:

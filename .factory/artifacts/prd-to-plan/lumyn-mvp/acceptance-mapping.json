@@ -301,7 +301,7 @@
     {
       "group_id": "nonfunctional_requirements",
       "title": "Non-functional requirements",
-      "source_ref": "docs/product/prd.md#nonfunctional-requirements",
+      "source_ref": "docs/product/prd.md#non-functional-requirements",
       "task_refs": [
         "T1",
         "T2",
