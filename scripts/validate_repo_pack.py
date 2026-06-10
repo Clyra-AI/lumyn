@@ -71,6 +71,13 @@ REQUIRED_TASK_FIELDS = [
     "stop_conditions",
 ]
 
+
+def normalize_repo_path(value: object) -> str:
+    path = str(value).strip().replace("\\", "/")
+    while path.startswith("./"):
+        path = path[2:]
+    return path
+
 REQUIRED_RUNNER_READY_FIELDS = [
     "worker_type",
     "factoryd_runtime",
@@ -882,7 +889,7 @@ def validate_task_execution_compiler_fields(task: dict[str, Any]) -> None:
     if task.get("required_worker_chain") != expected_required_worker_chain(task):
         fail(f"{task_id_value}.required_worker_chain must match the lifecycle gates: default validation/commit-push chain, or validation/code-review/commit-push chain when code_review_required=true")
     allowed_paths = [str(value).strip() for value in task.get("allowed_paths", [])]
-    bad_allowed = [path for path in allowed_paths if RUNTIME_CONTROL_ALLOWED_RE.match(path)]
+    bad_allowed = [path for path in allowed_paths if RUNTIME_CONTROL_ALLOWED_RE.match(normalize_repo_path(path))]
     if bad_allowed:
         fail(f"{task_id_value}.allowed_paths includes runtime-owned control artifact paths: {bad_allowed}")
     forbidden_paths = set(str(value).strip() for value in task.get("forbidden_paths", []))
@@ -1643,6 +1650,9 @@ def run_self_test() -> int:
     control_allowed_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
     }
+    control_allowed_packets["tasks"][1]["allowed_paths"].append(
+        "./.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+    )
     control_allowed_packets["tasks"][1]["allowed_paths"].append(
         ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
     )
