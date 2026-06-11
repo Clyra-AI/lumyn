@@ -81,6 +81,20 @@ Lumyn accepts work from:
 - Non-primary distribution: PyPI
 - MVP eval providers: OpenAI-compatible HTTP and Anthropic Messages HTTP adapters
 
+## Post-PRD Findings
+
+When `app-audit` or `code-review` produces material follow-up work, save the
+finding list in the repo and ingest it before implementation:
+
+```sh
+FACTORY_REPO=/path/to/factory factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind audit --input product/audits/<mission>.md --mission <mission> --json
+FACTORY_REPO=/path/to/factory factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind review --input product/reviews/<mission>.md --mission <mission> --json
+```
+
+The generated `.factory/artifacts/post-prd/<mission>/` artifacts are the
+governed source for execution. Do not edit `docs/product/prd.md` unless a human
+explicitly promotes a finding into product scope.
+
 ## Stop Conditions
 
 Stop and request human decision if:
