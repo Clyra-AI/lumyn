@@ -414,8 +414,10 @@
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6"
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2"
       ],
       "why_now": "Close safety/corpus-ready local evidence contracts, then close deterministic record/contract/replay/report foundation without live credentials."
     },
@@ -432,8 +434,10 @@
     {
       "order": 6,
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "why_now": "Add stochastic eval only after deterministic replay, live boundaries, and credential/network posture are approved."
     }
