@@ -25,7 +25,7 @@
         "T1"
       ],
       "validation_refs": [
-        ".factory/artifacts/task-runs/T1/validation-report.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/0/validation_commands"
       ],
       "status": "implemented",
       "risk_class": "low",
@@ -45,7 +45,7 @@
         "T2"
       ],
       "validation_refs": [
-        ".factory/artifacts/task-runs/T2/validation-report.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/1/validation_commands"
       ],
       "status": "implemented",
       "risk_class": "low",
@@ -65,7 +65,7 @@
         "T2.7"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2.7/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/4/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -87,7 +87,7 @@
         "T2.5"
       ],
       "validation_refs": [
-        ".factory/artifacts/task-runs/T2.5/validation-report.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/2/validation_commands"
       ],
       "status": "implemented",
       "risk_class": "medium",
@@ -107,7 +107,7 @@
         "T2.6"
       ],
       "validation_refs": [
-        ".factory/artifacts/task-runs/T2.6/validation-report.json"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/3/validation_commands"
       ],
       "status": "implemented",
       "risk_class": "medium",
@@ -127,7 +127,7 @@
         "T3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -150,22 +150,22 @@
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.2",
+        "T6.1",
         "T10",
-        "T11",
-        "T12"
+        "T11.2",
+        "T12.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.1/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.2/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.3/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/8/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/10/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/18/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -188,7 +188,7 @@
         "T3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -210,7 +210,7 @@
         "T3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -233,8 +233,8 @@
         "T4.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.2/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/1/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/7/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -258,9 +258,9 @@
         "T4.3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.1/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.2/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.3/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/8/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -282,7 +282,7 @@
         "T4.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.2/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/7/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -305,8 +305,8 @@
         "T10"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.1/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -326,29 +326,31 @@
       ],
       "task_refs": [
         "T2",
+        "T2.7",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.1",
+        "T6.2",
         "T7",
         "T8",
         "T9",
         "T10",
-        "T11",
-        "T12"
+        "T11.1",
+        "T12.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.2/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.3/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/1/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/8/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/9/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/12/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/13/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/14/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/15/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -368,10 +370,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T5"
+        "T5.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/9/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -390,10 +392,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T5"
+        "T5.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/9/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -412,10 +414,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T5"
+        "T5.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/9/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -434,10 +436,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T6"
+        "T6.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -461,29 +463,29 @@
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.2",
+        "T6.2",
         "T7",
         "T8",
         "T9",
         "T10",
-        "T11",
-        "T12"
+        "T11.2",
+        "T12.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T1/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.1/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.2/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.3/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/0/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/8/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/10/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/12/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/13/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/14/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/15/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/18/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -506,7 +508,7 @@
         "T7"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/13/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -528,7 +530,7 @@
         "T7"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/13/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -550,7 +552,7 @@
         "T8"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/14/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -572,7 +574,7 @@
         "T8"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/14/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -591,10 +593,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T11"
+        "T11.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -613,10 +615,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T11"
+        "T11.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -635,10 +637,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T11"
+        "T11.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -657,10 +659,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T12"
+        "T12.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/19/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -679,10 +681,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T12"
+        "T12.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/19/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -701,12 +703,12 @@
         "mvp"
       ],
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T12.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/19/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -725,14 +727,14 @@
         "mvp"
       ],
       "task_refs": [
-        "T6",
+        "T6.1",
         "T10",
-        "T12"
+        "T12.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/19/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -752,11 +754,11 @@
       ],
       "task_refs": [
         "T3",
-        "T6"
+        "T6.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -776,11 +778,11 @@
       ],
       "task_refs": [
         "T4.3",
-        "T5"
+        "T5.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.3/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/8/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/9/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -799,10 +801,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T5"
+        "T5.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/9/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -821,12 +823,14 @@
         "mvp"
       ],
       "task_refs": [
-        "T5",
-        "T6"
+        "T2.7",
+        "T5.1",
+        "T6.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/9/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -849,8 +853,8 @@
         "T10"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.1/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands"
       ],
       "status": "planned",
       "risk_class": "high",
@@ -869,26 +873,28 @@
         "mvp"
       ],
       "task_refs": [
+        "T2.7",
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.2",
+        "T6.1",
         "T7",
         "T10",
-        "T11",
-        "T12"
+        "T11.1",
+        "T12.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.1/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.2/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.3/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/8/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/10/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/13/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -911,7 +917,7 @@
         "T4.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.2/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/7/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -933,7 +939,7 @@
         "T3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -953,33 +959,35 @@
       ],
       "task_refs": [
         "T1",
+        "T2.7",
         "T3",
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.2",
+        "T6.1",
         "T7",
         "T8",
         "T9",
         "T10",
-        "T11",
-        "T12"
+        "T11.2",
+        "T12.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T1/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.1/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.2/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.3/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/0/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/8/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/10/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/13/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/14/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/15/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/18/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -999,10 +1007,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T12"
+        "T12.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/19/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1021,12 +1029,12 @@
         "mvp"
       ],
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T12.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/19/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1046,31 +1054,33 @@
       ],
       "task_refs": [
         "T2",
+        "T2.7",
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.2",
+        "T6.2",
         "T7",
         "T8",
         "T9",
         "T10",
-        "T11",
-        "T12"
+        "T11.2",
+        "T12.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.1/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.2/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.3/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/1/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/8/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/10/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/12/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/13/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/14/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/15/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/18/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1094,8 +1104,8 @@
         "T4.3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.2/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.3/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/8/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1114,10 +1124,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T6"
+        "T6.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1140,7 +1150,7 @@
         "T4.3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.3/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/8/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1163,7 +1173,7 @@
         "T3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
       ],
       "status": "planned",
       "risk_class": "low",
@@ -1183,7 +1193,7 @@
         "T3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
       ],
       "status": "planned",
       "risk_class": "low",
@@ -1203,7 +1213,7 @@
         "T4.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.1/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands"
       ],
       "status": "planned",
       "risk_class": "low",
@@ -1223,7 +1233,7 @@
         "T4.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.2/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/7/validation_commands"
       ],
       "status": "planned",
       "risk_class": "low",
@@ -1240,10 +1250,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T5"
+        "T5.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/9/validation_commands"
       ],
       "status": "planned",
       "risk_class": "low",
@@ -1260,10 +1270,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T5"
+        "T5.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/9/validation_commands"
       ],
       "status": "planned",
       "risk_class": "low",
@@ -1280,10 +1290,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T5"
+        "T5.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/9/validation_commands"
       ],
       "status": "planned",
       "risk_class": "low",
@@ -1300,10 +1310,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T6"
+        "T6.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands"
       ],
       "status": "planned",
       "risk_class": "low",
@@ -1324,8 +1334,8 @@
         "T10"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.1/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1344,10 +1354,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T6"
+        "T6.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands"
       ],
       "status": "planned",
       "risk_class": "low",
@@ -1364,10 +1374,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T6"
+        "T6.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands"
       ],
       "status": "planned",
       "risk_class": "low",
@@ -1384,10 +1394,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T6"
+        "T6.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/12/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1407,7 +1417,7 @@
         "T7"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/13/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1429,7 +1439,7 @@
         "T7"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/13/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1451,7 +1461,7 @@
         "T7"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/13/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1473,7 +1483,7 @@
         "T7"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/13/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1495,7 +1505,7 @@
         "T8"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/14/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1515,7 +1525,7 @@
         "T8"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/14/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1535,7 +1545,7 @@
         "T9"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/15/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1555,7 +1565,7 @@
         "T10"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T10/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1575,7 +1585,7 @@
         "T8"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T8/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/14/validation_commands"
       ],
       "status": "planned",
       "risk_class": "high",
@@ -1597,7 +1607,7 @@
         "T9"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/15/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1614,10 +1624,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T11"
+        "T11.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands"
       ],
       "status": "planned",
       "risk_class": "high",
@@ -1636,10 +1646,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T11"
+        "T11.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1656,10 +1666,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T11"
+        "T11.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1676,10 +1686,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T11"
+        "T11.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1696,10 +1706,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T11"
+        "T11.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1716,10 +1726,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T12"
+        "T12.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/19/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1736,12 +1746,12 @@
         "mvp"
       ],
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T12.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/19/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1758,10 +1768,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T12"
+        "T12.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/19/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1778,10 +1788,10 @@
         "mvp"
       ],
       "task_refs": [
-        "T12"
+        "T12.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/19/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1798,12 +1808,12 @@
         "mvp"
       ],
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T12.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/19/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1820,12 +1830,12 @@
         "mvp"
       ],
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.2",
+        "T12.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/18/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1844,10 +1854,10 @@
         "release"
       ],
       "task_refs": [
-        "T6"
+        "T6.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1867,11 +1877,11 @@
       ],
       "task_refs": [
         "T3",
-        "T6"
+        "T6.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/12/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1890,12 +1900,12 @@
         "release"
       ],
       "task_refs": [
-        "T5",
-        "T6"
+        "T5.1",
+        "T6.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T5/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/9/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1917,7 +1927,7 @@
         "T4.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T4.2/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/7/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1936,10 +1946,10 @@
         "release"
       ],
       "task_refs": [
-        "T11"
+        "T11.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/18/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1961,7 +1971,7 @@
         "T9"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T9/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/15/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1983,7 +1993,7 @@
         "T7"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T7/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/13/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -2002,10 +2012,10 @@
         "release"
       ],
       "task_refs": [
-        "T11"
+        "T11.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T11/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/18/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -2024,10 +2034,10 @@
         "release"
       ],
       "task_refs": [
-        "T6"
+        "T6.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T6/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
