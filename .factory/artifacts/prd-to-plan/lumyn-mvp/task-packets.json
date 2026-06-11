@@ -6056,7 +6056,6 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
       ],
       "validation_commands": [
-        "make smoke-first-session",
         "make test-coverage",
         "make prepush-full"
       ],
@@ -6066,8 +6065,6 @@
         "RCRR-008: Local HTML report identifies the fix target.",
         "RCRR-010: Bundled static traces open without model key, sandbox, or hosted account.",
         "RCRR-011: `lumyn demo` opens the bundled agent-failure and proof-gap reports with no install, model key, sandbox, or hosted account.",
-        "ACT-001: First trace opened in under 5 minutes.",
-        "ACT-003: First workflow recorded and replay-verified in under 30 minutes.",
         "PULL-005: User fixes docs, OpenAPI descriptions, auth guidance, endpoint ambiguity, or read-back gaps based on Lumyn output.",
         "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
         "FR13: FR13: Local Trace And Report - Lumyn must produce a local JSON trace and HTML report.",
@@ -6078,8 +6075,7 @@
         "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
         "NFR14: NFR14: No Dashboard Dependency - The MVP must explain value through local CLI output and local reports.",
         "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
-        "RCRR-012: `lumyn demo` includes bundled proof-gap and boundary-violation/safety finding examples without requiring a hosted account, model key, or sandbox.",
-        "First-session smoke evidence records ACT-001 under 5 minutes, ACT-002 under 10 minutes, and ACT-003 under 30 minutes without model key, sandbox, hosted account, or network."
+        "RCRR-012: `lumyn demo` includes bundled proof-gap and boundary-violation/safety finding examples without requiring a hosted account, model key, or sandbox."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -6105,8 +6101,7 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result",
-        "first_session_smoke_report"
+        "coverage_gate_result"
       ],
       "test_matrix_refs": [
         {
@@ -6407,8 +6402,6 @@
         "RCRR-008",
         "RCRR-010",
         "RCRR-011",
-        "ACT-001",
-        "ACT-003",
         "PULL-005",
         "FR2",
         "FR13",
@@ -6425,8 +6418,6 @@
           "RCRR-008",
           "RCRR-010",
           "RCRR-011",
-          "ACT-001",
-          "ACT-003",
           "PULL-005",
           "FR2",
           "FR13",
@@ -6458,7 +6449,6 @@
         }
       ],
       "commands": [
-        "make smoke-first-session",
         "make test-coverage",
         "make prepush-full"
       ],
@@ -6505,36 +6495,6 @@
         },
         {
           "acceptance_item_id": "RCRR-011",
-          "allowed_statuses": [
-            "implemented",
-            "partial",
-            "missing",
-            "blocked",
-            "deferred_with_approval"
-          ],
-          "evidence_required": [
-            "work_proof_marker",
-            "validation_report",
-            "scope_closure_report"
-          ]
-        },
-        {
-          "acceptance_item_id": "ACT-001",
-          "allowed_statuses": [
-            "implemented",
-            "partial",
-            "missing",
-            "blocked",
-            "deferred_with_approval"
-          ],
-          "evidence_required": [
-            "work_proof_marker",
-            "validation_report",
-            "scope_closure_report"
-          ]
-        },
-        {
-          "acceptance_item_id": "ACT-003",
           "allowed_statuses": [
             "implemented",
             "partial",
@@ -7083,7 +7043,9 @@
         "FR14",
         "NFR12",
         "RCRR-012",
-        "ACT-002"
+        "ACT-002",
+        "ACT-001",
+        "ACT-003"
       ],
       "validation_contract_inheritance": {
         "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
@@ -7092,7 +7054,9 @@
           "FR14",
           "NFR12",
           "RCRR-012",
-          "ACT-002"
+          "ACT-002",
+          "ACT-001",
+          "ACT-003"
         ]
       },
       "input_artifacts": [
@@ -7208,6 +7172,36 @@
         },
         {
           "acceptance_item_id": "ACT-002",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "ACT-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "ACT-003",
           "allowed_statuses": [
             "implemented",
             "partial",

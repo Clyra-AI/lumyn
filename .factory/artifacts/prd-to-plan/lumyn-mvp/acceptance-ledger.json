@@ -1854,10 +1854,10 @@
         "release"
       ],
       "task_refs": [
-        "T6.1"
+        "T6.2"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/12/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
@@ -1901,11 +1901,11 @@
       ],
       "task_refs": [
         "T5.1",
-        "T6.1"
+        "T6.2"
       ],
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/9/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/12/validation_commands"
       ],
       "status": "planned",
       "risk_class": "medium",
