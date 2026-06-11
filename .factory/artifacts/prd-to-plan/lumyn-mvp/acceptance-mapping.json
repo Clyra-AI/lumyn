@@ -35,14 +35,15 @@
       "task_refs": [
         "T1",
         "T2",
+        "T2.7",
         "T3",
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
-        "T10",
-        "T2.7"
+        "T5.1",
+        "T6.1",
+        "T6.2",
+        "T10"
       ],
       "acceptance_refs": [
         "FDN-001",
@@ -137,8 +138,10 @@
       "group_id": "live_agent_eval",
       "required": true,
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "acceptance_refs": [
         "EVAL-001",
@@ -186,11 +189,11 @@
       "source_ref": "docs/product/prd.md#success-metrics",
       "required": true,
       "task_refs": [
-        "T6",
         "T3",
-        "T4.1",
         "T4.2",
-        "T5"
+        "T5.1",
+        "T6.1",
+        "T6.2"
       ],
       "acceptance_refs": [
         "ACT-001",
@@ -211,10 +214,10 @@
       "source_ref": "docs/product/prd.md#success-metrics",
       "required": true,
       "task_refs": [
-        "T11",
-        "T9",
+        "T6.1",
         "T7",
-        "T6"
+        "T9",
+        "T11.2"
       ],
       "acceptance_refs": [
         "PULL-001",
@@ -238,18 +241,23 @@
       "task_refs": [
         "T1",
         "T2",
+        "T2.7",
         "T3",
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
         "T7",
         "T8",
         "T9",
         "T10",
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "criteria": [],
       "suggested_validation": [
@@ -321,18 +329,23 @@
       "task_refs": [
         "T1",
         "T2",
+        "T2.7",
         "T3",
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
         "T7",
         "T8",
         "T9",
         "T10",
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "criteria": [],
       "suggested_validation": [
@@ -394,8 +407,10 @@
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
         "T10",
         "T2.7"
       ],
@@ -434,8 +449,10 @@
       "public_release_boundary": false,
       "completion_policy": "Required internal capability slice; live eval dispatch remains gated by product-pull evidence and approved model/network posture.",
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "acceptance_group_refs": [
         "live_agent_eval",
@@ -457,8 +474,10 @@
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
         "T10",
         "T2.7"
       ],
@@ -533,8 +552,10 @@
       "required_for_completion": true,
       "public_release_boundary": false,
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "acceptance_group_refs": [
         "live_agent_eval",

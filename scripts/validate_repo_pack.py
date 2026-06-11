@@ -132,7 +132,7 @@ REQUIRED_LIVE_EVAL_DISPATCH_GATES = {"PULL-001", "PULL-004"}
 REQUIRED_MVP_VERSION_SLICES = {
     "v0.0": {
         "capability_group_id": "record_contract_replay_report",
-        "task_refs": {"T1", "T2", "T2.7", "T3", "T4.1", "T4.2", "T4.3", "T5", "T6", "T10"},
+        "task_refs": {"T1", "T2", "T2.7", "T3", "T4.1", "T4.2", "T4.3", "T5.1", "T5.2", "T6.1", "T6.2", "T10"},
     },
     "v0.1": {
         "capability_group_id": "live_verify_boundary_ci_share",
@@ -140,7 +140,7 @@ REQUIRED_MVP_VERSION_SLICES = {
     },
     "v0.2": {
         "capability_group_id": "live_agent_eval",
-        "task_refs": {"T11", "T12"},
+        "task_refs": {"T11.1", "T11.2", "T12.1", "T12.2"},
     },
 }
 
@@ -154,16 +154,16 @@ DOTTED_TASK_PARENT_SLICE_EXEMPTIONS = {"T2.5", "T2.6"}
 
 REQUIRED_ACCEPTANCE_TASK_REFS = {
     "FDN-003": {"T2.7"},
-    "RCRR-012": {"T6"},
+    "RCRR-012": {"T6.2"},
     "LVCIS-009": {"T8"},
     "LVCIS-010": {"T9"},
-    "EVAL-011": {"T11", "T12"},
-    "FR14": {"T3", "T4.1", "T4.2", "T4.3", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
-    "NFR9": {"T3", "T4.1", "T4.2", "T4.3", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
-    "NFR12": {"T4.1", "T4.2", "T4.3", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
-    "FR9": {"T4.2", "T4.3", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"},
-    "FR2": {"T3", "T4.1", "T4.2", "T4.3", "T5", "T6", "T10", "T11", "T12"},
-    "NFR6": {"T4.1", "T4.2", "T4.3", "T5", "T6", "T7", "T10", "T11", "T12"},
+    "EVAL-011": {"T11.2", "T12.2"},
+    "FR14": {"T3", "T4.1", "T4.2", "T4.3", "T5.2", "T6.2", "T7", "T8", "T9", "T10", "T11.2", "T12.2"},
+    "NFR9": {"T3", "T4.1", "T4.2", "T4.3", "T5.2", "T6.1", "T7", "T8", "T9", "T10", "T11.2", "T12.2"},
+    "NFR12": {"T4.1", "T4.2", "T4.3", "T5.2", "T6.2", "T7", "T8", "T9", "T10", "T11.2", "T12.2"},
+    "FR9": {"T4.2", "T4.3", "T5.1", "T6.2", "T7", "T8", "T9", "T10", "T11.1", "T12.2"},
+    "FR2": {"T3", "T4.1", "T4.2", "T4.3", "T5.2", "T6.1", "T10", "T11.2", "T12.2"},
+    "NFR6": {"T4.1", "T4.2", "T4.3", "T5.2", "T6.1", "T7", "T10", "T11.1", "T12.2"},
 }
 
 REQUIRED_FACTORYD_RUNTIME_FIELDS = [
@@ -1472,19 +1472,22 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
         validate_task_planning_skill_fields(task)
         validate_task_execution_compiler_fields(task)
         validate_task_version_slice_refs(task)
-        if current_task_id == "T11":
+        item_count = len(task.get("acceptance_item_ids", []))
+        if item_count > 15:
+            fail(f"{current_task_id}.acceptance_item_ids has {item_count} items; split runner-ready tasks at 15 or fewer acceptance items")
+        if current_task_id == "T11.1":
             validate_mvp_eval_provider_adapters(
                 task.get("mvp_eval_provider_adapters"),
-                "T11.mvp_eval_provider_adapters",
+                "T11.1.mvp_eval_provider_adapters",
             )
             checks = "\n".join(str(value).lower() for value in task.get("acceptance_checks", []))
             if "openai-compatible" not in checks or "anthropic" not in checks:
-                fail("T11 acceptance_checks must name both OpenAI-compatible and Anthropic adapter coverage")
+                fail("T11.1 acceptance_checks must name both OpenAI-compatible and Anthropic adapter coverage")
         if is_live_eval_dispatch_task(task):
             validate_live_eval_dispatch_gates(task)
     if any(task_ref in tasks_by_id for task_ref in ["T4", "T4.1", "T4.2", "T4.3"]):
         validate_recorder_task_split(tasks_by_id)
-    if "T6" in tasks_by_id:
+    if "T6.2" in tasks_by_id:
         validate_first_session_smoke_task(tasks_by_id)
 
 
@@ -1516,9 +1519,9 @@ def validate_recorder_task_split(tasks_by_id: dict[str, dict[str, Any]]) -> None
     t43_deps = {str(value) for value in tasks_by_id["T4.3"].get("blocked_by", [])}
     if "T4.2" not in t43_deps:
         fail("T4.3 must depend on T4.2")
-    t5_deps = {str(value) for value in tasks_by_id["T5"].get("blocked_by", [])}
+    t5_deps = {str(value) for value in tasks_by_id["T5.1"].get("blocked_by", [])}
     if "T4.3" not in t5_deps or "T4" in t5_deps:
-        fail("T5 must depend on T4.3, not the removed broad T4 packet")
+        fail("T5.1 must depend on T4.3, not the removed broad T4 packet")
     quality_checks = "\n".join(str(value).lower() for value in tasks_by_id["T4.3"].get("acceptance_checks", []))
     for token in ["strong-spec", "weak-spec", "non-claims", "70 percent"]:
         if token not in quality_checks:
@@ -1526,29 +1529,29 @@ def validate_recorder_task_split(tasks_by_id: dict[str, dict[str, Any]]) -> None
 
 
 def validate_first_session_smoke_task(tasks_by_id: dict[str, dict[str, Any]]) -> None:
-    task = tasks_by_id.get("T6")
+    task = tasks_by_id.get("T6.2")
     if not isinstance(task, dict):
-        fail("task-packets.json missing T6")
+        fail("task-packets.json missing T6.2")
     smoke = task.get("first_session_smoke")
     if not isinstance(smoke, dict):
-        fail("T6.first_session_smoke is required")
+        fail("T6.2.first_session_smoke is required")
     if smoke.get("required") is not True:
-        fail("T6.first_session_smoke.required must be true")
+        fail("T6.2.first_session_smoke.required must be true")
     if smoke.get("command") != "make smoke-first-session":
-        fail("T6.first_session_smoke.command must be make smoke-first-session")
-    if smoke.get("report_ref") != ".factory/artifacts/task-runs/T6/first-session-smoke.json":
-        fail("T6.first_session_smoke.report_ref must be task-scoped")
+        fail("T6.2.first_session_smoke.command must be make smoke-first-session")
+    if smoke.get("report_ref") != ".factory/artifacts/task-runs/T6.2/first-session-smoke.json":
+        fail("T6.2.first_session_smoke.report_ref must be task-scoped")
     smoke_ids = {str(value) for value in smoke.get("acceptance_item_ids", [])}
     if not {"ACT-001", "ACT-002", "ACT-003"}.issubset(smoke_ids):
-        fail("T6.first_session_smoke.acceptance_item_ids must cover ACT-001, ACT-002, and ACT-003")
+        fail("T6.2.first_session_smoke.acceptance_item_ids must cover ACT-001, ACT-002, and ACT-003")
     if "first_session_smoke_report" not in {str(value) for value in task.get("evidence_required", [])}:
-        fail("T6.evidence_required must include first_session_smoke_report")
+        fail("T6.2.evidence_required must include first_session_smoke_report")
     if "make smoke-first-session" not in {str(value) for value in task.get("validation_commands", [])}:
-        fail("T6.validation_commands must include make smoke-first-session")
+        fail("T6.2.validation_commands must include make smoke-first-session")
     allowed_paths = {str(value) for value in task.get("allowed_paths", [])}
     missing_paths = sorted({"Makefile", "scripts/"} - allowed_paths)
     if missing_paths:
-        fail(f"T6.allowed_paths must include smoke target implementation paths: {missing_paths}")
+        fail(f"T6.2.allowed_paths must include smoke target implementation paths: {missing_paths}")
 
 
 def validate_standalone_task_packet(packet: dict[str, Any], baseline_task_id: str) -> None:
@@ -1666,11 +1669,11 @@ def validate_safety_corpus_ready_plan(
 
     required_by_task = {
         "T2.7": {"FDN-003"},
-        "T6": {"RCRR-012"},
+        "T6.2": {"RCRR-012"},
         "T8": {"LVCIS-009"},
         "T9": {"LVCIS-010"},
-        "T11": {"EVAL-011"},
-        "T12": {"EVAL-011"},
+        "T11.2": {"EVAL-011"},
+        "T12.2": {"EVAL-011"},
     }
     required_ids = set().union(*required_by_task.values())
     ledger_items = {

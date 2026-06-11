@@ -79,14 +79,15 @@
       "task_refs": [
         "T1",
         "T2",
+        "T2.7",
         "T3",
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
-        "T10",
-        "T2.7"
+        "T5.1",
+        "T6.1",
+        "T6.2",
+        "T10"
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T1/validation-report.json",
@@ -99,14 +100,15 @@
         "T2"
       ],
       "remaining_task_refs": [
+        "T2.7",
         "T3",
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
-        "T10",
-        "T2.7"
+        "T5.1",
+        "T6.1",
+        "T6.2",
+        "T10"
       ],
       "notes": [
         "T1 established the pinned Go CLI skeleton, command-result envelope, exit-code constants, config defaults, and validation lanes.",
@@ -273,7 +275,7 @@
           "status": "planned",
           "evidence_refs": [],
           "repair_task_refs": [
-            "T6"
+            "T6.2"
           ]
         }
       ],
@@ -405,14 +407,17 @@
       ],
       "notes": [
         "Boundary violations that indicate scope escalation, data exposure risk, or out-of-policy action must be surfaced as safety/security-relevant findings in live verify and CI surfaces."
-      ]
+      ],
+      "implemented_task_refs": []
     },
     {
       "scope_item": "Live agent eval",
       "status": "planned",
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "evidence_refs": [],
       "blockers": [
@@ -522,21 +527,24 @@
           "status": "planned",
           "evidence_refs": [],
           "repair_task_refs": [
-            "T11",
-            "T12"
+            "T11.2",
+            "T12.2"
           ]
         }
       ],
       "remaining_task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "mvp_required_version_slices": [
         "v0.2"
       ],
       "delivery_slice_refs": [
         "v0.2"
-      ]
+      ],
+      "implemented_task_refs": []
     },
     {
       "scope_item": "Functional requirements",
@@ -546,35 +554,45 @@
       "task_refs": [
         "T1",
         "T2",
+        "T2.7",
         "T3",
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
         "T7",
         "T8",
         "T9",
         "T10",
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "implemented_task_refs": [],
       "remaining_task_refs": [
         "T1",
         "T2",
+        "T2.7",
         "T3",
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
         "T7",
         "T8",
         "T9",
         "T10",
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "evidence_refs": [],
       "acceptance_criteria": [],
@@ -770,35 +788,45 @@
       "task_refs": [
         "T1",
         "T2",
+        "T2.7",
         "T3",
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
         "T7",
         "T8",
         "T9",
         "T10",
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "implemented_task_refs": [],
       "remaining_task_refs": [
         "T1",
         "T2",
+        "T2.7",
         "T3",
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
         "T7",
         "T8",
         "T9",
         "T10",
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "evidence_refs": [],
       "acceptance_criteria": [],
@@ -931,8 +959,10 @@
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
         "T10",
         "T2.7"
       ],
@@ -971,8 +1001,10 @@
       "public_release_boundary": false,
       "completion_policy": "Required internal capability slice; live eval dispatch remains gated by product-pull evidence and approved model/network posture.",
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "acceptance_group_refs": [
         "live_agent_eval",
@@ -994,8 +1026,10 @@
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
         "T10",
         "T2.7"
       ],
@@ -1070,8 +1104,10 @@
       "required_for_completion": true,
       "public_release_boundary": false,
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "acceptance_group_refs": [
         "live_agent_eval",

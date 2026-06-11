@@ -4908,17 +4908,17 @@
       ]
     },
     {
-      "task_id": "T5",
+      "task_id": "T5.1",
       "slice_type": "vertical",
-      "objective": "Implement replay verification, stale cassette detection, `api_state`, and limited `trace_assertion` validators.",
+      "objective": "Implement replay verification, stale cassette detection, `api_state`, and limited `trace_assertion` validators. Split: Replay Verification And Proof Honesty.",
       "risk_class": "medium",
       "blocked_by": [
         "T4.3",
         "T2.6"
       ],
       "allowed_paths": [
-        ".factory/artifacts/pr-lifecycle/T5/",
-        ".factory/artifacts/task-runs/T5/",
+        ".factory/artifacts/pr-lifecycle/T5.1/",
+        ".factory/artifacts/task-runs/T5.1/",
         "cmd/lumyn/",
         "internal/",
         "tests/",
@@ -4954,9 +4954,6 @@
         "NFR2: NFR2: Fast First Workflow - A technical user should record and replay-verify one simple workflow in under 30 minutes.",
         "NFR3: NFR3: Deterministic Replay - Repeated replay verification on unchanged artifacts must produce the same result.",
         "NFR4: NFR4: Proof Honesty - Reports must clearly distinguish confirmed read-back proof, trace-only evidence, and proof gaps.",
-        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
-        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
-        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
         "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
         "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
       ],
@@ -5290,12 +5287,7 @@
         "FR12",
         "NFR2",
         "NFR3",
-        "NFR4",
-        "FR2",
-        "FR14",
-        "NFR6",
-        "NFR9",
-        "NFR12"
+        "NFR4"
       ],
       "validation_contract_inheritance": {
         "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
@@ -5310,12 +5302,7 @@
           "FR12",
           "NFR2",
           "NFR3",
-          "NFR4",
-          "FR2",
-          "FR14",
-          "NFR6",
-          "NFR9",
-          "NFR12"
+          "NFR4"
         ]
       },
       "input_artifacts": [
@@ -5506,7 +5493,434 @@
             "validation_report",
             "scope_closure_report"
           ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
+      ]
+    },
+    {
+      "task_id": "T5.2",
+      "slice_type": "vertical",
+      "objective": "Implement replay verification, stale cassette detection, `api_state`, and limited `trace_assertion` validators. Split: Replay Cross-Cutting Contracts.",
+      "risk_class": "medium",
+      "blocked_by": [
+        "T5.1"
+      ],
+      "allowed_paths": [
+        ".factory/artifacts/pr-lifecycle/T5.2/",
+        ".factory/artifacts/task-runs/T5.2/",
+        "cmd/lumyn/",
+        "internal/",
+        "tests/",
+        "examples/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "validation_commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "NFR2: NFR2: Fast First Workflow - A technical user should record and replay-verify one simple workflow in under 30 minutes.",
+        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "commit-push",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": false,
+        "codex_review_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map",
+        "factoryd_run_once_report",
+        "coverage_gate_result"
+      ],
+      "test_matrix_refs": [
+        {
+          "tier": "Tier 1 Unit",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "go test ./... -count=1"
+          ]
         },
+        {
+          "tier": "Tier 9 Contract",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-contracts"
+          ]
+        },
+        {
+          "tier": "Tier 4 Acceptance",
+          "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+          "status": "planned"
+        },
+        {
+          "tier": "Tier 11 Scenario",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "status": "planned"
+        }
+      ],
+      "security_scanner_gates": {
+        "required": true,
+        "scanner": "CodeQL",
+        "workflow_ref": ".github/workflows/codeql.yml",
+        "status_check": "CodeQL analyze",
+        "required_for_surfaces": [
+          "dependency additions",
+          "generated-code intake",
+          "CI or workflow changes",
+          "external calls",
+          "redaction/share/live/eval/provider code",
+          "data exposure",
+          "release-sensitive work"
+        ],
+        "exception_policy": "approved_exception_required"
+      },
+      "architecture_guidance_refs": [
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map",
+          "rule": "Medium/high risk tasks record state owner, feedback source, blast radius, source-of-truth impact, and rollback/deletion checks."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations",
+          "rule": "Behavior and schema/output changes use test-first evidence or a structured skipped reason."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#adr-and-decision-triggers",
+          "rule": "Boundary, public contract, failure semantics, credential/network, release, or major reliability/perf changes require ADR or decision note."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#performance-and-cost-triggers",
+          "rule": "Fan-out, repeated runs, or model calls declare expected cost/performance impact."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#reliability-and-recovery-triggers",
+          "rule": "Retry, cleanup, persistence, filesystem mutation, redaction, live network, and provider code require hardening/failure-mode evidence."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
+          "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
+        }
+      ],
+      "ci_lane_refs": [
+        {
+          "lane": "fast",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make lint-fast",
+            "make test-fast"
+          ]
+        },
+        {
+          "lane": "core",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make test-contracts",
+            "make prepush-full"
+          ]
+        },
+        {
+          "lane": "acceptance",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+          ]
+        },
+        {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
+          "lane": "risk",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "status_check_refs": [
+            "CodeQL analyze"
+          ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
+        }
+      ],
+      "engineering_policy_refs": [
+        {
+          "policy": "docs_parity",
+          "source_ref": "docs/dev/dev_guides.md#docs-parity",
+          "rule": "Behavior, flags, output shape, exit codes, artifact paths, install paths, and workflow semantics update docs and Factory planning artifacts together."
+        },
+        {
+          "policy": "output_contracts",
+          "source_ref": "docs/dev/dev_guides.md#output-contracts",
+          "rule": "Command-result JSON, exit codes, schemas, and product artifacts are public or executable contracts."
+        },
+        {
+          "policy": "release_integrity",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
+          "rule": "Release-sensitive work defines version, changelog, install, artifact-integrity, and UAT evidence before merge."
+        },
+        {
+          "policy": "provenance_evidence",
+          "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
+          "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
+        }
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
+        "mvp_eval_providers": [
+          "openai_compatible_http_adapter",
+          "anthropic_messages_http_adapter"
+        ]
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T5 is scoped to implement replay verification, stale cassette detection, `api_state`, and limited `trace_assertion` validators.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add deterministic replay verification, stale cassette detection, API state checks, and trace assertions.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds replay verification, stale cassette detection, `api_state`, and validator proof contracts.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T5 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "medium",
+        "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": false,
+        "hypothesis": "Network access, stale cassette data, or proof gaps must fail replay verification rather than reporting green.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Schema-backed artifacts must validate against the declared schema version or fail closure."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "FR2",
+        "FR14",
+        "NFR6",
+        "NFR9",
+        "NFR12"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "FR2",
+          "FR14",
+          "NFR6",
+          "NFR9",
+          "NFR12"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.0"
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
         {
           "acceptance_item_id": "FR2",
           "allowed_statuses": [
@@ -5610,17 +6024,17 @@
       ]
     },
     {
-      "task_id": "T6",
+      "task_id": "T6.1",
       "slice_type": "vertical",
-      "objective": "Implement local trace/report rendering and `lumyn demo` with bundled reports.",
+      "objective": "Implement local trace/report rendering and `lumyn demo` with bundled reports. Split: Local Reports And Bundled Demo Reports.",
       "risk_class": "medium",
       "blocked_by": [
-        "T5",
+        "T5.2",
         "T2.6"
       ],
       "allowed_paths": [
-        ".factory/artifacts/pr-lifecycle/T6/",
-        ".factory/artifacts/task-runs/T6/",
+        ".factory/artifacts/pr-lifecycle/T6.1/",
+        ".factory/artifacts/task-runs/T6.1/",
         "cmd/lumyn/",
         "internal/",
         "tests/",
@@ -5663,11 +6077,8 @@
         "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
         "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
         "NFR14: NFR14: No Dashboard Dependency - The MVP must explain value through local CLI output and local reports.",
-        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
-        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
         "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
         "RCRR-012: `lumyn demo` includes bundled proof-gap and boundary-violation/safety finding examples without requiring a hosted account, model key, or sandbox.",
-        "First-session smoke script runs init, check, demo report open/render probe, record, and replay verification against bundled local fixtures with elapsed-time evidence.",
         "First-session smoke evidence records ACT-001 under 5 minutes, ACT-002 under 10 minutes, and ACT-003 under 30 minutes without model key, sandbox, hosted account, or network."
       ],
       "required_worker_chain": [
@@ -6006,12 +6417,7 @@
         "NFR4",
         "NFR6",
         "NFR9",
-        "NFR14",
-        "FR9",
-        "FR14",
-        "NFR12",
-        "RCRR-012",
-        "ACT-002"
+        "NFR14"
       ],
       "validation_contract_inheritance": {
         "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
@@ -6029,12 +6435,7 @@
           "NFR4",
           "NFR6",
           "NFR9",
-          "NFR14",
-          "FR9",
-          "FR14",
-          "NFR12",
-          "RCRR-012",
-          "ACT-002"
+          "NFR14"
         ]
       },
       "input_artifacts": [
@@ -6056,22 +6457,6 @@
           "rule": "Bundled examples show proof-gap and boundary-violation safety findings locally."
         }
       ],
-      "first_session_smoke": {
-        "required": true,
-        "command": "make smoke-first-session",
-        "report_ref": ".factory/artifacts/task-runs/T6/first-session-smoke.json",
-        "acceptance_item_ids": [
-          "ACT-001",
-          "ACT-002",
-          "ACT-003"
-        ],
-        "time_budgets": {
-          "ACT-001": "5m",
-          "ACT-002": "10m",
-          "ACT-003": "30m"
-        },
-        "network_posture": "offline"
-      },
       "commands": [
         "make smoke-first-session",
         "make test-coverage",
@@ -6297,7 +6682,470 @@
             "validation_report",
             "scope_closure_report"
           ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
+      ]
+    },
+    {
+      "task_id": "T6.2",
+      "slice_type": "vertical",
+      "objective": "Implement local trace/report rendering and `lumyn demo` with bundled reports. Split: First-Session Smoke And Demo Evidence.",
+      "risk_class": "medium",
+      "blocked_by": [
+        "T6.1"
+      ],
+      "allowed_paths": [
+        ".factory/artifacts/pr-lifecycle/T6.2/",
+        ".factory/artifacts/task-runs/T6.2/",
+        "cmd/lumyn/",
+        "internal/",
+        "tests/",
+        "examples/traces/",
+        "scripts/",
+        "Makefile",
+        "README.md"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "validation_commands": [
+        "make smoke-first-session",
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR14: NFR14: No Dashboard Dependency - The MVP must explain value through local CLI output and local reports.",
+        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
+        "RCRR-012: `lumyn demo` includes bundled proof-gap and boundary-violation/safety finding examples without requiring a hosted account, model key, or sandbox.",
+        "First-session smoke script runs init, check, demo report open/render probe, record, and replay verification against bundled local fixtures with elapsed-time evidence.",
+        "First-session smoke evidence records ACT-001 under 5 minutes, ACT-002 under 10 minutes, and ACT-003 under 30 minutes without model key, sandbox, hosted account, or network."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "commit-push",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": false,
+        "codex_review_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map",
+        "factoryd_run_once_report",
+        "coverage_gate_result",
+        "first_session_smoke_report"
+      ],
+      "test_matrix_refs": [
+        {
+          "tier": "Tier 1 Unit",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "go test ./... -count=1"
+          ]
         },
+        {
+          "tier": "Tier 9 Contract",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-contracts"
+          ]
+        },
+        {
+          "tier": "Tier 4 Acceptance",
+          "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+          "status": "planned"
+        },
+        {
+          "tier": "Tier 11 Scenario",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "status": "planned"
+        }
+      ],
+      "security_scanner_gates": {
+        "required": true,
+        "scanner": "CodeQL",
+        "workflow_ref": ".github/workflows/codeql.yml",
+        "status_check": "CodeQL analyze",
+        "required_for_surfaces": [
+          "dependency additions",
+          "generated-code intake",
+          "CI or workflow changes",
+          "external calls",
+          "redaction/share/live/eval/provider code",
+          "data exposure",
+          "release-sensitive work"
+        ],
+        "exception_policy": "approved_exception_required"
+      },
+      "architecture_guidance_refs": [
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map",
+          "rule": "Medium/high risk tasks record state owner, feedback source, blast radius, source-of-truth impact, and rollback/deletion checks."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations",
+          "rule": "Behavior and schema/output changes use test-first evidence or a structured skipped reason."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#adr-and-decision-triggers",
+          "rule": "Boundary, public contract, failure semantics, credential/network, release, or major reliability/perf changes require ADR or decision note."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#performance-and-cost-triggers",
+          "rule": "Fan-out, repeated runs, or model calls declare expected cost/performance impact."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#reliability-and-recovery-triggers",
+          "rule": "Retry, cleanup, persistence, filesystem mutation, redaction, live network, and provider code require hardening/failure-mode evidence."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
+          "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
+        }
+      ],
+      "ci_lane_refs": [
+        {
+          "lane": "fast",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make lint-fast",
+            "make test-fast"
+          ]
+        },
+        {
+          "lane": "core",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make test-contracts",
+            "make prepush-full"
+          ]
+        },
+        {
+          "lane": "acceptance",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+          ]
+        },
+        {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
+          "lane": "risk",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "status_check_refs": [
+            "CodeQL analyze"
+          ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
+        }
+      ],
+      "engineering_policy_refs": [
+        {
+          "policy": "docs_parity",
+          "source_ref": "docs/dev/dev_guides.md#docs-parity",
+          "rule": "Behavior, flags, output shape, exit codes, artifact paths, install paths, and workflow semantics update docs and Factory planning artifacts together."
+        },
+        {
+          "policy": "output_contracts",
+          "source_ref": "docs/dev/dev_guides.md#output-contracts",
+          "rule": "Command-result JSON, exit codes, schemas, and product artifacts are public or executable contracts."
+        },
+        {
+          "policy": "release_integrity",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
+          "rule": "Release-sensitive work defines version, changelog, install, artifact-integrity, and UAT evidence before merge."
+        },
+        {
+          "policy": "provenance_evidence",
+          "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
+          "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
+        }
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
+        "mvp_eval_providers": [
+          "openai_compatible_http_adapter",
+          "anthropic_messages_http_adapter"
+        ]
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T6 is scoped to implement local trace/report rendering and `lumyn demo` with bundled reports.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add local trace/report rendering and bundled `lumyn demo` reports.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds trace/report rendering and `lumyn demo` output contracts. It also renders safety/corpus-ready local failure evidence in reports and bundled demos.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes.",
+        "Safety/corpus-ready evidence must remain local-first, schema-backed, and corpus_eligible false by default unless an explicit future opt-in scope change is approved."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T6 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "low",
+        "measurement_expectation": "No measurable runtime or cost increase expected beyond normal local CLI validation.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": false,
+        "hypothesis": "Reports must preserve proof strength and next-command guidance even when traces are partial or weak.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Reports must preserve finding kind, proof strength, boundary status, safety/security relevance, corpus eligibility, and fix target without uploading private artifacts."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts",
+        "Do not satisfy first-session acceptance with manual-only notes when deterministic smoke evidence can be captured."
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "FR9",
+        "FR14",
+        "NFR12",
+        "RCRR-012",
+        "ACT-002"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "FR9",
+          "FR14",
+          "NFR12",
+          "RCRR-012",
+          "ACT-002"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.0"
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
+      ],
+      "safety_corpus_ready_evidence_refs": [
+        {
+          "source_ref": "docs/product/prd.md#safety-and-corpus-ready-evidence",
+          "rule": "Reports and demos distinguish proof gaps, boundary violations, safety relevance, corpus eligibility, and fix targets."
+        },
+        {
+          "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json#/items/RCRR-012",
+          "rule": "Bundled examples show proof-gap and boundary-violation safety findings locally."
+        }
+      ],
+      "first_session_smoke": {
+        "required": true,
+        "command": "make smoke-first-session",
+        "report_ref": ".factory/artifacts/task-runs/T6.2/first-session-smoke.json",
+        "acceptance_item_ids": [
+          "ACT-001",
+          "ACT-002",
+          "ACT-003"
+        ],
+        "time_budgets": {
+          "ACT-001": "5m",
+          "ACT-002": "10m",
+          "ACT-003": "30m"
+        },
+        "network_posture": "offline"
+      },
+      "commands": [
+        "make smoke-first-session",
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
         {
           "acceptance_item_id": "FR9",
           "allowed_statuses": [
@@ -6406,7 +7254,7 @@
       "objective": "Implement live known-path verify with sandbox config, settle/retry readbacks, cleanup, and orphan evidence.",
       "risk_class": "high",
       "blocked_by": [
-        "T5",
+        "T5.2",
         "T2.6"
       ],
       "allowed_paths": [
@@ -7046,7 +7894,7 @@
       "objective": "Implement action-boundary object and deterministic boundary checks.",
       "risk_class": "high",
       "blocked_by": [
-        "T5",
+        "T5.2",
         "T2.6"
       ],
       "allowed_paths": [
@@ -7640,7 +8488,7 @@
       "objective": "Implement GitHub Action, JUnit output, PR-comment summary, changed-source mapping, and proof-honest README badge.",
       "risk_class": "high",
       "blocked_by": [
-        "T5",
+        "T5.2",
         "T8",
         "T2.6"
       ],
@@ -8191,7 +9039,7 @@
       "objective": "Implement `lumyn share` with redaction re-check and fail-closed export.",
       "risk_class": "high",
       "blocked_by": [
-        "T6",
+        "T6.2",
         "T2.6"
       ],
       "allowed_paths": [
@@ -8806,18 +9654,18 @@
       ]
     },
     {
-      "task_id": "T11",
+      "task_id": "T11.1",
       "slice_type": "vertical",
-      "objective": "Implement live eval provider interface, OpenAI-compatible and Anthropic provider adapters, stateless run defaults, context modes, repeated runs, and trace capture.",
+      "objective": "Implement live eval provider interface, OpenAI-compatible and Anthropic provider adapters, stateless run defaults, context modes, repeated runs, and trace capture. Split: Live Eval Provider Interface And Context Modes.",
       "risk_class": "high",
       "blocked_by": [
-        "T5",
+        "T5.2",
         "T8",
         "T2.6"
       ],
       "allowed_paths": [
-        ".factory/artifacts/pr-lifecycle/T11/",
-        ".factory/artifacts/task-runs/T11/",
+        ".factory/artifacts/pr-lifecycle/T11.1/",
+        ".factory/artifacts/task-runs/T11.1/",
         "cmd/lumyn/",
         "internal/",
         "tests/",
@@ -8842,7 +9690,6 @@
       "acceptance_checks": [
         "Eval supports surface_only and contract_assisted modes.",
         "Eval reports run count and pass rate.",
-        "Eval does not become the default hard CI gate.",
         "Eval runs OpenAI-compatible and Anthropic provider/model adapters when configured.",
         "Provider config records provider, model, temperature, base_url, and api_key_env.",
         "EVAL-001: `lumyn eval` runs OpenAI-compatible and Anthropic provider/model adapters when configured.",
@@ -8852,8 +9699,6 @@
         "EVAL-005: Eval reports selected endpoints and wrong turns.",
         "EVAL-007: Eval writes a local trace/report.",
         "EVAL-010: Eval is diagnostic by default unless an explicit gate is configured.",
-        "PULL-001: User records more than one workflow.",
-        "PULL-004: User asks to run live eval before an API/docs release.",
         "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
         "FR19: FR19: Live Agent Eval - Lumyn must support live agent probes using OpenAI-compatible and Anthropic provider adapters behind a pluggable provider interface.",
         "FR20: FR20: Eval Context Modes - Lumyn eval must support `surface_only` and `contract_assisted` modes.",
@@ -8861,11 +9706,7 @@
         "FR24: FR24: Least-Privilege Agent Runs - Lumyn eval must default to stateless local runs, explicit context, allowlisted env vars, and no ambient workspace access.",
         "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
         "NFR11: NFR11: Stochastic Honesty - Eval must report run counts and pass rates. It must not hide variability behind a deterministic-looking boolean.",
-        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
-        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
-        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
-        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
-        "EVAL-011: Eval emits normalized local failure events for wrong turns, boundary violations, proof gaps, docs/API ambiguity, model-specific failures, stochastic variance, provider/model/eval mode, cost/duration, and fix target."
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible."
       ],
       "requires_human_approval": [
         "OpenAI-compatible model credential posture",
@@ -9226,20 +10067,13 @@
         "EVAL-005",
         "EVAL-007",
         "EVAL-010",
-        "PULL-001",
-        "PULL-004",
         "FR9",
         "FR19",
         "FR20",
         "FR21",
         "FR24",
         "NFR6",
-        "NFR11",
-        "FR2",
-        "FR14",
-        "NFR9",
-        "NFR12",
-        "EVAL-011"
+        "NFR11"
       ],
       "validation_contract_inheritance": {
         "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
@@ -9251,20 +10085,13 @@
           "EVAL-005",
           "EVAL-007",
           "EVAL-010",
-          "PULL-001",
-          "PULL-004",
           "FR9",
           "FR19",
           "FR20",
           "FR21",
           "FR24",
           "NFR6",
-          "NFR11",
-          "FR2",
-          "FR14",
-          "NFR9",
-          "NFR12",
-          "EVAL-011"
+          "NFR11"
         ]
       },
       "input_artifacts": [
@@ -9423,36 +10250,6 @@
           ]
         },
         {
-          "acceptance_item_id": "PULL-001",
-          "allowed_statuses": [
-            "implemented",
-            "partial",
-            "missing",
-            "blocked",
-            "deferred_with_approval"
-          ],
-          "evidence_required": [
-            "work_proof_marker",
-            "validation_report",
-            "scope_closure_report"
-          ]
-        },
-        {
-          "acceptance_item_id": "PULL-004",
-          "allowed_statuses": [
-            "implemented",
-            "partial",
-            "missing",
-            "blocked",
-            "deferred_with_approval"
-          ],
-          "evidence_required": [
-            "work_proof_marker",
-            "validation_report",
-            "scope_closure_report"
-          ]
-        },
-        {
           "acceptance_item_id": "FR9",
           "allowed_statuses": [
             "implemented",
@@ -9544,6 +10341,494 @@
         },
         {
           "acceptance_item_id": "NFR11",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
+      ]
+    },
+    {
+      "task_id": "T11.2",
+      "slice_type": "vertical",
+      "objective": "Implement live eval provider interface, OpenAI-compatible and Anthropic provider adapters, stateless run defaults, context modes, repeated runs, and trace capture. Split: Live Eval Pull Gates And Failure Events.",
+      "risk_class": "high",
+      "blocked_by": [
+        "T11.1"
+      ],
+      "allowed_paths": [
+        ".factory/artifacts/pr-lifecycle/T11.2/",
+        ".factory/artifacts/task-runs/T11.2/",
+        "cmd/lumyn/",
+        "internal/",
+        "tests/",
+        "docs/architecture/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "validation_commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "PULL-001: User records more than one workflow.",
+        "PULL-004: User asks to run live eval before an API/docs release.",
+        "FR20: FR20: Eval Context Modes - Lumyn eval must support `surface_only` and `contract_assisted` modes.",
+        "FR21: FR21: Eval Repetition - Lumyn eval must support repeated runs and report pass rate instead of hiding stochastic behavior.",
+        "FR24: FR24: Least-Privilege Agent Runs - Lumyn eval must default to stateless local runs, explicit context, allowlisted env vars, and no ambient workspace access.",
+        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
+        "EVAL-011: Eval emits normalized local failure events for wrong turns, boundary violations, proof gaps, docs/API ambiguity, model-specific failures, stochastic variance, provider/model/eval mode, cost/duration, and fix target."
+      ],
+      "requires_human_approval": [
+        "OpenAI-compatible model credential posture",
+        "Anthropic model credential posture",
+        "network allowlist"
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "commit-push",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": false,
+        "codex_review_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map",
+        "factoryd_run_once_report",
+        "coverage_gate_result"
+      ],
+      "test_matrix_refs": [
+        {
+          "tier": "Tier 1 Unit",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "go test ./... -count=1"
+          ]
+        },
+        {
+          "tier": "Tier 9 Contract",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-contracts"
+          ]
+        },
+        {
+          "tier": "Tier 4 Acceptance",
+          "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+          "status": "planned"
+        },
+        {
+          "tier": "Tier 11 Scenario",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "status": "planned"
+        },
+        {
+          "tier": "Tier 12 Cross-System Integration",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "status": "blocked_until_approved"
+        }
+      ],
+      "security_scanner_gates": {
+        "required": true,
+        "scanner": "CodeQL",
+        "workflow_ref": ".github/workflows/codeql.yml",
+        "status_check": "CodeQL analyze",
+        "required_for_surfaces": [
+          "dependency additions",
+          "generated-code intake",
+          "CI or workflow changes",
+          "external calls",
+          "redaction/share/live/eval/provider code",
+          "data exposure",
+          "release-sensitive work"
+        ],
+        "exception_policy": "approved_exception_required"
+      },
+      "architecture_guidance_refs": [
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map",
+          "rule": "Medium/high risk tasks record state owner, feedback source, blast radius, source-of-truth impact, and rollback/deletion checks."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations",
+          "rule": "Behavior and schema/output changes use test-first evidence or a structured skipped reason."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#adr-and-decision-triggers",
+          "rule": "Boundary, public contract, failure semantics, credential/network, release, or major reliability/perf changes require ADR or decision note."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#performance-and-cost-triggers",
+          "rule": "Fan-out, repeated runs, or model calls declare expected cost/performance impact."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#reliability-and-recovery-triggers",
+          "rule": "Retry, cleanup, persistence, filesystem mutation, redaction, live network, and provider code require hardening/failure-mode evidence."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
+          "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
+        }
+      ],
+      "ci_lane_refs": [
+        {
+          "lane": "fast",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make lint-fast",
+            "make test-fast"
+          ]
+        },
+        {
+          "lane": "core",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make test-contracts",
+            "make prepush-full"
+          ]
+        },
+        {
+          "lane": "acceptance",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+          ]
+        },
+        {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
+          "lane": "risk",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "status_check_refs": [
+            "CodeQL analyze"
+          ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
+        }
+      ],
+      "engineering_policy_refs": [
+        {
+          "policy": "docs_parity",
+          "source_ref": "docs/dev/dev_guides.md#docs-parity",
+          "rule": "Behavior, flags, output shape, exit codes, artifact paths, install paths, and workflow semantics update docs and Factory planning artifacts together."
+        },
+        {
+          "policy": "output_contracts",
+          "source_ref": "docs/dev/dev_guides.md#output-contracts",
+          "rule": "Command-result JSON, exit codes, schemas, and product artifacts are public or executable contracts."
+        },
+        {
+          "policy": "release_integrity",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
+          "rule": "Release-sensitive work defines version, changelog, install, artifact-integrity, and UAT evidence before merge."
+        },
+        {
+          "policy": "provenance_evidence",
+          "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
+          "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
+        }
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
+        "mvp_eval_providers": [
+          "openai_compatible_http_adapter",
+          "anthropic_messages_http_adapter"
+        ]
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T11 is scoped to implement live eval provider interface, OpenAI-compatible and Anthropic provider adapters, stateless run defaults, context modes, repeated runs, and trace capture.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add live eval provider interface, OpenAI-compatible and Anthropic adapters, context modes, repeated runs, and trace capture.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds live eval provider interface, OpenAI-compatible and Anthropic adapters, context mode, repeated run, and trace capture contracts. It also emits normalized local eval failure events for future opt-in corpus analysis.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes.",
+        "Live credential, model-key, and network work remains blocked until explicit human approval and allowlist posture are recorded.",
+        "Safety/corpus-ready evidence must remain local-first, schema-backed, and corpus_eligible false by default unless an explicit future opt-in scope change is approved."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T11 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "high",
+        "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": true,
+        "hypothesis": "Provider errors, nondeterminism, missing credentials, or unsafe context modes must be labeled and kept out of default hard CI gates.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Live credential/network work is disabled by default and cannot run without approved posture evidence.",
+        "Eval traces must emit normalized local failure events with provider/model/mode metadata and corpus_eligible false by default."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "PULL-001",
+        "PULL-004",
+        "FR2",
+        "FR14",
+        "NFR9",
+        "NFR12",
+        "EVAL-011"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "PULL-001",
+          "PULL-004",
+          "FR2",
+          "FR14",
+          "NFR9",
+          "NFR12",
+          "EVAL-011"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.2"
+      ],
+      "delivery_slice_refs": [
+        "v0.2"
+      ],
+      "safety_corpus_ready_evidence_refs": [
+        {
+          "source_ref": "docs/product/prd.md#safety-and-corpus-ready-evidence",
+          "rule": "Eval emits normalized local failure events for provider/model/mode-specific failures."
+        },
+        {
+          "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json#/items/EVAL-011",
+          "rule": "Eval failure events remain local and corpus_eligible false by default."
+        }
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "PULL-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "PULL-004",
           "allowed_statuses": [
             "implemented",
             "partial",
@@ -9657,20 +10942,36 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
+      ],
+      "gated_by_acceptance_items": [
+        {
+          "acceptance_item_id": "PULL-001",
+          "required_status": "implemented",
+          "reason": "Live eval work must not start until product pull shows a user recorded more than one workflow.",
+          "source_ref": "docs/product/prd.md#product-pull",
+          "evidence_mode": "product_signal"
+        },
+        {
+          "acceptance_item_id": "PULL-004",
+          "required_status": "implemented",
+          "reason": "Live eval work must not start until product pull shows a user asked to run live eval before an API/docs release.",
+          "source_ref": "docs/product/prd.md#product-pull",
+          "evidence_mode": "product_signal"
+        }
       ]
     },
     {
-      "task_id": "T12",
+      "task_id": "T12.1",
       "slice_type": "vertical",
-      "objective": "Implement eval baseline comparison, drift labels, cost/duration reporting, and diagnostic failure classification.",
+      "objective": "Implement eval baseline comparison, drift labels, cost/duration reporting, and diagnostic failure classification. Split: Eval Baseline, Drift, Cost, And Duration.",
       "risk_class": "high",
       "blocked_by": [
-        "T11",
+        "T11.2",
         "T2.6"
       ],
       "allowed_paths": [
-        ".factory/artifacts/pr-lifecycle/T12/",
-        ".factory/artifacts/task-runs/T12/",
+        ".factory/artifacts/pr-lifecycle/T12.1/",
+        ".factory/artifacts/task-runs/T12.1/",
         "cmd/lumyn/",
         "internal/",
         "tests/",
@@ -9707,14 +11008,7 @@
         "FR24: FR24: Least-Privilege Agent Runs - Lumyn eval must default to stateless local runs, explicit context, allowlisted env vars, and no ambient workspace access.",
         "FR25: FR25: Portable Artifacts - Workflow contracts, cassettes, traces, reports, and baselines must remain useful outside a hosted service.",
         "NFR10: NFR10: Cost Visibility - Live evals must show token and estimated cost information.",
-        "NFR11: NFR11: Stochastic Honesty - Eval must report run counts and pass rates. It must not hide variability behind a deterministic-looking boolean.",
-        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
-        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
-        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
-        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
-        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
-        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
-        "EVAL-011: Eval emits normalized local failure events for wrong turns, boundary violations, proof gaps, docs/API ambiguity, model-specific failures, stochastic variance, provider/model/eval mode, cost/duration, and fix target."
+        "NFR11: NFR11: Stochastic Honesty - Eval must report run counts and pass rates. It must not hide variability behind a deterministic-looking boolean."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -10053,14 +11347,7 @@
         "FR24",
         "FR25",
         "NFR10",
-        "NFR11",
-        "FR2",
-        "FR9",
-        "FR14",
-        "NFR6",
-        "NFR9",
-        "NFR12",
-        "EVAL-011"
+        "NFR11"
       ],
       "validation_contract_inheritance": {
         "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
@@ -10075,14 +11362,7 @@
           "FR24",
           "FR25",
           "NFR10",
-          "NFR11",
-          "FR2",
-          "FR9",
-          "FR14",
-          "NFR6",
-          "NFR9",
-          "NFR12",
-          "EVAL-011"
+          "NFR11"
         ]
       },
       "input_artifacts": [
@@ -10299,7 +11579,477 @@
             "validation_report",
             "scope_closure_report"
           ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
+      ]
+    },
+    {
+      "task_id": "T12.2",
+      "slice_type": "vertical",
+      "objective": "Implement eval baseline comparison, drift labels, cost/duration reporting, and diagnostic failure classification. Split: Eval Portable Artifacts And Normalized Diagnostics.",
+      "risk_class": "high",
+      "blocked_by": [
+        "T12.1"
+      ],
+      "allowed_paths": [
+        ".factory/artifacts/pr-lifecycle/T12.2/",
+        ".factory/artifacts/task-runs/T12.2/",
+        "cmd/lumyn/",
+        "internal/",
+        "tests/",
+        "baselines/",
+        "examples/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "validation_commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "FR22: FR22: Model Pinning - Lumyn must record provider, model, temperature, and model snapshot where available.",
+        "FR23: FR23: Baseline Comparison - Lumyn eval must compare against a saved baseline where configured and label drift risk when model snapshots are unavailable.",
+        "FR24: FR24: Least-Privilege Agent Runs - Lumyn eval must default to stateless local runs, explicit context, allowlisted env vars, and no ambient workspace access.",
+        "FR25: FR25: Portable Artifacts - Workflow contracts, cassettes, traces, reports, and baselines must remain useful outside a hosted service.",
+        "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
+        "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
+        "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
+        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
+        "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
+        "EVAL-011: Eval emits normalized local failure events for wrong turns, boundary violations, proof gaps, docs/API ambiguity, model-specific failures, stochastic variance, provider/model/eval mode, cost/duration, and fix target."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "commit-push",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": false,
+        "codex_review_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map",
+        "factoryd_run_once_report",
+        "coverage_gate_result"
+      ],
+      "test_matrix_refs": [
+        {
+          "tier": "Tier 1 Unit",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "go test ./... -count=1"
+          ]
         },
+        {
+          "tier": "Tier 9 Contract",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-contracts"
+          ]
+        },
+        {
+          "tier": "Tier 4 Acceptance",
+          "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+          "status": "planned"
+        },
+        {
+          "tier": "Tier 11 Scenario",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "status": "planned"
+        },
+        {
+          "tier": "Tier 12 Cross-System Integration",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "status": "blocked_until_approved"
+        }
+      ],
+      "security_scanner_gates": {
+        "required": true,
+        "scanner": "CodeQL",
+        "workflow_ref": ".github/workflows/codeql.yml",
+        "status_check": "CodeQL analyze",
+        "required_for_surfaces": [
+          "dependency additions",
+          "generated-code intake",
+          "CI or workflow changes",
+          "external calls",
+          "redaction/share/live/eval/provider code",
+          "data exposure",
+          "release-sensitive work"
+        ],
+        "exception_policy": "approved_exception_required"
+      },
+      "architecture_guidance_refs": [
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map",
+          "rule": "Medium/high risk tasks record state owner, feedback source, blast radius, source-of-truth impact, and rollback/deletion checks."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations",
+          "rule": "Behavior and schema/output changes use test-first evidence or a structured skipped reason."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#adr-and-decision-triggers",
+          "rule": "Boundary, public contract, failure semantics, credential/network, release, or major reliability/perf changes require ADR or decision note."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#performance-and-cost-triggers",
+          "rule": "Fan-out, repeated runs, or model calls declare expected cost/performance impact."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#reliability-and-recovery-triggers",
+          "rule": "Retry, cleanup, persistence, filesystem mutation, redaction, live network, and provider code require hardening/failure-mode evidence."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
+          "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
+        }
+      ],
+      "ci_lane_refs": [
+        {
+          "lane": "fast",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make lint-fast",
+            "make test-fast"
+          ]
+        },
+        {
+          "lane": "core",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make test-contracts",
+            "make prepush-full"
+          ]
+        },
+        {
+          "lane": "acceptance",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+          ]
+        },
+        {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
+          "lane": "risk",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "status_check_refs": [
+            "CodeQL analyze"
+          ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
+        }
+      ],
+      "engineering_policy_refs": [
+        {
+          "policy": "docs_parity",
+          "source_ref": "docs/dev/dev_guides.md#docs-parity",
+          "rule": "Behavior, flags, output shape, exit codes, artifact paths, install paths, and workflow semantics update docs and Factory planning artifacts together."
+        },
+        {
+          "policy": "output_contracts",
+          "source_ref": "docs/dev/dev_guides.md#output-contracts",
+          "rule": "Command-result JSON, exit codes, schemas, and product artifacts are public or executable contracts."
+        },
+        {
+          "policy": "release_integrity",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
+          "rule": "Release-sensitive work defines version, changelog, install, artifact-integrity, and UAT evidence before merge."
+        },
+        {
+          "policy": "provenance_evidence",
+          "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
+          "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
+        }
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
+        "mvp_eval_providers": [
+          "openai_compatible_http_adapter",
+          "anthropic_messages_http_adapter"
+        ]
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "T12 is scoped to implement eval baseline comparison, drift labels, cost/duration reporting, and diagnostic failure classification.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Add eval baseline comparison, drift labeling, cost/duration reporting, and diagnostic failure classification.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds baseline comparison, drift labels, cost/duration, and diagnostic failure classification contracts. It also preserves normalized local eval failure-event stability across baselines and drift diagnostics.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes.",
+        "Safety/corpus-ready evidence must remain local-first, schema-backed, and corpus_eligible false by default unless an explicit future opt-in scope change is approved."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T12 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "high",
+        "measurement_expectation": "Keep deterministic commands fast and local; live/eval work must record duration, retry, and cost evidence before closure.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": true,
+        "hypothesis": "Baseline drift, model snapshot uncertainty, high cost, or missing trace evidence must be classified rather than hidden as pass/fail noise.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence.",
+        "Schema-backed artifacts must validate against the declared schema version or fail closure.",
+        "Eval baseline and diagnostic failure records must keep normalized failure fields stable across repeated runs."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "FR2",
+        "FR9",
+        "FR14",
+        "NFR6",
+        "NFR9",
+        "NFR12",
+        "EVAL-011"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "FR2",
+          "FR9",
+          "FR14",
+          "NFR6",
+          "NFR9",
+          "NFR12",
+          "EVAL-011"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "gated_by_acceptance_items": [
+        {
+          "acceptance_item_id": "PULL-001",
+          "required_status": "implemented",
+          "reason": "Live eval work must not start until product pull shows a user recorded more than one workflow.",
+          "source_ref": "docs/product/prd.md#product-pull",
+          "evidence_mode": "product_signal"
+        },
+        {
+          "acceptance_item_id": "PULL-004",
+          "required_status": "implemented",
+          "reason": "Live eval work must not start until product pull shows a user asked to run live eval before an API/docs release.",
+          "source_ref": "docs/product/prd.md#product-pull",
+          "evidence_mode": "product_signal"
+        }
+      ],
+      "mvp_required_version_slices": [
+        "v0.2"
+      ],
+      "delivery_slice_refs": [
+        "v0.2"
+      ],
+      "safety_corpus_ready_evidence_refs": [
+        {
+          "source_ref": "docs/product/prd.md#safety-and-corpus-ready-evidence",
+          "rule": "Eval baselines and drift diagnostics preserve normalized failure fields across repeated runs."
+        },
+        {
+          "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json#/items/EVAL-011",
+          "rule": "Failure classification remains corpus-ready without hosted upload."
+        }
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
         {
           "acceptance_item_id": "FR2",
           "allowed_statuses": [

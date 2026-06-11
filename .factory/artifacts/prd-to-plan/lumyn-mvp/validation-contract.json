@@ -486,8 +486,10 @@
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
         "T10",
         "T2.7"
       ],
@@ -526,8 +528,10 @@
       "public_release_boundary": false,
       "completion_policy": "Required internal capability slice; live eval dispatch remains gated by product-pull evidence and approved model/network posture.",
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "acceptance_group_refs": [
         "live_agent_eval",
@@ -554,8 +558,10 @@
         "T4.1",
         "T4.2",
         "T4.3",
-        "T5",
-        "T6",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
         "T10",
         "T2.7"
       ],
@@ -630,8 +636,10 @@
       "required_for_completion": true,
       "public_release_boundary": false,
       "task_refs": [
-        "T11",
-        "T12"
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ],
       "acceptance_group_refs": [
         "live_agent_eval",
