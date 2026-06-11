@@ -109,3 +109,17 @@ The expected one-task proof command is:
 ```text
 FACTORY_REPO=/path/to/factory factoryd run --config .factory/factoryd.autoship.example.json --repo lumyn --loop --max-tasks 1 --json
 ```
+
+## Post-PRD Audit Or Review Findings
+
+Material findings from `app-audit` and `code-review` become governed work only
+after they are saved as a repo-local source list and ingested:
+
+```text
+FACTORY_REPO=/path/to/factory factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind audit --input product/audits/<mission>.md --mission <mission> --json
+FACTORY_REPO=/path/to/factory factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind review --input product/reviews/<mission>.md --mission <mission> --json
+```
+
+The generated `.factory/artifacts/post-prd/<mission>/` artifacts become the
+mission contract for execution. Do not mutate `docs/product/prd.md` unless a
+human explicitly promotes the finding into product scope.

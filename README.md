@@ -105,3 +105,14 @@ evidence are all verified:
 export FACTORY_REPO=../factory
 factoryd run --config .factory/factoryd.autoship.example.json --repo lumyn --loop --max-tasks 1 --json
 ```
+
+Post-PRD audit or review findings become governed work through `factoryd ingest`:
+
+```bash
+export FACTORY_REPO=../factory
+factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind audit --input product/audits/<mission>.md --mission <mission> --json
+factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind review --input product/reviews/<mission>.md --mission <mission> --json
+```
+
+Those commands create `.factory/artifacts/post-prd/<mission>/`; that directory
+becomes the execution contract for the follow-up mission.
