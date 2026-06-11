@@ -927,7 +927,7 @@ def has_lifecycle_gates(value: Any) -> bool:
         "local_validation_required",
         "ci_required",
         "codex_review_required",
-        "ship_pr_required",
+        "commit_push_required",
         "post_merge_monitor_required",
         "pr_lifecycle_report_required",
     ]
@@ -2092,7 +2092,7 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
             "ci_required": True,
             "code_review_required": False,
             "codex_review_required": True,
-            "ship_pr_required": True,
+            "commit_push_required": True,
             "post_merge_monitor_required": True,
             "pr_lifecycle_report_required": True,
             "skip_policy": "approved_exception_required",

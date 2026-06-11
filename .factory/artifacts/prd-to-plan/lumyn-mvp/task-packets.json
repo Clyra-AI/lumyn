@@ -317,10 +317,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "worker_type": "codex_cli",
       "factoryd_runtime": {
@@ -394,6 +394,94 @@
       ],
       "delivery_slice_refs": [
         "v0.0"
+      ],
+      "commands": [
+        "make lint-fast",
+        "make test-fast",
+        "make test-coverage",
+        "make test-contracts"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "FDN-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -711,10 +799,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "worker_type": "codex_cli",
       "factoryd_runtime": {
@@ -790,6 +878,109 @@
       ],
       "delivery_slice_refs": [
         "v0.0"
+      ],
+      "commands": [
+        "make test-fast",
+        "make test-coverage",
+        "make test-contracts",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "FDN-002",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR5",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -1113,10 +1304,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "worker_type": "codex_cli",
       "factoryd_runtime": {
@@ -1196,6 +1387,67 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "commands": [
+        "make lint-fast",
+        "make test-coverage",
+        "make test-contracts",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "FDL-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
       ]
     },
     {
@@ -1514,10 +1766,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "worker_type": "codex_cli",
       "factoryd_runtime": {
@@ -1581,6 +1833,67 @@
       },
       "input_artifacts": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "commands": [
+        "make lint-fast",
+        "make test-coverage",
+        "make test-contracts",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "FDAP-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
       ]
     },
     {
@@ -1899,10 +2212,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "worker_type": "codex_cli",
       "factoryd_runtime": {
@@ -1994,6 +2307,138 @@
           "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json#/items/FDN-003",
           "rule": "corpus_eligible defaults false and hosted upload remains out of MVP scope."
         }
+      ],
+      "commands": [
+        "make test-coverage",
+        "make test-contracts",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "FDN-003",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR4",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR6",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -2058,10 +2503,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "evidence_required": [
         "validation_report",
@@ -2397,6 +2842,212 @@
       ],
       "delivery_slice_refs": [
         "v0.0"
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "RCRR-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "RCRR-002",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "ACT-002",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR1",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR2",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR3",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR4",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR1",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR8",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -2460,10 +3111,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "evidence_required": [
         "validation_report",
@@ -2807,6 +3458,197 @@
       ],
       "delivery_slice_refs": [
         "v0.0"
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "RCRR-003",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "RCRR-009",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR6",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR8",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR5",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR6",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR2",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -2872,10 +3714,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "evidence_required": [
         "validation_report",
@@ -3225,6 +4067,242 @@
       ],
       "delivery_slice_refs": [
         "v0.0"
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "RCRR-004",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "ACT-004",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR5",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR6",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR7",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR7",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR13",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR2",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR6",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -3289,10 +4367,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "evidence_required": [
         "validation_report",
@@ -3636,6 +4714,197 @@
       ],
       "delivery_slice_refs": [
         "v0.0"
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "REC-QUALITY-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR6",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR2",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR13",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR2",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR6",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -3702,10 +4971,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "evidence_required": [
         "validation_report",
@@ -4057,6 +5326,287 @@
       ],
       "delivery_slice_refs": [
         "v0.0"
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "RCRR-005",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "RCRR-006",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "RCRR-007",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "ACT-003",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR10",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR11",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR2",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR3",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR4",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR2",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR6",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -4131,10 +5681,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "evidence_required": [
         "validation_report",
@@ -4521,7 +6071,334 @@
           "ACT-003": "30m"
         },
         "network_posture": "offline"
-      }
+      },
+      "commands": [
+        "make smoke-first-session",
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "RCRR-008",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "RCRR-010",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "RCRR-011",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "ACT-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "ACT-003",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "PULL-005",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR2",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR13",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR25",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR1",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR4",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR6",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "RCRR-012",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "ACT-002",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
+      ]
     },
     {
       "task_id": "T7",
@@ -4587,10 +6464,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "evidence_required": [
         "validation_report",
@@ -4940,6 +6817,227 @@
       ],
       "delivery_slice_refs": [
         "v0.1"
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "LVCIS-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "LVCIS-002",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "LVCIS-003",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "LVCIS-004",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "PULL-003",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR15",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR16",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR6",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -5000,10 +7098,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "evidence_required": [
         "validation_report",
@@ -5358,6 +7456,182 @@
           "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json#/items/LVCIS-009",
           "rule": "Final-state pass does not override boundary safety failure."
         }
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "LVCIS-005",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "LVCIS-006",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR17",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR18",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "LVCIS-009",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -5418,10 +7692,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "evidence_required": [
         "validation_report",
@@ -5763,6 +8037,152 @@
           "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json#/items/LVCIS-010",
           "rule": "PR lifecycle evidence keeps safety findings visible."
         }
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "LVCIS-007",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "PULL-002",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "LVCIS-010",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -5824,10 +8244,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "evidence_required": [
         "validation_report",
@@ -6177,6 +8597,212 @@
       "delivery_slice_refs": [
         "v0.0",
         "v0.1"
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "RCRR-009",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "LVCIS-008",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR8",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR25",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR5",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR6",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR2",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -6257,10 +8883,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "evidence_required": [
         "validation_report",
@@ -6675,6 +9301,362 @@
           "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json#/items/EVAL-011",
           "rule": "Eval failure events remain local and corpus_eligible false by default."
         }
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "EVAL-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "EVAL-002",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "EVAL-003",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "EVAL-004",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "EVAL-005",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "EVAL-007",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "EVAL-010",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "PULL-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "PULL-004",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR19",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR20",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR21",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR24",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR6",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR11",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR2",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "EVAL-011",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -6745,10 +9727,10 @@
         "ci_required": true,
         "code_review_required": false,
         "codex_review_required": true,
-        "ship_pr_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
-        "skip_policy": "approved_exception_required"
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
       },
       "evidence_required": [
         "validation_report",
@@ -7137,6 +10119,317 @@
           "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json#/items/EVAL-011",
           "rule": "Failure classification remains corpus-ready without hosted upload."
         }
+      ],
+      "commands": [
+        "make test-coverage",
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "EVAL-006",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "EVAL-007",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "EVAL-008",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "EVAL-009",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "EVAL-010",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR22",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR23",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR24",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR25",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR10",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR11",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR2",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR14",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR6",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "EVAL-011",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "work_proof_marker",
+            "validation_report",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
       ]
     }
   ],
