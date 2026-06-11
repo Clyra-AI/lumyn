@@ -20,6 +20,26 @@
       "branch_prefix": "codex",
       "worker_type": "codex_cli",
       "worker_command": "",
+      "runtime_control": {
+        "owner": "factoryd-operator",
+        "autonomy_level": "restricted",
+        "mission_paused": false,
+        "mission_canceled": false,
+        "disabled_adapters": [],
+        "max_write_scope_paths": [],
+        "release_freeze": {
+          "enabled": false,
+          "reason": "",
+          "exception_ref": ""
+        },
+        "launch_request": {
+          "requested_action": "continue_mission",
+          "requested_adapter": "codex_cli",
+          "expected_decision": "allow",
+          "reason_code": "within_runtime_control_limits"
+        },
+        "conflict_behavior": "fail_closed"
+      },
       "command_timeout_seconds": 300,
       "worker_timeout_seconds": 1800,
       "lease_ttl_seconds": 3600,

@@ -75,6 +75,12 @@ Durable evidence remains under `.factory/artifacts/`; claims, worktrees, daemon
 events, and single-task run reports remain under `.factoryd/` unless promoted
 into a committed Factory artifact.
 
+The active daemon configs carry a restricted `runtime_control` block. `factoryd`
+must honor that block before worker dispatch, including pause/cancel/freeze,
+disabled-adapter, read-only, and write-scope gates. Claimed task runs also emit
+a canonical `.factoryd/runs/<run>/mission-event-log.json` and rerun repo-level
+validation commands in the worker worktree after task changes are present.
+
 PRD-derived control truth under `.factory/artifacts/prd-to-plan/lumyn-mvp/` is
 trusted runtime/planning state. Product workers must not edit the context brief,
 execution plan, task packets, validation contract, acceptance mapping, or
