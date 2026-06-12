@@ -112,8 +112,10 @@ exception records in `.github/action-ref-exceptions.yaml`.
   replay foundation passes and a human approves that posture.
 - Live eval provider endpoint work, including OpenAI-compatible custom
   `base_url` endpoints and Anthropic adapters, is blocked by the
-  `model_provider_endpoint` capability gate. Generic network or credential
-  approval does not satisfy this gate.
+  `model_provider_endpoint` capability gate. Approval must record provider
+  identity, provider model, endpoint or `base_url`, credential environment,
+  budget posture, redaction posture, and allowlist. Generic network or
+  credential approval does not satisfy this gate.
 - PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
 - Test matrix and architecture propagation source: `docs/dev/dev_guides.md` and `docs/architecture/architecture_guides.md`.
 - Product task packets must preserve CI lane refs, docs parity, output contract, release integrity, provenance, systems-thinking, TDD, ADR, performance, reliability, and fail-closed requirements from those guides.

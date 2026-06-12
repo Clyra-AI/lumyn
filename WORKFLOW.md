@@ -27,9 +27,10 @@ Lumyn accepts work from:
 - Human approval is required before any live sandbox credential or generic
   non-deterministic network work is used.
 - Live eval provider endpoint work requires a complete
-  `model_provider_endpoint` grant with provider identity, endpoint or
-  `base_url`, credential environment, budget posture, redaction posture, and
-  network allowlist. Generic network or credential approval is not enough.
+  `model_provider_endpoint` grant with provider identity, provider model,
+  endpoint or `base_url`, credential environment, budget posture, redaction
+  posture, and network allowlist. Generic network or credential approval is not
+  enough.
 - Human approval is required before changing the pinned runtime, module path, or primary distribution target.
 
 ## Artifact Rules

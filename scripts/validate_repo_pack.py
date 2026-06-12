@@ -1167,17 +1167,20 @@ def validate_model_provider_gate(task: dict[str, Any]) -> None:
     missing_surfaces = {"openai_compatible_http", "anthropic_messages_http"} - provider_surfaces
     if missing_surfaces:
         fail(f"{task_id_value}.model_provider_requirements.provider_surfaces missing {sorted(missing_surfaces)}")
+    required_fields = {str(value) for value in requirements.get("required_fields", [])}
+    if "provider_model" not in required_fields:
+        fail(f"{task_id_value}.model_provider_requirements.required_fields must include provider_model")
     if task.get("requires_human_approval") is not False:
         fail(f"{task_id_value}.requires_human_approval must be false; model-only approval is represented by model_provider_endpoint grant")
     grants = (((task.get("factoryd_runtime") or {}).get("capability_grants")) or [])
     matching = [
         grant for grant in grants
         if isinstance(grant, dict)
-        and grant.get("task_id") == "*"
+        and str(grant.get("task_id", "")).strip() in {"*", task_id_value}
         and grant.get("capability") == "model_provider_endpoint"
     ]
     if len(matching) != 1:
-        fail(f"{task_id_value}.factoryd_runtime.capability_grants must include one wildcard model_provider_endpoint grant")
+        fail(f"{task_id_value}.factoryd_runtime.capability_grants must include one wildcard or task-scoped model_provider_endpoint grant")
     grant = matching[0]
     approved = grant.get("approved")
     if approved not in (False, True):
@@ -1186,6 +1189,7 @@ def validate_model_provider_gate(task: dict[str, Any]) -> None:
         "evidence_ref",
         "network_allowlist",
         "provider_identity",
+        "provider_model",
         "credential_environment",
         "budget_posture",
         "redaction_posture",
@@ -1198,6 +1202,7 @@ def validate_model_provider_gate(task: dict[str, Any]) -> None:
     if approved is True:
         checked_values = [
             grant.get("provider_identity"),
+            grant.get("provider_model"),
             grant.get("provider_endpoint") or grant.get("base_url"),
             grant.get("credential_environment"),
             grant.get("budget_posture"),

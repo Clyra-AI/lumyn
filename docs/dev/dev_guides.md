@@ -171,5 +171,7 @@ coverage exception.
   artifacts, and they require the same explicit `model_provider_endpoint` grant
   before live eval closure.
 - Eval provider work is blocked until deterministic replay foundation passes and
-  the task has a complete `model_provider_endpoint` grant. Generic network or
+  the task has a complete `model_provider_endpoint` grant naming provider
+  identity, provider model, endpoint or `base_url`, credential environment,
+  budget posture, redaction posture, and allowlist. Generic network or
   credential approval does not satisfy that model-specific gate.

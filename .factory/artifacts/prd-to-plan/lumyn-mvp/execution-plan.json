@@ -555,7 +555,7 @@
       "base_url",
       "api_key_env"
     ],
-    "network_policy": "blocked until deterministic replay foundation passes and a complete model_provider_endpoint grant approves provider identity, endpoint/base_url, credential environment, budget posture, redaction posture, and network allowlist"
+    "network_policy": "blocked until deterministic replay foundation passes and a complete model_provider_endpoint grant approves provider identity, provider model, endpoint/base_url, credential environment, budget posture, redaction posture, and network allowlist"
   },
   "factoryd_runtime": {
     "state_dir": ".factoryd/",

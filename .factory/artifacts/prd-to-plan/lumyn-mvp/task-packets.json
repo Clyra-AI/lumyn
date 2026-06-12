@@ -9997,7 +9997,7 @@
           "base_url",
           "api_key_env"
         ],
-        "network_policy": "blocked until deterministic replay foundation passes and a complete model_provider_endpoint grant approves provider identity, endpoint/base_url, credential environment, budget posture, redaction posture, and network allowlist"
+        "network_policy": "blocked until deterministic replay foundation passes and a complete model_provider_endpoint grant approves provider identity, provider model, endpoint/base_url, credential environment, budget posture, redaction posture, and network allowlist"
       },
       "worker_type": "codex_cli",
       "factoryd_runtime": {
@@ -10019,6 +10019,7 @@
               "pending-approved-model-provider-host"
             ],
             "provider_identity": "pending-approved-provider",
+            "provider_model": "pending-approved-model",
             "provider_endpoint": "pending-approved-provider-endpoint",
             "credential_environment": "pending-approved-model-provider-env-var",
             "budget_posture": "pending-approved-model-provider-budget",
@@ -10396,6 +10397,7 @@
         ],
         "required_fields": [
           "provider_identity",
+          "provider_model",
           "provider_endpoint_or_base_url",
           "credential_environment",
           "budget_posture",
@@ -10747,6 +10749,7 @@
               "pending-approved-model-provider-host"
             ],
             "provider_identity": "pending-approved-provider",
+            "provider_model": "pending-approved-model",
             "provider_endpoint": "pending-approved-provider-endpoint",
             "credential_environment": "pending-approved-model-provider-env-var",
             "budget_posture": "pending-approved-model-provider-budget",
@@ -11005,6 +11008,7 @@
         ],
         "required_fields": [
           "provider_identity",
+          "provider_model",
           "provider_endpoint_or_base_url",
           "credential_environment",
           "budget_posture",
