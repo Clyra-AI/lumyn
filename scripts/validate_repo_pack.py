@@ -1207,16 +1207,21 @@ def validate_model_provider_gate(task: dict[str, Any]) -> None:
     ]
     if active_wildcard_grants:
         fail(f"{task_id_value}.active model_provider_endpoint grants must be task-scoped, not wildcard")
-    matching = [
-        grant for grant_group in (seed_grants, active_grants)
-        for grant in grant_group
+    seed_matching = [
+        grant for grant in seed_grants
         if isinstance(grant, dict)
-        and (
-            str(grant.get("task_id", "")).strip() == task_id_value
-            or (grant_group is seed_grants and str(grant.get("task_id", "")).strip() == "*")
-        )
+        and str(grant.get("task_id", "")).strip() in {"*", task_id_value}
         and grant.get("capability") == "model_provider_endpoint"
     ]
+    if any(grant.get("approved") is True for grant in seed_matching):
+        fail(f"{task_id_value}.seed model_provider_endpoint grants must stay approved false; active approvals belong in .factory/factoryd*.json")
+    active_matching = [
+        grant for grant in active_grants
+        if isinstance(grant, dict)
+        and str(grant.get("task_id", "")).strip() == task_id_value
+        and grant.get("capability") == "model_provider_endpoint"
+    ]
+    matching = [*seed_matching, *active_matching]
     if not matching:
         fail(f"{task_id_value} must include one seed wildcard or task-scoped model_provider_endpoint grant in factoryd_runtime.capability_grants, or one task-scoped active .factory/factoryd*.json config grant")
     grant = next((candidate for candidate in matching if candidate.get("approved") is True), matching[0])
@@ -1236,7 +1241,7 @@ def validate_model_provider_gate(task: dict[str, Any]) -> None:
     if missing:
         fail(f"{task_id_value}.model_provider_endpoint grant missing fields: {missing}")
     allowlist = grant.get("network_allowlist")
-    if not isinstance(allowlist, list) or not all(str(item).strip() for item in allowlist):
+    if not isinstance(allowlist, list) or not all(isinstance(item, str) and item.strip() for item in allowlist):
         fail(f"{task_id_value}.model_provider_endpoint grant network_allowlist must be a non-empty string list")
     provider_endpoint = str(grant.get("provider_endpoint", "")).strip()
     base_url = str(grant.get("base_url", "")).strip()
@@ -2459,7 +2464,12 @@ def run_self_test() -> int:
         globals()["factoryd_config_capability_grants"] = original_config_grants
 
     pending_base_url_task = model_provider_gate_task("T11.1", "T11.1")
-    pending_base_url_grant = pending_base_url_task["factoryd_runtime"]["capability_grants"][0]
+    pending_base_url_task["factoryd_runtime"]["capability_grants"] = []
+    pending_base_url_grant = {
+        "task_id": "T11.1",
+        "capability": "model_provider_endpoint",
+        "evidence_ref": ".factory/artifacts/approvals/model_provider_endpoint.md",
+    }
     pending_base_url_grant.update(
         {
             "approved": True,
@@ -2474,12 +2484,49 @@ def run_self_test() -> int:
         }
     )
     try:
-        validate_model_provider_gate(pending_base_url_task)
+        globals()["factoryd_config_capability_grants"] = lambda: [pending_base_url_grant]
+        try:
+            validate_model_provider_gate(pending_base_url_task)
+        except AssertionError as exc:
+            if "pending placeholders" not in str(exc):
+                raise
+        else:
+            fail("self-test expected whitespace endpoint with pending base_url to fail")
+    finally:
+        globals()["factoryd_config_capability_grants"] = original_config_grants
+
+    approved_seed_task = model_provider_gate_task("T11.1", "T11.1")
+    approved_seed_grant = approved_seed_task["factoryd_runtime"]["capability_grants"][0]
+    approved_seed_grant.update(
+        {
+            "approved": True,
+            "network_allowlist": ["api.example.com"],
+            "provider_identity": "example-provider",
+            "provider_model": "example-model",
+            "provider_endpoint": "https://api.example.com/v1",
+            "credential_environment": "LUMYN_PROVIDER_API_KEY",
+            "budget_posture": "capped",
+            "redaction_posture": "redacted",
+        }
+    )
+    try:
+        validate_model_provider_gate(approved_seed_task)
     except AssertionError as exc:
-        if "pending placeholders" not in str(exc):
+        if "seed model_provider_endpoint grants must stay approved false" not in str(exc):
             raise
     else:
-        fail("self-test expected whitespace endpoint with pending base_url to fail")
+        fail("self-test expected approved seed model-provider grant to fail")
+
+    non_string_allowlist_task = model_provider_gate_task("T11.1", "T11.1")
+    non_string_allowlist_grant = non_string_allowlist_task["factoryd_runtime"]["capability_grants"][0]
+    non_string_allowlist_grant["network_allowlist"] = [{"host": "api.example.com"}]
+    try:
+        validate_model_provider_gate(non_string_allowlist_task)
+    except AssertionError as exc:
+        if "network_allowlist must be a non-empty string list" not in str(exc):
+            raise
+    else:
+        fail("self-test expected non-string provider allowlist to fail")
 
     unknown_gate_task = propagated_task("T3", ["T2.6"])
     unknown_gate_task["gated_by_acceptance_items"] = [
