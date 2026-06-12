@@ -1974,11 +1974,25 @@ def validate_factoryd_config(config: dict[str, Any], active_config: dict[str, An
         active_repos = active_config.get("repos")
         if not isinstance(active_repos, dict) or "lumyn" not in active_repos:
             fail(".factory/factoryd.json must define repos.lumyn")
-        if active_repos["lumyn"] != lumyn:
-            fail(".factory/factoryd.json repos.lumyn must match the safe attended example config")
+        active_lumyn = active_repos["lumyn"]
+        if not isinstance(active_lumyn, dict):
+            fail(".factory/factoryd.json repos.lumyn must be an object")
+        for key, expected in expected_paths.items():
+            if active_lumyn.get(key) != expected:
+                fail(f".factory/factoryd.json repos.lumyn.{key} must be {expected!r}")
+        validate_factoryd_runtime(active_lumyn, ".factory/factoryd.json repos.lumyn")
+        active_shipping = active_lumyn.get("shipping")
+        if not isinstance(active_shipping, dict):
+            fail(".factory/factoryd.json repos.lumyn must declare shipping block")
+        if active_lumyn.get("auto_ship") is not False or active_shipping.get("enabled") is not False:
+            fail(".factory/factoryd.json must remain safe-attended; use factoryd.autoship.example.json for full-loop shipping")
         active_factory = active_config.get("factory")
-        if not isinstance(active_factory, dict) or active_factory.get("repo_path") != "../../factory":
-            fail(".factory/factoryd.json factory.repo_path must point to sibling ../../factory")
+        if not isinstance(active_factory, dict):
+            fail(".factory/factoryd.json must define factory")
+        if not has_nonempty_string(active_factory.get("repo_path")):
+            fail(".factory/factoryd.json factory.repo_path must be non-empty")
+        if active_factory.get("profile_path") != "profiles/lumyn.yaml":
+            fail(".factory/factoryd.json factory.profile_path must be profiles/lumyn.yaml")
     autoship_repos = autoship_config.get("repos")
     if not isinstance(autoship_repos, dict) or "lumyn" not in autoship_repos:
         fail(".factory/factoryd.autoship.example.json must define repos.lumyn")
@@ -2516,6 +2530,76 @@ def run_self_test() -> int:
             globals()["FACTORYD_CONFIG"] = original_example_config
             globals()["FACTORYD_ACTIVE_CONFIG"] = original_active_config
             globals()["FACTORYD_AUTOSHIP_CONFIG"] = original_autoship_config
+
+    base_runtime = {
+        "repo_path": "..",
+        "acceptance_ledger": ACCEPTANCE_LEDGER_REF,
+        "task_packets": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+        "scope_closure_map": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        "validation_contract": ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+        "state_dir": "../.factoryd",
+        "workspace_root": "../.factoryd/workspaces",
+        "validation_commands": [
+            "python3 scripts/validate_repo_pack.py --self-test",
+            "python3 scripts/validate_repo_pack.py",
+        ],
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": [],
+        "auto_ship": False,
+        "shipping": {
+            "enabled": False,
+            "push_required": False,
+            "pr_required": False,
+            "ci_required": False,
+            "codex_review_required": False,
+            "merge_required": False,
+            "post_merge_required": False,
+            "scope_closure_required": False,
+            "push_command": "",
+            "open_pr_command": "",
+            "ci_command": "",
+            "codex_review_command": "",
+            "merge_command": "",
+            "post_merge_command": "",
+            "scope_closure_command": "",
+        },
+    }
+    base_config = {
+        "factory": {"repo_path": "${FACTORY_REPO}", "profile_path": "profiles/lumyn.yaml"},
+        "repos": {"lumyn": base_runtime},
+    }
+    active_runtime = json.loads(json.dumps(base_runtime))
+    active_runtime["capability_grants"] = [active_config_grant]
+    active_config_with_grant = {
+        "factory": {"repo_path": "${FACTORY_REPO}", "profile_path": "profiles/lumyn.yaml"},
+        "repos": {"lumyn": active_runtime},
+    }
+    autoship_runtime = json.loads(json.dumps(base_runtime))
+    autoship_runtime["auto_ship"] = True
+    autoship_runtime["shipping"].update(
+        {
+            "enabled": True,
+            "provider": "github_cli",
+            "push_required": True,
+            "pr_required": True,
+            "ci_required": True,
+            "codex_review_required": True,
+            "merge_required": True,
+            "post_merge_required": True,
+            "scope_closure_required": True,
+            "scope_closure_mode": "semantic",
+        }
+    )
+    autoship_config = {
+        "factory": {"repo_path": "${FACTORY_REPO}", "profile_path": "profiles/lumyn.yaml"},
+        "repos": {"lumyn": autoship_runtime},
+    }
+    validate_factoryd_config(base_config, active_config_with_grant, autoship_config)
 
     active_wildcard_task = model_provider_gate_task()
     active_wildcard_task["factoryd_runtime"]["capability_grants"] = []
