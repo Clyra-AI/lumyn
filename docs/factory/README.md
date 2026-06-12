@@ -96,6 +96,9 @@ Approved live approval, credential, or network work must be represented in
 the active `.factory/factoryd*.json` config through task-scoped
 `capability_grants`.
 Do not edit PRD-derived task packets just to bypass a daemon gate.
+`scripts/validate_repo_pack.py` validates both the planning-time seed grants in
+task packets and any active grants recorded in `.factory/factoryd*.json`, so
+operator approvals can remain daemon config instead of becoming PRD-plan drift.
 
 Autonomous shipping is disabled in `.factory/factoryd.example.json`. The
 explicit `.factory/factoryd.autoship.example.json` template may be used only

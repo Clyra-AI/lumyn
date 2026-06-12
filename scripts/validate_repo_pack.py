@@ -415,6 +415,22 @@ def load_json(path: Path) -> dict[str, Any]:
     return payload
 
 
+def factoryd_config_capability_grants() -> list[dict[str, Any]]:
+    grants: list[dict[str, Any]] = []
+    for path in [FACTORYD_CONFIG, FACTORYD_ACTIVE_CONFIG, FACTORYD_AUTOSHIP_CONFIG]:
+        if not path.exists():
+            continue
+        config = load_json(path)
+        repos = config.get("repos")
+        if isinstance(repos, dict):
+            for repo in repos.values():
+                if isinstance(repo, dict) and isinstance(repo.get("capability_grants"), list):
+                    grants.extend(grant for grant in repo["capability_grants"] if isinstance(grant, dict))
+        if isinstance(config.get("capability_grants"), list):
+            grants.extend(grant for grant in config["capability_grants"] if isinstance(grant, dict))
+    return grants
+
+
 def require_existing(relative_path: str) -> None:
     if not (ROOT / relative_path).exists():
         fail(f"missing required repo-pack file: {relative_path}")
@@ -1172,16 +1188,19 @@ def validate_model_provider_gate(task: dict[str, Any]) -> None:
         fail(f"{task_id_value}.model_provider_requirements.required_fields must include provider_model")
     if task.get("requires_human_approval") is not False:
         fail(f"{task_id_value}.requires_human_approval must be false; model-only approval is represented by model_provider_endpoint grant")
-    grants = (((task.get("factoryd_runtime") or {}).get("capability_grants")) or [])
+    grants = [
+        *(((task.get("factoryd_runtime") or {}).get("capability_grants")) or []),
+        *factoryd_config_capability_grants(),
+    ]
     matching = [
         grant for grant in grants
         if isinstance(grant, dict)
         and str(grant.get("task_id", "")).strip() in {"*", task_id_value}
         and grant.get("capability") == "model_provider_endpoint"
     ]
-    if len(matching) != 1:
-        fail(f"{task_id_value}.factoryd_runtime.capability_grants must include one wildcard or task-scoped model_provider_endpoint grant")
-    grant = matching[0]
+    if not matching:
+        fail(f"{task_id_value} must include one wildcard or task-scoped model_provider_endpoint grant in factoryd_runtime.capability_grants or active .factory/factoryd*.json config")
+    grant = next((candidate for candidate in matching if candidate.get("approved") is True), matching[0])
     approved = grant.get("approved")
     if approved not in (False, True):
         fail(f"{task_id_value}.model_provider_endpoint grant approved flag must be true or false")
