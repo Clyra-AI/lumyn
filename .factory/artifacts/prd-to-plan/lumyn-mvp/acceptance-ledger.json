@@ -586,7 +586,7 @@
       "acceptance_item_id": "FR19",
       "group_id": "functional_requirements",
       "source_ref": "docs/product/prd.md#functional-requirements",
-      "source_text": "FR19: Live Agent Eval - Lumyn must support live agent probes using OpenAI-compatible and Anthropic provider adapters behind a pluggable provider interface.",
+      "source_text": "FR19: Live Agent Eval - Lumyn must support live agent probes using OpenAI-compatible provider adapters, including custom base_url local endpoints, and Anthropic provider adapters behind a pluggable provider interface.",
       "kind": "functional_requirement",
       "evidence_mode": "automated",
       "closure_required_for": [
@@ -1617,7 +1617,7 @@
       "acceptance_item_id": "EVAL-001",
       "group_id": "live_agent_eval",
       "source_ref": "docs/product/prd.md#live-agent-eval-acceptance-tests",
-      "source_text": "`lumyn eval` runs OpenAI-compatible and Anthropic provider/model adapters when configured.",
+      "source_text": "`lumyn eval` runs OpenAI-compatible provider/model adapters, including custom base_url local endpoints, and Anthropic provider/model adapters when configured.",
       "kind": "acceptance_test",
       "evidence_mode": "external",
       "closure_required_for": [
@@ -1632,7 +1632,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "Provider credentials for OpenAI-compatible and Anthropic adapters require explicit approval before live closure."
+        "Provider credentials for OpenAI-compatible, local base_url, and Anthropic adapters require explicit approval before live closure."
       ]
     },
     {

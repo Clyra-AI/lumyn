@@ -160,7 +160,7 @@
         "EVAL-011"
       ],
       "requires_human_approval": [
-        "OpenAI-compatible model credential posture",
+        "OpenAI-compatible model credential and local base_url endpoint posture",
         "Anthropic model credential posture",
         "network allowlist"
       ],

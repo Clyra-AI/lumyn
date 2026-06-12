@@ -59,7 +59,7 @@
     "Active required_worker_chain values must use commit-push, not deprecated aliases such as ship-pr.",
     "Task packets must carry explicit scope_exclusions, alignment_gate_ref, and plan_drift_policy_ref inherited from the execution plan.",
     "Runtime pins must include toolchain_version, module_or_package_path, provider_policy, artifact_namespace, and live_work_policy before implementation starts.",
-    "Live eval MVP closure must cover OpenAI-compatible and Anthropic provider adapters when configured.",
+    "Live eval MVP closure must cover OpenAI-compatible provider adapters, including custom base_url local endpoints, and Anthropic provider adapters when configured.",
     "Coverage-gated tasks must carry make test-coverage evidence or an approved scoped coverage exception.",
     "CI control-set evidence must prove required-check metadata, least-privilege workflow permissions, concurrency, timeouts, toolchain-pin source, owner-review coverage, action-ref posture, and branch-protection expectations for lifecycle, workflow, policy, scanner, or autonomous shipping work.",
     "Version-slice coverage must map legacy v0.0, v0.1, and v0.2 internal slices to task refs, acceptance groups, and scope-closure entries before any full MVP completion claim.",
@@ -92,7 +92,8 @@
     "acceptance ledger item missing, unmapped, or closed only at group level",
     "required MVP version slice v0.0, v0.1, or v0.2 lacks task, acceptance mapping, validation-contract, or scope-closure coverage",
     "safety/corpus-ready acceptance items are missing from task packets, scope closure, validation contract, or delivery slices",
-    "normalized failure evidence omits corpus_eligible false by default or implies hosted telemetry/upload without approved scope change"
+    "normalized failure evidence omits corpus_eligible false by default or implies hosted telemetry/upload without approved scope change",
+    "live eval provider work bundles model weights or local inference-runtime payloads instead of using provider/base_url configuration"
   ],
   "runtime_pins": {
     "language": "go",
@@ -104,7 +105,7 @@
     "distribution_target": "standalone_binary",
     "secondary_distribution_target": "homebrew_after_first_binary",
     "not_primary_distribution_target": "pypi",
-    "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+    "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
     "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
     "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
     "mvp_eval_providers": [
@@ -404,7 +405,7 @@
     "FR16: FR16: Cleanup And Sandbox Hygiene - Lumyn must support cleanup steps, run IDs, idempotency where practical, and basic orphan detection.",
     "FR17: FR17: Action Boundary - Lumyn must support a first-class action-boundary object and deterministic boundary checks.",
     "FR18: FR18: Boundary Failure Semantics - Lumyn must fail a workflow when expected final state passes but configured action boundaries are violated.",
-    "FR19: FR19: Live Agent Eval - Lumyn must support live agent probes using OpenAI-compatible and Anthropic provider adapters behind a pluggable provider interface.",
+    "FR19: FR19: Live Agent Eval - Lumyn must support live agent probes using OpenAI-compatible provider adapters, including custom base_url local endpoints, and Anthropic provider adapters behind a pluggable provider interface.",
     "FR20: FR20: Eval Context Modes - Lumyn eval must support `surface_only` and `contract_assisted` modes.",
     "FR21: FR21: Eval Repetition - Lumyn eval must support repeated runs and report pass rate instead of hiding stochastic behavior.",
     "FR22: FR22: Model Pinning - Lumyn must record provider, model, temperature, and model snapshot where available.",
@@ -448,7 +449,7 @@
     "LVCIS-008: `lumyn share` re-runs redaction at export and produces a single self-contained artifact of a trace that opens with no Lumyn install or account; it fails closed if any value cannot be confidently redacted.",
     "LVCIS-009: Action-boundary violations that indicate scope escalation, data exposure risk, or out-of-policy action are labeled safety/security-relevant and fail even when final state passes.",
     "LVCIS-010: CI, JUnit, and PR-comment output surface completion result, proof strength, boundary status, safety/security finding count, and fix target.",
-    "EVAL-001: `lumyn eval` runs OpenAI-compatible and Anthropic provider/model adapters when configured.",
+    "EVAL-001: `lumyn eval` runs OpenAI-compatible provider/model adapters, including custom base_url local endpoints, and Anthropic provider/model adapters when configured.",
     "EVAL-002: Eval supports `surface_only` mode.",
     "EVAL-003: Eval supports `contract_assisted` mode.",
     "EVAL-004: Eval reports run count and pass rate.",
