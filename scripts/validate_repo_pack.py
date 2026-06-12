@@ -21,6 +21,7 @@ RISK_CLASSIFICATION = PLAN_DIR / "risk-classification.json"
 FACTORYD_CONFIG = ROOT / ".factory" / "factoryd.example.json"
 FACTORYD_ACTIVE_CONFIG = ROOT / ".factory" / "factoryd.json"
 FACTORYD_AUTOSHIP_CONFIG = ROOT / ".factory" / "factoryd.autoship.example.json"
+FACTORYD_REPO_KEY = "lumyn"
 REQUIRED_CHECKS = ROOT / ".github" / "required-checks.json"
 CODEOWNERS = ROOT / ".github" / "CODEOWNERS"
 ACTION_REF_EXCEPTIONS = ROOT / ".github" / "action-ref-exceptions.yaml"
@@ -423,10 +424,10 @@ def factoryd_config_capability_grants() -> list[dict[str, Any]]:
         config = load_json(path)
         repos = config.get("repos")
         if isinstance(repos, dict):
-            for repo in repos.values():
-                if isinstance(repo, dict) and isinstance(repo.get("capability_grants"), list):
-                    grants.extend(grant for grant in repo["capability_grants"] if isinstance(grant, dict))
-        if isinstance(config.get("capability_grants"), list):
+            repo = repos.get(FACTORYD_REPO_KEY)
+            if isinstance(repo, dict) and isinstance(repo.get("capability_grants"), list):
+                grants.extend(grant for grant in repo["capability_grants"] if isinstance(grant, dict))
+        elif isinstance(config.get("capability_grants"), list):
             grants.extend(grant for grant in config["capability_grants"] if isinstance(grant, dict))
     return grants
 
