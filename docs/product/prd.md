@@ -250,7 +250,7 @@ workflow YAML + product sources + sandbox + model config -> live agent attempts 
 Required capabilities:
 
 - `lumyn eval`
-- OpenAI-compatible and Anthropic provider adapters plus pluggable provider interface
+- OpenAI-compatible provider adapters, including custom `base_url` local endpoints, and Anthropic provider adapters plus pluggable provider interface
 - BYO model key
 - model, provider, and temperature pinning
 - `surface_only` eval mode
@@ -280,7 +280,10 @@ Post-MVP deferrals:
 - broad production observability
 - hosted scheduling
 
-OpenAI-compatible and Anthropic provider adapters are MVP scope; comparative multi-provider panels remain post-MVP.
+OpenAI-compatible and Anthropic provider adapters are MVP scope; comparative
+multi-provider panels remain post-MVP. Local open-source model servers are
+supported through the OpenAI-compatible `base_url` path when configured; Lumyn
+does not bundle model weights or local inference-runtime payloads.
 
 ---
 
@@ -1043,7 +1046,9 @@ Lumyn must fail a workflow when expected final state passes but configured actio
 
 ### FR19: Live Agent Eval
 
-Lumyn must support live agent probes using OpenAI-compatible and Anthropic provider adapters behind a pluggable provider interface.
+Lumyn must support live agent probes using OpenAI-compatible provider adapters,
+including custom `base_url` local endpoints, and Anthropic provider adapters
+behind a pluggable provider interface.
 
 ### FR20: Eval Context Modes
 
@@ -1152,7 +1157,7 @@ The MVP must explain value through local CLI output and local reports.
 - live known-path verify
 - sandbox cleanup and basic orphan detection
 - basic action-boundary object and checks
-- live agent eval with OpenAI-compatible and Anthropic provider adapters
+- live agent eval with OpenAI-compatible provider adapters, including custom `base_url` local endpoints, and Anthropic provider adapters
 - surface-only and contract-assisted eval
 - repeated eval runs
 - baseline comparison
@@ -1530,7 +1535,8 @@ Entry gate: the workflow contract, canonical evidence model, redaction pipeline,
 Build:
 
 - `eval`
-- OpenAI-compatible and Anthropic model/provider adapters
+- OpenAI-compatible model/provider adapters, including custom `base_url` local endpoints
+- Anthropic model/provider adapters
 - pluggable provider interface
 - surface-only context mode
 - contract-assisted context mode
@@ -1581,7 +1587,7 @@ The MVP is not complete until all acceptance groups pass.
 
 ### Live Agent Eval Acceptance Tests
 
-1. `lumyn eval` runs OpenAI-compatible and Anthropic provider/model adapters when configured.
+1. `lumyn eval` runs OpenAI-compatible provider/model adapters, including custom `base_url` local endpoints, and Anthropic provider/model adapters when configured.
 2. Eval supports `surface_only` mode.
 3. Eval supports `contract_assisted` mode.
 4. Eval reports run count and pass rate.

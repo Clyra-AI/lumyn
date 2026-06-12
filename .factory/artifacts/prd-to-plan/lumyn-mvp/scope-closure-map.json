@@ -423,7 +423,7 @@
       ],
       "evidence_refs": [],
       "blockers": [
-        "OpenAI-compatible model credential posture",
+        "OpenAI-compatible model credential and local base_url endpoint posture",
         "Anthropic model credential posture",
         "network allowlist"
       ],
@@ -432,7 +432,7 @@
         "anthropic_messages_http_adapter"
       ],
       "notes": [
-        "MVP live eval is not closed until both OpenAI-compatible and Anthropic provider adapters are implemented or an explicit human-approved scope exception is recorded.",
+        "MVP live eval is not closed until OpenAI-compatible provider adapters including custom base_url local endpoints and Anthropic provider adapters are implemented or an explicit human-approved scope exception is recorded.",
         "Eval failure evidence must be normalized locally for future opt-in corpus value while preserving local-first privacy by default."
       ],
       "scope_item_id": "live_agent_eval",

@@ -100,7 +100,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -573,7 +573,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -1081,7 +1081,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -1675,7 +1675,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -2118,7 +2118,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -2675,7 +2675,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -3288,7 +3288,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -3891,7 +3891,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -4544,7 +4544,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -5145,7 +5145,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -5749,7 +5749,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -6265,7 +6265,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -6905,7 +6905,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -7488,7 +7488,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -8122,7 +8122,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -8706,7 +8706,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -9268,7 +9268,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -9684,9 +9684,9 @@
       "acceptance_checks": [
         "Eval supports surface_only and contract_assisted modes.",
         "Eval reports run count and pass rate.",
-        "Eval runs OpenAI-compatible and Anthropic provider/model adapters when configured.",
+        "Eval runs OpenAI-compatible provider/model adapters, including custom base_url local endpoints, and Anthropic provider/model adapters when configured.",
         "Provider config records provider, model, temperature, base_url, and api_key_env.",
-        "EVAL-001: `lumyn eval` runs OpenAI-compatible and Anthropic provider/model adapters when configured.",
+        "EVAL-001: `lumyn eval` runs OpenAI-compatible provider/model adapters, including custom base_url local endpoints, and Anthropic provider/model adapters when configured.",
         "EVAL-002: Eval supports `surface_only` mode.",
         "EVAL-003: Eval supports `contract_assisted` mode.",
         "EVAL-004: Eval reports run count and pass rate.",
@@ -9694,7 +9694,7 @@
         "EVAL-007: Eval writes a local trace/report.",
         "EVAL-010: Eval is diagnostic by default unless an explicit gate is configured.",
         "FR9: FR9: Canonical Evidence Schema - Record, replay verify, live verify, eval, validators, and reports must consume canonical evidence events.",
-        "FR19: FR19: Live Agent Eval - Lumyn must support live agent probes using OpenAI-compatible and Anthropic provider adapters behind a pluggable provider interface.",
+        "FR19: FR19: Live Agent Eval - Lumyn must support live agent probes using OpenAI-compatible provider adapters, including custom base_url local endpoints, and Anthropic provider adapters behind a pluggable provider interface.",
         "FR20: FR20: Eval Context Modes - Lumyn eval must support `surface_only` and `contract_assisted` modes.",
         "FR21: FR21: Eval Repetition - Lumyn eval must support repeated runs and report pass rate instead of hiding stochastic behavior.",
         "FR24: FR24: Least-Privilege Agent Runs - Lumyn eval must default to stateless local runs, explicit context, allowlisted env vars, and no ambient workspace access.",
@@ -9703,7 +9703,7 @@
         "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible."
       ],
       "requires_human_approval": [
-        "OpenAI-compatible model credential posture",
+        "OpenAI-compatible model credential and local base_url endpoint posture",
         "Anthropic model credential posture",
         "network allowlist"
       ],
@@ -9900,7 +9900,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -10420,7 +10420,7 @@
         "EVAL-011: Eval emits normalized local failure events for wrong turns, boundary violations, proof gaps, docs/API ambiguity, model-specific failures, stochastic variance, provider/model/eval mode, cost/duration, and fix target."
       ],
       "requires_human_approval": [
-        "OpenAI-compatible model credential posture",
+        "OpenAI-compatible model credential and local base_url endpoint posture",
         "Anthropic model credential posture",
         "network allowlist"
       ],
@@ -10617,7 +10617,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -11197,7 +11197,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -11840,7 +11840,7 @@
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",

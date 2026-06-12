@@ -494,7 +494,7 @@
     "distribution_target": "standalone_binary",
     "secondary_distribution_target": "homebrew_after_first_binary",
     "not_primary_distribution_target": "pypi",
-    "provider_policy": "OpenAI-compatible HTTP and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+    "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
     "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
     "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
     "mvp_eval_providers": [
@@ -508,7 +508,7 @@
     "blocking_decisions": [
       "runtime: Go 1.26.4 with module github.com/Clyra-AI/lumyn",
       "distribution: standalone binary first, Homebrew later, PyPI not primary",
-      "provider: OpenAI-compatible HTTP and Anthropic Messages HTTP adapters for eval, no SDK-heavy dependency during deterministic bootstrap",
+      "provider: OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters for eval, no SDK-heavy dependency during deterministic bootstrap",
       "artifact namespace: Factory evidence in .factory/artifacts/ and product artifacts in workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
       "credential and live-work posture: no network, sandbox credentials, or model keys until deterministic replay passes and human approval unlocks them",
       "dependency policy: standard library first; pinned dependencies only when required and justified"

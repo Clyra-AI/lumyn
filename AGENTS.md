@@ -104,7 +104,9 @@ exception records in `.github/action-ref-exceptions.yaml`.
 - Runtime: Go `1.26.4`.
 - Module path: `github.com/Clyra-AI/lumyn`.
 - Distribution: standalone binary first, Homebrew next, PyPI not primary.
-- MVP eval providers: OpenAI-compatible HTTP and Anthropic Messages HTTP adapters behind a provider interface.
+- MVP eval providers: OpenAI-compatible HTTP, including custom `base_url` local
+  endpoints, and Anthropic Messages HTTP adapters behind a provider interface.
+- Lumyn does not bundle model weights or local inference-runtime payloads.
 - Artifact namespace: Factory artifacts in `.factory/artifacts/`; transient Factory material in `.factory/tmp/`; product artifacts in `workflows/`, `cassettes/`, `runs/`, `baselines/`, `schemas/`, and `examples/`.
 - Live sandbox, model-key, and network work is blocked until deterministic replay foundation passes and a human approves credential/network posture.
 - PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
