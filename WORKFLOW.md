@@ -36,7 +36,8 @@ Lumyn accepts work from:
 ## Artifact Rules
 
 - Durable Factory artifacts go under `.factory/artifacts/`.
-- Active safe attended `factoryd` config lives at `.factory/factoryd.json`.
+- Local active safe attended `factoryd` config lives at `.factory/factoryd.json`
+  after copying `.factory/factoryd.example.json`; it is gitignored.
 - Safe `factoryd` config template lives at `.factory/factoryd.example.json`.
 - Explicit full-loop `factoryd` config template lives at `.factory/factoryd.autoship.example.json`.
 - Ignored daemon runtime state goes under `.factoryd/`.

@@ -12,3 +12,4 @@ build/
 *.egg-info/
 .factoryd/
 .factory/tmp/
+.factory/factoryd.json

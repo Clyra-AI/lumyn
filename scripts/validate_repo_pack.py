@@ -1917,7 +1917,7 @@ def validate_safety_corpus_ready_plan(
 def validate_factoryd_config(config: dict[str, Any], active_config: dict[str, Any], autoship_config: dict[str, Any]) -> None:
     if contains_machine_local_path(config):
         fail(".factory/factoryd.example.json contains a machine-local absolute path")
-    if contains_machine_local_path(active_config):
+    if active_config and contains_machine_local_path(active_config):
         fail(".factory/factoryd.json contains a machine-local absolute path")
     if contains_machine_local_path(autoship_config):
         fail(".factory/factoryd.autoship.example.json contains a machine-local absolute path")
@@ -1970,14 +1970,15 @@ def validate_factoryd_config(config: dict[str, Any], active_config: dict[str, An
     ]:
         if shipping.get(key) != "":
             fail(f".factory/factoryd.example.json shipping.{key} must be empty until hooks are approved")
-    active_repos = active_config.get("repos")
-    if not isinstance(active_repos, dict) or "lumyn" not in active_repos:
-        fail(".factory/factoryd.json must define repos.lumyn")
-    if active_repos["lumyn"] != lumyn:
-        fail(".factory/factoryd.json repos.lumyn must match the safe attended example config")
-    active_factory = active_config.get("factory")
-    if not isinstance(active_factory, dict) or active_factory.get("repo_path") != "../../factory":
-        fail(".factory/factoryd.json factory.repo_path must point to sibling ../../factory")
+    if active_config:
+        active_repos = active_config.get("repos")
+        if not isinstance(active_repos, dict) or "lumyn" not in active_repos:
+            fail(".factory/factoryd.json must define repos.lumyn")
+        if active_repos["lumyn"] != lumyn:
+            fail(".factory/factoryd.json repos.lumyn must match the safe attended example config")
+        active_factory = active_config.get("factory")
+        if not isinstance(active_factory, dict) or active_factory.get("repo_path") != "../../factory":
+            fail(".factory/factoryd.json factory.repo_path must point to sibling ../../factory")
     autoship_repos = autoship_config.get("repos")
     if not isinstance(autoship_repos, dict) or "lumyn" not in autoship_repos:
         fail(".factory/factoryd.autoship.example.json must define repos.lumyn")
@@ -3012,7 +3013,7 @@ def main() -> int:
         packets = load_json(TASK_PACKETS)
         contract = load_json(VALIDATION_CONTRACT)
         factoryd_config = load_json(FACTORYD_CONFIG)
-        factoryd_active_config = load_json(FACTORYD_ACTIVE_CONFIG)
+        factoryd_active_config = load_json(FACTORYD_ACTIVE_CONFIG) if FACTORYD_ACTIVE_CONFIG.exists() else {}
         factoryd_autoship_config = load_json(FACTORYD_AUTOSHIP_CONFIG)
         acceptance_ledger = load_json(ACCEPTANCE_LEDGER)
         acceptance_mapping = load_json(ACCEPTANCE_MAPPING)
