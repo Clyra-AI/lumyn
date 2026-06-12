@@ -1156,6 +1156,50 @@ def validate_live_eval_dispatch_gates(task: dict[str, Any]) -> None:
             fail(f"{task_id_value}.gated_by_acceptance_items[{required_id}].evidence_mode must be product_signal")
 
 
+def validate_model_provider_gate(task: dict[str, Any]) -> None:
+    task_id_value = task_id(task)
+    if task.get("requires_model_provider_endpoint") is not True:
+        fail(f"{task_id_value}.requires_model_provider_endpoint must be true for live eval provider work")
+    requirements = task.get("model_provider_requirements")
+    if not isinstance(requirements, dict) or requirements.get("required_grant") != "model_provider_endpoint":
+        fail(f"{task_id_value}.model_provider_requirements must require model_provider_endpoint")
+    provider_surfaces = {str(value) for value in requirements.get("provider_surfaces", [])}
+    missing_surfaces = {"openai_compatible_http", "anthropic_messages_http"} - provider_surfaces
+    if missing_surfaces:
+        fail(f"{task_id_value}.model_provider_requirements.provider_surfaces missing {sorted(missing_surfaces)}")
+    if task.get("requires_human_approval") is not False:
+        fail(f"{task_id_value}.requires_human_approval must be false; model-only approval is represented by model_provider_endpoint grant")
+    grants = (((task.get("factoryd_runtime") or {}).get("capability_grants")) or [])
+    matching = [
+        grant for grant in grants
+        if isinstance(grant, dict)
+        and grant.get("task_id") == "*"
+        and grant.get("capability") == "model_provider_endpoint"
+    ]
+    if len(matching) != 1:
+        fail(f"{task_id_value}.factoryd_runtime.capability_grants must include one wildcard model_provider_endpoint grant")
+    grant = matching[0]
+    if grant.get("approved") is not False:
+        fail(f"{task_id_value}.model_provider_endpoint grant must remain unapproved until live provider posture is explicitly approved")
+    required_grant_fields = [
+        "evidence_ref",
+        "network_allowlist",
+        "provider_identity",
+        "provider_endpoint",
+        "credential_environment",
+        "budget_posture",
+        "redaction_posture",
+    ]
+    missing = [field for field in required_grant_fields if field not in grant or grant[field] in (None, "", [])]
+    if missing:
+        fail(f"{task_id_value}.model_provider_endpoint grant missing fields: {missing}")
+    if "model_provider_endpoint" not in str(grant.get("evidence_ref")):
+        fail(f"{task_id_value}.model_provider_endpoint grant evidence_ref must cite the alignment decision")
+    joined_stop_conditions = "\n".join(str(value) for value in task.get("stop_conditions", []))
+    if "model_provider_endpoint grant" not in joined_stop_conditions:
+        fail(f"{task_id_value}.stop_conditions must fail closed without model_provider_endpoint grant")
+
+
 def validate_task_version_slice_refs(task: dict[str, Any]) -> None:
     task_id_value = task_id(task)
     expected = expected_task_version_slices(task_id_value)
@@ -1483,6 +1527,9 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
             checks = "\n".join(str(value).lower() for value in task.get("acceptance_checks", []))
             if "openai-compatible" not in checks or "anthropic" not in checks:
                 fail("T11.1 acceptance_checks must name both OpenAI-compatible and Anthropic adapter coverage")
+            validate_model_provider_gate(task)
+        if current_task_id == "T11.2":
+            validate_model_provider_gate(task)
         if is_live_eval_dispatch_task(task):
             validate_live_eval_dispatch_gates(task)
     if any(task_ref in tasks_by_id for task_ref in ["T4", "T4.1", "T4.2", "T4.3"]):

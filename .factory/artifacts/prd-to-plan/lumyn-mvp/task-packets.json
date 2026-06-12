@@ -9702,11 +9702,7 @@
         "NFR11: NFR11: Stochastic Honesty - Eval must report run counts and pass rates. It must not hide variability behind a deterministic-looking boolean.",
         "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible."
       ],
-      "requires_human_approval": [
-        "OpenAI-compatible model credential and local base_url endpoint posture",
-        "Anthropic model credential posture",
-        "network allowlist"
-      ],
+      "requires_human_approval": false,
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
@@ -9897,10 +9893,10 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "live_work_policy": "blocked until deterministic replay foundation passes and complete model_provider_endpoint, sandbox credential, or network grants unlock the relevant live work",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; live provider endpoint work requires a complete model_provider_endpoint grant and no model key or network is used in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -9979,7 +9975,8 @@
         "runtime enforcement",
         "production trace import",
         "multi-provider eval panels",
-        "training shared models on private artifacts"
+        "training shared models on private artifacts",
+        "No model provider endpoint calls without a complete model_provider_endpoint grant."
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
       "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
@@ -10000,7 +9997,7 @@
           "base_url",
           "api_key_env"
         ],
-        "network_policy": "blocked until deterministic replay foundation passes and human approval unlocks model/network posture"
+        "network_policy": "blocked until deterministic replay foundation passes and a complete model_provider_endpoint grant approves provider identity, endpoint/base_url, credential environment, budget posture, redaction posture, and network allowlist"
       },
       "worker_type": "codex_cli",
       "factoryd_runtime": {
@@ -10012,7 +10009,22 @@
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
         "network_posture": "offline by default until live sandbox/model work is approved",
-        "capability_grants": []
+        "capability_grants": [
+          {
+            "task_id": "*",
+            "capability": "model_provider_endpoint",
+            "approved": false,
+            "evidence_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json#/alignment_decisions/model_provider_endpoint",
+            "network_allowlist": [
+              "pending-approved-model-provider-host"
+            ],
+            "provider_identity": "pending-approved-provider",
+            "provider_endpoint": "pending-approved-provider-endpoint",
+            "credential_environment": "pending-approved-model-provider-env-var",
+            "budget_posture": "pending-approved-model-provider-budget",
+            "redaction_posture": "pending-approved-model-provider-redaction"
+          }
+        ]
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -10024,7 +10036,8 @@
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
         "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
-        "acceptance ledger item missing, unmapped, or closed only at group level"
+        "acceptance ledger item missing, unmapped, or closed only at group level",
+        "model provider endpoint work attempted without model_provider_endpoint grant"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -10373,7 +10386,24 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "requires_model_provider_endpoint": true,
+      "model_provider_requirements": {
+        "required_grant": "model_provider_endpoint",
+        "provider_surfaces": [
+          "openai_compatible_http",
+          "anthropic_messages_http"
+        ],
+        "required_fields": [
+          "provider_identity",
+          "provider_endpoint_or_base_url",
+          "credential_environment",
+          "budget_posture",
+          "redaction_posture",
+          "network_allowlist"
+        ],
+        "approval_policy": "Live eval provider endpoint work for OpenAI-compatible/custom base_url and Anthropic adapters stays blocked until a complete model_provider_endpoint grant replaces pending placeholders."
+      }
     },
     {
       "task_id": "T11.2",
@@ -10419,11 +10449,7 @@
         "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
         "EVAL-011: Eval emits normalized local failure events for wrong turns, boundary violations, proof gaps, docs/API ambiguity, model-specific failures, stochastic variance, provider/model/eval mode, cost/duration, and fix target."
       ],
-      "requires_human_approval": [
-        "OpenAI-compatible model credential and local base_url endpoint posture",
-        "Anthropic model credential posture",
-        "network allowlist"
-      ],
+      "requires_human_approval": false,
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
@@ -10614,10 +10640,10 @@
           "schemas": "schemas/",
           "examples": "examples/"
         },
-        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "live_work_policy": "blocked until deterministic replay foundation passes and complete model_provider_endpoint, sandbox credential, or network grants unlock the relevant live work",
         "toolchain_version": "1.26.4",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
-        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; live provider endpoint work requires a complete model_provider_endpoint grant and no model key or network is used in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
         "mvp_eval_providers": [
           "openai_compatible_http_adapter",
@@ -10696,7 +10722,8 @@
         "runtime enforcement",
         "production trace import",
         "multi-provider eval panels",
-        "training shared models on private artifacts"
+        "training shared models on private artifacts",
+        "No model provider endpoint calls without a complete model_provider_endpoint grant."
       ],
       "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
       "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
@@ -10710,7 +10737,22 @@
         "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
         "network_posture": "offline by default until live sandbox/model work is approved",
-        "capability_grants": []
+        "capability_grants": [
+          {
+            "task_id": "*",
+            "capability": "model_provider_endpoint",
+            "approved": false,
+            "evidence_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json#/alignment_decisions/model_provider_endpoint",
+            "network_allowlist": [
+              "pending-approved-model-provider-host"
+            ],
+            "provider_identity": "pending-approved-provider",
+            "provider_endpoint": "pending-approved-provider-endpoint",
+            "credential_environment": "pending-approved-model-provider-env-var",
+            "budget_posture": "pending-approved-model-provider-budget",
+            "redaction_posture": "pending-approved-model-provider-redaction"
+          }
+        ]
       },
       "stop_conditions": [
         "missing runner-ready task contract",
@@ -10722,7 +10764,8 @@
         "credential or network access required before approval posture is unlocked",
         "coverage policy evidence is missing or below threshold without an approved scoped exception",
         "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
-        "acceptance ledger item missing, unmapped, or closed only at group level"
+        "acceptance ledger item missing, unmapped, or closed only at group level",
+        "model provider endpoint work attempted without model_provider_endpoint grant"
       ],
       "coverage_policy_refs": {
         "required": true,
@@ -10952,7 +10995,24 @@
           "source_ref": "docs/product/prd.md#product-pull",
           "evidence_mode": "product_signal"
         }
-      ]
+      ],
+      "requires_model_provider_endpoint": true,
+      "model_provider_requirements": {
+        "required_grant": "model_provider_endpoint",
+        "provider_surfaces": [
+          "openai_compatible_http",
+          "anthropic_messages_http"
+        ],
+        "required_fields": [
+          "provider_identity",
+          "provider_endpoint_or_base_url",
+          "credential_environment",
+          "budget_posture",
+          "redaction_posture",
+          "network_allowlist"
+        ],
+        "approval_policy": "Live eval provider endpoint work for OpenAI-compatible/custom base_url and Anthropic adapters stays blocked until a complete model_provider_endpoint grant replaces pending placeholders."
+      }
     },
     {
       "task_id": "T12.1",

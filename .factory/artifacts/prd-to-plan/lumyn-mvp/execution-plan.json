@@ -494,9 +494,9 @@
     "distribution_target": "standalone_binary",
     "secondary_distribution_target": "homebrew_after_first_binary",
     "not_primary_distribution_target": "pypi",
-    "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+    "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; live provider endpoint work requires a complete model_provider_endpoint grant and no model key or network is used in deterministic bootstrap",
     "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
-    "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+    "live_work_policy": "blocked until deterministic replay foundation passes and complete model_provider_endpoint, sandbox credential, or network grants unlock the relevant live work",
     "mvp_eval_providers": [
       "openai_compatible_http_adapter",
       "anthropic_messages_http_adapter"
@@ -555,7 +555,7 @@
       "base_url",
       "api_key_env"
     ],
-    "network_policy": "blocked until deterministic replay foundation passes and human approval unlocks model/network posture"
+    "network_policy": "blocked until deterministic replay foundation passes and a complete model_provider_endpoint grant approves provider identity, endpoint/base_url, credential environment, budget posture, redaction posture, and network allowlist"
   },
   "factoryd_runtime": {
     "state_dir": ".factoryd/",

@@ -168,6 +168,8 @@ coverage exception.
 - Provider config shape: `provider`, `model`, `temperature`, `base_url`, `api_key_env`.
 - Local open-source model servers are represented as OpenAI-compatible
   `base_url` endpoints. They are provider endpoints, not bundled model
-  artifacts, and they require the same explicit model-key/network approval before
-  live eval closure.
-- Eval provider work is blocked until deterministic replay foundation passes and model-key/network posture is approved.
+  artifacts, and they require the same explicit `model_provider_endpoint` grant
+  before live eval closure.
+- Eval provider work is blocked until deterministic replay foundation passes and
+  the task has a complete `model_provider_endpoint` grant. Generic network or
+  credential approval does not satisfy that model-specific gate.
