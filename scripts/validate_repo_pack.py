@@ -1981,6 +1981,9 @@ def validate_factoryd_config(config: dict[str, Any], active_config: dict[str, An
             if active_lumyn.get(key) != expected:
                 fail(f".factory/factoryd.json repos.lumyn.{key} must be {expected!r}")
         validate_factoryd_runtime(active_lumyn, ".factory/factoryd.json repos.lumyn")
+        active_commands = active_lumyn.get("validation_commands")
+        if not isinstance(active_commands, list) or "python3 scripts/validate_repo_pack.py" not in active_commands:
+            fail(".factory/factoryd.json must run validate_repo_pack.py")
         active_shipping = active_lumyn.get("shipping")
         if not isinstance(active_shipping, dict):
             fail(".factory/factoryd.json repos.lumyn must declare shipping block")
@@ -2600,6 +2603,15 @@ def run_self_test() -> int:
         "repos": {"lumyn": autoship_runtime},
     }
     validate_factoryd_config(base_config, active_config_with_grant, autoship_config)
+    bad_active_config = json.loads(json.dumps(active_config_with_grant))
+    bad_active_config["repos"]["lumyn"]["validation_commands"] = ["go test ./..."]
+    try:
+        validate_factoryd_config(base_config, bad_active_config, autoship_config)
+    except AssertionError as exc:
+        if "must run validate_repo_pack.py" not in str(exc):
+            raise
+    else:
+        fail("self-test expected active config without repo-pack validation to fail")
 
     active_wildcard_task = model_provider_gate_task()
     active_wildcard_task["factoryd_runtime"]["capability_grants"] = []
