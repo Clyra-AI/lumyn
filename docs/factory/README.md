@@ -93,12 +93,15 @@ offline product/runtime network posture until a specific live sandbox or model
 provider task is approved.
 
 Approved live approval, credential, or network work must be represented in
-the active `.factory/factoryd*.json` config through task-scoped
+the active `.factory/factoryd.json` config through task-scoped
 `capability_grants`.
 Do not edit PRD-derived task packets just to bypass a daemon gate.
 `scripts/validate_repo_pack.py` validates both the planning-time seed grants in
-task packets and any active grants recorded in `.factory/factoryd*.json`, so
+task packets and any active grants recorded in `.factory/factoryd.json`, so
 operator approvals can remain daemon config instead of becoming PRD-plan drift.
+The checked-in `.factory/factoryd.example.json` and
+`.factory/factoryd.autoship.example.json` files are templates only; their grants
+must not satisfy live/model approval gates.
 
 Autonomous shipping is disabled in `.factory/factoryd.example.json`. The
 explicit `.factory/factoryd.autoship.example.json` template may be used only
