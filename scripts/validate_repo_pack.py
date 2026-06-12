@@ -1240,11 +1240,31 @@ def validate_model_provider_gate(task: dict[str, Any]) -> None:
     missing = [field for field in required_grant_fields if field not in grant or missing_grant_value(grant[field])]
     if missing:
         fail(f"{task_id_value}.model_provider_endpoint grant missing fields: {missing}")
+    required_string_fields = [
+        "evidence_ref",
+        "provider_identity",
+        "provider_model",
+        "credential_environment",
+        "budget_posture",
+        "redaction_posture",
+    ]
+    non_string_fields = [
+        field for field in required_string_fields
+        if field in grant and not isinstance(grant.get(field), str)
+    ]
+    if non_string_fields:
+        fail(f"{task_id_value}.model_provider_endpoint grant fields must be non-empty strings: {non_string_fields}")
     allowlist = grant.get("network_allowlist")
     if not isinstance(allowlist, list) or not all(isinstance(item, str) and item.strip() for item in allowlist):
         fail(f"{task_id_value}.model_provider_endpoint grant network_allowlist must be a non-empty string list")
-    provider_endpoint = str(grant.get("provider_endpoint", "")).strip()
-    base_url = str(grant.get("base_url", "")).strip()
+    provider_endpoint_value = grant.get("provider_endpoint", "")
+    base_url_value = grant.get("base_url", "")
+    if provider_endpoint_value not in (None, "") and not isinstance(provider_endpoint_value, str):
+        fail(f"{task_id_value}.model_provider_endpoint grant provider_endpoint must be a string")
+    if base_url_value not in (None, "") and not isinstance(base_url_value, str):
+        fail(f"{task_id_value}.model_provider_endpoint grant base_url must be a string")
+    provider_endpoint = provider_endpoint_value.strip() if isinstance(provider_endpoint_value, str) else ""
+    base_url = base_url_value.strip() if isinstance(base_url_value, str) else ""
     provider_endpoint_or_base_url = provider_endpoint or base_url
     if not provider_endpoint_or_base_url:
         fail(f"{task_id_value}.model_provider_endpoint grant must include provider_endpoint or base_url")
@@ -2567,6 +2587,22 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected non-string provider allowlist to fail")
+
+    non_string_metadata_task = model_provider_gate_task("T11.1", "T11.1")
+    non_string_metadata_task["factoryd_runtime"]["capability_grants"] = []
+    non_string_metadata_grant = dict(active_config_grant)
+    non_string_metadata_grant["provider_model"] = {"name": "example-model"}
+    try:
+        globals()["factoryd_config_capability_grants"] = lambda: [non_string_metadata_grant]
+        try:
+            validate_model_provider_gate(non_string_metadata_task)
+        except AssertionError as exc:
+            if "fields must be non-empty strings" not in str(exc):
+                raise
+        else:
+            fail("self-test expected non-string provider metadata to fail")
+    finally:
+        globals()["factoryd_config_capability_grants"] = original_config_grants
 
     unknown_gate_task = propagated_task("T3", ["T2.6"])
     unknown_gate_task["gated_by_acceptance_items"] = [
