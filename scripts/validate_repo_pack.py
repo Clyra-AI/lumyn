@@ -431,6 +431,14 @@ def factoryd_config_capability_grants() -> list[dict[str, Any]]:
     return grants
 
 
+def missing_grant_value(value: Any) -> bool:
+    if value is None or value == []:
+        return True
+    if isinstance(value, str):
+        return not value.strip()
+    return False
+
+
 def require_existing(relative_path: str) -> None:
     if not (ROOT / relative_path).exists():
         fail(f"missing required repo-pack file: {relative_path}")
@@ -1213,13 +1221,13 @@ def validate_model_provider_gate(task: dict[str, Any]) -> None:
         "budget_posture",
         "redaction_posture",
     ]
-    missing = [field for field in required_grant_fields if field not in grant or grant[field] in (None, "", [])]
+    missing = [field for field in required_grant_fields if field not in grant or missing_grant_value(grant[field])]
     if missing:
         fail(f"{task_id_value}.model_provider_endpoint grant missing fields: {missing}")
     allowlist = grant.get("network_allowlist")
     if not isinstance(allowlist, list) or not all(str(item).strip() for item in allowlist):
         fail(f"{task_id_value}.model_provider_endpoint grant network_allowlist must be a non-empty string list")
-    if grant.get("provider_endpoint") in (None, "", []) and grant.get("base_url") in (None, "", []):
+    if not str(grant.get("provider_endpoint", "")).strip() and not str(grant.get("base_url", "")).strip():
         fail(f"{task_id_value}.model_provider_endpoint grant must include provider_endpoint or base_url")
     if approved is True:
         checked_values = [
