@@ -24,13 +24,20 @@ Lumyn accepts work from:
 
 - Plan approval is required before implementation work starts.
 - Merge approval is required before protected branch updates.
-- Human approval is required before any live sandbox credential, model key, or non-deterministic eval is used.
+- Human approval is required before any live sandbox credential or generic
+  non-deterministic network work is used.
+- Live eval provider endpoint work requires a complete
+  `model_provider_endpoint` grant with provider identity, provider model,
+  endpoint or `base_url`, credential environment, budget posture, redaction
+  posture, and network allowlist. Generic network or credential approval is not
+  enough.
 - Human approval is required before changing the pinned runtime, module path, or primary distribution target.
 
 ## Artifact Rules
 
 - Durable Factory artifacts go under `.factory/artifacts/`.
-- Active safe attended `factoryd` config lives at `.factory/factoryd.json`.
+- Local active safe attended `factoryd` config lives at `.factory/factoryd.json`
+  after copying `.factory/factoryd.example.json`; it is gitignored.
 - Safe `factoryd` config template lives at `.factory/factoryd.example.json`.
 - Explicit full-loop `factoryd` config template lives at `.factory/factoryd.autoship.example.json`.
 - Ignored daemon runtime state goes under `.factoryd/`.

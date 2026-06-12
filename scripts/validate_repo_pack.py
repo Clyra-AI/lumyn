@@ -5,6 +5,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import Any
 
 
@@ -21,6 +22,7 @@ RISK_CLASSIFICATION = PLAN_DIR / "risk-classification.json"
 FACTORYD_CONFIG = ROOT / ".factory" / "factoryd.example.json"
 FACTORYD_ACTIVE_CONFIG = ROOT / ".factory" / "factoryd.json"
 FACTORYD_AUTOSHIP_CONFIG = ROOT / ".factory" / "factoryd.autoship.example.json"
+FACTORYD_REPO_KEY = "lumyn"
 REQUIRED_CHECKS = ROOT / ".github" / "required-checks.json"
 CODEOWNERS = ROOT / ".github" / "CODEOWNERS"
 ACTION_REF_EXCEPTIONS = ROOT / ".github" / "action-ref-exceptions.yaml"
@@ -413,6 +415,29 @@ def load_json(path: Path) -> dict[str, Any]:
     if not isinstance(payload, dict):
         fail(f"{path.relative_to(ROOT)} must contain a JSON object")
     return payload
+
+
+def factoryd_config_capability_grants() -> list[dict[str, Any]]:
+    grants: list[dict[str, Any]] = []
+    if not FACTORYD_ACTIVE_CONFIG.exists():
+        return grants
+    config = load_json(FACTORYD_ACTIVE_CONFIG)
+    repos = config.get("repos")
+    if isinstance(repos, dict):
+        repo = repos.get(FACTORYD_REPO_KEY)
+        if isinstance(repo, dict) and isinstance(repo.get("capability_grants"), list):
+            grants.extend(grant for grant in repo["capability_grants"] if isinstance(grant, dict))
+    elif isinstance(config.get("capability_grants"), list):
+        grants.extend(grant for grant in config["capability_grants"] if isinstance(grant, dict))
+    return grants
+
+
+def missing_grant_value(value: Any) -> bool:
+    if value is None or value == []:
+        return True
+    if isinstance(value, str):
+        return not value.strip()
+    return False
 
 
 def require_existing(relative_path: str) -> None:
@@ -1156,6 +1181,132 @@ def validate_live_eval_dispatch_gates(task: dict[str, Any]) -> None:
             fail(f"{task_id_value}.gated_by_acceptance_items[{required_id}].evidence_mode must be product_signal")
 
 
+def validate_model_provider_gate(task: dict[str, Any]) -> None:
+    task_id_value = task_id(task)
+    if task.get("requires_model_provider_endpoint") is not True:
+        fail(f"{task_id_value}.requires_model_provider_endpoint must be true for live eval provider work")
+    requirements = task.get("model_provider_requirements")
+    if not isinstance(requirements, dict) or requirements.get("required_grant") != "model_provider_endpoint":
+        fail(f"{task_id_value}.model_provider_requirements must require model_provider_endpoint")
+    provider_surfaces = {str(value) for value in requirements.get("provider_surfaces", [])}
+    missing_surfaces = {"openai_compatible_http", "anthropic_messages_http"} - provider_surfaces
+    if missing_surfaces:
+        fail(f"{task_id_value}.model_provider_requirements.provider_surfaces missing {sorted(missing_surfaces)}")
+    required_fields = {str(value) for value in requirements.get("required_fields", [])}
+    expected_required_fields = {
+        "provider_identity",
+        "provider_model",
+        "provider_endpoint_or_base_url",
+        "credential_environment",
+        "budget_posture",
+        "redaction_posture",
+        "network_allowlist",
+    }
+    missing_required_fields = sorted(expected_required_fields - required_fields)
+    if missing_required_fields:
+        fail(f"{task_id_value}.model_provider_requirements.required_fields missing {missing_required_fields}")
+    if task.get("requires_human_approval") is not False:
+        fail(f"{task_id_value}.requires_human_approval must be false; model-only approval is represented by model_provider_endpoint grant")
+    required_grant_fields = [
+        "evidence_ref",
+        "network_allowlist",
+        "provider_identity",
+        "provider_model",
+        "credential_environment",
+        "budget_posture",
+        "redaction_posture",
+    ]
+    required_string_fields = [
+        "evidence_ref",
+        "provider_identity",
+        "provider_model",
+        "credential_environment",
+        "budget_posture",
+        "redaction_posture",
+    ]
+
+    def validate_provider_grant_fields(candidate: dict[str, Any], label: str) -> str:
+        missing = [
+            field for field in required_grant_fields
+            if field not in candidate or missing_grant_value(candidate[field])
+        ]
+        if missing:
+            fail(f"{label} missing fields: {missing}")
+        non_string_fields = [
+            field for field in required_string_fields
+            if field in candidate and not isinstance(candidate.get(field), str)
+        ]
+        if non_string_fields:
+            fail(f"{label} fields must be non-empty strings: {non_string_fields}")
+        allowlist = candidate.get("network_allowlist")
+        if not isinstance(allowlist, list) or not all(isinstance(item, str) and item.strip() for item in allowlist):
+            fail(f"{label} network_allowlist must be a non-empty string list")
+        provider_endpoint_value = candidate.get("provider_endpoint", "")
+        base_url_value = candidate.get("base_url", "")
+        if provider_endpoint_value not in (None, "") and not isinstance(provider_endpoint_value, str):
+            fail(f"{label} provider_endpoint must be a string")
+        if base_url_value not in (None, "") and not isinstance(base_url_value, str):
+            fail(f"{label} base_url must be a string")
+        provider_endpoint = provider_endpoint_value.strip() if isinstance(provider_endpoint_value, str) else ""
+        base_url = base_url_value.strip() if isinstance(base_url_value, str) else ""
+        provider_endpoint_or_base_url = provider_endpoint or base_url
+        if not provider_endpoint_or_base_url:
+            fail(f"{label} must include provider_endpoint or base_url")
+        return provider_endpoint_or_base_url
+
+    seed_grants = ((task.get("factoryd_runtime") or {}).get("capability_grants")) or []
+    active_grants = factoryd_config_capability_grants()
+    active_wildcard_grants = [
+        grant for grant in active_grants
+        if isinstance(grant, dict)
+        and str(grant.get("task_id", "")).strip() == "*"
+        and grant.get("capability") == "model_provider_endpoint"
+    ]
+    if active_wildcard_grants:
+        fail(f"{task_id_value}.active model_provider_endpoint grants must be task-scoped, not wildcard")
+    seed_matching = [
+        grant for grant in seed_grants
+        if isinstance(grant, dict)
+        and str(grant.get("task_id", "")).strip() in {"*", task_id_value}
+        and grant.get("capability") == "model_provider_endpoint"
+    ]
+    if any(grant.get("approved") is True for grant in seed_matching):
+        fail(f"{task_id_value}.seed model_provider_endpoint grants must stay approved false; active approvals belong in .factory/factoryd.json")
+    for seed_grant in seed_matching:
+        validate_provider_grant_fields(seed_grant, f"{task_id_value}.seed model_provider_endpoint grant")
+    active_matching = [
+        grant for grant in active_grants
+        if isinstance(grant, dict)
+        and str(grant.get("task_id", "")).strip() == task_id_value
+        and grant.get("capability") == "model_provider_endpoint"
+    ]
+    matching = [*seed_matching, *active_matching]
+    if not matching:
+        fail(f"{task_id_value} must include one seed wildcard or task-scoped model_provider_endpoint grant in factoryd_runtime.capability_grants, or one task-scoped active .factory/factoryd.json config grant")
+    grant = next((candidate for candidate in matching if candidate.get("approved") is True), matching[0])
+    approved = grant.get("approved")
+    if approved not in (False, True):
+        fail(f"{task_id_value}.model_provider_endpoint grant approved flag must be true or false")
+    provider_endpoint_or_base_url = validate_provider_grant_fields(grant, f"{task_id_value}.model_provider_endpoint grant")
+    if approved is True:
+        checked_values = [
+            grant.get("provider_identity"),
+            grant.get("provider_model"),
+            provider_endpoint_or_base_url,
+            grant.get("credential_environment"),
+            grant.get("budget_posture"),
+            grant.get("redaction_posture"),
+            *list(grant.get("network_allowlist") or []),
+        ]
+        if any("pending-approved" in str(value).lower() or str(value).lower().startswith("pending-") for value in checked_values):
+            fail(f"{task_id_value}.approved model_provider_endpoint grant must not use pending placeholders")
+    if "model_provider_endpoint" not in str(grant.get("evidence_ref")):
+        fail(f"{task_id_value}.model_provider_endpoint grant evidence_ref must cite the alignment decision")
+    joined_stop_conditions = "\n".join(str(value) for value in task.get("stop_conditions", []))
+    if "model_provider_endpoint grant" not in joined_stop_conditions:
+        fail(f"{task_id_value}.stop_conditions must fail closed without model_provider_endpoint grant")
+
+
 def validate_task_version_slice_refs(task: dict[str, Any]) -> None:
     task_id_value = task_id(task)
     expected = expected_task_version_slices(task_id_value)
@@ -1483,6 +1634,9 @@ def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> Non
             checks = "\n".join(str(value).lower() for value in task.get("acceptance_checks", []))
             if "openai-compatible" not in checks or "anthropic" not in checks:
                 fail("T11.1 acceptance_checks must name both OpenAI-compatible and Anthropic adapter coverage")
+            validate_model_provider_gate(task)
+        if current_task_id == "T11.2":
+            validate_model_provider_gate(task)
         if is_live_eval_dispatch_task(task):
             validate_live_eval_dispatch_gates(task)
     if any(task_ref in tasks_by_id for task_ref in ["T4", "T4.1", "T4.2", "T4.3"]):
@@ -1763,7 +1917,7 @@ def validate_safety_corpus_ready_plan(
 def validate_factoryd_config(config: dict[str, Any], active_config: dict[str, Any], autoship_config: dict[str, Any]) -> None:
     if contains_machine_local_path(config):
         fail(".factory/factoryd.example.json contains a machine-local absolute path")
-    if contains_machine_local_path(active_config):
+    if active_config and contains_machine_local_path(active_config):
         fail(".factory/factoryd.json contains a machine-local absolute path")
     if contains_machine_local_path(autoship_config):
         fail(".factory/factoryd.autoship.example.json contains a machine-local absolute path")
@@ -1816,14 +1970,32 @@ def validate_factoryd_config(config: dict[str, Any], active_config: dict[str, An
     ]:
         if shipping.get(key) != "":
             fail(f".factory/factoryd.example.json shipping.{key} must be empty until hooks are approved")
-    active_repos = active_config.get("repos")
-    if not isinstance(active_repos, dict) or "lumyn" not in active_repos:
-        fail(".factory/factoryd.json must define repos.lumyn")
-    if active_repos["lumyn"] != lumyn:
-        fail(".factory/factoryd.json repos.lumyn must match the safe attended example config")
-    active_factory = active_config.get("factory")
-    if not isinstance(active_factory, dict) or active_factory.get("repo_path") != "../../factory":
-        fail(".factory/factoryd.json factory.repo_path must point to sibling ../../factory")
+    if active_config:
+        active_repos = active_config.get("repos")
+        if not isinstance(active_repos, dict) or "lumyn" not in active_repos:
+            fail(".factory/factoryd.json must define repos.lumyn")
+        active_lumyn = active_repos["lumyn"]
+        if not isinstance(active_lumyn, dict):
+            fail(".factory/factoryd.json repos.lumyn must be an object")
+        for key, expected in expected_paths.items():
+            if active_lumyn.get(key) != expected:
+                fail(f".factory/factoryd.json repos.lumyn.{key} must be {expected!r}")
+        validate_factoryd_runtime(active_lumyn, ".factory/factoryd.json repos.lumyn")
+        active_commands = active_lumyn.get("validation_commands")
+        if not isinstance(active_commands, list) or "python3 scripts/validate_repo_pack.py" not in active_commands:
+            fail(".factory/factoryd.json must run validate_repo_pack.py")
+        active_shipping = active_lumyn.get("shipping")
+        if not isinstance(active_shipping, dict):
+            fail(".factory/factoryd.json repos.lumyn must declare shipping block")
+        if active_lumyn.get("auto_ship") is not False or active_shipping.get("enabled") is not False:
+            fail(".factory/factoryd.json must remain safe-attended; use factoryd.autoship.example.json for full-loop shipping")
+        active_factory = active_config.get("factory")
+        if not isinstance(active_factory, dict):
+            fail(".factory/factoryd.json must define factory")
+        if not has_nonempty_string(active_factory.get("repo_path")):
+            fail(".factory/factoryd.json factory.repo_path must be non-empty")
+        if active_factory.get("profile_path") != "profiles/lumyn.yaml":
+            fail(".factory/factoryd.json factory.profile_path must be profiles/lumyn.yaml")
     autoship_repos = autoship_config.get("repos")
     if not isinstance(autoship_repos, dict) or "lumyn" not in autoship_repos:
         fail(".factory/factoryd.autoship.example.json must define repos.lumyn")
@@ -2269,6 +2441,46 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
     }
 
 
+def model_provider_gate_task(task_id_value: str = "T11.1", grant_task_id: str = "*") -> dict[str, Any]:
+    task = propagated_task(task_id_value, ["T11"])
+    task.update(
+        {
+            "requires_model_provider_endpoint": True,
+            "requires_human_approval": False,
+            "model_provider_requirements": {
+                "required_grant": "model_provider_endpoint",
+                "provider_surfaces": ["openai_compatible_http", "anthropic_messages_http"],
+                "required_fields": [
+                    "provider_identity",
+                    "provider_model",
+                    "provider_endpoint_or_base_url",
+                    "credential_environment",
+                    "budget_posture",
+                    "redaction_posture",
+                    "network_allowlist",
+                ],
+            },
+        }
+    )
+    task["factoryd_runtime"]["capability_grants"] = [
+        {
+            "task_id": grant_task_id,
+            "capability": "model_provider_endpoint",
+            "approved": False,
+            "evidence_ref": ".factory/artifacts/approvals/model_provider_endpoint.md",
+            "network_allowlist": ["pending-approved-provider-host"],
+            "provider_identity": "pending-approved-provider",
+            "provider_model": "pending-approved-model",
+            "provider_endpoint": "pending-approved-provider-endpoint",
+            "credential_environment": "pending-approved-credential-environment",
+            "budget_posture": "pending-approved-budget",
+            "redaction_posture": "pending-approved-redaction",
+        }
+    ]
+    task["stop_conditions"].append("missing model_provider_endpoint grant")
+    return task
+
+
 def run_self_test() -> int:
     valid_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
     validate_task_packets(valid_packets, "T2.6")
@@ -2278,6 +2490,266 @@ def run_self_test() -> int:
         fail("self-test expected T2.5 lifecycle baseline task to remain delivery-slice exempt")
     if contains_machine_local_path(".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate"):
         fail("self-test expected repo-relative JSON pointer to remain portable")
+
+    validate_model_provider_gate(model_provider_gate_task())
+
+    original_config_grants = factoryd_config_capability_grants
+    original_example_config = FACTORYD_CONFIG
+    original_active_config = FACTORYD_ACTIVE_CONFIG
+    original_autoship_config = FACTORYD_AUTOSHIP_CONFIG
+    active_config_grant = {
+        "task_id": "T11.1",
+        "capability": "model_provider_endpoint",
+        "approved": True,
+        "evidence_ref": ".factory/artifacts/approvals/model_provider_endpoint.md",
+        "network_allowlist": ["api.example.com"],
+        "provider_identity": "example-provider",
+        "provider_model": "example-model",
+        "provider_endpoint": "https://api.example.com/v1",
+        "credential_environment": "LUMYN_PROVIDER_API_KEY",
+        "budget_posture": "capped",
+        "redaction_posture": "redacted",
+    }
+    with TemporaryDirectory() as temp_dir:
+        temp_root = Path(temp_dir)
+        example_config = temp_root / "factoryd.example.json"
+        active_config = temp_root / "factoryd.json"
+        autoship_config = temp_root / "factoryd.autoship.example.json"
+        config_payload = {"repos": {FACTORYD_REPO_KEY: {"capability_grants": [active_config_grant]}}}
+        empty_active_payload = {"repos": {FACTORYD_REPO_KEY: {"capability_grants": []}}}
+        example_config.write_text(json.dumps(config_payload), encoding="utf-8")
+        autoship_config.write_text(json.dumps(config_payload), encoding="utf-8")
+        active_config.write_text(json.dumps(empty_active_payload), encoding="utf-8")
+        try:
+            globals()["FACTORYD_CONFIG"] = example_config
+            globals()["FACTORYD_ACTIVE_CONFIG"] = active_config
+            globals()["FACTORYD_AUTOSHIP_CONFIG"] = autoship_config
+            if factoryd_config_capability_grants():
+                fail("self-test expected example and autoship config grants to be ignored")
+            active_config.write_text(json.dumps(config_payload), encoding="utf-8")
+            if factoryd_config_capability_grants() != [active_config_grant]:
+                fail("self-test expected active factoryd.json grants to be visible")
+        finally:
+            globals()["FACTORYD_CONFIG"] = original_example_config
+            globals()["FACTORYD_ACTIVE_CONFIG"] = original_active_config
+            globals()["FACTORYD_AUTOSHIP_CONFIG"] = original_autoship_config
+
+    base_runtime = {
+        "repo_path": "..",
+        "acceptance_ledger": ACCEPTANCE_LEDGER_REF,
+        "task_packets": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+        "scope_closure_map": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        "validation_contract": ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+        "state_dir": "../.factoryd",
+        "workspace_root": "../.factoryd/workspaces",
+        "validation_commands": [
+            "python3 scripts/validate_repo_pack.py --self-test",
+            "python3 scripts/validate_repo_pack.py",
+        ],
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": [],
+        "auto_ship": False,
+        "shipping": {
+            "enabled": False,
+            "push_required": False,
+            "pr_required": False,
+            "ci_required": False,
+            "codex_review_required": False,
+            "merge_required": False,
+            "post_merge_required": False,
+            "scope_closure_required": False,
+            "push_command": "",
+            "open_pr_command": "",
+            "ci_command": "",
+            "codex_review_command": "",
+            "merge_command": "",
+            "post_merge_command": "",
+            "scope_closure_command": "",
+        },
+    }
+    base_config = {
+        "factory": {"repo_path": "${FACTORY_REPO}", "profile_path": "profiles/lumyn.yaml"},
+        "repos": {"lumyn": base_runtime},
+    }
+    active_runtime = json.loads(json.dumps(base_runtime))
+    active_runtime["capability_grants"] = [active_config_grant]
+    active_config_with_grant = {
+        "factory": {"repo_path": "${FACTORY_REPO}", "profile_path": "profiles/lumyn.yaml"},
+        "repos": {"lumyn": active_runtime},
+    }
+    autoship_runtime = json.loads(json.dumps(base_runtime))
+    autoship_runtime["auto_ship"] = True
+    autoship_runtime["shipping"].update(
+        {
+            "enabled": True,
+            "provider": "github_cli",
+            "push_required": True,
+            "pr_required": True,
+            "ci_required": True,
+            "codex_review_required": True,
+            "merge_required": True,
+            "post_merge_required": True,
+            "scope_closure_required": True,
+            "scope_closure_mode": "semantic",
+        }
+    )
+    autoship_config = {
+        "factory": {"repo_path": "${FACTORY_REPO}", "profile_path": "profiles/lumyn.yaml"},
+        "repos": {"lumyn": autoship_runtime},
+    }
+    validate_factoryd_config(base_config, active_config_with_grant, autoship_config)
+    bad_active_config = json.loads(json.dumps(active_config_with_grant))
+    bad_active_config["repos"]["lumyn"]["validation_commands"] = ["go test ./..."]
+    try:
+        validate_factoryd_config(base_config, bad_active_config, autoship_config)
+    except AssertionError as exc:
+        if "must run validate_repo_pack.py" not in str(exc):
+            raise
+    else:
+        fail("self-test expected active config without repo-pack validation to fail")
+
+    active_wildcard_task = model_provider_gate_task()
+    active_wildcard_task["factoryd_runtime"]["capability_grants"] = []
+    active_wildcard_grant = {
+        "task_id": "*",
+        "capability": "model_provider_endpoint",
+        "approved": True,
+        "evidence_ref": ".factory/artifacts/approvals/model_provider_endpoint.md",
+        "network_allowlist": ["api.example.com"],
+        "provider_identity": "example-provider",
+        "provider_model": "example-model",
+        "provider_endpoint": "https://api.example.com/v1",
+        "credential_environment": "LUMYN_PROVIDER_API_KEY",
+        "budget_posture": "capped",
+        "redaction_posture": "redacted",
+    }
+    try:
+        globals()["factoryd_config_capability_grants"] = lambda: [active_wildcard_grant]
+        try:
+            validate_model_provider_gate(active_wildcard_task)
+        except AssertionError as exc:
+            if "active model_provider_endpoint grants must be task-scoped" not in str(exc):
+                raise
+        else:
+            fail("self-test expected active wildcard model-provider grant to fail")
+    finally:
+        globals()["factoryd_config_capability_grants"] = original_config_grants
+
+    pending_base_url_task = model_provider_gate_task("T11.1", "T11.1")
+    pending_base_url_task["factoryd_runtime"]["capability_grants"] = []
+    pending_base_url_grant = {
+        "task_id": "T11.1",
+        "capability": "model_provider_endpoint",
+        "evidence_ref": ".factory/artifacts/approvals/model_provider_endpoint.md",
+    }
+    pending_base_url_grant.update(
+        {
+            "approved": True,
+            "network_allowlist": ["api.example.com"],
+            "provider_identity": "example-provider",
+            "provider_model": "example-model",
+            "provider_endpoint": "   ",
+            "base_url": "pending-approved-base-url",
+            "credential_environment": "LUMYN_PROVIDER_API_KEY",
+            "budget_posture": "capped",
+            "redaction_posture": "redacted",
+        }
+    )
+    try:
+        globals()["factoryd_config_capability_grants"] = lambda: [pending_base_url_grant]
+        try:
+            validate_model_provider_gate(pending_base_url_task)
+        except AssertionError as exc:
+            if "pending placeholders" not in str(exc):
+                raise
+        else:
+            fail("self-test expected whitespace endpoint with pending base_url to fail")
+    finally:
+        globals()["factoryd_config_capability_grants"] = original_config_grants
+
+    approved_seed_task = model_provider_gate_task("T11.1", "T11.1")
+    approved_seed_grant = approved_seed_task["factoryd_runtime"]["capability_grants"][0]
+    approved_seed_grant.update(
+        {
+            "approved": True,
+            "network_allowlist": ["api.example.com"],
+            "provider_identity": "example-provider",
+            "provider_model": "example-model",
+            "provider_endpoint": "https://api.example.com/v1",
+            "credential_environment": "LUMYN_PROVIDER_API_KEY",
+            "budget_posture": "capped",
+            "redaction_posture": "redacted",
+        }
+    )
+    try:
+        validate_model_provider_gate(approved_seed_task)
+    except AssertionError as exc:
+        if "seed model_provider_endpoint grants must stay approved false" not in str(exc):
+            raise
+    else:
+        fail("self-test expected approved seed model-provider grant to fail")
+
+    non_string_allowlist_task = model_provider_gate_task("T11.1", "T11.1")
+    non_string_allowlist_grant = non_string_allowlist_task["factoryd_runtime"]["capability_grants"][0]
+    non_string_allowlist_grant["network_allowlist"] = [{"host": "api.example.com"}]
+    try:
+        validate_model_provider_gate(non_string_allowlist_task)
+    except AssertionError as exc:
+        if "network_allowlist must be a non-empty string list" not in str(exc):
+            raise
+    else:
+        fail("self-test expected non-string provider allowlist to fail")
+
+    non_string_metadata_task = model_provider_gate_task("T11.1", "T11.1")
+    non_string_metadata_task["factoryd_runtime"]["capability_grants"] = []
+    non_string_metadata_grant = dict(active_config_grant)
+    non_string_metadata_grant["provider_model"] = {"name": "example-model"}
+    try:
+        globals()["factoryd_config_capability_grants"] = lambda: [non_string_metadata_grant]
+        try:
+            validate_model_provider_gate(non_string_metadata_task)
+        except AssertionError as exc:
+            if "fields must be non-empty strings" not in str(exc):
+                raise
+        else:
+            fail("self-test expected non-string provider metadata to fail")
+    finally:
+        globals()["factoryd_config_capability_grants"] = original_config_grants
+
+    missing_requirement_field_task = model_provider_gate_task("T11.1", "T11.1")
+    missing_requirement_field_task["model_provider_requirements"]["required_fields"].remove("network_allowlist")
+    try:
+        validate_model_provider_gate(missing_requirement_field_task)
+    except AssertionError as exc:
+        if "required_fields missing" not in str(exc):
+            raise
+    else:
+        fail("self-test expected missing model-provider requirement field to fail")
+
+    missing_seed_metadata_task = model_provider_gate_task("T11.1", "T11.1")
+    missing_seed_metadata_task["factoryd_runtime"]["capability_grants"] = [
+        {
+            "task_id": "T11.1",
+            "capability": "model_provider_endpoint",
+            "approved": False,
+        }
+    ]
+    try:
+        globals()["factoryd_config_capability_grants"] = lambda: [active_config_grant]
+        try:
+            validate_model_provider_gate(missing_seed_metadata_task)
+        except AssertionError as exc:
+            if "seed model_provider_endpoint grant missing fields" not in str(exc):
+                raise
+        else:
+            fail("self-test expected missing seed provider metadata to fail")
+    finally:
+        globals()["factoryd_config_capability_grants"] = original_config_grants
 
     unknown_gate_task = propagated_task("T3", ["T2.6"])
     unknown_gate_task["gated_by_acceptance_items"] = [
@@ -2637,7 +3109,7 @@ def main() -> int:
         packets = load_json(TASK_PACKETS)
         contract = load_json(VALIDATION_CONTRACT)
         factoryd_config = load_json(FACTORYD_CONFIG)
-        factoryd_active_config = load_json(FACTORYD_ACTIVE_CONFIG)
+        factoryd_active_config = load_json(FACTORYD_ACTIVE_CONFIG) if FACTORYD_ACTIVE_CONFIG.exists() else {}
         factoryd_autoship_config = load_json(FACTORYD_AUTOSHIP_CONFIG)
         acceptance_ledger = load_json(ACCEPTANCE_LEDGER)
         acceptance_mapping = load_json(ACCEPTANCE_MAPPING)

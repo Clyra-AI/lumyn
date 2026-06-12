@@ -18,6 +18,11 @@ The MVP includes:
 - live agent eval with OpenAI-compatible provider adapters, including custom `base_url` local endpoints, Anthropic provider adapters, repeated runs, cost/duration reporting, and baseline comparison
 
 Post-MVP exclusions include MCP recording, event assertions, hosted dashboards, runtime enforcement, production trace import, and multi-provider eval panels. OpenAI-compatible and Anthropic adapters are MVP scope; comparative multi-provider panels are not. Local open-source model servers are supported through the OpenAI-compatible `base_url` path; Lumyn does not bundle model weights or local inference-runtime payloads.
+Live eval provider endpoints, including custom `base_url` endpoints, stay
+blocked until the repo records a complete `model_provider_endpoint` grant with
+provider identity, provider model, endpoint or `base_url`, credential
+environment, budget posture, redaction posture, and allowlist; generic network
+or credential approval is not enough.
 
 ## Repository Layout
 

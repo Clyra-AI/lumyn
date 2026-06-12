@@ -46,7 +46,8 @@ Every change should improve one or more of:
 - `docs/architecture/`: repo-local architecture guidance.
 - `.factory/artifacts/`: durable Factory planning, validation, closure, and handoff artifacts.
 - `.factory/tmp/`: ignored local execution scratch space.
-- `.factory/factoryd.json`: active safe attended daemon config.
+- `.factory/factoryd.json`: local active safe attended daemon config copied
+  from `.factory/factoryd.example.json`; gitignored.
 - `.factory/factoryd.example.json`: safe repo-local daemon config template.
 - `.factory/factoryd.autoship.example.json`: explicit full-loop daemon config template for protected GitHub execution.
 - `.factoryd/`: ignored local daemon state, claims, worktrees, events, and run reports.
@@ -108,7 +109,14 @@ exception records in `.github/action-ref-exceptions.yaml`.
   endpoints, and Anthropic Messages HTTP adapters behind a provider interface.
 - Lumyn does not bundle model weights or local inference-runtime payloads.
 - Artifact namespace: Factory artifacts in `.factory/artifacts/`; transient Factory material in `.factory/tmp/`; product artifacts in `workflows/`, `cassettes/`, `runs/`, `baselines/`, `schemas/`, and `examples/`.
-- Live sandbox, model-key, and network work is blocked until deterministic replay foundation passes and a human approves credential/network posture.
+- Live sandbox and generic network/credential work is blocked until deterministic
+  replay foundation passes and a human approves that posture.
+- Live eval provider endpoint work, including OpenAI-compatible custom
+  `base_url` endpoints and Anthropic adapters, is blocked by the
+  `model_provider_endpoint` capability gate. Approval must record provider
+  identity, provider model, endpoint or `base_url`, credential environment,
+  budget posture, redaction posture, and allowlist. Generic network or
+  credential approval does not satisfy this gate.
 - PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
 - Test matrix and architecture propagation source: `docs/dev/dev_guides.md` and `docs/architecture/architecture_guides.md`.
 - Product task packets must preserve CI lane refs, docs parity, output contract, release integrity, provenance, systems-thinking, TDD, ADR, performance, reliability, and fail-closed requirements from those guides.

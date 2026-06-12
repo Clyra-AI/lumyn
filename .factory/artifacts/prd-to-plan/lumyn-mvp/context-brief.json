@@ -72,7 +72,8 @@
     "The MVP is broad because live verify, CI, share, and eval are all required before closure.",
     "Credential brokering is not needed for deterministic bootstrap but becomes blocking for live verify and eval.",
     "Redaction must be designed before any trace/cassette/report persistence is trusted.",
-    "T1 and T2 used local validation and manual PR shipping; T2.5 closes the missing delivery-lifecycle baseline before T3."
+    "T1 and T2 used local validation and manual PR shipping; T2.5 closes the missing delivery-lifecycle baseline before T3.",
+    "Model provider endpoint work requires a model_provider_endpoint grant; generic network or credential approval does not satisfy live eval dispatch."
   ],
   "recommended_worker_chain": [
     "scout-context",
@@ -112,7 +113,8 @@
         "sandbox credential posture",
         "model credential posture",
         "network allowlist"
-      ]
+      ],
+      "model_provider_endpoint_gate": "OpenAI-compatible/custom base_url and Anthropic live eval provider endpoint work requires an approved model_provider_endpoint grant; generic network or credential approval is not sufficient."
     },
     "mvp_eval_provider_adapters": {
       "adapters": [
@@ -131,7 +133,7 @@
         "base_url",
         "api_key_env"
       ],
-      "network_policy": "blocked until deterministic replay foundation passes and human approval unlocks model/network posture"
+      "network_policy": "blocked until deterministic replay foundation passes and a complete model_provider_endpoint grant approves provider identity, provider model, endpoint/base_url, credential environment, budget posture, redaction posture, and network allowlist"
     },
     "factoryd_runtime": {
       "state_dir": ".factoryd/",
@@ -144,7 +146,18 @@
       "network_posture": "offline by default until live sandbox/model work is approved",
       "capability_grants": []
     },
-    "factoryd_dispatch_policy": "runner-ready task packets must declare worker_type, factoryd_runtime, validation_commands, evidence_required, stop_conditions, path policy, lifecycle gates, and scope exclusions before dispatch"
+    "factoryd_dispatch_policy": "runner-ready task packets must declare worker_type, factoryd_runtime, validation_commands, evidence_required, stop_conditions, path policy, lifecycle gates, and scope exclusions before dispatch",
+    "model_provider_endpoint": {
+      "status": "pending_approval",
+      "decision": "model_provider_endpoint",
+      "value": "OpenAI-compatible/custom base_url and Anthropic live eval provider endpoint work is required MVP scope but remains blocked until an operator approves provider endpoint metadata and credential/network posture through a model_provider_endpoint grant.",
+      "required_before_dispatch": [
+        "T11.1",
+        "T11.2"
+      ],
+      "required_grant": "model_provider_endpoint",
+      "generic_grants_sufficient": false
+    }
   },
   "factory_compatibility": {
     "factory_contract_version": "1.0",

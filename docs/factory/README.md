@@ -6,7 +6,8 @@ Factory artifacts for Lumyn live under `.factory/artifacts/`.
 - Task-run evidence: `.factory/artifacts/task-runs/`
 - PR lifecycle evidence: `.factory/artifacts/pr-lifecycle/`
 - Downstream pilot evidence: `.factory/artifacts/pilot/lumyn-mvp-slice/`
-- Active safe attended daemon config: `.factory/factoryd.json`
+- Local active safe attended daemon config: `.factory/factoryd.json`
+  (gitignored; copy from `.factory/factoryd.example.json`)
 - Safe daemon config template: `.factory/factoryd.example.json`
 - Explicit autoship daemon config template: `.factory/factoryd.autoship.example.json`
 - Local daemon runtime state: `.factoryd/` (gitignored)
@@ -29,6 +30,7 @@ Start with non-mutating proof:
 
 ```text
 export FACTORY_REPO=../factory
+cp .factory/factoryd.example.json .factory/factoryd.json
 factoryd doctor --config .factory/factoryd.json --repo lumyn --json
 factoryd run --config .factory/factoryd.json --repo lumyn --dry-run --json
 ```
@@ -93,9 +95,15 @@ offline product/runtime network posture until a specific live sandbox or model
 provider task is approved.
 
 Approved live approval, credential, or network work must be represented in
-the active `.factory/factoryd*.json` config through task-scoped
+the active `.factory/factoryd.json` config through task-scoped
 `capability_grants`.
 Do not edit PRD-derived task packets just to bypass a daemon gate.
+`scripts/validate_repo_pack.py` validates both the planning-time seed grants in
+task packets and any active grants recorded in `.factory/factoryd.json`, so
+operator approvals can remain daemon config instead of becoming PRD-plan drift.
+The checked-in `.factory/factoryd.example.json` and
+`.factory/factoryd.autoship.example.json` files are templates only; their grants
+must not satisfy live/model approval gates.
 
 Autonomous shipping is disabled in `.factory/factoryd.example.json`. The
 explicit `.factory/factoryd.autoship.example.json` template may be used only
