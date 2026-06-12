@@ -1193,8 +1193,18 @@ def validate_model_provider_gate(task: dict[str, Any]) -> None:
     if missing_surfaces:
         fail(f"{task_id_value}.model_provider_requirements.provider_surfaces missing {sorted(missing_surfaces)}")
     required_fields = {str(value) for value in requirements.get("required_fields", [])}
-    if "provider_model" not in required_fields:
-        fail(f"{task_id_value}.model_provider_requirements.required_fields must include provider_model")
+    expected_required_fields = {
+        "provider_identity",
+        "provider_model",
+        "provider_endpoint_or_base_url",
+        "credential_environment",
+        "budget_posture",
+        "redaction_posture",
+        "network_allowlist",
+    }
+    missing_required_fields = sorted(expected_required_fields - required_fields)
+    if missing_required_fields:
+        fail(f"{task_id_value}.model_provider_requirements.required_fields missing {missing_required_fields}")
     if task.get("requires_human_approval") is not False:
         fail(f"{task_id_value}.requires_human_approval must be false; model-only approval is represented by model_provider_endpoint grant")
     seed_grants = ((task.get("factoryd_runtime") or {}).get("capability_grants")) or []
@@ -2603,6 +2613,16 @@ def run_self_test() -> int:
             fail("self-test expected non-string provider metadata to fail")
     finally:
         globals()["factoryd_config_capability_grants"] = original_config_grants
+
+    missing_requirement_field_task = model_provider_gate_task("T11.1", "T11.1")
+    missing_requirement_field_task["model_provider_requirements"]["required_fields"].remove("network_allowlist")
+    try:
+        validate_model_provider_gate(missing_requirement_field_task)
+    except AssertionError as exc:
+        if "required_fields missing" not in str(exc):
+            raise
+    else:
+        fail("self-test expected missing model-provider requirement field to fail")
 
     unknown_gate_task = propagated_task("T3", ["T2.6"])
     unknown_gate_task["gated_by_acceptance_items"] = [
