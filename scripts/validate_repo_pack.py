@@ -1583,6 +1583,9 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
 
 
 def validate_task_packets(packets: dict[str, Any], baseline_task_id: str) -> None:
+    artifact_type = packets.get("artifact_type")
+    if artifact_type is not None and artifact_type != "task_packets":
+        fail("task-packets.json artifact_type must be task_packets")
     validate_no_legacy_provider_fields(packets, "task-packets.json")
     validate_no_deprecated_active_workers(packets, "task-packets.json")
     tasks = packets.get("tasks")
@@ -2484,6 +2487,19 @@ def model_provider_gate_task(task_id_value: str = "T11.1", grant_task_id: str = 
 def run_self_test() -> int:
     valid_packets = {"tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]}
     validate_task_packets(valid_packets, "T2.6")
+    try:
+        validate_task_packets(
+            {
+                "artifact_type": "task_packet_set",
+                "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])],
+            },
+            "T2.6",
+        )
+    except AssertionError as exc:
+        if "artifact_type" not in str(exc):
+            raise
+    else:
+        fail("self-test expected legacy task packet set artifact_type to fail")
     if expected_task_version_slices("T11.1") != {"v0.2"}:
         fail("self-test expected dotted live-eval task to inherit parent v0.2 delivery slice")
     if expected_task_version_slices("T2.5"):
@@ -3118,6 +3134,8 @@ def main() -> int:
         validate_context_brief(context)
         baseline_task_id = validate_execution_plan(plan)
         ledger_ids = validate_acceptance_ledger(acceptance_ledger)
+        if packets.get("artifact_type") != "task_packets":
+            fail("task-packets.json artifact_type must be task_packets")
         validate_task_packets(packets, baseline_task_id)
         for packet_path in REPAIR_TASK_PACKETS:
             validate_standalone_task_packet(load_json(packet_path), baseline_task_id)
