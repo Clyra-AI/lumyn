@@ -2,9 +2,9 @@
   "artifact_type": "work_proof_marker",
   "schema_version": "1.0",
   "task_id": "T2.7",
-  "generated_at": "2026-06-13T20:44:37Z",
+  "generated_at": "2026-06-13T20:52:56Z",
   "marker": "T2.7-safety-corpus-local-evidence-contracts",
-  "implementation_tracked_diff_sha256": "2ca5a852f8f268d33cef2bac918cbd87e910ee878512b4149dd4c204b6c680df",
+  "implementation_tracked_diff_sha256": "0b2aaa93ef54026b1768dbad85d570f4e1fa75ae6fce026ef698620157e125c1",
   "new_decision_note_sha256": "a480d9f56b4a887c8ca009cc3b7153253695d9ef930be4d8922cb8584c1d5333",
   "summary": "Added required local safety/corpus-ready fields to command-result, result-axes, and evidence-event schemas; updated CLI result defaults; added fail-closed schema tests and a local-only boundary safety finding fixture.",
   "changed_paths": [
