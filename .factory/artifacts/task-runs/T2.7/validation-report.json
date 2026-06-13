@@ -3,7 +3,7 @@
   "schema_version": "1.0",
   "task_id": "T2.7",
   "worker": "task-executor",
-  "generated_at": "2026-06-13T20:52:56Z",
+  "generated_at": "2026-06-13T20:59:06Z",
   "objective": "Add safety/corpus-ready local evidence contracts before T3 product implementation.",
   "runner_ready_contract_result": {
     "status": "pass",
