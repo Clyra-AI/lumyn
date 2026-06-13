@@ -1,5 +1,5 @@
 {
-  "artifact_type": "task_packet_set",
+  "artifact_type": "task_packets",
   "schema_version": "0.1",
   "source_prd_ref": "docs/product/prd.md",
   "tasks": [
