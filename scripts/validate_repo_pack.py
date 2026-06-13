@@ -1350,7 +1350,7 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
     if field == "factoryd_runtime":
         return is_valid_factoryd_runtime(value)
     if field == "max_iterations":
-        return isinstance(value, int) and value > 0
+        return isinstance(value, int) and not isinstance(value, bool) and value > 0
     if field in ["validation_commands", "evidence_required", "stop_conditions"]:
         return has_nonempty_list(value)
     if field == "security_scanner_gates":
@@ -2898,6 +2898,18 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected missing runtime pin to fail")
+
+    boolean_iteration_budget_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    boolean_iteration_budget_packets["tasks"][1]["max_iterations"] = True
+    try:
+        validate_task_packets(boolean_iteration_budget_packets, "T2.6")
+    except AssertionError as exc:
+        if "max_iterations" not in str(exc):
+            raise
+    else:
+        fail("self-test expected boolean max_iterations to fail")
 
     missing_alignment_ref_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
