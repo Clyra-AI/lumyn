@@ -79,8 +79,7 @@
       "type": "array",
       "minItems": 1,
       "items": {
-        "type": "object",
-        "additionalProperties": true
+        "$ref": "#/$defs/normalized_evidence_event"
       }
     },
     "state_bindings": {
@@ -111,6 +110,45 @@
           "enum": [
             "warn_normal_fail_strict"
           ]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "normalized_evidence_event": {
+      "type": "object",
+      "required": [
+        "finding_kind",
+        "proof_strength",
+        "action_boundary_status",
+        "security_relevance",
+        "fix_target",
+        "surface_fingerprint",
+        "eval_mode",
+        "provider_metadata",
+        "corpus_eligible"
+      ],
+      "properties": {
+        "fix_target": {
+          "type": "string",
+          "minLength": 1
+        },
+        "surface_fingerprint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provider_metadata": {
+          "type": "object",
+          "required": [
+            "applicable",
+            "provider",
+            "model"
+          ],
+          "additionalProperties": true
+        },
+        "corpus_eligible": {
+          "const": false
         }
       },
       "additionalProperties": true

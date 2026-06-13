@@ -2,7 +2,7 @@
   "artifact_type": "task_scope_closure_map",
   "schema_version": "1.0",
   "task_id": "T2.7",
-  "generated_at": "2026-06-13T17:30:55Z",
+  "generated_at": "2026-06-13T20:44:37Z",
   "canonical_scope_closure_map_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
   "canonical_scope_closure_map_modified": false,
   "closure_unit": "acceptance_item",
@@ -15,6 +15,9 @@
         "schemas/command-result.schema.json",
         "schemas/result-axes.schema.json",
         "schemas/evidence-event.schema.json",
+        "schemas/cassette.schema.json",
+        "schemas/canonical-trace.schema.json",
+        "docs/product/prd.md",
         "schemas/schema_test.go",
         ".factory/artifacts/task-runs/T2.7/validation-report.json"
       ]
@@ -25,6 +28,8 @@
       "summary": "Canonical evidence-event schema now carries normalized safety/corpus fields; full record/replay/live/eval/report production remains future product work.",
       "evidence_refs": [
         "schemas/evidence-event.schema.json",
+        "schemas/cassette.schema.json",
+        "schemas/canonical-trace.schema.json",
         "schemas/schema_test.go"
       ]
     },
@@ -35,7 +40,9 @@
       "evidence_refs": [
         "schemas/command-result.schema.json",
         "schemas/result-axes.schema.json",
-        "schemas/evidence-event.schema.json"
+        "schemas/evidence-event.schema.json",
+        "schemas/cassette.schema.json",
+        "schemas/canonical-trace.schema.json"
       ]
     },
     {
@@ -45,7 +52,8 @@
       "evidence_refs": [
         "cmd/lumyn/main.go",
         "schemas/schema_test.go",
-        "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md"
+        "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -55,7 +63,8 @@
       "evidence_refs": [
         "schemas/command-result.schema.json",
         "schemas/result-axes.schema.json",
-        "schemas/evidence-event.schema.json"
+        "schemas/evidence-event.schema.json",
+        "docs/product/prd.md"
       ]
     },
     {
@@ -66,6 +75,8 @@
         "schemas/command-result.schema.json",
         "schemas/result-axes.schema.json",
         "schemas/evidence-event.schema.json",
+        "schemas/cassette.schema.json",
+        "schemas/canonical-trace.schema.json",
         "schemas/schema_test.go"
       ]
     }

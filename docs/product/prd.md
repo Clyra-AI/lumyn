@@ -400,7 +400,20 @@ Every command that returns state should emit:
   "errors": [],
   "artifacts": [],
   "duration_ms": 0,
-  "redaction_status": "applied"
+  "redaction_status": "applied",
+  "finding_kind": "none",
+  "proof_strength": "unknown",
+  "action_boundary_status": "not_configured",
+  "security_relevance": "none",
+  "fix_target": "not_applicable",
+  "surface_fingerprint": "not_applicable",
+  "eval_mode": "not_applicable",
+  "provider_metadata": {
+    "applicable": false,
+    "provider": "not_applicable",
+    "model": "not_applicable"
+  },
+  "corpus_eligible": false
 }
 ```
 
@@ -411,8 +424,8 @@ Workflow runs should additionally include:
 - `verify_strategy`
 - `eval_context_mode` when mode is `eval`
 - `result_axes`
-- `proof_strength`
-- `action_boundary_status`
+- workflow-specific `proof_strength` and `action_boundary_status` values when
+  stronger evidence or configured boundaries are available
 - `failure_modes`
 - `trace_path`
 - `report_path`
