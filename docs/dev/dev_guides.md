@@ -132,6 +132,10 @@ coverage exception.
 - The command-result JSON envelope is a public contract.
 - Exit-code constants are a public contract and must match `docs/product/prd.md`.
 - Schemas under `schemas/` are executable contracts.
+- Normalized result and failure contracts must carry `finding_kind`,
+  `proof_strength`, `action_boundary_status`, `security_relevance`,
+  `fix_target`, `surface_fingerprint`, `eval_mode`, `provider_metadata`, and
+  `corpus_eligible: false` as local-only evidence fields.
 - Product artifacts in `workflows/`, `cassettes/`, `runs/`, `baselines/`, and `examples/` must stay repo-relative and schema-backed when a schema exists.
 - Output contract changes require tests or fixtures before implementation when practical.
 

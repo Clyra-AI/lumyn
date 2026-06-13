@@ -31,10 +31,14 @@ func run(args []string, stdout io.Writer, stderr io.Writer, started time.Time) i
 func commandResultForArgs(args []string, started time.Time) (result.CommandResult, int) {
 	command := commandFromArgs(args)
 	status := "pass"
+	findingKind := "none"
+	fixTarget := "not_applicable"
 	exitCode := exitcode.Success
 	errors := []result.CommandError{}
 	if !isKnownCommand(command) {
 		status = "fail"
+		findingKind = "command_error"
+		fixTarget = "command"
 		exitCode = exitcode.InvalidUsageOrInput
 		errors = append(errors, result.CommandError{
 			Code:    "unknown_command",
@@ -43,17 +47,30 @@ func commandResultForArgs(args []string, started time.Time) (result.CommandResul
 	}
 
 	payload := result.CommandResult{
-		ObjectType:      "lumyn.command_result",
-		SchemaVersion:   "1.0",
-		Metadata:        commandMetadata(),
-		Command:         command,
-		Status:          status,
-		Mode:            command,
-		Warnings:        []string{},
-		Errors:          errors,
-		Artifacts:       []result.ArtifactRef{},
-		DurationMS:      time.Since(started).Milliseconds(),
-		RedactionStatus: "not_applicable",
+		ObjectType:           "lumyn.command_result",
+		SchemaVersion:        "1.0",
+		Metadata:             commandMetadata(),
+		Command:              command,
+		Status:               status,
+		Mode:                 command,
+		Warnings:             []string{},
+		Errors:               errors,
+		Artifacts:            []result.ArtifactRef{},
+		DurationMS:           time.Since(started).Milliseconds(),
+		RedactionStatus:      "not_applicable",
+		FindingKind:          findingKind,
+		ProofStrength:        "unknown",
+		ActionBoundaryStatus: "not_configured",
+		SecurityRelevance:    "none",
+		FixTarget:            fixTarget,
+		SurfaceFingerprint:   "not_applicable",
+		EvalMode:             "not_applicable",
+		ProviderMetadata: result.ProviderMetadata{
+			Applicable: false,
+			Provider:   "not_applicable",
+			Model:      "not_applicable",
+		},
+		CorpusEligible: false,
 	}
 
 	return payload, exitCode

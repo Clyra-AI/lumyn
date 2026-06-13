@@ -1,0 +1,55 @@
+{
+  "artifact_type": "ship_packet",
+  "schema_version": "1.0",
+  "task_id": "T2.7",
+  "generated_at": "2026-06-13T17:30:55Z",
+  "producer": "task-executor",
+  "status": "ready_for_commit_push_worker",
+  "commit_created": false,
+  "push_performed": false,
+  "pr_created": false,
+  "merge_performed": false,
+  "summary": "Implementation and local validation are complete for the bounded T2.7 task. Commit, push, PR creation, CI, Codex review, and merge are intentionally not performed by task-executor.",
+  "changed_paths": [
+    "CHANGELOG.md",
+    "cmd/lumyn/main.go",
+    "cmd/lumyn/main_test.go",
+    "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md",
+    "docs/dev/dev_guides.md",
+    "internal/result/result.go",
+    "internal/result/result_test.go",
+    "schemas/command-result.schema.json",
+    "schemas/evidence-event.schema.json",
+    "schemas/result-axes.schema.json",
+    "schemas/schema_test.go",
+    ".factory/artifacts/task-runs/T2.7/validation-report.json",
+    ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+    ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+    ".factory/artifacts/task-runs/T2.7/factoryd-run-once-report.json",
+    ".factory/artifacts/task-runs/T2.7/coverage-gate-result.json",
+    ".factory/artifacts/pr-lifecycle/T2.7/ship-packet.json",
+    ".factory/artifacts/pr-lifecycle/T2.7/post-merge-report.json",
+    ".factory/artifacts/pr-lifecycle/T2.7/pr-lifecycle-report.json"
+  ],
+  "local_validation_refs": [
+    ".factory/artifacts/task-runs/T2.7/validation-report.json",
+    ".factory/artifacts/task-runs/T2.7/coverage-gate-result.json"
+  ],
+  "acceptance_refs": [
+    ".factory/artifacts/task-runs/T2.7/scope-closure-map.json"
+  ],
+  "downstream_required_workers": [
+    "validation-gate",
+    "commit-push",
+    "post-merge-monitor"
+  ],
+  "gate_status": {
+    "local_validation": "pass",
+    "coverage": "pass",
+    "ci_validate": "pending_downstream_worker",
+    "codeql_analyze": "pending_downstream_worker",
+    "passive_codex_review": "pending_downstream_worker",
+    "commit_push": "pending_downstream_worker",
+    "post_merge_monitor": "pending_downstream_worker"
+  }
+}

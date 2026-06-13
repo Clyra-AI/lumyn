@@ -1,0 +1,48 @@
+{
+  "artifact_type": "pr_lifecycle_report",
+  "schema_version": "1.0",
+  "task_id": "T2.7",
+  "generated_at": "2026-06-13T17:30:55Z",
+  "producer": "task-executor",
+  "status": "implementation_validated_lifecycle_pending",
+  "local_validation": {
+    "status": "pass",
+    "validation_report_ref": ".factory/artifacts/task-runs/T2.7/validation-report.json",
+    "coverage_gate_result_ref": ".factory/artifacts/task-runs/T2.7/coverage-gate-result.json"
+  },
+  "ci_status": {
+    "validate": "pending_downstream_worker",
+    "CodeQL analyze": "pending_downstream_worker"
+  },
+  "review_status": {
+    "code_review_required": false,
+    "codex_review_required": true,
+    "codex_review": "pending_downstream_worker"
+  },
+  "shipping_status": {
+    "commit_push_required": true,
+    "commit_created": false,
+    "push_performed": false,
+    "pr_created": false,
+    "ship_packet_ref": ".factory/artifacts/pr-lifecycle/T2.7/ship-packet.json"
+  },
+  "merge_status": {
+    "merge_performed": false,
+    "post_merge_monitor_required": true,
+    "post_merge_report_ref": ".factory/artifacts/pr-lifecycle/T2.7/post-merge-report.json"
+  },
+  "branch_protection_status": {
+    "required": true,
+    "live_remote_audit_performed": false,
+    "reason": "No GitHub credential or network approval was available for live remote audit in task-executor."
+  },
+  "scope_closure": {
+    "task_scope_closure_ref": ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+    "canonical_scope_closed": false
+  },
+  "approved_exceptions": [],
+  "process_escape": false,
+  "notes": [
+    "This lifecycle report records task-executor boundaries only and does not mark downstream lifecycle gates satisfied."
+  ]
+}

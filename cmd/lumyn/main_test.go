@@ -25,12 +25,19 @@ func TestCLIEmitsCommandResultEnvelope(t *testing.T) {
 	validateCommandResultSchema(t, payload)
 
 	expected := map[string]string{
-		"object_type":      "lumyn.command_result",
-		"schema_version":   "1.0",
-		"command":          "check",
-		"status":           "pass",
-		"mode":             "check",
-		"redaction_status": "not_applicable",
+		"object_type":            "lumyn.command_result",
+		"schema_version":         "1.0",
+		"command":                "check",
+		"status":                 "pass",
+		"mode":                   "check",
+		"redaction_status":       "not_applicable",
+		"finding_kind":           "none",
+		"proof_strength":         "unknown",
+		"action_boundary_status": "not_configured",
+		"security_relevance":     "none",
+		"fix_target":             "not_applicable",
+		"surface_fingerprint":    "not_applicable",
+		"eval_mode":              "not_applicable",
 	}
 	for key, value := range expected {
 		if payload[key] != value {
@@ -43,6 +50,16 @@ func TestCLIEmitsCommandResultEnvelope(t *testing.T) {
 	}
 	if metadata["lumyn_version"] != "0.0.0" {
 		t.Fatalf("metadata.lumyn_version = %v, want 0.0.0", metadata["lumyn_version"])
+	}
+	if payload["corpus_eligible"] != false {
+		t.Fatalf("corpus_eligible = %v, want false", payload["corpus_eligible"])
+	}
+	providerMetadata, ok := payload["provider_metadata"].(map[string]any)
+	if !ok {
+		t.Fatalf("provider_metadata = %T, want object", payload["provider_metadata"])
+	}
+	if providerMetadata["applicable"] != false {
+		t.Fatalf("provider_metadata.applicable = %v, want false", providerMetadata["applicable"])
 	}
 }
 
@@ -68,6 +85,12 @@ func TestCLIRejectsUnknownCommandWithJSONEnvelope(t *testing.T) {
 	}
 	if payload["command"] != "unknown-command" {
 		t.Fatalf("command = %v, want unknown-command", payload["command"])
+	}
+	if payload["finding_kind"] != "command_error" {
+		t.Fatalf("finding_kind = %v, want command_error", payload["finding_kind"])
+	}
+	if payload["corpus_eligible"] != false {
+		t.Fatalf("corpus_eligible = %v, want false", payload["corpus_eligible"])
 	}
 }
 

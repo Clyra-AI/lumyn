@@ -1,0 +1,75 @@
+{
+  "artifact_type": "task_scope_closure_map",
+  "schema_version": "1.0",
+  "task_id": "T2.7",
+  "generated_at": "2026-06-13T17:30:55Z",
+  "canonical_scope_closure_map_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+  "canonical_scope_closure_map_modified": false,
+  "closure_unit": "acceptance_item",
+  "acceptance_results": [
+    {
+      "acceptance_item_id": "FDN-003",
+      "status": "implemented",
+      "summary": "Normalized result and failure schemas preserve finding kind, proof strength, boundary status, security relevance, fix target, surface fingerprint, provider/model metadata when applicable, eval mode, and corpus_eligible false posture.",
+      "evidence_refs": [
+        "schemas/command-result.schema.json",
+        "schemas/result-axes.schema.json",
+        "schemas/evidence-event.schema.json",
+        "schemas/schema_test.go",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json"
+      ]
+    },
+    {
+      "acceptance_item_id": "FR9",
+      "status": "partial",
+      "summary": "Canonical evidence-event schema now carries normalized safety/corpus fields; full record/replay/live/eval/report production remains future product work.",
+      "evidence_refs": [
+        "schemas/evidence-event.schema.json",
+        "schemas/schema_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR4",
+      "status": "partial",
+      "summary": "Proof strength is required in normalized result and evidence contracts; full proof-honest report rendering remains future product work.",
+      "evidence_refs": [
+        "schemas/command-result.schema.json",
+        "schemas/result-axes.schema.json",
+        "schemas/evidence-event.schema.json"
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR6",
+      "status": "partial",
+      "summary": "Schemas and CLI defaults require corpus_eligible false and add no hosted telemetry, upload, credential, network, or model behavior.",
+      "evidence_refs": [
+        "cmd/lumyn/main.go",
+        "schemas/schema_test.go",
+        "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md"
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR9",
+      "status": "partial",
+      "summary": "Normalized contracts now carry fix_target and surface_fingerprint fields; full user-facing diagnostic output remains future product work.",
+      "evidence_refs": [
+        "schemas/command-result.schema.json",
+        "schemas/result-axes.schema.json",
+        "schemas/evidence-event.schema.json"
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR12",
+      "status": "partial",
+      "summary": "Versioned schemas remain executable contracts at schema_version 1.0; broader artifact stability remains future product work.",
+      "evidence_refs": [
+        "schemas/command-result.schema.json",
+        "schemas/result-axes.schema.json",
+        "schemas/evidence-event.schema.json",
+        "schemas/schema_test.go"
+      ]
+    }
+  ],
+  "no_group_only_closure_claims": true,
+  "mvp_scope_closed": false
+}

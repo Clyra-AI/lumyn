@@ -1,0 +1,22 @@
+{
+  "artifact_type": "factoryd_run_once_report",
+  "schema_version": "1.0",
+  "task_id": "T2.7",
+  "generated_at": "2026-06-13T17:30:55Z",
+  "worker": "task-executor",
+  "workspace": ".factoryd/workspaces/lumyn-T2.7-20260613T172120.475079000Z",
+  "status": "implementation_validated",
+  "network_used": false,
+  "credentials_used": false,
+  "model_calls_used": false,
+  "daemon_state_modified": false,
+  "tracker_state_modified": false,
+  "commit_created": false,
+  "pr_created": false,
+  "merge_performed": false,
+  "validation_report_ref": ".factory/artifacts/task-runs/T2.7/validation-report.json",
+  "work_proof_marker_ref": ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+  "notes": [
+    "This report records the Codex task-executor run only. Commit, push, CI, Codex review, merge, and post-merge checks remain assigned to downstream workers."
+  ]
+}

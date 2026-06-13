@@ -100,22 +100,75 @@ func TestInvalidCommandResultFails(t *testing.T) {
 	}
 }
 
+func TestSafetyCorpusReadyFieldsFailClosed(t *testing.T) {
+	root := repoRoot(t)
+	tests := map[string]map[string]any{
+		"command-result.schema.json": commandResultSample(map[string]any{}),
+		"result-axes.schema.json":    resultAxesSample(map[string]any{}),
+		"evidence-event.schema.json": evidenceEvent(map[string]any{}),
+	}
+	for schemaName, sample := range tests {
+		schemaName := schemaName
+		sample := sample
+		t.Run(schemaName+"_missing_normalized_fields", func(t *testing.T) {
+			schema, err := jsonschema.Compile(filepath.Join(root, "schemas", schemaName))
+			if err != nil {
+				t.Fatalf("compile schema: %v", err)
+			}
+			if err := schema.Validate(sample); err == nil {
+				t.Fatal("expected missing safety/corpus-ready fields to fail validation")
+			}
+		})
+
+		t.Run(schemaName+"_corpus_upload_opt_in", func(t *testing.T) {
+			schema, err := jsonschema.Compile(filepath.Join(root, "schemas", schemaName))
+			if err != nil {
+				t.Fatalf("compile schema: %v", err)
+			}
+			withFields := addSafetyCorpusFields(sample, map[string]any{
+				"corpus_eligible": true,
+			})
+			if err := schema.Validate(withFields); err == nil {
+				t.Fatal("expected corpus_eligible true to fail local-only MVP validation")
+			}
+		})
+	}
+}
+
+func TestBoundarySafetyFindingExampleIsLocalOnly(t *testing.T) {
+	root := repoRoot(t)
+	schema, err := jsonschema.Compile(filepath.Join(root, "schemas", "evidence-event.schema.json"))
+	if err != nil {
+		t.Fatalf("compile schema: %v", err)
+	}
+	sample := boundarySafetyFindingEvent(map[string]any{
+		"locality":    "local_only",
+		"positioning": "workflow_completion_safety_finding",
+	})
+	if err := schema.Validate(sample); err != nil {
+		t.Fatalf("validate local boundary safety finding: %v", err)
+	}
+	if sample["corpus_eligible"] != false {
+		t.Fatalf("corpus_eligible = %v, want false", sample["corpus_eligible"])
+	}
+	if sample["security_relevance"] != "safety_and_security_relevant" {
+		t.Fatalf("security_relevance = %v, want safety_and_security_relevant", sample["security_relevance"])
+	}
+	metadata, ok := sample["metadata"].(map[string]any)
+	if !ok {
+		t.Fatalf("metadata = %T, want object", sample["metadata"])
+	}
+	for _, disallowed := range []string{"hosted_telemetry", "shared_corpus_upload", "security_platform_claim"} {
+		if _, ok := metadata[disallowed]; ok {
+			t.Fatalf("boundary safety example must not imply %s", disallowed)
+		}
+	}
+}
+
 func representativeSamples() map[string]any {
 	metadata := map[string]any{}
 	return map[string]any{
-		"command-result.schema.json": map[string]any{
-			"object_type":      "lumyn.command_result",
-			"schema_version":   "1.0",
-			"command":          "verify",
-			"status":           "pass",
-			"mode":             "replay",
-			"warnings":         []any{},
-			"errors":           []any{},
-			"artifacts":        []any{map[string]any{"path": "runs/run_123/trace.json", "type": "canonical_trace"}},
-			"duration_ms":      12,
-			"redaction_status": "applied",
-			"metadata":         metadata,
-		},
+		"command-result.schema.json": addSafetyCorpusFields(commandResultSample(metadata), nil),
 		"proof-strength.schema.json": map[string]any{
 			"object_type":            "lumyn.proof_strength",
 			"schema_version":         "1.0",
@@ -126,7 +179,7 @@ func representativeSamples() map[string]any {
 			"summary":                "Required read-back validator passed.",
 			"metadata":               metadata,
 		},
-		"evidence-event.schema.json": evidenceEvent(metadata),
+		"evidence-event.schema.json": addSafetyCorpusFields(evidenceEvent(metadata), nil),
 		"cassette.schema.json": map[string]any{
 			"object_type":      "lumyn.cassette",
 			"schema_version":   "1.0",
@@ -182,14 +235,14 @@ func representativeSamples() map[string]any {
 			"metadata":            metadata,
 		},
 		"validator.schema.json": map[string]any{
-			"object_type":  "lumyn.validator",
+			"object_type":    "lumyn.validator",
 			"schema_version": "1.0",
-			"validator_id": "validator_customer_active",
-			"type":         "api_state",
-			"required":     true,
-			"proof_cap":    "strong",
-			"expect":       map[string]any{"status": "active"},
-			"metadata":     metadata,
+			"validator_id":   "validator_customer_active",
+			"type":           "api_state",
+			"required":       true,
+			"proof_cap":      "strong",
+			"expect":         map[string]any{"status": "active"},
+			"metadata":       metadata,
 		},
 		"action-boundary.schema.json": map[string]any{
 			"object_type":           "lumyn.action_boundary",
@@ -244,17 +297,90 @@ func representativeSamples() map[string]any {
 			"proof_strength":   map[string]any{"level": "strong"},
 			"metadata":         metadata,
 		},
-		"result-axes.schema.json": map[string]any{
-			"object_type":     "lumyn.result_axes",
-			"schema_version":  "1.0",
-			"workflow_result": "pass",
-			"proof_strength":  "strong",
-			"freshness":       "fresh",
-			"redaction":       "applied",
-			"boundary":        "in_bounds",
-			"metadata":        metadata,
-		},
+		"result-axes.schema.json": addSafetyCorpusFields(resultAxesSample(metadata), nil),
 	}
+}
+
+func commandResultSample(metadata map[string]any) map[string]any {
+	return map[string]any{
+		"object_type":      "lumyn.command_result",
+		"schema_version":   "1.0",
+		"command":          "verify",
+		"status":           "pass",
+		"mode":             "replay",
+		"warnings":         []any{},
+		"errors":           []any{},
+		"artifacts":        []any{map[string]any{"path": "runs/run_123/trace.json", "type": "canonical_trace"}},
+		"duration_ms":      12,
+		"redaction_status": "applied",
+		"metadata":         metadata,
+	}
+}
+
+func resultAxesSample(metadata map[string]any) map[string]any {
+	return map[string]any{
+		"object_type":     "lumyn.result_axes",
+		"schema_version":  "1.0",
+		"workflow_result": "pass",
+		"proof_strength":  "strong",
+		"freshness":       "fresh",
+		"redaction":       "applied",
+		"boundary":        "in_bounds",
+		"metadata":        metadata,
+	}
+}
+
+func addSafetyCorpusFields(sample map[string]any, overrides map[string]any) map[string]any {
+	withFields := map[string]any{}
+	for key, value := range sample {
+		withFields[key] = value
+	}
+	defaults := map[string]any{
+		"finding_kind":           "none",
+		"proof_strength":         "unknown",
+		"action_boundary_status": "not_configured",
+		"security_relevance":     "none",
+		"fix_target":             "not_applicable",
+		"surface_fingerprint":    "not_applicable",
+		"eval_mode":              "not_applicable",
+		"provider_metadata": map[string]any{
+			"applicable": false,
+			"provider":   "not_applicable",
+			"model":      "not_applicable",
+		},
+		"corpus_eligible": false,
+	}
+	for key, value := range defaults {
+		if _, exists := withFields[key]; !exists {
+			withFields[key] = value
+		}
+	}
+	if overrides != nil {
+		for key, value := range overrides {
+			withFields[key] = value
+		}
+	}
+	return withFields
+}
+
+func boundarySafetyFindingEvent(metadata map[string]any) map[string]any {
+	return addSafetyCorpusFields(evidenceEvent(metadata), map[string]any{
+		"source":                 "validator",
+		"kind":                   "boundary_finding",
+		"finding_kind":           "forbidden_endpoint_call",
+		"proof_strength":         "strong",
+		"action_boundary_status": "failed",
+		"security_relevance":     "safety_and_security_relevant",
+		"fix_target":             "workflow_contract.action_boundary.forbidden_paths",
+		"surface_fingerprint":    "sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+		"eval_mode":              "not_applicable",
+		"provider_metadata": map[string]any{
+			"applicable": false,
+			"provider":   "not_applicable",
+			"model":      "not_applicable",
+		},
+		"corpus_eligible": false,
+	})
 }
 
 func evidenceEvent(metadata map[string]any) map[string]any {
