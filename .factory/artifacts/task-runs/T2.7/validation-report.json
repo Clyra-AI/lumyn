@@ -1,0 +1,224 @@
+{
+  "artifact_type": "validation_report",
+  "schema_version": "1.0",
+  "task_id": "T2.7",
+  "worker": "task-executor",
+  "generated_at": "2026-06-13T20:36:48Z",
+  "objective": "Add safety/corpus-ready local evidence contracts before T3 product implementation.",
+  "runner_ready_contract_result": {
+    "status": "pass",
+    "confirmed_fields": [
+      "task_id",
+      "objective",
+      "acceptance_checks",
+      "acceptance_item_ids",
+      "risk_class",
+      "allowed_paths",
+      "forbidden_paths",
+      "validation_commands",
+      "baseline_commands",
+      "red_first_commands",
+      "final_validation_commands",
+      "required_worker_chain",
+      "lifecycle_gates",
+      "evidence_required",
+      "scope_exclusions",
+      "stop_conditions",
+      "max_iterations",
+      "runtime_pins",
+      "alignment_gate_ref",
+      "plan_drift_policy_ref",
+      "factory_compatibility",
+      "coverage_policy_refs",
+      "security_scanner_gates",
+      "acceptance_result_requirements",
+      "changelog_intent",
+      "versioning_impact",
+      "migration_impact",
+      "docs_sync_refs"
+    ]
+  },
+  "baseline_evidence": [
+    {
+      "command": "make lint-fast",
+      "status": "pass",
+      "exit_code": 0,
+      "summary": "Repo layout, policy grep checks, workflow hardening checks, and go vet passed."
+    },
+    {
+      "command": "make test-fast",
+      "status": "pass",
+      "exit_code": 0,
+      "summary": "go test ./... -count=1 passed."
+    }
+  ],
+  "red_evidence": {
+    "command": "make test-contracts",
+    "status": "failed",
+    "exit_code": 2,
+    "summary": "Red-first schema tests failed because command-result, result-axes, and evidence-event schemas did not reject missing safety/corpus-ready fields or corpus_eligible true.",
+    "failing_tests": [
+      "TestSafetyCorpusReadyFieldsFailClosed/command-result.schema.json_missing_normalized_fields",
+      "TestSafetyCorpusReadyFieldsFailClosed/command-result.schema.json_corpus_upload_opt_in",
+      "TestSafetyCorpusReadyFieldsFailClosed/result-axes.schema.json_missing_normalized_fields",
+      "TestSafetyCorpusReadyFieldsFailClosed/result-axes.schema.json_corpus_upload_opt_in",
+      "TestSafetyCorpusReadyFieldsFailClosed/evidence-event.schema.json_missing_normalized_fields",
+      "TestSafetyCorpusReadyFieldsFailClosed/evidence-event.schema.json_corpus_upload_opt_in"
+    ]
+  },
+  "green_evidence": [
+    {
+      "command": "make test-contracts",
+      "status": "pass",
+      "exit_code": 0,
+      "summary": "All Go tests, schema tests, repo-pack validation, pilot evidence validation, and required schema presence checks passed."
+    },
+    {
+      "command": "make test-coverage",
+      "status": "pass",
+      "exit_code": 0,
+      "summary": "Coverage total 96.7%, minimum 75.0%."
+    }
+  ],
+  "final_validation_evidence": {
+    "command": "make prepush-full",
+    "status": "pass",
+    "exit_code": 0,
+    "summary": "fmt, lint-fast, test-fast, test-coverage, test-contracts, and build passed."
+  },
+  "commands_run": [
+    "make lint-fast",
+    "make test-fast",
+    "make test-contracts",
+    "make test-coverage",
+    "make prepush-full"
+  ],
+  "changed_paths": [
+    "CHANGELOG.md",
+    "cmd/lumyn/main.go",
+    "cmd/lumyn/main_test.go",
+    "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md",
+    "docs/dev/dev_guides.md",
+    "internal/result/result.go",
+    "internal/result/result_test.go",
+    "schemas/command-result.schema.json",
+    "schemas/evidence-event.schema.json",
+    "schemas/result-axes.schema.json",
+    "schemas/schema_test.go",
+    ".factory/artifacts/task-runs/T2.7/validation-report.json",
+    ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+    ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+    ".factory/artifacts/task-runs/T2.7/factoryd-run-once-report.json",
+    ".factory/artifacts/task-runs/T2.7/coverage-gate-result.json",
+    ".factory/artifacts/pr-lifecycle/T2.7/ship-packet.json",
+    ".factory/artifacts/pr-lifecycle/T2.7/post-merge-report.json",
+    ".factory/artifacts/pr-lifecycle/T2.7/pr-lifecycle-report.json"
+  ],
+  "acceptance_results": [
+    {
+      "acceptance_item_id": "FDN-003",
+      "status": "implemented",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json"
+      ]
+    },
+    {
+      "acceptance_item_id": "FR9",
+      "status": "partial",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json"
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR4",
+      "status": "partial",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json"
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR6",
+      "status": "partial",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json"
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR9",
+      "status": "partial",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json"
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR12",
+      "status": "partial",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json"
+      ]
+    }
+  ],
+  "path_policy_result": {
+    "status": "pass",
+    "forbidden_paths_changed": [],
+    "outside_allowed_paths_changed": []
+  },
+  "plan_drift_result": {
+    "status": "pass",
+    "runtime_changed": false,
+    "distribution_changed": false,
+    "provider_posture_changed": false,
+    "dependency_changed": false,
+    "artifact_namespace_changed": false,
+    "live_work_changed": false,
+    "validation_contract_changed": false,
+    "acceptance_ledger_changed": false,
+    "scope_closure_changed": false
+  },
+  "changelog_result": {
+    "status": "updated",
+    "path": "CHANGELOG.md"
+  },
+  "versioning_result": {
+    "status": "pre_1_0_no_migration_required",
+    "notes": "Schema examples and command-result envelope now include local-only normalized fields."
+  },
+  "docs_sync_result": {
+    "status": "partial_by_path_policy",
+    "updated_paths": [
+      "docs/dev/dev_guides.md",
+      "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md"
+    ],
+    "not_modified_paths": [
+      "README.md",
+      "AGENTS.md",
+      "WORKFLOW.md",
+      "docs/product/prd.md"
+    ],
+    "rationale": "The PRD already names the safety/corpus-ready fields; remaining docs were outside the task allowed path set or did not require CLI usage text for this foundation contract."
+  },
+  "security_scanner_result": {
+    "status": "pending_ci",
+    "required_status_check": "CodeQL analyze",
+    "reason": "No dependency, workflow, external call, credential, hosted telemetry, or live provider code was added. CodeQL remains a downstream PR lifecycle gate."
+  },
+  "coverage_gate_result_ref": ".factory/artifacts/task-runs/T2.7/coverage-gate-result.json",
+  "work_proof_marker_ref": ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+  "test_first_skipped_reason": null,
+  "blockers": [],
+  "residual_risks": [
+    "GitHub CI, CodeQL status, passive Codex review, commit/push, and post-merge monitoring are pending downstream lifecycle workers."
+  ]
+}

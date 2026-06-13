@@ -1,0 +1,44 @@
+{
+  "artifact_type": "work_proof_marker",
+  "schema_version": "1.0",
+  "task_id": "T2.7",
+  "generated_at": "2026-06-13T17:30:55Z",
+  "marker": "T2.7-safety-corpus-local-evidence-contracts",
+  "implementation_tracked_diff_sha256": "327c2a6a96c0a04ddcab9eace467062517e92eabccfa2087d1be4403b333ff9f",
+  "new_decision_note_sha256": "a480d9f56b4a887c8ca009cc3b7153253695d9ef930be4d8922cb8584c1d5333",
+  "summary": "Added required local safety/corpus-ready fields to command-result, result-axes, and evidence-event schemas; updated CLI result defaults; added fail-closed schema tests and a local-only boundary safety finding fixture.",
+  "changed_paths": [
+    "CHANGELOG.md",
+    "cmd/lumyn/main.go",
+    "cmd/lumyn/main_test.go",
+    "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md",
+    "docs/dev/dev_guides.md",
+    "internal/result/result.go",
+    "internal/result/result_test.go",
+    "schemas/command-result.schema.json",
+    "schemas/evidence-event.schema.json",
+    "schemas/result-axes.schema.json",
+    "schemas/schema_test.go"
+  ],
+  "contract_fields_added": [
+    "finding_kind",
+    "proof_strength",
+    "action_boundary_status",
+    "security_relevance",
+    "fix_target",
+    "surface_fingerprint",
+    "eval_mode",
+    "provider_metadata",
+    "corpus_eligible"
+  ],
+  "local_only_posture": {
+    "corpus_eligible": false,
+    "hosted_telemetry_added": false,
+    "shared_corpus_upload_added": false,
+    "network_or_model_call_added": false
+  },
+  "validation_refs": [
+    ".factory/artifacts/task-runs/T2.7/validation-report.json",
+    ".factory/artifacts/task-runs/T2.7/coverage-gate-result.json"
+  ]
+}
