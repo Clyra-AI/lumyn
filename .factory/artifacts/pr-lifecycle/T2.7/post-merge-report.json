@@ -3,12 +3,21 @@
   "schema_version": "1.0",
   "task_id": "T2.7",
   "generated_at": "2026-06-13T20:59:06Z",
-  "producer": "task-executor",
-  "status": "not_run_task_executor_boundary",
-  "merge_performed": false,
-  "default_branch_checked": false,
-  "reason": "The task-executor worker is not allowed to commit, push, open a PR, merge, or monitor post-merge state.",
-  "required_downstream_worker": "post-merge-monitor",
+  "producer": "post-merge-monitor",
+  "status": "healthy",
+  "merge_performed": true,
+  "merge_commit": "ae3c6b211b5fa6800f00e6bfc66499cbf28b6452",
+  "merged_at": "2026-06-13T21:05:01Z",
+  "default_branch_checked": true,
+  "default_branch_ref": "origin/main",
+  "default_branch_head": "ae3c6b211b5fa6800f00e6bfc66499cbf28b6452",
+  "post_merge_validation": {
+    "status": "pass",
+    "commands": [
+      "make prepush-full"
+    ],
+    "summary": "Post-merge local validation on main passed after PR #36 landed."
+  },
   "local_validation_ref": ".factory/artifacts/task-runs/T2.7/validation-report.json",
   "blocker": null
 }
