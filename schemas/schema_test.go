@@ -165,6 +165,28 @@ func TestBoundarySafetyFindingExampleIsLocalOnly(t *testing.T) {
 	}
 }
 
+func TestPersistedEvidenceEventContainersFailClosed(t *testing.T) {
+	root := repoRoot(t)
+	metadata := map[string]any{}
+	tests := map[string]map[string]any{
+		"cassette.schema.json":        cassetteSample(metadata, evidenceEvent(metadata)),
+		"canonical-trace.schema.json": canonicalTraceSample(metadata, evidenceEvent(metadata)),
+	}
+	for schemaName, sample := range tests {
+		schemaName := schemaName
+		sample := sample
+		t.Run(schemaName+"_nested_event_missing_normalized_fields", func(t *testing.T) {
+			schema, err := jsonschema.Compile(filepath.Join(root, "schemas", schemaName))
+			if err != nil {
+				t.Fatalf("compile schema: %v", err)
+			}
+			if err := schema.Validate(sample); err == nil {
+				t.Fatal("expected nested event missing safety/corpus-ready fields to fail validation")
+			}
+		})
+	}
+}
+
 func representativeSamples() map[string]any {
 	metadata := map[string]any{}
 	return map[string]any{
@@ -180,25 +202,7 @@ func representativeSamples() map[string]any {
 			"metadata":               metadata,
 		},
 		"evidence-event.schema.json": addSafetyCorpusFields(evidenceEvent(metadata), nil),
-		"cassette.schema.json": map[string]any{
-			"object_type":      "lumyn.cassette",
-			"schema_version":   "1.0",
-			"cassette_id":      "cas_create_customer",
-			"workflow_id":      "create_customer_with_readback",
-			"recorded_at":      "2026-06-07T00:00:00Z",
-			"lumyn_version":    "0.0.0-dev",
-			"source_refs":      []any{map[string]any{"path": "docs/openapi.yaml", "hash": "sha256:test"}},
-			"redaction_status": "applied",
-			"evidence_events":  []any{evidenceEvent(metadata)},
-			"state_bindings":   map[string]any{"customer_id": "cus_test_123"},
-			"validator_inputs": map[string]any{"validator_customer_active": map[string]any{"customer_id": "cus_test_123"}},
-			"replay_integrity": map[string]any{
-				"source_hashes": map[string]any{"docs/openapi.yaml": "sha256:test"},
-				"cassette_hash": "sha256:cassette",
-				"stale_policy":  "warn_normal_fail_strict",
-			},
-			"metadata": metadata,
-		},
+		"cassette.schema.json":       cassetteSample(metadata, addSafetyCorpusFields(evidenceEvent(metadata), nil)),
 		"redaction-config.schema.json": map[string]any{
 			"object_type":              "lumyn.redaction_config",
 			"schema_version":           "1.0",
@@ -283,21 +287,8 @@ func representativeSamples() map[string]any {
 			"confidence":     "high",
 			"metadata":       metadata,
 		},
-		"canonical-trace.schema.json": map[string]any{
-			"object_type":      "lumyn.canonical_trace",
-			"schema_version":   "1.0",
-			"trace_id":         "trace_123",
-			"run_id":           "run_123",
-			"workflow_id":      "create_customer_with_readback",
-			"lumyn_version":    "0.0.0-dev",
-			"started_at":       "2026-06-07T00:00:00Z",
-			"finished_at":      "2026-06-07T00:00:01Z",
-			"redaction_status": "applied",
-			"events":           []any{evidenceEvent(metadata)},
-			"proof_strength":   map[string]any{"level": "strong"},
-			"metadata":         metadata,
-		},
-		"result-axes.schema.json": addSafetyCorpusFields(resultAxesSample(metadata), nil),
+		"canonical-trace.schema.json": canonicalTraceSample(metadata, addSafetyCorpusFields(evidenceEvent(metadata), nil)),
+		"result-axes.schema.json":     addSafetyCorpusFields(resultAxesSample(metadata), nil),
 	}
 }
 
@@ -361,6 +352,45 @@ func addSafetyCorpusFields(sample map[string]any, overrides map[string]any) map[
 		}
 	}
 	return withFields
+}
+
+func cassetteSample(metadata map[string]any, event map[string]any) map[string]any {
+	return map[string]any{
+		"object_type":      "lumyn.cassette",
+		"schema_version":   "1.0",
+		"cassette_id":      "cas_create_customer",
+		"workflow_id":      "create_customer_with_readback",
+		"recorded_at":      "2026-06-07T00:00:00Z",
+		"lumyn_version":    "0.0.0-dev",
+		"source_refs":      []any{map[string]any{"path": "docs/openapi.yaml", "hash": "sha256:test"}},
+		"redaction_status": "applied",
+		"evidence_events":  []any{event},
+		"state_bindings":   map[string]any{"customer_id": "cus_test_123"},
+		"validator_inputs": map[string]any{"validator_customer_active": map[string]any{"customer_id": "cus_test_123"}},
+		"replay_integrity": map[string]any{
+			"source_hashes": map[string]any{"docs/openapi.yaml": "sha256:test"},
+			"cassette_hash": "sha256:cassette",
+			"stale_policy":  "warn_normal_fail_strict",
+		},
+		"metadata": metadata,
+	}
+}
+
+func canonicalTraceSample(metadata map[string]any, event map[string]any) map[string]any {
+	return map[string]any{
+		"object_type":      "lumyn.canonical_trace",
+		"schema_version":   "1.0",
+		"trace_id":         "trace_123",
+		"run_id":           "run_123",
+		"workflow_id":      "create_customer_with_readback",
+		"lumyn_version":    "0.0.0-dev",
+		"started_at":       "2026-06-07T00:00:00Z",
+		"finished_at":      "2026-06-07T00:00:01Z",
+		"redaction_status": "applied",
+		"events":           []any{event},
+		"proof_strength":   map[string]any{"level": "strong"},
+		"metadata":         metadata,
+	}
 }
 
 func boundarySafetyFindingEvent(metadata map[string]any) map[string]any {

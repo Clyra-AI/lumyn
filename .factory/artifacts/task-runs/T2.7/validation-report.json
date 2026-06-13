@@ -3,7 +3,7 @@
   "schema_version": "1.0",
   "task_id": "T2.7",
   "worker": "task-executor",
-  "generated_at": "2026-06-13T20:36:48Z",
+  "generated_at": "2026-06-13T20:44:37Z",
   "objective": "Add safety/corpus-ready local evidence contracts before T3 product implementation.",
   "runner_ready_contract_result": {
     "status": "pass",
@@ -68,6 +68,12 @@
   },
   "green_evidence": [
     {
+      "command": "go test ./schemas -run 'TestSafetyCorpusReadyFieldsFailClosed|TestPersistedEvidenceEventContainersFailClosed|TestRepresentativeSamplesValidate|TestInvalidCommandResultFails' -count=1",
+      "status": "pass",
+      "exit_code": 0,
+      "summary": "Targeted schema regression tests passed for normalized fields, persisted event containers, representative samples, and invalid command results."
+    },
+    {
       "command": "make test-contracts",
       "status": "pass",
       "exit_code": 0,
@@ -89,6 +95,7 @@
   "commands_run": [
     "make lint-fast",
     "make test-fast",
+    "go test ./schemas -run 'TestSafetyCorpusReadyFieldsFailClosed|TestPersistedEvidenceEventContainersFailClosed|TestRepresentativeSamplesValidate|TestInvalidCommandResultFails' -count=1",
     "make test-contracts",
     "make test-coverage",
     "make prepush-full"
@@ -99,8 +106,11 @@
     "cmd/lumyn/main_test.go",
     "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md",
     "docs/dev/dev_guides.md",
+    "docs/product/prd.md",
     "internal/result/result.go",
     "internal/result/result_test.go",
+    "schemas/canonical-trace.schema.json",
+    "schemas/cassette.schema.json",
     "schemas/command-result.schema.json",
     "schemas/evidence-event.schema.json",
     "schemas/result-axes.schema.json",
@@ -199,15 +209,15 @@
     "status": "partial_by_path_policy",
     "updated_paths": [
       "docs/dev/dev_guides.md",
-      "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md"
+      "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md",
+      "docs/product/prd.md"
     ],
     "not_modified_paths": [
       "README.md",
       "AGENTS.md",
-      "WORKFLOW.md",
-      "docs/product/prd.md"
+      "WORKFLOW.md"
     ],
-    "rationale": "The PRD already names the safety/corpus-ready fields; remaining docs were outside the task allowed path set or did not require CLI usage text for this foundation contract."
+    "rationale": "The PRD command-result example was updated after review so product truth matches the stricter schema; remaining docs did not require CLI usage text for this foundation contract."
   },
   "security_scanner_result": {
     "status": "pending_ci",
