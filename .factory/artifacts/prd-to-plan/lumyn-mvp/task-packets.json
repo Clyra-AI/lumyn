@@ -482,7 +482,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T2",
@@ -981,7 +982,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T2.5",
@@ -1448,7 +1450,8 @@
       ],
       "delivery_slice_refs": [
         "v0.0"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T2.6",
@@ -1894,7 +1897,8 @@
       ],
       "delivery_slice_refs": [
         "v0.0"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T2.7",
@@ -2439,7 +2443,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T3",
@@ -3048,7 +3053,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T4.1",
@@ -3649,7 +3655,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T4.2",
@@ -4303,7 +4310,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T4.3",
@@ -4905,7 +4913,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T5.1",
@@ -5519,7 +5528,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T5.2",
@@ -6021,7 +6031,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T6.1",
@@ -6668,7 +6679,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T6.2",
@@ -7240,7 +7252,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T7",
@@ -7880,7 +7893,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T8",
@@ -8474,7 +8488,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T9",
@@ -9025,7 +9040,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T10",
@@ -9645,7 +9661,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T11.1",
@@ -10405,7 +10422,8 @@
           "network_allowlist"
         ],
         "approval_policy": "Live eval provider endpoint work for OpenAI-compatible/custom base_url and Anthropic adapters stays blocked until a complete model_provider_endpoint grant replaces pending placeholders."
-      }
+      },
+      "max_iterations": 2
     },
     {
       "task_id": "T11.2",
@@ -11016,7 +11034,8 @@
           "network_allowlist"
         ],
         "approval_policy": "Live eval provider endpoint work for OpenAI-compatible/custom base_url and Anthropic adapters stays blocked until a complete model_provider_endpoint grant replaces pending placeholders."
-      }
+      },
+      "max_iterations": 2
     },
     {
       "task_id": "T12.1",
@@ -11663,7 +11682,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     },
     {
       "task_id": "T12.2",
@@ -12238,7 +12258,8 @@
         "docs/dev/dev_guides.md",
         "docs/architecture/architecture_guides.md",
         "docs/product/prd.md"
-      ]
+      ],
+      "max_iterations": 2
     }
   ],
   "runtime_pins": {
