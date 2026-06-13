@@ -67,11 +67,23 @@
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/4/validation_commands"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "medium",
       "notes": [
         "This is a local contract and schema requirement only; MVP artifacts must not upload telemetry or private traces by default."
-      ]
+      ],
+      "evidence_refs": [
+        "schemas/command-result.schema.json",
+        "schemas/result-axes.schema.json",
+        "schemas/evidence-event.schema.json",
+        "schemas/cassette.schema.json",
+        "schemas/canonical-trace.schema.json",
+        "docs/product/prd.md",
+        "schemas/schema_test.go",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-13T21:21:40Z"
     },
     {
       "acceptance_item_id": "FDL-001",
@@ -352,12 +364,20 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
       ],
-      "status": "planned",
+      "status": "partial",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
         "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
-      ]
+      ],
+      "evidence_refs": [
+        "schemas/evidence-event.schema.json",
+        "schemas/cassette.schema.json",
+        "schemas/canonical-trace.schema.json",
+        "schemas/schema_test.go"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-13T21:21:40Z"
     },
     {
       "acceptance_item_id": "FR10",
@@ -832,11 +852,20 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/9/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands"
       ],
-      "status": "planned",
+      "status": "partial",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
-      ]
+      ],
+      "evidence_refs": [
+        "schemas/command-result.schema.json",
+        "schemas/result-axes.schema.json",
+        "schemas/evidence-event.schema.json",
+        "schemas/cassette.schema.json",
+        "schemas/canonical-trace.schema.json"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-13T21:21:40Z"
     },
     {
       "acceptance_item_id": "NFR5",
@@ -896,12 +925,20 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/17/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
       ],
-      "status": "planned",
+      "status": "partial",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
         "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
-      ]
+      ],
+      "evidence_refs": [
+        "cmd/lumyn/main.go",
+        "schemas/schema_test.go",
+        "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md",
+        "docs/product/prd.md"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-13T21:21:40Z"
     },
     {
       "acceptance_item_id": "NFR7",
@@ -989,12 +1026,20 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/18/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
       ],
-      "status": "planned",
+      "status": "partial",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
         "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
-      ]
+      ],
+      "evidence_refs": [
+        "schemas/command-result.schema.json",
+        "schemas/result-axes.schema.json",
+        "schemas/evidence-event.schema.json",
+        "docs/product/prd.md"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-13T21:21:40Z"
     },
     {
       "acceptance_item_id": "NFR10",
@@ -1082,12 +1127,22 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/18/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
       ],
-      "status": "planned",
+      "status": "partial",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
         "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
-      ]
+      ],
+      "evidence_refs": [
+        "schemas/command-result.schema.json",
+        "schemas/result-axes.schema.json",
+        "schemas/evidence-event.schema.json",
+        "schemas/cassette.schema.json",
+        "schemas/canonical-trace.schema.json",
+        "schemas/schema_test.go"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-13T21:21:40Z"
     },
     {
       "acceptance_item_id": "NFR13",
@@ -2046,5 +2101,6 @@
       ]
     }
   ],
-  "acceptance_item_count": 87
+  "acceptance_item_count": 87,
+  "last_updated_at": "2026-06-13T21:21:40Z"
 }

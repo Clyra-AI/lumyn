@@ -94,14 +94,17 @@
         ".factory/artifacts/task-runs/T1/validation-report.json",
         ".factory/artifacts/task-runs/T1/work-proof-marker.json",
         ".factory/artifacts/task-runs/T2/validation-report.json",
-        ".factory/artifacts/task-runs/T2/work-proof-marker.json"
+        ".factory/artifacts/task-runs/T2/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
       ],
       "implemented_task_refs": [
         "T1",
-        "T2"
+        "T2",
+        "T2.7"
       ],
       "remaining_task_refs": [
-        "T2.7",
         "T3",
         "T4.1",
         "T4.2",
@@ -266,11 +269,20 @@
         },
         {
           "acceptance_item_id": "FDN-003",
-          "status": "planned",
-          "evidence_refs": [],
-          "repair_task_refs": [
-            "T2.7"
-          ]
+          "status": "implemented",
+          "evidence_refs": [
+            "schemas/command-result.schema.json",
+            "schemas/result-axes.schema.json",
+            "schemas/evidence-event.schema.json",
+            "schemas/cassette.schema.json",
+            "schemas/canonical-trace.schema.json",
+            "docs/product/prd.md",
+            "schemas/schema_test.go",
+            ".factory/artifacts/task-runs/T2.7/validation-report.json",
+            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+          ],
+          "repair_task_refs": []
         },
         {
           "acceptance_item_id": "RCRR-012",
@@ -574,11 +586,12 @@
         "T12.1",
         "T12.2"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "T2.7"
+      ],
       "remaining_task_refs": [
         "T1",
         "T2",
-        "T2.7",
         "T3",
         "T4.1",
         "T4.2",
@@ -596,7 +609,11 @@
         "T12.1",
         "T12.2"
       ],
-      "evidence_refs": [],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+      ],
       "acceptance_criteria": [],
       "requires_human_approval": false,
       "notes": [
@@ -680,8 +697,16 @@
         },
         {
           "acceptance_item_id": "FR9",
-          "status": "planned",
-          "evidence_refs": [],
+          "status": "partial",
+          "evidence_refs": [
+            "schemas/evidence-event.schema.json",
+            "schemas/cassette.schema.json",
+            "schemas/canonical-trace.schema.json",
+            "schemas/schema_test.go",
+            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T2.7/validation-report.json",
+            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+          ],
           "repair_task_refs": []
         },
         {
@@ -808,11 +833,12 @@
         "T12.1",
         "T12.2"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "T2.7"
+      ],
       "remaining_task_refs": [
         "T1",
         "T2",
-        "T2.7",
         "T3",
         "T4.1",
         "T4.2",
@@ -830,7 +856,11 @@
         "T12.1",
         "T12.2"
       ],
-      "evidence_refs": [],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+      ],
       "acceptance_criteria": [],
       "requires_human_approval": false,
       "notes": [
@@ -873,8 +903,17 @@
         },
         {
           "acceptance_item_id": "NFR4",
-          "status": "planned",
-          "evidence_refs": [],
+          "status": "partial",
+          "evidence_refs": [
+            "schemas/command-result.schema.json",
+            "schemas/result-axes.schema.json",
+            "schemas/evidence-event.schema.json",
+            "schemas/cassette.schema.json",
+            "schemas/canonical-trace.schema.json",
+            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T2.7/validation-report.json",
+            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+          ],
           "repair_task_refs": []
         },
         {
@@ -885,8 +924,16 @@
         },
         {
           "acceptance_item_id": "NFR6",
-          "status": "planned",
-          "evidence_refs": [],
+          "status": "partial",
+          "evidence_refs": [
+            "cmd/lumyn/main.go",
+            "schemas/schema_test.go",
+            "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md",
+            "docs/product/prd.md",
+            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T2.7/validation-report.json",
+            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+          ],
           "repair_task_refs": []
         },
         {
@@ -903,8 +950,16 @@
         },
         {
           "acceptance_item_id": "NFR9",
-          "status": "planned",
-          "evidence_refs": [],
+          "status": "partial",
+          "evidence_refs": [
+            "schemas/command-result.schema.json",
+            "schemas/result-axes.schema.json",
+            "schemas/evidence-event.schema.json",
+            "docs/product/prd.md",
+            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T2.7/validation-report.json",
+            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+          ],
           "repair_task_refs": []
         },
         {
@@ -921,8 +976,18 @@
         },
         {
           "acceptance_item_id": "NFR12",
-          "status": "planned",
-          "evidence_refs": [],
+          "status": "partial",
+          "evidence_refs": [
+            "schemas/command-result.schema.json",
+            "schemas/result-axes.schema.json",
+            "schemas/evidence-event.schema.json",
+            "schemas/cassette.schema.json",
+            "schemas/canonical-trace.schema.json",
+            "schemas/schema_test.go",
+            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T2.7/validation-report.json",
+            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+          ],
           "repair_task_refs": []
         },
         {
@@ -941,7 +1006,7 @@
     }
   ],
   "full_mvp_closure_rule": "Every required acceptance item in acceptance-ledger.json must be implemented, deferred by approval, or blocked with evidence before full MVP closure.",
-  "last_updated_at": "2026-06-10T00:00:00Z",
+  "last_updated_at": "2026-06-13T21:21:40Z",
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
   "acceptance_item_count": 87,
   "mvp_required_version_slices": [
