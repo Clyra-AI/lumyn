@@ -190,7 +190,8 @@
       "stop_conditions",
       "ci_control_set_refs_or_evidence",
       "acceptance_ledger_ref",
-      "acceptance_item_ids"
+      "acceptance_item_ids",
+      "max_iterations"
     ],
     "exception_behavior": "block_or_record_approved_exception",
     "notes": [

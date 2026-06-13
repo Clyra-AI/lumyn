@@ -73,6 +73,7 @@ REQUIRED_TASK_FIELDS = [
     "worker_type",
     "factoryd_runtime",
     "validation_commands",
+    "max_iterations",
     "evidence_required",
     "stop_conditions",
     "acceptance_ledger_ref",
@@ -99,6 +100,7 @@ REQUIRED_RUNNER_READY_FIELDS = [
     "worker_type",
     "factoryd_runtime",
     "validation_commands",
+    "max_iterations",
     "evidence_required",
     "stop_conditions",
     "allowed_paths",
@@ -1347,6 +1349,8 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
         return value == "codex_cli"
     if field == "factoryd_runtime":
         return is_valid_factoryd_runtime(value)
+    if field == "max_iterations":
+        return isinstance(value, int) and value > 0
     if field in ["validation_commands", "evidence_required", "stop_conditions"]:
         return has_nonempty_list(value)
     if field == "security_scanner_gates":
@@ -2298,6 +2302,7 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
             "capability_grants": [],
         },
         "validation_commands": ["make prepush-full"],
+        "max_iterations": 2,
         "evidence_required": ["validation_report", "work_proof_marker", "factoryd_run_once_report"],
         "stop_conditions": [
             "missing runner-ready task contract",
