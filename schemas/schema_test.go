@@ -184,6 +184,25 @@ func TestPersistedEvidenceEventContainersFailClosed(t *testing.T) {
 				t.Fatal("expected nested event missing safety/corpus-ready fields to fail validation")
 			}
 		})
+		t.Run(schemaName+"_nested_event_malformed_normalized_fields", func(t *testing.T) {
+			schema, err := jsonschema.Compile(filepath.Join(root, "schemas", schemaName))
+			if err != nil {
+				t.Fatalf("compile schema: %v", err)
+			}
+			malformedEvent := addSafetyCorpusFields(evidenceEvent(metadata), map[string]any{
+				"finding_kind":   "typo",
+				"proof_strength": map[string]any{},
+			})
+			var malformedContainer map[string]any
+			if schemaName == "cassette.schema.json" {
+				malformedContainer = cassetteSample(metadata, malformedEvent)
+			} else {
+				malformedContainer = canonicalTraceSample(metadata, malformedEvent)
+			}
+			if err := schema.Validate(malformedContainer); err == nil {
+				t.Fatal("expected malformed nested safety/corpus-ready fields to fail validation")
+			}
+		})
 	}
 }
 

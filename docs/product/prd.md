@@ -738,6 +738,12 @@ Example:
   "timestamp": "2026-06-07T00:00:00Z",
   "source": "http",
   "kind": "http_request",
+  "redaction_status": "applied",
+  "raw_refs": ["redacted://request/evt_001"],
+  "classification": {
+    "action_type": "write",
+    "confidence": "high"
+  },
   "operation": {
     "method": "POST",
     "path": "/customers",
@@ -755,7 +761,22 @@ Example:
   },
   "bindings": {
     "customer_id": "cus_test_123"
-  }
+  },
+  "confidence": "high",
+  "finding_kind": "none",
+  "proof_strength": "unknown",
+  "action_boundary_status": "not_configured",
+  "security_relevance": "none",
+  "fix_target": "not_applicable",
+  "surface_fingerprint": "not_applicable",
+  "eval_mode": "not_applicable",
+  "provider_metadata": {
+    "applicable": false,
+    "provider": "not_applicable",
+    "model": "not_applicable"
+  },
+  "corpus_eligible": false,
+  "metadata": {}
 }
 ```
 
@@ -1335,6 +1356,10 @@ Every evidence event must include:
 - classification fields where available
 - state bindings where extracted
 - confidence labels where inference is used
+- normalized local evidence fields: `finding_kind`, `proof_strength`,
+  `action_boundary_status`, `security_relevance`, `fix_target`,
+  `surface_fingerprint`, `eval_mode`, `provider_metadata`, and
+  `corpus_eligible: false`
 
 HTTP evidence events must include:
 

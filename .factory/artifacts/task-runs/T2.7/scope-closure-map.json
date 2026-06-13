@@ -2,7 +2,7 @@
   "artifact_type": "task_scope_closure_map",
   "schema_version": "1.0",
   "task_id": "T2.7",
-  "generated_at": "2026-06-13T20:44:37Z",
+  "generated_at": "2026-06-13T20:52:56Z",
   "canonical_scope_closure_map_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
   "canonical_scope_closure_map_modified": false,
   "closure_unit": "acceptance_item",

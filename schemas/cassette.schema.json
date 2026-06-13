@@ -130,6 +130,18 @@
         "corpus_eligible"
       ],
       "properties": {
+        "finding_kind": {
+          "$ref": "#/$defs/finding_kind"
+        },
+        "proof_strength": {
+          "$ref": "#/$defs/proof_strength"
+        },
+        "action_boundary_status": {
+          "$ref": "#/$defs/action_boundary_status"
+        },
+        "security_relevance": {
+          "$ref": "#/$defs/security_relevance"
+        },
         "fix_target": {
           "type": "string",
           "minLength": 1
@@ -139,16 +151,115 @@
           "minLength": 1
         },
         "provider_metadata": {
-          "type": "object",
-          "required": [
-            "applicable",
-            "provider",
-            "model"
-          ],
-          "additionalProperties": true
+          "$ref": "#/$defs/provider_metadata"
+        },
+        "eval_mode": {
+          "$ref": "#/$defs/eval_mode"
         },
         "corpus_eligible": {
           "const": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "finding_kind": {
+      "type": "string",
+      "enum": [
+        "none",
+        "completion_gap",
+        "proof_gap",
+        "boundary_violation",
+        "redaction_share_failure",
+        "eval_failure",
+        "docs_api_ambiguity",
+        "model_specific_failure",
+        "stochastic_failure",
+        "cost_duration",
+        "source_missing_metadata",
+        "context_missing",
+        "wrong_tool_or_endpoint",
+        "auth_confusion",
+        "final_state_mismatch",
+        "validator_coverage_gap",
+        "forbidden_endpoint_call",
+        "scope_escalation",
+        "unrelated_resource_access",
+        "unexpected_write_action",
+        "excessive_api_calls",
+        "data_exposure_risk",
+        "cleanup_failure",
+        "flaky_workflow",
+        "baseline_drift_contaminated",
+        "classification_uncertain",
+        "unenforced_boundary_declared",
+        "command_error"
+      ]
+    },
+    "proof_strength": {
+      "type": "string",
+      "enum": [
+        "strong",
+        "weak",
+        "gap",
+        "unknown"
+      ]
+    },
+    "action_boundary_status": {
+      "type": "string",
+      "enum": [
+        "passed",
+        "failed",
+        "not_configured",
+        "declared_not_enforced",
+        "classification_uncertain",
+        "unknown"
+      ]
+    },
+    "security_relevance": {
+      "type": "string",
+      "enum": [
+        "none",
+        "safety_relevant",
+        "security_relevant",
+        "safety_and_security_relevant",
+        "unknown"
+      ]
+    },
+    "eval_mode": {
+      "type": "string",
+      "enum": [
+        "not_applicable",
+        "surface_only",
+        "contract_assisted",
+        "unknown"
+      ]
+    },
+    "provider_metadata": {
+      "type": "object",
+      "required": [
+        "applicable",
+        "provider",
+        "model"
+      ],
+      "properties": {
+        "applicable": {
+          "type": "boolean"
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_snapshot": {
+          "type": "string",
+          "minLength": 1
+        },
+        "base_url": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "additionalProperties": true
