@@ -203,6 +203,28 @@ func TestPersistedEvidenceEventContainersFailClosed(t *testing.T) {
 				t.Fatal("expected malformed nested safety/corpus-ready fields to fail validation")
 			}
 		})
+		t.Run(schemaName+"_nested_event_provider_applicability", func(t *testing.T) {
+			schema, err := jsonschema.Compile(filepath.Join(root, "schemas", schemaName))
+			if err != nil {
+				t.Fatalf("compile schema: %v", err)
+			}
+			malformedEvent := addSafetyCorpusFields(evidenceEvent(metadata), map[string]any{
+				"provider_metadata": map[string]any{
+					"applicable": false,
+					"provider":   "openai",
+					"model":      "gpt-4",
+				},
+			})
+			var malformedContainer map[string]any
+			if schemaName == "cassette.schema.json" {
+				malformedContainer = cassetteSample(metadata, malformedEvent)
+			} else {
+				malformedContainer = canonicalTraceSample(metadata, malformedEvent)
+			}
+			if err := schema.Validate(malformedContainer); err == nil {
+				t.Fatal("expected non-applicable provider metadata with provider/model values to fail validation")
+			}
+		})
 	}
 }
 

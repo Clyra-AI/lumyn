@@ -217,6 +217,56 @@
           "minLength": 1
         }
       },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "applicable": {
+                "const": false
+              }
+            },
+            "required": [
+              "applicable"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provider": {
+                "const": "not_applicable"
+              },
+              "model": {
+                "const": "not_applicable"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "applicable": {
+                "const": true
+              }
+            },
+            "required": [
+              "applicable"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provider": {
+                "not": {
+                  "const": "not_applicable"
+                }
+              },
+              "model": {
+                "not": {
+                  "const": "not_applicable"
+                }
+              }
+            }
+          }
+        }
+      ],
       "additionalProperties": true
     }
   },
