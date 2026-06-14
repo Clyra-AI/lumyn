@@ -436,6 +436,7 @@ func checkOpenAPI(root string, entry SourceEntry) []Finding {
 			WorkflowRelevance: "Agents need explicit auth schemes to avoid guessing credentials or headers.",
 		})
 	}
+	findings = append(findings, authScopeDescriptionFindings(sourcePath, data)...)
 	return findings
 }
 
@@ -1438,6 +1439,63 @@ func hasSecuritySchemesJSON(raw map[string]any) bool {
 	return ok && len(schemes) > 0
 }
 
+func authScopeDescriptionFindings(sourcePath string, data []byte) []Finding {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	var raw map[string]any
+	if err := decoder.Decode(&raw); err != nil {
+		return nil
+	}
+	components, ok := raw["components"].(map[string]any)
+	if !ok {
+		return nil
+	}
+	schemes, ok := components["securitySchemes"].(map[string]any)
+	if !ok {
+		return nil
+	}
+	findings := []Finding{}
+	for schemeName, schemeValue := range schemes {
+		scheme, ok := schemeValue.(map[string]any)
+		if !ok || strings.ToLower(stringValue(scheme["type"])) != "oauth2" {
+			continue
+		}
+		flows, ok := scheme["flows"].(map[string]any)
+		if !ok {
+			continue
+		}
+		for flowName, flowValue := range flows {
+			flow, ok := flowValue.(map[string]any)
+			if !ok {
+				continue
+			}
+			scopes, ok := flow["scopes"].(map[string]any)
+			if !ok {
+				continue
+			}
+			for scopeName, scopeValue := range scopes {
+				if stringValue(scopeValue) != "" {
+					continue
+				}
+				findings = append(findings, Finding{
+					Kind:     "auth_confusion",
+					Severity: "warning",
+					Message:  fmt.Sprintf("OAuth scope %q in security scheme %q lacks a useful description", scopeName, schemeName),
+					Reference: Reference{
+						Path: sourcePath,
+						JSONPointer: "#/components/securitySchemes/" + escapeJSONPointer(schemeName) +
+							"/flows/" + escapeJSONPointer(flowName) + "/scopes/" + escapeJSONPointer(scopeName),
+						Object: "oauth_scope",
+					},
+					FixTarget:         "auth_scope_description",
+					WorkflowRelevance: "Agents need explicit scope meaning before selecting credentials or protected workflow actions.",
+				})
+			}
+		}
+	}
+	return findings
+}
+
 func hasReplacementHint(operation map[string]any) bool {
 	for _, key := range []string{"x-replacement", "x-replaced-by", "x-deprecated-replacement"} {
 		if stringValue(operation[key]) != "" {
@@ -1499,10 +1557,15 @@ func missingOperationalGuidance(lowerDocs string) bool {
 
 func cleanMarkdownLinkTarget(target string) string {
 	target = strings.TrimSpace(target)
+	if strings.HasPrefix(target, "<") {
+		if end := strings.Index(target, ">"); end > 0 {
+			return strings.Trim(strings.TrimSpace(target[1:end]), `"'`)
+		}
+	}
 	if space := strings.IndexByte(target, ' '); space >= 0 {
 		target = target[:space]
 	}
-	return strings.Trim(target, `"'`)
+	return strings.Trim(strings.Trim(target, "<>"), `"'`)
 }
 
 func isExternalReference(target string) bool {
@@ -1638,6 +1701,19 @@ func parseYAMLParameterLine(parameters []openAPIParameter, current **openAPIPara
 	if strings.HasPrefix(trimmed, "- ") {
 		item := strings.TrimSpace(strings.TrimPrefix(trimmed, "- "))
 		if strings.HasPrefix(item, "{") {
+			if refName, ok := yamlLocalComponentRef(item, "parameters"); ok {
+				if referenced, ok := parameterComponents[refName]; ok {
+					parameters = append(parameters, referenced)
+				} else {
+					parameters = append(parameters, openAPIParameter{
+						Name:    yamlInlineRefValue(item),
+						Pointer: pointer,
+						Line:    lineNo,
+					})
+				}
+				*current = &parameters[len(parameters)-1]
+				return parameters
+			}
 			parameter := yamlInlineParameter(item, pointer)
 			parameter.Line = lineNo
 			parameters = append(parameters, parameter)

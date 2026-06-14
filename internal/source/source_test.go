@@ -120,6 +120,37 @@ func TestCheckProjectResolvesRootRelativeMarkdownLinksFromProjectRoot(t *testing
 	}
 }
 
+func TestCheckProjectResolvesBracketedMarkdownLinksWithSpaces(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(completeOpenAPIYAML), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte("Read [auth](<auth guide.md>).\n"), 0o644); err != nil {
+		t.Fatalf("write docs guide: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "auth guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs auth: %v", err)
+	}
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  filepath.Join(root, "lumyn.yaml"),
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(filepath.Join(root, "lumyn.yaml"))
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "context_missing") {
+		t.Fatalf("bracketed docs link should resolve with spaces; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectFailsClosedForInvalidConfig(t *testing.T) {
 	root := t.TempDir()
 	_, err := CheckProject(filepath.Join(root, "missing-lumyn.yaml"))
@@ -275,6 +306,35 @@ func TestCheckProjectAllowsBodylessDeleteWithoutRequestSchema(t *testing.T) {
 	}
 	if hasFindingKind(report.Findings, "validator_coverage_gap") {
 		t.Fatalf("body-less DELETE should not require a request schema; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectReportsEmptyOAuthScopeDescriptions(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithEmptyOAuthScopeDescription), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.json",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "auth_confusion") {
+		t.Fatalf("empty OAuth scope descriptions should be reported; findings=%#v", report.Findings)
 	}
 }
 
@@ -548,6 +608,35 @@ func TestCheckProjectReportsMissingDescriptionForYAMLFlowParameter(t *testing.T)
 	}
 	if !hasFindingKind(report.Findings, "source_missing_metadata") {
 		t.Fatalf("flow-style parameter without description should be reported; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectReportsMissingDescriptionForYAMLFlowParameterRef(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithUndescribedFlowParameterRef), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "source_missing_metadata") {
+		t.Fatalf("flow-style parameter ref without description should be reported; findings=%#v", report.Findings)
 	}
 }
 
@@ -1059,6 +1148,46 @@ const openAPIWithBodylessDelete = `{
   }
 }`
 
+const openAPIWithEmptyOAuthScopeDescription = `{
+  "openapi": "3.0.3",
+  "info": {"title": "Fixture API", "version": "1.0.0"},
+  "paths": {
+    "/customers": {
+      "get": {
+        "operationId": "listCustomers",
+        "summary": "List customers",
+        "description": "List customers.",
+        "responses": {
+          "200": {
+            "description": "Customers.",
+            "content": {
+              "application/json": {
+                "schema": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "oauth": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://example.com/auth",
+            "tokenUrl": "https://example.com/token",
+            "scopes": {
+              "customers:read": ""
+            }
+          }
+        }
+      }
+    }
+  }
+}`
+
 const openAPIWithUndescribedParameterRef = `{
   "openapi": "3.0.3",
   "info": {"title": "Fixture API", "version": "1.0.0"},
@@ -1239,6 +1368,37 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+`
+
+const yamlOpenAPIWithUndescribedFlowParameterRef = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers/{id}:
+    get:
+      operationId: getCustomer
+      summary: Get customer
+      description: Get one customer.
+      parameters:
+        - { $ref: "#/components/parameters/CustomerId" }
+      responses:
+        "200":
+          description: Customer.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  parameters:
+    CustomerId:
+      name: id
+      in: path
 `
 
 const completeOpenAPIYAML = `openapi: 3.0.3
