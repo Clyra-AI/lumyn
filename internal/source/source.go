@@ -490,6 +490,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 	currentPath := ""
 	pathIndent := -1
 	var current *openAPIOperation
+	operationIndent := -1
 	requestBodyIndent := -1
 	responsesIndent := -1
 	response2xxIndent := -1
@@ -503,6 +504,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			operations = append(operations, *current)
 			current = nil
 		}
+		operationIndent = -1
 		requestBodyIndent = -1
 		responsesIndent = -1
 		response2xxIndent = -1
@@ -558,36 +560,54 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 				Pointer: "#/paths/" + escapeJSONPointer(currentPath) + "/" + method,
 				Line:    lineNo,
 			}
+			operationIndent = indent
 			continue
 		}
 		if current == nil {
 			continue
 		}
-		if indent <= pathIndent {
+		if indent <= pathIndent || indent <= operationIndent {
 			flushOperation()
 			continue
 		}
-		switch key {
-		case "operationId":
-			current.OperationID = value
-		case "summary":
-			current.Summary = value
-		case "description":
-			current.Description = value
-			if mentionsReplacement(value) {
-				current.ReplacementHint = true
-			}
-		case "deprecated":
-			current.Deprecated = value == "true"
-		case "x-replacement", "x-replaced-by":
-			current.ReplacementHint = value != ""
-		case "requestBody":
-			requestBodyIndent = indent
-		case "responses":
-			responsesIndent = indent
+		if requestBodyIndent >= 0 && indent <= requestBodyIndent {
+			requestBodyIndent = -1
+		}
+		if responsesIndent >= 0 && indent <= responsesIndent {
+			responsesIndent = -1
 			response2xxIndent = -1
-		case "parameters":
-			parametersIndent = indent
+		}
+		if response2xxIndent >= 0 && indent <= response2xxIndent {
+			response2xxIndent = -1
+		}
+		if parametersIndent >= 0 && indent <= parametersIndent {
+			parametersIndent = -1
+			currentParameter = nil
+		}
+		directOperationField := requestBodyIndent < 0 && responsesIndent < 0 && parametersIndent < 0
+		if directOperationField {
+			switch key {
+			case "operationId":
+				current.OperationID = value
+			case "summary":
+				current.Summary = value
+			case "description":
+				current.Description = value
+				if mentionsReplacement(value) {
+					current.ReplacementHint = true
+				}
+			case "deprecated":
+				current.Deprecated = value == "true"
+			case "x-replacement", "x-replaced-by":
+				current.ReplacementHint = value != ""
+			case "requestBody":
+				requestBodyIndent = indent
+			case "responses":
+				responsesIndent = indent
+				response2xxIndent = -1
+			case "parameters":
+				parametersIndent = indent
+			}
 		}
 		if requestBodyIndent >= 0 && indent > requestBodyIndent && key == "schema" {
 			current.HasRequestSchema = true
