@@ -490,7 +490,10 @@ func parseOpenAPIJSON(raw map[string]any) ([]openAPIOperation, bool, error) {
 				ReplacementHint:   hasReplacementHint(operationValue),
 				Parameters:        append([]openAPIParameter{}, pathParameters...),
 			}
-			operation.Parameters = append(operation.Parameters, parseJSONParameters(operationValue["parameters"], pointer+"/parameters", raw)...)
+			operation.Parameters = mergeOpenAPIParameterOverrides(
+				operation.Parameters,
+				parseJSONParameters(operationValue["parameters"], pointer+"/parameters", raw),
+			)
 			operations = append(operations, operation)
 		}
 	}
@@ -520,10 +523,12 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 	requestBodyIndent := -1
 	requestContentIndent := -1
 	requestMediaIndent := -1
+	requestMediaChildIndent := -1
 	responsesIndent := -1
 	response2xxIndent := -1
 	responseContentIndent := -1
 	responseMediaIndent := -1
+	responseMediaChildIndent := -1
 	parametersIndent := -1
 	var currentParameter *openAPIParameter
 	componentsIndent := -1
@@ -533,6 +538,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 
 	flushOperation := func() {
 		if current != nil {
+			current.Parameters = effectiveOpenAPIParameters(current.Parameters)
 			operations = append(operations, *current)
 			current = nil
 		}
@@ -540,10 +546,12 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		requestBodyIndent = -1
 		requestContentIndent = -1
 		requestMediaIndent = -1
+		requestMediaChildIndent = -1
 		responsesIndent = -1
 		response2xxIndent = -1
 		responseContentIndent = -1
 		responseMediaIndent = -1
+		responseMediaChildIndent = -1
 		parametersIndent = -1
 		currentParameter = nil
 	}
@@ -690,9 +698,11 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		if requestContentIndent >= 0 && indent <= requestContentIndent {
 			requestContentIndent = -1
 			requestMediaIndent = -1
+			requestMediaChildIndent = -1
 		}
 		if requestMediaIndent >= 0 && indent <= requestMediaIndent {
 			requestMediaIndent = -1
+			requestMediaChildIndent = -1
 		}
 		if responsesIndent >= 0 && indent <= responsesIndent {
 			responsesIndent = -1
@@ -708,9 +718,11 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		if responseContentIndent >= 0 && indent <= responseContentIndent {
 			responseContentIndent = -1
 			responseMediaIndent = -1
+			responseMediaChildIndent = -1
 		}
 		if responseMediaIndent >= 0 && indent <= responseMediaIndent {
 			responseMediaIndent = -1
+			responseMediaChildIndent = -1
 		}
 		if parametersIndent >= 0 && indent <= parametersIndent {
 			parametersIndent = -1
@@ -746,7 +758,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			}
 		}
 		if requestBodyIndent >= 0 && indent > requestBodyIndent && key == "schema" {
-			if requestMediaIndent >= 0 && indent > requestMediaIndent {
+			if requestMediaIndent >= 0 && (requestMediaChildIndent < 0 || indent == requestMediaChildIndent) {
 				current.HasRequestSchema = true
 			}
 		}
@@ -761,6 +773,10 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		}
 		if requestContentIndent >= 0 && indent > requestContentIndent && strings.Contains(key, "/") {
 			requestMediaIndent = indent
+			requestMediaChildIndent = -1
+		}
+		if requestMediaIndent >= 0 && indent > requestMediaIndent && (requestMediaChildIndent < 0 || indent <= requestMediaChildIndent) {
+			requestMediaChildIndent = indent
 		}
 		if responsesIndent >= 0 && indent > responsesIndent && is2xxStatusKey(key) {
 			response2xxIndent = indent
@@ -776,9 +792,15 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		}
 		if responseContentIndent >= 0 && indent > responseContentIndent && strings.Contains(key, "/") {
 			responseMediaIndent = indent
+			responseMediaChildIndent = -1
+		}
+		if responseMediaIndent >= 0 && indent > responseMediaIndent && (responseMediaChildIndent < 0 || indent <= responseMediaChildIndent) {
+			responseMediaChildIndent = indent
 		}
 		if responseMediaIndent >= 0 && indent > responseMediaIndent && key == "schema" {
-			current.HasResponseSchema = true
+			if responseMediaChildIndent < 0 || indent == responseMediaChildIndent {
+				current.HasResponseSchema = true
+			}
 		}
 		if response2xxIndent >= 0 && indent > response2xxIndent && key == "$ref" {
 			if refName, ok := yamlLocalComponentRef(value, "responses"); ok && responseComponentSchemas[refName] {
@@ -1356,7 +1378,7 @@ func mergeOpenAPIParameters(parameters []openAPIParameter, shared []openAPIParam
 	for _, candidate := range shared {
 		duplicate := false
 		for _, existing := range merged {
-			if existing.Name == candidate.Name && existing.In == candidate.In && existing.Pointer == candidate.Pointer {
+			if openAPIParameterIdentity(existing) != "" && openAPIParameterIdentity(existing) == openAPIParameterIdentity(candidate) {
 				duplicate = true
 				break
 			}
@@ -1366,6 +1388,39 @@ func mergeOpenAPIParameters(parameters []openAPIParameter, shared []openAPIParam
 		}
 	}
 	return merged
+}
+
+func mergeOpenAPIParameterOverrides(base []openAPIParameter, overrides []openAPIParameter) []openAPIParameter {
+	if len(overrides) == 0 {
+		return effectiveOpenAPIParameters(base)
+	}
+	return effectiveOpenAPIParameters(append(append([]openAPIParameter{}, base...), overrides...))
+}
+
+func effectiveOpenAPIParameters(parameters []openAPIParameter) []openAPIParameter {
+	effective := []openAPIParameter{}
+	indexByIdentity := map[string]int{}
+	for _, parameter := range parameters {
+		identity := openAPIParameterIdentity(parameter)
+		if identity == "" {
+			effective = append(effective, parameter)
+			continue
+		}
+		if index, ok := indexByIdentity[identity]; ok {
+			effective[index] = parameter
+			continue
+		}
+		indexByIdentity[identity] = len(effective)
+		effective = append(effective, parameter)
+	}
+	return effective
+}
+
+func openAPIParameterIdentity(parameter openAPIParameter) string {
+	if parameter.Name == "" || parameter.In == "" {
+		return ""
+	}
+	return parameter.Name + "\x00" + parameter.In
 }
 
 func hasSecuritySchemesJSON(raw map[string]any) bool {

@@ -377,6 +377,35 @@ func TestCheckProjectDoesNotTreatYAMLResponseHeaderSchemaAsBodySchema(t *testing
 	}
 }
 
+func TestCheckProjectRequiresDirectYAMLRequestMediaSchema(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlRequestBodyNestedExampleSchemaOnly), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "validator_coverage_gap") {
+		t.Fatalf("nested example schema should not satisfy request schema coverage; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectResolvesLocalComponentRequestAndResponseRefs(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithComponentRequestAndResponseRefs), 0o644); err != nil {
@@ -432,6 +461,35 @@ func TestCheckProjectReportsMissingDescriptionForJSONParameterRef(t *testing.T) 
 	}
 	if !hasFindingKind(report.Findings, "source_missing_metadata") {
 		t.Fatalf("referenced parameter without description should be reported; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectHonorsOperationParameterOverrides(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithOperationParameterOverride), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.json",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "source_missing_metadata") {
+		t.Fatalf("operation parameter override should replace stale path metadata; findings=%#v", report.Findings)
 	}
 }
 
@@ -952,6 +1010,41 @@ const openAPIWithUndescribedParameterRef = `{
   }
 }`
 
+const openAPIWithOperationParameterOverride = `{
+  "openapi": "3.0.3",
+  "info": {"title": "Fixture API", "version": "1.0.0"},
+  "paths": {
+    "/customers/{id}": {
+      "parameters": [
+        {"name": "id", "in": "path"}
+      ],
+      "get": {
+        "operationId": "getCustomer",
+        "summary": "Get customer",
+        "description": "Get one customer.",
+        "parameters": [
+          {"name": "id", "in": "path", "description": "Customer ID"}
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer.",
+            "content": {
+              "application/json": {
+                "schema": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}
+    }
+  }
+}`
+
 const yamlOpenAPIWithUndescribedParameterRef = `openapi: 3.0.3
 info:
   title: Fixture API
@@ -1186,6 +1279,39 @@ paths:
             X-Request-ID:
               schema:
                 type: string
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
+const yamlRequestBodyNestedExampleSchemaOnly = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    post:
+      operationId: createCustomer
+      summary: Create customer
+      description: Create one customer.
+      requestBody:
+        content:
+          application/json:
+            examples:
+              one:
+                value:
+                  schema:
+                    type: object
+      responses:
+        "201":
+          description: Created.
+          content:
+            application/json:
+              schema:
+                type: object
 components:
   securitySchemes:
     apiKeyAuth:
