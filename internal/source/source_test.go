@@ -182,6 +182,39 @@ func TestCheckProjectResolvesURLEncodedMarkdownLinks(t *testing.T) {
 	}
 }
 
+func TestCheckProjectRedactsSecretBearingBrokenMarkdownLinkTargets(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(completeOpenAPIYAML), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte("Read [setup](missing.md?api_key=super-secret-token#install).\n"+completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs guide: %v", err)
+	}
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  filepath.Join(root, "lumyn.yaml"),
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(filepath.Join(root, "lumyn.yaml"))
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "context_missing") {
+		t.Fatalf("expected missing local reference finding; findings=%#v", report.Findings)
+	}
+	for _, finding := range report.Findings {
+		if containsString(finding.Message, "api_key") || containsString(finding.Message, "super-secret-token") || containsString(finding.Message, "#install") {
+			t.Fatalf("finding message leaked secret-bearing link target: %#v", finding)
+		}
+	}
+}
+
 func TestCheckProjectFailsClosedForInvalidConfig(t *testing.T) {
 	root := t.TempDir()
 	_, err := CheckProject(filepath.Join(root, "missing-lumyn.yaml"))
@@ -453,6 +486,35 @@ func TestCheckProjectReportsEmptyYAMLOAuthScopeDescriptionsWhenTypeFollowsFlows(
 	}
 	if !hasFindingKind(report.Findings, "auth_confusion") {
 		t.Fatalf("YAML OAuth scopes should be reported even when type follows flows; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectReportsEmptyInlineYAMLOAuthScopes(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithInlineOAuthScopes), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "auth_confusion") {
+		t.Fatalf("inline YAML OAuth scope descriptions should be reported; findings=%#v", report.Findings)
 	}
 }
 
@@ -1555,6 +1617,34 @@ components:
           scopes:
             customers:read: ""
       type: oauth2
+`
+
+const yamlOpenAPIWithInlineOAuthScopes = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      summary: List customers
+      description: List customers.
+      responses:
+        "200":
+          description: Customers.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.com/auth
+          tokenUrl: https://example.com/token
+          scopes: {customers:read: ""}
 `
 
 const openAPIWithUndescribedParameterRef = `{

@@ -1113,7 +1113,7 @@ func brokenLocalReferenceFindings(root, docPath string, data []byte) []Finding {
 			if target == "" || isExternalReference(target) {
 				continue
 			}
-			targetPath := strings.SplitN(target, "#", 2)[0]
+			targetPath := markdownLinkLocalPath(target)
 			if targetPath == "" {
 				continue
 			}
@@ -1127,7 +1127,7 @@ func brokenLocalReferenceFindings(root, docPath string, data []byte) []Finding {
 			findings = append(findings, Finding{
 				Kind:     "context_missing",
 				Severity: "warning",
-				Message:  fmt.Sprintf("docs file %s links to missing local reference %s", relativePath(root, docPath), target),
+				Message:  fmt.Sprintf("docs file %s links to missing local reference %s", relativePath(root, docPath), markdownLinkFindingTarget(target)),
 				Reference: Reference{
 					Path: relativePath(root, docPath),
 					Line: index + 1,
@@ -1138,6 +1138,23 @@ func brokenLocalReferenceFindings(root, docPath string, data []byte) []Finding {
 		}
 	}
 	return findings
+}
+
+func markdownLinkLocalPath(target string) string {
+	targetPath := strings.SplitN(target, "#", 2)[0]
+	targetPath = strings.SplitN(targetPath, "?", 2)[0]
+	return targetPath
+}
+
+func markdownLinkFindingTarget(target string) string {
+	targetPath := markdownLinkLocalPath(target)
+	if targetPath == "" {
+		return "<local-fragment>"
+	}
+	if targetPath != target {
+		return targetPath + " [query-or-fragment-redacted]"
+	}
+	return targetPath
 }
 
 func writeReport(root string, report Report) error {
@@ -1630,6 +1647,9 @@ func yamlAuthScopeDescriptionFindings(sourcePath string, data []byte) []Finding 
 			scopesIndent = -1
 		case currentFlow != "" && indent > flowIndent && key == "scopes":
 			scopesIndent = indent
+			if currentSchemeOAuth2 {
+				findings = append(findings, yamlInlineAuthScopeDescriptionFindings(sourcePath, currentScheme, currentFlow, value)...)
+			}
 		case scopesIndent >= 0 && indent > scopesIndent:
 			if !currentSchemeOAuth2 {
 				continue
@@ -1651,6 +1671,34 @@ func yamlAuthScopeDescriptionFindings(sourcePath string, data []byte) []Finding 
 				WorkflowRelevance: "Agents need explicit scope meaning before selecting credentials or protected workflow actions.",
 			})
 		}
+	}
+	return findings
+}
+
+func yamlInlineAuthScopeDescriptionFindings(sourcePath, schemeName, flowName, value string) []Finding {
+	value = strings.TrimSpace(strings.Trim(value, "{} "))
+	if value == "" {
+		return nil
+	}
+	findings := []Finding{}
+	for _, entry := range splitYAMLFlowEntries(value) {
+		scopeName, scopeValue, ok := yamlKeyValue(strings.TrimSpace(entry))
+		if !ok || scopeValue != "" {
+			continue
+		}
+		findings = append(findings, Finding{
+			Kind:     "auth_confusion",
+			Severity: "warning",
+			Message:  fmt.Sprintf("OAuth scope %q in security scheme %q lacks a useful description", scopeName, schemeName),
+			Reference: Reference{
+				Path: sourcePath,
+				JSONPointer: "#/components/securitySchemes/" + escapeJSONPointer(schemeName) +
+					"/flows/" + escapeJSONPointer(flowName) + "/scopes/" + escapeJSONPointer(scopeName),
+				Object: "oauth_scope",
+			},
+			FixTarget:         "auth_scope_description",
+			WorkflowRelevance: "Agents need explicit scope meaning before selecting credentials or protected workflow actions.",
+		})
 	}
 	return findings
 }
