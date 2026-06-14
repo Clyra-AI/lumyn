@@ -1,0 +1,50 @@
+{
+  "artifact_type": "pr_lifecycle_report",
+  "schema_version": "1.0",
+  "task_id": "T3",
+  "status": "complete",
+  "branch_name": "codex/lumyn-T3-20260614T020310.481595000Z",
+  "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/38",
+  "commit_set": [
+    "c036d2074783ad046d7b8b8c0060e1af463a5532"
+  ],
+  "local_validation": {
+    "status": "pass",
+    "command": "make prepush-full"
+  },
+  "ci_status": {
+    "status": "pass",
+    "validate": "success",
+    "codeql": "success"
+  },
+  "codex_review": {
+    "status": "carry_forward",
+    "unresolved_actionable_comments": 0,
+    "notes": "Latest head had green CI, no unresolved current review threads, and prior Codex review artifacts after the follow-up wait window."
+  },
+  "shipping_status": {
+    "commit_created": true,
+    "push_performed": true,
+    "pr_created": true,
+    "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/38",
+    "ship_packet_ref": ".factory/artifacts/pr-lifecycle/T3/ship-packet.json"
+  },
+  "ship_pr": {
+    "status": "shipped",
+    "ship_packet_ref": ".factory/artifacts/pr-lifecycle/T3/ship-packet.json"
+  },
+  "merge_status": {
+    "status": "merged",
+    "merge_performed": true,
+    "merge_commit": "f40fc93ec8d8f4b5c280f5109a0f0a2aefae4bb0"
+  },
+  "merge": {
+    "status": "merged",
+    "merge_performed": true,
+    "merge_commit": "f40fc93ec8d8f4b5c280f5109a0f0a2aefae4bb0"
+  },
+  "post_merge": {
+    "status": "healthy",
+    "post_merge_report_ref": ".factory/artifacts/pr-lifecycle/T3/post-merge-report.json"
+  }
+}

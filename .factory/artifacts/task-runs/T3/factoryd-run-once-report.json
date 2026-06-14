@@ -1,0 +1,33 @@
+{
+  "artifact_type": "factoryd_run_once_report",
+  "schema_version": "0.1",
+  "generated_at": "2026-06-14T09:36:57Z",
+  "repo": "lumyn",
+  "task_id": "T3",
+  "status": "completed",
+  "promotion_decision": "implemented",
+  "selected_task": {
+    "task_id": "T3",
+    "objective": "Implement `lumyn init` and `lumyn check` for local OpenAPI/docs source intake and workflow-relevant source findings."
+  },
+  "final_validation_evidence": {
+    "status": "pass",
+    "evidence_refs": [
+      ".factory/artifacts/task-runs/T3/validation-report.json",
+      ".factory/artifacts/task-runs/T3/coverage-gate-result.json"
+    ]
+  },
+  "shipping": {
+    "status": "shipping_complete",
+    "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/38",
+    "merge_ref": "f40fc93ec8d8f4b5c280f5109a0f0a2aefae4bb0"
+  },
+  "evidence_refs": [
+    ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+    ".factory/artifacts/task-runs/T3/validation-report.json",
+    ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+    ".factory/artifacts/pr-lifecycle/T3/ship-packet.json",
+    ".factory/artifacts/pr-lifecycle/T3/pr-lifecycle-report.json",
+    ".factory/artifacts/pr-lifecycle/T3/post-merge-report.json"
+  ]
+}

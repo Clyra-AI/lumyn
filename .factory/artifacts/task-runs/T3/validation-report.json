@@ -139,14 +139,6 @@
       ]
     },
     {
-      "acceptance_item_id": "NFR1",
-      "status": "implemented",
-      "evidence_refs": [
-        ".factory/artifacts/task-runs/T3/validation-report.json",
-        "cmd/lumyn/main_test.go"
-      ]
-    },
-    {
       "acceptance_item_id": "NFR8",
       "status": "implemented",
       "evidence_refs": [
