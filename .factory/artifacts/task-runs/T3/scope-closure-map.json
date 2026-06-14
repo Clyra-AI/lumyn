@@ -73,7 +73,7 @@
     },
     {
       "acceptance_item_id": "FR14",
-      "status": "implemented",
+      "status": "partial",
       "evidence_refs": [
         "cmd/lumyn/main.go",
         "cmd/lumyn/main_test.go",

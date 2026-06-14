@@ -15,7 +15,7 @@
   "ci_status": {
     "status": "pass",
     "validate": "success",
-    "codeql": "success"
+    "CodeQL analyze": "success"
   },
   "codex_review": {
     "status": "carry_forward",
