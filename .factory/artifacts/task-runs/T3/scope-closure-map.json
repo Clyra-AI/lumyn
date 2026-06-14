@@ -57,7 +57,7 @@
     },
     {
       "acceptance_item_id": "NFR8",
-      "status": "implemented",
+      "status": "partial",
       "evidence_refs": [
         "internal/source/source.go",
         "internal/source/source_test.go"

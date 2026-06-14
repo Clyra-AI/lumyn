@@ -152,7 +152,7 @@
         "cmd/lumyn/main.go"
       ],
       "recorded_by": "factoryd sync-task-closure",
-      "recorded_at": "2026-06-14T10:07:25Z"
+      "recorded_at": "2026-06-14T10:15:30Z"
     },
     {
       "acceptance_item_id": "FR2",
@@ -198,7 +198,7 @@
         "cmd/lumyn/main.go"
       ],
       "recorded_by": "factoryd sync-task-closure",
-      "recorded_at": "2026-06-14T10:07:25Z"
+      "recorded_at": "2026-06-14T10:15:30Z"
     },
     {
       "acceptance_item_id": "FR3",
@@ -227,7 +227,7 @@
         "internal/source/source_test.go"
       ],
       "recorded_by": "factoryd sync-task-closure",
-      "recorded_at": "2026-06-14T10:07:25Z"
+      "recorded_at": "2026-06-14T10:15:30Z"
     },
     {
       "acceptance_item_id": "FR4",
@@ -256,7 +256,7 @@
         "internal/source/source_test.go"
       ],
       "recorded_by": "factoryd sync-task-closure",
-      "recorded_at": "2026-06-14T10:07:25Z"
+      "recorded_at": "2026-06-14T10:15:30Z"
     },
     {
       "acceptance_item_id": "FR5",
@@ -548,7 +548,7 @@
         "schemas/command-result.schema.json"
       ],
       "recorded_by": "factoryd sync-task-closure",
-      "recorded_at": "2026-06-14T10:07:25Z"
+      "recorded_at": "2026-06-14T10:15:30Z"
     },
     {
       "acceptance_item_id": "FR15",
@@ -1015,7 +1015,7 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
         ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "implemented",
+      "status": "partial",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
@@ -1025,7 +1025,7 @@
         "internal/source/source_test.go"
       ],
       "recorded_by": "factoryd sync-task-closure",
-      "recorded_at": "2026-06-14T10:07:25Z"
+      "recorded_at": "2026-06-14T10:15:30Z"
     },
     {
       "acceptance_item_id": "NFR9",
@@ -1085,7 +1085,7 @@
         "cmd/lumyn/main_test.go"
       ],
       "recorded_by": "factoryd sync-task-closure",
-      "recorded_at": "2026-06-14T10:07:25Z"
+      "recorded_at": "2026-06-14T10:15:30Z"
     },
     {
       "acceptance_item_id": "NFR10",
@@ -1285,7 +1285,7 @@
         "cmd/lumyn/main_test.go"
       ],
       "recorded_by": "factoryd sync-task-closure",
-      "recorded_at": "2026-06-14T10:07:25Z"
+      "recorded_at": "2026-06-14T10:15:30Z"
     },
     {
       "acceptance_item_id": "RCRR-002",
@@ -1313,7 +1313,7 @@
         "internal/source/source_test.go"
       ],
       "recorded_by": "factoryd sync-task-closure",
-      "recorded_at": "2026-06-14T10:07:25Z"
+      "recorded_at": "2026-06-14T10:15:30Z"
     },
     {
       "acceptance_item_id": "RCRR-003",
@@ -2165,5 +2165,5 @@
     }
   ],
   "acceptance_item_count": 87,
-  "last_updated_at": "2026-06-14T10:07:25Z"
+  "last_updated_at": "2026-06-14T10:15:30Z"
 }

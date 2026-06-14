@@ -997,7 +997,7 @@
         },
         {
           "acceptance_item_id": "NFR8",
-          "status": "implemented",
+          "status": "partial",
           "evidence_refs": [
             "internal/source/source.go",
             "internal/source/source_test.go",
@@ -1070,7 +1070,7 @@
     }
   ],
   "full_mvp_closure_rule": "Every required acceptance item in acceptance-ledger.json must be implemented, deferred by approval, or blocked with evidence before full MVP closure.",
-  "last_updated_at": "2026-06-14T10:07:25Z",
+  "last_updated_at": "2026-06-14T10:15:30Z",
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
   "acceptance_item_count": 87,
   "mvp_required_version_slices": [
