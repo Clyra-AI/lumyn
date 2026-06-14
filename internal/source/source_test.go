@@ -230,6 +230,35 @@ func TestCheckProjectResolvesMarkdownLinksWithParentheses(t *testing.T) {
 	}
 }
 
+func TestCheckProjectIgnoresMarkdownLinksInFencedCode(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(completeOpenAPIYAML), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	body := "Example only:\n```md\n[placeholder](missing.md)\n```\n\n" + completeDocs
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(body), 0o644); err != nil {
+		t.Fatalf("write docs guide: %v", err)
+	}
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  filepath.Join(root, "lumyn.yaml"),
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(filepath.Join(root, "lumyn.yaml"))
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "context_missing") {
+		t.Fatalf("docs links in fenced code blocks should be ignored; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectResolvesURLEncodedMarkdownLinks(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(completeOpenAPIYAML), 0o644); err != nil {
@@ -478,6 +507,35 @@ func TestCheckProjectAllowsBodylessDeleteWithoutRequestSchema(t *testing.T) {
 	}
 	if hasFindingKind(report.Findings, "validator_coverage_gap") {
 		t.Fatalf("body-less DELETE should not require a request schema; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectRejectsNullJSONMediaSchemas(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithNullMediaSchemas), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.json",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "validator_coverage_gap") || !hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("null media schemas should not satisfy request/response coverage; findings=%#v", report.Findings)
 	}
 }
 
@@ -1973,6 +2031,42 @@ const openAPIWithBodylessDelete = `{
             "content": {
               "application/json": {
                 "schema": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}
+    }
+  }
+}`
+
+const openAPIWithNullMediaSchemas = `{
+  "openapi": "3.0.3",
+  "info": {"title": "Fixture API", "version": "1.0.0"},
+  "paths": {
+    "/customers": {
+      "post": {
+        "operationId": "createCustomer",
+        "summary": "Create customer",
+        "description": "Create one customer.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": null
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created.",
+            "content": {
+              "application/json": {
+                "schema": null
               }
             }
           }
