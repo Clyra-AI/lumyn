@@ -734,6 +734,35 @@ func TestCheckProjectRequiresDirectFlowStyleMediaSchemas(t *testing.T) {
 	}
 }
 
+func TestCheckProjectResolvesInlineYAMLRequestAndResponseContentSchemas(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithInlineRequestAndResponseContentSchemas), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "validator_coverage_gap") || hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("inline request/response content schemas should satisfy schema checks; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectResolvesFlowStyleYAMLOperationSchemas(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithFlowStyleOperationSchemas), 0o644); err != nil {
@@ -2243,6 +2272,27 @@ paths:
           description: Customer.
           content:
             application/json: { examples: { e: { value: { schema: {} } } } }
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
+const yamlOpenAPIWithInlineRequestAndResponseContentSchemas = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    post:
+      operationId: createCustomer
+      summary: Create customer
+      description: Create one customer.
+      requestBody: {content: {application/json: {schema: {type: object}}}}
+      responses:
+        "201": {description: Created, content: {application/json: {schema: {type: object}}}}
 components:
   securitySchemes:
     apiKeyAuth:

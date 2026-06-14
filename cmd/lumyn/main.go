@@ -101,6 +101,9 @@ func checkCommandResult(args []string, started time.Time) (result.CommandResult,
 	exitCode := exitcode.Success
 	if first, ok := source.FirstFinding(report.Findings); ok {
 		payload.Status = "warning"
+		if errorFinding, hasError := source.FirstErrorFinding(report.Findings); hasError {
+			first = errorFinding
+		}
 		payload.FindingKind = first.Kind
 		payload.FixTarget = first.FixTarget
 		if source.ContainsProofGap(report.Findings) {
