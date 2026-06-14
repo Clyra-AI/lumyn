@@ -545,6 +545,35 @@ func TestCheckProjectResolvesInlineYAMLComponentRefs(t *testing.T) {
 	}
 }
 
+func TestCheckProjectResolvesQuotedInlineYAMLComponentRefs(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithQuotedInlineComponentRefs), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "validator_coverage_gap") || hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("quoted inline YAML component refs should satisfy schema checks; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectCarriesYAMLPathItemParameters(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithUndescribedPathParameter), 0o644); err != nil {
@@ -630,6 +659,39 @@ func TestCheckProjectFingerprintIgnoresGeneratedReports(t *testing.T) {
 	}
 	if first.SurfaceFingerprint != second.SurfaceFingerprint {
 		t.Fatalf("surface fingerprint changed after generated report write: first=%s second=%s", first.SurfaceFingerprint, second.SurfaceFingerprint)
+	}
+}
+
+func TestCheckProjectIgnoresGeneratedDocsFindings(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(completeOpenAPIYAML), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	generatedDir := filepath.Join(root, ".factory", "artifacts")
+	if err := os.MkdirAll(generatedDir, 0o755); err != nil {
+		t.Fatalf("create generated artifact dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(generatedDir, "generated.md"), []byte("Generated [missing](missing.md).\n"), 0o644); err != nil {
+		t.Fatalf("write generated docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    ".",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "context_missing") {
+		t.Fatalf("generated docs should not contribute source findings; findings=%#v", report.Findings)
 	}
 }
 
@@ -962,6 +1024,40 @@ paths:
       requestBody: { $ref: "#/components/requestBodies/CustomerWrite" }
       responses:
         "201": { $ref: "#/components/responses/CustomerRead" }
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  requestBodies:
+    CustomerWrite:
+      content:
+        application/json:
+          schema:
+            type: object
+  responses:
+    CustomerRead:
+      description: Customer read-back.
+      content:
+        application/json:
+          schema:
+            type: object
+`
+
+const yamlOpenAPIWithQuotedInlineComponentRefs = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    post:
+      operationId: createCustomer
+      summary: Create customer
+      description: Create one customer.
+      requestBody: { "$ref": "#/components/requestBodies/CustomerWrite" }
+      responses:
+        "201": { "$ref": "#/components/responses/CustomerRead" }
 components:
   securitySchemes:
     apiKeyAuth:
