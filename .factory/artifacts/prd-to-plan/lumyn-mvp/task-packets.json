@@ -1924,8 +1924,7 @@
         "Makefile",
         "go.mod",
         "go.sum",
-        "CHANGELOG.md",
-        "docs/product/"
+        "CHANGELOG.md"
       ],
       "forbidden_paths": [
         ".git/",

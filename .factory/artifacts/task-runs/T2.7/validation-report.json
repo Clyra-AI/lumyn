@@ -181,9 +181,13 @@
     }
   ],
   "path_policy_result": {
-    "status": "pass",
+    "status": "approved_exception",
     "forbidden_paths_changed": [],
-    "outside_allowed_paths_changed": []
+    "outside_allowed_paths_changed": [
+      "docs/product/prd.md"
+    ],
+    "approved_exception_ref": ".factory/artifacts/exceptions/T2.7-docs-product-path-drift.json",
+    "rationale": "The closed T2.7 task packet did not include docs/product/. The PRD example update is preserved as explicit path-policy drift instead of retroactively broadening allowed_paths."
   },
   "plan_drift_result": {
     "status": "pass",
@@ -230,5 +234,8 @@
   "blockers": [],
   "residual_risks": [
     "GitHub CI, CodeQL status, passive Codex review, commit/push, and post-merge monitoring are pending downstream lifecycle workers."
+  ],
+  "approved_exceptions": [
+    ".factory/artifacts/exceptions/T2.7-docs-product-path-drift.json"
   ]
 }
