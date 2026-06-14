@@ -928,6 +928,67 @@ func TestCheckProjectResolvesFlowStyleYAMLOperationSchemas(t *testing.T) {
 	}
 }
 
+func TestCheckProjectResolvesInlineYAMLOperationObjects(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithInlineOperationObject), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "wrong_tool_or_endpoint") ||
+		hasFindingKind(report.Findings, "docs_api_ambiguity") ||
+		hasFindingKind(report.Findings, "validator_coverage_gap") ||
+		hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("inline operation object should satisfy metadata and schema checks; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectHonorsYAMLDeprecatedReplacementHint(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithDeprecatedReplacementHint), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingFixTarget(report.Findings, "deprecated_operation_guidance") {
+		t.Fatalf("x-deprecated-replacement should satisfy deprecated guidance; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectResolvesLocalComponentRequestAndResponseRefs(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithComponentRequestAndResponseRefs), 0o644); err != nil {
@@ -2545,6 +2606,48 @@ components:
       name: X-API-Key
 `
 
+const yamlOpenAPIWithInlineOperationObject = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    post: {operationId: createCustomer, summary: Create customer, description: Create one customer., requestBody: {content: {application/json: {schema: {type: object}}}}, responses: {"201": {description: Created., content: {application/json: {schema: {type: object}}}}}}
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
+const yamlOpenAPIWithDeprecatedReplacementHint = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /v1/customers:
+    get:
+      operationId: listLegacyCustomers
+      summary: Legacy customers
+      description: Legacy endpoint.
+      deprecated: true
+      x-deprecated-replacement: listCustomers
+      responses:
+        "200":
+          description: Customers.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
 const openAPIWithComponentRequestAndResponseRefs = `{
   "openapi": "3.0.3",
   "info": {"title": "Fixture API", "version": "1.0.0"},
@@ -2903,6 +3006,15 @@ func containsString(haystack, needle string) bool {
 func hasFindingKind(findings []Finding, kind string) bool {
 	for _, finding := range findings {
 		if finding.Kind == kind {
+			return true
+		}
+	}
+	return false
+}
+
+func hasFindingFixTarget(findings []Finding, fixTarget string) bool {
+	for _, finding := range findings {
+		if finding.FixTarget == fixTarget {
 			return true
 		}
 	}

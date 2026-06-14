@@ -699,6 +699,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 				Line:       lineNo,
 				Parameters: append([]openAPIParameter{}, pathParameters...),
 			}
+			applyYAMLInlineOperationValue(current, value, parameterComponents, requestBodyComponentSchemas, responseComponentSchemas)
 			operationIndent = indent
 			continue
 		}
@@ -761,7 +762,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 				}
 			case "deprecated":
 				current.Deprecated = value == "true"
-			case "x-replacement", "x-replaced-by":
+			case "x-replacement", "x-replaced-by", "x-deprecated-replacement":
 				current.ReplacementHint = value != ""
 			case "requestBody":
 				current.HasRequestBody = true
@@ -1726,6 +1727,74 @@ func yamlInlineSecuritySchemeScopeFindings(sourcePath, value string) []Finding {
 		}
 	}
 	return findings
+}
+
+func applyYAMLInlineOperationValue(operation *openAPIOperation, value string, parameterComponents map[string]openAPIParameter, requestBodyComponentSchemas, responseComponentSchemas map[string]bool) {
+	if operation == nil {
+		return
+	}
+	value = strings.TrimSpace(strings.Trim(value, "{} "))
+	if value == "" {
+		return
+	}
+	for _, entry := range splitYAMLFlowEntries(value) {
+		key, entryValue, ok := yamlKeyValue(strings.TrimSpace(entry))
+		if !ok {
+			continue
+		}
+		switch key {
+		case "operationId":
+			operation.OperationID = entryValue
+		case "summary":
+			operation.Summary = entryValue
+		case "description":
+			operation.Description = entryValue
+			if mentionsReplacement(entryValue) {
+				operation.ReplacementHint = true
+			}
+		case "deprecated":
+			operation.Deprecated = entryValue == "true"
+		case "x-replacement", "x-replaced-by", "x-deprecated-replacement":
+			operation.ReplacementHint = entryValue != ""
+		case "requestBody":
+			operation.HasRequestBody = true
+			if refName, ok := yamlLocalComponentRef(entryValue, "requestBodies"); ok && requestBodyComponentSchemas[refName] {
+				operation.HasRequestSchema = true
+			}
+			if yamlInlineContentContainerHasSchema(entryValue) {
+				operation.HasRequestSchema = true
+			}
+		case "responses":
+			if yamlInlineResponsesHave2xxSchema(entryValue, responseComponentSchemas) {
+				operation.HasResponseSchema = true
+			}
+		case "parameters":
+			operation.Parameters = mergeOpenAPIParameterOverrides(
+				operation.Parameters,
+				yamlInlineParameterSequence(entryValue, operation.Pointer+"/parameters", parameterComponents),
+			)
+		}
+	}
+}
+
+func yamlInlineResponsesHave2xxSchema(value string, responseComponentSchemas map[string]bool) bool {
+	value = strings.TrimSpace(strings.Trim(value, "{} "))
+	if value == "" {
+		return false
+	}
+	for _, entry := range splitYAMLFlowEntries(value) {
+		key, entryValue, ok := yamlKeyValue(strings.TrimSpace(entry))
+		if !ok || !is2xxStatusKey(key) {
+			continue
+		}
+		if refName, ok := yamlLocalComponentRef(entryValue, "responses"); ok && responseComponentSchemas[refName] {
+			return true
+		}
+		if yamlInlineContentContainerHasSchema(entryValue) {
+			return true
+		}
+	}
+	return false
 }
 
 func yamlInlineAuthScopeDescriptionFindings(sourcePath, schemeName, flowName, value string) []Finding {
