@@ -768,6 +768,9 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 				if refName, ok := yamlLocalComponentRef(value, "requestBodies"); ok && requestBodyComponentSchemas[refName] {
 					current.HasRequestSchema = true
 				}
+				if yamlInlineContentContainerHasSchema(value) {
+					current.HasRequestSchema = true
+				}
 			case "responses":
 				responsesIndent = indent
 				response2xxIndent = -1
@@ -809,6 +812,9 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			responseContentIndent = -1
 			responseMediaIndent = -1
 			if refName, ok := yamlLocalComponentRef(value, "responses"); ok && responseComponentSchemas[refName] {
+				current.HasResponseSchema = true
+			}
+			if yamlInlineContentContainerHasSchema(value) {
 				current.HasResponseSchema = true
 			}
 		}
@@ -1193,6 +1199,15 @@ func HasErrorFindings(findings []Finding) bool {
 		}
 	}
 	return false
+}
+
+func FirstErrorFinding(findings []Finding) (Finding, bool) {
+	for _, finding := range findings {
+		if finding.Severity == "error" {
+			return finding, true
+		}
+	}
+	return Finding{}, false
 }
 
 func FirstFinding(findings []Finding) (Finding, bool) {
@@ -2273,8 +2288,36 @@ func yamlInlineValueHasSchema(value string) bool {
 	return false
 }
 
+func yamlInlineContentContainerHasSchema(value string) bool {
+	value = strings.TrimSpace(strings.Trim(value, "{} "))
+	if value == "" {
+		return false
+	}
+	for _, entry := range splitYAMLFlowEntries(value) {
+		key, entryValue, ok := yamlKeyValue(strings.TrimSpace(entry))
+		if ok && strings.Trim(key, `"'`) == "content" {
+			return yamlInlineContentValueHasSchema(entryValue)
+		}
+	}
+	return false
+}
+
+func yamlInlineContentValueHasSchema(value string) bool {
+	value = strings.TrimSpace(strings.Trim(value, "{} "))
+	if value == "" {
+		return false
+	}
+	for _, entry := range splitYAMLFlowEntries(value) {
+		key, entryValue, ok := yamlKeyValue(strings.TrimSpace(entry))
+		if ok && strings.Contains(strings.Trim(key, `"'`), "/") && yamlInlineValueHasSchema(entryValue) {
+			return true
+		}
+	}
+	return false
+}
+
 func yamlInlineMapHasKey(value, expected string) bool {
-	for _, entry := range strings.Split(value, ",") {
+	for _, entry := range splitYAMLFlowEntries(value) {
 		key, _, ok := yamlKeyValue(strings.TrimSpace(entry))
 		if ok && strings.Trim(key, `"'`) == expected {
 			return true

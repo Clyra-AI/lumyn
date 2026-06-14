@@ -286,6 +286,49 @@ func TestCommandResultForArgsRunsInitAndStrictCheck(t *testing.T) {
 	}
 }
 
+func TestCommandResultForArgsPrefersErrorFindingOnFailedCheck(t *testing.T) {
+	projectDir := t.TempDir()
+	t.Chdir(projectDir)
+	writeOpenAPIFixture(t, filepath.Join(projectDir, "warning.json"))
+	if err := os.WriteFile(filepath.Join(projectDir, "invalid.json"), []byte(`{"info": {}}`), 0o644); err != nil {
+		t.Fatalf("write invalid openapi: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(projectDir, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(projectDir, "docs", "guide.md"), []byte("See [missing](missing.md)\n"), 0o644); err != nil {
+		t.Fatalf("write docs: %v", err)
+	}
+	config := `version: 1
+sources:
+  openapi:
+    - id: warning
+      path: ./warning.json
+    - id: invalid
+      path: ./invalid.json
+  docs:
+    - id: docs
+      path: ./docs
+`
+	if err := os.WriteFile(filepath.Join(projectDir, "lumyn.yaml"), []byte(config), 0o644); err != nil {
+		t.Fatalf("write config: %v", err)
+	}
+
+	payload, code := commandResultForArgs([]string{"check"}, time.Now())
+	if code != exitcode.InvalidUsageOrInput {
+		t.Fatalf("check exit code = %d, want %d; errors=%#v", code, exitcode.InvalidUsageOrInput, payload.Errors)
+	}
+	if payload.Status != "fail" {
+		t.Fatalf("check status = %q, want fail", payload.Status)
+	}
+	if payload.FindingKind != "command_error" {
+		t.Fatalf("finding_kind = %q, want command_error", payload.FindingKind)
+	}
+	if payload.FixTarget != "sources.openapi" {
+		t.Fatalf("fix_target = %q, want sources.openapi", payload.FixTarget)
+	}
+}
+
 func TestCommandResultForArgsHandlesJSONFlagAndBadCommandFlags(t *testing.T) {
 	payload, code := commandResultForArgs([]string{"--json", "check", "--bad-flag"}, time.Now())
 	if code != exitcode.InvalidUsageOrInput {
