@@ -489,6 +489,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 	pathsIndent := -1
 	currentPath := ""
 	pathIndent := -1
+	pathItemChildIndent := -1
 	var current *openAPIOperation
 	operationIndent := -1
 	requestBodyIndent := -1
@@ -536,6 +537,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			pathsIndent = indent
 			currentPath = ""
 			pathIndent = -1
+			pathItemChildIndent = -1
 			continue
 		}
 		if inPaths && indent <= pathsIndent && key != "paths" {
@@ -549,9 +551,14 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			flushOperation()
 			currentPath = key
 			pathIndent = indent
+			pathItemChildIndent = -1
 			continue
 		}
-		if currentPath != "" && httpMethods[strings.ToLower(key)] && indent > pathIndent {
+		isPathItemChild := currentPath != "" && indent > pathIndent && (pathItemChildIndent < 0 || indent <= pathItemChildIndent)
+		if isPathItemChild && pathItemChildIndent < 0 {
+			pathItemChildIndent = indent
+		}
+		if isPathItemChild && httpMethods[strings.ToLower(key)] {
 			flushOperation()
 			method := strings.ToLower(key)
 			current = &openAPIOperation{
