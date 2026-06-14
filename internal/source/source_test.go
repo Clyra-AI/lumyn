@@ -539,6 +539,35 @@ func TestCheckProjectRejectsNullJSONMediaSchemas(t *testing.T) {
 	}
 }
 
+func TestCheckProjectRejectsNullYAMLMediaSchemas(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithNullMediaSchemas), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "validator_coverage_gap") || !hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("null YAML media schemas should not satisfy request/response coverage; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectReportsEmptyOAuthScopeDescriptions(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithEmptyOAuthScopeDescription), 0o644); err != nil {
@@ -681,6 +710,35 @@ func TestCheckProjectReportsEmptyFlowStyleYAMLOAuthScopes(t *testing.T) {
 	}
 	if !hasFindingKind(report.Findings, "auth_confusion") {
 		t.Fatalf("flow-style YAML OAuth scope descriptions should be reported; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectReportsEmptyBlockFlowStyleYAMLOAuthScopes(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithBlockFlowStyleOAuthSecurityScheme), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "auth_confusion") {
+		t.Fatalf("block flow-style YAML OAuth scope descriptions should be reported; findings=%#v", report.Findings)
 	}
 }
 
@@ -2081,6 +2139,34 @@ const openAPIWithNullMediaSchemas = `{
   }
 }`
 
+const yamlOpenAPIWithNullMediaSchemas = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    post:
+      operationId: createCustomer
+      summary: Create customer
+      description: Create one customer.
+      requestBody:
+        content:
+          application/json:
+            schema: null
+      responses:
+        "201":
+          description: Created.
+          content:
+            application/json:
+              schema:
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
 const openAPIWithEmptyOAuthScopeDescription = `{
   "openapi": "3.0.3",
   "info": {"title": "Fixture API", "version": "1.0.0"},
@@ -2255,6 +2341,28 @@ paths:
                 type: object
 components:
   securitySchemes: {oauth: {type: oauth2, flows: {authorizationCode: {authorizationUrl: https://example.com/auth, tokenUrl: https://example.com/token, scopes: {customers:read: ""}}}}}
+`
+
+const yamlOpenAPIWithBlockFlowStyleOAuthSecurityScheme = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      summary: List customers
+      description: List customers.
+      responses:
+        "200":
+          description: Customers.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    oauth: {type: oauth2, flows: {authorizationCode: {authorizationUrl: https://example.com/auth, tokenUrl: https://example.com/token, scopes: {customers:read: ""}}}}
 `
 
 const openAPIWithUndescribedParameterRef = `{

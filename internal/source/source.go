@@ -530,11 +530,13 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 	requestContentIndent := -1
 	requestMediaIndent := -1
 	requestMediaChildIndent := -1
+	requestSchemaIndent := -1
 	responsesIndent := -1
 	response2xxIndent := -1
 	responseContentIndent := -1
 	responseMediaIndent := -1
 	responseMediaChildIndent := -1
+	responseSchemaIndent := -1
 	parametersIndent := -1
 	var currentParameter *openAPIParameter
 	componentsIndent := -1
@@ -555,11 +557,13 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		requestContentIndent = -1
 		requestMediaIndent = -1
 		requestMediaChildIndent = -1
+		requestSchemaIndent = -1
 		responsesIndent = -1
 		response2xxIndent = -1
 		responseContentIndent = -1
 		responseMediaIndent = -1
 		responseMediaChildIndent = -1
+		responseSchemaIndent = -1
 		parametersIndent = -1
 		currentParameter = nil
 	}
@@ -726,39 +730,61 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			requestBodyIndent = -1
 			requestContentIndent = -1
 			requestMediaIndent = -1
+			requestMediaChildIndent = -1
+			requestSchemaIndent = -1
 		}
 		if requestContentIndent >= 0 && indent <= requestContentIndent {
 			requestContentIndent = -1
 			requestMediaIndent = -1
 			requestMediaChildIndent = -1
+			requestSchemaIndent = -1
 		}
 		if requestMediaIndent >= 0 && indent <= requestMediaIndent {
 			requestMediaIndent = -1
 			requestMediaChildIndent = -1
+			requestSchemaIndent = -1
 		}
 		if responsesIndent >= 0 && indent <= responsesIndent {
 			responsesIndent = -1
 			response2xxIndent = -1
 			responseContentIndent = -1
 			responseMediaIndent = -1
+			responseMediaChildIndent = -1
+			responseSchemaIndent = -1
 		}
 		if response2xxIndent >= 0 && indent <= response2xxIndent {
 			response2xxIndent = -1
 			responseContentIndent = -1
 			responseMediaIndent = -1
+			responseMediaChildIndent = -1
+			responseSchemaIndent = -1
 		}
 		if responseContentIndent >= 0 && indent <= responseContentIndent {
 			responseContentIndent = -1
 			responseMediaIndent = -1
 			responseMediaChildIndent = -1
+			responseSchemaIndent = -1
 		}
 		if responseMediaIndent >= 0 && indent <= responseMediaIndent {
 			responseMediaIndent = -1
 			responseMediaChildIndent = -1
+			responseSchemaIndent = -1
+		}
+		if requestSchemaIndent >= 0 && indent <= requestSchemaIndent {
+			requestSchemaIndent = -1
+		}
+		if responseSchemaIndent >= 0 && indent <= responseSchemaIndent {
+			responseSchemaIndent = -1
 		}
 		if parametersIndent >= 0 && indent <= parametersIndent {
 			parametersIndent = -1
 			currentParameter = nil
+		}
+		if requestSchemaIndent >= 0 && indent > requestSchemaIndent {
+			current.HasRequestSchema = true
+		}
+		if responseSchemaIndent >= 0 && indent > responseSchemaIndent {
+			current.HasResponseSchema = true
 		}
 		directOperationField := requestBodyIndent < 0 && responsesIndent < 0 && parametersIndent < 0
 		if directOperationField {
@@ -799,7 +825,11 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		}
 		if requestBodyIndent >= 0 && indent > requestBodyIndent && key == "schema" {
 			if requestMediaIndent >= 0 && (requestMediaChildIndent < 0 || indent == requestMediaChildIndent) {
-				current.HasRequestSchema = true
+				if yamlInlineValueHasEntries(value) {
+					current.HasRequestSchema = true
+				} else if strings.TrimSpace(value) == "" {
+					requestSchemaIndent = indent
+				}
 			}
 		}
 		if requestBodyIndent >= 0 && indent > requestBodyIndent && key == "$ref" {
@@ -848,7 +878,11 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		}
 		if responseMediaIndent >= 0 && indent > responseMediaIndent && key == "schema" {
 			if responseMediaChildIndent < 0 || indent == responseMediaChildIndent {
-				current.HasResponseSchema = true
+				if yamlInlineValueHasEntries(value) {
+					current.HasResponseSchema = true
+				} else if strings.TrimSpace(value) == "" {
+					responseSchemaIndent = indent
+				}
 			}
 		}
 		if response2xxIndent >= 0 && indent > response2xxIndent && key == "$ref" {
@@ -1746,7 +1780,10 @@ func yamlAuthScopeDescriptionFindings(sourcePath string, data []byte) []Finding 
 			schemeIndent = indent
 			flowsIndent = -1
 			currentFlow = ""
-			currentSchemeOAuth2 = oauth2Schemes[currentScheme]
+			currentSchemeOAuth2 = oauth2Schemes[currentScheme] || yamlInlineMapValueEquals(value, "type", "oauth2")
+			if currentSchemeOAuth2 {
+				findings = append(findings, yamlInlineOAuthSchemeScopeFindings(sourcePath, currentScheme, value)...)
+			}
 		case currentScheme != "" && indent > schemeIndent && key == "type":
 			currentSchemeOAuth2 = strings.EqualFold(value, "oauth2")
 		case currentScheme != "" && indent > schemeIndent && key == "flows":
@@ -1798,27 +1835,33 @@ func yamlInlineSecuritySchemeScopeFindings(sourcePath, value string) []Finding {
 		if !ok {
 			continue
 		}
-		schemeValue = strings.TrimSpace(strings.Trim(schemeValue, "{} "))
-		if !yamlInlineMapValueEquals(schemeValue, "type", "oauth2") {
-			continue
-		}
-		flowsValue, ok := yamlInlineMapValue(schemeValue, "flows")
+		findings = append(findings, yamlInlineOAuthSchemeScopeFindings(sourcePath, schemeName, schemeValue)...)
+	}
+	return findings
+}
+
+func yamlInlineOAuthSchemeScopeFindings(sourcePath, schemeName, schemeValue string) []Finding {
+	schemeValue = strings.TrimSpace(strings.Trim(schemeValue, "{} "))
+	if !yamlInlineMapValueEquals(schemeValue, "type", "oauth2") {
+		return nil
+	}
+	flowsValue, ok := yamlInlineMapValue(schemeValue, "flows")
+	if !ok {
+		return nil
+	}
+	flowsValue = strings.TrimSpace(strings.Trim(flowsValue, "{} "))
+	findings := []Finding{}
+	for _, flowEntry := range splitYAMLFlowEntries(flowsValue) {
+		flowName, flowValue, ok := yamlKeyValue(strings.TrimSpace(flowEntry))
 		if !ok {
 			continue
 		}
-		flowsValue = strings.TrimSpace(strings.Trim(flowsValue, "{} "))
-		for _, flowEntry := range splitYAMLFlowEntries(flowsValue) {
-			flowName, flowValue, ok := yamlKeyValue(strings.TrimSpace(flowEntry))
-			if !ok {
-				continue
-			}
-			flowValue = strings.TrimSpace(strings.Trim(flowValue, "{} "))
-			scopesValue, ok := yamlInlineMapValue(flowValue, "scopes")
-			if !ok {
-				continue
-			}
-			findings = append(findings, yamlInlineAuthScopeDescriptionFindings(sourcePath, schemeName, flowName, scopesValue)...)
+		flowValue = strings.TrimSpace(strings.Trim(flowValue, "{} "))
+		scopesValue, ok := yamlInlineMapValue(flowValue, "scopes")
+		if !ok {
+			continue
 		}
+		findings = append(findings, yamlInlineAuthScopeDescriptionFindings(sourcePath, schemeName, flowName, scopesValue)...)
 	}
 	return findings
 }
@@ -2610,10 +2653,8 @@ func yamlInlineValueHasSchema(value string) bool {
 	if value == "" {
 		return false
 	}
-	if yamlInlineMapHasKey(value, "schema") {
-		return true
-	}
-	return false
+	schemaValue, ok := yamlInlineMapValue(value, "schema")
+	return ok && yamlInlineValueHasEntries(schemaValue)
 }
 
 func yamlInlineContentContainerHasSchema(value string) bool {
