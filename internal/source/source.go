@@ -310,8 +310,19 @@ func parseProjectConfigYAML(path string, data []byte) (ProjectConfig, error) {
 		if strings.HasPrefix(trimmed, "version:") {
 			continue
 		}
-		if strings.HasPrefix(trimmed, "- id:") {
-			entry := SourceEntry{ID: parseYAMLValue(strings.TrimPrefix(trimmed, "- id:"))}
+		if strings.HasPrefix(trimmed, "- ") {
+			key, value, ok := yamlKeyValue(strings.TrimSpace(strings.TrimPrefix(trimmed, "- ")))
+			if !ok || (key != "id" && key != "path") {
+				current = nil
+				continue
+			}
+			entry := SourceEntry{}
+			switch key {
+			case "id":
+				entry.ID = value
+			case "path":
+				entry.Path = value
+			}
 			switch section {
 			case "openapi":
 				parsed.Sources.OpenAPI = append(parsed.Sources.OpenAPI, entry)
@@ -322,6 +333,10 @@ func parseProjectConfigYAML(path string, data []byte) (ProjectConfig, error) {
 			default:
 				current = nil
 			}
+			continue
+		}
+		if strings.HasPrefix(trimmed, "id:") && current != nil {
+			current.ID = parseYAMLValue(strings.TrimPrefix(trimmed, "id:"))
 			continue
 		}
 		if strings.HasPrefix(trimmed, "path:") && current != nil {
@@ -493,6 +508,9 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 	currentPath := ""
 	pathIndent := -1
 	pathItemChildIndent := -1
+	pathParameters := []openAPIParameter{}
+	pathParametersIndent := -1
+	var currentPathParameter *openAPIParameter
 	var current *openAPIOperation
 	operationIndent := -1
 	requestBodyIndent := -1
@@ -551,6 +569,9 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			currentPath = ""
 			pathIndent = -1
 			pathItemChildIndent = -1
+			pathParameters = nil
+			pathParametersIndent = -1
+			currentPathParameter = nil
 			continue
 		}
 		if inPaths && indent <= pathsIndent && key != "paths" {
@@ -584,20 +605,45 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			currentPath = key
 			pathIndent = indent
 			pathItemChildIndent = -1
+			pathParameters = nil
+			pathParametersIndent = -1
+			currentPathParameter = nil
 			continue
 		}
 		isPathItemChild := currentPath != "" && indent > pathIndent && (pathItemChildIndent < 0 || indent <= pathItemChildIndent)
 		if isPathItemChild && pathItemChildIndent < 0 {
 			pathItemChildIndent = indent
 		}
+		if pathParametersIndent >= 0 && indent <= pathParametersIndent {
+			pathParametersIndent = -1
+			currentPathParameter = nil
+		}
+		if current == nil && isPathItemChild && key == "parameters" {
+			pathParametersIndent = indent
+			currentPathParameter = nil
+			continue
+		}
+		if current == nil && pathParametersIndent >= 0 && indent > pathParametersIndent {
+			pathParameters = parseYAMLParameterLine(
+				pathParameters,
+				&currentPathParameter,
+				trimmed,
+				key,
+				value,
+				"#/paths/"+escapeJSONPointer(currentPath)+"/parameters",
+				lineNo,
+			)
+			continue
+		}
 		if isPathItemChild && httpMethods[strings.ToLower(key)] {
 			flushOperation()
 			method := strings.ToLower(key)
 			current = &openAPIOperation{
-				Path:    currentPath,
-				Method:  method,
-				Pointer: "#/paths/" + escapeJSONPointer(currentPath) + "/" + method,
-				Line:    lineNo,
+				Path:       currentPath,
+				Method:     method,
+				Pointer:    "#/paths/" + escapeJSONPointer(currentPath) + "/" + method,
+				Line:       lineNo,
+				Parameters: append([]openAPIParameter{}, pathParameters...),
 			}
 			operationIndent = indent
 			continue
@@ -661,6 +707,9 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 				current.ReplacementHint = value != ""
 			case "requestBody":
 				requestBodyIndent = indent
+				if refName, ok := yamlLocalComponentRef(value, "requestBodies"); ok && requestBodyComponentSchemas[refName] {
+					current.HasRequestSchema = true
+				}
 			case "responses":
 				responsesIndent = indent
 				response2xxIndent = -1
@@ -689,6 +738,9 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			response2xxIndent = indent
 			responseContentIndent = -1
 			responseMediaIndent = -1
+			if refName, ok := yamlLocalComponentRef(value, "responses"); ok && responseComponentSchemas[refName] {
+				current.HasResponseSchema = true
+			}
 		}
 		if response2xxIndent >= 0 && indent > response2xxIndent && key == "content" {
 			responseContentIndent = indent
@@ -706,36 +758,15 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			}
 		}
 		if parametersIndent >= 0 && indent > parametersIndent {
-			if strings.HasPrefix(trimmed, "- ") {
-				parameterKey, parameterValue, ok := yamlKeyValue(strings.TrimSpace(strings.TrimPrefix(trimmed, "- ")))
-				parameter := openAPIParameter{
-					Pointer: current.Pointer + "/parameters",
-					Line:    lineNo,
-				}
-				if ok {
-					switch parameterKey {
-					case "name":
-						parameter.Name = parameterValue
-					case "in":
-						parameter.In = parameterValue
-					case "description":
-						parameter.Description = parameterValue
-					}
-				}
-				current.Parameters = append(current.Parameters, parameter)
-				currentParameter = &current.Parameters[len(current.Parameters)-1]
-				continue
-			}
-			if currentParameter != nil {
-				switch key {
-				case "name":
-					currentParameter.Name = value
-				case "in":
-					currentParameter.In = value
-				case "description":
-					currentParameter.Description = value
-				}
-			}
+			current.Parameters = parseYAMLParameterLine(
+				current.Parameters,
+				&currentParameter,
+				trimmed,
+				key,
+				value,
+				current.Pointer+"/parameters",
+				lineNo,
+			)
 		}
 	}
 	if err := scanner.Err(); err != nil {
@@ -1387,8 +1418,32 @@ func yamlScalar(value string) string {
 }
 
 func parseYAMLValue(value string) string {
+	value = stripYAMLInlineComment(value)
 	value = strings.TrimSpace(value)
 	value = strings.Trim(value, `"'`)
+	return value
+}
+
+func stripYAMLInlineComment(value string) string {
+	inSingleQuote := false
+	inDoubleQuote := false
+	escaped := false
+	for index, char := range value {
+		switch {
+		case escaped:
+			escaped = false
+		case char == '\\' && inDoubleQuote:
+			escaped = true
+		case char == '\'' && !inDoubleQuote:
+			inSingleQuote = !inSingleQuote
+		case char == '"' && !inSingleQuote:
+			inDoubleQuote = !inDoubleQuote
+		case char == '#' && !inSingleQuote && !inDoubleQuote:
+			if index > 0 && (value[index-1] == ' ' || value[index-1] == '\t') {
+				return value[:index]
+			}
+		}
+	}
 	return value
 }
 
@@ -1404,10 +1459,65 @@ func yamlInlineValueHasEntries(value string) bool {
 
 func yamlLocalComponentRef(value, component string) (string, bool) {
 	prefix := "#/components/" + component + "/"
-	if !strings.HasPrefix(value, prefix) {
-		return "", false
+	for _, candidate := range []string{parseYAMLValue(value), yamlInlineRefValue(value)} {
+		if strings.HasPrefix(candidate, prefix) {
+			return unescapeJSONPointer(strings.TrimPrefix(candidate, prefix)), true
+		}
 	}
-	return unescapeJSONPointer(strings.TrimPrefix(value, prefix)), true
+	return "", false
+}
+
+func yamlInlineRefValue(value string) string {
+	value = strings.TrimSpace(stripYAMLInlineComment(value))
+	value = strings.Trim(value, "{} ")
+	refIndex := strings.Index(value, "$ref")
+	if refIndex < 0 {
+		return ""
+	}
+	refValue := strings.TrimSpace(value[refIndex+len("$ref"):])
+	if !strings.HasPrefix(refValue, ":") {
+		return ""
+	}
+	refValue = strings.TrimSpace(strings.TrimPrefix(refValue, ":"))
+	if commaIndex := strings.Index(refValue, ","); commaIndex >= 0 {
+		refValue = refValue[:commaIndex]
+	}
+	return parseYAMLValue(strings.Trim(refValue, "{} "))
+}
+
+func parseYAMLParameterLine(parameters []openAPIParameter, current **openAPIParameter, trimmed, key, value, pointer string, lineNo int) []openAPIParameter {
+	if strings.HasPrefix(trimmed, "- ") {
+		parameterKey, parameterValue, ok := yamlKeyValue(strings.TrimSpace(strings.TrimPrefix(trimmed, "- ")))
+		parameter := openAPIParameter{
+			Pointer: pointer,
+			Line:    lineNo,
+		}
+		if ok {
+			switch parameterKey {
+			case "name":
+				parameter.Name = parameterValue
+			case "in":
+				parameter.In = parameterValue
+			case "description":
+				parameter.Description = parameterValue
+			}
+		}
+		parameters = append(parameters, parameter)
+		*current = &parameters[len(parameters)-1]
+		return parameters
+	}
+	if *current == nil {
+		return parameters
+	}
+	switch key {
+	case "name":
+		(*current).Name = value
+	case "in":
+		(*current).In = value
+	case "description":
+		(*current).Description = value
+	}
+	return parameters
 }
 
 func yamlComponentContentSchemaRefs(data []byte, group string) map[string]bool {

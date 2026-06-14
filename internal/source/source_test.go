@@ -398,6 +398,34 @@ sources:
 	}
 }
 
+func TestReadProjectConfigAcceptsYAMLSourceEntryKeysInAnyOrderAndInlineComments(t *testing.T) {
+	root := t.TempDir()
+	configPath := filepath.Join(root, "lumyn.yaml")
+	configBody := `version: 1
+sources:
+  openapi:
+    - path: ./openapi.yaml # local API contract
+      id: public_api
+  docs:
+    - path: "./docs" # local docs
+      id: docs
+`
+	if err := os.WriteFile(configPath, []byte(configBody), 0o644); err != nil {
+		t.Fatalf("write config: %v", err)
+	}
+
+	parsed, err := ReadProjectConfig(configPath)
+	if err != nil {
+		t.Fatalf("ReadProjectConfig: %v", err)
+	}
+	if parsed.Sources.OpenAPI[0].ID != "public_api" || parsed.Sources.OpenAPI[0].Path != "./openapi.yaml" {
+		t.Fatalf("openapi source = %#v", parsed.Sources.OpenAPI[0])
+	}
+	if parsed.Sources.Docs[0].ID != "docs" || parsed.Sources.Docs[0].Path != "./docs" {
+		t.Fatalf("docs source = %#v", parsed.Sources.Docs[0])
+	}
+}
+
 func TestCheckProjectReportsInvalidOpenAPIAndMissingDocs(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(`{"info": {}}`), 0o644); err != nil {
@@ -454,6 +482,64 @@ func TestCheckProjectResolvesYAMLComponentResponseRef(t *testing.T) {
 	}
 	if hasFindingKind(report.Findings, "proof_gap") {
 		t.Fatalf("YAML component response ref should satisfy response schema checks; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectResolvesInlineYAMLComponentRefs(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithInlineComponentRefs), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "validator_coverage_gap") || hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("inline YAML component refs should satisfy schema checks; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectCarriesYAMLPathItemParameters(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithUndescribedPathParameter), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "source_missing_metadata") {
+		t.Fatalf("shared YAML path parameter without description should be reported; findings=%#v", report.Findings)
 	}
 }
 
@@ -801,6 +887,68 @@ components:
         application/json:
           schema:
             type: object
+`
+
+const yamlOpenAPIWithInlineComponentRefs = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    post:
+      operationId: createCustomer
+      summary: Create customer
+      description: Create one customer.
+      requestBody: { $ref: "#/components/requestBodies/CustomerWrite" }
+      responses:
+        "201": { $ref: "#/components/responses/CustomerRead" }
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  requestBodies:
+    CustomerWrite:
+      content:
+        application/json:
+          schema:
+            type: object
+  responses:
+    CustomerRead:
+      description: Customer read-back.
+      content:
+        application/json:
+          schema:
+            type: object
+`
+
+const yamlOpenAPIWithUndescribedPathParameter = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers/{id}:
+    parameters:
+      - name: id
+        in: path
+    get:
+      operationId: getCustomer
+      summary: Get customer
+      description: Get one customer.
+      responses:
+        "200":
+          description: Customer.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
 `
 
 const completeDocs = `# API Guide
