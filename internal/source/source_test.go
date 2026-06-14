@@ -288,6 +288,64 @@ func TestCheckProjectRequiresNonEmptyYAMLSecuritySchemes(t *testing.T) {
 	}
 }
 
+func TestCheckProjectDoesNotTreatYAMLResponseHeaderSchemaAsBodySchema(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlResponseHeaderSchemaOnly), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("expected proof_gap when only 2xx header schema exists; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectResolvesLocalComponentRequestAndResponseRefs(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithComponentRequestAndResponseRefs), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.json",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "validator_coverage_gap") || hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("component refs should satisfy request/response schema checks; findings=%#v", report.Findings)
+	}
+}
+
 func TestReadProjectConfigAcceptsJSONConfig(t *testing.T) {
 	root := t.TempDir()
 	configPath := filepath.Join(root, "lumyn.json")
@@ -565,6 +623,73 @@ paths:
                   securitySchemes:
                     type: string
 `
+
+const yamlResponseHeaderSchemaOnly = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      summary: List customers
+      description: List customers.
+      responses:
+        "200":
+          description: Customers.
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
+const openAPIWithComponentRequestAndResponseRefs = `{
+  "openapi": "3.0.3",
+  "info": {"title": "Fixture API", "version": "1.0.0"},
+  "paths": {
+    "/customers": {
+      "post": {
+        "operationId": "createCustomer",
+        "summary": "Create customer",
+        "description": "Create one customer.",
+        "requestBody": {"$ref": "#/components/requestBodies/CustomerWrite"},
+        "responses": {
+          "201": {"$ref": "#/components/responses/CustomerRead"}
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}
+    },
+    "requestBodies": {
+      "CustomerWrite": {
+        "content": {
+          "application/json": {
+            "schema": {"type": "object"}
+          }
+        }
+      }
+    },
+    "responses": {
+      "CustomerRead": {
+        "description": "Customer read-back.",
+        "content": {
+          "application/json": {
+            "schema": {"type": "object"}
+          }
+        }
+      }
+    }
+  }
+}`
 
 const completeDocs = `# API Guide
 

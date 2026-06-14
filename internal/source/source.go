@@ -467,8 +467,8 @@ func parseOpenAPIJSON(raw map[string]any) ([]openAPIOperation, bool, error) {
 				Description:       stringValue(operationValue["description"]),
 				Deprecated:        boolValue(operationValue["deprecated"]),
 				Pointer:           pointer,
-				HasRequestSchema:  hasContentSchema(operationValue["requestBody"]),
-				HasResponseSchema: has2xxResponseSchema(operationValue["responses"]),
+				HasRequestSchema:  hasRequestContentSchema(operationValue["requestBody"], raw),
+				HasResponseSchema: has2xxResponseSchema(operationValue["responses"], raw),
 				ReplacementHint:   hasReplacementHint(operationValue),
 				Parameters:        append([]openAPIParameter{}, pathParameters...),
 			}
@@ -494,8 +494,12 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 	var current *openAPIOperation
 	operationIndent := -1
 	requestBodyIndent := -1
+	requestContentIndent := -1
+	requestMediaIndent := -1
 	responsesIndent := -1
 	response2xxIndent := -1
+	responseContentIndent := -1
+	responseMediaIndent := -1
 	parametersIndent := -1
 	var currentParameter *openAPIParameter
 	componentsIndent := -1
@@ -510,8 +514,12 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		}
 		operationIndent = -1
 		requestBodyIndent = -1
+		requestContentIndent = -1
+		requestMediaIndent = -1
 		responsesIndent = -1
 		response2xxIndent = -1
+		responseContentIndent = -1
+		responseMediaIndent = -1
 		parametersIndent = -1
 		currentParameter = nil
 	}
@@ -601,13 +609,33 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		}
 		if requestBodyIndent >= 0 && indent <= requestBodyIndent {
 			requestBodyIndent = -1
+			requestContentIndent = -1
+			requestMediaIndent = -1
+		}
+		if requestContentIndent >= 0 && indent <= requestContentIndent {
+			requestContentIndent = -1
+			requestMediaIndent = -1
+		}
+		if requestMediaIndent >= 0 && indent <= requestMediaIndent {
+			requestMediaIndent = -1
 		}
 		if responsesIndent >= 0 && indent <= responsesIndent {
 			responsesIndent = -1
 			response2xxIndent = -1
+			responseContentIndent = -1
+			responseMediaIndent = -1
 		}
 		if response2xxIndent >= 0 && indent <= response2xxIndent {
 			response2xxIndent = -1
+			responseContentIndent = -1
+			responseMediaIndent = -1
+		}
+		if responseContentIndent >= 0 && indent <= responseContentIndent {
+			responseContentIndent = -1
+			responseMediaIndent = -1
+		}
+		if responseMediaIndent >= 0 && indent <= responseMediaIndent {
+			responseMediaIndent = -1
 		}
 		if parametersIndent >= 0 && indent <= parametersIndent {
 			parametersIndent = -1
@@ -639,12 +667,30 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			}
 		}
 		if requestBodyIndent >= 0 && indent > requestBodyIndent && key == "schema" {
-			current.HasRequestSchema = true
+			if requestMediaIndent >= 0 && indent > requestMediaIndent {
+				current.HasRequestSchema = true
+			}
+		}
+		if requestBodyIndent >= 0 && indent > requestBodyIndent && key == "content" {
+			requestContentIndent = indent
+			requestMediaIndent = -1
+		}
+		if requestContentIndent >= 0 && indent > requestContentIndent && strings.Contains(key, "/") {
+			requestMediaIndent = indent
 		}
 		if responsesIndent >= 0 && indent > responsesIndent && is2xxStatusKey(key) {
 			response2xxIndent = indent
+			responseContentIndent = -1
+			responseMediaIndent = -1
 		}
-		if response2xxIndent >= 0 && indent > response2xxIndent && key == "schema" {
+		if response2xxIndent >= 0 && indent > response2xxIndent && key == "content" {
+			responseContentIndent = indent
+			responseMediaIndent = -1
+		}
+		if responseContentIndent >= 0 && indent > responseContentIndent && strings.Contains(key, "/") {
+			responseMediaIndent = indent
+		}
+		if responseMediaIndent >= 0 && indent > responseMediaIndent && key == "schema" {
 			current.HasResponseSchema = true
 		}
 		if parametersIndent >= 0 && indent > parametersIndent {
@@ -1083,7 +1129,11 @@ func hasContentSchema(value any) bool {
 	return false
 }
 
-func has2xxResponseSchema(value any) bool {
+func hasRequestContentSchema(value any, root map[string]any) bool {
+	return hasContentSchema(resolveLocalComponentRef(value, root, "requestBodies"))
+}
+
+func has2xxResponseSchema(value any, root map[string]any) bool {
 	responses, ok := value.(map[string]any)
 	if !ok {
 		return false
@@ -1092,11 +1142,36 @@ func has2xxResponseSchema(value any) bool {
 		if !strings.HasPrefix(status, "2") {
 			continue
 		}
-		if hasContentSchema(responseValue) {
+		if hasContentSchema(resolveLocalComponentRef(responseValue, root, "responses")) {
 			return true
 		}
 	}
 	return false
+}
+
+func resolveLocalComponentRef(value any, root map[string]any, component string) any {
+	node, ok := value.(map[string]any)
+	if !ok {
+		return value
+	}
+	ref := stringValue(node["$ref"])
+	prefix := "#/components/" + component + "/"
+	if !strings.HasPrefix(ref, prefix) {
+		return value
+	}
+	components, ok := root["components"].(map[string]any)
+	if !ok {
+		return value
+	}
+	group, ok := components[component].(map[string]any)
+	if !ok {
+		return value
+	}
+	key := unescapeJSONPointer(strings.TrimPrefix(ref, prefix))
+	if resolved, ok := group[key]; ok {
+		return resolved
+	}
+	return value
 }
 
 func parseJSONParameters(value any, pointer string) []openAPIParameter {
@@ -1293,6 +1368,12 @@ func is2xxStatusKey(key string) bool {
 func escapeJSONPointer(value string) string {
 	value = strings.ReplaceAll(value, "~", "~0")
 	value = strings.ReplaceAll(value, "/", "~1")
+	return value
+}
+
+func unescapeJSONPointer(value string) string {
+	value = strings.ReplaceAll(value, "~1", "/")
+	value = strings.ReplaceAll(value, "~0", "~")
 	return value
 }
 
