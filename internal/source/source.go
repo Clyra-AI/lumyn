@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -445,6 +446,10 @@ func parseOpenAPI(data []byte) ([]openAPIOperation, bool, error) {
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.UseNumber()
 	if err := decoder.Decode(&raw); err == nil {
+		var trailing any
+		if trailingErr := decoder.Decode(&trailing); trailingErr != io.EOF {
+			return nil, false, errors.New("JSON OpenAPI source contains trailing data")
+		}
 		return parseOpenAPIJSON(raw)
 	}
 	return parseOpenAPIYAML(data)
@@ -1444,7 +1449,7 @@ func authScopeDescriptionFindings(sourcePath string, data []byte) []Finding {
 	decoder.UseNumber()
 	var raw map[string]any
 	if err := decoder.Decode(&raw); err != nil {
-		return nil
+		return yamlAuthScopeDescriptionFindings(sourcePath, data)
 	}
 	components, ok := raw["components"].(map[string]any)
 	if !ok {
@@ -1491,6 +1496,123 @@ func authScopeDescriptionFindings(sourcePath string, data []byte) []Finding {
 					WorkflowRelevance: "Agents need explicit scope meaning before selecting credentials or protected workflow actions.",
 				})
 			}
+		}
+	}
+	return findings
+}
+
+func yamlAuthScopeDescriptionFindings(sourcePath string, data []byte) []Finding {
+	findings := []Finding{}
+	scanner := bufio.NewScanner(bytes.NewReader(data))
+	componentsIndent := -1
+	schemesIndent := -1
+	schemeIndent := -1
+	flowsIndent := -1
+	flowIndent := -1
+	scopesIndent := -1
+	currentScheme := ""
+	currentFlow := ""
+	currentSchemeOAuth2 := false
+	for scanner.Scan() {
+		trimmed := strings.TrimSpace(scanner.Text())
+		if trimmed == "" || strings.HasPrefix(trimmed, "#") || trimmed == "---" {
+			continue
+		}
+		indent := leadingSpaces(scanner.Text())
+		key, value, ok := yamlKeyValue(trimmed)
+		if !ok {
+			continue
+		}
+		if componentsIndent >= 0 && indent <= componentsIndent && key != "components" {
+			componentsIndent = -1
+			schemesIndent = -1
+			schemeIndent = -1
+			flowsIndent = -1
+			flowIndent = -1
+			scopesIndent = -1
+			currentScheme = ""
+			currentFlow = ""
+			currentSchemeOAuth2 = false
+		}
+		if schemesIndent >= 0 && indent <= schemesIndent && key != "securitySchemes" {
+			schemesIndent = -1
+			schemeIndent = -1
+			flowsIndent = -1
+			flowIndent = -1
+			scopesIndent = -1
+			currentScheme = ""
+			currentFlow = ""
+			currentSchemeOAuth2 = false
+		}
+		if schemeIndent >= 0 && indent <= schemeIndent && key != currentScheme {
+			schemeIndent = -1
+			flowsIndent = -1
+			flowIndent = -1
+			scopesIndent = -1
+			currentScheme = ""
+			currentFlow = ""
+			currentSchemeOAuth2 = false
+		}
+		if flowsIndent >= 0 && indent <= flowsIndent && key != "flows" {
+			flowsIndent = -1
+			flowIndent = -1
+			scopesIndent = -1
+			currentFlow = ""
+		}
+		if flowIndent >= 0 && indent <= flowIndent && key != currentFlow {
+			flowIndent = -1
+			scopesIndent = -1
+			currentFlow = ""
+		}
+		if scopesIndent >= 0 && indent <= scopesIndent && key != "scopes" {
+			scopesIndent = -1
+		}
+		switch {
+		case key == "components":
+			componentsIndent = indent
+			schemesIndent = -1
+		case componentsIndent >= 0 && indent > componentsIndent && key == "securitySchemes":
+			schemesIndent = indent
+			schemeIndent = -1
+			currentScheme = ""
+		case schemesIndent >= 0 && indent > schemesIndent && (schemeIndent < 0 || indent <= schemeIndent):
+			currentScheme = key
+			schemeIndent = indent
+			flowsIndent = -1
+			currentFlow = ""
+			currentSchemeOAuth2 = false
+		case currentScheme != "" && indent > schemeIndent && key == "type":
+			currentSchemeOAuth2 = strings.EqualFold(value, "oauth2")
+		case currentScheme != "" && indent > schemeIndent && key == "flows":
+			flowsIndent = indent
+			flowIndent = -1
+			currentFlow = ""
+		case flowsIndent >= 0 && indent > flowsIndent && (flowIndent < 0 || indent <= flowIndent):
+			currentFlow = key
+			flowIndent = indent
+			scopesIndent = -1
+		case currentFlow != "" && indent > flowIndent && key == "scopes":
+			scopesIndent = indent
+		case scopesIndent >= 0 && indent > scopesIndent:
+			if !currentSchemeOAuth2 {
+				continue
+			}
+			if value != "" {
+				continue
+			}
+			findings = append(findings, Finding{
+				Kind:     "auth_confusion",
+				Severity: "warning",
+				Message:  fmt.Sprintf("OAuth scope %q in security scheme %q lacks a useful description", key, currentScheme),
+				Reference: Reference{
+					Path: sourcePath,
+					JSONPointer: "#/components/securitySchemes/" + escapeJSONPointer(currentScheme) +
+						"/flows/" + escapeJSONPointer(currentFlow) + "/scopes/" + escapeJSONPointer(key),
+					Object: "oauth_scope",
+				},
+				FixTarget:         "auth_scope_description",
+				WorkflowRelevance: "Agents need explicit scope meaning before selecting credentials or protected workflow actions.",
+			})
 		}
 	}
 	return findings
