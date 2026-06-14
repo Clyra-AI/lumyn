@@ -503,6 +503,7 @@ func parseOpenAPIJSON(raw map[string]any) ([]openAPIOperation, bool, error) {
 func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 	responseComponentSchemas := yamlComponentContentSchemaRefs(data, "responses")
 	requestBodyComponentSchemas := yamlComponentContentSchemaRefs(data, "requestBodies")
+	parameterComponents := yamlComponentParameters(data)
 	scanner := bufio.NewScanner(bytes.NewReader(data))
 	lineNo := 0
 	seenVersion := false
@@ -657,6 +658,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 				value,
 				"#/paths/"+escapeJSONPointer(currentPath)+"/parameters",
 				lineNo,
+				parameterComponents,
 			)
 			continue
 		}
@@ -792,6 +794,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 				value,
 				current.Pointer+"/parameters",
 				lineNo,
+				parameterComponents,
 			)
 		}
 	}
@@ -1570,7 +1573,7 @@ func yamlInlineRefValue(value string) string {
 	return ""
 }
 
-func parseYAMLParameterLine(parameters []openAPIParameter, current **openAPIParameter, trimmed, key, value, pointer string, lineNo int) []openAPIParameter {
+func parseYAMLParameterLine(parameters []openAPIParameter, current **openAPIParameter, trimmed, key, value, pointer string, lineNo int, parameterComponents map[string]openAPIParameter) []openAPIParameter {
 	if strings.HasPrefix(trimmed, "- ") {
 		parameterKey, parameterValue, ok := yamlKeyValue(strings.TrimSpace(strings.TrimPrefix(trimmed, "- ")))
 		parameter := openAPIParameter{
@@ -1578,6 +1581,21 @@ func parseYAMLParameterLine(parameters []openAPIParameter, current **openAPIPara
 			Line:    lineNo,
 		}
 		if ok {
+			if parameterKey == "$ref" {
+				if refName, ok := yamlLocalComponentRef(parameterValue, "parameters"); ok {
+					if referenced, ok := parameterComponents[refName]; ok {
+						parameters = append(parameters, referenced)
+					} else {
+						parameters = append(parameters, openAPIParameter{
+							Name:    parameterValue,
+							Pointer: pointer,
+							Line:    lineNo,
+						})
+					}
+					*current = &parameters[len(parameters)-1]
+					return parameters
+				}
+			}
 			switch parameterKey {
 			case "name":
 				parameter.Name = parameterValue
@@ -1605,6 +1623,94 @@ func parseYAMLParameterLine(parameters []openAPIParameter, current **openAPIPara
 	return parameters
 }
 
+func yamlComponentParameters(data []byte) map[string]openAPIParameter {
+	parameters := map[string]openAPIParameter{}
+	scanner := bufio.NewScanner(bytes.NewReader(data))
+	componentsIndent := -1
+	parametersIndent := -1
+	itemIndent := -1
+	currentItem := ""
+	for scanner.Scan() {
+		trimmed := strings.TrimSpace(scanner.Text())
+		if trimmed == "" || strings.HasPrefix(trimmed, "#") || trimmed == "---" {
+			continue
+		}
+		indent := leadingSpaces(scanner.Text())
+		key, value, ok := yamlKeyValue(trimmed)
+		if !ok {
+			continue
+		}
+		if componentsIndent >= 0 && indent <= componentsIndent && key != "components" {
+			componentsIndent = -1
+			parametersIndent = -1
+			itemIndent = -1
+			currentItem = ""
+		}
+		if parametersIndent >= 0 && indent <= parametersIndent && key != "parameters" {
+			parametersIndent = -1
+			itemIndent = -1
+			currentItem = ""
+		}
+		if itemIndent >= 0 && indent <= itemIndent && key != currentItem {
+			itemIndent = -1
+			currentItem = ""
+		}
+		if key == "components" {
+			componentsIndent = indent
+			parametersIndent = -1
+			itemIndent = -1
+			currentItem = ""
+			continue
+		}
+		if componentsIndent >= 0 && indent > componentsIndent && key == "parameters" {
+			parametersIndent = indent
+			itemIndent = -1
+			currentItem = ""
+			continue
+		}
+		if parametersIndent >= 0 && indent > parametersIndent && (itemIndent < 0 || indent <= itemIndent) {
+			currentItem = key
+			itemIndent = indent
+			parameters[currentItem] = yamlInlineParameter(value, "#/components/parameters/"+escapeJSONPointer(currentItem))
+			continue
+		}
+		if currentItem == "" || indent <= itemIndent {
+			continue
+		}
+		parameter := parameters[currentItem]
+		switch key {
+		case "name":
+			parameter.Name = value
+		case "in":
+			parameter.In = value
+		case "description":
+			parameter.Description = value
+		}
+		parameters[currentItem] = parameter
+	}
+	return parameters
+}
+
+func yamlInlineParameter(value, pointer string) openAPIParameter {
+	parameter := openAPIParameter{Pointer: pointer}
+	value = strings.TrimSpace(strings.Trim(value, "{} "))
+	for _, entry := range strings.Split(value, ",") {
+		key, entryValue, ok := yamlKeyValue(strings.TrimSpace(entry))
+		if !ok {
+			continue
+		}
+		switch key {
+		case "name":
+			parameter.Name = entryValue
+		case "in":
+			parameter.In = entryValue
+		case "description":
+			parameter.Description = entryValue
+		}
+	}
+	return parameter
+}
+
 func yamlComponentContentSchemaRefs(data []byte, group string) map[string]bool {
 	refs := map[string]bool{}
 	scanner := bufio.NewScanner(bytes.NewReader(data))
@@ -1620,7 +1726,7 @@ func yamlComponentContentSchemaRefs(data []byte, group string) map[string]bool {
 			continue
 		}
 		indent := leadingSpaces(scanner.Text())
-		key, _, ok := yamlKeyValue(trimmed)
+		key, value, ok := yamlKeyValue(trimmed)
 		if !ok {
 			continue
 		}
@@ -1677,6 +1783,9 @@ func yamlComponentContentSchemaRefs(data []byte, group string) map[string]bool {
 		}
 		if contentIndent >= 0 && indent > contentIndent && strings.Contains(key, "/") {
 			mediaIndent = indent
+			if yamlInlineValueHasSchema(value) {
+				refs[currentItem] = true
+			}
 			continue
 		}
 		if mediaIndent >= 0 && indent > mediaIndent && key == "schema" {
@@ -1684,6 +1793,27 @@ func yamlComponentContentSchemaRefs(data []byte, group string) map[string]bool {
 		}
 	}
 	return refs
+}
+
+func yamlInlineValueHasSchema(value string) bool {
+	value = strings.TrimSpace(strings.Trim(value, "{} "))
+	if value == "" {
+		return false
+	}
+	if yamlInlineMapHasKey(value, "schema") {
+		return true
+	}
+	return strings.HasPrefix(value, "schema:") || strings.Contains(value, " schema:") || strings.Contains(value, `"schema"`)
+}
+
+func yamlInlineMapHasKey(value, expected string) bool {
+	for _, entry := range strings.Split(value, ",") {
+		key, _, ok := yamlKeyValue(strings.TrimSpace(entry))
+		if ok && strings.Trim(key, `"'`) == expected {
+			return true
+		}
+	}
+	return false
 }
 
 func yamlKeyValue(trimmed string) (string, string, bool) {
