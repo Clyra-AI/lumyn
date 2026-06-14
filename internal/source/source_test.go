@@ -960,6 +960,38 @@ func TestCheckProjectResolvesInlineYAMLOperationObjects(t *testing.T) {
 	}
 }
 
+func TestCheckProjectResolvesRootFlowStyleYAMLPaths(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithRootFlowStylePaths), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "command_error") ||
+		hasFindingKind(report.Findings, "wrong_tool_or_endpoint") ||
+		hasFindingKind(report.Findings, "docs_api_ambiguity") ||
+		hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("root flow-style paths should parse as operations; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectHonorsYAMLDeprecatedReplacementHint(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithDeprecatedReplacementHint), 0o644); err != nil {
@@ -1018,6 +1050,35 @@ func TestCheckProjectResolvesLocalComponentRequestAndResponseRefs(t *testing.T) 
 	}
 }
 
+func TestCheckProjectResolvesChainedLocalComponentRefs(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithChainedComponentRequestAndResponseRefs), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.json",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "validator_coverage_gap") || hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("chained component refs should satisfy request/response schema checks; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectReportsMissingDescriptionForJSONParameterRef(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithUndescribedParameterRef), 0o644); err != nil {
@@ -1044,6 +1105,35 @@ func TestCheckProjectReportsMissingDescriptionForJSONParameterRef(t *testing.T) 
 	}
 	if !hasFindingKind(report.Findings, "source_missing_metadata") {
 		t.Fatalf("referenced parameter without description should be reported; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectReportsMissingDescriptionForChainedJSONParameterRef(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithChainedUndescribedParameterRef), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.json",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "source_missing_metadata") {
+		t.Fatalf("chained referenced parameter without description should be reported; findings=%#v", report.Findings)
 	}
 }
 
@@ -1932,6 +2022,45 @@ const openAPIWithUndescribedParameterRef = `{
   }
 }`
 
+const openAPIWithChainedUndescribedParameterRef = `{
+  "openapi": "3.0.3",
+  "info": {"title": "Fixture API", "version": "1.0.0"},
+  "paths": {
+    "/customers/{id}": {
+      "parameters": [
+        {"$ref": "#/components/parameters/CustomerIdAlias"}
+      ],
+      "get": {
+        "operationId": "getCustomer",
+        "summary": "Get customer",
+        "description": "Get one customer.",
+        "responses": {
+          "200": {
+            "description": "Customer.",
+            "content": {
+              "application/json": {
+                "schema": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}
+    },
+    "parameters": {
+      "CustomerIdAlias": {"$ref": "#/components/parameters/CustomerId"},
+      "CustomerId": {
+        "name": "id",
+        "in": "path"
+      }
+    }
+  }
+}`
+
 const openAPIWithOperationParameterOverride = `{
   "openapi": "3.0.3",
   "info": {"title": "Fixture API", "version": "1.0.0"},
@@ -2621,6 +2750,19 @@ components:
       name: X-API-Key
 `
 
+const yamlOpenAPIWithRootFlowStylePaths = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths: {/customers: {get: {operationId: listCustomers, summary: List customers, description: List customers., responses: {"200": {description: Customers., content: {application/json: {schema: {type: object}}}}}}}}
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
 const yamlOpenAPIWithDeprecatedReplacementHint = `openapi: 3.0.3
 info:
   title: Fixture API
@@ -2678,6 +2820,50 @@ const openAPIWithComponentRequestAndResponseRefs = `{
       }
     },
     "responses": {
+      "CustomerRead": {
+        "description": "Customer read-back.",
+        "content": {
+          "application/json": {
+            "schema": {"type": "object"}
+          }
+        }
+      }
+    }
+  }
+}`
+
+const openAPIWithChainedComponentRequestAndResponseRefs = `{
+  "openapi": "3.0.3",
+  "info": {"title": "Fixture API", "version": "1.0.0"},
+  "paths": {
+    "/customers": {
+      "post": {
+        "operationId": "createCustomer",
+        "summary": "Create customer",
+        "description": "Create one customer.",
+        "requestBody": {"$ref": "#/components/requestBodies/CustomerWriteAlias"},
+        "responses": {
+          "201": {"$ref": "#/components/responses/CustomerReadAlias"}
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}
+    },
+    "requestBodies": {
+      "CustomerWriteAlias": {"$ref": "#/components/requestBodies/CustomerWrite"},
+      "CustomerWrite": {
+        "content": {
+          "application/json": {
+            "schema": {"type": "object"}
+          }
+        }
+      }
+    },
+    "responses": {
+      "CustomerReadAlias": {"$ref": "#/components/responses/CustomerRead"},
       "CustomerRead": {
         "description": "Customer read-back.",
         "content": {
