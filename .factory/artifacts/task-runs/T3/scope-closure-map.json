@@ -24,13 +24,6 @@
       ]
     },
     {
-      "acceptance_item_id": "ACT-002",
-      "status": "implemented",
-      "evidence_refs": [
-        ".factory/artifacts/task-runs/T3/validation-report.json"
-      ]
-    },
-    {
       "acceptance_item_id": "FR1",
       "status": "implemented",
       "evidence_refs": [
