@@ -406,6 +406,35 @@ func TestCheckProjectRequiresDirectYAMLRequestMediaSchema(t *testing.T) {
 	}
 }
 
+func TestCheckProjectResolvesFlowStyleYAMLOperationSchemas(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithFlowStyleOperationSchemas), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "validator_coverage_gap") || hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("flow-style operation schemas should satisfy schema checks; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectResolvesLocalComponentRequestAndResponseRefs(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithComponentRequestAndResponseRefs), 0o644); err != nil {
@@ -490,6 +519,35 @@ func TestCheckProjectHonorsOperationParameterOverrides(t *testing.T) {
 	}
 	if hasFindingKind(report.Findings, "source_missing_metadata") {
 		t.Fatalf("operation parameter override should replace stale path metadata; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectReportsMissingDescriptionForYAMLFlowParameter(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithUndescribedFlowParameter), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "source_missing_metadata") {
+		t.Fatalf("flow-style parameter without description should be reported; findings=%#v", report.Findings)
 	}
 }
 
@@ -784,6 +842,35 @@ func TestCheckProjectPreservesYAMLPathKeysWithColons(t *testing.T) {
 	}
 }
 
+func TestCheckProjectFlagsDuplicateAgentNamesOnSamePath(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithDuplicateSamePathNames), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.json",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "docs_api_ambiguity") {
+		t.Fatalf("duplicate same-path agent-facing names should be reported; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectCarriesYAMLPathItemParameters(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithUndescribedPathParameter), 0o644); err != nil {
@@ -1045,6 +1132,57 @@ const openAPIWithOperationParameterOverride = `{
   }
 }`
 
+const openAPIWithDuplicateSamePathNames = `{
+  "openapi": "3.0.3",
+  "info": {"title": "Fixture API", "version": "1.0.0"},
+  "paths": {
+    "/customers": {
+      "get": {
+        "operationId": "listCustomers",
+        "summary": "Customers",
+        "description": "List customers.",
+        "responses": {
+          "200": {
+            "description": "Customers.",
+            "content": {
+              "application/json": {
+                "schema": {"type": "object"}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createCustomer",
+        "summary": "Customers",
+        "description": "Create customer.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {"type": "object"}
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created.",
+            "content": {
+              "application/json": {
+                "schema": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}
+    }
+  }
+}`
+
 const yamlOpenAPIWithUndescribedParameterRef = `openapi: 3.0.3
 info:
   title: Fixture API
@@ -1074,6 +1212,33 @@ components:
     CustomerId:
       name: id
       in: path
+`
+
+const yamlOpenAPIWithUndescribedFlowParameter = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers/{id}:
+    get:
+      operationId: getCustomer
+      summary: Get customer
+      description: Get one customer.
+      parameters:
+        - { name: id, in: path }
+      responses:
+        "200":
+          description: Customer.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
 `
 
 const completeOpenAPIYAML = `openapi: 3.0.3
@@ -1312,6 +1477,32 @@ paths:
             application/json:
               schema:
                 type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
+const yamlOpenAPIWithFlowStyleOperationSchemas = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    post:
+      operationId: createCustomer
+      summary: Create customer
+      description: Create one customer.
+      requestBody:
+        content:
+          application/json: { schema: { type: object } }
+      responses:
+        "201":
+          description: Created.
+          content:
+            application/json: { schema: { type: object } }
 components:
   securitySchemes:
     apiKeyAuth:
