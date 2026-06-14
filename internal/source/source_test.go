@@ -189,6 +189,35 @@ func TestCheckProjectDoesNotTreatYAMLErrorResponseSchemaAsSuccessSchema(t *testi
 	}
 }
 
+func TestCheckProjectDoesNotTreatYAMLSchemaMethodPropertyAsOperation(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlSchemaPropertyNamedLikeHTTPMethod), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if report.Status != "pass" {
+		t.Fatalf("report status = %q, want pass; findings=%#v", report.Status, report.Findings)
+	}
+}
+
 func TestReadProjectConfigAcceptsJSONConfig(t *testing.T) {
 	root := t.TempDir()
 	configPath := filepath.Join(root, "lumyn.json")
@@ -368,6 +397,34 @@ paths:
             application/json:
               schema:
                 type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
+const yamlSchemaPropertyNamedLikeHTTPMethod = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /reports:
+    get:
+      operationId: getReport
+      summary: Get report
+      description: Get one report.
+      responses:
+        "200":
+          description: Report response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  get:
+                    type: string
 components:
   securitySchemes:
     apiKeyAuth:
