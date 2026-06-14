@@ -151,6 +151,37 @@ func TestCheckProjectResolvesBracketedMarkdownLinksWithSpaces(t *testing.T) {
 	}
 }
 
+func TestCheckProjectResolvesURLEncodedMarkdownLinks(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(completeOpenAPIYAML), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte("Read [auth](auth%20guide.md).\n"), 0o644); err != nil {
+		t.Fatalf("write docs guide: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "auth guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs auth: %v", err)
+	}
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  filepath.Join(root, "lumyn.yaml"),
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(filepath.Join(root, "lumyn.yaml"))
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "context_missing") {
+		t.Fatalf("URL-encoded docs link should resolve to local path; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectFailsClosedForInvalidConfig(t *testing.T) {
 	root := t.TempDir()
 	_, err := CheckProject(filepath.Join(root, "missing-lumyn.yaml"))
@@ -551,6 +582,35 @@ func TestCheckProjectRequiresDirectYAMLRequestMediaSchema(t *testing.T) {
 	}
 	if !hasFindingKind(report.Findings, "validator_coverage_gap") {
 		t.Fatalf("nested example schema should not satisfy request schema coverage; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectRequiresDirectFlowStyleMediaSchemas(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlFlowStyleMediaNestedExampleSchemaOnly), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "validator_coverage_gap") || !hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("nested flow-style example schemas should not satisfy direct media schema checks; findings=%#v", report.Findings)
 	}
 }
 
@@ -1872,6 +1932,32 @@ paths:
             application/json:
               schema:
                 type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
+const yamlFlowStyleMediaNestedExampleSchemaOnly = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    post:
+      operationId: createCustomer
+      summary: Create customer
+      description: Create one customer.
+      requestBody:
+        content:
+          application/json: { examples: { e: { value: { schema: {} } } } }
+      responses:
+        "200":
+          description: Customer.
+          content:
+            application/json: { examples: { e: { value: { schema: {} } } } }
 components:
   securitySchemes:
     apiKeyAuth:

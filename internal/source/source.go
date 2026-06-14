@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -1100,6 +1101,9 @@ func brokenLocalReferenceFindings(root, docPath string, data []byte) []Finding {
 			if targetPath == "" {
 				continue
 			}
+			if unescaped, err := url.PathUnescape(targetPath); err == nil {
+				targetPath = unescaped
+			}
 			resolved := resolveMarkdownLinkTarget(root, docPath, targetPath)
 			if _, err := os.Stat(resolved); err == nil {
 				continue
@@ -2137,7 +2141,7 @@ func yamlInlineValueHasSchema(value string) bool {
 	if yamlInlineMapHasKey(value, "schema") {
 		return true
 	}
-	return strings.HasPrefix(value, "schema:") || strings.Contains(value, " schema:") || strings.Contains(value, `"schema"`)
+	return false
 }
 
 func yamlInlineMapHasKey(value, expected string) bool {
