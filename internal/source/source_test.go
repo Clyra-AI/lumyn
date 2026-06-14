@@ -1043,6 +1043,35 @@ func TestCheckProjectResolvesQuotedInlineYAMLComponentRefs(t *testing.T) {
 	}
 }
 
+func TestCheckProjectResolvesJSONStyleFlowYAMLComponentsAtRoot(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithJSONStyleFlowComponentsAndNestedComponentsProperty), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "validator_coverage_gap") || hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("JSON-style flow refs and root components should satisfy schema checks; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectResolvesFlowStyleYAMLComponentSchemas(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithFlowStyleComponentSchemas), 0o644); err != nil {
@@ -2196,6 +2225,42 @@ components:
         application/json:
           schema:
             type: object
+`
+
+const yamlOpenAPIWithJSONStyleFlowComponentsAndNestedComponentsProperty = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    post:
+      operationId: createCustomer
+      summary: Create customer
+      description: Create one customer.
+      requestBody: {"$ref":"#/components/requestBodies/CreateCustomer"}
+      responses:
+        "200": {"$ref":"#/components/responses/Customer"}
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        components:
+          type: string
+  requestBodies:
+    CreateCustomer:
+      content:
+        application/json: {"schema":{"type":"object"}}
+  responses:
+    Customer:
+      description: Customer.
+      content:
+        application/json: {"schema":{"type":"object"}}
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
 `
 
 const yamlOpenAPIWithFlowStyleComponentSchemas = `openapi: 3.0.3
