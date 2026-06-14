@@ -13,7 +13,6 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
-	"regexp"
 	"sort"
 	"strings"
 
@@ -30,7 +29,6 @@ const (
 var (
 	httpMethods    = map[string]bool{"get": true, "put": true, "post": true, "delete": true, "patch": true, "head": true, "options": true, "trace": true}
 	mutatingMethod = map[string]bool{"put": true, "post": true, "delete": true, "patch": true}
-	markdownLinkRE = regexp.MustCompile(`\[[^\]]+\]\(([^)]+)\)`)
 )
 
 type InitOptions struct {
@@ -1113,12 +1111,8 @@ func brokenLocalReferenceFindings(root, docPath string, data []byte) []Finding {
 	findings := []Finding{}
 	lines := bytes.Split(data, []byte("\n"))
 	for index, line := range lines {
-		matches := markdownLinkRE.FindAllSubmatch(line, -1)
-		for _, match := range matches {
-			if len(match) < 2 {
-				continue
-			}
-			target := cleanMarkdownLinkTarget(string(match[1]))
+		for _, rawTarget := range markdownLinkTargets(string(line)) {
+			target := cleanMarkdownLinkTarget(rawTarget)
 			if target == "" || isExternalReference(target) {
 				continue
 			}
@@ -1147,6 +1141,48 @@ func brokenLocalReferenceFindings(root, docPath string, data []byte) []Finding {
 		}
 	}
 	return findings
+}
+
+func markdownLinkTargets(line string) []string {
+	targets := []string{}
+	offset := 0
+	for offset < len(line) {
+		start := strings.Index(line[offset:], "](")
+		if start < 0 {
+			break
+		}
+		targetStart := offset + start + 2
+		targetEnd := markdownLinkTargetEnd(line, targetStart)
+		if targetEnd < 0 {
+			offset = targetStart
+			continue
+		}
+		targets = append(targets, line[targetStart:targetEnd])
+		offset = targetEnd + 1
+	}
+	return targets
+}
+
+func markdownLinkTargetEnd(line string, start int) int {
+	depth := 0
+	escaped := false
+	for index := start; index < len(line); index++ {
+		char := line[index]
+		switch {
+		case escaped:
+			escaped = false
+		case char == '\\':
+			escaped = true
+		case char == '(':
+			depth++
+		case char == ')':
+			if depth == 0 {
+				return index
+			}
+			depth--
+		}
+	}
+	return -1
 }
 
 func markdownLinkLocalPath(target string) string {
@@ -1531,7 +1567,19 @@ func hasSecuritySchemesJSON(raw map[string]any) bool {
 		return false
 	}
 	schemes, ok := components["securitySchemes"].(map[string]any)
-	return ok && len(schemes) > 0
+	if !ok {
+		return false
+	}
+	for _, value := range schemes {
+		scheme, ok := value.(map[string]any)
+		if !ok {
+			continue
+		}
+		if stringValue(scheme["type"]) != "" {
+			return true
+		}
+	}
+	return false
 }
 
 func authScopeDescriptionFindings(sourcePath string, data []byte) []Finding {

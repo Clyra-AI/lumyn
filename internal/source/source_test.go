@@ -199,6 +199,37 @@ func TestCheckProjectResolvesBracketedMarkdownLinksWithSpaces(t *testing.T) {
 	}
 }
 
+func TestCheckProjectResolvesMarkdownLinksWithParentheses(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(completeOpenAPIYAML), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte("Read [setup](setup(v1).md).\n"), 0o644); err != nil {
+		t.Fatalf("write docs guide: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "setup(v1).md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs setup: %v", err)
+	}
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  filepath.Join(root, "lumyn.yaml"),
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(filepath.Join(root, "lumyn.yaml"))
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "context_missing") {
+		t.Fatalf("docs link with balanced parentheses should resolve; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectResolvesURLEncodedMarkdownLinks(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(completeOpenAPIYAML), 0o644); err != nil {
@@ -711,6 +742,35 @@ func TestCheckProjectRejectsJSONTrailingData(t *testing.T) {
 	first, ok := FirstFinding(report.Findings)
 	if report.Status != "fail" || !ok || first.Kind != "command_error" || !containsString(first.Message, "trailing data") {
 		t.Fatalf("expected trailing data command_error; status=%q first=%#v findings=%#v", report.Status, first, report.Findings)
+	}
+}
+
+func TestCheckProjectRequiresUsableJSONSecuritySchemes(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithEmptySecurityScheme), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.json",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "auth_confusion") {
+		t.Fatalf("empty JSON security scheme should not satisfy auth scheme coverage; findings=%#v", report.Findings)
 	}
 }
 
@@ -1873,6 +1933,35 @@ const openAPIWithEmptyOAuthScopeDescription = `{
           }
         }
       }
+    }
+  }
+}`
+
+const openAPIWithEmptySecurityScheme = `{
+  "openapi": "3.0.3",
+  "info": {"title": "Fixture API", "version": "1.0.0"},
+  "paths": {
+    "/customers": {
+      "get": {
+        "operationId": "listCustomers",
+        "summary": "List customers",
+        "description": "List customers.",
+        "responses": {
+          "200": {
+            "description": "Customers.",
+            "content": {
+              "application/json": {
+                "schema": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {}
     }
   }
 }`
