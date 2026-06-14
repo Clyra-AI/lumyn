@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"testing"
@@ -15,7 +16,7 @@ import (
 
 func TestCLIEmitsCommandResultEnvelope(t *testing.T) {
 	binary := buildTestBinary(t)
-	command := exec.Command(binary, "check")
+	command := exec.Command(binary, "help")
 	output, err := command.Output()
 	if err != nil {
 		t.Fatalf("run lumyn command: %v", err)
@@ -27,9 +28,9 @@ func TestCLIEmitsCommandResultEnvelope(t *testing.T) {
 	expected := map[string]string{
 		"object_type":            "lumyn.command_result",
 		"schema_version":         "1.0",
-		"command":                "check",
+		"command":                "help",
 		"status":                 "pass",
-		"mode":                   "check",
+		"mode":                   "help",
 		"redaction_status":       "not_applicable",
 		"finding_kind":           "none",
 		"proof_strength":         "unknown",
@@ -60,6 +61,113 @@ func TestCLIEmitsCommandResultEnvelope(t *testing.T) {
 	}
 	if providerMetadata["applicable"] != false {
 		t.Fatalf("provider_metadata.applicable = %v, want false", providerMetadata["applicable"])
+	}
+}
+
+func TestCLIInitWritesConfigAndSourceArtifact(t *testing.T) {
+	binary := buildTestBinary(t)
+	projectDir := t.TempDir()
+	writeOpenAPIFixture(t, filepath.Join(projectDir, "openapi.json"))
+	if err := os.Mkdir(filepath.Join(projectDir, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(projectDir, "docs", "auth.md"), []byte("# Auth\nUse the API key header.\n"), 0o644); err != nil {
+		t.Fatalf("write docs: %v", err)
+	}
+
+	command := exec.Command(binary, "init", "--openapi", "./openapi.json", "--docs", "./docs")
+	command.Dir = projectDir
+	output, err := command.Output()
+	if err != nil {
+		t.Fatalf("run lumyn init: %v", err)
+	}
+
+	payload := decodeCommandResult(t, output)
+	validateCommandResultSchema(t, payload)
+	if payload["command"] != "init" {
+		t.Fatalf("command = %v, want init", payload["command"])
+	}
+	if payload["status"] != "pass" {
+		t.Fatalf("status = %v, want pass", payload["status"])
+	}
+	configBytes, err := os.ReadFile(filepath.Join(projectDir, "lumyn.yaml"))
+	if err != nil {
+		t.Fatalf("read generated config: %v", err)
+	}
+	if !bytes.Contains(configBytes, []byte("path: ./openapi.json")) {
+		t.Fatalf("generated config missing openapi path:\n%s", configBytes)
+	}
+
+	artifactPath := firstArtifactPath(t, payload, "source_intake")
+	artifactBytes, err := os.ReadFile(filepath.Join(projectDir, artifactPath))
+	if err != nil {
+		t.Fatalf("read source intake artifact %s: %v", artifactPath, err)
+	}
+	var artifact map[string]any
+	if err := json.Unmarshal(artifactBytes, &artifact); err != nil {
+		t.Fatalf("source intake artifact is not valid JSON: %v", err)
+	}
+	if artifact["object_type"] != "lumyn.source_check" {
+		t.Fatalf("artifact object_type = %v, want lumyn.source_check", artifact["object_type"])
+	}
+}
+
+func TestCLICheckEmitsWorkflowRelevantSourceFindingReference(t *testing.T) {
+	binary := buildTestBinary(t)
+	projectDir := t.TempDir()
+	writeOpenAPIFixture(t, filepath.Join(projectDir, "openapi.json"))
+	if err := os.Mkdir(filepath.Join(projectDir, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(projectDir, "docs", "guide.md"), []byte("[missing](missing.md)\n"), 0o644); err != nil {
+		t.Fatalf("write docs: %v", err)
+	}
+
+	initCommand := exec.Command(binary, "init", "--openapi", "./openapi.json", "--docs", "./docs")
+	initCommand.Dir = projectDir
+	if output, err := initCommand.CombinedOutput(); err != nil {
+		t.Fatalf("run lumyn init: %v\n%s", err, output)
+	}
+
+	checkCommand := exec.Command(binary, "check")
+	checkCommand.Dir = projectDir
+	output, err := checkCommand.Output()
+	if err != nil {
+		t.Fatalf("run lumyn check: %v", err)
+	}
+
+	payload := decodeCommandResult(t, output)
+	validateCommandResultSchema(t, payload)
+	if payload["command"] != "check" {
+		t.Fatalf("command = %v, want check", payload["command"])
+	}
+	if payload["status"] != "warning" {
+		t.Fatalf("status = %v, want warning", payload["status"])
+	}
+	if payload["finding_kind"] != "docs_api_ambiguity" {
+		t.Fatalf("finding_kind = %v, want docs_api_ambiguity", payload["finding_kind"])
+	}
+	metadata, ok := payload["metadata"].(map[string]any)
+	if !ok {
+		t.Fatalf("metadata = %T, want object", payload["metadata"])
+	}
+	findings, ok := metadata["source_findings"].([]any)
+	if !ok || len(findings) == 0 {
+		t.Fatalf("metadata.source_findings = %#v, want non-empty array", metadata["source_findings"])
+	}
+	first, ok := findings[0].(map[string]any)
+	if !ok {
+		t.Fatalf("first finding = %T, want object", findings[0])
+	}
+	reference, ok := first["reference"].(map[string]any)
+	if !ok {
+		t.Fatalf("first finding reference = %T, want object", first["reference"])
+	}
+	if reference["path"] == "" {
+		t.Fatalf("first finding reference lacks path: %#v", reference)
+	}
+	if reference["json_pointer"] == "" && reference["line"] == nil && reference["object"] == "" {
+		t.Fatalf("first finding lacks concrete source reference: %#v", reference)
 	}
 }
 
@@ -141,6 +249,67 @@ func TestCommandResultForArgsRejectsUnknownCommand(t *testing.T) {
 	}
 }
 
+func TestCommandResultForArgsRunsInitAndStrictCheck(t *testing.T) {
+	projectDir := t.TempDir()
+	t.Chdir(projectDir)
+	writeOpenAPIFixture(t, filepath.Join(projectDir, "openapi.json"))
+	if err := os.Mkdir(filepath.Join(projectDir, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(projectDir, "docs", "guide.md"), []byte("See [missing](missing.md)\n"), 0o644); err != nil {
+		t.Fatalf("write docs: %v", err)
+	}
+
+	initPayload, initCode := commandResultForArgs([]string{"init", "--openapi", "./openapi.json", "--docs", "./docs"}, time.Now())
+	if initCode != exitcode.Success {
+		t.Fatalf("init exit code = %d, want %d; errors=%#v", initCode, exitcode.Success, initPayload.Errors)
+	}
+	if initPayload.Status != "pass" {
+		t.Fatalf("init status = %q, want pass", initPayload.Status)
+	}
+	if initPayload.Metadata["source_finding_count"] != 0 {
+		t.Fatalf("init source_finding_count = %v, want 0", initPayload.Metadata["source_finding_count"])
+	}
+
+	checkPayload, checkCode := commandResultForArgs([]string{"check", "--strict"}, time.Now())
+	if checkCode != exitcode.SourceCompletenessFailure {
+		t.Fatalf("strict check exit code = %d, want %d; errors=%#v", checkCode, exitcode.SourceCompletenessFailure, checkPayload.Errors)
+	}
+	if checkPayload.Status != "fail" {
+		t.Fatalf("strict check status = %q, want fail", checkPayload.Status)
+	}
+	if checkPayload.FindingKind == "none" {
+		t.Fatalf("strict check finding kind should identify the source finding")
+	}
+	if checkPayload.ProofStrength != "gap" {
+		t.Fatalf("strict check proof_strength = %q, want gap", checkPayload.ProofStrength)
+	}
+}
+
+func TestCommandResultForArgsHandlesJSONFlagAndBadCommandFlags(t *testing.T) {
+	payload, code := commandResultForArgs([]string{"--json", "check", "--bad-flag"}, time.Now())
+	if code != exitcode.InvalidUsageOrInput {
+		t.Fatalf("exit code = %d, want %d", code, exitcode.InvalidUsageOrInput)
+	}
+	if payload.Command != "check" {
+		t.Fatalf("command = %q, want check", payload.Command)
+	}
+	if payload.Status != "fail" {
+		t.Fatalf("status = %q, want fail", payload.Status)
+	}
+	if len(payload.Errors) != 1 || payload.Errors[0].Code != "invalid_check_args" {
+		t.Fatalf("errors = %#v, want invalid_check_args", payload.Errors)
+	}
+
+	payload, code = commandResultForArgs([]string{"init", "--bad-flag"}, time.Now())
+	if code != exitcode.InvalidUsageOrInput {
+		t.Fatalf("init exit code = %d, want %d", code, exitcode.InvalidUsageOrInput)
+	}
+	if len(payload.Errors) != 1 || payload.Errors[0].Code != "invalid_init_args" {
+		t.Fatalf("init errors = %#v, want invalid_init_args", payload.Errors)
+	}
+}
+
 func TestCommandFromArgsUsesFirstArg(t *testing.T) {
 	if got := commandFromArgs([]string{"verify", "ignored"}); got != "verify" {
 		t.Fatalf("commandFromArgs = %q, want verify", got)
@@ -150,7 +319,7 @@ func TestCommandFromArgsUsesFirstArg(t *testing.T) {
 func TestRunWritesEnvelopeAndReturnsExitCode(t *testing.T) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
-	code := run([]string{"check"}, &stdout, &stderr, time.Now())
+	code := run([]string{"help"}, &stdout, &stderr, time.Now())
 	if code != exitcode.Success {
 		t.Fatalf("exit code = %d, want %d", code, exitcode.Success)
 	}
@@ -158,8 +327,8 @@ func TestRunWritesEnvelopeAndReturnsExitCode(t *testing.T) {
 		t.Fatalf("stderr = %q, want empty", stderr.String())
 	}
 	payload := decodeCommandResult(t, stdout.Bytes())
-	if payload["command"] != "check" {
-		t.Fatalf("command = %v, want check", payload["command"])
+	if payload["command"] != "help" {
+		t.Fatalf("command = %v, want help", payload["command"])
 	}
 }
 
@@ -210,4 +379,48 @@ func validateCommandResultSchema(t *testing.T, payload map[string]any) {
 	if err := schema.Validate(payload); err != nil {
 		t.Fatalf("command-result schema validation failed: %v", err)
 	}
+}
+
+func writeOpenAPIFixture(t *testing.T, path string) {
+	t.Helper()
+	spec := []byte(`{
+  "openapi": "3.0.3",
+  "info": {"title": "Fixture API", "version": "1.0.0"},
+  "paths": {
+    "/customers": {
+      "post": {
+        "operationId": "createCustomer",
+        "responses": {
+          "201": {"description": "created"}
+        }
+      }
+    }
+  }
+}`)
+	if err := os.WriteFile(path, spec, 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+}
+
+func firstArtifactPath(t *testing.T, payload map[string]any, artifactType string) string {
+	t.Helper()
+	artifacts, ok := payload["artifacts"].([]any)
+	if !ok {
+		t.Fatalf("artifacts = %T, want array", payload["artifacts"])
+	}
+	for _, artifact := range artifacts {
+		item, ok := artifact.(map[string]any)
+		if !ok {
+			t.Fatalf("artifact item = %T, want object", artifact)
+		}
+		if item["type"] == artifactType {
+			path, ok := item["path"].(string)
+			if !ok || path == "" {
+				t.Fatalf("artifact path = %#v, want non-empty string", item["path"])
+			}
+			return path
+		}
+	}
+	t.Fatalf("artifact type %q not found in %#v", artifactType, artifacts)
+	return ""
 }

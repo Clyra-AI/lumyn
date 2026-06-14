@@ -1,0 +1,36 @@
+{
+  "artifact_type": "coverage_gate_result",
+  "schema_version": "1.0",
+  "task_id": "T3",
+  "status": "pass",
+  "required": true,
+  "thresholds": [
+    {
+      "scope": "first_party",
+      "status": "pass",
+      "threshold": "75.0%",
+      "actual": "84.4%"
+    },
+    {
+      "scope": "go_stable_command_or_core_packages",
+      "status": "pass",
+      "threshold": "85.0%",
+      "actual": "cmd/lumyn 94.7%; internal/source 82.2%; internal/config 100.0%",
+      "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+    }
+  ],
+  "commands": [
+    {
+      "command": "GOCACHE=/private/tmp/lumyn-gocache-T3 make test-coverage",
+      "status": "pass",
+      "exit_code": 0,
+      "coverage_total": "84.4%"
+    },
+    {
+      "command": "GOCACHE=/private/tmp/lumyn-gocache-T3 make prepush-full",
+      "status": "pass",
+      "exit_code": 0,
+      "coverage_total": "84.4%"
+    }
+  ]
+}

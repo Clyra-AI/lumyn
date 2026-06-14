@@ -1,0 +1,26 @@
+{
+  "artifact_type": "work_proof_marker",
+  "schema_version": "1.0",
+  "task_id": "T3",
+  "status": "implemented",
+  "implementation_performed": true,
+  "changed_paths": [
+    ".factory/artifacts/task-runs/T3/coverage-gate-result.json",
+    ".factory/artifacts/task-runs/T3/validation-report.json",
+    ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+    "cmd/lumyn/main.go",
+    "cmd/lumyn/main_test.go",
+    "internal/source/source.go",
+    "internal/source/source_test.go"
+  ],
+  "evidence_refs": [
+    ".factory/artifacts/task-runs/T3/validation-report.json",
+    ".factory/artifacts/task-runs/T3/coverage-gate-result.json"
+  ],
+  "implementation_summary": [
+    "Implemented lumyn init flag parsing for --openapi, --docs, --config, and --json.",
+    "Implemented lumyn check local config intake, source report artifacts, strict-mode exit behavior, and command-result metadata findings.",
+    "Added internal/source local OpenAPI and docs checks with repo-relative references, source hashes, surface fingerprinting, and redacted source-check artifacts.",
+    "Added CLI and internal tests for config generation, source artifact generation, concrete source findings, YAML/JSON intake, strict mode, and fail-closed invalid inputs."
+  ]
+}

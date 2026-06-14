@@ -1,14 +1,145 @@
 {
+  "acceptance_item_count": 87,
+  "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
   "artifact_type": "scope_closure_map",
-  "schema_version": "0.1",
-  "source_prd_ref": "docs/product/prd.md",
   "closure_status": "partial",
+  "delivery_slices": [
+    {
+      "acceptance_group_refs": [
+        "record_contract_replay_report",
+        "activation_success_metrics"
+      ],
+      "acceptance_item_ids": [
+        "FDN-001",
+        "FDN-002",
+        "RCRR-001",
+        "RCRR-002",
+        "RCRR-003",
+        "RCRR-004",
+        "RCRR-005",
+        "RCRR-006",
+        "RCRR-007",
+        "RCRR-008",
+        "RCRR-009",
+        "RCRR-010",
+        "RCRR-011",
+        "ACT-001",
+        "ACT-002",
+        "ACT-003",
+        "ACT-004",
+        "PULL-005",
+        "REC-QUALITY-001",
+        "FDN-003",
+        "RCRR-012"
+      ],
+      "legacy_slice_ref": "v0.0",
+      "name": "Record, Contract, Replay, Report",
+      "public_release_boundary": false,
+      "required_for_completion": true,
+      "slice_id": "v0.0",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report",
+      "task_refs": [
+        "T1",
+        "T2",
+        "T3",
+        "T4.1",
+        "T4.2",
+        "T4.3",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
+        "T10",
+        "T2.7"
+      ]
+    },
+    {
+      "acceptance_group_refs": [
+        "live_verify_boundary_ci_share",
+        "product_pull_success_metrics"
+      ],
+      "acceptance_item_ids": [
+        "LVCIS-001",
+        "LVCIS-002",
+        "LVCIS-003",
+        "LVCIS-004",
+        "LVCIS-005",
+        "LVCIS-006",
+        "LVCIS-007",
+        "LVCIS-008",
+        "PULL-002",
+        "PULL-003",
+        "PULL-001",
+        "PULL-004",
+        "PULL-005",
+        "LVCIS-009",
+        "LVCIS-010"
+      ],
+      "legacy_slice_ref": "v0.1",
+      "name": "Live Known-Path Verify, Basic Boundaries, CI, And Share",
+      "public_release_boundary": false,
+      "required_for_completion": true,
+      "slice_id": "v0.1",
+      "source_ref": "docs/product/prd.md#live-known-path-verify-basic-boundaries-and-ci",
+      "task_refs": [
+        "T7",
+        "T8",
+        "T9",
+        "T10"
+      ]
+    },
+    {
+      "acceptance_group_refs": [
+        "live_agent_eval",
+        "product_pull_success_metrics"
+      ],
+      "acceptance_item_ids": [
+        "EVAL-001",
+        "EVAL-002",
+        "EVAL-003",
+        "EVAL-004",
+        "EVAL-005",
+        "EVAL-006",
+        "EVAL-007",
+        "EVAL-008",
+        "EVAL-009",
+        "EVAL-010",
+        "PULL-001",
+        "PULL-004",
+        "PULL-002",
+        "PULL-003",
+        "PULL-005",
+        "EVAL-011"
+      ],
+      "legacy_slice_ref": "v0.2",
+      "name": "Live Agent Eval",
+      "public_release_boundary": false,
+      "required_for_completion": true,
+      "slice_id": "v0.2",
+      "source_ref": "docs/product/prd.md#live-agent-eval",
+      "task_refs": [
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
+      ]
+    }
+  ],
+  "full_mvp_closure_rule": "Every required acceptance item in acceptance-ledger.json must be implemented, deferred by approval, or blocked with evidence before full MVP closure.",
   "items": [
     {
-      "scope_item": "Factory delivery lifecycle baseline",
-      "status": "implemented",
-      "task_refs": [
-        "T2.5"
+      "acceptance_item_ids": [
+        "FDL-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "FDL-001",
+          "evidence_refs": [
+            ".factory/artifacts/task-runs/T2.5/validation-report.json"
+          ],
+          "repair_task_refs": [],
+          "status": "implemented"
+        }
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T2.5/validation-report.json",
@@ -17,33 +148,33 @@
       "implemented_task_refs": [
         "T2.5"
       ],
-      "remaining_task_refs": [],
       "notes": [
         "T2.5 established the repository validate workflow, local lint enforcement for CI shape, and repo-local PR lifecycle guidance before T3 product work.",
         "T3 is the first product task that must use the lifecycle-gated worker chain and PR lifecycle evidence.",
         "T2.5 now also establishes required-check metadata, workflow hardening, CODEOWNERS owner-review coverage, action-ref exception posture, CodeQL workflow posture, and repo-pack validation for CI control drift.",
         "Required-check metadata must stay aligned with branch protection and commit-push required checks before autoship or merge."
       ],
+      "remaining_task_refs": [],
+      "scope_item": "Factory delivery lifecycle baseline",
       "scope_item_id": "factory_delivery_lifecycle_baseline",
-      "acceptance_item_ids": [
-        "FDL-001"
-      ],
-      "acceptance_item_statuses": [
-        {
-          "acceptance_item_id": "FDL-001",
-          "status": "implemented",
-          "evidence_refs": [
-            ".factory/artifacts/task-runs/T2.5/validation-report.json"
-          ],
-          "repair_task_refs": []
-        }
+      "status": "implemented",
+      "task_refs": [
+        "T2.5"
       ]
     },
     {
-      "scope_item": "Factory dev/architecture propagation baseline",
-      "status": "implemented",
-      "task_refs": [
-        "T2.6"
+      "acceptance_item_ids": [
+        "FDAP-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "FDAP-001",
+          "evidence_refs": [
+            ".factory/artifacts/task-runs/T2.6/validation-report.json"
+          ],
+          "repair_task_refs": [],
+          "status": "implemented"
+        }
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T2.6/validation-report.json",
@@ -52,76 +183,20 @@
       "implemented_task_refs": [
         "T2.6"
       ],
-      "remaining_task_refs": [],
       "notes": [
         "T2.6 established the 12-level test matrix mapping, CI lane mapping, CodeQL workflow, scanner lint checks, docs parity, output contract, release integrity, provenance evidence, systems-thinking, TDD/ADR, performance, reliability, and fail-closed rules.",
         "All current task packets now carry ci_lane_refs, test_matrix_refs, coverage_policy_refs, security_scanner_gates, engineering_policy_refs, and architecture_guidance_refs; future task packets must keep them or record an approved exception.",
         "T2.6 planning now also preserves Factory prd-to-plan and execution-compiler fields: public contract map, docs/OSS readiness, test matrix wiring, changelog/versioning intent, contract impact, ADR/TDD posture, cost/perf, failure hypotheses, and semantic invariants."
       ],
+      "remaining_task_refs": [],
+      "scope_item": "Factory dev/architecture propagation baseline",
       "scope_item_id": "factory_dev_architecture_propagation_baseline",
-      "acceptance_item_ids": [
-        "FDAP-001"
-      ],
-      "acceptance_item_statuses": [
-        {
-          "acceptance_item_id": "FDAP-001",
-          "status": "implemented",
-          "evidence_refs": [
-            ".factory/artifacts/task-runs/T2.6/validation-report.json"
-          ],
-          "repair_task_refs": []
-        }
+      "status": "implemented",
+      "task_refs": [
+        "T2.6"
       ]
     },
     {
-      "scope_item": "Record, contract, replay, report",
-      "status": "partial",
-      "task_refs": [
-        "T1",
-        "T2",
-        "T2.7",
-        "T3",
-        "T4.1",
-        "T4.2",
-        "T4.3",
-        "T5.1",
-        "T5.2",
-        "T6.1",
-        "T6.2",
-        "T10"
-      ],
-      "evidence_refs": [
-        ".factory/artifacts/task-runs/T1/validation-report.json",
-        ".factory/artifacts/task-runs/T1/work-proof-marker.json",
-        ".factory/artifacts/task-runs/T2/validation-report.json",
-        ".factory/artifacts/task-runs/T2/work-proof-marker.json",
-        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
-        ".factory/artifacts/task-runs/T2.7/validation-report.json",
-        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
-      ],
-      "implemented_task_refs": [
-        "T1",
-        "T2",
-        "T2.7"
-      ],
-      "remaining_task_refs": [
-        "T3",
-        "T4.1",
-        "T4.2",
-        "T4.3",
-        "T5.1",
-        "T5.2",
-        "T6.1",
-        "T6.2",
-        "T10"
-      ],
-      "notes": [
-        "T1 established the pinned Go CLI skeleton, command-result envelope, exit-code constants, config defaults, and validation lanes.",
-        "Record/replay/report scope remains partial until schemas, init/check, record, replay, and report tasks close.",
-        "T2 established executable Phase 0 schema files and schema validation coverage for workflow, evidence, cassette, proof, command-result, redaction, and related artifact models.",
-        "T2.7 was added after the safety/corpus-ready evidence requirement to make normalized local failure contracts explicit before T3 product implementation."
-      ],
-      "scope_item_id": "record_contract_replay_report",
       "acceptance_item_ids": [
         "FDN-001",
         "FDN-002",
@@ -148,128 +223,127 @@
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "FDN-001",
-          "status": "implemented",
           "evidence_refs": [
             ".factory/artifacts/task-runs/T1/validation-report.json"
           ],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "implemented"
         },
         {
           "acceptance_item_id": "FDN-002",
-          "status": "implemented",
           "evidence_refs": [
             ".factory/artifacts/task-runs/T2/validation-report.json"
           ],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "implemented"
         },
         {
           "acceptance_item_id": "RCRR-001",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "RCRR-002",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "RCRR-003",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "RCRR-004",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "RCRR-005",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "RCRR-006",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "RCRR-007",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "RCRR-008",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "RCRR-009",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "RCRR-010",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "RCRR-011",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "ACT-001",
-          "status": "partial",
+          "evidence_mode": "automated",
           "evidence_refs": [],
           "repair_task_refs": [],
-          "evidence_mode": "automated"
+          "status": "partial"
         },
         {
           "acceptance_item_id": "ACT-002",
-          "status": "partial",
+          "evidence_mode": "automated",
           "evidence_refs": [],
           "repair_task_refs": [],
-          "evidence_mode": "automated"
+          "status": "partial"
         },
         {
           "acceptance_item_id": "ACT-003",
-          "status": "partial",
+          "evidence_mode": "automated",
           "evidence_refs": [],
           "repair_task_refs": [],
-          "evidence_mode": "automated"
+          "status": "partial"
         },
         {
           "acceptance_item_id": "ACT-004",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "PULL-005",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "REC-QUALITY-001",
-          "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "FDN-003",
-          "status": "implemented",
           "evidence_refs": [
             "schemas/command-result.schema.json",
             "schemas/result-axes.schema.json",
@@ -282,39 +356,80 @@
             ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
             ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
           ],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "implemented"
         },
         {
           "acceptance_item_id": "RCRR-012",
-          "status": "planned",
           "evidence_refs": [],
           "repair_task_refs": [
             "T6.2"
-          ]
+          ],
+          "status": "planned"
         }
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T1/validation-report.json",
+        ".factory/artifacts/task-runs/T1/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2/validation-report.json",
+        ".factory/artifacts/task-runs/T2/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/work-proof-marker.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/validation-report.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/ship-packet.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/pr-lifecycle-report.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/post-merge-report.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/scope-closure-report.json"
+      ],
+      "implemented_task_refs": [
+        "T1",
+        "T2",
+        "T2.7",
+        "T3"
       ],
       "mvp_required_version_slices": [
         "v0.0"
       ],
-      "delivery_slice_refs": [
-        "v0.0"
+      "notes": [
+        "T1 established the pinned Go CLI skeleton, command-result envelope, exit-code constants, config defaults, and validation lanes.",
+        "Record/replay/report scope remains partial until schemas, init/check, record, replay, and report tasks close.",
+        "T2 established executable Phase 0 schema files and schema validation coverage for workflow, evidence, cassette, proof, command-result, redaction, and related artifact models.",
+        "T2.7 was added after the safety/corpus-ready evidence requirement to make normalized local failure contracts explicit before T3 product implementation."
+      ],
+      "remaining_task_refs": [
+        "T4.1",
+        "T4.2",
+        "T4.3",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
+        "T10"
+      ],
+      "scope_item": "Record, contract, replay, report",
+      "scope_item_id": "record_contract_replay_report",
+      "status": "partial",
+      "task_refs": [
+        "T1",
+        "T2",
+        "T2.7",
+        "T3",
+        "T4.1",
+        "T4.2",
+        "T4.3",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
+        "T10"
       ]
     },
     {
-      "scope_item": "Live verify, boundaries, CI, share",
-      "status": "planned",
-      "task_refs": [
-        "T7",
-        "T8",
-        "T9",
-        "T10"
-      ],
-      "evidence_refs": [],
-      "blockers": [
-        "sandbox credential posture",
-        "network allowlist"
-      ],
-      "scope_item_id": "live_verify_boundary_ci_share",
       "acceptance_item_ids": [
         "LVCIS-001",
         "LVCIS-002",
@@ -332,80 +447,95 @@
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "LVCIS-001",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "LVCIS-002",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "LVCIS-003",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "LVCIS-004",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "LVCIS-005",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "LVCIS-006",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "LVCIS-007",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "LVCIS-008",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "PULL-002",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "PULL-003",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "LVCIS-009",
-          "status": "planned",
           "evidence_refs": [],
           "repair_task_refs": [
             "T8"
-          ]
+          ],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "LVCIS-010",
-          "status": "planned",
           "evidence_refs": [],
           "repair_task_refs": [
             "T9"
-          ]
+          ],
+          "status": "planned"
         }
+      ],
+      "blockers": [
+        "sandbox credential posture",
+        "network allowlist"
+      ],
+      "delivery_slice_refs": [
+        "v0.1"
+      ],
+      "evidence_refs": [],
+      "implemented_task_refs": [],
+      "mvp_required_version_slices": [
+        "v0.1"
+      ],
+      "notes": [
+        "Boundary violations that indicate scope escalation, data exposure risk, or out-of-policy action must be surfaced as safety/security-relevant findings in live verify and CI surfaces."
       ],
       "remaining_task_refs": [
         "T7",
@@ -413,41 +543,17 @@
         "T9",
         "T10"
       ],
-      "mvp_required_version_slices": [
-        "v0.1"
-      ],
-      "delivery_slice_refs": [
-        "v0.1"
-      ],
-      "notes": [
-        "Boundary violations that indicate scope escalation, data exposure risk, or out-of-policy action must be surfaced as safety/security-relevant findings in live verify and CI surfaces."
-      ],
-      "implemented_task_refs": []
-    },
-    {
-      "scope_item": "Live agent eval",
+      "scope_item": "Live verify, boundaries, CI, share",
+      "scope_item_id": "live_verify_boundary_ci_share",
       "status": "planned",
       "task_refs": [
-        "T11.1",
-        "T11.2",
-        "T12.1",
-        "T12.2"
-      ],
-      "evidence_refs": [],
-      "blockers": [
-        "OpenAI-compatible model credential and local base_url endpoint posture",
-        "Anthropic model credential posture",
-        "network allowlist"
-      ],
-      "provider_adapter_coverage": [
-        "openai_compatible_http_adapter",
-        "anthropic_messages_http_adapter"
-      ],
-      "notes": [
-        "MVP live eval is not closed until OpenAI-compatible provider adapters including custom base_url local endpoints and Anthropic provider adapters are implemented or an explicit human-approved scope exception is recorded.",
-        "Eval failure evidence must be normalized locally for future opt-in corpus value while preserving local-first privacy by default."
-      ],
-      "scope_item_id": "live_agent_eval",
+        "T7",
+        "T8",
+        "T9",
+        "T10"
+      ]
+    },
+    {
       "acceptance_item_ids": [
         "EVAL-001",
         "EVAL-002",
@@ -466,159 +572,125 @@
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "EVAL-001",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "EVAL-002",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "EVAL-003",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "EVAL-004",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "EVAL-005",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "EVAL-006",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "EVAL-007",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "EVAL-008",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "EVAL-009",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "EVAL-010",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "PULL-001",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "PULL-004",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "EVAL-011",
-          "status": "planned",
           "evidence_refs": [],
           "repair_task_refs": [
             "T11.2",
             "T12.2"
-          ]
+          ],
+          "status": "planned"
         }
       ],
-      "remaining_task_refs": [
-        "T11.1",
-        "T11.2",
-        "T12.1",
-        "T12.2"
-      ],
-      "mvp_required_version_slices": [
-        "v0.2"
+      "blockers": [
+        "OpenAI-compatible model credential and local base_url endpoint posture",
+        "Anthropic model credential posture",
+        "network allowlist"
       ],
       "delivery_slice_refs": [
         "v0.2"
       ],
-      "implemented_task_refs": []
-    },
-    {
-      "scope_item": "Functional requirements",
-      "scope_item_id": "functional_requirements",
-      "source_ref": "docs/product/prd.md#functional-requirements",
-      "status": "partial",
-      "task_refs": [
-        "T1",
-        "T2",
-        "T2.7",
-        "T3",
-        "T4.1",
-        "T4.2",
-        "T4.3",
-        "T5.1",
-        "T5.2",
-        "T6.1",
-        "T6.2",
-        "T7",
-        "T8",
-        "T9",
-        "T10",
-        "T11.1",
-        "T11.2",
-        "T12.1",
-        "T12.2"
+      "evidence_refs": [],
+      "implemented_task_refs": [],
+      "mvp_required_version_slices": [
+        "v0.2"
       ],
-      "implemented_task_refs": [
-        "T2.7"
+      "notes": [
+        "MVP live eval is not closed until OpenAI-compatible provider adapters including custom base_url local endpoints and Anthropic provider adapters are implemented or an explicit human-approved scope exception is recorded.",
+        "Eval failure evidence must be normalized locally for future opt-in corpus value while preserving local-first privacy by default."
+      ],
+      "provider_adapter_coverage": [
+        "openai_compatible_http_adapter",
+        "anthropic_messages_http_adapter"
       ],
       "remaining_task_refs": [
-        "T1",
-        "T2",
-        "T3",
-        "T4.1",
-        "T4.2",
-        "T4.3",
-        "T5.1",
-        "T5.2",
-        "T6.1",
-        "T6.2",
-        "T7",
-        "T8",
-        "T9",
-        "T10",
         "T11.1",
         "T11.2",
         "T12.1",
         "T12.2"
       ],
-      "evidence_refs": [
-        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
-        ".factory/artifacts/task-runs/T2.7/validation-report.json",
-        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
-      ],
+      "scope_item": "Live agent eval",
+      "scope_item_id": "live_agent_eval",
+      "status": "planned",
+      "task_refs": [
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
+      ]
+    },
+    {
       "acceptance_criteria": [],
-      "requires_human_approval": false,
-      "notes": [
-        "Requirement-level scope closure added from PRD FR/NFR section."
-      ],
       "acceptance_item_ids": [
         "FR1",
         "FR2",
@@ -649,55 +721,54 @@
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "FR1",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR2",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR3",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR4",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR5",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR6",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR7",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR8",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR9",
-          "status": "partial",
           "evidence_refs": [
             "schemas/evidence-event.schema.json",
             "schemas/cassette.schema.json",
@@ -707,107 +778,347 @@
             ".factory/artifacts/task-runs/T2.7/validation-report.json",
             ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
           ],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "partial"
         },
         {
           "acceptance_item_id": "FR10",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR11",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR12",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR13",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR14",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR15",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR16",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR17",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR18",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR19",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR20",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR21",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR22",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR23",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR24",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         },
         {
           "acceptance_item_id": "FR25",
-          "status": "planned",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [],
+          "status": "planned"
         }
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/work-proof-marker.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/validation-report.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/ship-packet.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/pr-lifecycle-report.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/post-merge-report.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/scope-closure-report.json"
+      ],
+      "implemented_task_refs": [
+        "T2.7",
+        "T3"
+      ],
+      "notes": [
+        "Requirement-level scope closure added from PRD FR/NFR section."
+      ],
+      "remaining_task_refs": [
+        "T1",
+        "T2",
+        "T4.1",
+        "T4.2",
+        "T4.3",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
+      ],
+      "requires_human_approval": false,
+      "scope_item": "Functional requirements",
+      "scope_item_id": "functional_requirements",
+      "source_ref": "docs/product/prd.md#functional-requirements",
+      "status": "partial",
+      "task_refs": [
+        "T1",
+        "T2",
+        "T2.7",
+        "T3",
+        "T4.1",
+        "T4.2",
+        "T4.3",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
       ]
     },
     {
+      "acceptance_criteria": [],
+      "acceptance_item_ids": [
+        "NFR1",
+        "NFR2",
+        "NFR3",
+        "NFR4",
+        "NFR5",
+        "NFR6",
+        "NFR7",
+        "NFR8",
+        "NFR9",
+        "NFR10",
+        "NFR11",
+        "NFR12",
+        "NFR13",
+        "NFR14"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "NFR1",
+          "evidence_refs": [],
+          "repair_task_refs": [],
+          "status": "planned"
+        },
+        {
+          "acceptance_item_id": "NFR2",
+          "evidence_refs": [],
+          "repair_task_refs": [],
+          "status": "planned"
+        },
+        {
+          "acceptance_item_id": "NFR3",
+          "evidence_refs": [],
+          "repair_task_refs": [],
+          "status": "planned"
+        },
+        {
+          "acceptance_item_id": "NFR4",
+          "evidence_refs": [
+            "schemas/command-result.schema.json",
+            "schemas/result-axes.schema.json",
+            "schemas/evidence-event.schema.json",
+            "schemas/cassette.schema.json",
+            "schemas/canonical-trace.schema.json",
+            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T2.7/validation-report.json",
+            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+          ],
+          "repair_task_refs": [],
+          "status": "partial"
+        },
+        {
+          "acceptance_item_id": "NFR5",
+          "evidence_refs": [],
+          "repair_task_refs": [],
+          "status": "planned"
+        },
+        {
+          "acceptance_item_id": "NFR6",
+          "evidence_refs": [
+            "cmd/lumyn/main.go",
+            "schemas/schema_test.go",
+            "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md",
+            "docs/product/prd.md",
+            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T2.7/validation-report.json",
+            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+          ],
+          "repair_task_refs": [],
+          "status": "partial"
+        },
+        {
+          "acceptance_item_id": "NFR7",
+          "evidence_refs": [],
+          "repair_task_refs": [],
+          "status": "planned"
+        },
+        {
+          "acceptance_item_id": "NFR8",
+          "evidence_refs": [],
+          "repair_task_refs": [],
+          "status": "planned"
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "evidence_refs": [
+            "schemas/command-result.schema.json",
+            "schemas/result-axes.schema.json",
+            "schemas/evidence-event.schema.json",
+            "docs/product/prd.md",
+            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T2.7/validation-report.json",
+            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+          ],
+          "repair_task_refs": [],
+          "status": "partial"
+        },
+        {
+          "acceptance_item_id": "NFR10",
+          "evidence_refs": [],
+          "repair_task_refs": [],
+          "status": "planned"
+        },
+        {
+          "acceptance_item_id": "NFR11",
+          "evidence_refs": [],
+          "repair_task_refs": [],
+          "status": "planned"
+        },
+        {
+          "acceptance_item_id": "NFR12",
+          "evidence_refs": [
+            "schemas/command-result.schema.json",
+            "schemas/result-axes.schema.json",
+            "schemas/evidence-event.schema.json",
+            "schemas/cassette.schema.json",
+            "schemas/canonical-trace.schema.json",
+            "schemas/schema_test.go",
+            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T2.7/validation-report.json",
+            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+          ],
+          "repair_task_refs": [],
+          "status": "partial"
+        },
+        {
+          "acceptance_item_id": "NFR13",
+          "evidence_refs": [],
+          "repair_task_refs": [],
+          "status": "planned"
+        },
+        {
+          "acceptance_item_id": "NFR14",
+          "evidence_refs": [],
+          "repair_task_refs": [],
+          "status": "planned"
+        }
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/work-proof-marker.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/validation-report.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/ship-packet.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/pr-lifecycle-report.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/post-merge-report.json",
+        "factoryd://runs/20260614T020310.481595000Z-lumyn-T3/lifecycle/scope-closure-report.json"
+      ],
+      "implemented_task_refs": [
+        "T2.7",
+        "T3"
+      ],
+      "notes": [
+        "Requirement-level scope closure added from PRD FR/NFR section."
+      ],
+      "remaining_task_refs": [
+        "T1",
+        "T2",
+        "T4.1",
+        "T4.2",
+        "T4.3",
+        "T5.1",
+        "T5.2",
+        "T6.1",
+        "T6.2",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "T11.1",
+        "T11.2",
+        "T12.1",
+        "T12.2"
+      ],
+      "requires_human_approval": false,
       "scope_item": "Non-functional requirements",
       "scope_item_id": "nonfunctional_requirements",
       "source_ref": "docs/product/prd.md#non-functional-requirements",
@@ -832,193 +1143,24 @@
         "T11.2",
         "T12.1",
         "T12.2"
-      ],
-      "implemented_task_refs": [
-        "T2.7"
-      ],
-      "remaining_task_refs": [
-        "T1",
-        "T2",
-        "T3",
-        "T4.1",
-        "T4.2",
-        "T4.3",
-        "T5.1",
-        "T5.2",
-        "T6.1",
-        "T6.2",
-        "T7",
-        "T8",
-        "T9",
-        "T10",
-        "T11.1",
-        "T11.2",
-        "T12.1",
-        "T12.2"
-      ],
-      "evidence_refs": [
-        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
-        ".factory/artifacts/task-runs/T2.7/validation-report.json",
-        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
-      ],
-      "acceptance_criteria": [],
-      "requires_human_approval": false,
-      "notes": [
-        "Requirement-level scope closure added from PRD FR/NFR section."
-      ],
-      "acceptance_item_ids": [
-        "NFR1",
-        "NFR2",
-        "NFR3",
-        "NFR4",
-        "NFR5",
-        "NFR6",
-        "NFR7",
-        "NFR8",
-        "NFR9",
-        "NFR10",
-        "NFR11",
-        "NFR12",
-        "NFR13",
-        "NFR14"
-      ],
-      "acceptance_item_statuses": [
-        {
-          "acceptance_item_id": "NFR1",
-          "status": "planned",
-          "evidence_refs": [],
-          "repair_task_refs": []
-        },
-        {
-          "acceptance_item_id": "NFR2",
-          "status": "planned",
-          "evidence_refs": [],
-          "repair_task_refs": []
-        },
-        {
-          "acceptance_item_id": "NFR3",
-          "status": "planned",
-          "evidence_refs": [],
-          "repair_task_refs": []
-        },
-        {
-          "acceptance_item_id": "NFR4",
-          "status": "partial",
-          "evidence_refs": [
-            "schemas/command-result.schema.json",
-            "schemas/result-axes.schema.json",
-            "schemas/evidence-event.schema.json",
-            "schemas/cassette.schema.json",
-            "schemas/canonical-trace.schema.json",
-            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
-            ".factory/artifacts/task-runs/T2.7/validation-report.json",
-            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
-          ],
-          "repair_task_refs": []
-        },
-        {
-          "acceptance_item_id": "NFR5",
-          "status": "planned",
-          "evidence_refs": [],
-          "repair_task_refs": []
-        },
-        {
-          "acceptance_item_id": "NFR6",
-          "status": "partial",
-          "evidence_refs": [
-            "cmd/lumyn/main.go",
-            "schemas/schema_test.go",
-            "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md",
-            "docs/product/prd.md",
-            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
-            ".factory/artifacts/task-runs/T2.7/validation-report.json",
-            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
-          ],
-          "repair_task_refs": []
-        },
-        {
-          "acceptance_item_id": "NFR7",
-          "status": "planned",
-          "evidence_refs": [],
-          "repair_task_refs": []
-        },
-        {
-          "acceptance_item_id": "NFR8",
-          "status": "planned",
-          "evidence_refs": [],
-          "repair_task_refs": []
-        },
-        {
-          "acceptance_item_id": "NFR9",
-          "status": "partial",
-          "evidence_refs": [
-            "schemas/command-result.schema.json",
-            "schemas/result-axes.schema.json",
-            "schemas/evidence-event.schema.json",
-            "docs/product/prd.md",
-            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
-            ".factory/artifacts/task-runs/T2.7/validation-report.json",
-            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
-          ],
-          "repair_task_refs": []
-        },
-        {
-          "acceptance_item_id": "NFR10",
-          "status": "planned",
-          "evidence_refs": [],
-          "repair_task_refs": []
-        },
-        {
-          "acceptance_item_id": "NFR11",
-          "status": "planned",
-          "evidence_refs": [],
-          "repair_task_refs": []
-        },
-        {
-          "acceptance_item_id": "NFR12",
-          "status": "partial",
-          "evidence_refs": [
-            "schemas/command-result.schema.json",
-            "schemas/result-axes.schema.json",
-            "schemas/evidence-event.schema.json",
-            "schemas/cassette.schema.json",
-            "schemas/canonical-trace.schema.json",
-            "schemas/schema_test.go",
-            ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
-            ".factory/artifacts/task-runs/T2.7/validation-report.json",
-            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
-          ],
-          "repair_task_refs": []
-        },
-        {
-          "acceptance_item_id": "NFR13",
-          "status": "planned",
-          "evidence_refs": [],
-          "repair_task_refs": []
-        },
-        {
-          "acceptance_item_id": "NFR14",
-          "status": "planned",
-          "evidence_refs": [],
-          "repair_task_refs": []
-        }
       ]
     }
   ],
-  "full_mvp_closure_rule": "Every required acceptance item in acceptance-ledger.json must be implemented, deferred by approval, or blocked with evidence before full MVP closure.",
-  "last_updated_at": "2026-06-13T22:31:04Z",
-  "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
-  "acceptance_item_count": 87,
+  "last_updated_at": "2026-06-14T02:03:10Z",
   "mvp_required_version_slices": [
     {
-      "slice_id": "v0.0",
+      "acceptance_group_refs": [
+        "record_contract_replay_report",
+        "activation_success_metrics"
+      ],
+      "capability_group_id": "record_contract_replay_report",
+      "completion_policy": "Required internal capability slice; not a standalone public release or MVP completion point.",
       "legacy_label": "v0.0",
       "name": "Record, Contract, Replay, Report",
-      "capability_group_id": "record_contract_replay_report",
-      "source_ref": "docs/product/prd.md#record-contract-replay-report",
-      "required_for_full_mvp": true,
       "public_release_boundary": false,
-      "completion_policy": "Required internal capability slice; not a standalone public release or MVP completion point.",
+      "required_for_full_mvp": true,
+      "slice_id": "v0.0",
+      "source_ref": "docs/product/prd.md#record-contract-replay-report",
       "task_refs": [
         "T1",
         "T2",
@@ -1032,173 +1174,49 @@
         "T6.2",
         "T10",
         "T2.7"
-      ],
-      "acceptance_group_refs": [
-        "record_contract_replay_report",
-        "activation_success_metrics"
       ]
     },
     {
-      "slice_id": "v0.1",
+      "acceptance_group_refs": [
+        "live_verify_boundary_ci_share",
+        "product_pull_success_metrics"
+      ],
+      "capability_group_id": "live_verify_boundary_ci_share",
+      "completion_policy": "Required internal capability slice; live sandbox/network work remains gated by approved credential posture.",
       "legacy_label": "v0.1",
       "name": "Live Known-Path Verify, Basic Boundaries, CI, And Share",
-      "capability_group_id": "live_verify_boundary_ci_share",
-      "source_ref": "docs/product/prd.md#live-known-path-verify-basic-boundaries-and-ci",
-      "required_for_full_mvp": true,
       "public_release_boundary": false,
-      "completion_policy": "Required internal capability slice; live sandbox/network work remains gated by approved credential posture.",
+      "required_for_full_mvp": true,
+      "slice_id": "v0.1",
+      "source_ref": "docs/product/prd.md#live-known-path-verify-basic-boundaries-and-ci",
       "task_refs": [
         "T7",
         "T8",
         "T9",
         "T10"
-      ],
-      "acceptance_group_refs": [
-        "live_verify_boundary_ci_share",
-        "product_pull_success_metrics"
       ]
     },
     {
-      "slice_id": "v0.2",
+      "acceptance_group_refs": [
+        "live_agent_eval",
+        "product_pull_success_metrics"
+      ],
+      "capability_group_id": "live_agent_eval",
+      "completion_policy": "Required internal capability slice; live eval dispatch remains gated by product-pull evidence and approved model/network posture.",
       "legacy_label": "v0.2",
       "name": "Live Agent Eval",
-      "capability_group_id": "live_agent_eval",
-      "source_ref": "docs/product/prd.md#live-agent-eval",
-      "required_for_full_mvp": true,
       "public_release_boundary": false,
-      "completion_policy": "Required internal capability slice; live eval dispatch remains gated by product-pull evidence and approved model/network posture.",
+      "required_for_full_mvp": true,
+      "slice_id": "v0.2",
+      "source_ref": "docs/product/prd.md#live-agent-eval",
       "task_refs": [
         "T11.1",
         "T11.2",
         "T12.1",
         "T12.2"
-      ],
-      "acceptance_group_refs": [
-        "live_agent_eval",
-        "product_pull_success_metrics"
       ]
     }
   ],
-  "delivery_slices": [
-    {
-      "slice_id": "v0.0",
-      "name": "Record, Contract, Replay, Report",
-      "source_ref": "docs/product/prd.md#record-contract-replay-report",
-      "required_for_completion": true,
-      "public_release_boundary": false,
-      "task_refs": [
-        "T1",
-        "T2",
-        "T3",
-        "T4.1",
-        "T4.2",
-        "T4.3",
-        "T5.1",
-        "T5.2",
-        "T6.1",
-        "T6.2",
-        "T10",
-        "T2.7"
-      ],
-      "acceptance_group_refs": [
-        "record_contract_replay_report",
-        "activation_success_metrics"
-      ],
-      "acceptance_item_ids": [
-        "FDN-001",
-        "FDN-002",
-        "RCRR-001",
-        "RCRR-002",
-        "RCRR-003",
-        "RCRR-004",
-        "RCRR-005",
-        "RCRR-006",
-        "RCRR-007",
-        "RCRR-008",
-        "RCRR-009",
-        "RCRR-010",
-        "RCRR-011",
-        "ACT-001",
-        "ACT-002",
-        "ACT-003",
-        "ACT-004",
-        "PULL-005",
-        "REC-QUALITY-001",
-        "FDN-003",
-        "RCRR-012"
-      ],
-      "legacy_slice_ref": "v0.0"
-    },
-    {
-      "slice_id": "v0.1",
-      "name": "Live Known-Path Verify, Basic Boundaries, CI, And Share",
-      "source_ref": "docs/product/prd.md#live-known-path-verify-basic-boundaries-and-ci",
-      "required_for_completion": true,
-      "public_release_boundary": false,
-      "task_refs": [
-        "T7",
-        "T8",
-        "T9",
-        "T10"
-      ],
-      "acceptance_group_refs": [
-        "live_verify_boundary_ci_share",
-        "product_pull_success_metrics"
-      ],
-      "acceptance_item_ids": [
-        "LVCIS-001",
-        "LVCIS-002",
-        "LVCIS-003",
-        "LVCIS-004",
-        "LVCIS-005",
-        "LVCIS-006",
-        "LVCIS-007",
-        "LVCIS-008",
-        "PULL-002",
-        "PULL-003",
-        "PULL-001",
-        "PULL-004",
-        "PULL-005",
-        "LVCIS-009",
-        "LVCIS-010"
-      ],
-      "legacy_slice_ref": "v0.1"
-    },
-    {
-      "slice_id": "v0.2",
-      "name": "Live Agent Eval",
-      "source_ref": "docs/product/prd.md#live-agent-eval",
-      "required_for_completion": true,
-      "public_release_boundary": false,
-      "task_refs": [
-        "T11.1",
-        "T11.2",
-        "T12.1",
-        "T12.2"
-      ],
-      "acceptance_group_refs": [
-        "live_agent_eval",
-        "product_pull_success_metrics"
-      ],
-      "acceptance_item_ids": [
-        "EVAL-001",
-        "EVAL-002",
-        "EVAL-003",
-        "EVAL-004",
-        "EVAL-005",
-        "EVAL-006",
-        "EVAL-007",
-        "EVAL-008",
-        "EVAL-009",
-        "EVAL-010",
-        "PULL-001",
-        "PULL-004",
-        "PULL-002",
-        "PULL-003",
-        "PULL-005",
-        "EVAL-011"
-      ],
-      "legacy_slice_ref": "v0.2"
-    }
-  ]
+  "schema_version": "0.1",
+  "source_prd_ref": "docs/product/prd.md"
 }

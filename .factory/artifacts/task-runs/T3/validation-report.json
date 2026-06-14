@@ -1,0 +1,212 @@
+{
+  "artifact_type": "validation_report",
+  "schema_version": "1.0",
+  "task_id": "T3",
+  "status": "pass",
+  "commands_run": [
+    "make lint-fast",
+    "make test-fast",
+    "GOCACHE=/private/tmp/lumyn-gocache-T3 make lint-fast",
+    "GOCACHE=/private/tmp/lumyn-gocache-T3 make test-fast",
+    "GOCACHE=/private/tmp/lumyn-gocache-T3 make test-contracts",
+    "GOCACHE=/private/tmp/lumyn-gocache-T3 go test ./cmd/lumyn ./internal/source -count=1",
+    "GOCACHE=/private/tmp/lumyn-gocache-T3 go test ./... -count=1",
+    "GOCACHE=/private/tmp/lumyn-gocache-T3 make test-coverage",
+    "GOCACHE=/private/tmp/lumyn-gocache-T3 make prepush-full"
+  ],
+  "baseline_evidence": [
+    {
+      "command": "make lint-fast",
+      "status": "recovered",
+      "exit_code": 2,
+      "classification": "sandbox_go_cache_preflight",
+      "reason": "Go attempted to write the default home build cache, which is not writable in this worker sandbox."
+    },
+    {
+      "command": "make test-fast",
+      "status": "recovered",
+      "exit_code": 2,
+      "classification": "sandbox_go_cache_preflight",
+      "reason": "Go attempted to write the default home build cache, which is not writable in this worker sandbox."
+    },
+    {
+      "command": "GOCACHE=/private/tmp/lumyn-gocache-T3 make lint-fast",
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "GOCACHE=/private/tmp/lumyn-gocache-T3 make test-fast",
+      "status": "pass",
+      "exit_code": 0
+    }
+  ],
+  "red_evidence": [
+    {
+      "command": "GOCACHE=/private/tmp/lumyn-gocache-T3 make test-contracts",
+      "status": "pass",
+      "exit_code": 0,
+      "phase": "pre_edit_contract_baseline"
+    },
+    {
+      "command": "GOCACHE=/private/tmp/lumyn-gocache-T3 go test ./cmd/lumyn ./internal/source -count=1",
+      "status": "expected_red",
+      "exit_code": 1,
+      "phase": "red_first_after_tests",
+      "reason": "Tests exited 1 because InitProject, InitOptions, CheckProject, config writing, and check findings were not implemented yet."
+    }
+  ],
+  "green_evidence": [
+    {
+      "command": "GOCACHE=/private/tmp/lumyn-gocache-T3 go test ./cmd/lumyn ./internal/source -count=1",
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "GOCACHE=/private/tmp/lumyn-gocache-T3 go test ./... -count=1",
+      "status": "pass",
+      "exit_code": 0
+    }
+  ],
+  "final_validation_evidence": [
+    {
+      "command": "GOCACHE=/private/tmp/lumyn-gocache-T3 make test-coverage",
+      "status": "pass",
+      "exit_code": 0,
+      "coverage_total": "84.4%"
+    },
+    {
+      "command": "GOCACHE=/private/tmp/lumyn-gocache-T3 make prepush-full",
+      "status": "pass",
+      "exit_code": 0,
+      "note": "Go emitted a non-fatal home module stat-cache warning during final build; make exited 0."
+    }
+  ],
+  "acceptance_results": [
+    {
+      "acceptance_item_id": "RCRR-001",
+      "status": "implemented",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+        "cmd/lumyn/main_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "RCRR-002",
+      "status": "implemented",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+        "cmd/lumyn/main_test.go",
+        "internal/source/source_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "ACT-002",
+      "status": "implemented",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T3/validation-report.json"
+      ]
+    },
+    {
+      "acceptance_item_id": "FR1",
+      "status": "implemented",
+      "evidence_refs": [
+        "internal/source/source.go",
+        "cmd/lumyn/main.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "FR2",
+      "status": "implemented",
+      "evidence_refs": [
+        "internal/source/source.go",
+        "cmd/lumyn/main.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "FR3",
+      "status": "implemented",
+      "evidence_refs": [
+        "internal/source/source.go",
+        "internal/source/source_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "FR4",
+      "status": "implemented",
+      "evidence_refs": [
+        "internal/source/source.go",
+        "internal/source/source_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR1",
+      "status": "implemented",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        "cmd/lumyn/main_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR8",
+      "status": "implemented",
+      "evidence_refs": [
+        "internal/source/source.go",
+        "internal/source/source_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR9",
+      "status": "implemented",
+      "evidence_refs": [
+        "internal/source/source.go",
+        "cmd/lumyn/main_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "FR14",
+      "status": "implemented",
+      "evidence_refs": [
+        "cmd/lumyn/main.go",
+        "cmd/lumyn/main_test.go",
+        "schemas/command-result.schema.json"
+      ]
+    }
+  ],
+  "path_policy_result": {
+    "status": "pass",
+    "allowed_paths": [
+      ".factory/artifacts/task-runs/T3/",
+      "cmd/lumyn/",
+      "internal/"
+    ],
+    "changed_paths_checked": [
+      ".factory/artifacts/task-runs/T3/coverage-gate-result.json",
+      ".factory/artifacts/task-runs/T3/validation-report.json",
+      ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+      "cmd/lumyn/main.go",
+      "cmd/lumyn/main_test.go",
+      "internal/source/source.go",
+      "internal/source/source_test.go"
+    ]
+  },
+  "plan_drift_result": {
+    "status": "pass",
+    "reason": "No runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions were changed."
+  },
+  "changelog_result": {
+    "status": "not_modified_by_worker_path_policy",
+    "reason": "CHANGELOG.md is outside the task allowed_paths, so the task-executor did not edit it."
+  },
+  "docs_sync_result": {
+    "status": "not_modified_by_worker_path_policy",
+    "reason": "README and docs paths are outside the task allowed_paths, so the task-executor did not edit them."
+  },
+  "versioning_result": {
+    "status": "no_migration_required",
+    "reason": "Pre-1.0 CLI behavior was implemented behind existing command-result schema_version 1.0 without changing schema files."
+  },
+  "blockers": [],
+  "residual_risks": [
+    "Full lifecycle artifacts for ship, PR lifecycle, post-merge, scope closure, and factoryd run-once are factoryd-produced and were not authored by this task-executor worker."
+  ]
+}
