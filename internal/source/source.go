@@ -544,6 +544,33 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		currentParameter = nil
 	}
 
+	applyPathParameters := func() {
+		if currentPath == "" || len(pathParameters) == 0 {
+			return
+		}
+		for index := range operations {
+			if operations[index].Path == currentPath {
+				operations[index].Parameters = mergeOpenAPIParameters(operations[index].Parameters, pathParameters)
+			}
+		}
+		if current != nil && current.Path == currentPath {
+			current.Parameters = mergeOpenAPIParameters(current.Parameters, pathParameters)
+		}
+	}
+	resetPathState := func() {
+		currentPath = ""
+		pathIndent = -1
+		pathItemChildIndent = -1
+		pathParameters = nil
+		pathParametersIndent = -1
+		currentPathParameter = nil
+	}
+	flushPathItem := func() {
+		flushOperation()
+		applyPathParameters()
+		resetPathState()
+	}
+
 	for scanner.Scan() {
 		lineNo++
 		raw := scanner.Text()
@@ -563,19 +590,13 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			seenVersion = true
 		}
 		if key == "paths" {
-			flushOperation()
+			flushPathItem()
 			inPaths = true
 			pathsIndent = indent
-			currentPath = ""
-			pathIndent = -1
-			pathItemChildIndent = -1
-			pathParameters = nil
-			pathParametersIndent = -1
-			currentPathParameter = nil
 			continue
 		}
 		if inPaths && indent <= pathsIndent && key != "paths" {
-			flushOperation()
+			flushPathItem()
 			inPaths = false
 		}
 		if componentsIndent >= 0 && indent <= componentsIndent && key != "components" {
@@ -601,7 +622,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			continue
 		}
 		if strings.HasPrefix(key, "/") && indent > pathsIndent {
-			flushOperation()
+			flushPathItem()
 			currentPath = key
 			pathIndent = indent
 			pathItemChildIndent = -1
@@ -618,7 +639,8 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			pathParametersIndent = -1
 			currentPathParameter = nil
 		}
-		if current == nil && isPathItemChild && key == "parameters" {
+		if isPathItemChild && key == "parameters" {
+			flushOperation()
 			pathParametersIndent = indent
 			currentPathParameter = nil
 			continue
@@ -772,7 +794,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 	if err := scanner.Err(); err != nil {
 		return nil, false, err
 	}
-	flushOperation()
+	flushPathItem()
 	if !seenVersion {
 		return nil, false, errors.New("missing openapi version")
 	}
@@ -1018,7 +1040,7 @@ func brokenLocalReferenceFindings(root, docPath string, data []byte) []Finding {
 			if targetPath == "" {
 				continue
 			}
-			resolved := filepath.Clean(filepath.Join(filepath.Dir(docPath), filepath.FromSlash(targetPath)))
+			resolved := resolveMarkdownLinkTarget(root, docPath, targetPath)
 			if _, err := os.Stat(resolved); err == nil {
 				continue
 			}
@@ -1282,6 +1304,26 @@ func parseJSONParameters(value any, pointer string) []openAPIParameter {
 	return parameters
 }
 
+func mergeOpenAPIParameters(parameters []openAPIParameter, shared []openAPIParameter) []openAPIParameter {
+	if len(shared) == 0 {
+		return parameters
+	}
+	merged := append([]openAPIParameter{}, parameters...)
+	for _, candidate := range shared {
+		duplicate := false
+		for _, existing := range merged {
+			if existing.Name == candidate.Name && existing.In == candidate.In && existing.Pointer == candidate.Pointer {
+				duplicate = true
+				break
+			}
+		}
+		if !duplicate {
+			merged = append(merged, candidate)
+		}
+	}
+	return merged
+}
+
 func hasSecuritySchemesJSON(raw map[string]any) bool {
 	components, ok := raw["components"].(map[string]any)
 	if !ok {
@@ -1404,6 +1446,13 @@ func cleanSlashPath(path string) string {
 		return ""
 	}
 	return filepath.ToSlash(filepath.Clean(path))
+}
+
+func resolveMarkdownLinkTarget(root, docPath, targetPath string) string {
+	if strings.HasPrefix(targetPath, "/") {
+		return filepath.Clean(filepath.Join(root, filepath.FromSlash(strings.TrimPrefix(targetPath, "/"))))
+	}
+	return filepath.Clean(filepath.Join(filepath.Dir(docPath), filepath.FromSlash(targetPath)))
 }
 
 func yamlScalar(value string) string {
