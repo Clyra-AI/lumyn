@@ -367,6 +367,35 @@ func TestCheckProjectReportsEmptyYAMLOAuthScopeDescriptions(t *testing.T) {
 	}
 }
 
+func TestCheckProjectReportsEmptyYAMLOAuthScopeDescriptionsWhenTypeFollowsFlows(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithLateOAuthType), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "auth_confusion") {
+		t.Fatalf("YAML OAuth scopes should be reported even when type follows flows; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectRejectsUnsupportedSwagger2(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "swagger.json"), []byte(swagger2JSONFixture), 0o644); err != nil {
@@ -1019,6 +1048,42 @@ func TestCheckProjectFlagsDuplicateAgentNamesOnSamePath(t *testing.T) {
 	}
 }
 
+func TestCheckProjectFlagsDuplicateOperationIDsWithDistinctSummaries(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithDuplicateOperationIDsDistinctSummaries), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.json",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	found := false
+	for _, finding := range report.Findings {
+		if finding.FixTarget == "operation_id_disambiguation" {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Fatalf("duplicate operationIds should be reported independently of summaries; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectCarriesYAMLPathItemParameters(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithUndescribedPathParameter), 0o644); err != nil {
@@ -1276,6 +1341,35 @@ components:
             customers:read: ""
 `
 
+const yamlOpenAPIWithLateOAuthType = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      summary: List customers
+      description: List customers.
+      responses:
+        "200":
+          description: Customers.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    oauth:
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.com/auth
+          tokenUrl: https://example.com/token
+          scopes:
+            customers:read: ""
+      type: oauth2
+`
+
 const openAPIWithUndescribedParameterRef = `{
   "openapi": "3.0.3",
   "info": {"title": "Fixture API", "version": "1.0.0"},
@@ -1383,6 +1477,59 @@ const openAPIWithDuplicateSamePathNames = `{
         "responses": {
           "201": {
             "description": "Created.",
+            "content": {
+              "application/json": {
+                "schema": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}
+    }
+  }
+}`
+
+const openAPIWithDuplicateOperationIDsDistinctSummaries = `{
+  "openapi": "3.0.3",
+  "info": {"title": "Fixture API", "version": "1.0.0"},
+  "paths": {
+    "/customers": {
+      "get": {
+        "operationId": "syncCustomer",
+        "summary": "List customers",
+        "description": "List customers.",
+        "responses": {
+          "200": {
+            "description": "Customers.",
+            "content": {
+              "application/json": {
+                "schema": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customers/{id}/sync": {
+      "post": {
+        "operationId": "syncCustomer",
+        "summary": "Sync one customer",
+        "description": "Sync one customer.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {"type": "object"}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Synced.",
             "content": {
               "application/json": {
                 "schema": {"type": "object"}

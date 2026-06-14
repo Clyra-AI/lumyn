@@ -848,6 +848,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 func findingsForOperations(sourcePath string, operations []openAPIOperation) []Finding {
 	findings := []Finding{}
 	seenToolNames := map[string]openAPIOperation{}
+	seenOperationIDs := map[string]openAPIOperation{}
 	for _, operation := range operations {
 		object := strings.ToUpper(operation.Method) + " " + operation.Path
 		reference := Reference{Path: sourcePath, JSONPointer: operation.Pointer, Object: object}
@@ -873,6 +874,21 @@ func findingsForOperations(sourcePath string, operations []openAPIOperation) []F
 				FixTarget:         "operation_id",
 				WorkflowRelevance: "Stable operation IDs help map workflow steps to the intended endpoint.",
 			})
+		} else {
+			operationIDKey := strings.ToLower(strings.TrimSpace(operation.OperationID))
+			if previous, ok := seenOperationIDs[operationIDKey]; ok {
+				findings = append(findings, Finding{
+					Kind:     "docs_api_ambiguity",
+					Severity: "warning",
+					Message: fmt.Sprintf("%s and %s %s reuse operationId %q",
+						object, strings.ToUpper(previous.Method), previous.Path, operation.OperationID),
+					Reference:         reference,
+					FixTarget:         "operation_id_disambiguation",
+					WorkflowRelevance: "Duplicate operation IDs can bind recorded workflow steps to the wrong endpoint.",
+				})
+			} else {
+				seenOperationIDs[operationIDKey] = operation
+			}
 		}
 		if mutatingMethod[operation.Method] && !operation.HasRequestSchema && !(operation.Method == "delete" && !operation.HasRequestBody) {
 			findings = append(findings, Finding{
@@ -1503,6 +1519,7 @@ func authScopeDescriptionFindings(sourcePath string, data []byte) []Finding {
 
 func yamlAuthScopeDescriptionFindings(sourcePath string, data []byte) []Finding {
 	findings := []Finding{}
+	oauth2Schemes := yamlOAuth2SecuritySchemeNames(data)
 	scanner := bufio.NewScanner(bytes.NewReader(data))
 	componentsIndent := -1
 	schemesIndent := -1
@@ -1580,7 +1597,7 @@ func yamlAuthScopeDescriptionFindings(sourcePath string, data []byte) []Finding 
 			schemeIndent = indent
 			flowsIndent = -1
 			currentFlow = ""
-			currentSchemeOAuth2 = false
+			currentSchemeOAuth2 = oauth2Schemes[currentScheme]
 		case currentScheme != "" && indent > schemeIndent && key == "type":
 			currentSchemeOAuth2 = strings.EqualFold(value, "oauth2")
 		case currentScheme != "" && indent > schemeIndent && key == "flows":
@@ -1616,6 +1633,56 @@ func yamlAuthScopeDescriptionFindings(sourcePath string, data []byte) []Finding 
 		}
 	}
 	return findings
+}
+
+func yamlOAuth2SecuritySchemeNames(data []byte) map[string]bool {
+	names := map[string]bool{}
+	scanner := bufio.NewScanner(bytes.NewReader(data))
+	componentsIndent := -1
+	schemesIndent := -1
+	schemeIndent := -1
+	currentScheme := ""
+	for scanner.Scan() {
+		trimmed := strings.TrimSpace(scanner.Text())
+		if trimmed == "" || strings.HasPrefix(trimmed, "#") || trimmed == "---" {
+			continue
+		}
+		indent := leadingSpaces(scanner.Text())
+		key, value, ok := yamlKeyValue(trimmed)
+		if !ok {
+			continue
+		}
+		if componentsIndent >= 0 && indent <= componentsIndent && key != "components" {
+			componentsIndent = -1
+			schemesIndent = -1
+			schemeIndent = -1
+			currentScheme = ""
+		}
+		if schemesIndent >= 0 && indent <= schemesIndent && key != "securitySchemes" {
+			schemesIndent = -1
+			schemeIndent = -1
+			currentScheme = ""
+		}
+		if schemeIndent >= 0 && indent <= schemeIndent && key != currentScheme {
+			schemeIndent = -1
+			currentScheme = ""
+		}
+		switch {
+		case key == "components":
+			componentsIndent = indent
+			schemesIndent = -1
+		case componentsIndent >= 0 && indent > componentsIndent && key == "securitySchemes":
+			schemesIndent = indent
+			schemeIndent = -1
+			currentScheme = ""
+		case schemesIndent >= 0 && indent > schemesIndent && (schemeIndent < 0 || indent <= schemeIndent):
+			currentScheme = key
+			schemeIndent = indent
+		case currentScheme != "" && indent > schemeIndent && key == "type" && strings.EqualFold(value, "oauth2"):
+			names[currentScheme] = true
+		}
+	}
+	return names
 }
 
 func hasReplacementHint(operation map[string]any) bool {
