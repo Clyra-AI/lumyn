@@ -774,6 +774,35 @@ func TestCheckProjectRequiresUsableJSONSecuritySchemes(t *testing.T) {
 	}
 }
 
+func TestCheckProjectRequiresUsableYAMLSecuritySchemes(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithEmptyNamedSecurityScheme), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "auth_confusion") {
+		t.Fatalf("empty YAML security scheme should not satisfy auth scheme coverage; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectRequiresNonEmptyYAMLSecuritySchemes(t *testing.T) {
 	cases := []struct {
 		name string
@@ -1052,6 +1081,38 @@ func TestCheckProjectResolvesRootFlowStyleYAMLPaths(t *testing.T) {
 	}
 }
 
+func TestCheckProjectResolvesFlowStyleYAMLPathItems(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithFlowStylePathItem), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "command_error") ||
+		hasFindingKind(report.Findings, "wrong_tool_or_endpoint") ||
+		hasFindingKind(report.Findings, "docs_api_ambiguity") ||
+		hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("flow-style path item should parse as operations; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectHonorsYAMLDeprecatedReplacementHint(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithDeprecatedReplacementHint), 0o644); err != nil {
@@ -1136,6 +1197,35 @@ func TestCheckProjectResolvesChainedLocalComponentRefs(t *testing.T) {
 	}
 	if hasFindingKind(report.Findings, "validator_coverage_gap") || hasFindingKind(report.Findings, "proof_gap") {
 		t.Fatalf("chained component refs should satisfy request/response schema checks; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectResolvesFlowStyleYAMLComponentGroups(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithFlowStyleComponentGroups), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "validator_coverage_gap") || hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("flow-style YAML component groups should satisfy request/response schema checks; findings=%#v", report.Findings)
 	}
 }
 
@@ -2642,6 +2732,28 @@ components:
   securitySchemes: {}
 `
 
+const yamlOpenAPIWithEmptyNamedSecurityScheme = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      summary: List customers
+      description: List customers.
+      responses:
+        "200":
+          description: Customers.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    apiKeyAuth: {}
+`
+
 const yamlNestedSecuritySchemesProperty = `openapi: 3.0.3
 info:
   title: Fixture API
@@ -2852,6 +2964,20 @@ components:
       name: X-API-Key
 `
 
+const yamlOpenAPIWithFlowStylePathItem = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers: {get: {operationId: listCustomers, summary: List customers, description: List customers., responses: {"200": {description: Customers., content: {application/json: {schema: {type: object}}}}}}}
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
 const yamlOpenAPIWithDeprecatedReplacementHint = `openapi: 3.0.3
 info:
   title: Fixture API
@@ -2877,6 +3003,31 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+`
+
+const yamlOpenAPIWithFlowStyleComponentGroups = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    post:
+      operationId: createCustomer
+      summary: Create customer
+      description: Create one customer.
+      requestBody:
+        $ref: "#/components/requestBodies/CustomerWrite"
+      responses:
+        "201":
+          $ref: "#/components/responses/CustomerRead"
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  requestBodies: {CustomerWrite: {content: {application/json: {schema: {type: object}}}}}
+  responses: {CustomerRead: {description: Customer., content: {application/json: {schema: {type: object}}}}}
 `
 
 const openAPIWithComponentRequestAndResponseRefs = `{
