@@ -291,7 +291,7 @@ func parseProjectConfigYAML(path string, data []byte) (ProjectConfig, error) {
 			current = nil
 			continue
 		case "openapi:":
-			if section == "sources" {
+			if section == "sources" || section == "docs" {
 				section = "openapi"
 			}
 			current = nil
@@ -367,7 +367,7 @@ func sourceRefs(root string, projectConfig ProjectConfig) []SourceRef {
 			ID:   entry.ID,
 			Kind: "docs",
 			Path: cleanSlashPath(entry.Path),
-			Hash: hashPath(root, entry.Path),
+			Hash: hashDocsPath(root, entry.Path),
 		})
 	}
 	return refs
@@ -483,6 +483,8 @@ func parseOpenAPIJSON(raw map[string]any) ([]openAPIOperation, bool, error) {
 }
 
 func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
+	responseComponentSchemas := yamlComponentContentSchemaRefs(data, "responses")
+	requestBodyComponentSchemas := yamlComponentContentSchemaRefs(data, "requestBodies")
 	scanner := bufio.NewScanner(bytes.NewReader(data))
 	lineNo := 0
 	seenVersion := false
@@ -671,6 +673,11 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 				current.HasRequestSchema = true
 			}
 		}
+		if requestBodyIndent >= 0 && indent > requestBodyIndent && key == "$ref" {
+			if refName, ok := yamlLocalComponentRef(value, "requestBodies"); ok && requestBodyComponentSchemas[refName] {
+				current.HasRequestSchema = true
+			}
+		}
 		if requestBodyIndent >= 0 && indent > requestBodyIndent && key == "content" {
 			requestContentIndent = indent
 			requestMediaIndent = -1
@@ -692,6 +699,11 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		}
 		if responseMediaIndent >= 0 && indent > responseMediaIndent && key == "schema" {
 			current.HasResponseSchema = true
+		}
+		if response2xxIndent >= 0 && indent > response2xxIndent && key == "$ref" {
+			if refName, ok := yamlLocalComponentRef(value, "responses"); ok && responseComponentSchemas[refName] {
+				current.HasResponseSchema = true
+			}
 		}
 		if parametersIndent >= 0 && indent > parametersIndent {
 			if strings.HasPrefix(trimmed, "- ") {
@@ -1089,6 +1101,50 @@ func hashPath(root, path string) string {
 	return "sha256:" + hex.EncodeToString(digest[:])
 }
 
+func hashDocsPath(root, path string) string {
+	resolved := resolveProjectPath(root, path)
+	info, err := os.Stat(resolved)
+	if err != nil {
+		return ""
+	}
+	if !info.IsDir() {
+		return hashFile(resolved)
+	}
+	fileHashes := []string{}
+	_ = filepath.WalkDir(resolved, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return nil
+		}
+		if d.IsDir() {
+			if shouldSkipGeneratedSourceDir(d.Name()) && path != resolved {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+		if !isDocsFile(path) {
+			return nil
+		}
+		hash := hashFile(path)
+		if hash == "" {
+			return nil
+		}
+		fileHashes = append(fileHashes, relativePath(root, path)+"="+hash)
+		return nil
+	})
+	sort.Strings(fileHashes)
+	digest := sha256.Sum256([]byte(strings.Join(fileHashes, "\n")))
+	return "sha256:" + hex.EncodeToString(digest[:])
+}
+
+func shouldSkipGeneratedSourceDir(name string) bool {
+	switch name {
+	case ".git", ".factory", ".factoryd", "runs":
+		return true
+	default:
+		return false
+	}
+}
+
 func hashFile(path string) string {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -1344,6 +1400,95 @@ func yamlInlineValueHasEntries(value string) bool {
 	default:
 		return true
 	}
+}
+
+func yamlLocalComponentRef(value, component string) (string, bool) {
+	prefix := "#/components/" + component + "/"
+	if !strings.HasPrefix(value, prefix) {
+		return "", false
+	}
+	return unescapeJSONPointer(strings.TrimPrefix(value, prefix)), true
+}
+
+func yamlComponentContentSchemaRefs(data []byte, group string) map[string]bool {
+	refs := map[string]bool{}
+	scanner := bufio.NewScanner(bytes.NewReader(data))
+	componentsIndent := -1
+	groupIndent := -1
+	itemIndent := -1
+	contentIndent := -1
+	mediaIndent := -1
+	currentItem := ""
+	for scanner.Scan() {
+		trimmed := strings.TrimSpace(scanner.Text())
+		if trimmed == "" || strings.HasPrefix(trimmed, "#") || trimmed == "---" {
+			continue
+		}
+		indent := leadingSpaces(scanner.Text())
+		key, _, ok := yamlKeyValue(trimmed)
+		if !ok {
+			continue
+		}
+		if componentsIndent >= 0 && indent <= componentsIndent && key != "components" {
+			componentsIndent = -1
+			groupIndent = -1
+			itemIndent = -1
+			contentIndent = -1
+			mediaIndent = -1
+			currentItem = ""
+		}
+		if groupIndent >= 0 && indent <= groupIndent && key != group {
+			groupIndent = -1
+			itemIndent = -1
+			contentIndent = -1
+			mediaIndent = -1
+			currentItem = ""
+		}
+		if itemIndent >= 0 && indent <= itemIndent && key != currentItem {
+			itemIndent = -1
+			contentIndent = -1
+			mediaIndent = -1
+			currentItem = ""
+		}
+		if contentIndent >= 0 && indent <= contentIndent && key != "content" {
+			contentIndent = -1
+			mediaIndent = -1
+		}
+		if mediaIndent >= 0 && indent <= mediaIndent {
+			mediaIndent = -1
+		}
+		if key == "components" {
+			componentsIndent = indent
+			continue
+		}
+		if componentsIndent >= 0 && indent > componentsIndent && key == group {
+			groupIndent = indent
+			continue
+		}
+		if groupIndent >= 0 && indent > groupIndent && (itemIndent < 0 || indent <= itemIndent) {
+			currentItem = key
+			itemIndent = indent
+			contentIndent = -1
+			mediaIndent = -1
+			continue
+		}
+		if currentItem == "" {
+			continue
+		}
+		if itemIndent >= 0 && indent > itemIndent && key == "content" {
+			contentIndent = indent
+			mediaIndent = -1
+			continue
+		}
+		if contentIndent >= 0 && indent > contentIndent && strings.Contains(key, "/") {
+			mediaIndent = indent
+			continue
+		}
+		if mediaIndent >= 0 && indent > mediaIndent && key == "schema" {
+			refs[currentItem] = true
+		}
+	}
+	return refs
 }
 
 func yamlKeyValue(trimmed string) (string, string, bool) {

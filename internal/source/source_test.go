@@ -373,6 +373,31 @@ func TestReadProjectConfigAcceptsJSONConfig(t *testing.T) {
 	}
 }
 
+func TestReadProjectConfigAcceptsYAMLSourcesInEitherOrder(t *testing.T) {
+	root := t.TempDir()
+	configPath := filepath.Join(root, "lumyn.yaml")
+	configBody := `version: 1
+sources:
+  docs:
+    - id: docs
+      path: ./docs
+  openapi:
+    - id: public_api
+      path: ./openapi.yaml
+`
+	if err := os.WriteFile(configPath, []byte(configBody), 0o644); err != nil {
+		t.Fatalf("write config: %v", err)
+	}
+
+	parsed, err := ReadProjectConfig(configPath)
+	if err != nil {
+		t.Fatalf("ReadProjectConfig: %v", err)
+	}
+	if parsed.Sources.OpenAPI[0].Path != "./openapi.yaml" || parsed.Sources.Docs[0].Path != "./docs" {
+		t.Fatalf("parsed sources = %#v", parsed.Sources)
+	}
+}
+
 func TestCheckProjectReportsInvalidOpenAPIAndMissingDocs(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(`{"info": {}}`), 0o644); err != nil {
@@ -400,6 +425,65 @@ func TestCheckProjectReportsInvalidOpenAPIAndMissingDocs(t *testing.T) {
 	first, ok := FirstFinding(report.Findings)
 	if !ok || first.Kind != "command_error" {
 		t.Fatalf("first finding = %#v, %v; want command_error", first, ok)
+	}
+}
+
+func TestCheckProjectResolvesYAMLComponentResponseRef(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithComponentResponseRef), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("YAML component response ref should satisfy response schema checks; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectFingerprintIgnoresGeneratedReports(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(completeOpenAPIYAML), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    ".",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	first, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("first CheckProject: %v", err)
+	}
+	second, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("second CheckProject: %v", err)
+	}
+	if first.SurfaceFingerprint != second.SurfaceFingerprint {
+		t.Fatalf("surface fingerprint changed after generated report write: first=%s second=%s", first.SurfaceFingerprint, second.SurfaceFingerprint)
 	}
 }
 
@@ -690,6 +774,34 @@ const openAPIWithComponentRequestAndResponseRefs = `{
     }
   }
 }`
+
+const yamlOpenAPIWithComponentResponseRef = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      summary: List customers
+      description: List customers.
+      responses:
+        "200":
+          $ref: "#/components/responses/CustomerList"
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  responses:
+    CustomerList:
+      description: Customer list.
+      content:
+        application/json:
+          schema:
+            type: object
+`
 
 const completeDocs = `# API Guide
 
