@@ -435,9 +435,10 @@ func parseOpenAPI(data []byte) ([]openAPIOperation, bool, error) {
 
 func parseOpenAPIJSON(raw map[string]any) ([]openAPIOperation, bool, error) {
 	if _, ok := raw["openapi"]; !ok {
-		if _, ok := raw["swagger"]; !ok {
-			return nil, false, errors.New("missing openapi or swagger version")
+		if _, ok := raw["swagger"]; ok {
+			return nil, false, errors.New("swagger 2.0 is not supported; use OpenAPI 3.x")
 		}
+		return nil, false, errors.New("missing openapi version")
 	}
 	paths, ok := raw["paths"].(map[string]any)
 	if !ok || len(paths) == 0 {
@@ -497,6 +498,8 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 	response2xxIndent := -1
 	parametersIndent := -1
 	var currentParameter *openAPIParameter
+	componentsIndent := -1
+	securitySchemesIndent := -1
 	securitySchemes := false
 	operations := []openAPIOperation{}
 
@@ -525,11 +528,11 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		if !hasKey {
 			continue
 		}
-		if key == "openapi" || key == "swagger" {
-			seenVersion = true
+		if key == "swagger" {
+			return nil, false, errors.New("swagger 2.0 is not supported; use OpenAPI 3.x")
 		}
-		if key == "securitySchemes" {
-			securitySchemes = true
+		if key == "openapi" {
+			seenVersion = true
 		}
 		if key == "paths" {
 			flushOperation()
@@ -543,6 +546,25 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		if inPaths && indent <= pathsIndent && key != "paths" {
 			flushOperation()
 			inPaths = false
+		}
+		if componentsIndent >= 0 && indent <= componentsIndent && key != "components" {
+			componentsIndent = -1
+			securitySchemesIndent = -1
+		}
+		if securitySchemesIndent >= 0 && indent <= securitySchemesIndent && key != "securitySchemes" {
+			securitySchemesIndent = -1
+		}
+		if key == "components" && !inPaths {
+			componentsIndent = indent
+			securitySchemesIndent = -1
+		}
+		if componentsIndent >= 0 && indent > componentsIndent && key == "securitySchemes" {
+			securitySchemesIndent = indent
+			if yamlInlineValueHasEntries(value) {
+				securitySchemes = true
+			}
+		} else if securitySchemesIndent >= 0 && indent > securitySchemesIndent {
+			securitySchemes = true
 		}
 		if !inPaths {
 			continue
@@ -663,7 +685,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 	}
 	flushOperation()
 	if !seenVersion {
-		return nil, false, errors.New("missing openapi or swagger version")
+		return nil, false, errors.New("missing openapi version")
 	}
 	if len(operations) == 0 {
 		return nil, false, errors.New("paths object contains no HTTP operations")
@@ -1237,6 +1259,16 @@ func parseYAMLValue(value string) string {
 	value = strings.TrimSpace(value)
 	value = strings.Trim(value, `"'`)
 	return value
+}
+
+func yamlInlineValueHasEntries(value string) bool {
+	value = strings.TrimSpace(strings.Trim(value, `"'`))
+	switch value {
+	case "", "{}", "[]", "null", "~":
+		return false
+	default:
+		return true
+	}
 }
 
 func yamlKeyValue(trimmed string) (string, string, bool) {
