@@ -249,6 +249,35 @@ func TestCheckProjectDoesNotTreatYAMLSchemaMethodPropertyAsOperation(t *testing.
 	}
 }
 
+func TestCheckProjectAllowsBodylessDeleteWithoutRequestSchema(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithBodylessDelete), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.json",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "validator_coverage_gap") {
+		t.Fatalf("body-less DELETE should not require a request schema; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectRejectsUnsupportedSwagger2(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "swagger.json"), []byte(swagger2JSONFixture), 0o644); err != nil {
@@ -374,6 +403,35 @@ func TestCheckProjectResolvesLocalComponentRequestAndResponseRefs(t *testing.T) 
 	}
 	if hasFindingKind(report.Findings, "validator_coverage_gap") || hasFindingKind(report.Findings, "proof_gap") {
 		t.Fatalf("component refs should satisfy request/response schema checks; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectReportsMissingDescriptionForJSONParameterRef(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithUndescribedParameterRef), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.json",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "source_missing_metadata") {
+		t.Fatalf("referenced parameter without description should be reported; findings=%#v", report.Findings)
 	}
 }
 
@@ -574,6 +632,42 @@ func TestCheckProjectResolvesQuotedInlineYAMLComponentRefs(t *testing.T) {
 	}
 }
 
+func TestCheckProjectPreservesYAMLPathKeysWithColons(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithColonPathKey), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	found := false
+	for _, finding := range report.Findings {
+		if finding.Kind == "docs_api_ambiguity" && finding.Reference.Object == "GET /v1/books:batchGet" {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Fatalf("expected finding to preserve colon path key; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectCarriesYAMLPathItemParameters(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithUndescribedPathParameter), 0o644); err != nil {
@@ -725,6 +819,76 @@ const validOpenAPIWithMissingMetadata = `{
         "responses": {
           "201": {"description": "created"}
         }
+      }
+    }
+  }
+}`
+
+const openAPIWithBodylessDelete = `{
+  "openapi": "3.0.3",
+  "info": {"title": "Fixture API", "version": "1.0.0"},
+  "paths": {
+    "/customers/{id}": {
+      "delete": {
+        "operationId": "deleteCustomer",
+        "summary": "Delete customer",
+        "description": "Delete one customer.",
+        "parameters": [
+          {"name": "id", "in": "path", "description": "Customer ID"}
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted.",
+            "content": {
+              "application/json": {
+                "schema": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}
+    }
+  }
+}`
+
+const openAPIWithUndescribedParameterRef = `{
+  "openapi": "3.0.3",
+  "info": {"title": "Fixture API", "version": "1.0.0"},
+  "paths": {
+    "/customers/{id}": {
+      "parameters": [
+        {"$ref": "#/components/parameters/CustomerId"}
+      ],
+      "get": {
+        "operationId": "getCustomer",
+        "summary": "Get customer",
+        "description": "Get one customer.",
+        "responses": {
+          "200": {
+            "description": "Customer.",
+            "content": {
+              "application/json": {
+                "schema": {"type": "object"}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {"type": "apiKey", "in": "header", "name": "X-API-Key"}
+    },
+    "parameters": {
+      "CustomerId": {
+        "name": "id",
+        "in": "path"
       }
     }
   }
@@ -1077,6 +1241,29 @@ components:
         application/json:
           schema:
             type: object
+`
+
+const yamlOpenAPIWithColonPathKey = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /v1/books:batchGet:
+    get:
+      operationId: batchGetBooks
+      responses:
+        "200":
+          description: Books.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
 `
 
 const yamlOpenAPIWithUndescribedPathParameter = `openapi: 3.0.3

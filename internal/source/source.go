@@ -117,6 +117,7 @@ type openAPIOperation struct {
 	Deprecated        bool
 	Pointer           string
 	Line              int
+	HasRequestBody    bool
 	HasRequestSchema  bool
 	HasResponseSchema bool
 	ReplacementHint   bool
@@ -467,13 +468,14 @@ func parseOpenAPIJSON(raw map[string]any) ([]openAPIOperation, bool, error) {
 		if !ok {
 			continue
 		}
-		pathParameters := parseJSONParameters(pathItem["parameters"], "#/paths/"+escapeJSONPointer(pathName)+"/parameters")
+		pathParameters := parseJSONParameters(pathItem["parameters"], "#/paths/"+escapeJSONPointer(pathName)+"/parameters", raw)
 		for _, method := range sortedHTTPMethods(pathItem) {
 			operationValue, ok := pathItem[method].(map[string]any)
 			if !ok {
 				continue
 			}
 			pointer := "#/paths/" + escapeJSONPointer(pathName) + "/" + method
+			requestBody, hasRequestBody := operationValue["requestBody"]
 			operation := openAPIOperation{
 				Path:              pathName,
 				Method:            method,
@@ -482,12 +484,13 @@ func parseOpenAPIJSON(raw map[string]any) ([]openAPIOperation, bool, error) {
 				Description:       stringValue(operationValue["description"]),
 				Deprecated:        boolValue(operationValue["deprecated"]),
 				Pointer:           pointer,
-				HasRequestSchema:  hasRequestContentSchema(operationValue["requestBody"], raw),
+				HasRequestBody:    hasRequestBody,
+				HasRequestSchema:  hasRequestContentSchema(requestBody, raw),
 				HasResponseSchema: has2xxResponseSchema(operationValue["responses"], raw),
 				ReplacementHint:   hasReplacementHint(operationValue),
 				Parameters:        append([]openAPIParameter{}, pathParameters...),
 			}
-			operation.Parameters = append(operation.Parameters, parseJSONParameters(operationValue["parameters"], pointer+"/parameters")...)
+			operation.Parameters = append(operation.Parameters, parseJSONParameters(operationValue["parameters"], pointer+"/parameters", raw)...)
 			operations = append(operations, operation)
 		}
 	}
@@ -728,6 +731,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			case "x-replacement", "x-replaced-by":
 				current.ReplacementHint = value != ""
 			case "requestBody":
+				current.HasRequestBody = true
 				requestBodyIndent = indent
 				if refName, ok := yamlLocalComponentRef(value, "requestBodies"); ok && requestBodyComponentSchemas[refName] {
 					current.HasRequestSchema = true
@@ -833,7 +837,7 @@ func findingsForOperations(sourcePath string, operations []openAPIOperation) []F
 				WorkflowRelevance: "Stable operation IDs help map workflow steps to the intended endpoint.",
 			})
 		}
-		if mutatingMethod[operation.Method] && !operation.HasRequestSchema {
+		if mutatingMethod[operation.Method] && !operation.HasRequestSchema && !(operation.Method == "delete" && !operation.HasRequestBody) {
 			findings = append(findings, Finding{
 				Kind:              "validator_coverage_gap",
 				Severity:          "warning",
@@ -1286,7 +1290,7 @@ func resolveLocalComponentRef(value any, root map[string]any, component string) 
 	return value
 }
 
-func parseJSONParameters(value any, pointer string) []openAPIParameter {
+func parseJSONParameters(value any, pointer string, root map[string]any) []openAPIParameter {
 	values, ok := value.([]any)
 	if !ok {
 		return nil
@@ -1297,14 +1301,48 @@ func parseJSONParameters(value any, pointer string) []openAPIParameter {
 		if !ok {
 			continue
 		}
+		parameterPointer := fmt.Sprintf("%s/%d", pointer, index)
+		if ref := stringValue(parameterValue["$ref"]); ref != "" {
+			if resolved, resolvedPointer, ok := resolveLocalParameterRef(ref, root); ok {
+				parameterValue = resolved
+				parameterPointer = resolvedPointer
+			} else {
+				parameters = append(parameters, openAPIParameter{
+					Name:    ref,
+					Pointer: parameterPointer,
+				})
+				continue
+			}
+		}
 		parameters = append(parameters, openAPIParameter{
 			Name:        stringValue(parameterValue["name"]),
 			In:          stringValue(parameterValue["in"]),
 			Description: stringValue(parameterValue["description"]),
-			Pointer:     fmt.Sprintf("%s/%d", pointer, index),
+			Pointer:     parameterPointer,
 		})
 	}
 	return parameters
+}
+
+func resolveLocalParameterRef(ref string, root map[string]any) (map[string]any, string, bool) {
+	prefix := "#/components/parameters/"
+	if !strings.HasPrefix(ref, prefix) {
+		return nil, "", false
+	}
+	components, ok := root["components"].(map[string]any)
+	if !ok {
+		return nil, "", false
+	}
+	parameters, ok := components["parameters"].(map[string]any)
+	if !ok {
+		return nil, "", false
+	}
+	key := unescapeJSONPointer(strings.TrimPrefix(ref, prefix))
+	parameter, ok := parameters[key].(map[string]any)
+	if !ok {
+		return nil, "", false
+	}
+	return parameter, "#/components/parameters/" + escapeJSONPointer(key), true
 }
 
 func mergeOpenAPIParameters(parameters []openAPIParameter, shared []openAPIParameter) []openAPIParameter {
@@ -1649,13 +1687,36 @@ func yamlComponentContentSchemaRefs(data []byte, group string) map[string]bool {
 }
 
 func yamlKeyValue(trimmed string) (string, string, bool) {
-	index := strings.Index(trimmed, ":")
+	index := yamlMappingSeparator(trimmed)
 	if index < 0 {
 		return "", "", false
 	}
 	key := strings.Trim(strings.TrimSpace(trimmed[:index]), `"'`)
 	value := parseYAMLValue(trimmed[index+1:])
 	return key, value, true
+}
+
+func yamlMappingSeparator(trimmed string) int {
+	inSingleQuote := false
+	inDoubleQuote := false
+	escaped := false
+	for index, char := range trimmed {
+		switch {
+		case escaped:
+			escaped = false
+		case char == '\\' && inDoubleQuote:
+			escaped = true
+		case char == '\'' && !inDoubleQuote:
+			inSingleQuote = !inSingleQuote
+		case char == '"' && !inSingleQuote:
+			inDoubleQuote = !inDoubleQuote
+		case char == ':' && !inSingleQuote && !inDoubleQuote:
+			if index+1 == len(trimmed) || trimmed[index+1] == ' ' || trimmed[index+1] == '\t' {
+				return index
+			}
+		}
+	}
+	return -1
 }
 
 func leadingSpaces(value string) int {
