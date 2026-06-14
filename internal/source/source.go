@@ -540,6 +540,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 	componentsIndent := -1
 	componentsChildIndent := -1
 	securitySchemesIndent := -1
+	securitySchemeIndent := -1
 	securitySchemes := false
 	operations := []openAPIOperation{}
 
@@ -623,25 +624,36 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			componentsIndent = -1
 			componentsChildIndent = -1
 			securitySchemesIndent = -1
+			securitySchemeIndent = -1
 		}
 		if securitySchemesIndent >= 0 && indent <= securitySchemesIndent && key != "securitySchemes" {
 			securitySchemesIndent = -1
+			securitySchemeIndent = -1
 		}
 		if key == "components" && indent == 0 && !inPaths {
 			componentsIndent = indent
 			componentsChildIndent = -1
 			securitySchemesIndent = -1
+			securitySchemeIndent = -1
 		}
 		if componentsIndent >= 0 && indent > componentsIndent && (componentsChildIndent < 0 || indent <= componentsChildIndent) {
 			componentsChildIndent = indent
 		}
 		if componentsChildIndent >= 0 && indent == componentsChildIndent && key == "securitySchemes" {
 			securitySchemesIndent = indent
-			if yamlInlineValueHasEntries(value) {
+			securitySchemeIndent = -1
+			if yamlInlineSecuritySchemesHaveType(value) {
 				securitySchemes = true
 			}
 		} else if securitySchemesIndent >= 0 && indent > securitySchemesIndent {
-			securitySchemes = true
+			if securitySchemeIndent < 0 || indent <= securitySchemeIndent {
+				securitySchemeIndent = indent
+				if yamlInlineMapValueNonEmpty(value, "type") {
+					securitySchemes = true
+				}
+			} else if indent > securitySchemeIndent && key == "type" && value != "" {
+				securitySchemes = true
+			}
 		}
 		if !inPaths {
 			continue
@@ -654,6 +666,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			pathParameters = nil
 			pathParametersIndent = -1
 			currentPathParameter = nil
+			operations = append(operations, yamlInlinePathItemOperations(currentPath, "#/paths/"+escapeJSONPointer(currentPath), value, nil, parameterComponents, requestBodyComponentSchemas, responseComponentSchemas)...)
 			continue
 		}
 		isPathItemChild := currentPath != "" && indent > pathIndent && (pathItemChildIndent < 0 || indent <= pathItemChildIndent)
@@ -1857,30 +1870,39 @@ func yamlInlinePathOperations(value string, parameterComponents map[string]openA
 			continue
 		}
 		pathPointer := "#/paths/" + escapeJSONPointer(pathName)
-		pathParameters := []openAPIParameter{}
-		pathValue = strings.TrimSpace(strings.Trim(pathValue, "{} "))
-		if parametersValue, ok := yamlInlineMapValue(pathValue, "parameters"); ok {
-			pathParameters = yamlInlineParameterSequence(parametersValue, pathPointer+"/parameters", parameterComponents)
+		operations = append(operations, yamlInlinePathItemOperations(pathName, pathPointer, pathValue, nil, parameterComponents, requestBodyComponentSchemas, responseComponentSchemas)...)
+	}
+	return operations
+}
+
+func yamlInlinePathItemOperations(pathName, pathPointer, value string, inheritedParameters []openAPIParameter, parameterComponents map[string]openAPIParameter, requestBodyComponentSchemas, responseComponentSchemas map[string]bool) []openAPIOperation {
+	value = strings.TrimSpace(strings.Trim(value, "{} "))
+	if value == "" {
+		return nil
+	}
+	pathParameters := append([]openAPIParameter{}, inheritedParameters...)
+	if parametersValue, ok := yamlInlineMapValue(value, "parameters"); ok {
+		pathParameters = mergeOpenAPIParameterOverrides(pathParameters, yamlInlineParameterSequence(parametersValue, pathPointer+"/parameters", parameterComponents))
+	}
+	operations := []openAPIOperation{}
+	for _, operationEntry := range splitYAMLFlowEntries(value) {
+		method, operationValue, ok := yamlKeyValue(strings.TrimSpace(operationEntry))
+		if !ok {
+			continue
 		}
-		for _, operationEntry := range splitYAMLFlowEntries(pathValue) {
-			method, operationValue, ok := yamlKeyValue(strings.TrimSpace(operationEntry))
-			if !ok {
-				continue
-			}
-			method = strings.ToLower(method)
-			if !httpMethods[method] {
-				continue
-			}
-			operation := openAPIOperation{
-				Path:       pathName,
-				Method:     method,
-				Pointer:    pathPointer + "/" + method,
-				Parameters: append([]openAPIParameter{}, pathParameters...),
-			}
-			applyYAMLInlineOperationValue(&operation, operationValue, parameterComponents, requestBodyComponentSchemas, responseComponentSchemas)
-			operation.Parameters = effectiveOpenAPIParameters(operation.Parameters)
-			operations = append(operations, operation)
+		method = strings.ToLower(method)
+		if !httpMethods[method] {
+			continue
 		}
+		operation := openAPIOperation{
+			Path:       pathName,
+			Method:     method,
+			Pointer:    pathPointer + "/" + method,
+			Parameters: append([]openAPIParameter{}, pathParameters...),
+		}
+		applyYAMLInlineOperationValue(&operation, operationValue, parameterComponents, requestBodyComponentSchemas, responseComponentSchemas)
+		operation.Parameters = effectiveOpenAPIParameters(operation.Parameters)
+		operations = append(operations, operation)
 	}
 	return operations
 }
@@ -2519,6 +2541,11 @@ func yamlComponentContentSchemaRefs(data []byte, group string) map[string]bool {
 		}
 		if componentsIndent >= 0 && indent > componentsIndent && key == group {
 			groupIndent = indent
+			for item, hasSchema := range yamlInlineComponentContentSchemaRefs(value) {
+				if hasSchema {
+					refs[item] = true
+				}
+			}
 			continue
 		}
 		if groupIndent >= 0 && indent > groupIndent && (itemIndent < 0 || indent <= itemIndent) {
@@ -2545,6 +2572,21 @@ func yamlComponentContentSchemaRefs(data []byte, group string) map[string]bool {
 		}
 		if mediaIndent >= 0 && indent > mediaIndent && key == "schema" {
 			refs[currentItem] = true
+		}
+	}
+	return refs
+}
+
+func yamlInlineComponentContentSchemaRefs(value string) map[string]bool {
+	refs := map[string]bool{}
+	value = strings.TrimSpace(strings.Trim(value, "{} "))
+	if value == "" {
+		return refs
+	}
+	for _, entry := range splitYAMLFlowEntries(value) {
+		itemName, itemValue, ok := yamlKeyValue(strings.TrimSpace(entry))
+		if ok && yamlInlineContentContainerHasSchema(itemValue) {
+			refs[itemName] = true
 		}
 	}
 	return refs
@@ -2597,6 +2639,25 @@ func yamlInlineMapHasKey(value, expected string) bool {
 func yamlInlineMapValueEquals(value, expected, want string) bool {
 	got, ok := yamlInlineMapValue(value, expected)
 	return ok && strings.EqualFold(strings.Trim(got, `"'`), want)
+}
+
+func yamlInlineMapValueNonEmpty(value, expected string) bool {
+	got, ok := yamlInlineMapValue(value, expected)
+	return ok && strings.Trim(got, `"'`) != ""
+}
+
+func yamlInlineSecuritySchemesHaveType(value string) bool {
+	value = strings.TrimSpace(strings.Trim(value, "{} "))
+	if value == "" {
+		return false
+	}
+	for _, entry := range splitYAMLFlowEntries(value) {
+		_, schemeValue, ok := yamlKeyValue(strings.TrimSpace(entry))
+		if ok && yamlInlineMapValueNonEmpty(schemeValue, "type") {
+			return true
+		}
+	}
+	return false
 }
 
 func yamlInlineMapValue(value, expected string) (string, bool) {
