@@ -972,6 +972,9 @@ func checkDocs(root string, entry SourceEntry) []Finding {
 				})
 				return nil
 			}
+			if d.IsDir() && path != absPath && shouldSkipGeneratedSourceDir(d.Name()) {
+				return filepath.SkipDir
+			}
 			visitFile(path, d)
 			return nil
 		})
@@ -1519,19 +1522,14 @@ func yamlLocalComponentRef(value, component string) (string, bool) {
 func yamlInlineRefValue(value string) string {
 	value = strings.TrimSpace(stripYAMLInlineComment(value))
 	value = strings.Trim(value, "{} ")
-	refIndex := strings.Index(value, "$ref")
-	if refIndex < 0 {
-		return ""
+	for _, entry := range strings.Split(value, ",") {
+		key, refValue, ok := yamlKeyValue(strings.TrimSpace(entry))
+		if !ok || strings.Trim(key, `"'`) != "$ref" {
+			continue
+		}
+		return parseYAMLValue(strings.Trim(refValue, "{} "))
 	}
-	refValue := strings.TrimSpace(value[refIndex+len("$ref"):])
-	if !strings.HasPrefix(refValue, ":") {
-		return ""
-	}
-	refValue = strings.TrimSpace(strings.TrimPrefix(refValue, ":"))
-	if commaIndex := strings.Index(refValue, ","); commaIndex >= 0 {
-		refValue = refValue[:commaIndex]
-	}
-	return parseYAMLValue(strings.Trim(refValue, "{} "))
+	return ""
 }
 
 func parseYAMLParameterLine(parameters []openAPIParameter, current **openAPIParameter, trimmed, key, value, pointer string, lineNo int) []openAPIParameter {
