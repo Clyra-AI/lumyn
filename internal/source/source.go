@@ -614,6 +614,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 			flushPathItem()
 			inPaths = true
 			pathsIndent = indent
+			operations = append(operations, yamlInlinePathOperations(value, parameterComponents, requestBodyComponentSchemas, responseComponentSchemas)...)
 			continue
 		}
 		if inPaths && indent <= pathsIndent && key != "paths" {
@@ -1373,6 +1374,10 @@ func has2xxResponseSchema(value any, root map[string]any) bool {
 }
 
 func resolveLocalComponentRef(value any, root map[string]any, component string) any {
+	return resolveLocalComponentRefSeen(value, root, component, map[string]bool{})
+}
+
+func resolveLocalComponentRefSeen(value any, root map[string]any, component string, seen map[string]bool) any {
 	node, ok := value.(map[string]any)
 	if !ok {
 		return value
@@ -1382,6 +1387,10 @@ func resolveLocalComponentRef(value any, root map[string]any, component string) 
 	if !strings.HasPrefix(ref, prefix) {
 		return value
 	}
+	if seen[ref] {
+		return value
+	}
+	seen[ref] = true
 	components, ok := root["components"].(map[string]any)
 	if !ok {
 		return value
@@ -1392,7 +1401,7 @@ func resolveLocalComponentRef(value any, root map[string]any, component string) 
 	}
 	key := unescapeJSONPointer(strings.TrimPrefix(ref, prefix))
 	if resolved, ok := group[key]; ok {
-		return resolved
+		return resolveLocalComponentRefSeen(resolved, root, component, seen)
 	}
 	return value
 }
@@ -1432,10 +1441,18 @@ func parseJSONParameters(value any, pointer string, root map[string]any) []openA
 }
 
 func resolveLocalParameterRef(ref string, root map[string]any) (map[string]any, string, bool) {
+	return resolveLocalParameterRefSeen(ref, root, map[string]bool{})
+}
+
+func resolveLocalParameterRefSeen(ref string, root map[string]any, seen map[string]bool) (map[string]any, string, bool) {
 	prefix := "#/components/parameters/"
 	if !strings.HasPrefix(ref, prefix) {
 		return nil, "", false
 	}
+	if seen[ref] {
+		return nil, "", false
+	}
+	seen[ref] = true
 	components, ok := root["components"].(map[string]any)
 	if !ok {
 		return nil, "", false
@@ -1448,6 +1465,9 @@ func resolveLocalParameterRef(ref string, root map[string]any) (map[string]any, 
 	parameter, ok := parameters[key].(map[string]any)
 	if !ok {
 		return nil, "", false
+	}
+	if nextRef := stringValue(parameter["$ref"]); nextRef != "" {
+		return resolveLocalParameterRefSeen(nextRef, root, seen)
 	}
 	return parameter, "#/components/parameters/" + escapeJSONPointer(key), true
 }
@@ -1775,6 +1795,46 @@ func applyYAMLInlineOperationValue(operation *openAPIOperation, value string, pa
 			)
 		}
 	}
+}
+
+func yamlInlinePathOperations(value string, parameterComponents map[string]openAPIParameter, requestBodyComponentSchemas, responseComponentSchemas map[string]bool) []openAPIOperation {
+	value = strings.TrimSpace(strings.Trim(value, "{} "))
+	if value == "" {
+		return nil
+	}
+	operations := []openAPIOperation{}
+	for _, pathEntry := range splitYAMLFlowEntries(value) {
+		pathName, pathValue, ok := yamlKeyValue(strings.TrimSpace(pathEntry))
+		if !ok || !strings.HasPrefix(pathName, "/") {
+			continue
+		}
+		pathPointer := "#/paths/" + escapeJSONPointer(pathName)
+		pathParameters := []openAPIParameter{}
+		pathValue = strings.TrimSpace(strings.Trim(pathValue, "{} "))
+		if parametersValue, ok := yamlInlineMapValue(pathValue, "parameters"); ok {
+			pathParameters = yamlInlineParameterSequence(parametersValue, pathPointer+"/parameters", parameterComponents)
+		}
+		for _, operationEntry := range splitYAMLFlowEntries(pathValue) {
+			method, operationValue, ok := yamlKeyValue(strings.TrimSpace(operationEntry))
+			if !ok {
+				continue
+			}
+			method = strings.ToLower(method)
+			if !httpMethods[method] {
+				continue
+			}
+			operation := openAPIOperation{
+				Path:       pathName,
+				Method:     method,
+				Pointer:    pathPointer + "/" + method,
+				Parameters: append([]openAPIParameter{}, pathParameters...),
+			}
+			applyYAMLInlineOperationValue(&operation, operationValue, parameterComponents, requestBodyComponentSchemas, responseComponentSchemas)
+			operation.Parameters = effectiveOpenAPIParameters(operation.Parameters)
+			operations = append(operations, operation)
+		}
+	}
+	return operations
 }
 
 func yamlInlineResponsesHave2xxSchema(value string, responseComponentSchemas map[string]bool) bool {
