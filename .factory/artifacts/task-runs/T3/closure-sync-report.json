@@ -1,0 +1,41 @@
+{
+  "artifact_type": "factoryd_task_closure_sync_report",
+  "schema_version": "0.1",
+  "generated_at": "2026-06-14T09:44:30Z",
+  "repo": "lumyn",
+  "task_id": "T3",
+  "ok": true,
+  "evidence_dir_ref": ".factory/artifacts/task-runs/T3",
+  "work_proof_marker_ref": ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+  "validation_report_ref": ".factory/artifacts/task-runs/T3/validation-report.json",
+  "task_scope_closure_map_ref": ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+  "lifecycle_evidence_refs": [
+    ".factory/artifacts/task-runs/T3/validation-report.json",
+    ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+    ".factory/artifacts/pr-lifecycle/T3/ship-packet.json",
+    ".factory/artifacts/pr-lifecycle/T3/post-merge-report.json",
+    ".factory/artifacts/pr-lifecycle/T3/pr-lifecycle-report.json",
+    ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+    ".factory/artifacts/task-runs/T3/factoryd-run-once-report.json",
+    ".factory/artifacts/task-runs/T3/coverage-gate-result.json"
+  ],
+  "canonical_scope_closure_map_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+  "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+  "report_ref": ".factory/artifacts/task-runs/T3/closure-sync-report.json",
+  "updated_task_refs": [
+    "T3"
+  ],
+  "updated_acceptance_item_ids": [
+    "ACT-002",
+    "FR1",
+    "FR14",
+    "FR2",
+    "FR3",
+    "FR4",
+    "NFR8",
+    "NFR9",
+    "RCRR-001",
+    "RCRR-002"
+  ],
+  "closure_status": "partial"
+}

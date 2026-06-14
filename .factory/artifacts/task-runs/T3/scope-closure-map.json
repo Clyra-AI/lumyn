@@ -1,0 +1,96 @@
+{
+  "artifact_type": "task_scope_closure_map",
+  "schema_version": "1.0",
+  "task_id": "T3",
+  "generated_at": "2026-06-14T09:36:57Z",
+  "canonical_scope_closure_map_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+  "canonical_scope_closure_map_modified": false,
+  "acceptance_results": [
+    {
+      "acceptance_item_id": "RCRR-001",
+      "status": "implemented",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+        "cmd/lumyn/main_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "RCRR-002",
+      "status": "implemented",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+        "cmd/lumyn/main_test.go",
+        "internal/source/source_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "ACT-002",
+      "status": "implemented",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T3/validation-report.json"
+      ]
+    },
+    {
+      "acceptance_item_id": "FR1",
+      "status": "implemented",
+      "evidence_refs": [
+        "internal/source/source.go",
+        "cmd/lumyn/main.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "FR2",
+      "status": "implemented",
+      "evidence_refs": [
+        "internal/source/source.go",
+        "cmd/lumyn/main.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "FR3",
+      "status": "implemented",
+      "evidence_refs": [
+        "internal/source/source.go",
+        "internal/source/source_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "FR4",
+      "status": "implemented",
+      "evidence_refs": [
+        "internal/source/source.go",
+        "internal/source/source_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR8",
+      "status": "implemented",
+      "evidence_refs": [
+        "internal/source/source.go",
+        "internal/source/source_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "NFR9",
+      "status": "implemented",
+      "evidence_refs": [
+        "internal/source/source.go",
+        "cmd/lumyn/main_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "FR14",
+      "status": "implemented",
+      "evidence_refs": [
+        "cmd/lumyn/main.go",
+        "cmd/lumyn/main_test.go",
+        "schemas/command-result.schema.json"
+      ]
+    }
+  ],
+  "evidence_refs": [
+    ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+    ".factory/artifacts/task-runs/T3/validation-report.json",
+    ".factory/artifacts/pr-lifecycle/T3/pr-lifecycle-report.json"
+  ]
+}

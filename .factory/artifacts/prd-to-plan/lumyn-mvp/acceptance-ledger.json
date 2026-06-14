@@ -139,13 +139,20 @@
         "T3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
+        ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
-      ]
+      ],
+      "evidence_refs": [
+        "internal/source/source.go",
+        "cmd/lumyn/main.go"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-14T09:44:30Z"
     },
     {
       "acceptance_item_id": "FR2",
@@ -177,14 +184,21 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/11/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/18/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands",
+        ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
         "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
-      ]
+      ],
+      "evidence_refs": [
+        "internal/source/source.go",
+        "cmd/lumyn/main.go"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-14T09:44:30Z"
     },
     {
       "acceptance_item_id": "FR3",
@@ -200,13 +214,20 @@
         "T3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
+        ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
-      ]
+      ],
+      "evidence_refs": [
+        "internal/source/source.go",
+        "internal/source/source_test.go"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-14T09:44:30Z"
     },
     {
       "acceptance_item_id": "FR4",
@@ -222,13 +243,20 @@
         "T3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
+        ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
-      ]
+      ],
+      "evidence_refs": [
+        "internal/source/source.go",
+        "internal/source/source_test.go"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-14T09:44:30Z"
     },
     {
       "acceptance_item_id": "FR5",
@@ -505,14 +533,22 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/15/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/18/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands",
+        ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
         "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
-      ]
+      ],
+      "evidence_refs": [
+        "cmd/lumyn/main.go",
+        "cmd/lumyn/main_test.go",
+        "schemas/command-result.schema.json"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-14T09:44:30Z"
     },
     {
       "acceptance_item_id": "FR15",
@@ -976,13 +1012,20 @@
         "T3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
+        ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
-      ]
+      ],
+      "evidence_refs": [
+        "internal/source/source.go",
+        "internal/source/source_test.go"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-14T09:44:30Z"
     },
     {
       "acceptance_item_id": "NFR9",
@@ -1024,9 +1067,10 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/15/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/16/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/18/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/20/validation_commands",
+        ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "partial",
+      "status": "implemented",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
@@ -1036,10 +1080,12 @@
         "schemas/command-result.schema.json",
         "schemas/result-axes.schema.json",
         "schemas/evidence-event.schema.json",
-        "docs/product/prd.md"
+        "docs/product/prd.md",
+        "internal/source/source.go",
+        "cmd/lumyn/main_test.go"
       ],
       "recorded_by": "factoryd sync-task-closure",
-      "recorded_at": "2026-06-13T22:31:04Z"
+      "recorded_at": "2026-06-14T09:44:30Z"
     },
     {
       "acceptance_item_id": "NFR10",
@@ -1228,11 +1274,18 @@
         "T3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
+        ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "low",
-      "notes": []
+      "notes": [],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+        "cmd/lumyn/main_test.go"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-14T09:44:30Z"
     },
     {
       "acceptance_item_id": "RCRR-002",
@@ -1248,11 +1301,19 @@
         "T3"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
+        ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "low",
-      "notes": []
+      "notes": [],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+        "cmd/lumyn/main_test.go",
+        "internal/source/source_test.go"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-14T09:44:30Z"
     },
     {
       "acceptance_item_id": "RCRR-003",
@@ -1936,13 +1997,19 @@
       ],
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/12/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/12/validation_commands",
+        ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "medium",
       "notes": [
         "Automated first-session smoke must record elapsed time and command evidence before closure."
-      ]
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T3/validation-report.json"
+      ],
+      "recorded_by": "factoryd sync-task-closure",
+      "recorded_at": "2026-06-14T09:44:30Z"
     },
     {
       "acceptance_item_id": "ACT-003",
@@ -2102,5 +2169,5 @@
     }
   ],
   "acceptance_item_count": 87,
-  "last_updated_at": "2026-06-13T22:31:04Z"
+  "last_updated_at": "2026-06-14T09:44:30Z"
 }

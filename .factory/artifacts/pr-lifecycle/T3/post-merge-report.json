@@ -1,0 +1,23 @@
+{
+  "artifact_type": "post_merge_report",
+  "schema_version": "1.0",
+  "task_id": "T3",
+  "status": "healthy",
+  "merge_performed": true,
+  "merge_reference": "f40fc93ec8d8f4b5c280f5109a0f0a2aefae4bb0",
+  "default_branch_checked": true,
+  "default_branch_ref": "f40fc93ec8d8f4b5c280f5109a0f0a2aefae4bb0",
+  "post_merge_evidence_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/27494810421",
+  "checks": [
+    {
+      "name": "validate",
+      "status": "success",
+      "url": "https://github.com/Clyra-AI/lumyn/actions/runs/27494810421"
+    },
+    {
+      "name": "codeql",
+      "status": "success",
+      "url": "https://github.com/Clyra-AI/lumyn/actions/runs/27494810422"
+    }
+  ]
+}

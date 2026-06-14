@@ -97,15 +97,18 @@
         ".factory/artifacts/task-runs/T2/work-proof-marker.json",
         ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
         ".factory/artifacts/task-runs/T2.7/validation-report.json",
-        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
       ],
       "implemented_task_refs": [
         "T1",
         "T2",
-        "T2.7"
+        "T2.7",
+        "T3"
       ],
       "remaining_task_refs": [
-        "T3",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -164,14 +167,25 @@
         },
         {
           "acceptance_item_id": "RCRR-001",
-          "status": "partial",
-          "evidence_refs": [],
+          "status": "implemented",
+          "evidence_refs": [
+            ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+            "cmd/lumyn/main_test.go",
+            ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T3/validation-report.json"
+          ],
           "repair_task_refs": []
         },
         {
           "acceptance_item_id": "RCRR-002",
-          "status": "partial",
-          "evidence_refs": [],
+          "status": "implemented",
+          "evidence_refs": [
+            ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+            "cmd/lumyn/main_test.go",
+            "internal/source/source_test.go",
+            ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T3/validation-report.json"
+          ],
           "repair_task_refs": []
         },
         {
@@ -237,8 +251,12 @@
         },
         {
           "acceptance_item_id": "ACT-002",
-          "status": "partial",
-          "evidence_refs": [],
+          "status": "implemented",
+          "evidence_refs": [
+            ".factory/artifacts/task-runs/T3/validation-report.json",
+            ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+          ],
           "repair_task_refs": [],
           "evidence_mode": "automated"
         },
@@ -587,12 +605,12 @@
         "T12.2"
       ],
       "implemented_task_refs": [
-        "T2.7"
+        "T2.7",
+        "T3"
       ],
       "remaining_task_refs": [
         "T1",
         "T2",
-        "T3",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -612,7 +630,10 @@
       "evidence_refs": [
         ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
         ".factory/artifacts/task-runs/T2.7/validation-report.json",
-        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
       ],
       "acceptance_criteria": [],
       "requires_human_approval": false,
@@ -649,26 +670,50 @@
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "FR1",
-          "status": "planned",
-          "evidence_refs": [],
+          "status": "implemented",
+          "evidence_refs": [
+            "internal/source/source.go",
+            "cmd/lumyn/main.go",
+            ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T3/validation-report.json",
+            ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+          ],
           "repair_task_refs": []
         },
         {
           "acceptance_item_id": "FR2",
-          "status": "planned",
-          "evidence_refs": [],
+          "status": "implemented",
+          "evidence_refs": [
+            "internal/source/source.go",
+            "cmd/lumyn/main.go",
+            ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T3/validation-report.json",
+            ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+          ],
           "repair_task_refs": []
         },
         {
           "acceptance_item_id": "FR3",
-          "status": "planned",
-          "evidence_refs": [],
+          "status": "implemented",
+          "evidence_refs": [
+            "internal/source/source.go",
+            "internal/source/source_test.go",
+            ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T3/validation-report.json",
+            ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+          ],
           "repair_task_refs": []
         },
         {
           "acceptance_item_id": "FR4",
-          "status": "planned",
-          "evidence_refs": [],
+          "status": "implemented",
+          "evidence_refs": [
+            "internal/source/source.go",
+            "internal/source/source_test.go",
+            ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T3/validation-report.json",
+            ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+          ],
           "repair_task_refs": []
         },
         {
@@ -735,8 +780,15 @@
         },
         {
           "acceptance_item_id": "FR14",
-          "status": "planned",
-          "evidence_refs": [],
+          "status": "implemented",
+          "evidence_refs": [
+            "cmd/lumyn/main.go",
+            "cmd/lumyn/main_test.go",
+            "schemas/command-result.schema.json",
+            ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T3/validation-report.json",
+            ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+          ],
           "repair_task_refs": []
         },
         {
@@ -834,12 +886,12 @@
         "T12.2"
       ],
       "implemented_task_refs": [
-        "T2.7"
+        "T2.7",
+        "T3"
       ],
       "remaining_task_refs": [
         "T1",
         "T2",
-        "T3",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -859,7 +911,10 @@
       "evidence_refs": [
         ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
         ".factory/artifacts/task-runs/T2.7/validation-report.json",
-        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
       ],
       "acceptance_criteria": [],
       "requires_human_approval": false,
@@ -944,13 +999,19 @@
         },
         {
           "acceptance_item_id": "NFR8",
-          "status": "planned",
-          "evidence_refs": [],
+          "status": "implemented",
+          "evidence_refs": [
+            "internal/source/source.go",
+            "internal/source/source_test.go",
+            ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T3/validation-report.json",
+            ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+          ],
           "repair_task_refs": []
         },
         {
           "acceptance_item_id": "NFR9",
-          "status": "partial",
+          "status": "implemented",
           "evidence_refs": [
             "schemas/command-result.schema.json",
             "schemas/result-axes.schema.json",
@@ -958,7 +1019,12 @@
             "docs/product/prd.md",
             ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
             ".factory/artifacts/task-runs/T2.7/validation-report.json",
-            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
+            ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
+            "internal/source/source.go",
+            "cmd/lumyn/main_test.go",
+            ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T3/validation-report.json",
+            ".factory/artifacts/task-runs/T3/work-proof-marker.json"
           ],
           "repair_task_refs": []
         },
@@ -1006,7 +1072,7 @@
     }
   ],
   "full_mvp_closure_rule": "Every required acceptance item in acceptance-ledger.json must be implemented, deferred by approval, or blocked with evidence before full MVP closure.",
-  "last_updated_at": "2026-06-13T22:31:04Z",
+  "last_updated_at": "2026-06-14T09:44:30Z",
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
   "acceptance_item_count": 87,
   "mvp_required_version_slices": [
