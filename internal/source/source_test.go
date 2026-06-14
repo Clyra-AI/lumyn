@@ -311,6 +311,35 @@ func TestCheckProjectDoesNotTreatYAMLSchemaMethodPropertyAsOperation(t *testing.
 	}
 }
 
+func TestCheckProjectKeepsParsingAfterNestedYAMLPathsSchemaProperty(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlNestedPathsSchemaPropertyBeforeLaterOperation), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "wrong_tool_or_endpoint") {
+		t.Fatalf("later operation after nested schema.paths property should still be parsed; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectAllowsBodylessDeleteWithoutRequestSchema(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(openAPIWithBodylessDelete), 0o644); err != nil {
@@ -1811,6 +1840,45 @@ paths:
                 properties:
                   get:
                     type: string
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
+const yamlNestedPathsSchemaPropertyBeforeLaterOperation = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      summary: List customers
+      description: List customers.
+      responses:
+        "200":
+          description: Customers.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paths:
+                    type: array
+  /orders:
+    get:
+      summary: List orders
+      description: List orders.
+      responses:
+        "200":
+          description: Orders.
+          content:
+            application/json:
+              schema:
+                type: object
 components:
   securitySchemes:
     apiKeyAuth:
