@@ -131,6 +131,64 @@ func TestCheckProjectPassesCompleteYAMLOpenAPIAndDocs(t *testing.T) {
 	}
 }
 
+func TestCheckProjectDoesNotTreatYAMLResponseDescriptionAsOperationDescription(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOperationMissingDescriptionWithResponseDescription), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "docs_api_ambiguity") {
+		t.Fatalf("expected docs_api_ambiguity when only response description exists; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectDoesNotTreatYAMLErrorResponseSchemaAsSuccessSchema(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlSuccessResponseWithoutSchemaAndErrorSchema), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "proof_gap") {
+		t.Fatalf("expected proof_gap when only non-2xx response has schema; findings=%#v", report.Findings)
+	}
+}
+
 func TestReadProjectConfigAcceptsJSONConfig(t *testing.T) {
 	root := t.TempDir()
 	configPath := filepath.Join(root, "lumyn.json")
@@ -268,6 +326,56 @@ components:
       name: X-API-Key
 `
 
+const yamlOperationMissingDescriptionWithResponseDescription = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      responses:
+        "200":
+          description: Response object description should not describe the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
+const yamlSuccessResponseWithoutSchemaAndErrorSchema = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: getCustomer
+      summary: Get customer
+      description: Get one customer.
+      responses:
+        "200":
+          description: Customer read-back without schema.
+        "404":
+          description: Missing customer error.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
 const completeDocs = `# API Guide
 
 Use the API key header for auth.
@@ -280,6 +388,15 @@ Create requests are idempotent when an idempotency key is supplied.
 func containsString(haystack, needle string) bool {
 	for i := 0; i+len(needle) <= len(haystack); i++ {
 		if haystack[i:i+len(needle)] == needle {
+			return true
+		}
+	}
+	return false
+}
+
+func hasFindingKind(findings []Finding, kind string) bool {
+	for _, finding := range findings {
+		if finding.Kind == kind {
 			return true
 		}
 	}
