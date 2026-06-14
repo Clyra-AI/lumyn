@@ -1123,7 +1123,16 @@ func checkDocs(root string, entry SourceEntry) []Finding {
 func brokenLocalReferenceFindings(root, docPath string, data []byte) []Finding {
 	findings := []Finding{}
 	lines := bytes.Split(data, []byte("\n"))
+	inFence := false
 	for index, line := range lines {
+		trimmedLine := strings.TrimSpace(string(line))
+		if isMarkdownFenceDelimiter(trimmedLine) {
+			inFence = !inFence
+			continue
+		}
+		if inFence {
+			continue
+		}
 		for _, rawTarget := range markdownLinkTargets(string(line)) {
 			target := cleanMarkdownLinkTarget(rawTarget)
 			if target == "" || isExternalReference(target) {
@@ -1154,6 +1163,10 @@ func brokenLocalReferenceFindings(root, docPath string, data []byte) []Finding {
 		}
 	}
 	return findings
+}
+
+func isMarkdownFenceDelimiter(line string) bool {
+	return strings.HasPrefix(line, "```") || strings.HasPrefix(line, "~~~")
 }
 
 func markdownLinkTargets(line string) []string {
@@ -1395,7 +1408,7 @@ func hasContentSchema(value any) bool {
 		if !ok {
 			continue
 		}
-		if _, ok := media["schema"]; ok {
+		if schema, ok := media["schema"]; ok && schema != nil {
 			return true
 		}
 	}
