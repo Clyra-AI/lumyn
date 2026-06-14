@@ -774,6 +774,9 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		if requestContentIndent >= 0 && indent > requestContentIndent && strings.Contains(key, "/") {
 			requestMediaIndent = indent
 			requestMediaChildIndent = -1
+			if yamlInlineValueHasSchema(value) {
+				current.HasRequestSchema = true
+			}
 		}
 		if requestMediaIndent >= 0 && indent > requestMediaIndent && (requestMediaChildIndent < 0 || indent <= requestMediaChildIndent) {
 			requestMediaChildIndent = indent
@@ -793,6 +796,9 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		if responseContentIndent >= 0 && indent > responseContentIndent && strings.Contains(key, "/") {
 			responseMediaIndent = indent
 			responseMediaChildIndent = -1
+			if yamlInlineValueHasSchema(value) {
+				current.HasResponseSchema = true
+			}
 		}
 		if responseMediaIndent >= 0 && indent > responseMediaIndent && (responseMediaChildIndent < 0 || indent <= responseMediaChildIndent) {
 			responseMediaChildIndent = indent
@@ -918,7 +924,7 @@ func findingsForOperations(sourcePath string, operations []openAPIOperation) []F
 		if toolKey == "" {
 			continue
 		}
-		if previous, ok := seenToolNames[toolKey]; ok && previous.Path != operation.Path {
+		if previous, ok := seenToolNames[toolKey]; ok {
 			findings = append(findings, Finding{
 				Kind:     "docs_api_ambiguity",
 				Severity: "warning",
@@ -1630,7 +1636,15 @@ func yamlInlineRefValue(value string) string {
 
 func parseYAMLParameterLine(parameters []openAPIParameter, current **openAPIParameter, trimmed, key, value, pointer string, lineNo int, parameterComponents map[string]openAPIParameter) []openAPIParameter {
 	if strings.HasPrefix(trimmed, "- ") {
-		parameterKey, parameterValue, ok := yamlKeyValue(strings.TrimSpace(strings.TrimPrefix(trimmed, "- ")))
+		item := strings.TrimSpace(strings.TrimPrefix(trimmed, "- "))
+		if strings.HasPrefix(item, "{") {
+			parameter := yamlInlineParameter(item, pointer)
+			parameter.Line = lineNo
+			parameters = append(parameters, parameter)
+			*current = &parameters[len(parameters)-1]
+			return parameters
+		}
+		parameterKey, parameterValue, ok := yamlKeyValue(item)
 		parameter := openAPIParameter{
 			Pointer: pointer,
 			Line:    lineNo,
