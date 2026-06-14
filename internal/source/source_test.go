@@ -218,6 +218,76 @@ func TestCheckProjectDoesNotTreatYAMLSchemaMethodPropertyAsOperation(t *testing.
 	}
 }
 
+func TestCheckProjectRejectsUnsupportedSwagger2(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "swagger.json"), []byte(swagger2JSONFixture), 0o644); err != nil {
+		t.Fatalf("write Swagger fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./swagger.json",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	first, ok := FirstFinding(report.Findings)
+	if report.Status != "fail" || !ok || first.Kind != "command_error" || !containsString(first.Message, "swagger 2.0 is not supported") {
+		t.Fatalf("expected unsupported Swagger command_error; status=%q first=%#v findings=%#v", report.Status, first, report.Findings)
+	}
+}
+
+func TestCheckProjectRequiresNonEmptyYAMLSecuritySchemes(t *testing.T) {
+	cases := []struct {
+		name string
+		body string
+	}{
+		{name: "empty components securitySchemes", body: yamlEmptySecuritySchemes},
+		{name: "nested schema property named securitySchemes", body: yamlNestedSecuritySchemesProperty},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			root := t.TempDir()
+			if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(tc.body), 0o644); err != nil {
+				t.Fatalf("write OpenAPI fixture: %v", err)
+			}
+			if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+				t.Fatalf("create docs dir: %v", err)
+			}
+			if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+				t.Fatalf("write docs fixture: %v", err)
+			}
+			configPath := filepath.Join(root, "lumyn.yaml")
+			if _, err := InitProject(InitOptions{
+				ConfigPath:  configPath,
+				OpenAPIPath: "./openapi.yaml",
+				DocsPath:    "./docs",
+			}); err != nil {
+				t.Fatalf("InitProject: %v", err)
+			}
+
+			report, err := CheckProject(configPath)
+			if err != nil {
+				t.Fatalf("CheckProject: %v", err)
+			}
+			if !hasFindingKind(report.Findings, "auth_confusion") {
+				t.Fatalf("expected auth_confusion for missing usable security scheme; findings=%#v", report.Findings)
+			}
+		})
+	}
+}
+
 func TestReadProjectConfigAcceptsJSONConfig(t *testing.T) {
 	root := t.TempDir()
 	configPath := filepath.Join(root, "lumyn.json")
@@ -431,6 +501,69 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+`
+
+const swagger2JSONFixture = `{
+  "swagger": "2.0",
+  "info": {"title": "Fixture API", "version": "1.0.0"},
+  "paths": {
+    "/customers": {
+      "get": {
+        "operationId": "listCustomers",
+        "summary": "List customers",
+        "description": "List customers.",
+        "responses": {
+          "200": {
+            "description": "Customers.",
+            "schema": {"type": "object"}
+          }
+        }
+      }
+    }
+  }
+}`
+
+const yamlEmptySecuritySchemes = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      summary: List customers
+      description: List customers.
+      responses:
+        "200":
+          description: Customers.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes: {}
+`
+
+const yamlNestedSecuritySchemesProperty = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      summary: List customers
+      description: List customers.
+      responses:
+        "200":
+          description: Customers.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  securitySchemes:
+                    type: string
 `
 
 const completeDocs = `# API Guide
