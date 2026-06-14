@@ -1,0 +1,31 @@
+{
+  "artifact_type": "approved_exception",
+  "schema_version": "0.1",
+  "exception_id": "T2.7-docs-product-path-drift",
+  "status": "approved",
+  "scope": "T2.7 historical path-policy drift for docs/product/prd.md",
+  "policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T2.7/allowed_paths",
+  "owner": "factory-operator",
+  "reason": "T2.7 updated docs/product/prd.md to keep product truth aligned with the stricter safety/corpus-ready schema contract, but the original runner-ready allowed_paths did not include docs/product/. The closed task packet must not be broadened after dispatch; this exception records the drift explicitly for audit.",
+  "affected_paths": [
+    "docs/product/prd.md"
+  ],
+  "compensating_validation": [
+    "make test-contracts",
+    "make test-coverage",
+    "make prepush-full",
+    "GitHub validate",
+    "CodeQL analyze"
+  ],
+  "evidence_refs": [
+    ".factory/artifacts/task-runs/T2.7/validation-report.json",
+    ".factory/artifacts/pr-lifecycle/T2.7/pr-lifecycle-report.json",
+    "https://github.com/Clyra-AI/lumyn/pull/36"
+  ],
+  "follow_up_task_refs": [
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/T3"
+  ],
+  "expires_when": "T3 verifies product-source intake and PRD/schema examples without further docs/product path drift, or a future plan-drift task updates the task packet before dispatch.",
+  "approved_by": "factory-operator",
+  "approved_at": "2026-06-14T01:18:06Z"
+}

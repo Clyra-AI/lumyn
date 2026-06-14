@@ -56,6 +56,10 @@
     "codeql_analyze": "pass",
     "passive_codex_review": "carry_forward_no_unresolved_actionable_comments",
     "commit_push": "pass",
-    "post_merge_monitor": "pass"
-  }
+    "post_merge_monitor": "pass",
+    "path_policy": "approved_exception"
+  },
+  "approved_exceptions": [
+    ".factory/artifacts/exceptions/T2.7-docs-product-path-drift.json"
+  ]
 }

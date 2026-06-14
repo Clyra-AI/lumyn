@@ -2,7 +2,7 @@
   "artifact_type": "pr_lifecycle_report",
   "schema_version": "1.0",
   "task_id": "T2.7",
-  "generated_at": "2026-06-13T21:34:36Z",
+  "generated_at": "2026-06-14T01:18:06Z",
   "producer": "commit-push",
   "status": "completed",
   "local_validation": {
@@ -62,16 +62,36 @@
     "required_checks_observed": [
       "validate",
       "CodeQL analyze"
+    ],
+    "audit_command": "make audit-remote-protection",
+    "repo_control_evidence_ref": ".factory/artifacts/repo-controls/main-branch-protection.json",
+    "evidence_refs": [
+      ".factory/artifacts/repo-controls/main-branch-protection.json"
     ]
   },
   "scope_closure": {
     "task_scope_closure_ref": ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
     "canonical_scope_closed": false
   },
-  "approved_exceptions": [],
+  "approved_exceptions": [
+    ".factory/artifacts/exceptions/T2.7-docs-product-path-drift.json"
+  ],
   "process_escape": false,
   "notes": [
     "T2.7 implementation was merged through PR #36 after local validation, GitHub validate, CodeQL analyze, Codex review triage, and post-merge main validation.",
-    "Codex review on the final head had prior review artifacts and no unresolved actionable comments; recorded as carry-forward evidence rather than a fresh terminal thumbs-up."
-  ]
+    "Codex review on the final head had prior review artifacts and no unresolved actionable comments; recorded as carry-forward evidence rather than a fresh terminal thumbs-up.",
+    "T2.7 historical docs/product/prd.md path drift is recorded as an approved exception instead of broadening the closed task packet.",
+    "Branch-protection evidence is recorded in .factory/artifacts/repo-controls/main-branch-protection.json from make audit-remote-protection."
+  ],
+  "closure_sync_status": {
+    "status": "pending_current_pr_review",
+    "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/37",
+    "canonical_mutation_commit": "a364699f35d38eaddb968ddf7499bcc32db4f0c3",
+    "canonical_mutation_refs": [
+      ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+      ".factory/artifacts/task-runs/T2.7/closure-sync-report.json"
+    ],
+    "note": "This PR supplies review/CI evidence for the canonical closure sync. The T2.7 implementation lifecycle remains bound to PR #36; the closure-sync mutation must be reviewed through PR #37 before merge."
+  }
 }
