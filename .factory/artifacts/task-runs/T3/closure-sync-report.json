@@ -1,7 +1,7 @@
 {
   "artifact_type": "factoryd_task_closure_sync_report",
   "schema_version": "0.1",
-  "generated_at": "2026-06-14T09:44:30Z",
+  "generated_at": "2026-06-14T09:52:05Z",
   "repo": "lumyn",
   "task_id": "T3",
   "ok": true,
@@ -26,7 +26,6 @@
     "T3"
   ],
   "updated_acceptance_item_ids": [
-    "ACT-002",
     "FR1",
     "FR14",
     "FR2",

@@ -15,7 +15,7 @@
       "url": "https://github.com/Clyra-AI/lumyn/actions/runs/27494810421"
     },
     {
-      "name": "codeql",
+      "name": "CodeQL analyze",
       "status": "success",
       "url": "https://github.com/Clyra-AI/lumyn/actions/runs/27494810422"
     }
