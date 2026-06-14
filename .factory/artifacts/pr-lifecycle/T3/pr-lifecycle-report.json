@@ -6,8 +6,42 @@
   "branch_name": "codex/lumyn-T3-20260614T020310.481595000Z",
   "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/38",
   "commit_set": [
-    "c036d2074783ad046d7b8b8c0060e1af463a5532"
+    "c036d2074783ad046d7b8b8c0060e1af463a5532",
+    "19134ab1d7396934f3dedc38f5d5852f0f73fa8f",
+    "1254dc39a75bac66f9ba9b8e4067f9d728de690a",
+    "d50fdc64afb67670745d7432b8c783c4cdc1d5ea",
+    "88825124b3e0fbf72dda23a1f576c61b588f419f",
+    "835c7c03f07f60447bc772b32a7e70fa8f4bcb64"
   ],
+  "implementation_lifecycle": {
+    "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/38",
+    "branch_name": "codex/lumyn-T3-20260614T020310.481595000Z",
+    "merge_commit": "f40fc93ec8d8f4b5c280f5109a0f0a2aefae4bb0"
+  },
+  "closure_sync_lifecycle": {
+    "status": "reviewed_pending_merge",
+    "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/39",
+    "branch_name": "codex/lumyn-t3-closure-sync",
+    "commit_set": [
+      "19134ab1d7396934f3dedc38f5d5852f0f73fa8f",
+      "1254dc39a75bac66f9ba9b8e4067f9d728de690a",
+      "d50fdc64afb67670745d7432b8c783c4cdc1d5ea",
+      "88825124b3e0fbf72dda23a1f576c61b588f419f",
+      "835c7c03f07f60447bc772b32a7e70fa8f4bcb64"
+    ],
+    "artifact_mutations": [
+      ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+      ".factory/artifacts/task-runs/T3/closure-sync-report.json",
+      ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+      ".factory/artifacts/task-runs/T3/validation-report.json"
+    ],
+    "required_checks": {
+      "validate": "success",
+      "CodeQL analyze": "success"
+    },
+    "final_merge_evidence": "Record PR #39 merge and post-merge status after this closure-sync PR lands."
+  },
   "local_validation": {
     "status": "pass",
     "command": "make prepush-full"
