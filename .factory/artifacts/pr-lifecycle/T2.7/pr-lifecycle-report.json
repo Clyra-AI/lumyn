@@ -2,7 +2,7 @@
   "artifact_type": "pr_lifecycle_report",
   "schema_version": "1.0",
   "task_id": "T2.7",
-  "generated_at": "2026-06-14T01:18:06Z",
+  "generated_at": "2026-06-14T01:21:02Z",
   "producer": "commit-push",
   "status": "completed",
   "local_validation": {
@@ -24,14 +24,29 @@
     "code_review_required": false,
     "codex_review_required": true,
     "codex_review": "carry_forward_no_unresolved_actionable_comments",
-    "head_sha": "414cf6b14ad0346ca4ce88aeb7101db8da054767",
+    "head_sha": "a364699f35d38eaddb968ddf7499bcc32db4f0c3",
     "settle_evidence_refs": [
       "https://github.com/Clyra-AI/lumyn/pull/36#pullrequestreview-4492012074",
       "https://github.com/Clyra-AI/lumyn/pull/36#pullrequestreview-4492021075",
       "https://github.com/Clyra-AI/lumyn/pull/36#pullrequestreview-4492028223",
-      "https://github.com/Clyra-AI/lumyn/pull/36"
+      "https://github.com/Clyra-AI/lumyn/pull/36",
+      "https://github.com/Clyra-AI/lumyn/pull/37",
+      "https://github.com/Clyra-AI/lumyn/pull/37/files"
     ],
-    "unresolved_actionable_comments": 0
+    "unresolved_actionable_comments": 0,
+    "implementation_head_sha": "414cf6b14ad0346ca4ce88aeb7101db8da054767",
+    "closure_sync_pr_ref": "https://github.com/Clyra-AI/lumyn/pull/37",
+    "closure_sync_commit_set": [
+      "f04cc48789b3b4025855ddf8836ef321c4c2946b",
+      "5ce44ace2c374365d26a949aa6edd7a7741a8834",
+      "a6235afbedbadc37a6038864e3721dd5c86d087c",
+      "f711546605a3a74c61b15f2d96eb12c22c83fdc3",
+      "4036a0972a7add890d3e0dc109dba8fdc15217dc",
+      "e68e3bc2e0990d6ff197c7f3e6f828f4b226e6c6",
+      "78d0c11d976fda14f7c14aa200ead097c44e3660",
+      "a364699f35d38eaddb968ddf7499bcc32db4f0c3"
+    ],
+    "note": "head_sha and closure_sync_commit_set identify the canonical closure-sync mutation reviewed in PR #37; implementation_head_sha identifies the product implementation head from PR #36."
   },
   "shipping_status": {
     "commit_push_required": true,
@@ -44,9 +59,33 @@
       "cf147107b71246ca415fe8189a935d2691a01c69",
       "1991d1c08bd6d208fc92ea535b6cd4d422f1116d",
       "9c0c6890f726180f652bd6d076ce0d127fdf9da3",
+      "414cf6b14ad0346ca4ce88aeb7101db8da054767",
+      "f04cc48789b3b4025855ddf8836ef321c4c2946b",
+      "5ce44ace2c374365d26a949aa6edd7a7741a8834",
+      "a6235afbedbadc37a6038864e3721dd5c86d087c",
+      "f711546605a3a74c61b15f2d96eb12c22c83fdc3",
+      "4036a0972a7add890d3e0dc109dba8fdc15217dc",
+      "e68e3bc2e0990d6ff197c7f3e6f828f4b226e6c6",
+      "78d0c11d976fda14f7c14aa200ead097c44e3660",
+      "a364699f35d38eaddb968ddf7499bcc32db4f0c3"
+    ],
+    "ship_packet_ref": ".factory/artifacts/pr-lifecycle/T2.7/ship-packet.json",
+    "implementation_commit_set": [
+      "cf147107b71246ca415fe8189a935d2691a01c69",
+      "1991d1c08bd6d208fc92ea535b6cd4d422f1116d",
+      "9c0c6890f726180f652bd6d076ce0d127fdf9da3",
       "414cf6b14ad0346ca4ce88aeb7101db8da054767"
     ],
-    "ship_packet_ref": ".factory/artifacts/pr-lifecycle/T2.7/ship-packet.json"
+    "closure_sync_commit_set": [
+      "f04cc48789b3b4025855ddf8836ef321c4c2946b",
+      "5ce44ace2c374365d26a949aa6edd7a7741a8834",
+      "a6235afbedbadc37a6038864e3721dd5c86d087c",
+      "f711546605a3a74c61b15f2d96eb12c22c83fdc3",
+      "4036a0972a7add890d3e0dc109dba8fdc15217dc",
+      "e68e3bc2e0990d6ff197c7f3e6f828f4b226e6c6",
+      "78d0c11d976fda14f7c14aa200ead097c44e3660",
+      "a364699f35d38eaddb968ddf7499bcc32db4f0c3"
+    ]
   },
   "merge_status": {
     "merge_performed": true,
@@ -81,10 +120,12 @@
     "T2.7 implementation was merged through PR #36 after local validation, GitHub validate, CodeQL analyze, Codex review triage, and post-merge main validation.",
     "Codex review on the final head had prior review artifacts and no unresolved actionable comments; recorded as carry-forward evidence rather than a fresh terminal thumbs-up.",
     "T2.7 historical docs/product/prd.md path drift is recorded as an approved exception instead of broadening the closed task packet.",
-    "Branch-protection evidence is recorded in .factory/artifacts/repo-controls/main-branch-protection.json from make audit-remote-protection."
+    "Branch-protection evidence is recorded in .factory/artifacts/repo-controls/main-branch-protection.json from make audit-remote-protection.",
+    "Lifecycle review_status.head_sha now identifies the closure-sync mutation commit; implementation_head_sha preserves the original PR #36 implementation head.",
+    "shipping_status.commit_set includes both the implementation commit set and the closure-sync commit set so canonical ledger mutations are not certified by stale implementation-only evidence."
   ],
   "closure_sync_status": {
-    "status": "pending_current_pr_review",
+    "status": "current_pr_review_required_before_merge",
     "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/37",
     "canonical_mutation_commit": "a364699f35d38eaddb968ddf7499bcc32db4f0c3",
     "canonical_mutation_refs": [
@@ -92,6 +133,7 @@
       ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
       ".factory/artifacts/task-runs/T2.7/closure-sync-report.json"
     ],
-    "note": "This PR supplies review/CI evidence for the canonical closure sync. The T2.7 implementation lifecycle remains bound to PR #36; the closure-sync mutation must be reviewed through PR #37 before merge."
+    "note": "This PR supplies review/CI evidence for the canonical closure sync. The T2.7 implementation lifecycle remains bound to PR #36; the closure-sync mutation must be reviewed through PR #37 before merge.",
+    "review_policy": "PR #37 must pass validate, CodeQL analyze, passive Codex review, and conversation resolution before this canonical closure sync is merged."
   }
 }
