@@ -89,6 +89,37 @@ func TestCheckProjectReportsConcreteWorkflowRelevantFinding(t *testing.T) {
 	}
 }
 
+func TestCheckProjectResolvesRootRelativeMarkdownLinksFromProjectRoot(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(completeOpenAPIYAML), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte("Read [auth](/docs/auth.md).\n"), 0o644); err != nil {
+		t.Fatalf("write docs guide: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "auth.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs auth: %v", err)
+	}
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  filepath.Join(root, "lumyn.yaml"),
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(filepath.Join(root, "lumyn.yaml"))
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "context_missing") {
+		t.Fatalf("root-relative docs link should resolve from project root; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectFailsClosedForInvalidConfig(t *testing.T) {
 	root := t.TempDir()
 	_, err := CheckProject(filepath.Join(root, "missing-lumyn.yaml"))
@@ -543,6 +574,35 @@ func TestCheckProjectCarriesYAMLPathItemParameters(t *testing.T) {
 	}
 }
 
+func TestCheckProjectCarriesYAMLPathItemParametersAfterMethods(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithLateUndescribedPathParameter), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "source_missing_metadata") {
+		t.Fatalf("late shared YAML path parameter without description should be reported; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectFingerprintIgnoresGeneratedReports(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(completeOpenAPIYAML), 0o644); err != nil {
@@ -943,6 +1003,34 @@ paths:
             application/json:
               schema:
                 type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
+const yamlOpenAPIWithLateUndescribedPathParameter = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers/{id}:
+    get:
+      operationId: getCustomer
+      summary: Get customer
+      description: Get one customer.
+      responses:
+        "200":
+          description: Customer.
+          content:
+            application/json:
+              schema:
+                type: object
+    parameters:
+      - name: id
+        in: path
 components:
   securitySchemes:
     apiKeyAuth:
