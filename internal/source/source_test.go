@@ -556,6 +556,35 @@ func TestCheckProjectRequiresNonEmptyYAMLSecuritySchemes(t *testing.T) {
 	}
 }
 
+func TestCheckProjectDoesNotTreatNestedYAMLSecuritySchemesPropertyAsAuthScheme(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlNestedSecuritySchemesSchemaPropertyOnly), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "auth_confusion") {
+		t.Fatalf("nested securitySchemes schema property should not satisfy auth scheme coverage; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectDoesNotTreatYAMLResponseHeaderSchemaAsBodySchema(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlResponseHeaderSchemaOnly), 0o644); err != nil {
@@ -814,6 +843,46 @@ func TestCheckProjectReportsMissingDescriptionForYAMLFlowParameterRef(t *testing
 	}
 	if !hasFindingKind(report.Findings, "source_missing_metadata") {
 		t.Fatalf("flow-style parameter ref without description should be reported; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectReportsMissingDescriptionForYAMLInlineParameterArrays(t *testing.T) {
+	cases := []struct {
+		name string
+		body string
+	}{
+		{name: "operation parameters", body: yamlOpenAPIWithInlineOperationParameterArray},
+		{name: "path parameters", body: yamlOpenAPIWithInlinePathParameterArray},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			root := t.TempDir()
+			if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(tc.body), 0o644); err != nil {
+				t.Fatalf("write OpenAPI fixture: %v", err)
+			}
+			if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+				t.Fatalf("create docs dir: %v", err)
+			}
+			if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+				t.Fatalf("write docs fixture: %v", err)
+			}
+			configPath := filepath.Join(root, "lumyn.yaml")
+			if _, err := InitProject(InitOptions{
+				ConfigPath:  configPath,
+				OpenAPIPath: "./openapi.yaml",
+				DocsPath:    "./docs",
+			}); err != nil {
+				t.Fatalf("InitProject: %v", err)
+			}
+
+			report, err := CheckProject(configPath)
+			if err != nil {
+				t.Fatalf("CheckProject: %v", err)
+			}
+			if !hasFindingKind(report.Findings, "source_missing_metadata") {
+				t.Fatalf("inline YAML parameter array without descriptions should be reported; findings=%#v", report.Findings)
+			}
+		})
 	}
 }
 
@@ -1979,6 +2048,35 @@ paths:
                     type: string
 `
 
+const yamlNestedSecuritySchemesSchemaPropertyOnly = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      summary: List customers
+      description: List customers.
+      responses:
+        "200":
+          description: Customers.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  schemas:
+    Agent:
+      type: object
+      properties:
+        securitySchemes:
+          type: object
+          properties:
+            apiKeyAuth:
+              type: string
+`
+
 const yamlResponseHeaderSchemaOnly = `openapi: 3.0.3
 info:
   title: Fixture API
@@ -2366,6 +2464,58 @@ paths:
     parameters:
       - name: id
         in: path
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
+const yamlOpenAPIWithInlineOperationParameterArray = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers/{id}:
+    get:
+      operationId: getCustomer
+      summary: Get customer
+      description: Get one customer.
+      parameters: [{name: id, in: path}]
+      responses:
+        "200":
+          description: Customer.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+`
+
+const yamlOpenAPIWithInlinePathParameterArray = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers/{id}:
+    parameters: [{name: id, in: path}]
+    get:
+      operationId: getCustomer
+      summary: Get customer
+      description: Get one customer.
+      responses:
+        "200":
+          description: Customer.
+          content:
+            application/json:
+              schema:
+                type: object
 components:
   securitySchemes:
     apiKeyAuth:
