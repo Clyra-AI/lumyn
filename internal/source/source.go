@@ -165,7 +165,7 @@ func InitProject(options InitOptions) (Report, error) {
 	report := newReport(cleanSlashPath(options.ConfigPath), intakeReportPath, "pass")
 	report.SourceRefs = sourceRefs(root, projectConfig)
 	report.SurfaceFingerprint = surfaceFingerprint(report.SourceRefs)
-	if err := writeReport(root, report); err != nil {
+	if err := writeReport(reportRoot(options.ConfigPath), report); err != nil {
 		return Report{}, err
 	}
 	return report, nil
@@ -191,7 +191,7 @@ func CheckProject(configPath string) (Report, error) {
 	}
 	report.Status = statusFromFindings(report.Findings)
 	report.SurfaceFingerprint = surfaceFingerprint(report.SourceRefs)
-	if err := writeReport(root, report); err != nil {
+	if err := writeReport(reportRoot(configPath), report); err != nil {
 		return Report{}, err
 	}
 	return report, nil
@@ -604,10 +604,10 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		if !hasKey {
 			continue
 		}
-		if key == "swagger" {
+		if key == "swagger" && indent == 0 {
 			return nil, false, errors.New("swagger 2.0 is not supported; use OpenAPI 3.x")
 		}
-		if key == "openapi" {
+		if key == "openapi" && indent == 0 {
 			seenVersion = true
 		}
 		if key == "paths" && indent == 0 {
@@ -1900,6 +1900,24 @@ func projectRoot(configPath string) string {
 	dir := filepath.Dir(configPath)
 	if dir == "" {
 		return "."
+	}
+	return dir
+}
+
+func reportRoot(configPath string) string {
+	if configPath == "" {
+		return "."
+	}
+	if !filepath.IsAbs(configPath) {
+		return "."
+	}
+	dir := filepath.Dir(configPath)
+	if strings.HasPrefix(filepath.Base(dir), ".") {
+		parent := filepath.Dir(dir)
+		if parent == "" {
+			return "."
+		}
+		return parent
 	}
 	return dir
 }
