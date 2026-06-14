@@ -608,7 +608,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		if key == "openapi" {
 			seenVersion = true
 		}
-		if key == "paths" {
+		if key == "paths" && indent == 0 {
 			flushPathItem()
 			inPaths = true
 			pathsIndent = indent
