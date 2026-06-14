@@ -56,12 +56,16 @@ func TestInitProjectRebasesSourcesWhenConfigLivesInSubdirectory(t *testing.T) {
 	t.Chdir(root)
 
 	configPath := filepath.Join(".lumyn", "lumyn.yaml")
-	if _, err := InitProject(InitOptions{
+	initReport, err := InitProject(InitOptions{
 		ConfigPath:  configPath,
 		OpenAPIPath: "./openapi.yaml",
 		DocsPath:    "./docs",
-	}); err != nil {
+	})
+	if err != nil {
 		t.Fatalf("InitProject: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(root, initReport.ReportPath)); err != nil {
+		t.Fatalf("source intake artifact should be written to reported project-root path: %v", err)
 	}
 	projectConfig, err := ReadProjectConfig(configPath)
 	if err != nil {
@@ -77,6 +81,9 @@ func TestInitProjectRebasesSourcesWhenConfigLivesInSubdirectory(t *testing.T) {
 	report, err := CheckProject(configPath)
 	if err != nil {
 		t.Fatalf("CheckProject: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(root, report.ReportPath)); err != nil {
+		t.Fatalf("source check artifact should be written to reported project-root path: %v", err)
 	}
 	if hasFindingKind(report.Findings, "context_missing") || hasFindingKind(report.Findings, "command_error") {
 		t.Fatalf("rebased init config should resolve generated source paths; findings=%#v", report.Findings)
@@ -615,6 +622,65 @@ func TestCheckProjectRejectsUnsupportedSwagger2(t *testing.T) {
 	first, ok := FirstFinding(report.Findings)
 	if report.Status != "fail" || !ok || first.Kind != "command_error" || !containsString(first.Message, "swagger 2.0 is not supported") {
 		t.Fatalf("expected unsupported Swagger command_error; status=%q first=%#v findings=%#v", report.Status, first, report.Findings)
+	}
+}
+
+func TestCheckProjectIgnoresNestedYAMLSwaggerPropertyForVersion(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithNestedSwaggerProperty), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "command_error") {
+		t.Fatalf("nested YAML swagger schema property should not be treated as Swagger 2.0; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectRequiresRootYAMLOpenAPIVersion(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithNestedOpenAPIPropertyOnly), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	first, ok := FirstFinding(report.Findings)
+	if report.Status != "fail" || !ok || first.Kind != "command_error" || !containsString(first.Message, "missing openapi version") {
+		t.Fatalf("expected missing root version command_error; status=%q first=%#v findings=%#v", report.Status, first, report.Findings)
 	}
 }
 
@@ -2214,6 +2280,67 @@ const swagger2JSONFixture = `{
     }
   }
 }`
+
+const yamlOpenAPIWithNestedSwaggerProperty = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      summary: List customers
+      description: List customers.
+      responses:
+        "200":
+          description: Customers.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    Customer:
+      type: object
+      properties:
+        swagger:
+          type: string
+`
+
+const yamlOpenAPIWithNestedOpenAPIPropertyOnly = `info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      summary: List customers
+      description: List customers.
+      responses:
+        "200":
+          description: Customers.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    Metadata:
+      type: object
+      properties:
+        openapi:
+          type: string
+`
 
 const yamlEmptySecuritySchemes = `openapi: 3.0.3
 info:
