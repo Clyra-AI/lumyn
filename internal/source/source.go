@@ -625,7 +625,7 @@ func parseOpenAPIYAML(data []byte) ([]openAPIOperation, bool, error) {
 		if securitySchemesIndent >= 0 && indent <= securitySchemesIndent && key != "securitySchemes" {
 			securitySchemesIndent = -1
 		}
-		if key == "components" && !inPaths {
+		if key == "components" && indent == 0 && !inPaths {
 			componentsIndent = indent
 			securitySchemesIndent = -1
 		}
@@ -1589,7 +1589,7 @@ func yamlAuthScopeDescriptionFindings(sourcePath string, data []byte) []Finding 
 			scopesIndent = -1
 		}
 		switch {
-		case key == "components":
+		case key == "components" && indent == 0:
 			componentsIndent = indent
 			schemesIndent = -1
 		case componentsIndent >= 0 && indent > componentsIndent && key == "securitySchemes":
@@ -1672,7 +1672,7 @@ func yamlOAuth2SecuritySchemeNames(data []byte) map[string]bool {
 			currentScheme = ""
 		}
 		switch {
-		case key == "components":
+		case key == "components" && indent == 0:
 			componentsIndent = indent
 			schemesIndent = -1
 		case componentsIndent >= 0 && indent > componentsIndent && key == "securitySchemes":
@@ -1993,7 +1993,7 @@ func yamlComponentParameters(data []byte) map[string]openAPIParameter {
 			itemIndent = -1
 			currentItem = ""
 		}
-		if key == "components" {
+		if key == "components" && indent == 0 {
 			componentsIndent = indent
 			parametersIndent = -1
 			itemIndent = -1
@@ -2096,7 +2096,7 @@ func yamlComponentContentSchemaRefs(data []byte, group string) map[string]bool {
 		if mediaIndent >= 0 && indent <= mediaIndent {
 			mediaIndent = -1
 		}
-		if key == "components" {
+		if key == "components" && indent == 0 {
 			componentsIndent = indent
 			continue
 		}
@@ -2179,12 +2179,21 @@ func yamlMappingSeparator(trimmed string) int {
 		case char == '"' && !inSingleQuote:
 			inDoubleQuote = !inDoubleQuote
 		case char == ':' && !inSingleQuote && !inDoubleQuote:
-			if index+1 == len(trimmed) || trimmed[index+1] == ' ' || trimmed[index+1] == '\t' {
+			if index+1 == len(trimmed) || isYAMLMappingValueStart(trimmed[index+1]) {
 				return index
 			}
 		}
 	}
 	return -1
+}
+
+func isYAMLMappingValueStart(char byte) bool {
+	switch char {
+	case ' ', '\t', '{', '[', '"', '\'':
+		return true
+	default:
+		return false
+	}
 }
 
 func leadingSpaces(value string) int {
