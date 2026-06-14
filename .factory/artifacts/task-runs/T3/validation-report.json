@@ -109,7 +109,7 @@
     },
     {
       "acceptance_item_id": "FR2",
-      "status": "implemented",
+      "status": "partial",
       "evidence_refs": [
         "internal/source/source.go",
         "cmd/lumyn/main.go"
@@ -141,7 +141,7 @@
     },
     {
       "acceptance_item_id": "NFR9",
-      "status": "implemented",
+      "status": "partial",
       "evidence_refs": [
         "internal/source/source.go",
         "cmd/lumyn/main_test.go"
