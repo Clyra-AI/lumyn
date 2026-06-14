@@ -42,6 +42,47 @@ func TestInitProjectWritesConfigAndIntakeArtifact(t *testing.T) {
 	}
 }
 
+func TestInitProjectRebasesSourcesWhenConfigLivesInSubdirectory(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(completeOpenAPIYAML), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.MkdirAll(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	t.Chdir(root)
+
+	configPath := filepath.Join(".lumyn", "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	projectConfig, err := ReadProjectConfig(configPath)
+	if err != nil {
+		t.Fatalf("ReadProjectConfig: %v", err)
+	}
+	if got, want := projectConfig.Sources.OpenAPI[0].Path, "../openapi.yaml"; got != want {
+		t.Fatalf("OpenAPI path = %q, want %q", got, want)
+	}
+	if got, want := projectConfig.Sources.Docs[0].Path, "../docs"; got != want {
+		t.Fatalf("docs path = %q, want %q", got, want)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if hasFindingKind(report.Findings, "context_missing") || hasFindingKind(report.Findings, "command_error") {
+		t.Fatalf("rebased init config should resolve generated source paths; findings=%#v", report.Findings)
+	}
+}
+
 func TestCheckProjectReportsConcreteWorkflowRelevantFinding(t *testing.T) {
 	root := t.TempDir()
 	if err := os.WriteFile(filepath.Join(root, "openapi.json"), []byte(validOpenAPIWithMissingMetadata), 0o644); err != nil {
@@ -515,6 +556,35 @@ func TestCheckProjectReportsEmptyInlineYAMLOAuthScopes(t *testing.T) {
 	}
 	if !hasFindingKind(report.Findings, "auth_confusion") {
 		t.Fatalf("inline YAML OAuth scope descriptions should be reported; findings=%#v", report.Findings)
+	}
+}
+
+func TestCheckProjectReportsEmptyFlowStyleYAMLOAuthScopes(t *testing.T) {
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "openapi.yaml"), []byte(yamlOpenAPIWithFlowStyleOAuthSecuritySchemes), 0o644); err != nil {
+		t.Fatalf("write OpenAPI fixture: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "docs"), 0o755); err != nil {
+		t.Fatalf("create docs dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "docs", "guide.md"), []byte(completeDocs), 0o644); err != nil {
+		t.Fatalf("write docs fixture: %v", err)
+	}
+	configPath := filepath.Join(root, "lumyn.yaml")
+	if _, err := InitProject(InitOptions{
+		ConfigPath:  configPath,
+		OpenAPIPath: "./openapi.yaml",
+		DocsPath:    "./docs",
+	}); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	report, err := CheckProject(configPath)
+	if err != nil {
+		t.Fatalf("CheckProject: %v", err)
+	}
+	if !hasFindingKind(report.Findings, "auth_confusion") {
+		t.Fatalf("flow-style YAML OAuth scope descriptions should be reported; findings=%#v", report.Findings)
 	}
 }
 
@@ -1674,6 +1744,27 @@ components:
           authorizationUrl: https://example.com/auth
           tokenUrl: https://example.com/token
           scopes: {customers:read: ""}
+`
+
+const yamlOpenAPIWithFlowStyleOAuthSecuritySchemes = `openapi: 3.0.3
+info:
+  title: Fixture API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      operationId: listCustomers
+      summary: List customers
+      description: List customers.
+      responses:
+        "200":
+          description: Customers.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes: {oauth: {type: oauth2, flows: {authorizationCode: {authorizationUrl: https://example.com/auth, tokenUrl: https://example.com/token, scopes: {customers:read: ""}}}}}
 `
 
 const openAPIWithUndescribedParameterRef = `{

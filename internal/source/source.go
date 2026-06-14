@@ -137,11 +137,12 @@ type openAPIParameter struct {
 func InitProject(options InitOptions) (Report, error) {
 	options = normalizedInitOptions(options)
 	root := projectRoot(options.ConfigPath)
+	configPathWasRelative := !filepath.IsAbs(options.ConfigPath)
 	projectConfig := ProjectConfig{
 		Version: 1,
 		Sources: SourceConfig{
-			OpenAPI: []SourceEntry{{ID: "public_api", Path: filepath.ToSlash(options.OpenAPIPath)}},
-			Docs:    []SourceEntry{{ID: "docs", Path: filepath.ToSlash(options.DocsPath)}},
+			OpenAPI: []SourceEntry{{ID: "public_api", Path: sourcePathForConfigRoot(root, options.OpenAPIPath, configPathWasRelative)}},
+			Docs:    []SourceEntry{{ID: "docs", Path: sourcePathForConfigRoot(root, options.DocsPath, configPathWasRelative)}},
 		},
 		Env: EnvConfig{
 			BaseURL: "${API_BASE_URL}",
@@ -1644,6 +1645,7 @@ func yamlAuthScopeDescriptionFindings(sourcePath string, data []byte) []Finding 
 			schemesIndent = indent
 			schemeIndent = -1
 			currentScheme = ""
+			findings = append(findings, yamlInlineSecuritySchemeScopeFindings(sourcePath, value)...)
 		case schemesIndent >= 0 && indent > schemesIndent && (schemeIndent < 0 || indent <= schemeIndent):
 			currentScheme = key
 			schemeIndent = indent
@@ -1685,6 +1687,42 @@ func yamlAuthScopeDescriptionFindings(sourcePath string, data []byte) []Finding 
 				FixTarget:         "auth_scope_description",
 				WorkflowRelevance: "Agents need explicit scope meaning before selecting credentials or protected workflow actions.",
 			})
+		}
+	}
+	return findings
+}
+
+func yamlInlineSecuritySchemeScopeFindings(sourcePath, value string) []Finding {
+	value = strings.TrimSpace(strings.Trim(value, "{} "))
+	if value == "" {
+		return nil
+	}
+	findings := []Finding{}
+	for _, schemeEntry := range splitYAMLFlowEntries(value) {
+		schemeName, schemeValue, ok := yamlKeyValue(strings.TrimSpace(schemeEntry))
+		if !ok {
+			continue
+		}
+		schemeValue = strings.TrimSpace(strings.Trim(schemeValue, "{} "))
+		if !yamlInlineMapValueEquals(schemeValue, "type", "oauth2") {
+			continue
+		}
+		flowsValue, ok := yamlInlineMapValue(schemeValue, "flows")
+		if !ok {
+			continue
+		}
+		flowsValue = strings.TrimSpace(strings.Trim(flowsValue, "{} "))
+		for _, flowEntry := range splitYAMLFlowEntries(flowsValue) {
+			flowName, flowValue, ok := yamlKeyValue(strings.TrimSpace(flowEntry))
+			if !ok {
+				continue
+			}
+			flowValue = strings.TrimSpace(strings.Trim(flowValue, "{} "))
+			scopesValue, ok := yamlInlineMapValue(flowValue, "scopes")
+			if !ok {
+				continue
+			}
+			findings = append(findings, yamlInlineAuthScopeDescriptionFindings(sourcePath, schemeName, flowName, scopesValue)...)
 		}
 	}
 	return findings
@@ -1871,6 +1909,46 @@ func resolveProjectPath(root, path string) string {
 		return filepath.Clean(path)
 	}
 	return filepath.Clean(filepath.Join(root, filepath.FromSlash(path)))
+}
+
+func sourcePathForConfigRoot(root, path string, preferWorkingDirectory bool) string {
+	if path == "" {
+		return ""
+	}
+	rootAbs, err := filepath.Abs(root)
+	if err != nil {
+		return cleanSlashPath(path)
+	}
+	sourcePath := filepath.FromSlash(filepath.Clean(path))
+	sourceAbs := sourcePath
+	if !filepath.IsAbs(sourceAbs) {
+		cwd, cwdErr := os.Getwd()
+		cwdCandidate := sourcePath
+		if cwdErr == nil {
+			cwdCandidate = filepath.Join(cwd, sourcePath)
+		}
+		rootCandidate := filepath.Join(rootAbs, sourcePath)
+		switch {
+		case preferWorkingDirectory && cwdErr == nil && pathExists(cwdCandidate):
+			sourceAbs = cwdCandidate
+		case pathExists(rootCandidate):
+			sourceAbs = rootCandidate
+		case cwdErr == nil:
+			sourceAbs = cwdCandidate
+		default:
+			return cleanSlashPath(path)
+		}
+	}
+	rel, err := filepath.Rel(rootAbs, sourceAbs)
+	if err != nil {
+		return cleanSlashPath(path)
+	}
+	return cleanSlashPath(rel)
+}
+
+func pathExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
 }
 
 func relativePath(root, path string) string {
@@ -2317,13 +2395,24 @@ func yamlInlineContentValueHasSchema(value string) bool {
 }
 
 func yamlInlineMapHasKey(value, expected string) bool {
+	_, ok := yamlInlineMapValue(value, expected)
+	return ok
+}
+
+func yamlInlineMapValueEquals(value, expected, want string) bool {
+	got, ok := yamlInlineMapValue(value, expected)
+	return ok && strings.EqualFold(strings.Trim(got, `"'`), want)
+}
+
+func yamlInlineMapValue(value, expected string) (string, bool) {
+	value = strings.TrimSpace(strings.Trim(value, "{} "))
 	for _, entry := range splitYAMLFlowEntries(value) {
-		key, _, ok := yamlKeyValue(strings.TrimSpace(entry))
+		key, entryValue, ok := yamlKeyValue(strings.TrimSpace(entry))
 		if ok && strings.Trim(key, `"'`) == expected {
-			return true
+			return entryValue, true
 		}
 	}
-	return false
+	return "", false
 }
 
 func yamlKeyValue(trimmed string) (string, string, bool) {

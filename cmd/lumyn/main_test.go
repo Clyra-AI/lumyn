@@ -94,8 +94,8 @@ func TestCLIInitWritesConfigAndSourceArtifact(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read generated config: %v", err)
 	}
-	if !bytes.Contains(configBytes, []byte("path: ./openapi.json")) {
-		t.Fatalf("generated config missing openapi path:\n%s", configBytes)
+	if !bytes.Contains(configBytes, []byte("path: openapi.json")) {
+		t.Fatalf("generated config missing normalized openapi path:\n%s", configBytes)
 	}
 
 	artifactPath := firstArtifactPath(t, payload, "source_intake")
