@@ -150,6 +150,35 @@ coverage exception.
   non-interactive behavior, quiet/compact output posture, typed exits, and
   machine-readable errors when the task touches CLI behavior.
 
+## Source-Check Proof Rubric
+
+`lumyn check` must stay distinct from generic generation-time readiness scoring.
+It verifies whether source evidence can support later workflow-completion proof.
+Source checks use two tiers:
+
+- Infrastructure tier: parser/schema/readability facts such as path existence,
+  operation IDs, auth declaration shape, response schema availability, and
+  validator input paths.
+- Workflow/domain tier: evidence that a source surface can support a concrete
+  workflow job, expected outcome, read-back, cleanup, boundary, or fix target.
+
+Unprovable, missing, or hallucinated paths are hard failures for source-evidence
+closure. A check may report `needs_user_input` or `coverage_gap`, but it must not
+count those as proof claims or as accepted recorder-quality claims.
+
+T3.1 is the parser/source-proof repair guard. Recorder-heavy tasks T4.1 through
+T4.3 must consume only source-check outputs that passed the structured parser,
+proof-tier, and hallucinated-reference checks or record an approved exception.
+
+## Workflow Insight Framing
+
+Recorder and report work should capture the workflow's business job in addition
+to endpoint mechanics. Use an optional field such as `workflow_insight` or
+`business_job` to explain what the workflow enables, why the evidence matters,
+and which fix target unlocks completion. This field is evidence framing, not
+marketing copy; it must be grounded in the workflow goal, expected outcome,
+validators, trace, or source references.
+
 ## Structured Data, Proof, Budgets, And Redaction
 
 - OpenAPI, workflow, cassette, evidence, trace, baseline, and report data must

@@ -81,6 +81,7 @@
         "T2",
         "T2.7",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -116,13 +117,15 @@
         "T5.2",
         "T6.1",
         "T6.2",
-        "T10"
+        "T10",
+        "T3.1"
       ],
       "notes": [
         "T1 established the pinned Go CLI skeleton, command-result envelope, exit-code constants, config defaults, and validation lanes.",
         "Record/replay/report scope remains partial until schemas, init/check, record, replay, and report tasks close.",
         "T2 established executable Phase 0 schema files and schema validation coverage for workflow, evidence, cassette, proof, command-result, redaction, and related artifact models.",
-        "T2.7 was added after the safety/corpus-ready evidence requirement to make normalized local failure contracts explicit before T3 product implementation."
+        "T2.7 was added after the safety/corpus-ready evidence requirement to make normalized local failure contracts explicit before T3 product implementation.",
+        "Sprint 4 added T3.1 as a parser/source-proof repair guard before recorder-heavy implementation."
       ],
       "scope_item_id": "record_contract_replay_report",
       "acceptance_item_ids": [
@@ -186,7 +189,9 @@
             ".factory/artifacts/task-runs/T3/scope-closure-map.json",
             ".factory/artifacts/task-runs/T3/validation-report.json"
           ],
-          "repair_task_refs": []
+          "repair_task_refs": [
+            "T3.1"
+          ]
         },
         {
           "acceptance_item_id": "RCRR-003",
@@ -281,7 +286,9 @@
           "acceptance_item_id": "REC-QUALITY-001",
           "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [
+            "T6.1"
+          ]
         },
         {
           "acceptance_item_id": "FDN-003",
@@ -586,6 +593,7 @@
         "T2",
         "T2.7",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -623,7 +631,8 @@
         "T11.1",
         "T11.2",
         "T12.1",
-        "T12.2"
+        "T12.2",
+        "T3.1"
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
@@ -700,7 +709,9 @@
             ".factory/artifacts/task-runs/T3/validation-report.json",
             ".factory/artifacts/task-runs/T3/work-proof-marker.json"
           ],
-          "repair_task_refs": []
+          "repair_task_refs": [
+            "T3.1"
+          ]
         },
         {
           "acceptance_item_id": "FR4",
@@ -712,7 +723,9 @@
             ".factory/artifacts/task-runs/T3/validation-report.json",
             ".factory/artifacts/task-runs/T3/work-proof-marker.json"
           ],
-          "repair_task_refs": []
+          "repair_task_refs": [
+            "T3.1"
+          ]
         },
         {
           "acceptance_item_id": "FR5",
@@ -867,6 +880,7 @@
         "T2",
         "T2.7",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -904,7 +918,8 @@
         "T11.1",
         "T11.2",
         "T12.1",
-        "T12.2"
+        "T12.2",
+        "T3.1"
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
@@ -1005,7 +1020,9 @@
             ".factory/artifacts/task-runs/T3/validation-report.json",
             ".factory/artifacts/task-runs/T3/work-proof-marker.json"
           ],
-          "repair_task_refs": []
+          "repair_task_refs": [
+            "T3.1"
+          ]
         },
         {
           "acceptance_item_id": "NFR9",
@@ -1024,7 +1041,9 @@
             ".factory/artifacts/task-runs/T3/validation-report.json",
             ".factory/artifacts/task-runs/T3/work-proof-marker.json"
           ],
-          "repair_task_refs": []
+          "repair_task_refs": [
+            "T3.1"
+          ]
         },
         {
           "acceptance_item_id": "NFR10",
@@ -1074,11 +1093,13 @@
       "source_ref": "docs/dev/dev_guides.md#agent-native-cli-policy",
       "status": "partial",
       "task_refs": [
-        "T3"
+        "T3",
+        "T6.1"
       ],
       "implemented_task_refs": [],
       "remaining_task_refs": [
-        "T3"
+        "T3",
+        "T6.1"
       ],
       "evidence_refs": [],
       "acceptance_item_ids": [
@@ -1089,7 +1110,10 @@
           "acceptance_item_id": "CLI-AGENT-001",
           "status": "partial",
           "evidence_refs": [],
-          "repair_task_refs": []
+          "repair_task_refs": [
+            "T3.1",
+            "T6.1"
+          ]
         }
       ],
       "acceptance_criteria": [
@@ -1099,7 +1123,8 @@
       ],
       "requires_human_approval": false,
       "notes": [
-        "Factory-derived CLI quality gate; close with command tests and validation evidence."
+        "Factory-derived CLI quality gate; close with command tests and validation evidence.",
+        "Sprint 4 extends agent-native CLI proof into report rendering and proof-rubric presentation."
       ],
       "delivery_slice_refs": [
         "v0.0"
@@ -1107,7 +1132,7 @@
     }
   ],
   "full_mvp_closure_rule": "Every required acceptance item in acceptance-ledger.json must be implemented, deferred by approval, or blocked with evidence before full MVP closure.",
-  "last_updated_at": "2026-06-14T10:26:37Z",
+  "last_updated_at": "2026-06-18T00:00:00Z",
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
   "acceptance_item_count": 88,
   "mvp_required_version_slices": [
@@ -1124,6 +1149,7 @@
         "T1",
         "T2",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -1138,6 +1164,10 @@
         "record_contract_replay_report",
         "activation_success_metrics",
         "agent_native_cli_conventions"
+      ],
+      "acceptance_item_ids": [
+        "CLI-AGENT-001",
+        "REC-QUALITY-001"
       ]
     },
     {
@@ -1192,6 +1222,7 @@
         "T1",
         "T2",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",

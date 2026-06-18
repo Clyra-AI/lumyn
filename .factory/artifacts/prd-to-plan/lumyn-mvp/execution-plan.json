@@ -36,7 +36,8 @@
         "T2.5",
         "T2.6",
         "T2.7",
-        "T3"
+        "T3",
+        "T3.1"
       ]
     },
     {
@@ -415,6 +416,7 @@
       "task_refs": [
         "T2.7",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -423,7 +425,7 @@
         "T6.1",
         "T6.2"
       ],
-      "why_now": "Close safety/corpus-ready local evidence contracts, then close deterministic record/contract/replay/report foundation without live credentials."
+      "why_now": "Close safety/corpus-ready local evidence contracts, source parser/proof repair, then close deterministic record/contract/replay/report foundation without live credentials."
     },
     {
       "order": 5,
@@ -615,6 +617,7 @@
         "T1",
         "T2",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -629,6 +632,10 @@
         "record_contract_replay_report",
         "activation_success_metrics",
         "agent_native_cli_conventions"
+      ],
+      "acceptance_item_ids": [
+        "CLI-AGENT-001",
+        "REC-QUALITY-001"
       ]
     },
     {
@@ -689,6 +696,7 @@
         "T1",
         "T2",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",

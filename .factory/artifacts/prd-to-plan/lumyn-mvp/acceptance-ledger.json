@@ -211,16 +211,19 @@
         "mvp"
       ],
       "task_refs": [
-        "T3"
+        "T3",
+        "T3.1"
       ],
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
-        ".factory/artifacts/task-runs/T3/validation-report.json"
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands"
       ],
       "status": "implemented",
       "risk_class": "medium",
       "notes": [
-        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
+        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output."
       ],
       "evidence_refs": [
         "internal/source/source.go",
@@ -240,16 +243,19 @@
         "mvp"
       ],
       "task_refs": [
-        "T3"
+        "T3",
+        "T3.1"
       ],
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
-        ".factory/artifacts/task-runs/T3/validation-report.json"
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands"
       ],
       "status": "implemented",
       "risk_class": "medium",
       "notes": [
-        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
+        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output."
       ],
       "evidence_refs": [
         "internal/source/source.go",
@@ -1009,16 +1015,19 @@
         "mvp"
       ],
       "task_refs": [
-        "T3"
+        "T3",
+        "T3.1"
       ],
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
-        ".factory/artifacts/task-runs/T3/validation-report.json"
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands"
       ],
       "status": "partial",
       "risk_class": "medium",
       "notes": [
-        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
+        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output."
       ],
       "evidence_refs": [
         "internal/source/source.go",
@@ -1041,6 +1050,7 @@
         "T1",
         "T2.7",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -1074,7 +1084,8 @@
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
-        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
+        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it.",
+        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output."
       ],
       "evidence_refs": [
         "schemas/command-result.schema.json",
@@ -1248,7 +1259,8 @@
         "release"
       ],
       "task_refs": [
-        "T4.3"
+        "T4.3",
+        "T6.1"
       ],
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/8/validation_commands"
@@ -1257,7 +1269,8 @@
       "risk_class": "medium",
       "notes": [
         "Quantified recorder quality gate requires measured corpus evidence before MVP closure.",
-        "Measure only recorder confidence claims against strong-spec and weak-spec simple REST/OpenAPI fixtures; needs_user_input and coverage_gap are non-claims."
+        "Measure only recorder confidence claims against strong-spec and weak-spec simple REST/OpenAPI fixtures; needs_user_input and coverage_gap are non-claims.",
+        "Reports must render recorder quality evidence with the two-tier proof rubric and exclude unprovable claims."
       ]
     },
     {
@@ -1298,15 +1311,19 @@
         "mvp"
       ],
       "task_refs": [
-        "T3"
+        "T3",
+        "T3.1"
       ],
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
-        ".factory/artifacts/task-runs/T3/validation-report.json"
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands"
       ],
       "status": "implemented",
       "risk_class": "low",
-      "notes": [],
+      "notes": [
+        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output."
+      ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T3/work-proof-marker.json",
         "cmd/lumyn/main_test.go",
@@ -2174,15 +2191,20 @@
         "mvp"
       ],
       "task_refs": [
-        "T3"
+        "T3",
+        "T3.1",
+        "T6.1"
       ],
       "validation_refs": [
-        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/6/validation_commands"
       ],
       "status": "planned",
       "risk_class": "low",
       "notes": [
-        "Factory-derived CLI quality gate added from the agent-native CLI standard."
+        "Factory-derived CLI quality gate added from the agent-native CLI standard.",
+        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output.",
+        "Reports must preserve agent-native compact/quiet JSON posture for proof and source-check results."
       ],
       "delivery_slice_refs": [
         "v0.0"
@@ -2190,5 +2212,5 @@
     }
   ],
   "acceptance_item_count": 88,
-  "last_updated_at": "2026-06-14T10:26:37Z"
+  "last_updated_at": "2026-06-18T00:00:00Z"
 }

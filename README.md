@@ -2,6 +2,11 @@
 
 Lumyn is a local-first OSS CLI for proving whether API workflows can be completed, verified, bounded, and explained with durable evidence.
 
+Lumyn is not a one-shot "agent readiness" generator. Its wedge is continuous
+workflow-completion proof: record a workflow, prove the outcome, keep that proof
+fresh in local reports and CI, and fail closed when source references,
+read-backs, action boundaries, or evidence are not trustworthy.
+
 The full MVP product contract is [docs/product/prd.md](docs/product/prd.md).
 Factory planning artifacts map the full MVP through acceptance item IDs plus
 generic `delivery_slices` / task `delivery_slice_refs` for the internal
@@ -75,6 +80,14 @@ Scanner-gated changes require CodeQL status evidence or an approved exception.
 GitHub `main` branch protection and the `protect-main-from-direct-push` ruleset
 can be audited with `make audit-remote-protection` when GitHub credentials are
 available.
+
+## Source Checks And Reports
+
+`lumyn check` must separate infrastructure-tier source facts from
+workflow/domain-tier proof claims. Missing, unprovable, or hallucinated source
+paths fail source-evidence closure instead of becoming weak findings. Recorder
+and report tasks should carry a grounded workflow insight or business-job field
+so reports explain why the workflow matters, not only which endpoints appeared.
 
 ## Runtime Pins
 
