@@ -3893,7 +3893,7 @@
       ],
       "max_iterations": 2,
       "required_proof_level": "source_evidence",
-      "proof_scorecard_required": false,
+      "proof_scorecard_required": true,
       "proof_scorecard_artifact": "proof-of-behavior-scorecard",
       "structured_parser_policy_refs": [
         "docs/dev/dev_guides.md#structured-data-proof-budgets-and-redaction"
