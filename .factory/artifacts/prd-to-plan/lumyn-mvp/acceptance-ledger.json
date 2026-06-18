@@ -219,11 +219,12 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#task:T3.1/validation_commands",
         ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "implemented",
+      "status": "partial",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
-        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output."
+        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output.",
+        "Status downgraded to partial until T3.1 parser/source-proof repair produces validation evidence."
       ],
       "evidence_refs": [
         "internal/source/source.go",
@@ -251,11 +252,12 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#task:T3.1/validation_commands",
         ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "implemented",
+      "status": "partial",
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
-        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output."
+        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output.",
+        "Status downgraded to partial until T3.1 parser/source-proof repair produces validation evidence."
       ],
       "evidence_refs": [
         "internal/source/source.go",
@@ -1321,10 +1323,11 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#task:T3.1/validation_commands",
         ".factory/artifacts/task-runs/T3/validation-report.json"
       ],
-      "status": "implemented",
+      "status": "partial",
       "risk_class": "low",
       "notes": [
-        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output."
+        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output.",
+        "Status downgraded to partial until T3.1 parser/source-proof repair produces validation evidence."
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T3/work-proof-marker.json",
