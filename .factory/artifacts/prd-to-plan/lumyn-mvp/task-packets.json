@@ -587,7 +587,8 @@
         "work_proof_marker",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "planning_skill_refs": [
         "factory://skills/prd-to-plan",
@@ -929,6 +930,9 @@
           "FR5",
           "FR9",
           "NFR12"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -1136,7 +1140,8 @@
         "scope_closure_map",
         "factoryd_run_once_report",
         "coverage_gate_result",
-        "ci_control_set_evidence"
+        "ci_control_set_evidence",
+        "proof-of-behavior-scorecard"
       ],
       "planning_skill_refs": [
         "factory://skills/prd-to-plan",
@@ -1485,6 +1490,9 @@
         "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
         "acceptance_item_ids": [
           "FDL-001"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -1702,7 +1710,8 @@
         "work_proof_marker",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "ci_lane_refs": [
         {
@@ -1972,6 +1981,9 @@
         "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
         "acceptance_item_ids": [
           "FDAP-001"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -2186,7 +2198,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "ci_lane_refs": [
         {
@@ -2469,6 +2482,9 @@
           "NFR6",
           "NFR9",
           "NFR12"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -2724,7 +2740,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -3067,6 +3084,9 @@
           "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
           "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
           "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -3395,7 +3415,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -3738,6 +3759,9 @@
           "FR14",
           "NFR9",
           "NFR12"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -4039,7 +4063,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -4388,6 +4413,9 @@
           "NFR9",
           "NFR12",
           "NFR6"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -4733,7 +4761,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -5076,6 +5105,9 @@
           "NFR6",
           "NFR9",
           "NFR12"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -5375,7 +5407,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -5717,6 +5750,9 @@
           "NFR2",
           "NFR3",
           "NFR4"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -6020,7 +6056,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -6350,6 +6387,9 @@
           "NFR6",
           "NFR9",
           "NFR12"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -6577,7 +6617,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -6923,6 +6964,9 @@
           "NFR6",
           "NFR9",
           "NFR14"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -7258,7 +7302,8 @@
         "scope_closure_map",
         "factoryd_run_once_report",
         "coverage_gate_result",
-        "first_session_smoke_report"
+        "first_session_smoke_report",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -7594,6 +7639,9 @@
           "ACT-002",
           "ACT-001",
           "ACT-003"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -7877,7 +7925,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -8227,6 +8276,9 @@
           "NFR6",
           "NFR9",
           "NFR12"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -8552,7 +8604,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -8897,6 +8950,9 @@
           "NFR9",
           "NFR12",
           "LVCIS-009"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -9187,7 +9243,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -9519,6 +9576,9 @@
           "NFR9",
           "NFR12",
           "LVCIS-010"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -9780,7 +9840,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -10128,6 +10189,9 @@
           "FR14",
           "NFR9",
           "NFR12"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -10449,7 +10513,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -10842,6 +10907,9 @@
           "FR24",
           "NFR6",
           "NFR11"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -11239,7 +11307,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -11599,6 +11668,9 @@
           "NFR9",
           "NFR12",
           "EVAL-011"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -11896,7 +11968,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -12245,6 +12318,9 @@
           "FR25",
           "NFR10",
           "NFR11"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [
@@ -12580,7 +12656,8 @@
         "pr_lifecycle_report",
         "scope_closure_map",
         "factoryd_run_once_report",
-        "coverage_gate_result"
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
       ],
       "test_matrix_refs": [
         {
@@ -12921,6 +12998,9 @@
           "NFR9",
           "NFR12",
           "EVAL-011"
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
         ]
       },
       "input_artifacts": [

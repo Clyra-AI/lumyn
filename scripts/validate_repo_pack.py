@@ -123,6 +123,18 @@ REQUIRED_PROOF_LEVELS = {
     "workflow_behavior",
     "user_visible_behavior",
 }
+BEHAVIORAL_PROOF_LEVELS = {
+    "workflow_behavior",
+    "user_visible_behavior",
+}
+PROOF_SCORECARD_ARTIFACT = "proof-of-behavior-scorecard"
+REDACTION_RECURSIVE_TERMS = {
+    "owner",
+    "credential",
+    "secret",
+    "endpoint",
+    "path",
+}
 
 REQUIRED_ACCEPTANCE_ITEM_IDS = {
     "FDN-001",
@@ -1368,15 +1380,34 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
     if field in ["validation_commands", "evidence_required", "stop_conditions"]:
         return has_nonempty_list(value)
     if field == "required_proof_level":
-        return value in REQUIRED_PROOF_LEVELS
+        if value not in REQUIRED_PROOF_LEVELS:
+            return False
+        if value in BEHAVIORAL_PROOF_LEVELS:
+            evidence_required = task.get("evidence_required")
+            return (
+                task.get("proof_scorecard_required") is True
+                and task.get("proof_scorecard_artifact") == PROOF_SCORECARD_ARTIFACT
+                and isinstance(evidence_required, list)
+                and PROOF_SCORECARD_ARTIFACT in evidence_required
+            )
+        return True
     if field == "artifact_budget_refs":
         return has_nonempty_list(value)
     if field == "redaction_posture":
         if not isinstance(value, dict):
             return False
-        return value.get("classification") in {"internal", "customer_safe", "public"} and isinstance(
-            value.get("customer_safe"), bool
-        )
+        if value.get("classification") not in {"internal", "customer_safe", "public"}:
+            return False
+        if not isinstance(value.get("customer_safe"), bool):
+            return False
+        if value.get("classification") in {"customer_safe", "public"} or value.get("customer_safe") is True:
+            policy = value.get("recursive_policy")
+            if not isinstance(policy, str) or not policy.strip():
+                return False
+            normalized_policy = policy.lower()
+            if not all(term in normalized_policy for term in REDACTION_RECURSIVE_TERMS):
+                return False
+        return True
     if field == "security_scanner_gates":
         if not isinstance(value, dict):
             return False
@@ -3092,6 +3123,35 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected missing runner-ready task field to fail")
+
+    behavioral_without_scorecard_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    behavioral_without_scorecard_packets["tasks"][1]["required_proof_level"] = "workflow_behavior"
+    behavioral_without_scorecard_packets["tasks"][1]["proof_scorecard_required"] = False
+    try:
+        validate_task_packets(behavioral_without_scorecard_packets, "T2.6")
+    except AssertionError as exc:
+        if "missing guide propagation fields" not in str(exc):
+            raise
+    else:
+        fail("self-test expected behavioral proof without scorecard to fail")
+
+    customer_safe_without_recursive_redaction_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    customer_safe_without_recursive_redaction_packets["tasks"][1]["redaction_posture"] = {
+        "classification": "customer_safe",
+        "customer_safe": True,
+        "redaction_notes": "Shareable evidence requires redaction.",
+    }
+    try:
+        validate_task_packets(customer_safe_without_recursive_redaction_packets, "T2.6")
+    except AssertionError as exc:
+        if "missing guide propagation fields" not in str(exc):
+            raise
+    else:
+        fail("self-test expected customer-safe redaction without recursive policy to fail")
 
     api_contract_without_adr = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
