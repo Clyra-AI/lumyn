@@ -181,7 +181,7 @@
         },
         {
           "acceptance_item_id": "RCRR-002",
-          "status": "implemented",
+          "status": "partial",
           "evidence_refs": [
             ".factory/artifacts/task-runs/T3/work-proof-marker.json",
             "cmd/lumyn/main_test.go",
@@ -701,7 +701,7 @@
         },
         {
           "acceptance_item_id": "FR3",
-          "status": "implemented",
+          "status": "partial",
           "evidence_refs": [
             "internal/source/source.go",
             "internal/source/source_test.go",
@@ -715,7 +715,7 @@
         },
         {
           "acceptance_item_id": "FR4",
-          "status": "implemented",
+          "status": "partial",
           "evidence_refs": [
             "internal/source/source.go",
             "internal/source/source_test.go",
@@ -1094,11 +1094,13 @@
       "status": "partial",
       "task_refs": [
         "T3",
+        "T3.1",
         "T6.1"
       ],
       "implemented_task_refs": [],
       "remaining_task_refs": [
         "T3",
+        "T3.1",
         "T6.1"
       ],
       "evidence_refs": [],
@@ -1124,7 +1126,8 @@
       "requires_human_approval": false,
       "notes": [
         "Factory-derived CLI quality gate; close with command tests and validation evidence.",
-        "Sprint 4 extends agent-native CLI proof into report rendering and proof-rubric presentation."
+        "Sprint 4 extends agent-native CLI proof into report rendering and proof-rubric presentation.",
+        "Sprint 4 adds T3.1 as the parser/source-proof repair guard for CLI source-check closure."
       ],
       "delivery_slice_refs": [
         "v0.0"
