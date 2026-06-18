@@ -2162,8 +2162,33 @@
       "notes": [
         "Product-pull signal requires human/product evidence or approved deferral; it must not be auto-closed by implementation tests."
       ]
+    },
+    {
+      "acceptance_item_id": "CLI-AGENT-001",
+      "group_id": "agent_native_cli_conventions",
+      "source_ref": "docs/dev/dev_guides.md#agent-native-cli-policy",
+      "source_text": "Agent-facing CLI commands support stable JSON mode, non-interactive machine-readable output, quiet/compact posture, typed exits, and machine-readable errors or an approved deferral.",
+      "kind": "quality_gate",
+      "evidence_mode": "automated",
+      "closure_required_for": [
+        "mvp"
+      ],
+      "task_refs": [
+        "T3"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#/tasks/5/validation_commands"
+      ],
+      "status": "planned",
+      "risk_class": "low",
+      "notes": [
+        "Factory-derived CLI quality gate added from the agent-native CLI standard."
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
+      ]
     }
   ],
-  "acceptance_item_count": 87,
+  "acceptance_item_count": 88,
   "last_updated_at": "2026-06-14T10:26:37Z"
 }

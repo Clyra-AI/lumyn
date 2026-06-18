@@ -139,6 +139,30 @@ coverage exception.
 - Product artifacts in `workflows/`, `cassettes/`, `runs/`, `baselines/`, and `examples/` must stay repo-relative and schema-backed when a schema exists.
 - Output contract changes require tests or fixtures before implementation when practical.
 
+## Agent-Native CLI Policy
+
+- Agent-facing commands must support stable JSON output mode.
+- Commands should emit machine-readable output when stdout is not a TTY unless
+  explicitly human-only with an approved exception.
+- `--quiet` and `--compact` must preserve status, evidence refs, typed errors,
+  and the command-result envelope.
+- T3+ task packets must carry acceptance checks for JSON mode, piped or
+  non-interactive behavior, quiet/compact output posture, typed exits, and
+  machine-readable errors when the task touches CLI behavior.
+
+## Structured Data, Proof, Budgets, And Redaction
+
+- OpenAPI, workflow, cassette, evidence, trace, baseline, and report data must
+  be read through parsers, schemas, or stable APIs.
+- Source checks must distinguish syntax proof, source-evidence proof, workflow
+  proof, and user-visible proof; workflow or user-visible closure requires a
+  proof-of-behavior scorecard or approved exception.
+- Large logs, traces, reports, and generated evidence must be cited by artifact
+  ref with full-output hashes and truncation metadata instead of duplicated
+  payloads.
+- `lumyn share` and any customer-safe artifact must recursively redact nested
+  owner, credential, endpoint, secret, and machine-local path fields.
+
 ## Release Integrity
 
 - Primary distribution is a standalone binary.
