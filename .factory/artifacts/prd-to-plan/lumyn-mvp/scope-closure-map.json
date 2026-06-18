@@ -1067,12 +1067,49 @@
           "repair_task_refs": []
         }
       ]
+    },
+    {
+      "scope_item": "Agent-native CLI conventions",
+      "scope_item_id": "agent_native_cli_conventions",
+      "source_ref": "docs/dev/dev_guides.md#agent-native-cli-policy",
+      "status": "partial",
+      "task_refs": [
+        "T3"
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "T3"
+      ],
+      "evidence_refs": [],
+      "acceptance_item_ids": [
+        "CLI-AGENT-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "CLI-AGENT-001",
+          "status": "partial",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "acceptance_criteria": [
+        "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
+        "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
+        "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Factory-derived CLI quality gate; close with command tests and validation evidence."
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
+      ]
     }
   ],
   "full_mvp_closure_rule": "Every required acceptance item in acceptance-ledger.json must be implemented, deferred by approval, or blocked with evidence before full MVP closure.",
   "last_updated_at": "2026-06-14T10:26:37Z",
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
-  "acceptance_item_count": 87,
+  "acceptance_item_count": 88,
   "mvp_required_version_slices": [
     {
       "slice_id": "v0.0",
