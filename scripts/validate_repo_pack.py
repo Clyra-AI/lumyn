@@ -78,6 +78,9 @@ REQUIRED_TASK_FIELDS = [
     "stop_conditions",
     "acceptance_ledger_ref",
     "acceptance_item_ids",
+    "required_proof_level",
+    "artifact_budget_refs",
+    "redaction_posture",
 ]
 
 
@@ -110,7 +113,16 @@ REQUIRED_RUNNER_READY_FIELDS = [
     "scope_exclusions",
     "acceptance_ledger_ref",
     "acceptance_item_ids",
+    "required_proof_level",
+    "artifact_budget_refs",
+    "redaction_posture",
 ]
+REQUIRED_PROOF_LEVELS = {
+    "syntax",
+    "source_evidence",
+    "workflow_behavior",
+    "user_visible_behavior",
+}
 
 REQUIRED_ACCEPTANCE_ITEM_IDS = {
     "FDN-001",
@@ -1355,6 +1367,16 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
         return isinstance(value, int) and not isinstance(value, bool) and value > 0
     if field in ["validation_commands", "evidence_required", "stop_conditions"]:
         return has_nonempty_list(value)
+    if field == "required_proof_level":
+        return value in REQUIRED_PROOF_LEVELS
+    if field == "artifact_budget_refs":
+        return has_nonempty_list(value)
+    if field == "redaction_posture":
+        if not isinstance(value, dict):
+            return False
+        return value.get("classification") in {"internal", "customer_safe", "public"} and isinstance(
+            value.get("customer_safe"), bool
+        )
     if field == "security_scanner_gates":
         if not isinstance(value, dict):
             return False
@@ -2306,6 +2328,14 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
         "validation_commands": ["make prepush-full"],
         "max_iterations": 2,
         "evidence_required": ["validation_report", "work_proof_marker", "factoryd_run_once_report"],
+        "required_proof_level": "source_evidence",
+        "artifact_budget_refs": ["docs/dev/dev_guides.md#structured-data-proof-and-evidence-budgets"],
+        "redaction_posture": {
+            "classification": "internal",
+            "customer_safe": False,
+            "redaction_notes": "Self-test task-run evidence remains internal.",
+            "recursive_policy": "nested owner, credential, secret, endpoint, and machine-local path fields must be redacted before sharing",
+        },
         "stop_conditions": [
             "missing runner-ready task contract",
             "changed path outside allowed_paths",
@@ -3050,6 +3080,18 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected missing planning-skill fields to fail")
+
+    missing_runner_ready_field_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    del missing_runner_ready_field_packets["tasks"][1]["required_proof_level"]
+    try:
+        validate_task_packets(missing_runner_ready_field_packets, "T2.6")
+    except AssertionError as exc:
+        if "missing guide propagation fields" not in str(exc):
+            raise
+    else:
+        fail("self-test expected missing runner-ready task field to fail")
 
     api_contract_without_adr = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]

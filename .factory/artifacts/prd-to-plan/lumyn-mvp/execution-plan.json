@@ -191,7 +191,10 @@
       "ci_control_set_refs_or_evidence",
       "acceptance_ledger_ref",
       "acceptance_item_ids",
-      "max_iterations"
+      "max_iterations",
+      "required_proof_level",
+      "artifact_budget_refs",
+      "redaction_posture"
     ],
     "exception_behavior": "block_or_record_approved_exception",
     "notes": [
