@@ -4607,7 +4607,9 @@
         "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
         "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
         "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
-        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default."
+        "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
+        "Recorder workflow draft implementation consumes only parser/source-check outputs that passed T3.1 structured proof and hallucinated-reference guards.",
+        "Every generated draft assertion, validator, and state binding must cite an infra-tier or workflow/domain-tier proof source or record an approved exception."
       ],
       "required_worker_chain": [
         "task-executor",
