@@ -3342,6 +3342,578 @@
       ]
     },
     {
+      "task_id": "T3.1",
+      "slice_type": "vertical",
+      "objective": "Repair and harden source parsing, source-check proof tiers, and hallucinated-reference rejection before recorder-heavy work begins.",
+      "risk_class": "medium",
+      "blocked_by": [
+        "T3",
+        "T2.6"
+      ],
+      "allowed_paths": [
+        ".factory/artifacts/pr-lifecycle/T3.1/",
+        ".factory/artifacts/task-runs/T3.1/",
+        "cmd/lumyn/",
+        "internal/",
+        "tests/",
+        "examples/",
+        "schemas/",
+        "docs/dev/"
+      ],
+      "forbidden_paths": [
+        ".git/",
+        ".factory/tmp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "validation_commands": [
+        "make test-coverage",
+        "make test-contracts",
+        "make prepush-full"
+      ],
+      "acceptance_checks": [
+        "Parser repair uses structured OpenAPI/docs parsers, schemas, or stable APIs instead of ad hoc string extraction.",
+        "Source checks distinguish infrastructure-tier proofs from workflow/domain-tier proofs and record proof tier in machine-readable output.",
+        "Unprovable, missing, or hallucinated file/path/operation references fail closed with typed errors and do not satisfy source evidence.",
+        "CLI output for parser/source-check failures preserves stable JSON, typed exits, compact/quiet status, and repo-relative evidence refs.",
+        "NFR8: Parser-first source intake is enforced before recorder and workflow-draft implementation proceeds.",
+        "RCRR-002: `lumyn check` findings cite concrete source references that can be re-read from repo-local inputs."
+      ],
+      "required_worker_chain": [
+        "task-executor",
+        "validation-gate",
+        "commit-push",
+        "post-merge-monitor"
+      ],
+      "lifecycle_gates": {
+        "local_validation_required": true,
+        "ci_required": true,
+        "code_review_required": false,
+        "codex_review_required": true,
+        "post_merge_monitor_required": true,
+        "pr_lifecycle_report_required": true,
+        "skip_policy": "approved_exception_required",
+        "commit_push_required": true
+      },
+      "evidence_required": [
+        "validation_report",
+        "work_proof_marker",
+        "ship_packet",
+        "post_merge_report",
+        "pr_lifecycle_report",
+        "scope_closure_map",
+        "factoryd_run_once_report",
+        "coverage_gate_result",
+        "proof-of-behavior-scorecard"
+      ],
+      "test_matrix_refs": [
+        {
+          "tier": "Tier 1 Unit",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "go test ./... -count=1"
+          ]
+        },
+        {
+          "tier": "Tier 9 Contract",
+          "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+          "command_refs": [
+            "make test-contracts"
+          ]
+        },
+        {
+          "tier": "Tier 4 Acceptance",
+          "source_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
+          "status": "planned"
+        }
+      ],
+      "security_scanner_gates": {
+        "required": true,
+        "scanner": "CodeQL",
+        "workflow_ref": ".github/workflows/codeql.yml",
+        "status_check": "CodeQL analyze",
+        "required_for_surfaces": [
+          "dependency additions",
+          "generated-code intake",
+          "CI or workflow changes",
+          "external calls",
+          "redaction/share/live/eval/provider code",
+          "data exposure",
+          "release-sensitive work"
+        ],
+        "exception_policy": "approved_exception_required"
+      },
+      "architecture_guidance_refs": [
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map",
+          "rule": "Medium/high risk tasks record state owner, feedback source, blast radius, source-of-truth impact, and rollback/deletion checks."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations",
+          "rule": "Behavior and schema/output changes use test-first evidence or a structured skipped reason."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#adr-and-decision-triggers",
+          "rule": "Boundary, public contract, failure semantics, credential/network, release, or major reliability/perf changes require ADR or decision note."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#performance-and-cost-triggers",
+          "rule": "Fan-out, repeated runs, or model calls declare expected cost/performance impact."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#reliability-and-recovery-triggers",
+          "rule": "Retry, cleanup, persistence, filesystem mutation, redaction, live network, and provider code require hardening/failure-mode evidence."
+        },
+        {
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
+          "rule": "Deterministic bootstrap has no network/secrets; live work requires approval and evidence."
+        }
+      ],
+      "ci_lane_refs": [
+        {
+          "lane": "fast",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make lint-fast",
+            "make test-fast"
+          ]
+        },
+        {
+          "lane": "core",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            "make test-contracts",
+            "make prepush-full"
+          ]
+        },
+        {
+          "lane": "acceptance",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "command_refs": [
+            ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
+          ]
+        },
+        {
+          "lane": "cross_platform",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/cross-platform-deferred.json"
+        },
+        {
+          "lane": "risk",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "status_check_refs": [
+            "CodeQL analyze"
+          ]
+        },
+        {
+          "lane": "release",
+          "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+          "exception_ref": ".factory/artifacts/exceptions/release-deferred.json"
+        }
+      ],
+      "engineering_policy_refs": [
+        {
+          "policy": "docs_parity",
+          "source_ref": "docs/dev/dev_guides.md#docs-parity",
+          "rule": "Behavior, flags, output shape, exit codes, artifact paths, install paths, and workflow semantics update docs and Factory planning artifacts together."
+        },
+        {
+          "policy": "output_contracts",
+          "source_ref": "docs/dev/dev_guides.md#output-contracts",
+          "rule": "Command-result JSON, exit codes, schemas, and product artifacts are public or executable contracts."
+        },
+        {
+          "policy": "release_integrity",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
+          "rule": "Release-sensitive work defines version, changelog, install, artifact-integrity, and UAT evidence before merge."
+        },
+        {
+          "policy": "provenance_evidence",
+          "source_ref": "docs/dev/dev_guides.md#provenance-evidence",
+          "rule": "Validation, work-proof, PR lifecycle, scanner, and scope-closure evidence use repo-relative refs."
+        },
+        {
+          "policy": "ci_control_set",
+          "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+          "rule": "CI/workflow/policy/lifecycle work preserves required-check metadata, owner-review coverage, workflow permissions, concurrency, timeouts, toolchain-pin setup, action-ref posture, and branch-protection evidence or approved exceptions."
+        },
+        {
+          "policy": "structured_parser_policy",
+          "source_ref": "docs/dev/dev_guides.md#structured-data-proof-budgets-and-redaction",
+          "rule": "Structured data is read through parsers, schemas, stable APIs, or approved exceptions."
+        },
+        {
+          "policy": "agent_native_cli",
+          "source_ref": "docs/dev/dev_guides.md#agent-native-cli-policy",
+          "rule": "CLI tasks define JSON, non-interactive, quiet, compact, typed-exit, and machine-readable error behavior before agent-facing use."
+        },
+        {
+          "policy": "artifact_budget_and_refs",
+          "source_ref": "docs/dev/dev_guides.md#structured-data-proof-budgets-and-redaction",
+          "rule": "Large output is cited by artifact ref with full-output hash and truncation metadata."
+        },
+        {
+          "policy": "customer_safe_redaction",
+          "source_ref": "docs/dev/dev_guides.md#structured-data-proof-budgets-and-redaction",
+          "rule": "Shareable artifacts must declare redaction posture and recursively redact sensitive data."
+        }
+      ],
+      "planning_skill_refs": [
+        "factory://skills/prd-to-plan",
+        "factory://skills/execution-compiler"
+      ],
+      "runtime_pins": {
+        "language": "go",
+        "go_version": "1.26.4",
+        "module_path": "github.com/Clyra-AI/lumyn",
+        "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
+        "distribution_target": "standalone_binary",
+        "secondary_distribution_target": "homebrew_after_first_binary",
+        "not_primary_distribution_target": "pypi",
+        "artifact_namespaces": {
+          "factory_artifacts": ".factory/artifacts/",
+          "factory_transient": ".factory/tmp/",
+          "workflows": "workflows/",
+          "cassettes": "cassettes/",
+          "runs": "runs/",
+          "baselines": "baselines/",
+          "schemas": "schemas/",
+          "examples": "examples/"
+        },
+        "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
+        "toolchain_version": "1.26.4",
+        "module_or_package_path": "github.com/Clyra-AI/lumyn",
+        "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
+        "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
+        "mvp_eval_providers": [
+          "openai_compatible_http_adapter",
+          "anthropic_messages_http_adapter"
+        ]
+      },
+      "slice_rationale": {
+        "slice_type": "vertical",
+        "why_this_shape": "Small vertical repair slice: it changes source-check behavior, tests, and proof evidence together before recorder tasks consume parser output.",
+        "vertical_slice_preference": "Vertical slices are preferred; foundation-only work must justify why downstream product slices need the shared contract first."
+      },
+      "changelog": {
+        "impact": "required_when_implemented",
+        "section": "Unreleased",
+        "draft_entry": "Harden source parsing and proof-tier checks before recorder-heavy implementation.",
+        "semver_marker_override": "pre_1_0_minor_candidate"
+      },
+      "contract_impact": "Adds public `lumyn init` and `lumyn check` behavior, config output, source intake, and workflow-relevant finding output contracts.",
+      "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
+      "architecture_constraints": [
+        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
+        "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
+        "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
+        "Record state owner, feedback source, deletion/blast-radius impact, rollback path, and evidence refs for medium/high risk architecture changes."
+      ],
+      "adr_required": true,
+      "adr_trigger_reason": "Required because this task changes public, executable, CLI, schema, artifact, CI/review, redaction/share, live/eval, or proof semantics captured by the Lumyn plan.",
+      "tdd_first_failing_tests": [
+        "Add or update the smallest failing test, fixture, or schema validation for T3 acceptance before implementation when practical.",
+        "If a red-first check is not practical, record test_first_skipped_reason in the validation report with compensating evidence."
+      ],
+      "cost_perf_impact": {
+        "level": "low",
+        "measurement_expectation": "No measurable runtime or cost increase expected beyond normal local CLI validation.",
+        "budget_trigger": "Add explicit performance/cost evidence if implementation introduces repeated replay, live network, model calls, generated artifacts, or large fixture processing."
+      },
+      "chaos_failure_hypothesis": {
+        "required": false,
+        "hypothesis": "Missing OpenAPI/docs inputs, unreadable paths, or invalid config must produce actionable source findings without network access.",
+        "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
+      },
+      "semantic_invariants": [
+        "Every command path emits the stable command-result envelope, including failures.",
+        "Exit codes remain aligned with docs/product/prd.md and tests.",
+        "Validation evidence records command, exit status, and skipped-command reason when applicable.",
+        "Factory evidence and product artifacts use repo-relative paths only.",
+        "No task may claim closure for PRD scope that remains missing, blocked, or deferred without explicit evidence."
+      ],
+      "plan_drift_policy": "If this task changes runtime, distribution, provider, dependency, artifact namespace, live-work, guide, validation-contract, acceptance-ledger, acceptance-mapping, or scope-closure decisions, update context brief, execution plan, task packets, validation contract, acceptance ledger, acceptance mapping, and scope-closure map before implementation continues.",
+      "factory_compatibility": {
+        "factory_contract_version": "1.0",
+        "profile_ref": "profiles/lumyn.yaml",
+        "skill_vocabulary_version": "2026-06-09",
+        "skill_inventory_ref": "skills/README.md",
+        "generated_by": "prd-to-plan+execution-compiler",
+        "generated_at": "2026-06-09T00:00:00Z",
+        "deprecated_worker_policy": "block_active_aliases",
+        "deprecated_worker_aliases": [
+          {
+            "deprecated": "ship-pr",
+            "replacement": "commit-push",
+            "status": "deprecated",
+            "migration_behavior": "block active task packets until required_worker_chain is migrated"
+          }
+        ]
+      },
+      "scope_exclusions": [
+        "MCP recording",
+        "event assertions",
+        "hosted dashboard",
+        "runtime enforcement",
+        "production trace import",
+        "multi-provider eval panels",
+        "training shared models on private artifacts"
+      ],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json#/plan_drift_policy",
+      "worker_type": "codex_cli",
+      "factoryd_runtime": {
+        "state_dir": ".factoryd/",
+        "workspace_root": ".factoryd/workspaces/",
+        "branch_prefix": "codex",
+        "worker_type": "codex_cli",
+        "worker_command": "",
+        "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
+        "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
+        "network_posture": "offline by default until live sandbox/model work is approved",
+        "capability_grants": []
+      },
+      "stop_conditions": [
+        "missing runner-ready task contract",
+        "changed path outside allowed_paths",
+        "forbidden path changed",
+        "required validation command failed",
+        "plan drift detected",
+        "required lifecycle evidence missing without approved exception",
+        "credential or network access required before approval posture is unlocked",
+        "coverage policy evidence is missing or below threshold without an approved scoped exception",
+        "required-check metadata, workflow permissions, concurrency, timeouts, owner-review coverage, action-ref posture, or branch-protection evidence is missing for CI/workflow/policy/lifecycle work",
+        "acceptance ledger item missing, unmapped, or closed only at group level"
+      ],
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {
+            "scope": "go_first_party_packages_overall",
+            "threshold": 75,
+            "command_refs": [
+              "make test-coverage"
+            ]
+          },
+          {
+            "scope": "go_stable_command_or_core_packages",
+            "threshold": 85,
+            "command_refs": [
+              "make test-coverage"
+            ],
+            "exception_ref": ".factory/artifacts/exceptions/stable-command-core-coverage-deferred.json"
+          }
+        ],
+        "command_refs": [
+          "make test-coverage",
+          "make prepush-full"
+        ],
+        "exception_policy": "coverage misses block promotion unless the task records an approved scoped exception with owner, reason, expiry or follow-up task, and compensating validation evidence"
+      },
+      "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+      "acceptance_item_ids": [
+        "RCRR-002",
+        "FR3",
+        "FR4",
+        "NFR8",
+        "NFR9",
+        "CLI-AGENT-001"
+      ],
+      "validation_contract_inheritance": {
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "RCRR-001",
+          "RCRR-002",
+          "ACT-002",
+          "FR1",
+          "FR2",
+          "FR3",
+          "FR4",
+          "NFR1",
+          "NFR8",
+          "NFR9",
+          "FR14",
+          "CLI-AGENT-001"
+        ],
+        "acceptance_criteria": [
+          "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
+          "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
+          "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
+        ],
+        "evidence_required": [
+          "proof-of-behavior-scorecard"
+        ]
+      },
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      ],
+      "mvp_required_version_slices": [
+        "v0.0"
+      ],
+      "delivery_slice_refs": [
+        "v0.0"
+      ],
+      "commands": [
+        "make prepush-full"
+      ],
+      "baseline_commands": [
+        "make lint-fast",
+        "make test-fast"
+      ],
+      "red_first_commands": [
+        "make test-contracts"
+      ],
+      "final_validation_commands": [
+        "make prepush-full"
+      ],
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "RCRR-002",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "validation_report",
+            "work_proof_marker",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR3",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "validation_report",
+            "work_proof_marker",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "FR4",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "validation_report",
+            "work_proof_marker",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR8",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "validation_report",
+            "work_proof_marker",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "NFR9",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "validation_report",
+            "work_proof_marker",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "CLI-AGENT-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "validation_report",
+            "work_proof_marker",
+            "scope_closure_report"
+          ]
+        }
+      ],
+      "ci_control_refs": {
+        "required_checks_ref": ".github/required-checks.json",
+        "required_status_checks": [
+          "validate",
+          "CodeQL analyze"
+        ],
+        "branch_protection_required": true,
+        "codeowners_ref": ".github/CODEOWNERS",
+        "action_ref_exceptions_ref": ".github/action-ref-exceptions.yaml"
+      },
+      "changelog_intent": {
+        "required": true,
+        "path": "CHANGELOG.md",
+        "reason": "Task may affect public CLI, artifact, docs, schema, or delivery behavior; record no-op rationale when no user-facing change occurs."
+      },
+      "versioning_impact": "Pre-1.0 MVP work; public output, schema, artifact, CLI, or install behavior changes must record migration notes before release.",
+      "migration_impact": "None expected unless this task changes public outputs, schemas, artifacts, install/distribution behavior, or persisted evidence.",
+      "docs_sync_refs": [
+        "README.md",
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "docs/product/prd.md"
+      ],
+      "max_iterations": 2,
+      "required_proof_level": "source_evidence",
+      "proof_scorecard_required": false,
+      "proof_scorecard_artifact": "proof-of-behavior-scorecard",
+      "structured_parser_policy_refs": [
+        "docs/dev/dev_guides.md#structured-data-proof-budgets-and-redaction"
+      ],
+      "artifact_budget_refs": [
+        "docs/dev/dev_guides.md#structured-data-proof-budgets-and-redaction"
+      ],
+      "redaction_posture": {
+        "classification": "internal",
+        "customer_safe": false,
+        "redaction_notes": "Recursive redaction is required before customer-safe/public sharing; task-run evidence remains internal unless explicitly exported.",
+        "recursive_policy": "nested owner, credential, secret, endpoint, and machine-local path fields must be redacted before sharing"
+      },
+      "agent_native_cli_checks": [
+        "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
+        "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
+        "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
+      ]
+    },
+    {
       "task_id": "T4.1",
       "slice_type": "vertical",
       "objective": "Implement deterministic HTTP recorder capture, redaction, and normalized event persistence for the bundled mock API.",
@@ -3349,6 +3921,7 @@
       "blocked_by": [
         "T2",
         "T3",
+        "T3.1",
         "T2.6"
       ],
       "allowed_paths": [
@@ -3389,7 +3962,9 @@
         "FR2: FR2: Local-First Operation - The MVP must work without a hosted Lumyn account.",
         "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
         "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
-        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
+        "Recorder implementation consumes only parser/source-check outputs that passed T3.1 structured proof and hallucinated-reference guards.",
+        "Any source-derived recorder suggestion must cite an infra-tier or workflow/domain-tier proof source."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -3994,7 +4569,8 @@
       "risk_class": "medium",
       "blocked_by": [
         "T4.1",
-        "T2.6"
+        "T2.6",
+        "T3.1"
       ],
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T4.2/",
@@ -4693,7 +5269,8 @@
       "risk_class": "medium",
       "blocked_by": [
         "T4.2",
-        "T2.6"
+        "T2.6",
+        "T3.1"
       ],
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T4.3/",
@@ -4735,7 +5312,9 @@
         "FR14: FR14: Stable CLI Output - Lumyn must support stable exit codes and `--json`.",
         "NFR6: NFR6: Local Privacy - Lumyn must not send specs, docs, traces, cassettes, or API responses to Lumyn by default.",
         "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
-        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned."
+        "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
+        "REC-QUALITY-001 measurement excludes unprovable parser/source-check references from accepted claims.",
+        "Recorder quality evidence carries the two-tier proof rubric for every drafted assertion, read-back candidate, and state binding."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -6591,7 +7170,9 @@
         "NFR9: NFR9: Debuggable Errors - Errors must include file, path, command, object, or line references where possible.",
         "NFR14: NFR14: No Dashboard Dependency - The MVP must explain value through local CLI output and local reports.",
         "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
-        "RCRR-012: `lumyn demo` includes bundled proof-gap and boundary-violation/safety finding examples without requiring a hosted account, model key, or sandbox."
+        "RCRR-012: `lumyn demo` includes bundled proof-gap and boundary-violation/safety finding examples without requiring a hosted account, model key, or sandbox.",
+        "Reports render the workflow insight/business-job framing when present and distinguish it from endpoint enumeration.",
+        "Reports show infra-tier proof, workflow/domain-tier proof, proof gaps, and unprovable-path hard failures separately."
       ],
       "required_worker_chain": [
         "task-executor",
@@ -6947,7 +7528,9 @@
         "NFR4",
         "NFR6",
         "NFR9",
-        "NFR14"
+        "NFR14",
+        "CLI-AGENT-001",
+        "REC-QUALITY-001"
       ],
       "validation_contract_inheritance": {
         "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
@@ -6963,10 +7546,17 @@
           "NFR4",
           "NFR6",
           "NFR9",
-          "NFR14"
+          "NFR14",
+          "CLI-AGENT-001",
+          "REC-QUALITY-001"
         ],
         "evidence_required": [
           "proof-of-behavior-scorecard"
+        ],
+        "acceptance_criteria": [
+          "Reports render the workflow insight/business-job framing when present.",
+          "Reports distinguish infra-tier proof, workflow/domain-tier proof, proof gaps, and unprovable-path hard failures.",
+          "Report tasks preserve agent-native CLI output and recorder quality proof-rubric evidence."
         ]
       },
       "input_artifacts": [
@@ -7013,8 +7603,8 @@
             "deferred_with_approval"
           ],
           "evidence_required": [
-            "work_proof_marker",
             "validation_report",
+            "work_proof_marker",
             "scope_closure_report"
           ]
         },
@@ -7028,8 +7618,8 @@
             "deferred_with_approval"
           ],
           "evidence_required": [
-            "work_proof_marker",
             "validation_report",
+            "work_proof_marker",
             "scope_closure_report"
           ]
         },
@@ -7043,8 +7633,8 @@
             "deferred_with_approval"
           ],
           "evidence_required": [
-            "work_proof_marker",
             "validation_report",
+            "work_proof_marker",
             "scope_closure_report"
           ]
         },
@@ -7058,8 +7648,8 @@
             "deferred_with_approval"
           ],
           "evidence_required": [
-            "work_proof_marker",
             "validation_report",
+            "work_proof_marker",
             "scope_closure_report"
           ]
         },
@@ -7073,8 +7663,8 @@
             "deferred_with_approval"
           ],
           "evidence_required": [
-            "work_proof_marker",
             "validation_report",
+            "work_proof_marker",
             "scope_closure_report"
           ]
         },
@@ -7088,8 +7678,8 @@
             "deferred_with_approval"
           ],
           "evidence_required": [
-            "work_proof_marker",
             "validation_report",
+            "work_proof_marker",
             "scope_closure_report"
           ]
         },
@@ -7103,8 +7693,8 @@
             "deferred_with_approval"
           ],
           "evidence_required": [
-            "work_proof_marker",
             "validation_report",
+            "work_proof_marker",
             "scope_closure_report"
           ]
         },
@@ -7118,8 +7708,8 @@
             "deferred_with_approval"
           ],
           "evidence_required": [
-            "work_proof_marker",
             "validation_report",
+            "work_proof_marker",
             "scope_closure_report"
           ]
         },
@@ -7133,8 +7723,8 @@
             "deferred_with_approval"
           ],
           "evidence_required": [
-            "work_proof_marker",
             "validation_report",
+            "work_proof_marker",
             "scope_closure_report"
           ]
         },
@@ -7148,8 +7738,8 @@
             "deferred_with_approval"
           ],
           "evidence_required": [
-            "work_proof_marker",
             "validation_report",
+            "work_proof_marker",
             "scope_closure_report"
           ]
         },
@@ -7163,8 +7753,8 @@
             "deferred_with_approval"
           ],
           "evidence_required": [
-            "work_proof_marker",
             "validation_report",
+            "work_proof_marker",
             "scope_closure_report"
           ]
         },
@@ -7178,8 +7768,38 @@
             "deferred_with_approval"
           ],
           "evidence_required": [
-            "work_proof_marker",
             "validation_report",
+            "work_proof_marker",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "CLI-AGENT-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "validation_report",
+            "work_proof_marker",
+            "scope_closure_report"
+          ]
+        },
+        {
+          "acceptance_item_id": "REC-QUALITY-001",
+          "allowed_statuses": [
+            "implemented",
+            "partial",
+            "missing",
+            "blocked",
+            "deferred_with_approval"
+          ],
+          "evidence_required": [
+            "validation_report",
+            "work_proof_marker",
             "scope_closure_report"
           ]
         }
@@ -7275,7 +7895,9 @@
         "NFR12: NFR12: Artifact Stability - Schemas and artifacts must be versioned.",
         "RCRR-012: `lumyn demo` includes bundled proof-gap and boundary-violation/safety finding examples without requiring a hosted account, model key, or sandbox.",
         "First-session smoke script runs init, check, demo report open/render probe, record, and replay verification against bundled local fixtures with elapsed-time evidence.",
-        "First-session smoke evidence records ACT-001 under 5 minutes, ACT-002 under 10 minutes, and ACT-003 under 30 minutes without model key, sandbox, hosted account, or network."
+        "First-session smoke evidence records ACT-001 under 5 minutes, ACT-002 under 10 minutes, and ACT-003 under 30 minutes without model key, sandbox, hosted account, or network.",
+        "Reports render the workflow insight/business-job framing when present and distinguish it from endpoint enumeration.",
+        "Reports show infra-tier proof, workflow/domain-tier proof, proof gaps, and unprovable-path hard failures separately."
       ],
       "required_worker_chain": [
         "task-executor",

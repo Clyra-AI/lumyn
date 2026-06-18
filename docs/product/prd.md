@@ -118,6 +118,13 @@ Why: POST /customers returned 200, but no reliable read-back confirms status=act
 Fix target: expose or document GET /customers/{id}.status.
 ```
 
+Source checks and reports should also explain the workflow's high-value business
+job when evidence supports it. That framing is not a marketing claim; it is a
+grounded statement tied to the workflow goal, expected outcome, validators,
+trace, source references, and fix target. This keeps Lumyn focused on
+completion proof and continuous CI evidence rather than generation-time
+readiness scoring.
+
 ### Workflow YAML Is The Source Of Truth
 
 Workflow YAML remains the core durable artifact. The MVP should not require users to start from a blank YAML file.

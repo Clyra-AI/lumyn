@@ -37,6 +37,7 @@
         "T2",
         "T2.7",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -245,6 +246,7 @@
         "T2",
         "T2.7",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -333,6 +335,7 @@
         "T2",
         "T2.7",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -396,7 +399,8 @@
       "source_ref": "docs/dev/dev_guides.md#agent-native-cli-policy",
       "required": true,
       "task_refs": [
-        "T3"
+        "T3",
+        "T6.1"
       ],
       "acceptance_refs": [
         "CLI-AGENT-001"
@@ -414,7 +418,9 @@
         {
           "acceptance_item_id": "CLI-AGENT-001",
           "task_refs": [
-            "T3"
+            "T3",
+            "T3.1",
+            "T6.1"
           ],
           "evidence_mode": "automated",
           "delivery_slice_refs": [
@@ -442,6 +448,7 @@
         "T1",
         "T2",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -456,6 +463,10 @@
         "record_contract_replay_report",
         "activation_success_metrics",
         "agent_native_cli_conventions"
+      ],
+      "acceptance_item_ids": [
+        "CLI-AGENT-001",
+        "REC-QUALITY-001"
       ]
     },
     {
@@ -510,6 +521,7 @@
         "T1",
         "T2",
         "T3",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
