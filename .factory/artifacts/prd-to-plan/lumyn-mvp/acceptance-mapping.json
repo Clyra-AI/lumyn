@@ -400,6 +400,7 @@
       "required": true,
       "task_refs": [
         "T3",
+        "T3.1",
         "T6.1"
       ],
       "acceptance_refs": [
