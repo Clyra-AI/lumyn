@@ -41,7 +41,8 @@
     "activation_success_metrics",
     "product_pull_success_metrics",
     "functional_requirements",
-    "nonfunctional_requirements"
+    "nonfunctional_requirements",
+    "agent_native_cli_conventions"
   ],
   "proof_requirements": [
     "Validation reports must record command, exit status, and skipped-command reason when applicable.",
@@ -475,7 +476,7 @@
     "PULL-003: User configures live sandbox verify.",
     "PULL-004: User asks to run live eval before an API/docs release.",
     "PULL-005: User fixes docs, OpenAPI descriptions, auth guidance, endpoint ambiguity, or read-back gaps based on Lumyn output.",
-    "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
+    "CLI-AGENT-001: Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
     "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
     "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
   ],
@@ -505,7 +506,8 @@
       ],
       "acceptance_group_refs": [
         "record_contract_replay_report",
-        "activation_success_metrics"
+        "activation_success_metrics",
+        "agent_native_cli_conventions"
       ]
     },
     {
@@ -577,7 +579,8 @@
       ],
       "acceptance_group_refs": [
         "record_contract_replay_report",
-        "activation_success_metrics"
+        "activation_success_metrics",
+        "agent_native_cli_conventions"
       ],
       "acceptance_item_ids": [
         "FDN-001",
@@ -600,7 +603,8 @@
         "PULL-005",
         "REC-QUALITY-001",
         "FDN-003",
-        "RCRR-012"
+        "RCRR-012",
+        "CLI-AGENT-001"
       ],
       "legacy_slice_ref": "v0.0"
     },
