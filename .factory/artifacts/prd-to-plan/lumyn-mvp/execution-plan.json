@@ -624,7 +624,8 @@
       ],
       "acceptance_group_refs": [
         "record_contract_replay_report",
-        "activation_success_metrics"
+        "activation_success_metrics",
+        "agent_native_cli_conventions"
       ]
     },
     {
@@ -697,7 +698,8 @@
       ],
       "acceptance_group_refs": [
         "record_contract_replay_report",
-        "activation_success_metrics"
+        "activation_success_metrics",
+        "agent_native_cli_conventions"
       ],
       "acceptance_item_ids": [
         "FDN-001",

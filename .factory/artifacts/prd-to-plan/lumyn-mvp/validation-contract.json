@@ -476,9 +476,7 @@
     "PULL-003: User configures live sandbox verify.",
     "PULL-004: User asks to run live eval before an API/docs release.",
     "PULL-005: User fixes docs, OpenAPI descriptions, auth guidance, endpoint ambiguity, or read-back gaps based on Lumyn output.",
-    "CLI-AGENT-001: Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
-    "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
-    "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
+    "CLI-AGENT-001: Agent-facing CLI output supports stable JSON mode, non-interactive or piped output is machine-readable unless the command is explicitly human-only, and quiet/compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
   ],
   "mvp_required_version_slices": [
     {
