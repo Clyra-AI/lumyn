@@ -634,8 +634,28 @@
         "agent_native_cli_conventions"
       ],
       "acceptance_item_ids": [
-        "CLI-AGENT-001",
-        "REC-QUALITY-001"
+        "FDN-001",
+        "FDN-002",
+        "RCRR-001",
+        "RCRR-002",
+        "RCRR-003",
+        "RCRR-004",
+        "RCRR-005",
+        "RCRR-006",
+        "RCRR-007",
+        "RCRR-008",
+        "RCRR-009",
+        "RCRR-010",
+        "RCRR-011",
+        "ACT-001",
+        "ACT-002",
+        "ACT-003",
+        "ACT-004",
+        "PULL-005",
+        "REC-QUALITY-001",
+        "FDN-003",
+        "RCRR-012",
+        "CLI-AGENT-001"
       ]
     },
     {
@@ -656,6 +676,23 @@
       "acceptance_group_refs": [
         "live_verify_boundary_ci_share",
         "product_pull_success_metrics"
+      ],
+      "acceptance_item_ids": [
+        "LVCIS-001",
+        "LVCIS-002",
+        "LVCIS-003",
+        "LVCIS-004",
+        "LVCIS-005",
+        "LVCIS-006",
+        "LVCIS-007",
+        "LVCIS-008",
+        "PULL-002",
+        "PULL-003",
+        "PULL-001",
+        "PULL-004",
+        "PULL-005",
+        "LVCIS-009",
+        "LVCIS-010"
       ]
     },
     {
@@ -676,6 +713,24 @@
       "acceptance_group_refs": [
         "live_agent_eval",
         "product_pull_success_metrics"
+      ],
+      "acceptance_item_ids": [
+        "EVAL-001",
+        "EVAL-002",
+        "EVAL-003",
+        "EVAL-004",
+        "EVAL-005",
+        "EVAL-006",
+        "EVAL-007",
+        "EVAL-008",
+        "EVAL-009",
+        "EVAL-010",
+        "PULL-001",
+        "PULL-004",
+        "PULL-002",
+        "PULL-003",
+        "PULL-005",
+        "EVAL-011"
       ]
     }
   ],
