@@ -418,5 +418,15 @@
   ],
   "delivery_slice_refs": [
     "v0.0"
-  ]
+  ],
+  "required_proof_level": "source_evidence",
+  "artifact_budget_refs": [
+    "docs/dev/dev_guides.md#structured-data-proof-and-evidence-budgets"
+  ],
+  "redaction_posture": {
+    "classification": "internal",
+    "customer_safe": false,
+    "redaction_notes": "Repair task-run evidence remains internal unless explicitly exported.",
+    "recursive_policy": "nested owner, credential, secret, endpoint, and machine-local path fields must be redacted before sharing"
+  }
 }

@@ -246,7 +246,10 @@
       "ci_control_set_refs_or_evidence",
       "acceptance_ledger_ref",
       "acceptance_item_ids",
-      "max_iterations"
+      "max_iterations",
+      "required_proof_level",
+      "artifact_budget_refs",
+      "redaction_posture"
     ],
     "validator_ref": "scripts/validate_repo_pack.py"
   },
