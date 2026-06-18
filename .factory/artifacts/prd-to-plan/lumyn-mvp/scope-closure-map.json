@@ -110,6 +110,7 @@
         "T3"
       ],
       "remaining_task_refs": [
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -117,8 +118,7 @@
         "T5.2",
         "T6.1",
         "T6.2",
-        "T10",
-        "T3.1"
+        "T10"
       ],
       "notes": [
         "T1 established the pinned Go CLI skeleton, command-result envelope, exit-code constants, config defaults, and validation lanes.",
@@ -287,6 +287,7 @@
           "status": "partial",
           "evidence_refs": [],
           "repair_task_refs": [
+            "T4.3",
             "T6.1"
           ]
         },
@@ -617,6 +618,7 @@
       "remaining_task_refs": [
         "T1",
         "T2",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -631,8 +633,7 @@
         "T11.1",
         "T11.2",
         "T12.1",
-        "T12.2",
-        "T3.1"
+        "T12.2"
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
@@ -904,6 +905,7 @@
       "remaining_task_refs": [
         "T1",
         "T2",
+        "T3.1",
         "T4.1",
         "T4.2",
         "T4.3",
@@ -918,8 +920,7 @@
         "T11.1",
         "T11.2",
         "T12.1",
-        "T12.2",
-        "T3.1"
+        "T12.2"
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
