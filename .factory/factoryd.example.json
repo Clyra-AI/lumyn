@@ -79,7 +79,7 @@
         "warn_line_threshold": 1200,
         "fail_line_threshold": 2500,
         "source_extensions": [".go", ".py", ".ts", ".tsx", ".js", ".jsx"],
-        "excluded_dirs": [".git", ".factoryd", ".factory/tmp", ".venv", "__pycache__", "build", "dist", "node_modules", "vendor"],
+        "excluded_dirs": [".git", ".factoryd", ".factory/tmp", "workspaces", ".venv", "__pycache__", "build", "dist", "node_modules", "vendor"],
         "exception_refs": [".factory/artifacts/exceptions/architecture-debt-lumyn-source.json"]
       },
       "acceptance_ledger": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"

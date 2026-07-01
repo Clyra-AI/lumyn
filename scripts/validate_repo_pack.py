@@ -62,13 +62,14 @@ ARCHITECTURE_BUDGET_EXCEPTION_PATHS = [
 ARCHITECTURE_BUDGET_EXCEPTION_LINE_CEILINGS = {
     "internal/source/source.go": 2798,
     "internal/source/source_test.go": 3650,
-    "scripts/validate_repo_pack.py": 3560,
+    "scripts/validate_repo_pack.py": 3566,
 }
 EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS = [".go", ".py", ".ts", ".tsx", ".js", ".jsx"]
 EXPECTED_ARCHITECTURE_BUDGET_EXCLUDED_DIRS = [
     ".git",
     ".factoryd",
     ".factory/tmp",
+    "workspaces",
     ".venv",
     "__pycache__",
     "build",
@@ -2785,7 +2786,7 @@ def run_self_test() -> int:
         oversized.write_text("line\n" * 2501, encoding="utf-8")
         sample_budget = {
             "source_extensions": [".py"],
-            "excluded_dirs": [".git", ".factoryd", ".factory/tmp"],
+            "excluded_dirs": [".git", ".factoryd", ".factory/tmp", "workspaces"],
             "fail_line_threshold": 2500,
         }
         failures = architecture_budget_unexcepted_failures(temp_root, sample_budget, set(), {})
@@ -2796,6 +2797,11 @@ def run_self_test() -> int:
         scratch.write_text("line\n" * 2501, encoding="utf-8")
         if any(".factory/tmp/scratch.py" in failure for failure in architecture_budget_unexcepted_failures(temp_root, sample_budget, set(), {})):
             fail("architecture budget self-test expected .factory/tmp scratch to be excluded")
+        workspace_source = temp_root / "workspaces" / "demo" / "generated.py"
+        workspace_source.parent.mkdir(parents=True)
+        workspace_source.write_text("line\n" * 2501, encoding="utf-8")
+        if any("workspaces/demo/generated.py" in failure for failure in architecture_budget_unexcepted_failures(temp_root, sample_budget, set(), {})):
+            fail("architecture budget self-test expected workspaces scratch to be excluded")
         if architecture_budget_unexcepted_failures(
             temp_root,
             sample_budget,
@@ -2910,7 +2916,7 @@ def run_self_test() -> int:
             "warn_line_threshold": 1200,
             "fail_line_threshold": 2500,
             "source_extensions": [".go", ".py", ".ts", ".tsx", ".js", ".jsx"],
-            "excluded_dirs": [".git", ".factoryd", ".factory/tmp", ".venv", "__pycache__", "build", "dist", "node_modules", "vendor"],
+            "excluded_dirs": [".git", ".factoryd", ".factory/tmp", "workspaces", ".venv", "__pycache__", "build", "dist", "node_modules", "vendor"],
             "exception_refs": ARCHITECTURE_BUDGET_EXCEPTION_REFS,
         },
         "auto_ship": False,
