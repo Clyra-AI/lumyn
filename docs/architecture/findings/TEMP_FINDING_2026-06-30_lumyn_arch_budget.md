@@ -1,8 +1,17 @@
-# TEMP Task Plan: Lumyn Architecture Budget And Early Source Split
+# TEMP Finding: Lumyn Architecture Budget And Early Source Split
 
 Date: 2026-06-30
-Status: queued after Factory/factoryd architecture budget contracts
+Status: source finding; not dispatchable
 Repo: Lumyn
+
+## Boundary
+
+This file is repo-local source evidence for future Factory/factoryd planning.
+It is not a generated execution contract, task packet, acceptance ledger, or
+scope-closure artifact. Before implementation starts, this finding must be
+ingested or promoted through the governed Factory path so runner-ready task
+packets, validation commands, lifecycle evidence, and acceptance refs are
+materialized.
 
 ## Objective
 
@@ -43,20 +52,11 @@ tests.
 - `internal/source/evidence`: evidence mapping and proof-honesty fields.
 - `internal/source/report`: report-facing projections.
 
-## Validation
+## Required Promotion
 
-- `make lint-fast`
-- `make test-fast`
-- `make test-coverage`
-- `make test-contracts`
-- targeted package tests for split behavior
-- `make prepush-full`
-
-## Acceptance Criteria
-
-- Lumyn keeps the thin CLI entrypoint shape.
-- `internal/source` no longer carries every source responsibility in one file.
-- Test files are split around package behavior.
-- Future tasks have deterministic architecture budget feedback before PR
-  review.
+- Source kind: review finding / architecture finding.
+- Candidate mission: `systemic-architecture-budget`.
+- Required command before implementation: `factoryd ingest --kind review` or
+  the equivalent governed Factory planning path.
+- Required validation after materialization: `make prepush-full`.
 
