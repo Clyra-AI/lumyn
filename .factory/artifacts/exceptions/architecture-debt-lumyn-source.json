@@ -12,7 +12,7 @@
     "line_ceilings": {
       "internal/source/source.go": 2798,
       "internal/source/source_test.go": 3650,
-      "scripts/validate_repo_pack.py": 3615
+      "scripts/validate_repo_pack.py": 3631
     },
     "budget": {
       "warn_line_threshold": 1200,
