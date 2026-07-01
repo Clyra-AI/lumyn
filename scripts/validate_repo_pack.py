@@ -59,6 +59,7 @@ ARCHITECTURE_BUDGET_EXCEPTION_PATHS = [
     "internal/source/source_test.go",
     "scripts/validate_repo_pack.py",
 ]
+FACTORY_ARCHITECTURE_BUDGET_POLICY_REF = "https://github.com/Clyra-AI/factory/blob/main/docs/standards/architecture-fitness-standard.md#default-budget"
 EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS = [".go", ".py", ".ts", ".tsx", ".js", ".jsx"]
 EXPECTED_ARCHITECTURE_BUDGET_EXCLUDED_DIRS = [
     ".git",
@@ -878,15 +879,35 @@ def validate_architecture_debt_exception_expiry(ref: str, exception: dict[str, A
 def architecture_debt_exception_repo_ref_error(root: Path, ref: str, key: str, values: object) -> str | None:
     if not isinstance(values, list) or not values:
         return f"{ref}.{key} must be a non-empty list"
+    resolved_root = root.resolve()
     for index, value in enumerate(values):
         if not isinstance(value, str):
             return f"{ref}.{key}[{index}] must be a repo-local path string"
+        if Path(value.strip()).is_absolute():
+            return f"{ref}.{key}[{index}] must be a repo-local path"
         normalized = normalize_architecture_budget_path(value)
         if not normalized or normalized == ".." or normalized.startswith("../"):
             return f"{ref}.{key}[{index}] must be a repo-local path"
-        if not (root / normalized).exists():
+        resolved = (root / normalized).resolve()
+        try:
+            resolved.relative_to(resolved_root)
+        except ValueError:
+            return f"{ref}.{key}[{index}] must stay inside the repository"
+        if not resolved.exists():
             return f"{ref}.{key}[{index}] points to missing repo path {normalized}"
     return None
+
+
+def architecture_budget_policy_ref_error(root: Path, value: object, label: str) -> str | None:
+    if not isinstance(value, str) or not value.strip():
+        return f"{label}.architecture_budget.policy_ref must be a non-empty string"
+    policy_ref = value.strip()
+    if policy_ref == FACTORY_ARCHITECTURE_BUDGET_POLICY_REF:
+        return None
+    if "#default-budget" not in policy_ref:
+        return f"{label}.architecture_budget.policy_ref must cite the Factory architecture fitness default budget"
+    path_ref = policy_ref.split("#", 1)[0]
+    return architecture_debt_exception_repo_ref_error(root, label, "architecture_budget.policy_ref", [path_ref])
 
 
 def architecture_debt_exception_line_ceiling_error(root: Path, ref: str, scope: dict[str, Any]) -> str | None:
@@ -1032,8 +1053,9 @@ def validate_architecture_budget_policy(repo: dict[str, Any], label: str) -> Non
         fail(f"{label}.architecture_budget.warn_line_threshold must be 1200")
     if budget.get("fail_line_threshold") != 2500:
         fail(f"{label}.architecture_budget.fail_line_threshold must be 2500")
-    if "architecture-fitness-standard.md#default-budget" not in str(budget.get("policy_ref", "")):
-        fail(f"{label}.architecture_budget.policy_ref must cite the Factory architecture fitness default budget")
+    policy_ref_error = architecture_budget_policy_ref_error(ROOT, budget.get("policy_ref"), label)
+    if policy_ref_error:
+        fail(policy_ref_error)
     extensions = budget.get("source_extensions")
     if sorted(extensions or []) != sorted(EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS):
         fail(f"{label}.architecture_budget.source_extensions must be {EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS!r}")
@@ -2977,7 +2999,7 @@ def run_self_test() -> int:
         "capability_grants": [],
         "architecture_budget": {
             "enabled": True,
-            "policy_ref": "docs/standards/architecture-fitness-standard.md#default-budget",
+            "policy_ref": FACTORY_ARCHITECTURE_BUDGET_POLICY_REF,
             "warn_line_threshold": 1200,
             "fail_line_threshold": 2500,
             "source_extensions": [".go", ".py", ".ts", ".tsx", ".js", ".jsx"],
