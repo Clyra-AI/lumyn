@@ -57,6 +57,13 @@ Every change should improve one or more of:
 - `tests/`: automated tests.
 - `examples/`: deterministic examples and fixtures.
 - `workflows/`, `cassettes/`, `baselines/`, `runs/`: Lumyn product artifact surfaces.
+- Architecture budget: source files warn at 1200 lines and fail at 2500 lines
+  by default. Existing debt in `internal/source/source.go` and
+  `internal/source/source_test.go`, plus repo-pack validator debt in
+  `scripts/validate_repo_pack.py`, is allowed only through
+  `.factory/artifacts/exceptions/architecture-debt-lumyn-source.json`; tasks
+  that touch those files must shrink, split, or keep the exception current with
+  compensating validation.
 
 ## 5. Required Validation
 

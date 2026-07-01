@@ -87,6 +87,23 @@ Require an ADR or decision note when a task changes:
 - `.factory/tmp/coverage.out`: ignored local/CI coverage profile emitted by `make test-coverage`.
 - `.factory/artifacts/pr-lifecycle/`: Factory delivery evidence tying PR validation, CI/status checks, review, shipping, merge, and post-merge monitoring together.
 
+## Architecture Budget And Decomposition
+
+Lumyn follows the Factory architecture budget gate: source files warn at `1200`
+lines and fail at `2500` lines. The inventory excludes daemon state,
+dependencies, caches, and build output, but it does include product source and
+tests. The approved current over-budget source surfaces are
+`internal/source/source.go`, `internal/source/source_test.go`, and
+`scripts/validate_repo_pack.py`, recorded in
+`.factory/artifacts/exceptions/architecture-debt-lumyn-source.json` and backed
+by `docs/architecture/findings/TEMP_FINDING_2026-06-30_lumyn_arch_budget.md`.
+
+Until that exception is closed, product work that touches `internal/source` or
+the repo-pack validator must either reduce file size, split coherent behavior
+into smaller packages or files, or record why the change is shrink-neutral with
+compensating validation. New feature work must not add unrelated product
+domains to the source-ingestion package or validator.
+
 Use Go `1.26.4`. T1 stays standard-library-only. T2 introduces the pinned
 `github.com/santhosh-tekuri/jsonschema/v5` validator for executable schema
 tests.
