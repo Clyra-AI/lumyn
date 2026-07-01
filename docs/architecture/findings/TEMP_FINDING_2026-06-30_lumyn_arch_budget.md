@@ -43,7 +43,8 @@ without rebuilding a single test monolith.
 1. Split `internal/source` by responsibility before more product work lands.
 2. Keep parsing, normalization, validation, evidence mapping, and report-facing
    logic separate.
-3. Split `source_test.go` into tests near the moved package responsibilities.
+3. Keep `source_test.go` below budget by moving tests near the affected package
+   responsibilities.
 4. Preserve public CLI behavior, command-result JSON, schemas, and examples.
 
 ## Candidate Package Boundaries
