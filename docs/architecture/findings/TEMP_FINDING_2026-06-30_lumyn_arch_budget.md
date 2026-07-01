@@ -47,12 +47,15 @@ tests.
 ## Candidate Package Boundaries
 
 - `internal/source`: public source-facing orchestration and shared types.
+- `internal/source/docs.go`: docs source walking, operational-guidance checks,
+  and broken local Markdown reference findings.
 - `internal/source/markdownlinks`: local Markdown link target parsing, fence
   detection, and missing-reference target normalization.
 - `internal/source/parse`: source parsing and raw input normalization.
 - `internal/source/validate`: deterministic source validation.
 - `internal/source/evidence`: evidence mapping and proof-honesty fields.
-- `internal/source/report`: report-facing projections.
+- `internal/source/report.go`: report persistence, status projection, and
+  finding classification helpers.
 
 ## Required Promotion
 
