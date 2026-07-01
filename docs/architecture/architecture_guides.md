@@ -86,6 +86,7 @@ Require an ADR or decision note when a task changes:
 - `.github/action-ref-exceptions.yaml`: audited exception records for non-SHA action refs.
 - `.factory/tmp/coverage.out`: ignored local/CI coverage profile emitted by `make test-coverage`.
 - `.factory/artifacts/pr-lifecycle/`: Factory delivery evidence tying PR validation, CI/status checks, review, shipping, merge, and post-merge monitoring together.
+- `internal/source/markdownlinks/`: local Markdown link target parsing, fence detection, and missing-reference target normalization for docs source checks.
 
 ## Architecture Budget And Decomposition
 
@@ -103,6 +104,12 @@ the repo-pack validator must either reduce file size, split coherent behavior
 into smaller packages or files, or record why the change is shrink-neutral with
 compensating validation. New feature work must not add unrelated product
 domains to the source-ingestion package or validator.
+
+Current source decomposition has started by extracting Markdown link target
+parsing and local target normalization into `internal/source/markdownlinks`.
+`internal/source` should keep the project-level source-check orchestration,
+filesystem resolution, and finding construction while smaller internal
+packages own pure parsing and normalization responsibilities.
 
 Use Go `1.26.4`. T1 stays standard-library-only. T2 introduces the pinned
 `github.com/santhosh-tekuri/jsonschema/v5` validator for executable schema
