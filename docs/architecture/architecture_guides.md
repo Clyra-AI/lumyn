@@ -90,8 +90,10 @@ Require an ADR or decision note when a task changes:
 - `internal/source/docs_test.go`: source-check docs/init/link behavior tests.
 - `internal/source/markdownlinks/`: local Markdown link target parsing, fence detection, and missing-reference target normalization for docs source checks.
 - `internal/source/report.go`: source-check report persistence and finding-status helpers.
+- `internal/source/source_config_report_test.go`: source config parsing, report persistence, and finding helper tests.
 - `internal/source/source_fixtures_*_test.go`: shared OpenAPI/YAML/docs fixtures for source tests.
 - `internal/source/source_helpers_test.go`: shared source-test assertion helpers.
+- `internal/source/source_parameters_test.go`: source-check OpenAPI parameter metadata tests.
 
 ## Architecture Budget And Decomposition
 
@@ -99,8 +101,7 @@ Lumyn follows the Factory architecture budget gate: source files warn at `1200`
 lines and fail at `2500` lines. The inventory excludes daemon state,
 dependencies, caches, and build output, but it does include product source and
 tests. The approved current over-budget source surfaces are
-`internal/source/source.go`, `internal/source/source_test.go`, and
-`scripts/validate_repo_pack.py`, recorded in
+`internal/source/source.go` and `scripts/validate_repo_pack.py`, recorded in
 `.factory/artifacts/exceptions/architecture-debt-lumyn-source.json` and backed
 by `docs/architecture/findings/TEMP_FINDING_2026-06-30_lumyn_arch_budget.md`.
 

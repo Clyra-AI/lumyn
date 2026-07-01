@@ -22,8 +22,10 @@ pattern as product behavior expands.
 
 Lumyn already has a thin `cmd/lumyn` entrypoint and several implementation
 packages under `internal/`. The immediate risk is not the CLI entrypoint; it is
-that `internal/source` has already accumulated broad responsibility and large
-tests.
+that `internal/source` has already accumulated broad responsibility, while
+`scripts/validate_repo_pack.py` remains over the source-size budget. The source
+tests have started moving into focused files so future behavior can be split
+without rebuilding a single test monolith.
 
 ## Workstream A: Repo-Pack Adoption
 
@@ -57,10 +59,14 @@ tests.
 - `internal/source/evidence`: evidence mapping and proof-honesty fields.
 - `internal/source/report.go`: report persistence, status projection, and
   finding classification helpers.
+- `internal/source/source_config_report_test.go`: config parsing, report
+  persistence, and finding helper tests.
 - `internal/source/source_fixtures_*_test.go`: shared OpenAPI/YAML/docs
   fixtures for source tests.
 - `internal/source/source_helpers_test.go`: shared source-test assertion
   helpers.
+- `internal/source/source_parameters_test.go`: OpenAPI parameter metadata
+  coverage tests.
 
 ## Required Promotion
 
