@@ -49,6 +49,7 @@ tests.
 - `internal/source`: public source-facing orchestration and shared types.
 - `internal/source/docs.go`: docs source walking, operational-guidance checks,
   and broken local Markdown reference findings.
+- `internal/source/docs_test.go`: source-check docs/init/link behavior tests.
 - `internal/source/markdownlinks`: local Markdown link target parsing, fence
   detection, and missing-reference target normalization.
 - `internal/source/parse`: source parsing and raw input normalization.
@@ -56,6 +57,10 @@ tests.
 - `internal/source/evidence`: evidence mapping and proof-honesty fields.
 - `internal/source/report.go`: report persistence, status projection, and
   finding classification helpers.
+- `internal/source/source_fixtures_*_test.go`: shared OpenAPI/YAML/docs
+  fixtures for source tests.
+- `internal/source/source_helpers_test.go`: shared source-test assertion
+  helpers.
 
 ## Required Promotion
 

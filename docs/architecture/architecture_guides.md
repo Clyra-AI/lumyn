@@ -87,8 +87,11 @@ Require an ADR or decision note when a task changes:
 - `.factory/tmp/coverage.out`: ignored local/CI coverage profile emitted by `make test-coverage`.
 - `.factory/artifacts/pr-lifecycle/`: Factory delivery evidence tying PR validation, CI/status checks, review, shipping, merge, and post-merge monitoring together.
 - `internal/source/docs.go`: docs source walking, operational-guidance checks, and broken local Markdown reference findings.
+- `internal/source/docs_test.go`: source-check docs/init/link behavior tests.
 - `internal/source/markdownlinks/`: local Markdown link target parsing, fence detection, and missing-reference target normalization for docs source checks.
 - `internal/source/report.go`: source-check report persistence and finding-status helpers.
+- `internal/source/source_fixtures_*_test.go`: shared OpenAPI/YAML/docs fixtures for source tests.
+- `internal/source/source_helpers_test.go`: shared source-test assertion helpers.
 
 ## Architecture Budget And Decomposition
 
@@ -110,10 +113,12 @@ domains to the source-ingestion package or validator.
 Current source decomposition has started by extracting Markdown link target
 parsing and local target normalization into `internal/source/markdownlinks`,
 docs-source validation into `internal/source/docs.go`, and report persistence
-and finding-status helpers into `internal/source/report.go`. `internal/source`
-should keep the project-level source-check orchestration, filesystem
-resolution, and shared types while smaller files or internal packages own pure
-parsing, validation, normalization, and reporting responsibilities.
+and finding-status helpers into `internal/source/report.go`. Source tests are
+also split so docs/init/link behavior, shared fixtures, and shared assertion
+helpers no longer live in one oversized test file. `internal/source` should
+keep the project-level source-check orchestration, filesystem resolution, and
+shared types while smaller files or internal packages own pure parsing,
+validation, normalization, and reporting responsibilities.
 
 Use Go `1.26.4`. T1 stays standard-library-only. T2 introduces the pinned
 `github.com/santhosh-tekuri/jsonschema/v5` validator for executable schema
