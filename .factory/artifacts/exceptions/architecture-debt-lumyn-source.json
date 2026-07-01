@@ -1,0 +1,33 @@
+{
+  "artifact_type": "architecture_debt_exception",
+  "schema_version": "0.1",
+  "exception_id": "ARCH-DEBT-2026-07-01-lumyn-source",
+  "repo": "lumyn",
+  "scope": {
+    "paths": [
+      "internal/source/source.go",
+      "internal/source/source_test.go",
+      "scripts/validate_repo_pack.py"
+    ],
+    "budget": {
+      "warn_line_threshold": 1200,
+      "fail_line_threshold": 2500
+    }
+  },
+  "reason": "Lumyn's current source-ingestion implementation, source tests, and repo-pack validator exceed the Factory source-size budget. The debt is isolated to internal/source and the validator contract, and must be made visible before future autoship cycles so new product work does not repeat the monolith pattern.",
+  "owner": "lumyn-maintainers",
+  "approved_by": "architecture-review",
+  "approved_at": "2026-07-01T00:00:00Z",
+  "expires_at": "2026-09-01T00:00:00Z",
+  "compensating_validation": [
+    "make prepush-full",
+    "factoryd doctor emits architecture_budget_report with internal/source files and scripts/validate_repo_pack.py marked exception_approved",
+    "tasks touching internal/source or scripts/validate_repo_pack.py must avoid net line growth unless they are shrink-only decomposition work"
+  ],
+  "follow_up_refs": [
+    "docs/architecture/findings/TEMP_FINDING_2026-06-30_lumyn_arch_budget.md"
+  ],
+  "evidence_refs": [
+    "docs/architecture/findings/TEMP_FINDING_2026-06-30_lumyn_arch_budget.md"
+  ]
+}

@@ -49,6 +49,14 @@ RUNTIME_CONTROL_FORBIDDEN_PATHS = [
     ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-mapping.json",
     ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
 ]
+ARCHITECTURE_BUDGET_EXCEPTION_REFS = [
+    ".factory/artifacts/exceptions/architecture-debt-lumyn-source.json",
+]
+ARCHITECTURE_BUDGET_EXCEPTION_PATHS = [
+    "internal/source/source.go",
+    "internal/source/source_test.go",
+    "scripts/validate_repo_pack.py",
+]
 
 REQUIRED_GUIDES = [
     "docs/dev/dev_guides.md",
@@ -778,6 +786,64 @@ def validate_factoryd_runtime(value: Any, label: str) -> None:
     network_posture = str(value.get("network_posture", "")).lower()
     if "offline" not in network_posture and "allowlist" not in network_posture:
         fail(f"{label}.network_posture must be offline or allowlisted")
+
+
+def validate_architecture_debt_exception(ref: str) -> None:
+    exception = load_json(ROOT / ref)
+    if exception.get("artifact_type") != "architecture_debt_exception":
+        fail(f"{ref} artifact_type must be architecture_debt_exception")
+    for key in [
+        "exception_id",
+        "repo",
+        "scope",
+        "reason",
+        "owner",
+        "approved_by",
+        "approved_at",
+        "expires_at",
+        "compensating_validation",
+        "follow_up_refs",
+        "evidence_refs",
+    ]:
+        if key not in exception:
+            fail(f"{ref} missing {key}")
+    if exception.get("repo") != FACTORYD_REPO_KEY:
+        fail(f"{ref}.repo must be {FACTORYD_REPO_KEY}")
+    scope = exception.get("scope")
+    if not isinstance(scope, dict):
+        fail(f"{ref}.scope must be an object")
+    if sorted(scope.get("paths") or []) != sorted(ARCHITECTURE_BUDGET_EXCEPTION_PATHS):
+        fail(f"{ref}.scope.paths must be {ARCHITECTURE_BUDGET_EXCEPTION_PATHS!r}")
+    if not isinstance(exception.get("compensating_validation"), list) or "make prepush-full" not in exception["compensating_validation"]:
+        fail(f"{ref}.compensating_validation must include make prepush-full")
+    if not exception.get("follow_up_refs"):
+        fail(f"{ref}.follow_up_refs must be non-empty")
+
+
+def validate_architecture_budget_policy(repo: dict[str, Any], label: str) -> None:
+    budget = repo.get("architecture_budget")
+    if not isinstance(budget, dict):
+        fail(f"{label}.architecture_budget must be an object")
+    if budget.get("enabled") is not True:
+        fail(f"{label}.architecture_budget.enabled must be true")
+    if budget.get("warn_line_threshold") != 1200:
+        fail(f"{label}.architecture_budget.warn_line_threshold must be 1200")
+    if budget.get("fail_line_threshold") != 2500:
+        fail(f"{label}.architecture_budget.fail_line_threshold must be 2500")
+    if "architecture-fitness-standard.md#default-budget" not in str(budget.get("policy_ref", "")):
+        fail(f"{label}.architecture_budget.policy_ref must cite the Factory architecture fitness default budget")
+    extensions = budget.get("source_extensions")
+    if not isinstance(extensions, list) or ".go" not in extensions:
+        fail(f"{label}.architecture_budget.source_extensions must include .go")
+    excluded = budget.get("excluded_dirs")
+    for expected in [".git", ".factoryd", "node_modules", "vendor", "dist"]:
+        if not isinstance(excluded, list) or expected not in excluded:
+            fail(f"{label}.architecture_budget.excluded_dirs must include {expected}")
+    exception_refs = budget.get("exception_refs")
+    if sorted(exception_refs or []) != sorted(ARCHITECTURE_BUDGET_EXCEPTION_REFS):
+        fail(f"{label}.architecture_budget.exception_refs must be {ARCHITECTURE_BUDGET_EXCEPTION_REFS!r}")
+    for ref in ARCHITECTURE_BUDGET_EXCEPTION_REFS:
+        validate_architecture_debt_exception(ref)
 
 
 def has_nonempty_collection(value: Any) -> bool:
@@ -2002,6 +2068,7 @@ def validate_factoryd_config(config: dict[str, Any], active_config: dict[str, An
         if lumyn.get(key) != expected:
             fail(f".factory/factoryd.example.json repos.lumyn.{key} must be {expected!r}")
     validate_factoryd_runtime(lumyn, ".factory/factoryd.example.json repos.lumyn")
+    validate_architecture_budget_policy(lumyn, ".factory/factoryd.example.json repos.lumyn")
     commands = lumyn.get("validation_commands")
     if not isinstance(commands, list) or "python3 scripts/validate_repo_pack.py" not in commands:
         fail(".factory/factoryd.example.json must run validate_repo_pack.py")
@@ -2043,6 +2110,7 @@ def validate_factoryd_config(config: dict[str, Any], active_config: dict[str, An
             if active_lumyn.get(key) != expected:
                 fail(f".factory/factoryd.json repos.lumyn.{key} must be {expected!r}")
         validate_factoryd_runtime(active_lumyn, ".factory/factoryd.json repos.lumyn")
+        validate_architecture_budget_policy(active_lumyn, ".factory/factoryd.json repos.lumyn")
         active_commands = active_lumyn.get("validation_commands")
         if not isinstance(active_commands, list) or "python3 scripts/validate_repo_pack.py" not in active_commands:
             fail(".factory/factoryd.json must run validate_repo_pack.py")
@@ -2068,6 +2136,7 @@ def validate_factoryd_config(config: dict[str, Any], active_config: dict[str, An
         if autoship_lumyn.get(key) != expected:
             fail(f".factory/factoryd.autoship.example.json repos.lumyn.{key} must be {expected!r}")
     validate_factoryd_runtime(autoship_lumyn, ".factory/factoryd.autoship.example.json repos.lumyn")
+    validate_architecture_budget_policy(autoship_lumyn, ".factory/factoryd.autoship.example.json repos.lumyn")
     autoship_shipping = autoship_lumyn.get("shipping")
     if not isinstance(autoship_shipping, dict):
         fail(".factory/factoryd.autoship.example.json repos.lumyn must declare shipping block")
@@ -2637,6 +2706,15 @@ def run_self_test() -> int:
         "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
         "network_posture": "offline by default until live sandbox/model work is approved",
         "capability_grants": [],
+        "architecture_budget": {
+            "enabled": True,
+            "policy_ref": "docs/standards/architecture-fitness-standard.md#default-budget",
+            "warn_line_threshold": 1200,
+            "fail_line_threshold": 2500,
+            "source_extensions": [".go", ".py", ".ts", ".tsx", ".js", ".jsx"],
+            "excluded_dirs": [".git", ".factoryd", ".venv", "__pycache__", "build", "dist", "node_modules", "vendor"],
+            "exception_refs": ARCHITECTURE_BUDGET_EXCEPTION_REFS,
+        },
         "auto_ship": False,
         "shipping": {
             "enabled": False,
