@@ -58,6 +58,12 @@ ARCHITECTURE_BUDGET_EXCEPTION_PATHS = [
     "internal/source/source_test.go",
     "scripts/validate_repo_pack.py",
 ]
+ARCHITECTURE_BUDGET_EXCEPTION_LINE_CEILINGS = {
+    "internal/source/source.go": 2798,
+    "internal/source/source_test.go": 3650,
+    "scripts/validate_repo_pack.py": 3506,
+}
+EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS = [".go", ".py", ".ts", ".tsx", ".js", ".jsx"]
 
 REQUIRED_GUIDES = [
     "docs/dev/dev_guides.md",
@@ -867,7 +873,12 @@ def count_file_lines(path: Path) -> int:
     return count
 
 
-def architecture_budget_unexcepted_failures(root: Path, budget: dict[str, Any], exception_paths: set[str]) -> list[str]:
+def architecture_budget_unexcepted_failures(
+    root: Path,
+    budget: dict[str, Any],
+    exception_paths: set[str],
+    exception_line_ceilings: dict[str, int],
+) -> list[str]:
     extensions = {
         str(ext).strip().lower()
         for ext in budget.get("source_extensions") or []
@@ -900,13 +911,26 @@ def architecture_budget_unexcepted_failures(root: Path, budget: dict[str, Any], 
             except OSError as exc:
                 failures.append(f"{rel} (unreadable: {exc})")
                 continue
-            if line_count >= fail_threshold and rel not in exception_paths:
-                failures.append(f"{rel} ({line_count} lines >= {fail_threshold})")
+            if line_count < fail_threshold:
+                continue
+            if rel in exception_paths:
+                ceiling = exception_line_ceilings.get(rel)
+                if ceiling is None:
+                    failures.append(f"{rel} is excepted but has no approved line ceiling")
+                elif line_count > ceiling:
+                    failures.append(f"{rel} ({line_count} lines > approved ceiling {ceiling})")
+                continue
+            failures.append(f"{rel} ({line_count} lines >= {fail_threshold})")
     return sorted(failures)
 
 
 def validate_architecture_budget_inventory(budget: dict[str, Any], label: str) -> None:
-    failures = architecture_budget_unexcepted_failures(ROOT, budget, architecture_budget_exception_paths(ROOT))
+    failures = architecture_budget_unexcepted_failures(
+        ROOT,
+        budget,
+        architecture_budget_exception_paths(ROOT),
+        ARCHITECTURE_BUDGET_EXCEPTION_LINE_CEILINGS,
+    )
     if failures:
         fail(f"{label}.architecture_budget has unexcepted over-budget source files: {', '.join(failures)}")
 
@@ -924,8 +948,8 @@ def validate_architecture_budget_policy(repo: dict[str, Any], label: str) -> Non
     if "architecture-fitness-standard.md#default-budget" not in str(budget.get("policy_ref", "")):
         fail(f"{label}.architecture_budget.policy_ref must cite the Factory architecture fitness default budget")
     extensions = budget.get("source_extensions")
-    if not isinstance(extensions, list) or ".go" not in extensions:
-        fail(f"{label}.architecture_budget.source_extensions must include .go")
+    if sorted(extensions or []) != sorted(EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS):
+        fail(f"{label}.architecture_budget.source_extensions must be {EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS!r}")
     excluded = budget.get("excluded_dirs")
     for expected in [".git", ".factoryd", "node_modules", "vendor", "dist"]:
         if not isinstance(excluded, list) or expected not in excluded:
@@ -2726,11 +2750,24 @@ def run_self_test() -> int:
             "excluded_dirs": [".git", ".factoryd"],
             "fail_line_threshold": 2500,
         }
-        failures = architecture_budget_unexcepted_failures(temp_root, sample_budget, set())
+        failures = architecture_budget_unexcepted_failures(temp_root, sample_budget, set(), {})
         if not failures or "internal/source/new.py" not in failures[0]:
             fail("architecture budget self-test expected unexcepted oversized source to fail")
-        if architecture_budget_unexcepted_failures(temp_root, sample_budget, {"internal/source/new.py"}):
+        if architecture_budget_unexcepted_failures(
+            temp_root,
+            sample_budget,
+            {"internal/source/new.py"},
+            {"internal/source/new.py": 2501},
+        ):
             fail("architecture budget self-test expected exception-scoped source to pass")
+        ceiling_failures = architecture_budget_unexcepted_failures(
+            temp_root,
+            sample_budget,
+            {"internal/source/new.py"},
+            {"internal/source/new.py": 2500},
+        )
+        if not ceiling_failures or "approved ceiling" not in ceiling_failures[0]:
+            fail("architecture budget self-test expected exception growth over ceiling to fail")
     try:
         validate_task_packets(
             {
