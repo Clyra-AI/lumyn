@@ -60,6 +60,9 @@ without rebuilding a single test monolith.
 - `internal/source/evidence`: evidence mapping and proof-honesty fields.
 - `internal/source/report.go`: report persistence, status projection, and
   finding classification helpers.
+- `internal/source/yaml_helpers.go`: YAML scalar rendering, inline-flow
+  parsing, OpenAPI component reference helpers, and JSON pointer escaping for
+  source checks.
 - `internal/source/source_config_report_test.go`: config parsing, report
   persistence, and finding helper tests.
 - `internal/source/source_fixtures_*_test.go`: shared OpenAPI/YAML/docs
