@@ -5,6 +5,7 @@ import json
 import os
 import re
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Any
@@ -61,9 +62,20 @@ ARCHITECTURE_BUDGET_EXCEPTION_PATHS = [
 ARCHITECTURE_BUDGET_EXCEPTION_LINE_CEILINGS = {
     "internal/source/source.go": 2798,
     "internal/source/source_test.go": 3650,
-    "scripts/validate_repo_pack.py": 3511,
+    "scripts/validate_repo_pack.py": 3560,
 }
 EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS = [".go", ".py", ".ts", ".tsx", ".js", ".jsx"]
+EXPECTED_ARCHITECTURE_BUDGET_EXCLUDED_DIRS = [
+    ".git",
+    ".factoryd",
+    ".factory/tmp",
+    ".venv",
+    "__pycache__",
+    "build",
+    "dist",
+    "node_modules",
+    "vendor",
+]
 
 REQUIRED_GUIDES = [
     "docs/dev/dev_guides.md",
@@ -821,10 +833,37 @@ def validate_architecture_debt_exception(ref: str) -> None:
         fail(f"{ref}.scope must be an object")
     if sorted(scope.get("paths") or []) != sorted(ARCHITECTURE_BUDGET_EXCEPTION_PATHS):
         fail(f"{ref}.scope.paths must be {ARCHITECTURE_BUDGET_EXCEPTION_PATHS!r}")
+    validate_architecture_debt_exception_expiry(ref, exception)
     if not isinstance(exception.get("compensating_validation"), list) or "make prepush-full" not in exception["compensating_validation"]:
         fail(f"{ref}.compensating_validation must include make prepush-full")
     if not exception.get("follow_up_refs"):
         fail(f"{ref}.follow_up_refs must be non-empty")
+
+
+def parse_rfc3339_timestamp(value: object, label: str) -> datetime:
+    if not isinstance(value, str) or not value.strip():
+        fail(f"{label} must be a non-empty RFC3339 timestamp")
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        fail(f"{label} must be RFC3339: {exc}")
+    if parsed.tzinfo is None:
+        fail(f"{label} must include a timezone")
+    return parsed.astimezone(timezone.utc)
+
+
+def architecture_debt_exception_expiry_error(ref: str, exception: dict[str, Any], now: datetime | None = None) -> str | None:
+    expires_at = parse_rfc3339_timestamp(exception.get("expires_at"), f"{ref}.expires_at")
+    reference_time = now or datetime.now(timezone.utc)
+    if expires_at <= reference_time.astimezone(timezone.utc):
+        return f"{ref}.expires_at must be in the future"
+    return None
+
+
+def validate_architecture_debt_exception_expiry(ref: str, exception: dict[str, Any], now: datetime | None = None) -> None:
+    error = architecture_debt_exception_expiry_error(ref, exception, now)
+    if error:
+        fail(error)
 
 
 def normalize_architecture_budget_path(value: object) -> str:
@@ -951,9 +990,8 @@ def validate_architecture_budget_policy(repo: dict[str, Any], label: str) -> Non
     if sorted(extensions or []) != sorted(EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS):
         fail(f"{label}.architecture_budget.source_extensions must be {EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS!r}")
     excluded = budget.get("excluded_dirs")
-    for expected in [".git", ".factoryd", ".factory/tmp", "node_modules", "vendor", "dist"]:
-        if not isinstance(excluded, list) or expected not in excluded:
-            fail(f"{label}.architecture_budget.excluded_dirs must include {expected}")
+    if sorted(excluded or []) != sorted(EXPECTED_ARCHITECTURE_BUDGET_EXCLUDED_DIRS):
+        fail(f"{label}.architecture_budget.excluded_dirs must be {EXPECTED_ARCHITECTURE_BUDGET_EXCLUDED_DIRS!r}")
     exception_refs = budget.get("exception_refs")
     if sorted(exception_refs or []) != sorted(ARCHITECTURE_BUDGET_EXCEPTION_REFS):
         fail(f"{label}.architecture_budget.exception_refs must be {ARCHITECTURE_BUDGET_EXCEPTION_REFS!r}")
@@ -2773,6 +2811,17 @@ def run_self_test() -> int:
         )
         if not ceiling_failures or "approved ceiling" not in ceiling_failures[0]:
             fail("architecture budget self-test expected exception growth over ceiling to fail")
+    validate_architecture_debt_exception_expiry(
+        "self-test-valid",
+        {"expires_at": "2099-01-01T00:00:00Z"},
+        datetime(2026, 7, 1, tzinfo=timezone.utc),
+    )
+    if not architecture_debt_exception_expiry_error(
+        "self-test-expired",
+        {"expires_at": "2026-06-30T00:00:00Z"},
+        datetime(2026, 7, 1, tzinfo=timezone.utc),
+    ):
+        fail("architecture debt exception self-test expected expired evidence to fail")
     try:
         validate_task_packets(
             {
