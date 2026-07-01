@@ -47,6 +47,8 @@ tests.
 ## Candidate Package Boundaries
 
 - `internal/source`: public source-facing orchestration and shared types.
+- `internal/source/markdownlinks`: local Markdown link target parsing, fence
+  detection, and missing-reference target normalization.
 - `internal/source/parse`: source parsing and raw input normalization.
 - `internal/source/validate`: deterministic source validation.
 - `internal/source/evidence`: evidence mapping and proof-honesty fields.
@@ -59,4 +61,3 @@ tests.
 - Required command before implementation: `factoryd ingest --kind review` or
   the equivalent governed Factory planning path.
 - Required validation after materialization: `make prepush-full`.
-

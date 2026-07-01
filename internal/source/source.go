@@ -17,6 +17,7 @@ import (
 	"strings"
 
 	"github.com/Clyra-AI/lumyn/internal/config"
+	"github.com/Clyra-AI/lumyn/internal/source/markdownlinks"
 )
 
 const (
@@ -1160,19 +1161,19 @@ func brokenLocalReferenceFindings(root, docPath string, data []byte) []Finding {
 	inFence := false
 	for index, line := range lines {
 		trimmedLine := strings.TrimSpace(string(line))
-		if isMarkdownFenceDelimiter(trimmedLine) {
+		if markdownlinks.IsFenceDelimiter(trimmedLine) {
 			inFence = !inFence
 			continue
 		}
 		if inFence {
 			continue
 		}
-		for _, rawTarget := range markdownLinkTargets(string(line)) {
-			target := cleanMarkdownLinkTarget(rawTarget)
+		for _, rawTarget := range markdownlinks.Targets(string(line)) {
+			target := markdownlinks.CleanTarget(rawTarget)
 			if target == "" || isExternalReference(target) {
 				continue
 			}
-			targetPath := markdownLinkLocalPath(target)
+			targetPath := markdownlinks.LocalPath(target)
 			if targetPath == "" {
 				continue
 			}
@@ -1186,7 +1187,7 @@ func brokenLocalReferenceFindings(root, docPath string, data []byte) []Finding {
 			findings = append(findings, Finding{
 				Kind:     "context_missing",
 				Severity: "warning",
-				Message:  fmt.Sprintf("docs file %s links to missing local reference %s", relativePath(root, docPath), markdownLinkFindingTarget(target)),
+				Message:  fmt.Sprintf("docs file %s links to missing local reference %s", relativePath(root, docPath), markdownlinks.FindingTarget(target)),
 				Reference: Reference{
 					Path: relativePath(root, docPath),
 					Line: index + 1,
@@ -1197,69 +1198,6 @@ func brokenLocalReferenceFindings(root, docPath string, data []byte) []Finding {
 		}
 	}
 	return findings
-}
-
-func isMarkdownFenceDelimiter(line string) bool {
-	return strings.HasPrefix(line, "```") || strings.HasPrefix(line, "~~~")
-}
-
-func markdownLinkTargets(line string) []string {
-	targets := []string{}
-	offset := 0
-	for offset < len(line) {
-		start := strings.Index(line[offset:], "](")
-		if start < 0 {
-			break
-		}
-		targetStart := offset + start + 2
-		targetEnd := markdownLinkTargetEnd(line, targetStart)
-		if targetEnd < 0 {
-			offset = targetStart
-			continue
-		}
-		targets = append(targets, line[targetStart:targetEnd])
-		offset = targetEnd + 1
-	}
-	return targets
-}
-
-func markdownLinkTargetEnd(line string, start int) int {
-	depth := 0
-	escaped := false
-	for index := start; index < len(line); index++ {
-		char := line[index]
-		switch {
-		case escaped:
-			escaped = false
-		case char == '\\':
-			escaped = true
-		case char == '(':
-			depth++
-		case char == ')':
-			if depth == 0 {
-				return index
-			}
-			depth--
-		}
-	}
-	return -1
-}
-
-func markdownLinkLocalPath(target string) string {
-	targetPath := strings.SplitN(target, "#", 2)[0]
-	targetPath = strings.SplitN(targetPath, "?", 2)[0]
-	return targetPath
-}
-
-func markdownLinkFindingTarget(target string) string {
-	targetPath := markdownLinkLocalPath(target)
-	if targetPath == "" {
-		return "<local-fragment>"
-	}
-	if targetPath != target {
-		return targetPath + " [query-or-fragment-redacted]"
-	}
-	return targetPath
 }
 
 func writeReport(root string, report Report) error {
@@ -2118,19 +2056,6 @@ func missingOperationalGuidance(lowerDocs string) bool {
 	hasPagination := strings.Contains(lowerDocs, "pagination") || strings.Contains(lowerDocs, "page ")
 	hasIdempotency := strings.Contains(lowerDocs, "idempotency") || strings.Contains(lowerDocs, "idempotent")
 	return !(hasRetry && hasRateLimit && hasPagination && hasIdempotency)
-}
-
-func cleanMarkdownLinkTarget(target string) string {
-	target = strings.TrimSpace(target)
-	if strings.HasPrefix(target, "<") {
-		if end := strings.Index(target, ">"); end > 0 {
-			return strings.Trim(strings.TrimSpace(target[1:end]), `"'`)
-		}
-	}
-	if space := strings.IndexByte(target, ' '); space >= 0 {
-		target = target[:space]
-	}
-	return strings.Trim(strings.Trim(target, "<>"), `"'`)
 }
 
 func isExternalReference(target string) bool {
