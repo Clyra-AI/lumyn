@@ -10,14 +10,12 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 
 	"github.com/Clyra-AI/lumyn/internal/config"
-	"github.com/Clyra-AI/lumyn/internal/source/markdownlinks"
 )
 
 const (
@@ -1035,248 +1033,6 @@ func findingsForOperations(sourcePath string, operations []openAPIOperation) []F
 	return findings
 }
 
-func checkDocs(root string, entry SourceEntry) []Finding {
-	docsPath := cleanSlashPath(entry.Path)
-	absPath := resolveProjectPath(root, entry.Path)
-	info, err := os.Stat(absPath)
-	if err != nil {
-		return []Finding{{
-			Kind:     "context_missing",
-			Severity: "warning",
-			Message:  fmt.Sprintf("docs source %s could not be read", docsPath),
-			Reference: Reference{
-				Path:   docsPath,
-				Object: "sources.docs." + entry.ID,
-			},
-			FixTarget:         "sources.docs.path",
-			WorkflowRelevance: "Agents need local docs context for auth, retries, pagination, and proof guidance.",
-		}}
-	}
-
-	findings := []Finding{}
-	readableFiles := 0
-	var combined strings.Builder
-	visitFile := func(path string, d fs.DirEntry) {
-		if d.IsDir() {
-			return
-		}
-		if !isDocsFile(path) {
-			return
-		}
-		relPath := relativePath(root, path)
-		data, readErr := os.ReadFile(path)
-		if readErr != nil {
-			findings = append(findings, Finding{
-				Kind:     "context_missing",
-				Severity: "warning",
-				Message:  fmt.Sprintf("docs file %s could not be read", relPath),
-				Reference: Reference{
-					Path:   relPath,
-					Object: "docs_file",
-				},
-				FixTarget:         "docs_file",
-				WorkflowRelevance: "Unreadable docs can hide auth, retry, or validation instructions from agent probes.",
-			})
-			return
-		}
-		readableFiles++
-		combined.Write(bytes.ToLower(data))
-		combined.WriteByte('\n')
-		findings = append(findings, brokenLocalReferenceFindings(root, path, data)...)
-	}
-
-	if info.IsDir() {
-		walkErr := filepath.WalkDir(absPath, func(path string, d fs.DirEntry, err error) error {
-			if err != nil {
-				findings = append(findings, Finding{
-					Kind:     "context_missing",
-					Severity: "warning",
-					Message:  fmt.Sprintf("docs path %s could not be inspected: %v", relativePath(root, path), err),
-					Reference: Reference{
-						Path:   relativePath(root, path),
-						Object: "docs_path",
-					},
-					FixTarget:         "docs_path",
-					WorkflowRelevance: "Unreadable docs can hide workflow constraints from source checks.",
-				})
-				return nil
-			}
-			if d.IsDir() && path != absPath && shouldSkipGeneratedSourceDir(d.Name()) {
-				return filepath.SkipDir
-			}
-			visitFile(path, d)
-			return nil
-		})
-		if walkErr != nil {
-			findings = append(findings, Finding{
-				Kind:     "context_missing",
-				Severity: "warning",
-				Message:  fmt.Sprintf("docs source %s could not be walked: %v", docsPath, walkErr),
-				Reference: Reference{
-					Path:   docsPath,
-					Object: "sources.docs." + entry.ID,
-				},
-				FixTarget:         "sources.docs.path",
-				WorkflowRelevance: "Agents need readable local docs for workflow-relevant source context.",
-			})
-		}
-	} else {
-		visitFile(absPath, fileEntry{name: filepath.Base(absPath)})
-	}
-
-	if readableFiles == 0 {
-		findings = append(findings, Finding{
-			Kind:     "context_missing",
-			Severity: "warning",
-			Message:  fmt.Sprintf("docs source %s contains no readable docs files", docsPath),
-			Reference: Reference{
-				Path:   docsPath,
-				Object: "sources.docs." + entry.ID,
-			},
-			FixTarget:         "docs_content",
-			WorkflowRelevance: "Agent probes need readable docs for setup, auth, retry, and validation instructions.",
-		})
-		return findings
-	}
-
-	if missingOperationalGuidance(combined.String()) {
-		findings = append(findings, Finding{
-			Kind:     "docs_api_ambiguity",
-			Severity: "warning",
-			Message:  "local docs do not mention retry, rate-limit, pagination, or idempotency guidance",
-			Reference: Reference{
-				Path:   docsPath,
-				Object: "docs_guidance",
-			},
-			FixTarget:         "operational_docs",
-			WorkflowRelevance: "Retries, rate limits, pagination, and idempotency affect agent workflow stability and write safety.",
-		})
-	}
-	return findings
-}
-
-func brokenLocalReferenceFindings(root, docPath string, data []byte) []Finding {
-	findings := []Finding{}
-	lines := bytes.Split(data, []byte("\n"))
-	inFence := false
-	for index, line := range lines {
-		trimmedLine := strings.TrimSpace(string(line))
-		if markdownlinks.IsFenceDelimiter(trimmedLine) {
-			inFence = !inFence
-			continue
-		}
-		if inFence {
-			continue
-		}
-		for _, rawTarget := range markdownlinks.Targets(string(line)) {
-			target := markdownlinks.CleanTarget(rawTarget)
-			if target == "" || isExternalReference(target) {
-				continue
-			}
-			targetPath := markdownlinks.LocalPath(target)
-			if targetPath == "" {
-				continue
-			}
-			if unescaped, err := url.PathUnescape(targetPath); err == nil {
-				targetPath = unescaped
-			}
-			resolved := resolveMarkdownLinkTarget(root, docPath, targetPath)
-			if _, err := os.Stat(resolved); err == nil {
-				continue
-			}
-			findings = append(findings, Finding{
-				Kind:     "context_missing",
-				Severity: "warning",
-				Message:  fmt.Sprintf("docs file %s links to missing local reference %s", relativePath(root, docPath), markdownlinks.FindingTarget(target)),
-				Reference: Reference{
-					Path: relativePath(root, docPath),
-					Line: index + 1,
-				},
-				FixTarget:         "docs_local_reference",
-				WorkflowRelevance: "Broken local docs links can hide workflow setup, auth, or validation instructions from agents.",
-			})
-		}
-	}
-	return findings
-}
-
-func writeReport(root string, report Report) error {
-	path := resolveProjectPath(root, report.ReportPath)
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-		return fmt.Errorf("create report directory %s: %w", cleanSlashPath(filepath.Dir(path)), err)
-	}
-	data, err := json.MarshalIndent(report, "", "  ")
-	if err != nil {
-		return fmt.Errorf("encode source report %s: %w", report.ReportPath, err)
-	}
-	data = append(data, '\n')
-	if err := os.WriteFile(path, data, 0o644); err != nil {
-		return fmt.Errorf("write source report %s: %w", report.ReportPath, err)
-	}
-	return nil
-}
-
-func statusFromFindings(findings []Finding) string {
-	status := "pass"
-	for _, finding := range findings {
-		if finding.Severity == "error" {
-			return "fail"
-		}
-		if finding.Severity == "warning" {
-			status = "warning"
-		}
-	}
-	return status
-}
-
-func HasErrorFindings(findings []Finding) bool {
-	for _, finding := range findings {
-		if finding.Severity == "error" {
-			return true
-		}
-	}
-	return false
-}
-
-func FirstErrorFinding(findings []Finding) (Finding, bool) {
-	for _, finding := range findings {
-		if finding.Severity == "error" {
-			return finding, true
-		}
-	}
-	return Finding{}, false
-}
-
-func FirstFinding(findings []Finding) (Finding, bool) {
-	if len(findings) == 0 {
-		return Finding{}, false
-	}
-	return findings[0], true
-}
-
-func sourceFindingHasKind(findings []Finding, kind string) bool {
-	for _, finding := range findings {
-		if finding.Kind == kind {
-			return true
-		}
-	}
-	return false
-}
-
-func ContainsProofGap(findings []Finding) bool {
-	return sourceFindingHasKind(findings, "proof_gap")
-}
-
-func ContainsSecurityRelevantFinding(findings []Finding) bool {
-	for _, finding := range findings {
-		switch finding.Kind {
-		case "auth_confusion", "data_exposure_risk", "forbidden_endpoint_call", "scope_escalation", "unexpected_write_action":
-			return true
-		}
-	}
-	return false
-}
-
 func hashPath(root, path string) string {
 	resolved := resolveProjectPath(root, path)
 	info, err := os.Stat(resolved)
@@ -2050,32 +1806,6 @@ func mentionsReplacement(value string) bool {
 	return strings.Contains(lower, "replace") || strings.Contains(lower, "use ") || strings.Contains(lower, "instead")
 }
 
-func missingOperationalGuidance(lowerDocs string) bool {
-	hasRetry := strings.Contains(lowerDocs, "retry")
-	hasRateLimit := strings.Contains(lowerDocs, "rate limit") || strings.Contains(lowerDocs, "rate-limit") || strings.Contains(lowerDocs, "429")
-	hasPagination := strings.Contains(lowerDocs, "pagination") || strings.Contains(lowerDocs, "page ")
-	hasIdempotency := strings.Contains(lowerDocs, "idempotency") || strings.Contains(lowerDocs, "idempotent")
-	return !(hasRetry && hasRateLimit && hasPagination && hasIdempotency)
-}
-
-func isExternalReference(target string) bool {
-	lower := strings.ToLower(target)
-	return strings.HasPrefix(lower, "http://") ||
-		strings.HasPrefix(lower, "https://") ||
-		strings.HasPrefix(lower, "mailto:") ||
-		strings.HasPrefix(lower, "tel:") ||
-		strings.HasPrefix(target, "#")
-}
-
-func isDocsFile(path string) bool {
-	switch strings.ToLower(filepath.Ext(path)) {
-	case ".md", ".mdx", ".txt", ".rst":
-		return true
-	default:
-		return false
-	}
-}
-
 func projectRoot(configPath string) string {
 	dir := filepath.Dir(configPath)
 	if dir == "" {
@@ -2162,13 +1892,6 @@ func cleanSlashPath(path string) string {
 		return ""
 	}
 	return filepath.ToSlash(filepath.Clean(path))
-}
-
-func resolveMarkdownLinkTarget(root, docPath, targetPath string) string {
-	if strings.HasPrefix(targetPath, "/") {
-		return filepath.Clean(filepath.Join(root, filepath.FromSlash(strings.TrimPrefix(targetPath, "/"))))
-	}
-	return filepath.Clean(filepath.Join(filepath.Dir(docPath), filepath.FromSlash(targetPath)))
 }
 
 func yamlScalar(value string) string {
@@ -2712,12 +2435,3 @@ func unescapeJSONPointer(value string) string {
 	value = strings.ReplaceAll(value, "~0", "~")
 	return value
 }
-
-type fileEntry struct {
-	name string
-}
-
-func (f fileEntry) Name() string               { return f.name }
-func (f fileEntry) IsDir() bool                { return false }
-func (f fileEntry) Type() fs.FileMode          { return 0 }
-func (f fileEntry) Info() (fs.FileInfo, error) { return nil, errors.New("file info unavailable") }

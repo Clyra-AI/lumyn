@@ -10,7 +10,7 @@
       "scripts/validate_repo_pack.py"
     ],
     "line_ceilings": {
-      "internal/source/source.go": 2723,
+      "internal/source/source.go": 2437,
       "internal/source/source_test.go": 3650,
       "scripts/validate_repo_pack.py": 3653
     },
