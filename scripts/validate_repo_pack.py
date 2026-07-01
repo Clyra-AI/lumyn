@@ -61,7 +61,7 @@ ARCHITECTURE_BUDGET_EXCEPTION_PATHS = [
 ARCHITECTURE_BUDGET_EXCEPTION_LINE_CEILINGS = {
     "internal/source/source.go": 2798,
     "internal/source/source_test.go": 3650,
-    "scripts/validate_repo_pack.py": 3506,
+    "scripts/validate_repo_pack.py": 3511,
 }
 EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS = [".go", ".py", ".ts", ".tsx", ".js", ".jsx"]
 
@@ -951,7 +951,7 @@ def validate_architecture_budget_policy(repo: dict[str, Any], label: str) -> Non
     if sorted(extensions or []) != sorted(EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS):
         fail(f"{label}.architecture_budget.source_extensions must be {EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS!r}")
     excluded = budget.get("excluded_dirs")
-    for expected in [".git", ".factoryd", "node_modules", "vendor", "dist"]:
+    for expected in [".git", ".factoryd", ".factory/tmp", "node_modules", "vendor", "dist"]:
         if not isinstance(excluded, list) or expected not in excluded:
             fail(f"{label}.architecture_budget.excluded_dirs must include {expected}")
     exception_refs = budget.get("exception_refs")
@@ -2747,12 +2747,17 @@ def run_self_test() -> int:
         oversized.write_text("line\n" * 2501, encoding="utf-8")
         sample_budget = {
             "source_extensions": [".py"],
-            "excluded_dirs": [".git", ".factoryd"],
+            "excluded_dirs": [".git", ".factoryd", ".factory/tmp"],
             "fail_line_threshold": 2500,
         }
         failures = architecture_budget_unexcepted_failures(temp_root, sample_budget, set(), {})
         if not failures or "internal/source/new.py" not in failures[0]:
             fail("architecture budget self-test expected unexcepted oversized source to fail")
+        scratch = temp_root / ".factory" / "tmp" / "scratch.py"
+        scratch.parent.mkdir(parents=True)
+        scratch.write_text("line\n" * 2501, encoding="utf-8")
+        if any(".factory/tmp/scratch.py" in failure for failure in architecture_budget_unexcepted_failures(temp_root, sample_budget, set(), {})):
+            fail("architecture budget self-test expected .factory/tmp scratch to be excluded")
         if architecture_budget_unexcepted_failures(
             temp_root,
             sample_budget,
@@ -2856,7 +2861,7 @@ def run_self_test() -> int:
             "warn_line_threshold": 1200,
             "fail_line_threshold": 2500,
             "source_extensions": [".go", ".py", ".ts", ".tsx", ".js", ".jsx"],
-            "excluded_dirs": [".git", ".factoryd", ".venv", "__pycache__", "build", "dist", "node_modules", "vendor"],
+            "excluded_dirs": [".git", ".factoryd", ".factory/tmp", ".venv", "__pycache__", "build", "dist", "node_modules", "vendor"],
             "exception_refs": ARCHITECTURE_BUDGET_EXCEPTION_REFS,
         },
         "auto_ship": False,
