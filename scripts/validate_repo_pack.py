@@ -59,11 +59,6 @@ ARCHITECTURE_BUDGET_EXCEPTION_PATHS = [
     "internal/source/source_test.go",
     "scripts/validate_repo_pack.py",
 ]
-ARCHITECTURE_BUDGET_EXCEPTION_LINE_CEILINGS = {
-    "internal/source/source.go": 2798,
-    "internal/source/source_test.go": 3650,
-    "scripts/validate_repo_pack.py": 3577,
-}
 EXPECTED_ARCHITECTURE_BUDGET_EXTENSIONS = [".go", ".py", ".ts", ".tsx", ".js", ".jsx"]
 EXPECTED_ARCHITECTURE_BUDGET_EXCLUDED_DIRS = [
     ".git",
@@ -834,11 +829,16 @@ def validate_architecture_debt_exception(ref: str) -> None:
         fail(f"{ref}.scope must be an object")
     if sorted(scope.get("paths") or []) != sorted(ARCHITECTURE_BUDGET_EXCEPTION_PATHS):
         fail(f"{ref}.scope.paths must be {ARCHITECTURE_BUDGET_EXCEPTION_PATHS!r}")
+    line_ceiling_error = architecture_debt_exception_line_ceiling_error(ROOT, ref, scope)
+    if line_ceiling_error:
+        fail(line_ceiling_error)
     validate_architecture_debt_exception_expiry(ref, exception)
     if not isinstance(exception.get("compensating_validation"), list) or "make prepush-full" not in exception["compensating_validation"]:
         fail(f"{ref}.compensating_validation must include make prepush-full")
-    if not exception.get("follow_up_refs"):
-        fail(f"{ref}.follow_up_refs must be non-empty")
+    for key in ["follow_up_refs", "evidence_refs"]:
+        ref_error = architecture_debt_exception_repo_ref_error(ROOT, ref, key, exception.get(key))
+        if ref_error:
+            fail(ref_error)
 
 
 def parse_rfc3339_timestamp(value: object, label: str) -> datetime:
@@ -867,6 +867,40 @@ def validate_architecture_debt_exception_expiry(ref: str, exception: dict[str, A
         fail(error)
 
 
+def architecture_debt_exception_repo_ref_error(root: Path, ref: str, key: str, values: object) -> str | None:
+    if not isinstance(values, list) or not values:
+        return f"{ref}.{key} must be a non-empty list"
+    for index, value in enumerate(values):
+        if not isinstance(value, str):
+            return f"{ref}.{key}[{index}] must be a repo-local path string"
+        normalized = normalize_architecture_budget_path(value)
+        if not normalized or normalized == ".." or normalized.startswith("../"):
+            return f"{ref}.{key}[{index}] must be a repo-local path"
+        if not (root / normalized).exists():
+            return f"{ref}.{key}[{index}] points to missing repo path {normalized}"
+    return None
+
+
+def architecture_debt_exception_line_ceiling_error(root: Path, ref: str, scope: dict[str, Any]) -> str | None:
+    line_ceilings = scope.get("line_ceilings")
+    if not isinstance(line_ceilings, dict):
+        return f"{ref}.scope.line_ceilings must be an object"
+    normalized_paths = [normalize_architecture_budget_path(path) for path in ARCHITECTURE_BUDGET_EXCEPTION_PATHS]
+    if sorted(line_ceilings.keys()) != sorted(normalized_paths):
+        return f"{ref}.scope.line_ceilings must cover {ARCHITECTURE_BUDGET_EXCEPTION_PATHS!r}"
+    for path in normalized_paths:
+        ceiling = line_ceilings.get(path)
+        if type(ceiling) is not int or ceiling <= 0:
+            return f"{ref}.scope.line_ceilings[{path!r}] must be a positive integer"
+        source = root / path
+        if not source.exists():
+            return f"{ref}.scope.line_ceilings[{path!r}] points to missing source"
+        line_count = count_file_lines(source)
+        if ceiling != line_count:
+            return f"{ref}.scope.line_ceilings[{path!r}] must equal current line count {line_count}"
+    return None
+
+
 def normalize_architecture_budget_path(value: object) -> str:
     path = str(value).strip().replace("\\", "/")
     while path.startswith("./"):
@@ -884,16 +918,19 @@ def architecture_budget_path_excluded(rel: str, excluded_dirs: set[str]) -> bool
     return False
 
 
-def architecture_budget_exception_paths(root: Path) -> set[str]:
+def architecture_budget_exception_scope(root: Path) -> tuple[set[str], dict[str, int]]:
     approved: set[str] = set()
+    line_ceilings: dict[str, int] = {}
     for ref in ARCHITECTURE_BUDGET_EXCEPTION_REFS:
         exception = load_json(root / ref)
         scope = exception.get("scope") or {}
+        scoped_line_ceilings = scope.get("line_ceilings") or {}
         for path in scope.get("paths") or []:
             normalized = normalize_architecture_budget_path(path)
             if normalized:
                 approved.add(normalized)
-    return approved
+                line_ceilings[normalized] = scoped_line_ceilings.get(normalized)
+    return approved, line_ceilings
 
 
 def count_file_lines(path: Path) -> int:
@@ -963,11 +1000,12 @@ def architecture_budget_unexcepted_failures(
 
 
 def validate_architecture_budget_inventory(budget: dict[str, Any], label: str) -> None:
+    exception_paths, exception_line_ceilings = architecture_budget_exception_scope(ROOT)
     failures = architecture_budget_unexcepted_failures(
         ROOT,
         budget,
-        architecture_budget_exception_paths(ROOT),
-        ARCHITECTURE_BUDGET_EXCEPTION_LINE_CEILINGS,
+        exception_paths,
+        exception_line_ceilings,
     )
     if failures:
         fail(f"{label}.architecture_budget has unexcepted over-budget source files: {', '.join(failures)}")
