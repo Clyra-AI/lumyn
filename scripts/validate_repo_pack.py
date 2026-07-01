@@ -56,7 +56,6 @@ ARCHITECTURE_BUDGET_EXCEPTION_REFS = [
 ]
 ARCHITECTURE_BUDGET_EXCEPTION_PATHS = [
     "internal/source/source.go",
-    "internal/source/source_test.go",
     "scripts/validate_repo_pack.py",
 ]
 FACTORY_ARCHITECTURE_BUDGET_POLICY_REF = "https://github.com/Clyra-AI/factory/blob/main/docs/standards/architecture-fitness-standard.md#default-budget"
