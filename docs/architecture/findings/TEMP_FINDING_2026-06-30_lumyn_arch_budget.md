@@ -89,6 +89,9 @@ Current progress:
   model-provider risk classification checks, lowering
   `scripts/validate_repo_pack.py` to 1,478 lines while preserving validation
   behavior.
+- `scripts/repo_pack_task_specials.py` now owns recorder split and
+  first-session smoke task checks, lowering `scripts/validate_repo_pack.py` to
+  1,419 lines while preserving validation behavior.
 
 ## Candidate Package Boundaries
 
