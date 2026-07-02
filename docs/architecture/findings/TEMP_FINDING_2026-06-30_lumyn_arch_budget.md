@@ -47,9 +47,17 @@ without rebuilding a single test monolith.
    responsibilities.
 4. Preserve public CLI behavior, command-result JSON, schemas, and examples.
 
+Current progress:
+
+- `internal/source/fingerprint.go` now owns source hashing, generated-artifact
+  skip rules for docs hashing, and source-surface fingerprint assembly,
+  lowering `internal/source/source.go` while preserving source-check behavior.
+
 ## Candidate Package Boundaries
 
 - `internal/source`: public source-facing orchestration and shared types.
+- `internal/source/fingerprint.go`: source hashing, docs hashing, generated
+  source-directory skips, and surface fingerprint assembly.
 - `internal/source/docs.go`: docs source walking, operational-guidance checks,
   and broken local Markdown reference findings.
 - `internal/source/docs_test.go`: source-check docs/init/link behavior tests.
