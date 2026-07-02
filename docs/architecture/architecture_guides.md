@@ -103,10 +103,12 @@ Require an ADR or decision note when a task changes:
 Lumyn follows the Factory architecture budget gate: source files warn at `1200`
 lines and fail at `2500` lines. The inventory excludes daemon state,
 dependencies, caches, and build output, but it does include product source and
-tests. The remaining approved over-budget source surface is
+tests. The remaining approved warning-level validator surface is
 `scripts/validate_repo_pack.py`, recorded in
 `.factory/artifacts/exceptions/architecture-debt-lumyn-source.json` and backed
 by `docs/architecture/findings/TEMP_FINDING_2026-06-30_lumyn_arch_budget.md`.
+Architecture-budget checks live in `scripts/repo_pack_architecture.py`, and the
+self-test fixture harness lives in `scripts/repo_pack_self_test.py`.
 `internal/source` has been split below the warning threshold and is no longer
 exception-approved debt.
 
