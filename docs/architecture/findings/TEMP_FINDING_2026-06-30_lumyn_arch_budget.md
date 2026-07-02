@@ -69,6 +69,12 @@ Current progress:
 - `scripts/repo_pack_self_test.py` now owns the repo-pack validator self-test
   fixture harness, bringing `scripts/validate_repo_pack.py` below the fail
   threshold while preserving validation behavior.
+- `scripts/repo_pack_contracts.py` now owns shared repo-pack contract constants,
+  slice coverage helpers, and reusable predicates used by validator modules.
+- `scripts/repo_pack_acceptance.py` now owns acceptance ledger, acceptance
+  mapping, scope-closure, and acceptance-coverage checks, lowering
+  `scripts/validate_repo_pack.py` to 1,972 lines while preserving validation
+  behavior.
 
 ## Candidate Package Boundaries
 
