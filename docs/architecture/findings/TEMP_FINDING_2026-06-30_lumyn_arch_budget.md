@@ -52,10 +52,15 @@ Current progress:
 - `internal/source/fingerprint.go` now owns source hashing, generated-artifact
   skip rules for docs hashing, and source-surface fingerprint assembly,
   lowering `internal/source/source.go` while preserving source-check behavior.
+- `internal/source/config.go` now owns source config read/write/defaulting and
+  repo-local config validation, further lowering `internal/source/source.go`
+  while preserving init/check behavior.
 
 ## Candidate Package Boundaries
 
 - `internal/source`: public source-facing orchestration and shared types.
+- `internal/source/config.go`: source config read/write/defaulting and
+  repo-local config validation.
 - `internal/source/fingerprint.go`: source hashing, docs hashing, generated
   source-directory skips, and surface fingerprint assembly.
 - `internal/source/docs.go`: docs source walking, operational-guidance checks,
