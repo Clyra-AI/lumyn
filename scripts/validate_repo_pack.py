@@ -30,6 +30,13 @@ from repo_pack_contracts import (
     validate_mvp_version_slice_coverage,
     validate_no_legacy_provider_fields,
 )
+from repo_pack_ci import (
+    ref_file_exists as ref_file_exists_for_root,
+    require_existing as require_existing_for_root,
+    validate_ci_control_set as validate_ci_control_set_for_root,
+    validate_coverage_policy_refs as validate_coverage_policy_refs_for_root,
+    validate_guides as validate_guides_for_root,
+)
 from repo_pack_factoryd import (
     contains_machine_local_path,
     is_valid_factoryd_runtime,
@@ -405,122 +412,32 @@ def validate_model_provider_gate(
 
 
 def require_existing(relative_path: str) -> None:
-    if not (ROOT / relative_path).exists():
-        fail(f"missing required repo-pack file: {relative_path}")
+    require_existing_for_root(ROOT, relative_path)
 
 
 def ref_file_exists(ref: Any) -> bool:
-    if not isinstance(ref, str) or not ref.strip():
-        return False
-    path_part = ref.split("#", 1)[0]
-    return bool(path_part) and (ROOT / path_part).exists()
+    return ref_file_exists_for_root(ROOT, ref)
 
 
 def validate_coverage_policy_refs(value: Any, label: str) -> None:
-    if not isinstance(value, dict):
-        fail(f"{label} must be an object")
-    for key in ["exception_ref", "evidence_ref"]:
-        if isinstance(value.get(key), str) and value[key].strip() and not ref_file_exists(value[key]):
-            fail(f"{label}.{key} points to missing file {value[key]}")
-    minimums = value.get("minimums")
-    if isinstance(minimums, list):
-        for index, item in enumerate(minimums):
-            if not isinstance(item, dict):
-                continue
-            if isinstance(item.get("exception_ref"), str) and item["exception_ref"].strip() and not ref_file_exists(item["exception_ref"]):
-                fail(f"{label}.minimums[{index}].exception_ref points to missing file {item['exception_ref']}")
+    validate_coverage_policy_refs_for_root(ROOT, value, label)
 
 
 def validate_guides() -> None:
-    for relative_path in REQUIRED_GUIDES:
-        require_existing(relative_path)
-    dev_guide = (ROOT / "docs/dev/dev_guides.md").read_text()
-    dev_guide_lower = dev_guide.lower()
-    tiers = set(re.findall(r"\|\s*Tier\s+(\d+)\b", dev_guide))
-    expected = {str(index) for index in range(1, 13)}
-    if tiers != expected:
-        fail(f"docs/dev/dev_guides.md must preserve all 12 test tiers; found {sorted(tiers)}")
-    for token in ["coverage gates", "make test-coverage", ">= 75%"]:
-        if token not in dev_guide_lower:
-            fail(f"docs/dev/dev_guides.md missing coverage token {token!r}")
-    makefile = (ROOT / "Makefile").read_text()
-    for token in ["test-coverage:", "check_go_coverage.py", "prepush-full: fmt lint-fast test-fast test-coverage"]:
-        if token not in makefile:
-            fail(f"Makefile missing coverage gate token {token!r}")
-    arch_guide = (ROOT / "docs/architecture/architecture_guides.md").read_text().lower()
-    for token in ["systems thinking", "tdd", "adr", "performance", "reliability", "fail-closed", "coverage gates"]:
-        if token not in arch_guide:
-            fail(f"docs/architecture/architecture_guides.md missing architecture token {token!r}")
+    validate_guides_for_root(ROOT, REQUIRED_GUIDES)
 
 
 def validate_ci_control_set() -> None:
-    for path in [REQUIRED_CHECKS, CODEOWNERS, ACTION_REF_EXCEPTIONS, VALIDATE_WORKFLOW, CODEQL_WORKFLOW]:
-        if not path.exists():
-            fail(f"missing CI control file: {path.relative_to(ROOT)}")
-
-    required_checks = load_json(REQUIRED_CHECKS).get("required_checks")
-    if not isinstance(required_checks, list):
-        fail(".github/required-checks.json.required_checks must be a list")
-    missing_checks = [check for check in REQUIRED_STATUS_CHECKS if check not in required_checks]
-    if missing_checks:
-        fail(f".github/required-checks.json missing required checks: {missing_checks}")
-
-    validate_workflow = VALIDATE_WORKFLOW.read_text()
-    validate_tokens = [
-        "pull_request:",
-        "push:",
-        "branches:",
-        "- main",
-        "permissions:",
-        "contents: read",
-        "concurrency:",
-        "cancel-in-progress: true",
-        "timeout-minutes:",
-        "actions/checkout@v6.0.2",
-        "actions/setup-go@v6.3.0",
-        "go-version-file: go.mod",
-        "check-latest: false",
-        "cache: true",
-        "make prepush-full",
-    ]
-    for token in validate_tokens:
-        if token not in validate_workflow:
-            fail(f".github/workflows/validate.yml missing CI control token {token!r}")
-
-    codeql_workflow = CODEQL_WORKFLOW.read_text()
-    codeql_tokens = [
-        "pull_request:",
-        "push:",
-        "branches:",
-        "- main",
-        "permissions:",
-        "security-events: write",
-        "contents: read",
-        "concurrency:",
-        "cancel-in-progress: true",
-        "timeout-minutes:",
-        "actions/checkout@v6.0.2",
-        "actions/setup-go@v6.3.0",
-        "go-version-file: go.mod",
-        "check-latest: false",
-        "github/codeql-action/init@v4",
-        "github/codeql-action/autobuild@v4",
-        "github/codeql-action/analyze@v4",
-        "languages: go",
-    ]
-    for token in codeql_tokens:
-        if token not in codeql_workflow:
-            fail(f".github/workflows/codeql.yml missing CI control token {token!r}")
-
-    codeowners = CODEOWNERS.read_text()
-    for token in ["*", "/.github/**", "/schemas/**", "/cmd/**", "/internal/**"]:
-        if token not in codeowners:
-            fail(f".github/CODEOWNERS missing owner token {token!r}")
-
-    action_exceptions = ACTION_REF_EXCEPTIONS.read_text()
-    for token in REQUIRED_ACTION_REFS + ["owner:", "reason:", "scope:", "expires:", "review_command:"]:
-        if token not in action_exceptions:
-            fail(f".github/action-ref-exceptions.yaml missing action-ref token {token!r}")
+    validate_ci_control_set_for_root(
+        ROOT,
+        REQUIRED_CHECKS,
+        CODEOWNERS,
+        ACTION_REF_EXCEPTIONS,
+        VALIDATE_WORKFLOW,
+        CODEQL_WORKFLOW,
+        REQUIRED_STATUS_CHECKS,
+        REQUIRED_ACTION_REFS,
+    )
 
 
 def task_id(task: dict[str, Any]) -> str:
