@@ -8,22 +8,22 @@
       "scripts/validate_repo_pack.py"
     ],
     "line_ceilings": {
-      "scripts/validate_repo_pack.py": 1419
+      "scripts/validate_repo_pack.py": 879
     },
     "budget": {
       "warn_line_threshold": 1200,
       "fail_line_threshold": 2500
     }
   },
-  "reason": "Lumyn's repo-pack validator has been split below the Factory fail threshold but remains above the warning threshold. The architecture-budget logic, self-test fixture harness, shared repo-pack contract constants, acceptance artifact checks, model-provider gate checks, factoryd config checks, guide/CI control checks, safety/risk checks, and task-special checks now live in focused helper modules; the remaining warning-level debt is isolated to the validator orchestration and must stay visible before future autoship cycles so new product work does not repeat the monolith pattern.",
+  "reason": "Lumyn's repo-pack validator has been split below the Factory warning threshold. The architecture-budget logic, self-test fixture harness, shared repo-pack contract constants, acceptance artifact checks, model-provider gate checks, factoryd config checks, guide/CI control checks, safety/risk checks, task-special checks, and planning/artifact contract checks now live in focused helper modules; the remaining exception is a shrink-only ceiling for validator orchestration so new product work does not repeat the monolith pattern.",
   "owner": "lumyn-maintainers",
   "approved_by": "architecture-review",
   "approved_at": "2026-07-01T00:00:00Z",
   "expires_at": "2026-09-01T00:00:00Z",
   "compensating_validation": [
     "make prepush-full",
-    "factoryd doctor emits architecture_budget_report with no unexcepted fail-level source and keeps scripts/validate_repo_pack.py warning-level debt visible",
-    "tasks touching scripts/validate_repo_pack.py must avoid net line growth above 1419 lines unless they are shrink-only decomposition work",
+    "factoryd doctor emits architecture_budget_report with no unexcepted fail-level source and keeps scripts/validate_repo_pack.py shrink-only ceiling visible",
+    "tasks touching scripts/validate_repo_pack.py must avoid net line growth above 879 lines unless they are shrink-only decomposition work",
     "tasks touching internal/source must keep source files below the architecture warning threshold unless a new approved exception is recorded"
   ],
   "follow_up_refs": [
@@ -39,6 +39,7 @@
     "scripts/repo_pack_ci.py",
     "scripts/repo_pack_safety.py",
     "scripts/repo_pack_task_specials.py",
+    "scripts/repo_pack_planning.py",
     "scripts/repo_pack_self_test.py",
     "internal/source/config.go",
     "internal/source/fingerprint.go",
