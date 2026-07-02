@@ -5,27 +5,26 @@
   "repo": "lumyn",
   "scope": {
     "paths": [
-      "internal/source/source.go",
       "scripts/validate_repo_pack.py"
     ],
     "line_ceilings": {
-      "internal/source/source.go": 1641,
-      "scripts/validate_repo_pack.py": 3652
+      "scripts/validate_repo_pack.py": 3651
     },
     "budget": {
       "warn_line_threshold": 1200,
       "fail_line_threshold": 2500
     }
   },
-  "reason": "Lumyn's current source-ingestion implementation and repo-pack validator exceed the Factory source-size budget. The debt is isolated to internal/source and the validator contract, and must be made visible before future autoship cycles so new product work does not repeat the monolith pattern.",
+  "reason": "Lumyn's repo-pack validator exceeds the Factory source-size budget. The internal/source decomposition has been split below the warning threshold; the remaining debt is isolated to the validator contract and must stay visible before future autoship cycles so new product work does not repeat the monolith pattern.",
   "owner": "lumyn-maintainers",
   "approved_by": "architecture-review",
   "approved_at": "2026-07-01T00:00:00Z",
   "expires_at": "2026-09-01T00:00:00Z",
   "compensating_validation": [
     "make prepush-full",
-    "factoryd doctor emits architecture_budget_report with internal/source/source.go and scripts/validate_repo_pack.py marked exception_approved",
-    "tasks touching internal/source or scripts/validate_repo_pack.py must avoid net line growth unless they are shrink-only decomposition work"
+    "factoryd doctor emits architecture_budget_report with scripts/validate_repo_pack.py marked exception_approved",
+    "tasks touching scripts/validate_repo_pack.py must avoid net line growth unless they are shrink-only decomposition work",
+    "tasks touching internal/source must keep source files below the architecture warning threshold unless a new approved exception is recorded"
   ],
   "follow_up_refs": [
     "docs/architecture/findings/TEMP_FINDING_2026-06-30_lumyn_arch_budget.md"
@@ -33,6 +32,8 @@
   "evidence_refs": [
     "internal/source/config.go",
     "internal/source/fingerprint.go",
+    "internal/source/openapi.go",
+    "internal/source/openapi_auth.go",
     "docs/architecture/findings/TEMP_FINDING_2026-06-30_lumyn_arch_budget.md"
   ]
 }
