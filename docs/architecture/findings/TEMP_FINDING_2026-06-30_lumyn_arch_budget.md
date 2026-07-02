@@ -75,6 +75,10 @@ Current progress:
   mapping, scope-closure, and acceptance-coverage checks, lowering
   `scripts/validate_repo_pack.py` to 1,972 lines while preserving validation
   behavior.
+- `scripts/repo_pack_model_provider.py` now owns model-provider endpoint grant
+  extraction and live-eval provider gate checks, lowering
+  `scripts/validate_repo_pack.py` to 1,848 lines while preserving validation
+  behavior.
 
 ## Candidate Package Boundaries
 
