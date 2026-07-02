@@ -1320,7 +1320,6 @@ def validate_task_packets(
     baseline_task_id: str,
     active_model_provider_grants: list[dict[str, Any]] | None = None,
 ) -> None:
-    active_model_provider_grants = active_model_provider_grants or []
     artifact_type = packets.get("artifact_type")
     if artifact_type is not None and artifact_type != "task_packets":
         fail("task-packets.json artifact_type must be task_packets")

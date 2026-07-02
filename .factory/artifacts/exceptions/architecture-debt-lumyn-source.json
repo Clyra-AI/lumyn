@@ -8,7 +8,7 @@
       "scripts/validate_repo_pack.py"
     ],
     "line_ceilings": {
-      "scripts/validate_repo_pack.py": 1849
+      "scripts/validate_repo_pack.py": 1848
     },
     "budget": {
       "warn_line_threshold": 1200,
@@ -23,7 +23,7 @@
   "compensating_validation": [
     "make prepush-full",
     "factoryd doctor emits architecture_budget_report with no unexcepted fail-level source and keeps scripts/validate_repo_pack.py warning-level debt visible",
-    "tasks touching scripts/validate_repo_pack.py must avoid net line growth above 1849 lines unless they are shrink-only decomposition work",
+    "tasks touching scripts/validate_repo_pack.py must avoid net line growth above 1848 lines unless they are shrink-only decomposition work",
     "tasks touching internal/source must keep source files below the architecture warning threshold unless a new approved exception is recorded"
   ],
   "follow_up_refs": [
