@@ -79,6 +79,9 @@ Current progress:
   extraction and live-eval provider gate checks, lowering
   `scripts/validate_repo_pack.py` to 1,848 lines while preserving validation
   behavior.
+- `scripts/repo_pack_factoryd.py` now owns factoryd runtime, portable path, and
+  repo config checks, lowering `scripts/validate_repo_pack.py` to 1,665 lines
+  while preserving validation behavior.
 
 ## Candidate Package Boundaries
 
