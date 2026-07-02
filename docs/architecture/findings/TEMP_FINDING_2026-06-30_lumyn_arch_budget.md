@@ -23,11 +23,11 @@ pattern as product behavior expands.
 Lumyn already has a thin `cmd/lumyn` entrypoint and several implementation
 packages under `internal/`. The immediate risk is not the CLI entrypoint. The
 first `internal/source` decomposition pass has brought source package files
-below the warning threshold. The repo-pack validator has been split below the
-fail threshold, with `scripts/validate_repo_pack.py` still tracked as
-warning-level orchestration debt. Source tests and validator self-tests now live
-in focused files so future behavior can be split without rebuilding a single
-test monolith.
+below the warning threshold. The repo-pack validator has also been split below
+the warning threshold, with `scripts/validate_repo_pack.py` still tracked under
+a shrink-only orchestration ceiling. Source tests and validator self-tests now
+live in focused files so future behavior can be split without rebuilding a
+single test monolith.
 
 ## Workstream A: Repo-Pack Adoption
 
@@ -92,6 +92,10 @@ Current progress:
 - `scripts/repo_pack_task_specials.py` now owns recorder split and
   first-session smoke task checks, lowering `scripts/validate_repo_pack.py` to
   1,419 lines while preserving validation behavior.
+- `scripts/repo_pack_planning.py` now owns context brief, execution plan,
+  validation contract, and shared planning-policy checks, lowering
+  `scripts/validate_repo_pack.py` to 879 lines while preserving validation
+  behavior.
 
 ## Candidate Package Boundaries
 
