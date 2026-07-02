@@ -85,6 +85,10 @@ Current progress:
 - `scripts/repo_pack_ci.py` now owns guide coverage, coverage-policy refs, and
   GitHub CI/control-file checks, lowering `scripts/validate_repo_pack.py` to
   1,582 lines while preserving validation behavior.
+- `scripts/repo_pack_safety.py` now owns safety/corpus-ready plan checks and
+  model-provider risk classification checks, lowering
+  `scripts/validate_repo_pack.py` to 1,478 lines while preserving validation
+  behavior.
 
 ## Candidate Package Boundaries
 
