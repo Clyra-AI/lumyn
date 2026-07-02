@@ -21,11 +21,11 @@ pattern as product behavior expands.
 ## Current Finding
 
 Lumyn already has a thin `cmd/lumyn` entrypoint and several implementation
-packages under `internal/`. The immediate risk is not the CLI entrypoint; it is
-that `internal/source` has already accumulated broad responsibility, while
-`scripts/validate_repo_pack.py` remains over the source-size budget. The source
-tests have started moving into focused files so future behavior can be split
-without rebuilding a single test monolith.
+packages under `internal/`. The immediate risk is not the CLI entrypoint. The
+first `internal/source` decomposition pass has brought source package files
+below the warning threshold, while `scripts/validate_repo_pack.py` remains over
+the source-size budget. Source tests have moved into focused files so future
+behavior can be split without rebuilding a single test monolith.
 
 ## Workstream A: Repo-Pack Adoption
 
@@ -55,6 +55,13 @@ Current progress:
 - `internal/source/config.go` now owns source config read/write/defaulting and
   repo-local config validation, further lowering `internal/source/source.go`
   while preserving init/check behavior.
+- `internal/source/openapi.go` now owns OpenAPI source parsing, operation
+  metadata checks, schema/reference resolution, and parser-facing findings,
+  bringing `internal/source/source.go` below the warning threshold while
+  preserving source-check behavior.
+- `internal/source/openapi_auth.go` now owns OpenAPI security-scheme and OAuth
+  scope description checks so the OpenAPI split remains below the warning
+  threshold.
 
 ## Candidate Package Boundaries
 
@@ -63,6 +70,10 @@ Current progress:
   repo-local config validation.
 - `internal/source/fingerprint.go`: source hashing, docs hashing, generated
   source-directory skips, and surface fingerprint assembly.
+- `internal/source/openapi.go`: OpenAPI source parsing, operation metadata
+  checks, schema/reference resolution, and parser-facing findings.
+- `internal/source/openapi_auth.go`: OpenAPI security-scheme and OAuth scope
+  description checks.
 - `internal/source/docs.go`: docs source walking, operational-guidance checks,
   and broken local Markdown reference findings.
 - `internal/source/docs_test.go`: source-check docs/init/link behavior tests.

@@ -89,6 +89,8 @@ Require an ADR or decision note when a task changes:
 - `internal/source/docs.go`: docs source walking, operational-guidance checks, and broken local Markdown reference findings.
 - `internal/source/docs_test.go`: source-check docs/init/link behavior tests.
 - `internal/source/markdownlinks/`: local Markdown link target parsing, fence detection, and missing-reference target normalization for docs source checks.
+- `internal/source/openapi.go`: OpenAPI source parsing, operation metadata checks, schema/reference resolution, and parser-facing source findings.
+- `internal/source/openapi_auth.go`: OpenAPI security scheme and OAuth scope description checks.
 - `internal/source/report.go`: source-check report persistence and finding-status helpers.
 - `internal/source/yaml_helpers.go`: YAML scalar rendering, inline-flow parsing, OpenAPI component reference helpers, and JSON pointer escaping for source checks.
 - `internal/source/source_config_report_test.go`: source config parsing, report persistence, and finding helper tests.
@@ -101,10 +103,12 @@ Require an ADR or decision note when a task changes:
 Lumyn follows the Factory architecture budget gate: source files warn at `1200`
 lines and fail at `2500` lines. The inventory excludes daemon state,
 dependencies, caches, and build output, but it does include product source and
-tests. The approved current over-budget source surfaces are
-`internal/source/source.go` and `scripts/validate_repo_pack.py`, recorded in
+tests. The remaining approved over-budget source surface is
+`scripts/validate_repo_pack.py`, recorded in
 `.factory/artifacts/exceptions/architecture-debt-lumyn-source.json` and backed
 by `docs/architecture/findings/TEMP_FINDING_2026-06-30_lumyn_arch_budget.md`.
+`internal/source` has been split below the warning threshold and is no longer
+exception-approved debt.
 
 Until that exception is closed, product work that touches `internal/source` or
 the repo-pack validator must either reduce file size, split coherent behavior
@@ -112,15 +116,19 @@ into smaller packages or files, or record why the change is shrink-neutral with
 compensating validation. New feature work must not add unrelated product
 domains to the source-ingestion package or validator.
 
-Current source decomposition has started by extracting Markdown link target
-parsing and local target normalization into `internal/source/markdownlinks`,
-docs-source validation into `internal/source/docs.go`, and report persistence
-and finding-status helpers into `internal/source/report.go`, and YAML scalar,
-inline-flow, component-reference, and JSON pointer helpers into
+Current source decomposition has extracted Markdown link target parsing and
+local target normalization into `internal/source/markdownlinks`, docs-source
+validation into `internal/source/docs.go`, report persistence and
+finding-status helpers into `internal/source/report.go`, source config handling
+into `internal/source/config.go`, source fingerprinting into
+`internal/source/fingerprint.go`, OpenAPI parsing and findings into
+`internal/source/openapi.go`, OpenAPI auth-scope checks into
+`internal/source/openapi_auth.go`, and YAML scalar, inline-flow,
+component-reference, and JSON pointer helpers into
 `internal/source/yaml_helpers.go`. Source tests are also split so
 docs/init/link behavior, shared fixtures, and shared assertion helpers no
-longer live in one oversized test file. `internal/source` should keep the
-project-level source-check orchestration, filesystem resolution, and shared
+longer live in one oversized test file. `internal/source/source.go` should keep
+the project-level source-check orchestration, filesystem resolution, and shared
 types while smaller files or internal packages own pure parsing, validation,
 normalization, and reporting responsibilities.
 

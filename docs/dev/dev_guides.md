@@ -75,10 +75,12 @@ Lumyn uses the Factory default architecture budget: warn at `1200` source lines
 and fail at `2500` source lines for `.go`, `.py`, `.ts`, `.tsx`, `.js`, and
 `.jsx` files, excluding generated runtime, dependency, cache, and build
 directories. `factoryd doctor` must emit an `architecture_budget_report` before
-daemon work. The current `internal/source/source.go` and
-`scripts/validate_repo_pack.py` over-budget files are temporary debt covered by
+daemon work. The remaining over-budget source file is
+`scripts/validate_repo_pack.py`, covered by
 `.factory/artifacts/exceptions/architecture-debt-lumyn-source.json`; work that
-touches them must avoid net growth unless it is shrink-only decomposition.
+touches it must avoid net growth unless it is shrink-only decomposition.
+`internal/source` has been split below the warning threshold and future work
+must preserve those smaller responsibility boundaries.
 
 ## CI And PR Lifecycle
 

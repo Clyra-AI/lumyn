@@ -55,7 +55,6 @@ ARCHITECTURE_BUDGET_EXCEPTION_REFS = [
     ".factory/artifacts/exceptions/architecture-debt-lumyn-source.json",
 ]
 ARCHITECTURE_BUDGET_EXCEPTION_PATHS = [
-    "internal/source/source.go",
     "scripts/validate_repo_pack.py",
 ]
 FACTORY_ARCHITECTURE_BUDGET_POLICY_REF = "https://github.com/Clyra-AI/factory/blob/main/docs/standards/architecture-fitness-standard.md#default-budget"
