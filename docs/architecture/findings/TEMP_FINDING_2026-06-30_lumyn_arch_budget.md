@@ -82,6 +82,9 @@ Current progress:
 - `scripts/repo_pack_factoryd.py` now owns factoryd runtime, portable path, and
   repo config checks, lowering `scripts/validate_repo_pack.py` to 1,665 lines
   while preserving validation behavior.
+- `scripts/repo_pack_ci.py` now owns guide coverage, coverage-policy refs, and
+  GitHub CI/control-file checks, lowering `scripts/validate_repo_pack.py` to
+  1,582 lines while preserving validation behavior.
 
 ## Candidate Package Boundaries
 
