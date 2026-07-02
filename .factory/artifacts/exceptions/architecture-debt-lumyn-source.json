@@ -9,7 +9,7 @@
       "scripts/validate_repo_pack.py"
     ],
     "line_ceilings": {
-      "internal/source/source.go": 1895,
+      "internal/source/source.go": 1803,
       "scripts/validate_repo_pack.py": 3652
     },
     "budget": {
@@ -31,6 +31,7 @@
     "docs/architecture/findings/TEMP_FINDING_2026-06-30_lumyn_arch_budget.md"
   ],
   "evidence_refs": [
+    "internal/source/fingerprint.go",
     "docs/architecture/findings/TEMP_FINDING_2026-06-30_lumyn_arch_budget.md"
   ]
 }
