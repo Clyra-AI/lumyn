@@ -13,7 +13,6 @@ from repo_pack_acceptance import (
     validate_acceptance_mapping,
     validate_scope_closure_map,
 )
-from repo_pack_architecture import validate_architecture_budget_policy
 from repo_pack_contracts import (
     ACCEPTANCE_LEDGER_REF,
     LEGACY_PROVIDER_FIELD,
@@ -30,6 +29,12 @@ from repo_pack_contracts import (
     validate_delivery_slice_coverage,
     validate_mvp_version_slice_coverage,
     validate_no_legacy_provider_fields,
+)
+from repo_pack_factoryd import (
+    contains_machine_local_path,
+    is_valid_factoryd_runtime,
+    validate_factoryd_config as validate_factoryd_config_for_root,
+    validate_factoryd_runtime,
 )
 from repo_pack_model_provider import (
     factoryd_config_capability_grants as collect_factoryd_config_capability_grants,
@@ -163,18 +168,6 @@ REDACTION_RECURSIVE_TERMS = {
     "path",
 }
 
-REQUIRED_FACTORYD_RUNTIME_FIELDS = [
-    "state_dir",
-    "workspace_root",
-    "branch_prefix",
-    "worker_type",
-    "worker_command",
-    "approval_posture",
-    "credential_posture",
-    "network_posture",
-    "capability_grants",
-]
-
 REQUIRED_PLAN_SKILL_REFS = [
     "factory://skills/prd-to-plan",
     "factory://skills/execution-compiler",
@@ -290,7 +283,6 @@ ADR_CONTRACT_TOKENS = [
     "proof",
 ]
 
-MACHINE_LOCAL_PATH_RE = re.compile(r"(?<![A-Za-z0-9+./#-])(?:/(?!/)[A-Za-z0-9._-][^\s\"'<>]*|[A-Za-z]:[\\/])")
 NO_CONTRACT_IMPACT_BREAKERS = [
     " but ",
     " except ",
@@ -588,66 +580,6 @@ def object_source_ref_base(value: Any) -> str:
 
 def has_nonempty_dict(value: Any) -> bool:
     return isinstance(value, dict) and bool(value)
-
-
-def is_valid_factoryd_runtime(value: Any) -> bool:
-    if not isinstance(value, dict):
-        return False
-    for field in REQUIRED_FACTORYD_RUNTIME_FIELDS:
-        if field == "capability_grants":
-            if not isinstance(value.get(field), list):
-                return False
-            continue
-        if field == "worker_command":
-            if field not in value:
-                return False
-            continue
-        if not has_nonempty_string(value.get(field)):
-            return False
-    if value.get("worker_type") != "codex_cli":
-        return False
-    credential_posture = str(value.get("credential_posture", "")).lower()
-    if "no ambient" not in credential_posture:
-        return False
-    network_posture = str(value.get("network_posture", "")).lower()
-    return "offline" in network_posture or "allowlist" in network_posture
-
-
-def validate_factoryd_runtime(value: Any, label: str) -> None:
-    if not isinstance(value, dict):
-        fail(f"{label} must be an object")
-    missing = [
-        field
-        for field in REQUIRED_FACTORYD_RUNTIME_FIELDS
-        if field not in ["worker_command", "capability_grants"] and not has_nonempty_string(value.get(field))
-    ]
-    if "worker_command" not in value:
-        missing.append("worker_command")
-    if not isinstance(value.get("capability_grants"), list):
-        missing.append("capability_grants")
-    if missing:
-        fail(f"{label} missing fields: {', '.join(missing)}")
-    if value.get("worker_type") != "codex_cli":
-        fail(f"{label}.worker_type must be codex_cli")
-    credential_posture = str(value.get("credential_posture", "")).lower()
-    if "no ambient" not in credential_posture:
-        fail(f"{label}.credential_posture must declare no ambient secrets")
-    network_posture = str(value.get("network_posture", "")).lower()
-    if "offline" not in network_posture and "allowlist" not in network_posture:
-        fail(f"{label}.network_posture must be offline or allowlisted")
-
-
-def contains_machine_local_path(value: Any) -> bool:
-    if isinstance(value, str):
-        return bool(MACHINE_LOCAL_PATH_RE.search(value))
-    if isinstance(value, list):
-        return any(contains_machine_local_path(item) for item in value)
-    if isinstance(value, dict):
-        return any(
-            contains_machine_local_path(key) or contains_machine_local_path(item)
-            for key, item in value.items()
-        )
-    return False
 
 
 def task_slice_type(task: dict[str, Any]) -> str:
@@ -1655,122 +1587,7 @@ def validate_safety_corpus_ready_plan(
 
 
 def validate_factoryd_config(config: dict[str, Any], active_config: dict[str, Any], autoship_config: dict[str, Any]) -> None:
-    if contains_machine_local_path(config):
-        fail(".factory/factoryd.example.json contains a machine-local absolute path")
-    if active_config and contains_machine_local_path(active_config):
-        fail(".factory/factoryd.json contains a machine-local absolute path")
-    if contains_machine_local_path(autoship_config):
-        fail(".factory/factoryd.autoship.example.json contains a machine-local absolute path")
-    repos = config.get("repos")
-    if not isinstance(repos, dict) or "lumyn" not in repos:
-        fail(".factory/factoryd.example.json must define repos.lumyn")
-    lumyn = repos["lumyn"]
-    if not isinstance(lumyn, dict):
-        fail(".factory/factoryd.example.json repos.lumyn must be an object")
-    expected_paths = {
-        "repo_path": "..",
-        "acceptance_ledger": ACCEPTANCE_LEDGER_REF,
-        "task_packets": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
-        "scope_closure_map": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
-        "validation_contract": ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
-        "state_dir": "../.factoryd",
-        "workspace_root": "../.factoryd/workspaces",
-    }
-    for key, expected in expected_paths.items():
-        if lumyn.get(key) != expected:
-            fail(f".factory/factoryd.example.json repos.lumyn.{key} must be {expected!r}")
-    validate_factoryd_runtime(lumyn, ".factory/factoryd.example.json repos.lumyn")
-    validate_architecture_budget_policy(ROOT, lumyn, ".factory/factoryd.example.json repos.lumyn")
-    commands = lumyn.get("validation_commands")
-    if not isinstance(commands, list) or "python3 scripts/validate_repo_pack.py" not in commands:
-        fail(".factory/factoryd.example.json must run validate_repo_pack.py")
-    shipping = lumyn.get("shipping")
-    if not isinstance(shipping, dict):
-        fail(".factory/factoryd.example.json repos.lumyn must declare shipping block")
-    if shipping.get("enabled") is not False or lumyn.get("auto_ship") is not False:
-        fail(".factory/factoryd.example.json must keep auto shipping disabled until remote lifecycle hooks are approved")
-    for key in [
-        "push_required",
-        "pr_required",
-        "ci_required",
-        "codex_review_required",
-        "merge_required",
-        "post_merge_required",
-        "scope_closure_required",
-    ]:
-        if shipping.get(key) is not False:
-            fail(f".factory/factoryd.example.json shipping.{key} must be false until hooks are approved")
-    for key in [
-        "push_command",
-        "open_pr_command",
-        "ci_command",
-        "codex_review_command",
-        "merge_command",
-        "post_merge_command",
-        "scope_closure_command",
-    ]:
-        if shipping.get(key) != "":
-            fail(f".factory/factoryd.example.json shipping.{key} must be empty until hooks are approved")
-    if active_config:
-        active_repos = active_config.get("repos")
-        if not isinstance(active_repos, dict) or "lumyn" not in active_repos:
-            fail(".factory/factoryd.json must define repos.lumyn")
-        active_lumyn = active_repos["lumyn"]
-        if not isinstance(active_lumyn, dict):
-            fail(".factory/factoryd.json repos.lumyn must be an object")
-        for key, expected in expected_paths.items():
-            if active_lumyn.get(key) != expected:
-                fail(f".factory/factoryd.json repos.lumyn.{key} must be {expected!r}")
-        validate_factoryd_runtime(active_lumyn, ".factory/factoryd.json repos.lumyn")
-        validate_architecture_budget_policy(ROOT, active_lumyn, ".factory/factoryd.json repos.lumyn")
-        active_commands = active_lumyn.get("validation_commands")
-        if not isinstance(active_commands, list) or "python3 scripts/validate_repo_pack.py" not in active_commands:
-            fail(".factory/factoryd.json must run validate_repo_pack.py")
-        active_shipping = active_lumyn.get("shipping")
-        if not isinstance(active_shipping, dict):
-            fail(".factory/factoryd.json repos.lumyn must declare shipping block")
-        if active_lumyn.get("auto_ship") is not False or active_shipping.get("enabled") is not False:
-            fail(".factory/factoryd.json must remain safe-attended; use factoryd.autoship.example.json for full-loop shipping")
-        active_factory = active_config.get("factory")
-        if not isinstance(active_factory, dict):
-            fail(".factory/factoryd.json must define factory")
-        if not has_nonempty_string(active_factory.get("repo_path")):
-            fail(".factory/factoryd.json factory.repo_path must be non-empty")
-        if active_factory.get("profile_path") != "profiles/lumyn.yaml":
-            fail(".factory/factoryd.json factory.profile_path must be profiles/lumyn.yaml")
-    autoship_repos = autoship_config.get("repos")
-    if not isinstance(autoship_repos, dict) or "lumyn" not in autoship_repos:
-        fail(".factory/factoryd.autoship.example.json must define repos.lumyn")
-    autoship_lumyn = autoship_repos["lumyn"]
-    if not isinstance(autoship_lumyn, dict):
-        fail(".factory/factoryd.autoship.example.json repos.lumyn must be an object")
-    for key, expected in expected_paths.items():
-        if autoship_lumyn.get(key) != expected:
-            fail(f".factory/factoryd.autoship.example.json repos.lumyn.{key} must be {expected!r}")
-    validate_factoryd_runtime(autoship_lumyn, ".factory/factoryd.autoship.example.json repos.lumyn")
-    validate_architecture_budget_policy(ROOT, autoship_lumyn, ".factory/factoryd.autoship.example.json repos.lumyn")
-    autoship_shipping = autoship_lumyn.get("shipping")
-    if not isinstance(autoship_shipping, dict):
-        fail(".factory/factoryd.autoship.example.json repos.lumyn must declare shipping block")
-    if autoship_lumyn.get("auto_ship") is not True or autoship_shipping.get("enabled") is not True:
-        fail(".factory/factoryd.autoship.example.json must explicitly enable auto shipping")
-    if autoship_shipping.get("provider") != "github_cli":
-        fail(".factory/factoryd.autoship.example.json shipping.provider must be github_cli")
-    for key in [
-        "push_required",
-        "pr_required",
-        "ci_required",
-        "codex_review_required",
-        "merge_required",
-        "post_merge_required",
-        "scope_closure_required",
-    ]:
-        if autoship_shipping.get(key) is not True:
-            fail(f".factory/factoryd.autoship.example.json shipping.{key} must be true")
-    if autoship_shipping.get("scope_closure_mode") != "semantic":
-        fail(".factory/factoryd.autoship.example.json shipping.scope_closure_mode must be semantic")
-    if ".factoryd/" not in (ROOT / ".gitignore").read_text():
-        fail(".gitignore must ignore .factoryd/")
+    validate_factoryd_config_for_root(ROOT, config, active_config, autoship_config, FACTORYD_REPO_KEY)
 
 
 def validate_risk_classification(risk: dict[str, Any]) -> None:
