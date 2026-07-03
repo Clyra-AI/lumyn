@@ -1,22 +1,32 @@
 # TEMP Finding: Lumyn Architecture Budget And Early Source Split
 
 Date: 2026-06-30
-Status: source finding; not dispatchable
+Status: closed source finding
 Repo: Lumyn
 
 ## Boundary
 
-This file is repo-local source evidence for future Factory/factoryd planning.
+This file is repo-local source evidence retained for architecture audit history.
 It is not a generated execution contract, task packet, acceptance ledger, or
-scope-closure artifact. Before implementation starts, this finding must be
-ingested or promoted through the governed Factory path so runner-ready task
-packets, validation commands, lifecycle evidence, and acceptance refs are
-materialized.
+scope-closure artifact. The finding was promoted through the governed Factory
+path and closed by the systemic architecture/review-convergence ledger in
+Factory PR #240, with Lumyn evidence synchronized through PR #58.
 
 ## Objective
 
 Adopt architecture budget rules early so Lumyn does not repeat Relia's monolith
 pattern as product behavior expands.
+
+## Closure
+
+Closed. Lumyn's repo operating pack now records the architecture budget and
+exception path, `internal/source` has been split below the warning threshold,
+and the validator orchestration surface is below its tracked shrink-only
+ceiling:
+
+- `internal/source/source.go`: 277 lines.
+- `internal/source/source_test.go`: 1,029 lines.
+- `scripts/validate_repo_pack.py`: 879 lines.
 
 ## Current Finding
 
