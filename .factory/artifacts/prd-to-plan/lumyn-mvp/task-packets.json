@@ -13,10 +13,12 @@
         ".factory/artifacts/pr-lifecycle/T1/",
         ".factory/artifacts/task-runs/T1/",
         ".tool-versions",
+        "internal/config/",
+        "internal/exitcode/",
+        "internal/result/",
         "AGENTS.md",
         "WORKFLOW.md",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "go.mod",
         "go.sum",
@@ -523,7 +525,14 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/config/",
+        "internal/exitcode/",
+        "internal/result/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T2",
@@ -1067,7 +1076,11 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "schemas/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T2.5",
@@ -1579,7 +1592,14 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        ".github/workflows/",
+        ".github/required-checks.json",
+        ".github/CODEOWNERS",
+        ".github/action-ref-exceptions.yaml"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T2.6",
@@ -2070,7 +2090,13 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "docs/dev/",
+        "docs/architecture/",
+        ".github/workflows/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T2.7",
@@ -2086,8 +2112,9 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T2.7/",
         ".factory/artifacts/task-runs/T2.7/",
+        "internal/result/",
+        "internal/source/",
         "schemas/",
-        "internal/",
         "cmd/lumyn/",
         "tests/",
         "examples/",
@@ -2660,7 +2687,14 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/result/",
+        "internal/source/",
+        "schemas/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T3",
@@ -2677,8 +2711,10 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T3/",
         ".factory/artifacts/task-runs/T3/",
+        "internal/config/",
+        "internal/result/",
+        "internal/source/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "examples/"
       ],
@@ -3339,7 +3375,14 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/config/",
+        "internal/result/",
+        "internal/source/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T3.1",
@@ -3353,8 +3396,9 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T3.1/",
         ".factory/artifacts/task-runs/T3.1/",
+        "internal/result/",
+        "internal/source/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "examples/",
         "schemas/",
@@ -3905,7 +3949,14 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/result/",
+        "internal/source/",
+        "schemas/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T4.1",
@@ -3921,8 +3972,10 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T4.1/",
         ".factory/artifacts/task-runs/T4.1/",
+        "internal/record/",
+        "internal/result/",
+        "internal/source/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "examples/mock-api/",
         "examples/cassettes/",
@@ -4554,7 +4607,15 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/record/",
+        "internal/result/",
+        "internal/source/",
+        "schemas/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T4.2",
@@ -4569,8 +4630,10 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T4.2/",
         ".factory/artifacts/task-runs/T4.2/",
+        "internal/record/",
+        "internal/result/",
+        "internal/workflow/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "examples/workflows/",
         "examples/cassettes/",
@@ -5256,7 +5319,15 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/record/",
+        "internal/result/",
+        "internal/workflow/",
+        "schemas/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T4.3",
@@ -5271,8 +5342,10 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T4.3/",
         ".factory/artifacts/task-runs/T4.3/",
+        "internal/record/",
+        "internal/report/",
+        "internal/workflow/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "examples/recorder-quality/",
         "examples/openapi/",
@@ -5906,7 +5979,14 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/record/",
+        "internal/report/",
+        "internal/workflow/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T5.1",
@@ -5920,8 +6000,11 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T5.1/",
         ".factory/artifacts/task-runs/T5.1/",
+        "internal/result/",
+        "internal/verify/",
+        "internal/workflow/",
+        "schemas/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "examples/"
       ],
@@ -6565,7 +6648,15 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/result/",
+        "internal/verify/",
+        "internal/workflow/",
+        "schemas/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T5.2",
@@ -6578,8 +6669,12 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T5.2/",
         ".factory/artifacts/task-runs/T5.2/",
+        "internal/config/",
+        "internal/result/",
+        "internal/verify/",
+        "internal/workflow/",
+        "schemas/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "examples/"
       ],
@@ -7112,7 +7207,16 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/config/",
+        "internal/result/",
+        "internal/verify/",
+        "internal/workflow/",
+        "schemas/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T6.1",
@@ -7126,8 +7230,10 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T6.1/",
         ".factory/artifacts/task-runs/T6.1/",
+        "internal/demo/",
+        "internal/report/",
+        "internal/result/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "examples/traces/",
         "scripts/",
@@ -7845,7 +7951,14 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/demo/",
+        "internal/report/",
+        "internal/result/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T6.2",
@@ -7858,8 +7971,10 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T6.2/",
         ".factory/artifacts/task-runs/T6.2/",
+        "internal/demo/",
+        "internal/report/",
+        "internal/result/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "examples/traces/",
         "scripts/",
@@ -8464,7 +8579,14 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/demo/",
+        "internal/report/",
+        "internal/result/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T7",
@@ -8478,8 +8600,11 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T7/",
         ".factory/artifacts/task-runs/T7/",
+        "internal/config/",
+        "internal/live/",
+        "internal/result/",
+        "internal/verify/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "docs/dev/"
       ],
@@ -9149,7 +9274,15 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/config/",
+        "internal/live/",
+        "internal/result/",
+        "internal/verify/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T8",
@@ -9163,8 +9296,10 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T8/",
         ".factory/artifacts/task-runs/T8/",
+        "internal/boundary/",
+        "internal/result/",
+        "internal/verify/",
         "cmd/lumyn/",
-        "internal/",
         "schemas/",
         "tests/",
         "examples/workflows/"
@@ -9788,7 +9923,15 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/boundary/",
+        "internal/result/",
+        "internal/verify/",
+        "schemas/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T9",
@@ -9803,9 +9946,11 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T9/",
         ".factory/artifacts/task-runs/T9/",
+        "internal/ci/",
+        "internal/result/",
+        "internal/verify/",
         ".github/workflows/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "README.md"
       ],
@@ -10384,7 +10529,15 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        ".github/workflows/",
+        "cmd/lumyn/",
+        "internal/ci/",
+        "internal/result/",
+        "internal/verify/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T10",
@@ -10398,8 +10551,11 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T10/",
         ".factory/artifacts/task-runs/T10/",
+        "internal/redaction/",
+        "internal/report/",
+        "internal/result/",
+        "internal/share/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "examples/traces/"
       ],
@@ -11049,7 +11205,15 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/redaction/",
+        "internal/report/",
+        "internal/result/",
+        "internal/share/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T11.1",
@@ -11064,8 +11228,11 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T11.1/",
         ".factory/artifacts/task-runs/T11.1/",
+        "internal/config/",
+        "internal/eval/",
+        "internal/provider/",
+        "internal/result/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "docs/architecture/"
       ],
@@ -11854,7 +12021,15 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/config/",
+        "internal/eval/",
+        "internal/provider/",
+        "internal/result/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T11.2",
@@ -11867,8 +12042,12 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T11.2/",
         ".factory/artifacts/task-runs/T11.2/",
+        "internal/config/",
+        "internal/eval/",
+        "internal/provider/",
+        "internal/result/",
+        "internal/source/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "docs/architecture/"
       ],
@@ -12510,7 +12689,16 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/config/",
+        "internal/eval/",
+        "internal/provider/",
+        "internal/result/",
+        "internal/source/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T12.1",
@@ -12524,8 +12712,11 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T12.1/",
         ".factory/artifacts/task-runs/T12.1/",
+        "internal/baseline/",
+        "internal/eval/",
+        "internal/report/",
+        "internal/result/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "baselines/",
         "examples/"
@@ -13202,7 +13393,15 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/baseline/",
+        "internal/eval/",
+        "internal/report/",
+        "internal/result/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     },
     {
       "task_id": "T12.2",
@@ -13215,8 +13414,11 @@
       "allowed_paths": [
         ".factory/artifacts/pr-lifecycle/T12.2/",
         ".factory/artifacts/task-runs/T12.2/",
+        "internal/baseline/",
+        "internal/eval/",
+        "internal/result/",
+        "internal/share/",
         "cmd/lumyn/",
-        "internal/",
         "tests/",
         "baselines/",
         "examples/"
@@ -13822,7 +14024,15 @@
         "Agent-facing CLI output supports stable JSON mode or records an approved deferral.",
         "Non-interactive or piped output is machine-readable unless the command is explicitly human-only.",
         "Quiet and compact modes preserve status, evidence refs, typed exits, and machine-readable errors."
-      ]
+      ],
+      "architecture_target_paths": [
+        "cmd/lumyn/",
+        "internal/baseline/",
+        "internal/eval/",
+        "internal/result/",
+        "internal/share/"
+      ],
+      "path_planning_method": "architecture_target_paths_v1"
     }
   ],
   "runtime_pins": {

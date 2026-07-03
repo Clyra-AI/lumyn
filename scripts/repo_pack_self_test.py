@@ -5,9 +5,9 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from typing import Any
 
 import validate_repo_pack as validator
-from validate_repo_pack import *  # noqa: F401,F403 - self-test fixtures exercise validator internals.
 from repo_pack_architecture import (
     ARCHITECTURE_BUDGET_EXCEPTION_REFS,
     FACTORY_ARCHITECTURE_BUDGET_POLICY_REF,
@@ -15,6 +15,19 @@ from repo_pack_architecture import (
     architecture_debt_exception_expiry_error,
     validate_architecture_debt_exception_expiry,
 )
+
+ACCEPTANCE_LEDGER_REF = validator.ACCEPTANCE_LEDGER_REF
+FACTORYD_REPO_KEY = validator.FACTORYD_REPO_KEY
+REQUIRED_PLAN_SKILL_REFS = validator.REQUIRED_PLAN_SKILL_REFS
+RUNTIME_CONTROL_FORBIDDEN_PATHS = validator.RUNTIME_CONTROL_FORBIDDEN_PATHS
+contains_machine_local_path = validator.contains_machine_local_path
+expected_task_version_slices = validator.expected_task_version_slices
+fail = validator.fail
+validate_factoryd_config = validator.validate_factoryd_config
+validate_model_provider_gate = validator.validate_model_provider_gate
+validate_standalone_task_packet = validator.validate_standalone_task_packet
+validate_task_execution_compiler_fields = validator.validate_task_execution_compiler_fields
+validate_task_packets = validator.validate_task_packets
 
 
 def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]:
@@ -71,14 +84,21 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
             "skip_policy": "approved_exception_required",
         },
         "allowed_paths": [
-            "cmd/",
-            "internal/",
+            "cmd/lumyn/",
+            "internal/result/",
+            "internal/source/",
             "schemas/",
             "tests/",
             "docs/",
             f".factory/artifacts/task-runs/{task_id_value}/",
             f".factory/artifacts/pr-lifecycle/{task_id_value}/",
         ],
+        "architecture_target_paths": [
+            "cmd/lumyn/",
+            "internal/result/",
+            "internal/source/",
+        ],
+        "path_planning_method": "architecture_target_paths_v1",
         "forbidden_paths": [".git/", ".factory/tmp/", ".factoryd/", *RUNTIME_CONTROL_FORBIDDEN_PATHS],
         "worker_type": "codex_cli",
         "factoryd_runtime": {
@@ -746,9 +766,6 @@ def run_self_test() -> int:
         ".factory//artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
     )
     control_allowed_packets["tasks"][1]["allowed_paths"].append(
-        ".factory/artifacts/task-runs/T3/../../prd-to-plan/lumyn-mvp/scope-closure-map.json"
-    )
-    control_allowed_packets["tasks"][1]["allowed_paths"].append(
         ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json"
     )
     control_allowed_packets["tasks"][1]["allowed_paths"].append(
@@ -761,6 +778,20 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected runtime-owned control artifact allowed path to fail")
+
+    traversal_allowed_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    traversal_allowed_packets["tasks"][1]["allowed_paths"].append(
+        ".factory/artifacts/task-runs/T3/../../prd-to-plan/lumyn-mvp/scope-closure-map.json"
+    )
+    try:
+        validate_task_packets(traversal_allowed_packets, "T2.6")
+    except AssertionError as exc:
+        if "must not traverse outside the repository" not in str(exc):
+            raise
+    else:
+        fail("self-test expected traversing allowed path to fail")
 
     missing_runtime_pin_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
@@ -935,6 +966,46 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected missing runner-ready task field to fail")
+
+    missing_architecture_targets_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    del missing_architecture_targets_packets["tasks"][1]["architecture_target_paths"]
+    try:
+        validate_task_packets(missing_architecture_targets_packets, "T2.6")
+    except AssertionError as exc:
+        if "architecture_target_paths must be a non-empty list" not in str(exc):
+            raise
+    else:
+        fail("self-test expected missing architecture target paths to fail")
+
+    broad_internal_allowed_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    broad_internal_allowed_packets["tasks"][1]["allowed_paths"].append("internal/")
+    try:
+        validate_task_packets(broad_internal_allowed_packets, "T2.6")
+    except AssertionError as exc:
+        if "allowed_paths must not include broad internal/" not in str(exc):
+            raise
+    else:
+        fail("self-test expected broad internal allowed path to fail")
+
+    missing_allowed_target_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    missing_allowed_target_packets["tasks"][1]["allowed_paths"] = [
+        path
+        for path in missing_allowed_target_packets["tasks"][1]["allowed_paths"]
+        if path != "internal/source/"
+    ]
+    try:
+        validate_task_packets(missing_allowed_target_packets, "T2.6")
+    except AssertionError as exc:
+        if "allowed_paths must include architecture_target_paths" not in str(exc):
+            raise
+    else:
+        fail("self-test expected missing allowed architecture target to fail")
 
     behavioral_without_scorecard_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]

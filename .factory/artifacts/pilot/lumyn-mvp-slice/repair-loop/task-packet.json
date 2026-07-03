@@ -50,8 +50,10 @@
     ".factory/artifacts/pr-lifecycle/T3/",
     ".factory/artifacts/task-runs/T3/",
     ".factory/artifacts/pilot/lumyn-mvp-slice/",
+    "internal/config/",
+    "internal/result/",
+    "internal/source/",
     "cmd/lumyn/",
-    "internal/",
     "tests/",
     "examples/"
   ],
@@ -428,5 +430,12 @@
     "customer_safe": false,
     "redaction_notes": "Repair task-run evidence remains internal unless explicitly exported.",
     "recursive_policy": "nested owner, credential, secret, endpoint, and machine-local path fields must be redacted before sharing"
-  }
+  },
+  "architecture_target_paths": [
+    "cmd/lumyn/",
+    "internal/config/",
+    "internal/result/",
+    "internal/source/"
+  ],
+  "path_planning_method": "architecture_target_paths_v1"
 }
