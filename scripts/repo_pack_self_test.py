@@ -1007,6 +1007,19 @@ def run_self_test() -> int:
     else:
         fail("self-test expected missing allowed architecture target to fail")
 
+    repo_root_target_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    repo_root_target_packets["tasks"][1]["architecture_target_paths"] = ["."]
+    repo_root_target_packets["tasks"][1]["allowed_paths"] = ["."]
+    try:
+        validate_task_packets(repo_root_target_packets, "T2.6")
+    except AssertionError as exc:
+        if "must not resolve to the repository root" not in str(exc):
+            raise
+    else:
+        fail("self-test expected repo-root architecture target to fail")
+
     behavioral_without_scorecard_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
     }

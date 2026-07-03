@@ -39,6 +39,8 @@ def repo_relative_path_error(value: object) -> str | None:
         return "must be repo-relative"
     if any(part == ".." for part in path.split("/")):
         return "must not traverse outside the repository"
+    if not normalize_repo_path(path):
+        return "must not resolve to the repository root"
     return None
 
 
