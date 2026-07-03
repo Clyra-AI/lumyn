@@ -62,10 +62,8 @@ from repo_pack_safety import (
     validate_risk_classification as validate_risk_classification_with_policy,
     validate_safety_corpus_ready_plan as validate_safety_corpus_ready_plan_with_prd,
 )
-from repo_pack_task_specials import (
-    validate_first_session_smoke_task,
-    validate_recorder_task_split,
-)
+from repo_pack_task_specials import validate_first_session_smoke_task, validate_recorder_task_split
+from repo_pack_task_paths import validate_architecture_target_paths
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -128,6 +126,7 @@ def normalize_repo_path(value: object) -> str:
             continue
         parts.append(part)
     return "/".join(parts)
+
 
 REQUIRED_PROOF_LEVELS = {
     "syntax",
@@ -493,6 +492,7 @@ def validate_task_execution_compiler_fields(task: dict[str, Any]) -> None:
         fail(f"{task_id_value}.lifecycle_gates must enable local, CI, Codex review, ship, post-merge, and PR lifecycle gates, and explicitly declare code_review_required true only when review policy requires it")
     if task.get("required_worker_chain") != expected_required_worker_chain(task):
         fail(f"{task_id_value}.required_worker_chain must match the lifecycle gates: default validation/commit-push chain, or validation/code-review/commit-push chain when code_review_required=true")
+    validate_architecture_target_paths(task)
     allowed_paths = [str(value).strip() for value in task.get("allowed_paths", [])]
     bad_allowed = [path for path in allowed_paths if RUNTIME_CONTROL_ALLOWED_RE.match(normalize_repo_path(path))]
     if bad_allowed:
