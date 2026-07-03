@@ -16,6 +16,7 @@
         "internal/config/",
         "internal/exitcode/",
         "internal/result/",
+        "internal/version/",
         "AGENTS.md",
         "WORKFLOW.md",
         "cmd/lumyn/",
@@ -530,7 +531,8 @@
         "cmd/lumyn/",
         "internal/config/",
         "internal/exitcode/",
-        "internal/result/"
+        "internal/result/",
+        "internal/version/"
       ],
       "path_planning_method": "architecture_target_paths_v1"
     },
