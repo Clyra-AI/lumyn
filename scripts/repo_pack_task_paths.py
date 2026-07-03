@@ -32,7 +32,9 @@ def normalize_repo_path(value: object) -> str:
 
 
 def repo_relative_path_error(value: object) -> str | None:
-    path = str(value).strip().replace("\\", "/")
+    if not isinstance(value, str):
+        return "must be a string"
+    path = value.strip().replace("\\", "/")
     if not path:
         return "must be non-empty"
     if path.startswith("/") or re.match(r"^[A-Za-z]:", path):

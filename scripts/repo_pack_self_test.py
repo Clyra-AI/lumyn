@@ -1020,6 +1020,18 @@ def run_self_test() -> int:
     else:
         fail("self-test expected repo-root architecture target to fail")
 
+    non_string_target_packets = {
+        "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
+    }
+    non_string_target_packets["tasks"][1]["architecture_target_paths"] = [123]
+    try:
+        validate_task_packets(non_string_target_packets, "T2.6")
+    except AssertionError as exc:
+        if "must be a string" not in str(exc):
+            raise
+    else:
+        fail("self-test expected non-string architecture path to fail")
+
     behavioral_without_scorecard_packets = {
         "tasks": [propagated_task("T2.6", ["T2.5"]), propagated_task("T3", ["T2.6"])]
     }
