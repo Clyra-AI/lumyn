@@ -577,13 +577,13 @@ def field_has_evidence(task: dict[str, Any], field: str) -> bool:
         return has_factory_compatibility(value)
     if field == "scope_exclusions":
         return has_nonempty_list(value)
-    if field in ["alignment_gate_ref", "plan_drift_policy_ref", "acceptance_ledger_ref"]:
+    if field in ["alignment_gate_ref", "plan_drift_policy_ref", "acceptance_ledger_ref", "path_planning_method"]:
         return has_nonempty_string(value)
     if field == "required_worker_chain":
         return value == expected_required_worker_chain(task)
     if field == "lifecycle_gates":
         return has_lifecycle_gates(value)
-    if field in ["allowed_paths", "forbidden_paths"]:
+    if field in ["allowed_paths", "forbidden_paths", "architecture_target_paths"]:
         return has_nonempty_list(value)
     if field == "worker_type":
         return value == "codex_cli"

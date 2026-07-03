@@ -974,7 +974,7 @@ def run_self_test() -> int:
     try:
         validate_task_packets(missing_architecture_targets_packets, "T2.6")
     except AssertionError as exc:
-        if "architecture_target_paths must be a non-empty list" not in str(exc):
+        if "missing guide propagation fields" not in str(exc) or "architecture_target_paths" not in str(exc):
             raise
     else:
         fail("self-test expected missing architecture target paths to fail")
@@ -1027,7 +1027,7 @@ def run_self_test() -> int:
     try:
         validate_task_packets(non_string_target_packets, "T2.6")
     except AssertionError as exc:
-        if "must be a string" not in str(exc):
+        if "missing guide propagation fields" not in str(exc) or "architecture_target_paths" not in str(exc):
             raise
     else:
         fail("self-test expected non-string architecture path to fail")
