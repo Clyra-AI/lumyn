@@ -29,7 +29,15 @@
       ],
       "status": "implemented",
       "risk_class": "low",
-      "notes": []
+      "notes": [
+        "2026-07-05 closure rollup sync records T1 foundation evidence."
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T1/validation-report.json",
+        ".factory/artifacts/task-runs/T1/work-proof-marker.json"
+      ],
+      "recorded_by": "closure rollup sync",
+      "recorded_at": "2026-07-05T04:16:29Z"
     },
     {
       "acceptance_item_id": "FDN-002",
@@ -49,7 +57,15 @@
       ],
       "status": "implemented",
       "risk_class": "low",
-      "notes": []
+      "notes": [
+        "2026-07-05 closure rollup sync records T2 foundation evidence."
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T2/validation-report.json",
+        ".factory/artifacts/task-runs/T2/work-proof-marker.json"
+      ],
+      "recorded_by": "closure rollup sync",
+      "recorded_at": "2026-07-05T04:16:29Z"
     },
     {
       "acceptance_item_id": "FDN-003",
@@ -149,7 +165,10 @@
       ],
       "evidence_refs": [
         "internal/source/source.go",
-        "cmd/lumyn/main.go"
+        "cmd/lumyn/main.go",
+        ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
       ],
       "recorded_by": "factoryd sync-task-closure",
       "recorded_at": "2026-06-14T10:26:37Z"
@@ -195,7 +214,10 @@
       ],
       "evidence_refs": [
         "internal/source/source.go",
-        "cmd/lumyn/main.go"
+        "cmd/lumyn/main.go",
+        ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
       ],
       "recorded_by": "factoryd sync-task-closure",
       "recorded_at": "2026-06-14T10:26:37Z"
@@ -228,7 +250,10 @@
       ],
       "evidence_refs": [
         "internal/source/source.go",
-        "internal/source/source_test.go"
+        "internal/source/source_test.go",
+        ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
       ],
       "recorded_by": "factoryd sync-task-closure",
       "recorded_at": "2026-06-14T10:26:37Z"
@@ -261,7 +286,10 @@
       ],
       "evidence_refs": [
         "internal/source/source.go",
-        "internal/source/source_test.go"
+        "internal/source/source_test.go",
+        ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
       ],
       "recorded_by": "factoryd sync-task-closure",
       "recorded_at": "2026-06-14T10:26:37Z"
@@ -421,7 +449,10 @@
         "schemas/canonical-trace.schema.json",
         "schemas/schema_test.go",
         ".factory/artifacts/task-runs/T2/validation-report.json",
-        ".factory/artifacts/task-runs/T2/work-proof-marker.json"
+        ".factory/artifacts/task-runs/T2/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
       ],
       "recorded_by": "factoryd sync-task-closure",
       "recorded_at": "2026-06-13T22:31:04Z"
@@ -559,12 +590,18 @@
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
-        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
+        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it.",
+        "2026-07-05 closure rollup sync records T1 CLI foundation evidence."
       ],
       "evidence_refs": [
         "cmd/lumyn/main.go",
         "cmd/lumyn/main_test.go",
-        "schemas/command-result.schema.json"
+        "schemas/command-result.schema.json",
+        ".factory/artifacts/task-runs/T1/validation-report.json",
+        ".factory/artifacts/task-runs/T1/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
       ],
       "recorded_by": "factoryd sync-task-closure",
       "recorded_at": "2026-06-14T10:26:37Z"
@@ -917,7 +954,10 @@
         "schemas/result-axes.schema.json",
         "schemas/evidence-event.schema.json",
         "schemas/cassette.schema.json",
-        "schemas/canonical-trace.schema.json"
+        "schemas/canonical-trace.schema.json",
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
       ],
       "recorded_by": "factoryd sync-task-closure",
       "recorded_at": "2026-06-13T22:31:04Z"
@@ -990,7 +1030,10 @@
         "cmd/lumyn/main.go",
         "schemas/schema_test.go",
         "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md",
-        "docs/product/prd.md"
+        "docs/product/prd.md",
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
       ],
       "recorded_by": "factoryd sync-task-closure",
       "recorded_at": "2026-06-13T22:31:04Z"
@@ -1044,7 +1087,10 @@
       ],
       "evidence_refs": [
         "internal/source/source.go",
-        "internal/source/source_test.go"
+        "internal/source/source_test.go",
+        ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
       ],
       "recorded_by": "factoryd sync-task-closure",
       "recorded_at": "2026-06-14T10:26:37Z"
@@ -1099,15 +1145,24 @@
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
         "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it.",
-        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output."
+        "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output.",
+        "2026-07-05 closure rollup sync records T1 error-contract evidence."
       ],
       "evidence_refs": [
         "schemas/command-result.schema.json",
         "schemas/result-axes.schema.json",
         "schemas/evidence-event.schema.json",
         "docs/product/prd.md",
+        ".factory/artifacts/task-runs/T1/validation-report.json",
+        ".factory/artifacts/task-runs/T1/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
         "internal/source/source.go",
-        "cmd/lumyn/main_test.go"
+        "cmd/lumyn/main_test.go",
+        ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
       ],
       "recorded_by": "factoryd sync-task-closure",
       "recorded_at": "2026-06-14T10:26:37Z"
@@ -1202,7 +1257,8 @@
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
-        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
+        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it.",
+        "2026-07-05 closure rollup sync records T2 artifact-schema evidence."
       ],
       "evidence_refs": [
         "schemas/command-result.schema.json",
@@ -1210,7 +1266,12 @@
         "schemas/evidence-event.schema.json",
         "schemas/cassette.schema.json",
         "schemas/canonical-trace.schema.json",
-        "schemas/schema_test.go"
+        "schemas/schema_test.go",
+        ".factory/artifacts/task-runs/T2/validation-report.json",
+        ".factory/artifacts/task-runs/T2/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
       ],
       "recorded_by": "factoryd sync-task-closure",
       "recorded_at": "2026-06-13T22:31:04Z"
@@ -2237,5 +2298,5 @@
     }
   ],
   "acceptance_item_count": 88,
-  "last_updated_at": "2026-07-05T04:10:45Z"
+  "last_updated_at": "2026-07-05T04:16:29Z"
 }
