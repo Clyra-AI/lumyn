@@ -651,7 +651,7 @@
       "requires_human_approval": false,
       "notes": [
         "Requirement-level scope closure added from PRD FR/NFR section.",
-        "2026-07-05 closure rollup sync records already-shipped task refs so daemon queue status can advance without changing partial acceptance item statuses."
+        "2026-07-05 closure rollup sync records already-shipped task refs so daemon queue status can advance without marking partially complete acceptance items as fully implemented."
       ],
       "acceptance_item_ids": [
         "FR1",
@@ -735,9 +735,15 @@
         },
         {
           "acceptance_item_id": "FR5",
-          "status": "planned",
-          "evidence_refs": [],
-          "repair_task_refs": []
+          "status": "partial",
+          "evidence_refs": [
+            "schemas/workflow-contract.schema.json",
+            ".factory/artifacts/task-runs/T2/validation-report.json",
+            ".factory/artifacts/task-runs/T2/work-proof-marker.json"
+          ],
+          "repair_task_refs": [
+            "T4.2"
+          ]
         },
         {
           "acceptance_item_id": "FR6",
@@ -765,6 +771,8 @@
             "schemas/cassette.schema.json",
             "schemas/canonical-trace.schema.json",
             "schemas/schema_test.go",
+            ".factory/artifacts/task-runs/T2/validation-report.json",
+            ".factory/artifacts/task-runs/T2/work-proof-marker.json",
             ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
             ".factory/artifacts/task-runs/T2.7/validation-report.json",
             ".factory/artifacts/task-runs/T2.7/work-proof-marker.json"
@@ -943,7 +951,7 @@
       "requires_human_approval": false,
       "notes": [
         "Requirement-level scope closure added from PRD FR/NFR section.",
-        "2026-07-05 closure rollup sync records already-shipped task refs so daemon queue status can advance without changing partial acceptance item statuses."
+        "2026-07-05 closure rollup sync records already-shipped task refs so daemon queue status can advance without marking partially complete acceptance items as fully implemented."
       ],
       "acceptance_item_ids": [
         "NFR1",
@@ -1127,7 +1135,11 @@
         {
           "acceptance_item_id": "CLI-AGENT-001",
           "status": "partial",
-          "evidence_refs": [],
+          "evidence_refs": [
+            ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+            ".factory/artifacts/task-runs/T3/validation-report.json",
+            ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+          ],
           "repair_task_refs": [
             "T3.1",
             "T6.1"
@@ -1144,7 +1156,7 @@
         "Factory-derived CLI quality gate; close with command tests and validation evidence.",
         "Sprint 4 extends agent-native CLI proof into report rendering and proof-rubric presentation.",
         "Sprint 4 adds T3.1 as the parser/source-proof repair guard for CLI source-check closure.",
-        "2026-07-05 closure rollup sync records already-shipped task refs so daemon queue status can advance without changing partial acceptance item statuses."
+        "2026-07-05 closure rollup sync records already-shipped task refs so daemon queue status can advance without marking partially complete acceptance items as fully implemented."
       ],
       "delivery_slice_refs": [
         "v0.0"
@@ -1152,7 +1164,7 @@
     }
   ],
   "full_mvp_closure_rule": "Every required acceptance item in acceptance-ledger.json must be implemented, deferred by approval, or blocked with evidence before full MVP closure.",
-  "last_updated_at": "2026-07-05T04:05:10Z",
+  "last_updated_at": "2026-07-05T04:10:45Z",
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
   "acceptance_item_count": 88,
   "mvp_required_version_slices": [
