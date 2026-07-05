@@ -636,6 +636,10 @@
         "T12.2"
       ],
       "evidence_refs": [
+        ".factory/artifacts/task-runs/T1/validation-report.json",
+        ".factory/artifacts/task-runs/T1/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2/validation-report.json",
+        ".factory/artifacts/task-runs/T2/work-proof-marker.json",
         ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
         ".factory/artifacts/task-runs/T2.7/validation-report.json",
         ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
@@ -924,6 +928,10 @@
         "T12.2"
       ],
       "evidence_refs": [
+        ".factory/artifacts/task-runs/T1/validation-report.json",
+        ".factory/artifacts/task-runs/T1/work-proof-marker.json",
+        ".factory/artifacts/task-runs/T2/validation-report.json",
+        ".factory/artifacts/task-runs/T2/work-proof-marker.json",
         ".factory/artifacts/task-runs/T2.7/scope-closure-map.json",
         ".factory/artifacts/task-runs/T2.7/validation-report.json",
         ".factory/artifacts/task-runs/T2.7/work-proof-marker.json",
@@ -1107,7 +1115,11 @@
         "T3.1",
         "T6.1"
       ],
-      "evidence_refs": [],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+      ],
       "acceptance_item_ids": [
         "CLI-AGENT-001"
       ],
@@ -1140,7 +1152,7 @@
     }
   ],
   "full_mvp_closure_rule": "Every required acceptance item in acceptance-ledger.json must be implemented, deferred by approval, or blocked with evidence before full MVP closure.",
-  "last_updated_at": "2026-07-05T03:52:50Z",
+  "last_updated_at": "2026-07-05T04:05:10Z",
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json",
   "acceptance_item_count": 88,
   "mvp_required_version_slices": [
