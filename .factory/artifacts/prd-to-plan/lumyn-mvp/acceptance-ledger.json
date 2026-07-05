@@ -284,11 +284,19 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#task:T2/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#task:T4.2/validation_commands"
       ],
-      "status": "planned",
+      "status": "partial",
       "risk_class": "medium",
       "notes": [
-        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence."
-      ]
+        "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
+        "2026-07-05 closure rollup sync records T2 workflow-schema evidence while T4.2 remains required for full closure."
+      ],
+      "evidence_refs": [
+        "schemas/workflow-contract.schema.json",
+        ".factory/artifacts/task-runs/T2/validation-report.json",
+        ".factory/artifacts/task-runs/T2/work-proof-marker.json"
+      ],
+      "recorded_by": "closure rollup sync",
+      "recorded_at": "2026-07-05T04:10:45Z"
     },
     {
       "acceptance_item_id": "FR6",
@@ -404,13 +412,16 @@
       "risk_class": "medium",
       "notes": [
         "Requirement-level closure item added from PRD FR/NFR section; close via mapped task evidence.",
-        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it."
+        "Cross-cutting invariant carried forward from foundation work; every mapped product task must preserve it.",
+        "2026-07-05 closure rollup sync records T2 schema evidence alongside T2.7 closure evidence."
       ],
       "evidence_refs": [
         "schemas/evidence-event.schema.json",
         "schemas/cassette.schema.json",
         "schemas/canonical-trace.schema.json",
-        "schemas/schema_test.go"
+        "schemas/schema_test.go",
+        ".factory/artifacts/task-runs/T2/validation-report.json",
+        ".factory/artifacts/task-runs/T2/work-proof-marker.json"
       ],
       "recorded_by": "factoryd sync-task-closure",
       "recorded_at": "2026-06-13T22:31:04Z"
@@ -2205,18 +2216,26 @@
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#task:T3.1/validation_commands",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json#task:T6.1/validation_commands"
       ],
-      "status": "planned",
+      "status": "partial",
       "risk_class": "low",
       "notes": [
         "Factory-derived CLI quality gate added from the agent-native CLI standard.",
         "Sprint 4 adds T3.1 parser/source-proof repair before recorder-heavy tasks consume source-check output.",
-        "Reports must preserve agent-native compact/quiet JSON posture for proof and source-check results."
+        "Reports must preserve agent-native compact/quiet JSON posture for proof and source-check results.",
+        "2026-07-05 closure rollup sync records T3 CLI evidence while T3.1 and T6.1 remain required for full closure."
       ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T3/scope-closure-map.json",
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+      ],
+      "recorded_by": "closure rollup sync",
+      "recorded_at": "2026-07-05T04:10:45Z",
       "delivery_slice_refs": [
         "v0.0"
       ]
     }
   ],
   "acceptance_item_count": 88,
-  "last_updated_at": "2026-06-18T00:00:00Z"
+  "last_updated_at": "2026-07-05T04:10:45Z"
 }
