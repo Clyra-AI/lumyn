@@ -144,6 +144,11 @@ exception records in `.github/action-ref-exceptions.yaml`.
   the product source of truth. Product workers may use daemon-selected task
   packets, but they must not edit daemon state or generated control artifacts to
   bypass lifecycle, validation, review, credential, network, or closure gates.
+- Factory `autoship-supervisor` may be used from the Lumyn repo root for one
+  selected task at a time. It is a judgment layer around `factoryd`, not the
+  implementation engine. Supervisor decisions, manual acceptance, narrow repair,
+  or systemic follow-up must be recorded under
+  `.factory/artifacts/supervisor-runs/<task_id>/`.
 - Material `app-audit` or `code-review` findings must be saved as repo-local
   markdown and ingested with `factoryd ingest --kind audit` or
   `factoryd ingest --kind review` before they become implementation tasks.

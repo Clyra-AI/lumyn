@@ -133,6 +133,20 @@
       "validator_ref": "scripts/validate_repo_pack.py"
     }
   },
+  "supervised_autoship_policy": {
+    "skill_ref": "factory://skills/autoship-supervisor",
+    "scope_rule": "Bind supervision to exactly one selected task ID per run.",
+    "daemon_authority": "factoryd remains the implementation, validation, PR, review, merge, post-merge, and routine repair engine.",
+    "allowed_interventions": [
+      "typed blocker classification",
+      "explicit human acceptance for gated evidence",
+      "narrow repair after daemon stop or non-convergence",
+      "plan update or systemic follow-up when the task contract is stale"
+    ],
+    "evidence_artifact_type": "autoship_supervisor_report",
+    "evidence_path": ".factory/artifacts/supervisor-runs/<task_id>/<timestamp>.json",
+    "task_packet_policy": "Runner-ready task packets remain daemon-owned; supervised autoship adds supervisor evidence only when the supervisor skill is explicitly used."
+  },
   "alignment_decisions_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json#/alignment_decisions",
   "runtime": {
     "language": "go",

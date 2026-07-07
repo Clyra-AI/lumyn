@@ -96,6 +96,19 @@
     "normalized failure evidence omits corpus_eligible false by default or implies hosted telemetry/upload without approved scope change",
     "live eval provider work bundles model weights or local inference-runtime payloads instead of using provider/base_url configuration"
   ],
+  "supervised_autoship_policy": {
+    "skill_ref": "factory://skills/autoship-supervisor",
+    "required_when": "A human supervisor explicitly oversees one factoryd autoship task from the Lumyn repo root.",
+    "evidence_artifact_type": "autoship_supervisor_report",
+    "evidence_path": ".factory/artifacts/supervisor-runs/<task_id>/<timestamp>.json",
+    "validation_rule": "Supervisor evidence supplements, but never replaces, validation_report, work_proof_marker, ship_packet, pr_lifecycle_report, post_merge_report, scope closure, CI, and latest-head Codex review evidence.",
+    "blocked_if": [
+      "supervisor is used without a single task_id",
+      "manual intervention bypasses factoryd lifecycle evidence",
+      "manual acceptance lacks explicit gate evidence",
+      "non-convergent repair is applied without recording blocker classification"
+    ]
+  },
   "runtime_pins": {
     "language": "go",
     "go_version": "1.26.4",

@@ -118,6 +118,17 @@ The expected one-task proof command is:
 FACTORY_REPO=/path/to/factory factoryd run --config .factory/factoryd.autoship.example.json --repo lumyn --loop --max-tasks 1 --json
 ```
 
+For attended daemon-led delivery, trigger Factory `autoship-supervisor` from
+the Lumyn repo root and name exactly one task. The supervisor lets `factoryd`
+own implementation, validation, PR creation, CI/review polling, merge,
+post-merge monitoring, and routine repair. It intervenes only for typed
+blockers, explicit human acceptance, non-convergent repair, stale plan scope, or
+systemic Factory/factoryd follow-up, and records the result as:
+
+```text
+.factory/artifacts/supervisor-runs/<task_id>/<timestamp>.json
+```
+
 ## Post-PRD Audit Or Review Findings
 
 Material findings from `app-audit` and `code-review` become governed work only
