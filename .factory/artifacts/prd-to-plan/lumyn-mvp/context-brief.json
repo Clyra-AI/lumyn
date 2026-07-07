@@ -30,6 +30,17 @@
         ".github/workflows/codeql.yml"
       ],
       "summary": "Lumyn must preserve CI lanes, the 12-level test matrix, CodeQL risk-lane scanner posture, docs parity, output contracts, release integrity, provenance evidence, systems-thinking, TDD/ADR, performance, reliability, trust-mode, and fail-closed architecture rules in task packets and validation evidence before T3 product implementation continues."
+    },
+    {
+      "topic": "Supervised Autoship",
+      "evidence_refs": [
+        "WORKFLOW.md#Supervised Autoship",
+        "docs/factory/README.md",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
+        ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json"
+      ],
+      "summary": "Factory autoship-supervisor may supervise exactly one selected factoryd autoship task from the Lumyn repo root. factoryd remains the implementation and shipping engine; supervisor evidence is recorded as autoship_supervisor_report under .factory/artifacts/supervisor-runs/<task_id>/ when the skill is explicitly used."
     }
   ],
   "assumptions": [
