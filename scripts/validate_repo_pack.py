@@ -811,7 +811,6 @@ def validate_safety_corpus_ready_plan(
 def validate_factoryd_config(config: dict[str, Any], active_config: dict[str, Any], autoship_config: dict[str, Any]) -> None:
     validate_factoryd_config_for_root(ROOT, config, active_config, autoship_config, FACTORYD_REPO_KEY)
 
-
 def validate_risk_classification(risk: dict[str, Any]) -> None:
     validate_risk_classification_with_policy(risk)
 
@@ -830,6 +829,7 @@ def main() -> int:
         return 2
     try:
         validate_guides()
+        require_existing(".factory/artifacts/supervisor-runs/.gitkeep")
         require_existing(".factory/artifacts/task-supervisor-runs/.gitkeep")
         validate_ci_control_set()
         context = load_json(CONTEXT_BRIEF)
