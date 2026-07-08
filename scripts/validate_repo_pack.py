@@ -65,7 +65,6 @@ from repo_pack_safety import (
 from repo_pack_task_specials import validate_first_session_smoke_task, validate_recorder_task_split
 from repo_pack_task_paths import validate_architecture_target_paths
 
-
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_DIR = ROOT / ".factory" / "artifacts" / "prd-to-plan" / "lumyn-mvp"
 CONTEXT_BRIEF = PLAN_DIR / "context-brief.json"
@@ -831,6 +830,7 @@ def main() -> int:
         return 2
     try:
         validate_guides()
+        require_existing(".factory/artifacts/task-supervisor-runs/.gitkeep")
         validate_ci_control_set()
         context = load_json(CONTEXT_BRIEF)
         plan = load_json(EXECUTION_PLAN)

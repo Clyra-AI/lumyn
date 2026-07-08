@@ -149,9 +149,12 @@ exception records in `.github/action-ref-exceptions.yaml`.
   implementation engine. Supervisor decisions, manual acceptance, narrow repair,
   or systemic follow-up must be recorded under
   `.factory/artifacts/supervisor-runs/<task_id>/`.
-- Material `app-audit` or `code-review` findings must be saved as repo-local
-  markdown and ingested with `factoryd ingest --kind audit` or
-  `factoryd ingest --kind review` before they become implementation tasks.
-  Generated post-PRD artifacts under `.factory/artifacts/post-prd/<mission>/`
-  are the execution contract; do not edit the MVP PRD unless a human explicitly
+- Material `app-audit`, `repo-audit`, or `code-review` findings should be
+  saved as repo-local structured `finding-list` JSON and ingested with
+  `factoryd ingest --kind audit` or `factoryd ingest --kind review` before they
+  become implementation tasks. Use Factory `task-supervisor` for guided
+  source-to-mission intake when a human wants a report and recommended next
+  task before autoship. Generated post-PRD artifacts under
+  `.factory/artifacts/post-prd/<mission>/` are the execution contract; do not
+  edit the MVP PRD unless a human explicitly
   promotes the finding into product scope.

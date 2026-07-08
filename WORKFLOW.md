@@ -109,12 +109,16 @@ delivery-slice labels instead of item-level evidence.
 
 ## Post-PRD Findings
 
-When `app-audit` or `code-review` produces material follow-up work, save the
-finding list in the repo and ingest it before implementation:
+When `app-audit`, `repo-audit`, or `code-review` produces material follow-up
+work, save a structured `finding-list` JSON artifact in the repo and ingest it
+before implementation. Use Factory `task-supervisor` from the Lumyn repo root
+for guided source-to-mission intake; it records `task_supervisor_report`
+evidence, runs ingest, doctor, and dry-run, and recommends one next task before
+any autoship handoff:
 
 ```sh
-FACTORY_REPO=/path/to/factory factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind audit --input product/audits/<mission>.md --mission <mission> --json
-FACTORY_REPO=/path/to/factory factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind review --input product/reviews/<mission>.md --mission <mission> --json
+FACTORY_REPO=/path/to/factory factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind audit --input product/audits/<mission>.finding-list.json --mission <mission> --json
+FACTORY_REPO=/path/to/factory factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind review --input product/reviews/<mission>.finding-list.json --mission <mission> --json
 ```
 
 The generated `.factory/artifacts/post-prd/<mission>/` artifacts are the

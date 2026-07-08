@@ -5,6 +5,8 @@ Factory artifacts for Lumyn live under `.factory/artifacts/`.
 - PRD-to-plan artifacts: `.factory/artifacts/prd-to-plan/lumyn-mvp/`
 - Task-run evidence: `.factory/artifacts/task-runs/`
 - PR lifecycle evidence: `.factory/artifacts/pr-lifecycle/`
+- Task-supervisor intake evidence: `.factory/artifacts/task-supervisor-runs/`
+- Autoship supervisor evidence: `.factory/artifacts/supervisor-runs/`
 - Downstream pilot evidence: `.factory/artifacts/pilot/lumyn-mvp-slice/`
 - Local active safe attended daemon config: `.factory/factoryd.json`
   (gitignored; copy from `.factory/factoryd.example.json`)
@@ -131,12 +133,15 @@ systemic Factory/factoryd follow-up, and records the result as:
 
 ## Post-PRD Audit Or Review Findings
 
-Material findings from `app-audit` and `code-review` become governed work only
-after they are saved as a repo-local source list and ingested:
+Material findings from `app-audit`, `repo-audit`, and `code-review` become
+governed work only after they are saved as a structured repo-local
+`finding-list` JSON source and ingested. Use Factory `task-supervisor` for the
+guided path that records `task_supervisor_report` evidence, runs `doctor` and
+dry-run, and recommends one next task before autoship:
 
 ```text
-FACTORY_REPO=/path/to/factory factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind audit --input product/audits/<mission>.md --mission <mission> --json
-FACTORY_REPO=/path/to/factory factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind review --input product/reviews/<mission>.md --mission <mission> --json
+FACTORY_REPO=/path/to/factory factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind audit --input product/audits/<mission>.finding-list.json --mission <mission> --json
+FACTORY_REPO=/path/to/factory factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind review --input product/reviews/<mission>.finding-list.json --mission <mission> --json
 ```
 
 The generated `.factory/artifacts/post-prd/<mission>/` artifacts become the

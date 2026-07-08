@@ -128,9 +128,12 @@ Post-PRD audit or review findings become governed work through `factoryd ingest`
 
 ```bash
 export FACTORY_REPO=../factory
-factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind audit --input product/audits/<mission>.md --mission <mission> --json
-factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind review --input product/reviews/<mission>.md --mission <mission> --json
+factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind audit --input product/audits/<mission>.finding-list.json --mission <mission> --json
+factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind review --input product/reviews/<mission>.finding-list.json --mission <mission> --json
 ```
 
 Those commands create `.factory/artifacts/post-prd/<mission>/`; that directory
 becomes the execution contract for the follow-up mission.
+Use Factory `task-supervisor` for guided audit, review, recommendation, or idea
+intake that records `task_supervisor_report` evidence before selecting an
+autoship task.
