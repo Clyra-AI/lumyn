@@ -507,6 +507,15 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
     ]
     if missing_architecture:
         fail(f"dev_architecture_propagation.architecture_policies missing {missing_architecture}")
+    task_supervision_policy = plan.get("task_supervision_policy")
+    if not isinstance(task_supervision_policy, dict):
+        fail("execution plan missing task_supervision_policy")
+    if task_supervision_policy.get("skill_ref") != "factory://skills/task-supervisor":
+        fail("task_supervision_policy.skill_ref must be factory://skills/task-supervisor")
+    if task_supervision_policy.get("evidence_artifact_type") != "task_supervisor_report":
+        fail("task_supervision_policy.evidence_artifact_type must be task_supervisor_report")
+    if task_supervision_policy.get("evidence_path") != ".factory/artifacts/task-supervisor-runs/<mission>/<timestamp>.json":
+        fail("task_supervision_policy.evidence_path must point at task-supervisor-runs")
     return baseline_task_id
 
 

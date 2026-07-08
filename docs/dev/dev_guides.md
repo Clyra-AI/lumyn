@@ -117,6 +117,11 @@ must preserve those smaller responsibility boundaries.
 - Live sandbox and eval work require explicit human approval before credentials are introduced.
 - Tests should be added before implementation when practical.
 - Evidence artifacts must use repo-relative paths.
+- Use Factory `task-supervisor` for guided post-PRD, audit, review,
+  recommendation, or idea intake before implementation. The report path is
+  `.factory/artifacts/task-supervisor-runs/<mission>/<timestamp>.json`; it
+  records source validation, ingest, doctor, dry-run, alignment gates, and the
+  recommended next task.
 - T1 must use the Go standard library only.
 - Any new dependency must be pinned in `go.mod`, justified in the task evidence, and covered by validation.
 - Schema/artifact changes must include representative validation coverage in `schemas/`.
