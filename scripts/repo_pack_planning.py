@@ -69,6 +69,7 @@ REQUIRED_RUNNER_READY_FIELDS = [
     "forbidden_paths",
     "architecture_target_paths",
     "path_planning_method",
+    "semantic_invariants",
     "required_worker_chain",
     "lifecycle_gates",
     "scope_exclusions",

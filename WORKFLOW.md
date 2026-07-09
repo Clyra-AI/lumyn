@@ -122,8 +122,10 @@ FACTORY_REPO=/path/to/factory factoryd ingest --config .factory/factoryd.example
 ```
 
 The generated `.factory/artifacts/post-prd/<mission>/` artifacts are the
-governed source for execution. Do not edit `docs/product/prd.md` unless a human
-explicitly promotes a finding into product scope.
+governed source for execution. Runner-ready post-PRD tasks must carry
+`semantic_invariants` in addition to path, validation, evidence, lifecycle, and
+acceptance mappings. Do not edit `docs/product/prd.md` unless a human explicitly
+promotes a finding into product scope.
 
 ## Stop Conditions
 
