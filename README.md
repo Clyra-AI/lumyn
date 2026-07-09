@@ -134,6 +134,8 @@ factoryd ingest --config .factory/factoryd.example.json --repo lumyn --kind revi
 
 Those commands create `.factory/artifacts/post-prd/<mission>/`; that directory
 becomes the execution contract for the follow-up mission.
+Runner-ready post-PRD tasks must carry `semantic_invariants` alongside path,
+validation, evidence, lifecycle, and acceptance mappings.
 Use Factory `task-supervisor` for guided audit, review, recommendation, or idea
 intake that records `task_supervisor_report` evidence before selecting an
 autoship task.

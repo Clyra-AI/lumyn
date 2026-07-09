@@ -122,6 +122,9 @@ must preserve those smaller responsibility boundaries.
   `.factory/artifacts/task-supervisor-runs/<mission>/<timestamp>.json`; it
   records source validation, ingest, doctor, dry-run, alignment gates, and the
   recommended next task.
+- Runner-ready task packets must preserve `semantic_invariants` so workers,
+  supervisors, and review repairs keep behavior boundaries intact across
+  decomposition and follow-up tasks.
 - T1 must use the Go standard library only.
 - Any new dependency must be pinned in `go.mod`, justified in the task evidence, and covered by validation.
 - Schema/artifact changes must include representative validation coverage in `schemas/`.
