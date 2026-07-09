@@ -58,7 +58,7 @@
       "acceptance_checks": [
         "CLI exposes stable command-result envelope shape.",
         "Exit-code constants match docs/product/prd.md.",
-        "Go module path is github.com/Clyra-AI/lumyn and Go version is pinned to 1.26.4.",
+        "Go module path is github.com/Clyra-AI/lumyn and Go version is pinned to 1.26.5.",
         "T1 has no external runtime dependencies unless explicitly justified and pinned.",
         "Tests pass without network, sandbox credentials, or model keys.",
         "Unknown commands fail closed with exit code 2 while still emitting the command-result JSON envelope.",
@@ -68,7 +68,7 @@
       ],
       "runtime": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library only for T1; add pinned dependencies only when required by later tasks"
       },
@@ -91,7 +91,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -108,7 +108,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -131,7 +131,7 @@
       "contract_impact": "Introduces the public CLI shell, command-result JSON envelope, exit-code constants, and config discovery contract.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -596,7 +596,7 @@
       ],
       "runtime": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "Pinned github.com/santhosh-tekuri/jsonschema/v5 v5.3.1 is allowed for executable schema validation from T2 onward."
       },
@@ -614,7 +614,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -631,7 +631,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -655,7 +655,7 @@
       "contract_impact": "Introduces executable schema contracts for workflows, command results, proof strength, cassettes, evidence, redaction, and related artifacts.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -1139,7 +1139,7 @@
       ],
       "acceptance_checks": [
         ".github/workflows/validate.yml exists and runs make prepush-full on pull_request and pushes to main.",
-        "Makefile lint-fast verifies the validate workflow uses Go 1.26.4 and make prepush-full.",
+        "Makefile lint-fast verifies the validate workflow uses Go 1.26.5 and make prepush-full.",
         "WORKFLOW.md, AGENTS.md, README.md, docs/dev/dev_guides.md, and docs/architecture/architecture_guides.md document CI/status, review, commit-push, post-merge, and PR lifecycle evidence.",
         "T3 and later product implementation depend on the lifecycle baseline.",
         "The later product-facing T9 CI/JUnit/PR-comment feature remains separate from this delivery baseline.",
@@ -1152,7 +1152,7 @@
       ],
       "runtime": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "No new runtime dependency is required for the delivery lifecycle baseline."
       },
@@ -1171,7 +1171,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -1188,7 +1188,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -1212,7 +1212,7 @@
       "contract_impact": "Introduces the repository delivery lifecycle contract for CI/status, required-check metadata, workflow hardening, owner-review coverage, action-ref posture, review, shipping, post-merge, and PR lifecycle evidence.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -1667,7 +1667,7 @@
       ],
       "runtime": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "No new runtime dependency is required for dev/architecture guide propagation or CodeQL workflow setup."
       },
@@ -1837,7 +1837,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -1854,7 +1854,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -1878,7 +1878,7 @@
       "contract_impact": "Introduces the repo-pack planning contract that propagates test matrix, scanner, engineering policy, architecture policy, and planning-skill fields into future task packets.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -2159,7 +2159,7 @@
       ],
       "runtime": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "No new runtime dependency is required for dev/architecture guide propagation or CodeQL workflow setup."
       },
@@ -2332,7 +2332,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -2349,7 +2349,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -2373,7 +2373,7 @@
       "contract_impact": "Extends schema-backed evidence contracts with safety/corpus-ready local failure/result fields and default corpus_eligible false posture.",
       "versioning_migration_impact": "No migration for external users before public release; schema examples and version notes must describe the new local-only failure-event fields.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -2946,7 +2946,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -2963,7 +2963,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -2986,7 +2986,7 @@
       "contract_impact": "Adds public `lumyn init` and `lumyn check` behavior, config output, source intake, and workflow-relevant finding output contracts.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -3398,6 +3398,11 @@
       "slice_type": "vertical",
       "objective": "Repair and harden source parsing, source-check proof tiers, and hallucinated-reference rejection before recorder-heavy work begins.",
       "risk_class": "medium",
+      "required_review": {
+        "required": true,
+        "review_type": "architecture",
+        "reviewer_class": "peer_agent"
+      },
       "blocked_by": [
         "T3",
         "T2.6"
@@ -3441,13 +3446,14 @@
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
+        "code-review",
         "commit-push",
         "post-merge-monitor"
       ],
       "lifecycle_gates": {
         "local_validation_required": true,
         "ci_required": true,
-        "code_review_required": false,
+        "code_review_required": true,
         "codex_review_required": true,
         "post_merge_monitor_required": true,
         "pr_lifecycle_report_required": true,
@@ -3623,7 +3629,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -3640,7 +3646,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -3663,7 +3669,7 @@
       "contract_impact": "Adds public `lumyn init` and `lumyn check` behavior, config output, source intake, and workflow-relevant finding output contracts.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -3686,6 +3692,12 @@
         "expected_fail_closed_behavior": "Return structured command-result/error evidence, do not mark acceptance green, and update validation/scope closure with the failure or blocker."
       },
       "semantic_invariants": [
+        "JSON and YAML OpenAPI inputs with equivalent meaning normalize to the same typed source representation.",
+        "Quoted, flow, block, reference, and nested OpenAPI forms are parsed by a pinned structured parser rather than line-oriented heuristics.",
+        "Local references resolve deterministically; external references remain blocked unless the task has an explicit allowlisted network grant.",
+        "Missing, cyclic, unprovable, or hallucinated source references fail proof closure with typed errors.",
+        "Syntax proof, source-evidence proof, workflow proof, and user-visible proof remain separate machine-readable tiers.",
+        "Findings cite stable repo-relative source paths and JSON pointers without credentials or machine-local paths.",
         "Every command path emits the stable command-result envelope, including failures.",
         "Exit codes remain aligned with docs/product/prd.md and tests.",
         "Validation evidence records command, exit status, and skipped-command reason when applicable.",
@@ -4212,7 +4224,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -4229,7 +4241,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -4252,7 +4264,7 @@
       "contract_impact": "Adds record/redact/normalize behavior and schema-backed persisted event/cassette evidence.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -4873,7 +4885,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -4890,7 +4902,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -4913,7 +4925,7 @@
       "contract_impact": "Adds workflow/cassette draft authoring contracts and approval/readability evidence.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -5584,7 +5596,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -5601,7 +5613,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -5624,7 +5636,7 @@
       "contract_impact": "Adds a deterministic recorder-quality measurement corpus and closure evidence for the 70 percent gate.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -6240,7 +6252,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -6257,7 +6269,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -6280,7 +6292,7 @@
       "contract_impact": "Adds replay verification, stale cassette detection, `api_state`, and validator proof contracts.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -6901,7 +6913,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -6918,7 +6930,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -6941,7 +6953,7 @@
       "contract_impact": "Adds replay verification, stale cassette detection, `api_state`, and validator proof contracts.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -7475,7 +7487,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -7492,7 +7504,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -7515,7 +7527,7 @@
       "contract_impact": "Adds trace/report rendering and `lumyn demo` output contracts. It also renders safety/corpus-ready local failure evidence in reports and bundled demos.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -8210,7 +8222,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -8227,7 +8239,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -8250,7 +8262,7 @@
       "contract_impact": "Adds trace/report rendering and `lumyn demo` output contracts. It also renders safety/corpus-ready local failure evidence in reports and bundled demos.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -8848,7 +8860,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -8865,7 +8877,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -8888,7 +8900,7 @@
       "contract_impact": "Adds live known-path verification, sandbox config, retry/readback, cleanup, and orphan evidence contracts.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -9537,7 +9549,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -9554,7 +9566,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -9577,7 +9589,7 @@
       "contract_impact": "Adds action-boundary schema and deterministic boundary-check semantics. It also classifies boundary safety/security findings for later report and CI surfaces.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -10176,7 +10188,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -10193,7 +10205,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -10216,7 +10228,7 @@
       "contract_impact": "Adds Lumyn GitHub Action, JUnit, PR comment, changed-source mapping, and proof-honest badge contracts. It also carries safety finding counts and fix targets into CI, JUnit, and PR-comment output.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -10794,7 +10806,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -10811,7 +10823,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -10834,7 +10846,7 @@
       "contract_impact": "Adds `lumyn share` export behavior and redaction re-check/fail-closed contracts.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -11478,7 +11490,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -11495,7 +11507,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and complete model_provider_endpoint, sandbox credential, or network grants unlock the relevant live work",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; live provider endpoint work requires a complete model_provider_endpoint grant and no model key or network is used in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -11518,7 +11530,7 @@
       "contract_impact": "Adds live eval provider interface, OpenAI-compatible and Anthropic adapters, context mode, repeated run, and trace capture contracts. It also emits normalized local eval failure events for future opt-in corpus analysis.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -12284,7 +12296,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -12301,7 +12313,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and complete model_provider_endpoint, sandbox credential, or network grants unlock the relevant live work",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; live provider endpoint work requires a complete model_provider_endpoint grant and no model key or network is used in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -12324,7 +12336,7 @@
       "contract_impact": "Adds live eval provider interface, OpenAI-compatible and Anthropic adapters, context mode, repeated run, and trace capture contracts. It also emits normalized local eval failure events for future opt-in corpus analysis.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -12957,7 +12969,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -12974,7 +12986,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -12997,7 +13009,7 @@
       "contract_impact": "Adds baseline comparison, drift labels, cost/duration, and diagnostic failure classification contracts. It also preserves normalized local eval failure-event stability across baselines and drift diagnostics.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",
@@ -13656,7 +13668,7 @@
       ],
       "runtime_pins": {
         "language": "go",
-        "go_version": "1.26.4",
+        "go_version": "1.26.5",
         "module_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
         "distribution_target": "standalone_binary",
@@ -13673,7 +13685,7 @@
           "examples": "examples/"
         },
         "live_work_policy": "blocked until deterministic replay foundation passes and human approval unlocks sandbox/model/network posture",
-        "toolchain_version": "1.26.4",
+        "toolchain_version": "1.26.5",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "provider_policy": "OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters; no model key or network in deterministic bootstrap",
         "artifact_namespace": ".factory/artifacts/ for Factory evidence; product artifacts use workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",
@@ -13696,7 +13708,7 @@
       "contract_impact": "Adds baseline comparison, drift labels, cost/duration, and diagnostic failure classification contracts. It also preserves normalized local eval failure-event stability across baselines and drift diagnostics.",
       "versioning_migration_impact": "Pre-1.0 MVP work may evolve contracts, but introduced schema_version values, exit codes, artifact names, and command-result fields must retain explicit migration notes before release.",
       "architecture_constraints": [
-        "Preserve Go 1.26.4 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
+        "Preserve Go 1.26.5 and module path github.com/Clyra-AI/lumyn unless alignment artifacts are updated first.",
         "Keep deterministic bootstrap work free of live network calls, sandbox credentials, and model keys.",
         "Keep command-result JSON, exit codes, schemas, and persisted artifacts repo-relative and schema-backed where a schema exists.",
         "Fail closed when proof strength, redaction confidence, credential posture, stale cassette state, or declared controls are ambiguous.",

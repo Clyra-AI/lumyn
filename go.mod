@@ -1,5 +1,5 @@
 module github.com/Clyra-AI/lumyn
 
-go 1.26.4
+go 1.26.5
 
 require github.com/santhosh-tekuri/jsonschema/v5 v5.3.1

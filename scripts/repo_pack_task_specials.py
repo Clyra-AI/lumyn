@@ -6,6 +6,22 @@ from typing import Any
 from repo_pack_contracts import fail
 
 
+def validate_source_parser_review(tasks_by_id: dict[str, dict[str, Any]]) -> None:
+    task = tasks_by_id.get("T3.1")
+    if not isinstance(task, dict):
+        fail("task-packets.json missing T3.1 source-parser repair task")
+    review = task.get("required_review")
+    if not isinstance(review, dict) or review.get("required") is not True:
+        fail("T3.1.required_review.required must be true")
+    if review.get("review_type") not in {"architecture", "security"}:
+        fail("T3.1.required_review.review_type must be architecture or security")
+    if review.get("reviewer_class") != "peer_agent":
+        fail("T3.1.required_review.reviewer_class must be peer_agent")
+    lifecycle = task.get("lifecycle_gates") or {}
+    if lifecycle.get("code_review_required") is not True:
+        fail("T3.1.lifecycle_gates.code_review_required must be true")
+
+
 def validate_recorder_task_split(tasks_by_id: dict[str, dict[str, Any]]) -> None:
     if "T4" in tasks_by_id:
         fail("task-packets.json must split broad T4 into T4.1, T4.2, and T4.3 before recorder dispatch")

@@ -91,7 +91,7 @@ so reports explain why the workflow matters, not only which endpoints appeared.
 
 ## Runtime Pins
 
-- Go `1.26.4`
+- Go `1.26.5`
 - Module path `github.com/Clyra-AI/lumyn`
 - Standalone binary first, Homebrew next
 - MVP eval providers: OpenAI-compatible HTTP and Anthropic Messages HTTP adapters

@@ -134,7 +134,7 @@ the project-level source-check orchestration, filesystem resolution, and shared
 types while smaller files or internal packages own pure parsing, validation,
 normalization, and reporting responsibilities.
 
-Use Go `1.26.4`. T1 stays standard-library-only. T2 introduces the pinned
+Use Go `1.26.5`. T1 stays standard-library-only. T2 introduces the pinned
 `github.com/santhosh-tekuri/jsonschema/v5` validator for executable schema
 tests.
 

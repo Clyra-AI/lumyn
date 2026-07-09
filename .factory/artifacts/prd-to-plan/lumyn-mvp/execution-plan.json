@@ -165,7 +165,7 @@
   "alignment_decisions_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json#/alignment_decisions",
   "runtime": {
     "language": "go",
-    "go_version": "1.26.4",
+    "go_version": "1.26.5",
     "module_path": "github.com/Clyra-AI/lumyn",
     "dependency_policy": "standard library only for T1; add pinned dependencies only when required by later tasks"
   },
@@ -523,8 +523,8 @@
   },
   "runtime_pins": {
     "language": "go",
-    "go_version": "1.26.4",
-    "toolchain_version": "1.26.4",
+    "go_version": "1.26.5",
+    "toolchain_version": "1.26.5",
     "module_path": "github.com/Clyra-AI/lumyn",
     "module_or_package_path": "github.com/Clyra-AI/lumyn",
     "dependency_policy": "standard library first; pinned Go modules only when a task proves need and records justification",
@@ -543,7 +543,7 @@
     "status": "resolved",
     "source_context_brief_ref": ".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json#/alignment_decisions",
     "blocking_decisions": [
-      "runtime: Go 1.26.4 with module github.com/Clyra-AI/lumyn",
+      "runtime: Go 1.26.5 with module github.com/Clyra-AI/lumyn",
       "distribution: standalone binary first, Homebrew later, PyPI not primary",
       "provider: OpenAI-compatible HTTP including custom base_url local endpoints, and Anthropic Messages HTTP adapters for eval, no SDK-heavy dependency during deterministic bootstrap",
       "artifact namespace: Factory evidence in .factory/artifacts/ and product artifacts in workflows/, cassettes/, runs/, baselines/, schemas/, and examples/",

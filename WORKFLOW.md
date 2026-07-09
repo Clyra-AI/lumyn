@@ -100,7 +100,7 @@ delivery-slice labels instead of item-level evidence.
 
 ## Runtime And Distribution Pins
 
-- Go version: `1.26.4`
+- Go version: `1.26.5`
 - Module path: `github.com/Clyra-AI/lumyn`
 - Primary distribution: standalone binary
 - Secondary distribution: Homebrew
