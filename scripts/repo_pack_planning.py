@@ -362,6 +362,12 @@ def validate_plan_drift_policy(value: Any, label: str) -> None:
         )
 
 
+def validate_semantic_invariant_policy_text(value: Any, label: str) -> None:
+    text = str(value or "").lower()
+    if "semantic_invariants" not in text and "semantic invariants" not in text:
+        fail(f"{label} must include semantic_invariants in runner-ready dispatch policy")
+
+
 def validate_context_brief(context: dict[str, Any]) -> None:
     validate_no_legacy_provider_fields(context, "context-brief.json")
     validate_factory_compatibility(context.get("factory_compatibility"), "context-brief.json.factory_compatibility")
@@ -388,6 +394,10 @@ def validate_context_brief(context: dict[str, Any]) -> None:
     validate_factoryd_runtime(
         decisions.get("factoryd_runtime"),
         "context-brief.json.alignment_decisions.factoryd_runtime",
+    )
+    validate_semantic_invariant_policy_text(
+        decisions.get("factoryd_dispatch_policy"),
+        "context-brief.json.alignment_decisions.factoryd_dispatch_policy",
     )
     validate_mvp_eval_provider_adapters(
         decisions.get("mvp_eval_provider_adapters"),
@@ -432,6 +442,18 @@ def validate_execution_plan(plan: dict[str, Any]) -> str:
         fail("execution plan planning_skill_alignment.status must be aligned")
     if not has_required_string_refs(alignment.get("source_refs"), REQUIRED_PLAN_SKILL_REFS):
         fail("execution plan planning_skill_alignment.source_refs must include Factory planning skills")
+    runner_ready_rules = [
+        str(rule)
+        for rule in alignment.get("validated_rules") or []
+        if "runner-ready" in str(rule).lower()
+    ]
+    if not runner_ready_rules:
+        fail("execution plan planning_skill_alignment.validated_rules must include runner-ready dispatch policy")
+    if not any(
+        "semantic_invariants" in rule.lower() or "semantic invariants" in rule.lower()
+        for rule in runner_ready_rules
+    ):
+        fail("execution plan runner-ready dispatch policy must include semantic_invariants")
     if contains_machine_local_path(plan):
         fail("execution plan contains a machine-local absolute path")
 

@@ -157,7 +157,7 @@
       "network_posture": "offline by default until live sandbox/model work is approved",
       "capability_grants": []
     },
-    "factoryd_dispatch_policy": "runner-ready task packets must declare worker_type, factoryd_runtime, validation_commands, max_iterations, evidence_required, stop_conditions, path policy, lifecycle gates, and scope exclusions before dispatch",
+    "factoryd_dispatch_policy": "runner-ready task packets must declare worker_type, factoryd_runtime, validation_commands, max_iterations, evidence_required, semantic_invariants, stop_conditions, path policy, lifecycle gates, and scope exclusions before dispatch",
     "model_provider_endpoint": {
       "status": "pending_approval",
       "decision": "model_provider_endpoint",
