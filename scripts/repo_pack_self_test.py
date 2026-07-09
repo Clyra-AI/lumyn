@@ -12,6 +12,7 @@ from repo_pack_architecture import (
     ARCHITECTURE_BUDGET_EXCEPTION_REFS,
     FACTORY_ARCHITECTURE_BUDGET_POLICY_REF,
     architecture_budget_unexcepted_failures,
+    architecture_debt_exception_budget_type_error,
     architecture_debt_exception_expiry_error,
     validate_architecture_debt_exception_expiry,
 )
@@ -26,6 +27,7 @@ fail = validator.fail
 validate_factoryd_config = validator.validate_factoryd_config
 validate_model_provider_gate = validator.validate_model_provider_gate
 validate_standalone_task_packet = validator.validate_standalone_task_packet
+validate_source_parser_review = validator.validate_source_parser_review
 validate_task_execution_compiler_fields = validator.validate_task_execution_compiler_fields
 validate_task_packets = validator.validate_task_packets
 
@@ -229,8 +231,8 @@ def propagated_task(task_id_value: str, blocked_by: list[str]) -> dict[str, Any]
         "planning_skill_refs": list(REQUIRED_PLAN_SKILL_REFS),
         "runtime_pins": {
             "language": "go",
-            "go_version": "1.26.4",
-            "toolchain_version": "1.26.4",
+            "go_version": "1.26.5",
+            "toolchain_version": "1.26.5",
             "module_path": "github.com/Clyra-AI/lumyn",
             "module_or_package_path": "github.com/Clyra-AI/lumyn",
             "dependency_policy": "standard library first; pinned dependencies only when task-required",
@@ -378,6 +380,20 @@ def run_self_test() -> int:
         datetime(2026, 7, 1, tzinfo=timezone.utc),
     ):
         fail("architecture debt exception self-test expected expired evidence to fail")
+    if not architecture_debt_exception_budget_type_error("self-test", {}):
+        fail("architecture debt exception self-test expected missing budget_type to fail")
+    if architecture_debt_exception_budget_type_error("self-test", {"budget_type": "source_file_lines"}):
+        fail("architecture debt exception self-test expected source_file_lines budget_type to pass")
+    validate_source_parser_review({
+        "T3.1": {
+            "required_review": {
+                "required": True,
+                "review_type": "architecture",
+                "reviewer_class": "peer_agent",
+            },
+            "lifecycle_gates": {"code_review_required": True},
+        }
+    })
     try:
         validate_task_packets(
             {

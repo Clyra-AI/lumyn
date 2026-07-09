@@ -4,7 +4,7 @@
 
 | Tool | Version |
 |---|---:|
-| Go | `1.26.4` |
+| Go | `1.26.5` |
 
 ## Dependency Pins
 
@@ -192,6 +192,11 @@ count those as proof claims or as accepted recorder-quality claims.
 T3.1 is the parser/source-proof repair guard. Recorder-heavy tasks T4.1 through
 T4.3 must consume only source-check outputs that passed the structured parser,
 proof-tier, and hallucinated-reference checks or record an approved exception.
+T3.1 requires an independent architecture-lens pre-PR review and the normal
+latest-head code review. Its implementation must prove JSON/YAML normalization
+equivalence, deterministic local-reference resolution, explicit external-ref
+network posture, typed failure for cycles or hallucinated refs, and portable
+source-path plus JSON-pointer citations before recorder work may resume.
 
 ## Workflow Insight Framing
 

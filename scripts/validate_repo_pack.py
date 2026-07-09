@@ -62,9 +62,8 @@ from repo_pack_safety import (
     validate_risk_classification as validate_risk_classification_with_policy,
     validate_safety_corpus_ready_plan as validate_safety_corpus_ready_plan_with_prd,
 )
-from repo_pack_task_specials import validate_first_session_smoke_task, validate_recorder_task_split
+from repo_pack_task_specials import validate_first_session_smoke_task, validate_recorder_task_split, validate_source_parser_review
 from repo_pack_task_paths import validate_architecture_target_paths
-
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_DIR = ROOT / ".factory" / "artifacts" / "prd-to-plan" / "lumyn-mvp"
 CONTEXT_BRIEF = PLAN_DIR / "context-brief.json"
@@ -771,6 +770,7 @@ def validate_task_packets(
             validate_live_eval_dispatch_gates(task)
     if any(task_ref in tasks_by_id for task_ref in ["T4", "T4.1", "T4.2", "T4.3"]):
         validate_recorder_task_split(tasks_by_id)
+        validate_source_parser_review(tasks_by_id)
     if "T6.2" in tasks_by_id:
         validate_first_session_smoke_task(tasks_by_id)
 

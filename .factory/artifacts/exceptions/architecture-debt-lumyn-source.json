@@ -4,6 +4,7 @@
   "exception_id": "ARCH-DEBT-2026-07-01-lumyn-source",
   "repo": "lumyn",
   "scope": {
+    "budget_type": "source_file_lines",
     "paths": [
       "scripts/validate_repo_pack.py"
     ],

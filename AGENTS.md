@@ -36,7 +36,7 @@ Every change should improve one or more of:
   closure units. They are internal delivery slices represented by
   `delivery_slices` and task `delivery_slice_refs`; acceptance item IDs remain
   the closure source of truth.
-- Build the CLI/core in Go `1.26.4` unless a later approved architecture decision changes the runtime.
+- Build the CLI/core in Go `1.26.5` unless a later approved architecture decision changes the runtime.
 - Keep T1 standard-library-only; new dependencies must be pinned and justified.
 
 ## 4. Required Boundaries
@@ -110,7 +110,7 @@ exception records in `.github/action-ref-exceptions.yaml`.
 
 ## 6. Alignment Pins
 
-- Runtime: Go `1.26.4`.
+- Runtime: Go `1.26.5`.
 - Module path: `github.com/Clyra-AI/lumyn`.
 - Distribution: standalone binary first, Homebrew next, PyPI not primary.
 - MVP eval providers: OpenAI-compatible HTTP, including custom `base_url` local

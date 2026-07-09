@@ -86,6 +86,9 @@ def validate_architecture_debt_exception(root: Path, ref: str) -> None:
     scope = exception.get("scope")
     if not isinstance(scope, dict):
         fail(f"{ref}.scope must be an object")
+    budget_type_error = architecture_debt_exception_budget_type_error(ref, scope)
+    if budget_type_error:
+        fail(budget_type_error)
     if sorted(scope.get("paths") or []) != sorted(ARCHITECTURE_BUDGET_EXCEPTION_PATHS):
         fail(f"{ref}.scope.paths must be {ARCHITECTURE_BUDGET_EXCEPTION_PATHS!r}")
     line_ceiling_error = architecture_debt_exception_line_ceiling_error(root, ref, scope)
@@ -98,6 +101,12 @@ def validate_architecture_debt_exception(root: Path, ref: str) -> None:
         ref_error = architecture_debt_exception_repo_ref_error(root, ref, key, exception.get(key))
         if ref_error:
             fail(ref_error)
+
+
+def architecture_debt_exception_budget_type_error(ref: str, scope: object) -> str | None:
+    if not isinstance(scope, dict) or scope.get("budget_type") != "source_file_lines":
+        return f"{ref}.scope.budget_type must be source_file_lines"
+    return None
 
 
 def parse_rfc3339_timestamp(value: object, label: str) -> datetime:

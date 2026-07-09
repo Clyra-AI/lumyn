@@ -25,8 +25,8 @@ lint-fast:
 	test -d tests
 	test -d scripts
 	! grep -RIn "TODO\\|TBD\\|FIXME" AGENTS.md WORKFLOW.md README.md docs cmd internal schemas tests
-	grep -q '^golang 1.26.4$$' .tool-versions
-	grep -q '^go 1.26.4$$' go.mod
+	grep -q '^golang 1.26.5$$' .tool-versions
+	grep -q '^go 1.26.5$$' go.mod
 	grep -q 'go-version-file: go.mod' .github/workflows/validate.yml
 	grep -q 'check-latest: false' .github/workflows/validate.yml
 	grep -q 'actions/checkout@v6.0.2' .github/workflows/validate.yml
