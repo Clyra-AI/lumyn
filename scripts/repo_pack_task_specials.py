@@ -20,6 +20,9 @@ def validate_source_parser_review(tasks_by_id: dict[str, dict[str, Any]]) -> Non
     lifecycle = task.get("lifecycle_gates") or {}
     if lifecycle.get("code_review_required") is not True:
         fail("T3.1.lifecycle_gates.code_review_required must be true")
+    evidence = {str(value) for value in task.get("evidence_required", [])}
+    if "review_report" not in evidence:
+        fail("T3.1.evidence_required must include review_report")
 
 
 def validate_recorder_task_split(tasks_by_id: dict[str, dict[str, Any]]) -> None:
