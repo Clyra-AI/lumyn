@@ -395,6 +395,22 @@ def run_self_test() -> int:
         }
     })
     try:
+        validate_source_parser_review({
+            "T3.1": {
+                "required_review": {
+                    "required": True,
+                    "review_type": "security",
+                    "reviewer_class": "peer_agent",
+                },
+                "lifecycle_gates": {"code_review_required": True},
+            }
+        })
+    except AssertionError as exc:
+        if "review_type must be architecture" not in str(exc):
+            raise
+    else:
+        fail("self-test expected T3.1 non-architecture review type to fail")
+    try:
         validate_task_packets(
             {
                 "artifact_type": "task_packet_set",
