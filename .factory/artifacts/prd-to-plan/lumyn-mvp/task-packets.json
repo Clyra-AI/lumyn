@@ -3466,6 +3466,7 @@
         "ship_packet",
         "post_merge_report",
         "pr_lifecycle_report",
+        "review_report",
         "scope_closure_map",
         "factoryd_run_once_report",
         "coverage_gate_result",

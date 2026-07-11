@@ -392,6 +392,7 @@ def run_self_test() -> int:
                 "reviewer_class": "peer_agent",
             },
             "lifecycle_gates": {"code_review_required": True},
+            "evidence_required": ["review_report"],
         }
     })
     try:
@@ -403,6 +404,7 @@ def run_self_test() -> int:
                     "reviewer_class": "peer_agent",
                 },
                 "lifecycle_gates": {"code_review_required": True},
+                "evidence_required": ["review_report"],
             }
         })
     except AssertionError as exc:
@@ -410,6 +412,23 @@ def run_self_test() -> int:
             raise
     else:
         fail("self-test expected T3.1 non-architecture review type to fail")
+    try:
+        validate_source_parser_review({
+            "T3.1": {
+                "required_review": {
+                    "required": True,
+                    "review_type": "architecture",
+                    "reviewer_class": "peer_agent",
+                },
+                "lifecycle_gates": {"code_review_required": True},
+                "evidence_required": ["validation_report"],
+            }
+        })
+    except AssertionError as exc:
+        if "evidence_required must include review_report" not in str(exc):
+            raise
+    else:
+        fail("self-test expected T3.1 missing review_report evidence to fail")
     try:
         validate_task_packets(
             {
