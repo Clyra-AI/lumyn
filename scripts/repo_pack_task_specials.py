@@ -13,8 +13,8 @@ def validate_source_parser_review(tasks_by_id: dict[str, dict[str, Any]]) -> Non
     review = task.get("required_review")
     if not isinstance(review, dict) or review.get("required") is not True:
         fail("T3.1.required_review.required must be true")
-    if review.get("review_type") not in {"architecture", "security"}:
-        fail("T3.1.required_review.review_type must be architecture or security")
+    if review.get("review_type") != "architecture":
+        fail("T3.1.required_review.review_type must be architecture")
     if review.get("reviewer_class") != "peer_agent":
         fail("T3.1.required_review.reviewer_class must be peer_agent")
     lifecycle = task.get("lifecycle_gates") or {}
