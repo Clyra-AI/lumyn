@@ -85,12 +85,12 @@
       {
         "decision": "sponsored_connection_meter",
         "value": "Sponsored connection meter: only a consumer-signed, invitation-bound minimal receipt whose signer is provider-authenticated and whose one-repository unit has a provider-signed deduplicated acknowledgement counts; richer attestation is separate and optional",
-        "evidence_ref": "docs/product/prd.md#provider-visible-connection-receipt"
+        "evidence_ref": "docs/product/prd.md#data-sharing"
       },
       {
         "decision": "distribution_posture",
         "value": "Distribution posture: the design-partner package is explicitly licensed and integrity-signed but not called OSS; public OSS/self-serve has a separate release gate",
-        "evidence_ref": "docs/product/prd.md#open-source-and-distribution-gate"
+        "evidence_ref": "docs/product/prd.md#distribution"
       },
       {
         "decision": "historical_plan",
