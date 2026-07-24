@@ -12,6 +12,7 @@ from typing import Any
 from repo_pack_architecture import validate_architecture_budget_policy
 from repo_pack_validation.acceptance_text import validate_acceptance_text
 from repo_pack_validation.authority import validate_active_repo_safety, validate_authority_grants
+from repo_pack_validation.markdown_refs import validate_markdown_fragment_refs
 from repo_pack_validation.runtime_pins import validate_runtime_pins
 from repo_pack_validation.self_tests import run_repo_pack_self_tests
 from repo_pack_validation.task_contracts import validate_migration_task_contracts
@@ -224,10 +225,8 @@ REQUIRED_DOCS = {
 MACHINE_LOCAL_RE = re.compile(r"(?:^|[\s\"'])(?:/Users/|/home/|file://|[A-Za-z]:\\\\)")
 ACCEPTANCE_ID_RE = re.compile(r"`([A-Z]+-\d{3})`:")
 
-
 def fail(message: str) -> None:
     raise AssertionError(message)
-
 
 def require(condition: bool, message: str) -> None:
     if not condition:
@@ -731,6 +730,7 @@ def validate_loaded(data: dict[str, dict[str, Any]], *, validate_configs: bool =
     for name, payload in data.items():
         require(not contains_machine_local_path(payload), f"{name} contains a machine-local path")
         require(not contains_true_key(payload, {"auto_merge", "default_branch_write", "provider_raw_repo_access"}), f"{name} enables a forbidden product capability")
+        validate_markdown_fragment_refs(ROOT, payload, name)
     validate_context(data["context"])
     validate_risk(data["risk"])
     ledger_by_id = validate_ledger(data["ledger"], required_ids)

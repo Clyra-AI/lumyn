@@ -557,7 +557,7 @@
     {
       "slice_id": "design_partner_pilot",
       "name": "Design-Partner Migration Campaign",
-      "source_ref": "docs/product/plan.md#design-partner-qualification",
+      "source_ref": "docs/product/plan.md#m25-qualify-the-design-partner-and-freeze-the-pilot-protocol",
       "required_for_completion": true,
       "public_release_boundary": false,
       "task_refs": [

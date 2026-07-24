@@ -7,6 +7,7 @@ from collections.abc import Callable
 from typing import Any
 
 from repo_pack_validation.authority import validate_authority_grants
+from repo_pack_validation.markdown_refs import _markdown_anchors
 
 
 Payload = dict[str, dict[str, Any]]
@@ -49,6 +50,19 @@ def run_repo_pack_self_tests(
     """Prove the validator rejects drift in authority, evidence, and scope."""
 
     tasks = validate_loaded(base, validate_configs=False)
+    _require(
+        _markdown_anchors(
+            "# API [Trust](https://example.com)\n"
+            "# `Code` *Mode*\n"
+        )
+        == {"api-trust", "code-mode"},
+        "Markdown heading slugs must use rendered inline text",
+    )
+    _require(
+        _markdown_anchors("# foo\n# foo\n# foo-1\n")
+        == {"foo", "foo-1", "foo-1-1"},
+        "Markdown heading suffix collisions must use an unoccupied slug",
+    )
     mutations: list[tuple[Callable[[Payload], Any], str]] = [
         (
             lambda value: value["ledger"]["items"].pop(),
@@ -248,6 +262,15 @@ def run_repo_pack_self_tests(
                 ],
             ),
             "irreversible external-disclosure semantics",
+        ),
+        (
+            lambda value: value["context"]["alignment_decisions"]["resolved"][
+                0
+            ].__setitem__(
+                "evidence_ref",
+                "docs/product/prd.md#missing-planning-source",
+            ),
+            "missing Markdown anchor",
         ),
     ]
     for mutate, expected in mutations:

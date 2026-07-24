@@ -125,7 +125,7 @@
     {
       "slice_id": "design_partner_pilot",
       "name": "Design-Partner Migration Campaign",
-      "source_ref": "docs/product/plan.md#design-partner-qualification",
+      "source_ref": "docs/product/plan.md#m25-qualify-the-design-partner-and-freeze-the-pilot-protocol",
       "required_for_completion": true,
       "public_release_boundary": false,
       "task_refs": [
@@ -608,7 +608,7 @@
         },
         {
           "policy": "release_integrity",
-          "source_ref": "docs/dev/dev_guides.md#changelog-and-versioning-policy",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
           "rule": "User-visible behavior and contract changes carry changelog and semver intent before shipping."
         },
         {
@@ -665,7 +665,7 @@
         },
         {
           "policy": "failure_semantics",
-          "source_ref": "docs/architecture/architecture_guides.md#failure-semantics",
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Ambiguous trust, authority, impact, patch, verification, or disclosure state fails closed."
         }
       ],
@@ -1260,7 +1260,7 @@
         },
         {
           "policy": "release_integrity",
-          "source_ref": "docs/dev/dev_guides.md#changelog-and-versioning-policy",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
           "rule": "User-visible behavior and contract changes carry changelog and semver intent before shipping."
         },
         {
@@ -1317,7 +1317,7 @@
         },
         {
           "policy": "failure_semantics",
-          "source_ref": "docs/architecture/architecture_guides.md#failure-semantics",
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Ambiguous trust, authority, impact, patch, verification, or disclosure state fails closed."
         }
       ],
@@ -2084,7 +2084,7 @@
         },
         {
           "policy": "release_integrity",
-          "source_ref": "docs/dev/dev_guides.md#changelog-and-versioning-policy",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
           "rule": "User-visible behavior and contract changes carry changelog and semver intent before shipping."
         },
         {
@@ -2141,7 +2141,7 @@
         },
         {
           "policy": "failure_semantics",
-          "source_ref": "docs/architecture/architecture_guides.md#failure-semantics",
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Ambiguous trust, authority, impact, patch, verification, or disclosure state fails closed."
         }
       ],
@@ -2738,7 +2738,7 @@
         },
         {
           "policy": "release_integrity",
-          "source_ref": "docs/dev/dev_guides.md#changelog-and-versioning-policy",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
           "rule": "User-visible behavior and contract changes carry changelog and semver intent before shipping."
         },
         {
@@ -2795,7 +2795,7 @@
         },
         {
           "policy": "failure_semantics",
-          "source_ref": "docs/architecture/architecture_guides.md#failure-semantics",
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Ambiguous trust, authority, impact, patch, verification, or disclosure state fails closed."
         }
       ],
@@ -3390,7 +3390,7 @@
         },
         {
           "policy": "release_integrity",
-          "source_ref": "docs/dev/dev_guides.md#changelog-and-versioning-policy",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
           "rule": "User-visible behavior and contract changes carry changelog and semver intent before shipping."
         },
         {
@@ -3447,7 +3447,7 @@
         },
         {
           "policy": "failure_semantics",
-          "source_ref": "docs/architecture/architecture_guides.md#failure-semantics",
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Ambiguous trust, authority, impact, patch, verification, or disclosure state fails closed."
         }
       ],
@@ -4118,7 +4118,7 @@
         },
         {
           "policy": "release_integrity",
-          "source_ref": "docs/dev/dev_guides.md#changelog-and-versioning-policy",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
           "rule": "User-visible behavior and contract changes carry changelog and semver intent before shipping."
         },
         {
@@ -4175,7 +4175,7 @@
         },
         {
           "policy": "failure_semantics",
-          "source_ref": "docs/architecture/architecture_guides.md#failure-semantics",
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Ambiguous trust, authority, impact, patch, verification, or disclosure state fails closed."
         }
       ],
@@ -4781,7 +4781,7 @@
         },
         {
           "policy": "release_integrity",
-          "source_ref": "docs/dev/dev_guides.md#changelog-and-versioning-policy",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
           "rule": "User-visible behavior and contract changes carry changelog and semver intent before shipping."
         },
         {
@@ -4838,7 +4838,7 @@
         },
         {
           "policy": "failure_semantics",
-          "source_ref": "docs/architecture/architecture_guides.md#failure-semantics",
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Ambiguous trust, authority, impact, patch, verification, or disclosure state fails closed."
         }
       ],
@@ -5548,7 +5548,7 @@
         },
         {
           "policy": "release_integrity",
-          "source_ref": "docs/dev/dev_guides.md#changelog-and-versioning-policy",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
           "rule": "User-visible behavior and contract changes carry changelog and semver intent before shipping."
         },
         {
@@ -5605,7 +5605,7 @@
         },
         {
           "policy": "failure_semantics",
-          "source_ref": "docs/architecture/architecture_guides.md#failure-semantics",
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Ambiguous trust, authority, impact, patch, verification, or disclosure state fails closed."
         }
       ],
@@ -6375,7 +6375,7 @@
         },
         {
           "policy": "release_integrity",
-          "source_ref": "docs/dev/dev_guides.md#changelog-and-versioning-policy",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
           "rule": "User-visible behavior and contract changes carry changelog and semver intent before shipping."
         },
         {
@@ -6432,7 +6432,7 @@
         },
         {
           "policy": "failure_semantics",
-          "source_ref": "docs/architecture/architecture_guides.md#failure-semantics",
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Ambiguous trust, authority, impact, patch, verification, or disclosure state fails closed."
         }
       ],
@@ -7186,7 +7186,7 @@
         },
         {
           "policy": "release_integrity",
-          "source_ref": "docs/dev/dev_guides.md#changelog-and-versioning-policy",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
           "rule": "User-visible behavior and contract changes carry changelog and semver intent before shipping."
         },
         {
@@ -7243,7 +7243,7 @@
         },
         {
           "policy": "failure_semantics",
-          "source_ref": "docs/architecture/architecture_guides.md#failure-semantics",
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Ambiguous trust, authority, impact, patch, verification, or disclosure state fails closed."
         }
       ],
@@ -8001,7 +8001,7 @@
         },
         {
           "policy": "release_integrity",
-          "source_ref": "docs/dev/dev_guides.md#changelog-and-versioning-policy",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
           "rule": "User-visible behavior and contract changes carry changelog and semver intent before shipping."
         },
         {
@@ -8058,7 +8058,7 @@
         },
         {
           "policy": "failure_semantics",
-          "source_ref": "docs/architecture/architecture_guides.md#failure-semantics",
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Ambiguous trust, authority, impact, patch, verification, or disclosure state fails closed."
         }
       ],
@@ -8912,7 +8912,7 @@
         },
         {
           "policy": "release_integrity",
-          "source_ref": "docs/dev/dev_guides.md#changelog-and-versioning-policy",
+          "source_ref": "docs/dev/dev_guides.md#release-integrity",
           "rule": "User-visible behavior and contract changes carry changelog and semver intent before shipping."
         },
         {
@@ -8969,7 +8969,7 @@
         },
         {
           "policy": "failure_semantics",
-          "source_ref": "docs/architecture/architecture_guides.md#failure-semantics",
+          "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
           "rule": "Ambiguous trust, authority, impact, patch, verification, or disclosure state fails closed."
         }
       ],
