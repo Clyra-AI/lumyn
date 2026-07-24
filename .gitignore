@@ -13,3 +13,18 @@ build/
 .factoryd/
 .factory/tmp/
 .factory/factoryd.json
+
+# Consumer-private Lumyn state belongs in an explicitly configured root outside
+# the checkout. Planned private artifact roots are ignored as defense in depth;
+# workflows/, cassettes/, and runs/ remain available for public test fixtures.
+/changes/
+/authorizations/
+/impacts/
+/migrations/
+/.lumyn/
+/.lumyn-private/
+/lumyn-state/
+
+# Only the source-safe public aggregate/hash pilot namespace is committable.
+/.factory/artifacts/pilot/lumyn-migration-mvp/private/
+/.factory/artifacts/pilot/lumyn-migration-mvp/raw/

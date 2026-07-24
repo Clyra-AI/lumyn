@@ -6,257 +6,546 @@
 |---|---:|
 | Go | `1.26.5` |
 
+Module path: `github.com/Clyra-AI/lumyn`.
+
+The Go core remains authoritative for Lumyn artifact, authorization, impact,
+patch, verification, and delivery orchestration. A future TypeScript parser or
+tooling subprocess requires a pinned dependency, a bounded interface, an ADR
+when it crosses the runtime boundary, and deterministic fixtures.
+
+The supported npm migration slice must record exact Node and npm versions
+before `package-lock.json` mutation is enabled. The migration plan and evidence
+also bind the approved registry or offline snapshot, package-integrity inputs,
+and toolchain digest. Floating versions, an unpinned registry view, lifecycle
+scripts, or a missing integrity value make deterministic lockfile mutation
+ineligible; there is no implicit local-machine fallback.
+
 ## Dependency Pins
 
-- `github.com/santhosh-tekuri/jsonschema/v5 v5.3.1`: executable JSON Schema validation for T2 and later schema/artifact work.
+- `github.com/santhosh-tekuri/jsonschema/v5 v5.3.1`: executable JSON Schema
+  validation.
+
+New dependencies must be pinned, justified in task evidence, scanner-covered,
+and exercised by a failing test or fixture before implementation.
 
 ## Validation Matrix
 
-- `make lint-fast`: repo operating pack and layout checks.
+- `make lint-fast`: repo contract, layout, policy, and Go vet.
 - `make test-fast`: Go unit tests.
-- `make test-coverage`: Go coverage gate over first-party CLI/schema packages.
-- `make test-contracts`: unit tests, Factory planning artifact presence, downstream pilot evidence validation, repo-pack guide propagation validation, and required schema-file presence.
+- `make test-coverage`: first-party Go coverage gate.
+- `make test-contracts`: Go tests, schema tests, active migration-plan
+  validation, historical pilot-evidence validation, and repo-pack self-tests.
 - `make prepush-full`: full local gate before PR or merge.
-- `make audit-remote-protection`: networked GitHub audit for live `main` branch protection and the `protect-main-from-direct-push` ruleset.
+- `make audit-remote-protection`: networked GitHub audit of `main` protection
+  and the `protect-main-from-direct-push` ruleset.
+
+The active migration control set contains exactly 62 acceptance items across
+12 task packets (`M0` through `M10`, including `M2.5`). Task completion and
+delivery slices are coverage lenses only; validation closes individual
+acceptance item IDs.
 
 ## CI Lane Mapping
 
-- Fast lane: `make lint-fast`, `make test-fast`.
-- Core lane: `make test-contracts`, `make prepush-full`.
-- Acceptance lane: PRD item coverage in `.factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json` and item status in `.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json`.
-- Cross-platform lane: reserved until standalone binary packaging starts.
-- Risk lane: GitHub Actions `CodeQL analyze`, plus future hardening/chaos/perf checks as replay, live verify, share, and eval mature.
-- Release lane: reserved until standalone binary release packaging starts.
+- Fast: `make lint-fast`, `make test-fast`.
+- Core: `make test-contracts`, `make prepush-full`.
+- Acceptance: item status in
+  `.factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json`
+  and `scope-closure-map.json`.
+- Cross-platform: reserved until standalone binary packaging.
+- Risk: `CodeQL analyze`, plus targeted security/architecture review for
+  parser, patch, external-call, credential, GitHub, data-sharing, and release
+  surfaces.
+- Release: reserved until supported binary packaging.
+- Cross-system: explicit task-scoped GitHub or provider-sandbox checks.
 
 ## 12-Level Test Matrix
 
-Lumyn preserves the Factory 12-level test matrix even when a tier is planned,
-reserved, or blocked by credential/network approval.
-
-| Tier | Status | Current command, check, or evidence |
+| Tier | Status | Migration-MVP evidence |
 |---|---|---|
-| Tier 1 Unit | Active | `go test ./... -count=1` through `make test-fast` |
-| Tier 2 Integration | Planned | `make test-contracts`; grows with schema/workflow integration tests |
-| Tier 3 End-to-End | Planned | CLI command invocation tests as `lumyn init`, `check`, `record`, `verify`, `trace`, and `eval` mature |
-| Tier 4 Acceptance | Planned | `.factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json` and `.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json` against PRD acceptance item IDs |
-| Tier 5 Hardening | Planned | fail-closed, redaction, stale-cassette, cleanup, retry, and orphan-evidence tests |
-| Tier 6 Chaos | Reserved | controlled failure injection after live verify/retry boundaries exist |
-| Tier 7 Performance | Reserved | runtime, cost, and duration budgets after replay/eval paths exist |
-| Tier 8 Soak | Reserved | repeated replay/eval stability after deterministic replay exists |
-| Tier 9 Contract | Active | `make test-contracts`; schemas, command-result envelope, exit-code stability |
-| Tier 10 UAT | Reserved | install/distribution acceptance after first standalone binary packaging |
-| Tier 11 Scenario | Planned | planted-flaw workflow matrix and proof-honesty scenario coverage |
-| Tier 12 Cross-System Integration | Blocked until approved | live sandbox/model-provider checks after explicit credential and network approval |
+| Tier 1 Unit | Active | Go units through `make test-fast` |
+| Tier 2 Integration | Planned/active | Schema, artifact, parser, impact, patch, and verification integration |
+| Tier 3 End-to-End | Planned | `campaign kit create`, `change publish`, `campaign invite create`, `provider enroll`, `campaign accept`, `trust refresh`, `authorization issue/revoke/validate`, `campaign receipt issue/submit/acknowledge/ack import`, `canary run --offline`, `impact`, `migrate`, `verify`, `trace`, `artifacts gc`, and `pr` command flows |
+| Tier 4 Acceptance | Active planning | Item-level active ledger and closure map |
+| Tier 5 Hardening | Planned | Path escape, stale input, retry, cleanup, redaction, idempotency, and crash recovery |
+| Tier 6 Chaos | Reserved | Controlled sandbox, GitHub, filesystem, and command-runner failures |
+| Tier 7 Performance | Planned | Impact and PR-preparation budgets over fixed fixtures |
+| Tier 8 Soak | Reserved | Repeated deterministic and campaign-idempotency runs |
+| Tier 9 Contract | Active | JSON Schemas, typed exits, artifact compatibility, negative fixtures |
+| Tier 10 UAT | Planned | Consumer-maintainer authorization and review workflow |
+| Tier 11 Scenario | Planned | Gold, held-out, unsupported, and false-verification migration corpus |
+| Tier 12 Cross-System Integration | Blocked until approved | M2.5-qualified provider/cohort, independently authorized M8 provider sandbox and M9 GitHub draft PR, and M10 real design-partner campaign |
 
-Future task packets must cite the applicable tiers or record an approved
-non-applicable reason.
+Future task packets cite applicable tiers or an approved non-applicable reason.
 
 ## Coverage Gates
 
-Lumyn inherits the org-wide Factory coverage policy derived from Wrkr's launch
-bar.
-
 | Scope | Threshold | Enforcement |
 |---|---:|---|
-| Go first-party packages overall (`cmd/`, `internal/`, `schemas/`) | `>= 75%` | `make test-coverage`, included in `make prepush-full` and CI |
-| Go stable command or core packages | `>= 85%` | Required once the package contains stable product-bearing logic; exceptions must name owner, reason, expiry or follow-up task, and compensating validation |
+| Go first-party packages overall | `>= 75%` | `make test-coverage` and CI |
+| Stable command or core packages | `>= 85%` | Hard gate calculated by `make test-coverage` |
 
-Coverage output is written to `.factory/tmp/coverage.out`. The gate is a
-false-green guard, not a replacement for command-result schema tests, acceptance
-closure, replay scenarios, CodeQL, or future live eval validation.
-
-Future task packets that touch first-party code, tests, CI, generated code, or
-package boundaries must cite `coverage_policy_refs` or record an approved
-coverage exception.
+Coverage output goes to `.factory/tmp/coverage.out`. Coverage is not a
+substitute for schema fixtures, held-out impact scoring, golden patches,
+proof-of-behavior scorecards, CodeQL, or cross-system evidence.
 
 ## Architecture Budget Gate
 
-Lumyn uses the Factory default architecture budget: warn at `1200` source lines
-and fail at `2500` source lines for `.go`, `.py`, `.ts`, `.tsx`, `.js`, and
-`.jsx` files, excluding generated runtime, dependency, cache, and build
-directories. `factoryd doctor` must emit an `architecture_budget_report` before
-daemon work. The remaining warning-level validator orchestration file is
-`scripts/validate_repo_pack.py`, covered by
-`.factory/artifacts/exceptions/architecture-debt-lumyn-source.json`; work that
-touches it must avoid net growth unless it is shrink-only decomposition.
-Architecture-budget logic lives in `scripts/repo_pack_architecture.py`, and
-self-test fixture construction lives in `scripts/repo_pack_self_test.py`.
-`internal/source` has been split below the warning threshold and future work
-must preserve those smaller responsibility boundaries.
+Source files warn at `1200` lines and fail at `2500` lines for supported source
+extensions. Generated runtime, dependency, cache, and build directories are
+excluded.
+
+The repo-pack validation rebaseline must reduce or stay below its existing
+shrink-only ceiling. Feature work keeps these responsibilities separate:
+
+- source/change intake;
+- TypeScript repository analysis;
+- migration planning;
+- patch application;
+- command execution;
+- workflow verification;
+- GitHub delivery;
+- provider attestation.
+
+Do not turn `internal/source` or a single validator file into the new product
+monolith.
 
 ## CI And PR Lifecycle
 
-- GitHub Actions workflow: `.github/workflows/validate.yml`.
-- Required check name: `validate`.
-- CI command: `make prepush-full`.
-- Required-check manifest: `.github/required-checks.json`, expected checks `validate` and `CodeQL analyze`.
-- Owner-review coverage: `.github/CODEOWNERS`, covering workflow, policy, Factory artifact, schema, CLI, and core implementation paths.
-- Workflow hardening: validate and CodeQL workflows declare least-privilege permissions, concurrency cancellation, job timeouts, and toolchain setup from pinned repo files.
-- Action-ref posture: `.github/action-ref-exceptions.yaml` records audited exceptions for non-SHA action refs with owner, reason, scope, expiry, and review command.
-- PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
-- Lifecycle-gated tasks require local validation, CI/status evidence, review evidence when required, ship evidence, post-merge evidence, and a PR lifecycle report or an explicit approved exception.
-- Passive Codex review settle is required before merge when the repository review integration is enabled.
-- Green CI alone is not merge-ready. The latest PR head must have Codex approval, thumbs-up, actionable-resolved, carry-forward, or an approved exception before merge.
-- Do not merge manually through `gh pr merge`, the GitHub UI, or a connector before passive Codex review settles. A configured `factoryd` autoship run may use its `github_cli` provider only after required CI, passive Codex review, merge, post-merge, and semantic scope-closure gates pass.
-- A PR merged without latest-head Codex review evidence is a process escape and must be recorded in PR lifecycle evidence with a follow-up fix or blocker.
-- GitHub `main` must be protected by branch protection plus the `protect-main-from-direct-push` ruleset.
-- Required live controls: pull requests required, strict `validate` and `CodeQL analyze` status checks, admin enforcement, conversation resolution, no force pushes, no branch deletion, and no current-user ruleset bypass.
-- Verify live remote controls with `make audit-remote-protection` when GitHub credentials are available.
+- Validation workflow: `.github/workflows/validate.yml`.
+- Required check: `validate`.
+- Security workflow: `.github/workflows/codeql.yml`.
+- Required security check: `CodeQL analyze`.
+- Required-check manifest: `.github/required-checks.json`.
+- Owner-review map: `.github/CODEOWNERS`.
+- Action-ref exceptions: `.github/action-ref-exceptions.yaml`.
+- PR lifecycle report:
+  `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
+
+Lifecycle-gated tasks require local validation, CI, review where required,
+shipping, post-merge, and item-level closure evidence.
+
+When task policy selects an independent gate, the canonical pre-shipping order
+is `holdout-evaluator`, `trace-grader`, then `evidence-attestor`, after
+`code-review` and before `commit-push`. These are external or human-operated
+lifecycle reviews. Shipping verifies their lifecycle-owned artifacts are
+schema-valid and passing, bind the exact task, work item, lifecycle run, current
+validation run, candidate digest, and work-proof marker digest, and carry
+independent worker provenance. Implementation-worker self-attestation is
+invalid. The task-level review lens and reviewer class must exactly match the
+inherited validation contract and current review artifact.
+
+Passive Codex review settle is required before merge. Green CI alone is not merge-ready.
+Do not merge manually through `gh pr merge`, the GitHub UI, or a
+connector before the configured latest-head terminal review signal. A merge
+without that evidence is a process escape and requires a recorded repair or
+exception.
+
+GitHub `main` remains protected by branch protection and the
+`protect-main-from-direct-push` ruleset. Use `make audit-remote-protection` to
+verify the live state.
 
 ## Security Scanner Enforcement
 
-- Scanner: CodeQL.
-- Workflow: `.github/workflows/codeql.yml`.
-- Status source: GitHub Actions `CodeQL analyze`.
-- Required for: dependency additions, generated-code intake, CI/workflow changes, redaction/share/live/eval/provider code, external calls, data exposure, and release-sensitive work.
-- Exception behavior: blocked unless the task packet, validation report, and PR lifecycle report record an approved scanner exception with compensating validation.
+CodeQL is required for:
+
+- dependency additions;
+- generated-code or fixture generators;
+- CI and workflow changes;
+- structured parser boundaries;
+- patch generation and filesystem writes;
+- command execution;
+- external network or API calls;
+- credential, redaction, or data-sharing behavior;
+- GitHub integration;
+- release-sensitive work.
+
+Scanner failure blocks closure unless a scoped, approved exception names the
+owner, reason, expiry/follow-up, and compensating validation.
 
 ## Bootstrap Rules
 
-- Deterministic bootstrap must not require network, sandbox credentials, or model keys.
-- Live sandbox and eval work require explicit human approval before credentials are introduced.
-- Tests should be added before implementation when practical.
-- Evidence artifacts must use repo-relative paths.
-- Use Factory `task-supervisor` for guided post-PRD, audit, review,
-  recommendation, or idea intake before implementation. The report path is
-  `.factory/artifacts/task-supervisor-runs/<mission>/<timestamp>.json`; it
-  records source validation, ingest, doctor, dry-run, alignment gates, and the
-  recommended next task.
-- Runner-ready task packets must preserve `semantic_invariants` so workers,
-  supervisors, and review repairs keep behavior boundaries intact across
-  decomposition and follow-up tasks.
-- T1 must use the Go standard library only.
-- Any new dependency must be pinned in `go.mod`, justified in the task evidence, and covered by validation.
-- Schema/artifact changes must include representative validation coverage in `schemas/`.
-- Changes to CI, review, shipping, or post-merge workflow must update `WORKFLOW.md`, this guide, and the relevant Factory planning artifacts in the same branch.
-- Changes to CI, workflow, policy, or lifecycle gates must keep
-  `.github/required-checks.json`, `.github/CODEOWNERS`,
-  `.github/action-ref-exceptions.yaml`, `scripts/validate_repo_pack.py`, and
-  the workflow files aligned.
-- Changes that affect T3+ task planning must keep `scripts/validate_repo_pack.py`
-  green so product task packets preserve CI lanes, 12-level test matrix refs,
-  scanner gates, engineering policy refs, architecture guidance refs, and the
-  Factory `prd-to-plan` / `execution-compiler` fields for Factory
-  compatibility, explicit scope exclusions, alignment gate refs, plan-drift
-  refs, acceptance-ledger refs, acceptance item IDs, expanded runtime pins,
-  changelog intent, contract impact, ADR posture, TDD-first evidence,
-  cost/perf impact, failure hypotheses, semantic invariants, canonical worker
-  chains, and lifecycle gates.
+- Deterministic benchmark work uses no network, sandbox credential, customer
+  repository, GitHub write, or model key.
+- Test-first or fixture-first development is expected.
+- Committed Factory control and lifecycle evidence uses repo-relative paths.
+  Consumer-private runtime and identifiable pilot evidence lives in an
+  explicitly configured consumer-controlled state root outside the checkout
+  and any public source repository; committed artifacts refer to it only by
+  opaque identifier and digest, never a machine-local path.
+- Factory worker grants use the closed `approval`, `credentials`, and `network`
+  vocabulary. Exact Lumyn product grants are private schema-backed artifacts;
+  task validation records diagnostic/closure proof over their opaque referenced
+  bundle, and no Factory grant substitutes for product authority. Factory
+  dispatch does not implement the Lumyn gate: product code revalidates current
+  packet trust and exact product authority immediately before every side effect
+  and retry.
+- M2.5 identifiable-evidence handling requires a narrow manual privacy/legal
+  preflight under Factory `approval`, including allowed fields, participant
+  consent, external private storage, TTL, expiry/revocation deletion,
+  deletion-receipt/orphan ownership, the minimal connection-receipt field
+  allowlist, separate public disclosure consent, and the irreversibility of
+  provider/public disclosure. This is not Lumyn runtime product authority. The
+  active approval must cite this preflight and exactly match its canonical
+  scope digest.
+- Existing historical task-run and pilot evidence is immutable.
+- T1 remains standard-library-only; later dependencies require task approval.
+- Structured artifact changes include valid and invalid schema fixtures.
+- Behavior, command, schema, artifact, permission, and evidence changes update
+  docs and active Factory planning together.
+- Runner-ready packets preserve acceptance IDs, paths, commands, risk,
+  lifecycle gates, evidence, proof level, capability requirements, stop
+  conditions, changelog/versioning intent, and semantic invariants.
 
 ## Docs Parity
 
-- Behavior, flags, output shape, exit codes, artifact paths, install paths, and workflow semantics must update docs in the same change.
-- User-facing docs: `README.md`, `docs/product/prd.md`, `docs/dev/dev_guides.md`, and `docs/architecture/architecture_guides.md`.
-- Factory planning docs: `.factory/artifacts/prd-to-plan/lumyn-mvp/`.
-- Quickstart or example changes must be backed by a command, schema test, fixture, or explicit planned-lane note.
+User-facing sources:
 
-## Output Contracts
+- `README.md`
+- `AGENTS.md`
+- `WORKFLOW.md`
+- `docs/product/prd.md`
+- `docs/product/plan.md`
+- `docs/dev/dev_guides.md`
+- `docs/architecture/architecture_guides.md`
+- relevant ADRs
 
-- The command-result JSON envelope is a public contract.
-- Exit-code constants are a public contract and must match `docs/product/prd.md`.
-- Schemas under `schemas/` are executable contracts.
-- Normalized result and failure contracts must carry `finding_kind`,
-  `proof_strength`, `action_boundary_status`, `security_relevance`,
-  `fix_target`, `surface_fingerprint`, `eval_mode`, `provider_metadata`, and
-  `corpus_eligible: false` as local-only evidence fields.
-- Product artifacts in `workflows/`, `cassettes/`, `runs/`, `baselines/`, and `examples/` must stay repo-relative and schema-backed when a schema exists.
-- Output contract changes require tests or fixtures before implementation when practical.
+Active planning sources:
+
+- `.factory/artifacts/prd-to-plan/lumyn-migration-mvp/`
+- Factory `profiles/lumyn.yaml`
+
+Behavior, flags, status axes, exits, artifact paths, trust boundaries, and
+implementation status must agree across these surfaces.
+
+## Structured Data Policy
+
+OpenAPI, JSON, YAML, package manifests, lockfiles, TypeScript ASTs, schemas,
+coverage, GitHub responses, and logs use structured parsers or stable APIs.
+Regex and text search may assist discovery but cannot be the only evidence for
+a supported call-site or mutation.
+
+Structured outputs:
+
+- declare object type and schema version;
+- use stable enum values;
+- preserve unknown/unsupported states;
+- include concrete source references;
+- avoid machine-local paths;
+- bind to input hashes where freshness matters;
+- fail on ambiguous or malformed input.
 
 ## Agent-Native CLI Policy
 
-- Agent-facing commands must support stable JSON output mode.
-- Commands should emit machine-readable output when stdout is not a TTY unless
-  explicitly human-only with an approved exception.
-- `--quiet` and `--compact` must preserve status, evidence refs, typed errors,
-  and the command-result envelope.
-- T3+ task packets must carry acceptance checks for JSON mode, piped or
-  non-interactive behavior, quiet/compact output posture, typed exits, and
-  machine-readable errors when the task touches CLI behavior.
+State-returning commands:
 
-## Source-Check Proof Rubric
+- support stable JSON;
+- remain machine-readable when piped or non-interactive;
+- preserve status, evidence refs, typed errors, and exit code in quiet/compact
+  modes;
+- return nonzero for unimplemented behavior;
+- never use a generic pass envelope as a placeholder.
 
-`lumyn check` must stay distinct from generic generation-time readiness scoring.
-It verifies whether source evidence can support later workflow-completion proof.
-Source checks use two tiers:
+Help and docs must not advertise a command as working before its end-to-end
+acceptance passes.
 
-- Infrastructure tier: parser/schema/readability facts such as path existence,
-  operation IDs, auth declaration shape, response schema availability, and
-  validator input paths.
-- Workflow/domain tier: evidence that a source surface can support a concrete
-  workflow job, expected outcome, read-back, cleanup, boundary, or fix target.
+## Migration Corpus Policy
 
-Unprovable, missing, or hallucinated paths are hard failures for source-evidence
-closure. A check may report `needs_user_input` or `coverage_gap`, but it must not
-count those as proof claims or as accepted recorder-quality claims.
+Every benchmark fixture includes:
 
-T3.1 is the parser/source-proof repair guard. Recorder-heavy tasks T4.1 through
-T4.3 must consume only source-check outputs that passed the structured parser,
-proof-tier, and hallucinated-reference checks or record an approved exception.
-T3.1 requires an independent architecture-lens pre-PR review and the normal
-latest-head code review. Its implementation must prove JSON/YAML normalization
-equivalence, deterministic local-reference resolution, explicit external-ref
-network posture, typed failure for cycles or hallucinated refs, and portable
-source-path plus JSON-pointer citations before recorder work may resume.
+- fixture and change IDs;
+- pinned source/target refs and digests;
+- license, attribution, and redistribution posture;
+- official SDK package/version;
+- annotated impacted and unaffected call sites;
+- expected patch;
+- expected verification stage and outcome;
+- unsupported/negative classification where applicable.
 
-## Workflow Insight Framing
+Visible development fixtures and held-out scoring fixtures remain separate.
+Ground truth is versioned before scoring. Public fixtures demonstrate
+engineering behavior only.
 
-Recorder and report work should capture the workflow's business job in addition
-to endpoint mechanics. Use an optional field such as `workflow_insight` or
-`business_job` to explain what the workflow enables, why the evidence matters,
-and which fix target unlocks completion. This field is evidence framing, not
-marketing copy; it must be grounded in the workflow goal, expected outcome,
-validators, trace, or source references.
+Only a non-resolving opaque holdout manifest containing opaque case IDs,
+provenance class and license posture, a frozen suite commitment, and encrypted
+or HMAC artifact commitments may be committed. An independent holdout owner
+provisions and freezes `LUMYN_HOLDOUT_ROOT`. Source URLs, repository or package
+identifiers, plaintext content digests, held-out repositories, inputs, answer
+keys, expected patches or labels, and raw traces remain there, outside every
+task-executor mount, prompt, and environment.
 
-## Structured Data, Proof, Budgets, And Redaction
+M1 uses provision-mode holdout policy and `holdout_provisioning_required` with
+an opaque private namespace and `hmac-sha256` algorithm; the plan never invents
+a commitment before the suite exists or labels provisioning as hidden
+evaluation of M1. M4, M6, and M7 use `holdout_evaluation_required` and
+evaluate-mode policy that resolves the trusted M1 result. The evaluator and
+shipping gate bind the exact referenced result bytes so replacement or replay
+invalidates the evaluation.
 
-- OpenAPI, workflow, cassette, evidence, trace, baseline, and report data must
-  be read through parsers, schemas, or stable APIs.
-- Source checks must distinguish syntax proof, source-evidence proof, workflow
-  proof, and user-visible proof; workflow or user-visible closure requires a
-  proof-of-behavior scorecard or approved exception.
-- Large logs, traces, reports, and generated evidence must be cited by artifact
-  ref with full-output hashes and truncation metadata instead of duplicated
-  payloads.
-- `lumyn share` and any customer-safe artifact must recursively redact nested
-  owner, credential, endpoint, secret, and machine-local path fields.
+## API-Provider Change Packet Trust Policy
+
+- API-provider change packets are signed declarative data, never executable
+  scripts.
+- Initial enrollment uses a provider-enrollment bundle and expected root
+  fingerprint obtained through a separately authenticated provider
+  admin/security channel. Invitation-supplied root material is never
+  self-authenticating.
+- `provider enroll` and `campaign accept` accept no repository argument and run
+  from a neutral directory with the checkout unavailable. They persist only to
+  the configured consumer-private root and create no authority.
+- `authorization issue` and `authorization revoke` are explicit,
+  consumer-signed private-state actions. An authorization request is never a
+  grant, and issuance never performs a granted side effect.
+- Canonical signing bytes and the immutable packet digest are versioned.
+- The consumer pins the provider trust root and verifies provider-organization
+  ownership of the named npm package.
+- Issuer key, issue time, audience, expiry, rotation, revocation, withdrawal,
+  and replay checks must all pass before repository analysis or mutation.
+- Current lifecycle state comes from either a signed offline provider-status
+  snapshot inside the enrollment policy's maximum age or an exact endpoint
+  read under `provider_trust_status_read`. The request carries no repository or
+  consumer data. Missing, stale, replayed, unsigned, wrong-endpoint, or
+  undeclared status blocks.
+- `published` means immutable for the authorized audience; it does not mean the
+  packet or prerelease migration is public.
+- Unknown issuer/package binding, stale or replayed packet, invalid signature,
+  revoked key, unsigned rotation, unconfirmed first-pin fingerprint,
+  withdrawn/superseded packet, or executable content fails closed. Normal
+  rotation is signed by the active root; emergency recovery requires explicit
+  re-enrollment and invalidates open approvals.
+- Valid and invalid fixtures cover every trust and lifecycle boundary.
+
+## TypeScript Impact Policy
+
+- Use a parser/AST or comparably structured representation.
+- Select and canonicalize one package/read root explicitly.
+- Resolve real paths before reading. Source files, manifests, lockfiles,
+  resolved modules, `tsconfig` `extends`, and TypeScript project references
+  must remain inside the selected root.
+- Reject path traversal, symlink escape, out-of-root `tsconfig` dependencies,
+  ambiguous roots, and multiple package roots before analysis.
+- Detect direct imports, aliases, and one-hop wrapper uncertainty.
+- Report dynamic/reflection use as uncertain.
+- Exclude generated, vendored, minified, cache, and build output.
+- Report package-manager and lockfile posture.
+- Score precision and recall separately by supported class.
+- Never label uncertain scope as unaffected.
+
+## Patch And Filesystem Policy
+
+- No patch before exact plan approval.
+- Revalidate the current packet bytes, digest, provider trust root and package
+  binding, lifecycle, audience, expiry, rotation, revocation, withdrawal,
+  supersession, and replay state immediately before every file or lockfile
+  write. Never cache the plan-time trust decision across a write boundary.
+- Use an isolated worktree or equivalent disposable workspace.
+- Resolve and validate real paths before writes.
+- Enforce allowed/forbidden paths and diff budgets.
+- Reject symlink/path traversal escape.
+- Map each edit to change and recipe IDs.
+- Preserve deterministic output for pinned inputs.
+- Mutate `package-lock.json` only with exact Node/npm versions, a pinned
+  registry or offline snapshot, recorded package-integrity inputs, lifecycle
+  scripts disabled, and a bound toolchain digest.
+- Do not execute arbitrary provider scripts.
+- Do not infer business values.
+- Record rollback and deletion checks.
+
+## Command Execution Policy
+
+Repository commands are untrusted:
+
+- exact command allowlist;
+- explicit working directory;
+- exact read-only and writable mounts;
+- neutral home and temp roots;
+- explicit executable/toolchain roots;
+- timeout and output budget;
+- no network by default;
+- package-registry access requires a separate `package_registry_read` grant
+  constrained to the approved registry or snapshot and package set;
+- dependency lifecycle scripts disabled by default;
+- no lockfile mutation through an ambient registry, floating Node/npm version,
+  or missing integrity input;
+- sanitized environment classes and no ambient secrets;
+- no host home, SSH/GPG/cloud credential stores, keychain, OS credentials,
+  agent/Docker/unrelated local-service sockets, or extra inherited file
+  descriptors;
+- child processes inherit the same mount, environment, socket, descriptor,
+  credential, network, and resource boundary;
+- a supported fail-closed isolation backend is mandatory;
+- sandbox credentials never exposed to build/test stages;
+- pre- and post-patch results kept separate;
+- large logs stored by artifact ref and hash.
+
+## Proof-Of-Behavior Policy
+
+Product verification state uses exactly:
+
+- `not_run`
+- `static_verified`
+- `repo_verified`
+- `workflow_contract_replay_passed`
+- `workflow_verified_replay`
+- `workflow_verified_mock`
+- `workflow_verified_sandbox`
+- `partial`
+- `failed`
+- `gap`
+- `stale`
+
+`workflow_contract_replay_passed` means an independent contract or cassette
+replay and cannot exceed `repo_verified`. A `workflow_verified_replay`,
+`workflow_verified_mock`, or `workflow_verified_sandbox` result requires an
+approved entrypoint executed from the exact patched repository head plus
+observed interaction and outcome evidence in the named environment. A result
+copied from the base commit or another head, or an independent replay that did
+not execute the patched repository, is not causal patched-head proof. Missing
+causal execution or any boundary, cleanup, redaction, freshness, or
+evidence-integrity failure blocks a workflow-verified label.
+
+Artifact syntax and grounded source references remain engineering evidence
+strengths, not alternate product verification labels. Consumer/provider
+outcomes from the real pilot are user-visible evidence, not a substitute for
+repository or workflow verification. No lower boundary closes a higher-level
+item; workflow and pilot closure require proof-of-behavior scorecards.
+
+## Redaction And Evidence Budgets
+
+- Redact before persistence and before sharing.
+- Redaction uncertainty blocks the artifact.
+- Provider-visible attestation has an explicit field allowlist.
+- Raw source, diffs, logs, traces, prompts, responses, and credentials are
+  private by default and persist only in the approved private state root
+  outside the checkout and public source repository.
+- Private records carry authorization-bound TTL and are deleted on expiry or
+  revocation automatically on creation, read, process startup, and the next
+  run; cleanup produces a deletion receipt or orphan report.
+- `lumyn artifacts gc` retries partial deletion and reports unresolved orphans.
+  It cannot extend TTL, revive revoked authority, or rewrite historical
+  closure evidence.
+- Provider-visible does not mean public. Public release requires separate
+  explicit consent and is limited to redacted aggregates and evidence hashes
+  under `.factory/artifacts/pilot/lumyn-migration-mvp/public/`.
+- Large output is referenced by path, digest, row/event count, and truncation
+  metadata inside private evidence; shareable artifacts use an opaque
+  identifier and digest rather than a private or machine-local path.
+- Machine-local paths are removed from shareable artifacts.
+
+## Capability Grants
+
+Live tasks use exact, task-scoped grants:
+
+- `customer_repo_read`
+- `customer_repo_write`
+- `command_execution`
+- `provider_trust_status_read`
+- `package_registry_read`
+- `sandbox_network`
+- `sandbox_credential`
+- `sandbox_request_disclosure`
+- `github_branch_write`
+- `github_pr_write`
+- `campaign_receipt`
+- `provider_attestation`
+- `artifact_retention`
+- `artifact_deletion`
+
+`customer_repo_write` authorizes bounded local workspace mutation, not a remote
+branch. `provider_trust_status_read` authorizes only the pinned status endpoint,
+request shape, response budget, maximum age, and expiry; a current signed
+offline snapshot needs no egress. `package_registry_read` authorizes only the
+named registry/snapshot and package set, not general network access.
+`sandbox_network` authorizes only the named non-production endpoint and
+operation allowlist; `sandbox_credential` independently authorizes the
+non-production credential class and scopes.
+`sandbox_request_disclosure`
+separately names allowed payload classes, synthetic or approved non-sensitive
+test data, and provider logging, retention, and deletion terms. Production
+customer data, PII, credentials, and secrets are never eligible payloads.
+`github_branch_write` and `github_pr_write` are independent and neither
+authorizes default-branch write or merge. `campaign_receipt` authorizes only
+the signed minimal sponsored-program meter and requires a
+provider-authenticated consumer signer binding, invitation/packet and
+eligible-repository unit binding, opaque IDs, consent-policy and key-binding
+digests, pinned endpoint or offline exchange, audience, expiry, nonce,
+signature, provider acknowledgement key, provider-signed acknowledgement,
+one-unit cardinality, idempotent same-digest retry, and conflicting-unit/replay
+rejection.
+`provider_attestation` authorizes only its richer field allowlist and does not
+authorize public disclosure. It is optional for M9/M10 richer reporting and
+cannot be made a prerequisite for an otherwise authorized M9 draft PR.
+`artifact_retention` and `artifact_deletion` independently name the exact
+artifact classes, storage boundary, TTL, expiry/revocation triggers, deletion
+scope, receipt owner, and orphan route. Every data-producing or disclosure
+grant references both.
+
+Grants name target, scope, expiry, revocation, evidence, and failure behavior.
+Wildcard customer-repository, registry, sandbox, request-disclosure, GitHub,
+provider-status, campaign-receipt, provider-attestation, retention, and
+deletion grants are invalid.
+Factory credential scopes and network allowlists also reject semantic
+wildcards (`all`, `any`, `default`), case-insensitive duplicates, wildcard or
+unspecified hosts, and CIDR-wide access.
+
+Product-signal tasks validate the actual private attestation and its
+aggregate/hash-only public manifest with a task-specific validator. A passing
+`--self-test` is not outcome evidence. An independent `evidence-attestor`
+record is required before `DISC` or `PILOT` closure.
+
+Provider export and public commit are irreversible disclosure boundaries.
+Revocation blocks future sharing and deletes Lumyn-controlled private copies;
+it cannot erase provider records, Git history, clones, or caches. Tests and
+rollback evidence must not claim otherwise.
+
+The current repository and pilot distribution are not described as OSS.
+Design-partner artifacts require explicit terms, a security/support route,
+signed provenance, checksums, and install-integrity instructions. Public
+OSS/self-serve adds an approved license plus security, contribution, support,
+and vulnerability-response policy gates.
+
+M1, M4, and M6 require an independent `holdout_result`; M7 requires both
+`holdout_result` and `trace_grade_report`; M10 requires an
+`attestation_record`. Each is lifecycle-owned and must pass before shipping.
+M1's result binds independent provisioning and the frozen suite commitment;
+M10's attestation reviews private campaign calculations without receiving or
+reusing the benchmark holdout root.
 
 ## Release Integrity
 
-- Primary distribution is a standalone binary.
-- Release work is reserved until packaging starts, but any release-sensitive task must define version, changelog, install, artifact-integrity, and UAT evidence before merge.
-- Homebrew follows the first binary release; PyPI is not primary.
+Primary design-partner distribution is an explicitly licensed,
+integrity-signed local or CI binary/source package. Public OSS/self-serve and
+Homebrew wait for the separate approved license, security, contribution,
+support, vulnerability-response, and release-integrity gate. Release work
+requires version, changelog, install, provenance, artifact-integrity, supported
+platform, and UAT evidence. Planned commands are not release claims.
 
 ## Provenance Evidence
 
-- Validation report path: `.factory/artifacts/task-runs/<task_id>/validation-report.json`.
-- Work-proof marker path: `.factory/artifacts/task-runs/<task_id>/work-proof-marker.json`.
-- PR lifecycle report path: `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
-- Codex review evidence source: latest-head PR review, thumbs-up, actionable-resolved, carry-forward, or approved exception before merge.
-- Scanner evidence source: GitHub Actions `CodeQL analyze`.
-- Branch protection evidence path: `.factory/artifacts/repo-controls/main-branch-protection.json`.
-- Pilot closure path: `.factory/artifacts/pilot/lumyn-mvp-slice/scope-closure-report.json`.
-- Pilot repair task path: `.factory/artifacts/pilot/lumyn-mvp-slice/repair-loop/task-packet.json`.
-- Acceptance item source: `.factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json`.
-- Scope closure source: `.factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json`.
-- Repo-pack propagation validator: `scripts/validate_repo_pack.py`.
-- Evidence must use repo-relative paths and record skipped-command reasons.
+- Task validation:
+  `.factory/artifacts/task-runs/<task_id>/validation-report.json`
+- Work proof:
+  `.factory/artifacts/task-runs/<task_id>/work-proof-marker.json`
+- Independent lifecycle evidence:
+  `.factory/artifacts/lifecycle-evidence/<task_id>/`
+- PR lifecycle:
+  `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`
+- Active acceptance:
+  `.factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json`
+- Active closure:
+  `.factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json`
+- Historical plan:
+  `.factory/artifacts/prd-to-plan/lumyn-mvp/`
+- Historical pilot:
+  `.factory/artifacts/pilot/lumyn-mvp-slice/`
+- Public migration-pilot summaries:
+  `.factory/artifacts/pilot/lumyn-migration-mvp/public/` (consented, redacted
+  aggregates and evidence hashes only)
+- Remote controls:
+  `.factory/artifacts/repo-controls/main-branch-protection.json`
 
-## Distribution Pins
-
-- Primary: standalone binary.
-- Secondary: Homebrew.
-- Not primary: PyPI.
-
-## Provider Pins
-
-- MVP eval providers: OpenAI-compatible HTTP and Anthropic Messages HTTP adapters.
-- Provider config shape: `provider`, `model`, `temperature`, `base_url`, `api_key_env`.
-- Local open-source model servers are represented as OpenAI-compatible
-  `base_url` endpoints. They are provider endpoints, not bundled model
-  artifacts, and they require the same explicit `model_provider_endpoint` grant
-  before live eval closure.
-- Eval provider work is blocked until deterministic replay foundation passes and
-  the task has a complete `model_provider_endpoint` grant naming provider
-  identity, provider model, endpoint or `base_url`, credential environment,
-  budget posture, redaction posture, and allowlist. Generic network or
-  credential approval does not satisfy that model-specific gate.
+These repository paths contain only source-safe Factory control, lifecycle, or
+public aggregate/hash evidence. Consumer-private impact, plan, patch,
+verification, runtime, and identifiable pilot records live in the configured
+external private state root and are referenced here only by opaque identifier
+and digest. Evidence records command, status, artifact refs, hashes where
+applicable, and skipped-command reasons.

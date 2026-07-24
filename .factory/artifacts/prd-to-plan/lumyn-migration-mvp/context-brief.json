@@ -1,0 +1,240 @@
+{
+  "artifact_type": "context_brief",
+  "schema_version": "0.1",
+  "brief_id": "lumyn-migration-mvp-context-001",
+  "work_item_id": "lumyn-migration-mvp",
+  "repo_ref": "https://github.com/Clyra-AI/lumyn",
+  "source_prd_ref": "docs/product/prd.md",
+  "shared_constraints_ref": "AGENTS.md",
+  "objective": "Build provider-sponsored, customer-controlled verified API migrations that turn authoritative provider change intent into evidence-backed draft PRs for explicitly authorized customer repositories.",
+  "relevant_files": [
+    "README.md",
+    "AGENTS.md",
+    "WORKFLOW.md",
+    "docs/product/prd.md",
+    "docs/product/plan.md",
+    "docs/dev/dev_guides.md",
+    "docs/architecture/architecture_guides.md",
+    "docs/architecture/adr-0002-provider-sponsored-customer-controlled-migrations.md"
+  ],
+  "related_changes": [
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/"
+  ],
+  "proven_findings": [
+    "The Go CLI/config/result/exit foundation is implemented.",
+    "Workflow, evidence, cassette, trace, proof, redaction, action-boundary, and command-result schemas are executable.",
+    "Local OpenAPI/docs intake produces structured references, fingerprints, deprecation findings, and replacement hints.",
+    "Provider enrollment and provider-status refresh, explicit authorization issue/revoke, authenticated receipt acknowledgement, host isolation, recorder, replay execution, live verification, reporting, migration analysis, patching, GitHub delivery, and live agent evaluation are not implemented.",
+    "Recognized but unimplemented commands currently return a generic pass and must fail closed first."
+  ],
+  "alignment_findings": {
+    "facts": [
+      "The API provider can own authoritative change intent and fund a campaign.",
+      "The API consumer owns repository access, execution, disclosure, review, and merge.",
+      "Public API artifacts can seed benchmarks without establishing provider demand or authorization."
+    ],
+    "inferences": [
+      "The strongest first product is provider-sponsored and customer-controlled, not conventional one-principal sell-side automation.",
+      "Consumer trust and consent are the principal activation risk; patch generation alone does not establish commercial viability."
+    ]
+  },
+  "alignment_decisions": {
+    "status": "resolved",
+    "blocking_questions": [],
+    "resolved": [
+      {
+        "decision": "economic_buyer",
+        "value": "API provider",
+        "evidence_ref": "docs/product/prd.md#buyer-and-champion"
+      },
+      {
+        "decision": "repository_authority",
+        "value": "API consumer organization",
+        "evidence_ref": "docs/product/prd.md#trust-and-authorization-contract"
+      },
+      {
+        "decision": "initial_runtime",
+        "value": "Go CLI with parser-backed TypeScript/Node analysis in local or customer CI execution",
+        "evidence_ref": "docs/product/prd.md#initial-technical-scope"
+      },
+      {
+        "decision": "initial_delivery",
+        "value": "customer-authorized draft GitHub PR; no default-branch write or auto-merge",
+        "evidence_ref": "docs/product/prd.md#draft-pr-delivery"
+      },
+      {
+        "decision": "model_policy",
+        "value": "no model-provider adapter required for the deterministic MVP",
+        "evidence_ref": "docs/product/prd.md#product-principles"
+      },
+      {
+        "decision": "development_entry",
+        "value": "M0-M4 may use pinned license-compatible public API docs, OpenAPI descriptions, SDK releases, migration guides, and synthetic fixtures; these are untrusted engineering inputs, not provider or demand evidence",
+        "evidence_ref": "docs/product/prd.md#development-entry-boundary"
+      },
+      {
+        "decision": "consumer_authorization",
+        "value": "Consumer authorization: campaign acceptance creates only a no-authority request; explicit consumer-signed issue and revoke actions control every product grant",
+        "evidence_ref": "docs/product/prd.md#trust-and-authorization-contract"
+      },
+      {
+        "decision": "trust_freshness",
+        "value": "Trust freshness: every side effect uses a signed in-age offline provider-status snapshot or an exact endpoint read under provider_trust_status_read that sends no repository or consumer data",
+        "evidence_ref": "docs/product/prd.md#trust-and-authorization-contract"
+      },
+      {
+        "decision": "sponsored_connection_meter",
+        "value": "Sponsored connection meter: only a consumer-signed, invitation-bound minimal receipt whose signer is provider-authenticated and whose one-repository unit has a provider-signed deduplicated acknowledgement counts; richer attestation is separate and optional",
+        "evidence_ref": "docs/product/prd.md#provider-visible-connection-receipt"
+      },
+      {
+        "decision": "distribution_posture",
+        "value": "Distribution posture: the design-partner package is explicitly licensed and integrity-signed but not called OSS; public OSS/self-serve has a separate release gate",
+        "evidence_ref": "docs/product/prd.md#open-source-and-distribution-gate"
+      },
+      {
+        "decision": "historical_plan",
+        "value": ".factory/artifacts/prd-to-plan/lumyn-mvp/ is immutable and non-active",
+        "evidence_ref": "docs/architecture/adr-0002-provider-sponsored-customer-controlled-migrations.md#superseded-plan"
+      }
+    ],
+    "unresolved": [],
+    "implementation_may_start": true
+  },
+  "evidence_summary": {
+    "reviewed_surfaces": [
+      "current code and tests",
+      "all authored product and operating docs",
+      "historical Factory plan and closure evidence",
+      "Lumyn Factory profile",
+      "buy-side review",
+      "sell-side review",
+      "independent implementation/plan audit"
+    ],
+    "bounds": [
+      "No provider demand is inferred from public documentation.",
+      "No unimplemented command or planned runtime is described as complete."
+    ]
+  },
+  "failed_approaches": [
+    "Generic agent-readiness evaluation is superseded as the commercial wedge.",
+    "Buy-side monitoring of every vendor is deferred because public documentation lacks authoritative semantic intent and distribution.",
+    "Provider-controlled repository automation is rejected because payment does not convey customer authority."
+  ],
+  "constraints": [
+    "Keep existing evidence immutable.",
+    "Fail closed on ambiguous intent, authorization, patch scope, or proof.",
+    "Keep provider and consumer data planes separate.",
+    "Use deterministic transformations before any model-assisted fallback.",
+    "Preserve Factory lifecycle and item-level closure."
+  ],
+  "unknowns": [
+    "Which qualified API provider and upcoming migration will close M2.5 and anchor the first campaign.",
+    "Which customer maintainers will authorize repositories and sandbox access.",
+    "Which of the three supported change classes will dominate the first real campaign."
+  ],
+  "open_questions": [
+    "M2.5 must resolve provider identity, packet content, trust enrollment and operational status channel, mock or sandbox endpoint, provider acknowledgement key and receipt exchange, authenticated consumer receipt-signer binding, eligible customer cohort and host-isolation compatibility, one-unit connection-receipt acknowledgement, irreversible-disclosure consent, confidentiality, distribution terms, and paid pilot terms before M5 can begin."
+  ],
+  "assumptions": [
+    "The first provider has an official TypeScript SDK, deterministic mock or sandbox, and a reachable managed integration cohort.",
+    "The first customer repositories permit local or customer-CI execution and draft GitHub PR creation after explicit approval.",
+    "Three deterministic change classes cover enough of the first campaign to test the commercial thesis."
+  ],
+  "decision_points": [
+    "Stop before M8 without an exact non-production sandbox grant.",
+    "Stop before M9 without exact remote-branch and GitHub draft-PR grants; a minimal campaign receipt and richer provider attestation remain separate grants.",
+    "Stop before M5 until M2.5 closes with a qualified provider and frozen eligible cohort.",
+    "Reframe if provider recruitment, customer consent, deterministic coverage, or willingness-to-pay gates fail."
+  ],
+  "risk_flags": [
+    "two-sided activation",
+    "provider change-channel supply-chain risk",
+    "provider-status freshness",
+    "customer repository and credential authority",
+    "host command escape or unsupported platform",
+    "false unaffected classification",
+    "false verification",
+    "unauthenticated receipt signer, unit duplication, replay, or over-disclosure",
+    "irreversible private data disclosure",
+    "services-only willingness to pay"
+  ],
+  "scope_risks": [
+    "Expanding beyond TypeScript/Node, direct SDK use, GitHub, and three deterministic mappings before the benchmark is green.",
+    "Building a hosted campaign dashboard before a provider commits a real migration and customer cohort.",
+    "Treating technical fixture success as commercial validation."
+  ],
+  "system_model_summary": "The provider campaign plane supplies immutable change intent and signed current-status evidence, and receives only a separately authorized minimal connection receipt or richer consented attestation. The consumer execution plane owns source, credentials, host-isolated commands, patches, evidence, disclosure, and merge. Lumyn mediates through explicit consumer-signed issue/revoke actions, revocable capability grants, and evidence-bound draft PR delivery.",
+  "recommended_workers": [
+    "task-executor",
+    "validation-gate",
+    "code-review",
+    "holdout-evaluator",
+    "trace-grader",
+    "evidence-attestor",
+    "commit-push",
+    "post-merge-monitor"
+  ],
+  "recommended_worker_chain": [
+    "task-executor",
+    "validation-gate",
+    "commit-push",
+    "post-merge-monitor"
+  ],
+  "runtime_pins": {
+    "language": "go_with_parser_backed_typescript_analysis",
+    "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+    "module_or_package_path": "github.com/Clyra-AI/lumyn",
+    "dependency_policy": "standard library first; pinned Go modules or a bounded TypeScript parser runtime only with task evidence and license review",
+    "distribution_target": "explicitly licensed and integrity-signed design-partner binary/source package for customer-controlled local or CI execution; public OSS/self-serve and Homebrew only after the separate license, security, contribution, support, vulnerability-response, and release-integrity gate",
+    "provider_policy": "API-provider change authority is a signed declarative packet whose current trust state is revalidated before every local, sandbox, or remote side effect against a consumer-pinned provider trust root and verified provider-to-package ownership binding, including issuer key, issue time, audience, expiry, rotation, revocation, withdrawal, and replay checks; freshness comes only from a signed offline provider-status snapshot inside the pinned maximum age or an exact endpoint read under provider_trust_status_read, with no repository or consumer data in the request; no model-provider adapter is required for the MVP",
+    "artifact_namespace": ".factory/artifacts contains only Factory evidence and separately consented aggregate/hash-only public pilot evidence; private product runtime artifacts use an explicitly configured consumer-controlled root outside the checkout and public source repository; provider export and public commit are irreversible disclosure boundaries, so revocation blocks future sharing and deletes only Lumyn-controlled private copies",
+    "live_work_policy": "offline by default; Factory worker approval, credential, and network grants govern implementation work only and never substitute for separate consumer-signed Lumyn authorization; Lumyn revalidates the private bundle and current provider-status evidence immediately before each repository write, host-isolated command, provider-status read, package-registry read, sandbox payload/network/credential action, minimal campaign receipt, provider attestation, remote branch write, GitHub PR, artifact retention, or artifact deletion side effect"
+  },
+  "factory_compatibility": {
+    "factory_contract_version": "1.0",
+    "profile_contract_version": "lumyn-migration-mvp-2026-07-23",
+    "profile_ref": "profiles/lumyn.yaml",
+    "skill_vocabulary_version": "2026-06-09",
+    "skill_inventory_ref": "skills/README.md",
+    "generated_by": "prd-to-plan+execution-compiler",
+    "generated_at": "2026-07-23T00:00:00Z",
+    "deprecated_worker_policy": "block_active_aliases",
+    "deprecated_worker_aliases": [
+      {
+        "deprecated": "ship-pr",
+        "replacement": "commit-push",
+        "status": "deprecated",
+        "migration_behavior": "block active task packets until required_worker_chain is migrated"
+      }
+    ]
+  },
+  "alignment_gate": {
+    "status": "resolved",
+    "implementation_may_start": true,
+    "source_ref": "docs/product/plan.md#global-decisions-locked"
+  },
+  "plan_drift_policy": {
+    "drift_triggers": [
+      "buyer or customer authority",
+      "runtime or distribution",
+      "provider packet trust or status freshness",
+      "minimal receipt or richer attestation",
+      "disclosure irreversibility",
+      "dependency or artifact namespace",
+      "host-isolation or live-work posture",
+      "acceptance scope",
+      "Factory contract"
+    ],
+    "required_updates": [
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/context-brief.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json"
+    ],
+    "continuation_behavior": "block_until_artifacts_updated"
+  }
+}

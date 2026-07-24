@@ -1,6 +1,8 @@
 GO ?= go
 PKG_LIST := ./cmd/... ./internal/... ./schemas/...
 COVERAGE_MIN ?= 75
+STABLE_COVERAGE_MIN ?= 85
+STABLE_COVERAGE_PACKAGES := cmd/lumyn internal/config internal/exitcode internal/result
 
 .PHONY: fmt lint-fast test-fast test-coverage test-contracts build audit-remote-protection prepush-full
 
@@ -9,6 +11,7 @@ lint-fast:
 	test -f WORKFLOW.md
 	test -f README.md
 	test -f docs/product/prd.md
+	test -f docs/product/plan.md
 	test -f .tool-versions
 	test -f go.mod
 	test -f scripts/audit_branch_protection.py
@@ -75,7 +78,9 @@ test-fast:
 test-coverage:
 	mkdir -p .factory/tmp
 	$(GO) test $(PKG_LIST) -count=1 -covermode=atomic -coverprofile=.factory/tmp/coverage.out
-	python3 scripts/check_go_coverage.py .factory/tmp/coverage.out $(COVERAGE_MIN)
+	python3 scripts/check_go_coverage.py .factory/tmp/coverage.out $(COVERAGE_MIN) \
+		--stable-minimum $(STABLE_COVERAGE_MIN) \
+		$(foreach package,$(STABLE_COVERAGE_PACKAGES),--stable-package $(package))
 
 test-contracts:
 	$(GO) test ./... -count=1
@@ -83,12 +88,13 @@ test-contracts:
 	python3 scripts/validate_factory_pilot_evidence.py
 	python3 scripts/validate_repo_pack.py --self-test
 	python3 scripts/validate_repo_pack.py
-	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json
-	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json
-	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json
-	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json
-	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json
-	test -f .factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json
+	test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/context-brief.json
+	test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json
+	test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json
+	test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json
+	test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json
+	test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json
+	test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json
 	test -f .factory/artifacts/task-runs/T2.5/validation-report.json
 	test -f .factory/artifacts/task-runs/T2.5/work-proof-marker.json
 	test -f .factory/artifacts/task-runs/T2.6/validation-report.json

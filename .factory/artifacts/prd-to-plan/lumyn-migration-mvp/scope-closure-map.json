@@ -1,0 +1,2417 @@
+{
+  "artifact_type": "scope_closure_map",
+  "schema_version": "0.1",
+  "source_prd_ref": "docs/product/prd.md",
+  "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+  "acceptance_mapping_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
+  "acceptance_item_count": 62,
+  "closure_status": "partial",
+  "last_updated_at": "2026-07-23T00:00:00Z",
+  "items": [
+    {
+      "scope_item": "The Go CLI, config discovery, stable result envelope, exit-code constants, and local validation baseline remain functional.",
+      "scope_item_id": "BASE-001",
+      "group_id": "retained_foundation",
+      "source_ref": "docs/product/prd.md#retained-foundation",
+      "status": "implemented",
+      "task_refs": [
+        "M0"
+      ],
+      "acceptance_item_ids": [
+        "BASE-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "BASE-001",
+          "status": "implemented",
+          "evidence_refs": [
+            ".factory/artifacts/task-runs/T1/validation-report.json",
+            ".factory/artifacts/task-runs/T1/work-proof-marker.json"
+          ],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M0"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T1/validation-report.json",
+        ".factory/artifacts/task-runs/T1/work-proof-marker.json"
+      ],
+      "acceptance_criteria": [
+        "The Go CLI, config discovery, stable result envelope, exit-code constants, and local validation baseline remain functional."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Carry-forward evidence proves only the retained foundation or current rebaseline statement named by this item."
+      ]
+    },
+    {
+      "scope_item": "Existing workflow, evidence, cassette, trace, proof, boundary, redaction, and command-result schemas remain executable and versioned.",
+      "scope_item_id": "BASE-002",
+      "group_id": "retained_foundation",
+      "source_ref": "docs/product/prd.md#retained-foundation",
+      "status": "implemented",
+      "task_refs": [
+        "M0"
+      ],
+      "acceptance_item_ids": [
+        "BASE-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "BASE-002",
+          "status": "implemented",
+          "evidence_refs": [
+            ".factory/artifacts/task-runs/T2/validation-report.json",
+            ".factory/artifacts/task-runs/T2.7/validation-report.json"
+          ],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M0"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T2/validation-report.json",
+        ".factory/artifacts/task-runs/T2.7/validation-report.json"
+      ],
+      "acceptance_criteria": [
+        "Existing workflow, evidence, cassette, trace, proof, boundary, redaction, and command-result schemas remain executable and versioned."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Carry-forward evidence proves only the retained foundation or current rebaseline statement named by this item."
+      ]
+    },
+    {
+      "scope_item": "CI, coverage, CodeQL, CODEOWNERS, required checks, passive review, shipping, and post-merge governance remain enforced.",
+      "scope_item_id": "BASE-003",
+      "group_id": "retained_foundation",
+      "source_ref": "docs/product/prd.md#retained-foundation",
+      "status": "missing",
+      "task_refs": [
+        "M0"
+      ],
+      "acceptance_item_ids": [
+        "BASE-003"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "BASE-003",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M0"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "CI, coverage, CodeQL, CODEOWNERS, required checks, passive review, shipping, and post-merge governance remain enforced."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "OpenAPI/docs intake produces structured refs, fingerprints, deprecation findings, and concrete source locations.",
+      "scope_item_id": "BASE-004",
+      "group_id": "retained_foundation",
+      "source_ref": "docs/product/prd.md#retained-foundation",
+      "status": "implemented",
+      "task_refs": [
+        "M0",
+        "M3"
+      ],
+      "acceptance_item_ids": [
+        "BASE-004"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "BASE-004",
+          "status": "implemented",
+          "evidence_refs": [
+            ".factory/artifacts/task-runs/T3/validation-report.json",
+            ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+          ],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M0",
+        "M3"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/T3/validation-report.json",
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+      ],
+      "acceptance_criteria": [
+        "OpenAPI/docs intake produces structured refs, fingerprints, deprecation findings, and concrete source locations."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Carry-forward evidence proves only the retained foundation or current rebaseline statement named by this item."
+      ]
+    },
+    {
+      "scope_item": "The dev/architecture planning policies and 12-level test matrix remain propagated into every runner-ready migration task.",
+      "scope_item_id": "BASE-005",
+      "group_id": "retained_foundation",
+      "source_ref": "docs/product/prd.md#retained-foundation",
+      "status": "implemented",
+      "task_refs": [
+        "M0"
+      ],
+      "acceptance_item_ids": [
+        "BASE-005"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "BASE-005",
+          "status": "implemented",
+          "evidence_refs": [
+            ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+            "scripts/validate_repo_pack.py",
+            "docs/dev/dev_guides.md",
+            "docs/architecture/architecture_guides.md"
+          ],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M0"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+        "scripts/validate_repo_pack.py",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md"
+      ],
+      "acceptance_criteria": [
+        "The dev/architecture planning policies and 12-level test matrix remain propagated into every runner-ready migration task."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Carry-forward evidence proves only the retained foundation or current rebaseline statement named by this item."
+      ]
+    },
+    {
+      "scope_item": "Unimplemented commands return a typed nonzero result instead of a generic pass.",
+      "scope_item_id": "REB-001",
+      "group_id": "product_rebaseline",
+      "source_ref": "docs/product/prd.md#product-rebaseline",
+      "status": "missing",
+      "task_refs": [
+        "M0"
+      ],
+      "acceptance_item_ids": [
+        "REB-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "REB-001",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M0"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Unimplemented commands return a typed nonzero result instead of a generic pass."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "API-provider identity and model-provider metadata are unambiguous in schemas, CLI results, docs, and fixtures.",
+      "scope_item_id": "REB-002",
+      "group_id": "product_rebaseline",
+      "source_ref": "docs/product/prd.md#product-rebaseline",
+      "status": "missing",
+      "task_refs": [
+        "M0"
+      ],
+      "acceptance_item_ids": [
+        "REB-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "REB-002",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M0"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "API-provider identity and model-provider metadata are unambiguous in schemas, CLI results, docs, and fixtures."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Historical task evidence remains immutable and the old plan is explicitly non-active.",
+      "scope_item_id": "REB-003",
+      "group_id": "product_rebaseline",
+      "source_ref": "docs/product/prd.md#product-rebaseline",
+      "status": "implemented",
+      "task_refs": [
+        "M0"
+      ],
+      "acceptance_item_ids": [
+        "REB-003"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "REB-003",
+          "status": "implemented",
+          "evidence_refs": [
+            "docs/product/prd.md",
+            "docs/product/plan.md",
+            ".factory/README.md",
+            ".factory/factoryd.example.json",
+            ".factory/factoryd.autoship.example.json",
+            "scripts/validate_repo_pack.py",
+            "docs/architecture/adr-0002-provider-sponsored-customer-controlled-migrations.md"
+          ],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M0"
+      ],
+      "evidence_refs": [
+        "docs/product/prd.md",
+        "docs/product/plan.md",
+        ".factory/README.md",
+        ".factory/factoryd.example.json",
+        ".factory/factoryd.autoship.example.json",
+        "scripts/validate_repo_pack.py",
+        "docs/architecture/adr-0002-provider-sponsored-customer-controlled-migrations.md"
+      ],
+      "acceptance_criteria": [
+        "Historical task evidence remains immutable and the old plan is explicitly non-active."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Carry-forward evidence proves only the retained foundation or current rebaseline statement named by this item."
+      ]
+    },
+    {
+      "scope_item": "A valid packet includes pinned source/target artifacts, typed semantic mappings, an immutable digest, and declared audience and confidentiality, and passes schema and semantic validation.",
+      "scope_item_id": "CHG-001",
+      "group_id": "provider_change",
+      "source_ref": "docs/product/prd.md#provider-change-and-benchmark",
+      "status": "missing",
+      "task_refs": [
+        "M2",
+        "M3"
+      ],
+      "acceptance_item_ids": [
+        "CHG-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "CHG-001",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2",
+        "M3"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "A valid packet includes pinned source/target artifacts, typed semantic mappings, an immutable digest, and declared audience and confidentiality, and passes schema and semantic validation."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Draft, superseded, withdrawn, expired, wrong-audience, revoked-key, replayed, mutated-after-publish, or provenance-mismatched packets block mutation, including when the state changes after planning but before a local, sandbox, or remote side effect.",
+      "scope_item_id": "CHG-002",
+      "group_id": "provider_change",
+      "source_ref": "docs/product/prd.md#provider-change-and-benchmark",
+      "status": "missing",
+      "task_refs": [
+        "M2",
+        "M3",
+        "M6",
+        "M8",
+        "M9"
+      ],
+      "acceptance_item_ids": [
+        "CHG-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "CHG-002",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2",
+        "M3",
+        "M6",
+        "M8",
+        "M9"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Draft, superseded, withdrawn, expired, wrong-audience, revoked-key, replayed, mutated-after-publish, or provenance-mismatched packets block mutation, including when the state changes after planning but before a local, sandbox, or remote side effect."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "A provider packet cannot execute arbitrary scripts.",
+      "scope_item_id": "CHG-003",
+      "group_id": "provider_change",
+      "source_ref": "docs/product/prd.md#provider-change-and-benchmark",
+      "status": "missing",
+      "task_refs": [
+        "M2",
+        "M3"
+      ],
+      "acceptance_item_ids": [
+        "CHG-003"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "CHG-003",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2",
+        "M3"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "A provider packet cannot execute arbitrary scripts."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "A published packet is trusted only when its signature verifies against a consumer-pinned API-provider trust root and its issuer-to-package binding, key, timestamp, audience, expiry, rotation, revocation, and replay checks pass immediately before every side effect and retry; no prior trust result is cached. Current status comes from either a signed offline snapshot within the pinned maximum age or an exact-endpoint read under `provider_trust_status_read`; missing, stale, replayed, unsigned, or undeclared status access blocks. Published means immutable for its authorized audience, not publicly disclosed.",
+      "scope_item_id": "CHG-004",
+      "group_id": "provider_change",
+      "source_ref": "docs/product/prd.md#provider-change-and-benchmark",
+      "status": "missing",
+      "task_refs": [
+        "M2",
+        "M3",
+        "M6",
+        "M8",
+        "M9"
+      ],
+      "acceptance_item_ids": [
+        "CHG-004"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "CHG-004",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2",
+        "M3",
+        "M6",
+        "M8",
+        "M9"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "A published packet is trusted only when its signature verifies against a consumer-pinned API-provider trust root and its issuer-to-package binding, key, timestamp, audience, expiry, rotation, revocation, and replay checks pass immediately before every side effect and retry; no prior trust result is cached. Current status comes from either a signed offline snapshot within the pinned maximum age or an exact-endpoint read under `provider_trust_status_read`; missing, stale, replayed, unsigned, or undeclared status access blocks. Published means immutable for its authorized audience, not publicly disclosed."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "At least three provider-change packets, one per supported change class, and at least nine visible development consumer fixtures, three per class, contain frozen ground truth. Each class has at least 20 annotated affected sites and 20 annotated non-affected candidate sites. An independent holdout owner provisions and freezes a separate evaluator-controlled holdout containing at least one repository per class. Only opaque case IDs, non-resolving provenance class and license posture, a frozen suite commitment, and encrypted or HMAC artifact commitments are committed. Source URLs, repository or package identifiers, plaintext content digests, held-out inputs, and answer keys are never committed, mounted, passed, or exposed to the task executor.",
+      "scope_item_id": "CORPUS-001",
+      "group_id": "migration_benchmark",
+      "source_ref": "docs/product/prd.md#provider-change-and-benchmark",
+      "status": "missing",
+      "task_refs": [
+        "M1"
+      ],
+      "acceptance_item_ids": [
+        "CORPUS-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "CORPUS-001",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M1"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "At least three provider-change packets, one per supported change class, and at least nine visible development consumer fixtures, three per class, contain frozen ground truth. Each class has at least 20 annotated affected sites and 20 annotated non-affected candidate sites. An independent holdout owner provisions and freezes a separate evaluator-controlled holdout containing at least one repository per class. Only opaque case IDs, non-resolving provenance class and license posture, a frozen suite commitment, and encrypted or HMAC artifact commitments are committed. Source URLs, repository or package identifiers, plaintext content digests, held-out inputs, and answer keys are never committed, mounted, passed, or exposed to the task executor."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Negative development fixtures cover unsupported, ambiguous, stale, out-of-boundary, semantic-non-equivalence, and false-verification cases. The evaluator-controlled held-out workflow suite has at least two positive and two negative patched-repository executions for every deterministic verification environment label emitted by the MVP, and returns aggregate results and digests without answer material.",
+      "scope_item_id": "CORPUS-002",
+      "group_id": "migration_benchmark",
+      "source_ref": "docs/product/prd.md#provider-change-and-benchmark",
+      "status": "missing",
+      "task_refs": [
+        "M1"
+      ],
+      "acceptance_item_ids": [
+        "CORPUS-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "CORPUS-002",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M1"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Negative development fixtures cover unsupported, ambiguous, stale, out-of-boundary, semantic-non-equivalence, and false-verification cases. The evaluator-controlled held-out workflow suite has at least two positive and two negative patched-repository executions for every deterministic verification environment label emitted by the MVP, and returns aggregate results and digests without answer material."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Public fixtures are described as engineering benchmarks, not evidence of provider demand.",
+      "scope_item_id": "CORPUS-003",
+      "group_id": "migration_benchmark",
+      "source_ref": "docs/product/prd.md#provider-change-and-benchmark",
+      "status": "missing",
+      "task_refs": [
+        "M1"
+      ],
+      "acceptance_item_ids": [
+        "CORPUS-003"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "CORPUS-003",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M1"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Public fixtures are described as engineering benchmarks, not evidence of provider demand."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "A Provider Operator can create a standard campaign kit, author and validate a declarative change packet, sign and publish immutable packet bytes through a configured signer, and then create a signed campaign invitation without embedding signing secrets or granting repository access.",
+      "scope_item_id": "ACT-001",
+      "group_id": "two_sided_activation",
+      "source_ref": "docs/product/prd.md#two-sided-activation",
+      "status": "missing",
+      "task_refs": [
+        "M2"
+      ],
+      "acceptance_item_ids": [
+        "ACT-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "ACT-001",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "A Provider Operator can create a standard campaign kit, author and validate a declarative change packet, sign and publish immutable packet bytes through a configured signer, and then create a signed campaign invitation without embedding signing secrets or granting repository access."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "A Consumer Maintainer can enroll the provider from a separately authenticated enrollment bundle and out-of-band confirmed fingerprint, pin the provider root and package binding, and then verify and accept the signed invitation. Enrollment and acceptance store state only in the consumer-private root with the checkout unavailable and produce a reviewable authorization request. They grant no authority. The maintainer can then explicitly issue and revoke a signed, time-bounded private authorization bundle and, independently, opt into a signed minimal campaign connection receipt without bespoke artifact authoring or repository disclosure.",
+      "scope_item_id": "ACT-002",
+      "group_id": "two_sided_activation",
+      "source_ref": "docs/product/prd.md#two-sided-activation",
+      "status": "missing",
+      "task_refs": [
+        "M2"
+      ],
+      "acceptance_item_ids": [
+        "ACT-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "ACT-002",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "A Consumer Maintainer can enroll the provider from a separately authenticated enrollment bundle and out-of-band confirmed fingerprint, pin the provider root and package binding, and then verify and accept the signed invitation. Enrollment and acceptance store state only in the consumer-private root with the checkout unavailable and produce a reviewable authorization request. They grant no authority. The maintainer can then explicitly issue and revoke a signed, time-bounded private authorization bundle and, independently, opt into a signed minimal campaign connection receipt without bespoke artifact authoring or repository disclosure."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "A synthetic offline canary runs the published packet and invitation through consumer acceptance, explicit authorization issuance, impact, plan, bounded patch, host-isolated replay or mock verification, evidence rendering, and a local draft-PR preview with receipts, while using no live credentials, sandbox, provider export, network, or remote write. Any missing implementation stage returns a typed nonzero result, so provider demonstrations cannot false-green.",
+      "scope_item_id": "ACT-003",
+      "group_id": "two_sided_activation",
+      "source_ref": "docs/product/prd.md#two-sided-activation",
+      "status": "missing",
+      "task_refs": [
+        "M7"
+      ],
+      "acceptance_item_ids": [
+        "ACT-003"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "ACT-003",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M7"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "A synthetic offline canary runs the published packet and invitation through consumer acceptance, explicit authorization issuance, impact, plan, bounded patch, host-isolated replay or mock verification, evidence rendering, and a local draft-PR preview with receipts, while using no live credentials, sandbox, provider export, network, or remote write. Any missing implementation stage returns a typed nonzero result, so provider demonstrations cannot false-green."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Repository analysis requires per-campaign, per-repository, time-bounded read authorization.",
+      "scope_item_id": "AUTH-001",
+      "group_id": "authorization",
+      "source_ref": "docs/product/prd.md#authorization-and-impact",
+      "status": "missing",
+      "task_refs": [
+        "M2",
+        "M4",
+        "M5"
+      ],
+      "acceptance_item_ids": [
+        "AUTH-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "AUTH-001",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2",
+        "M4",
+        "M5"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Repository analysis requires per-campaign, per-repository, time-bounded read authorization."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Local write, host-isolated command execution, provider trust status read, registry network, sandbox network, credential, remote branch write, PR write, minimal campaign receipt, richer provider attestation, retention, and deletion are separate, time-bounded scopes. Issuance and revocation are signed consumer actions; no grant implies another.",
+      "scope_item_id": "AUTH-002",
+      "group_id": "authorization",
+      "source_ref": "docs/product/prd.md#authorization-and-impact",
+      "status": "missing",
+      "task_refs": [
+        "M2",
+        "M5",
+        "M6",
+        "M7",
+        "M8",
+        "M9",
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "AUTH-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "AUTH-002",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2",
+        "M5",
+        "M6",
+        "M7",
+        "M8",
+        "M9",
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Local write, host-isolated command execution, provider trust status read, registry network, sandbox network, credential, remote branch write, PR write, minimal campaign receipt, richer provider attestation, retention, and deletion are separate, time-bounded scopes. Issuance and revocation are signed consumer actions; no grant implies another."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "The API Provider and the public cannot retrieve raw consumer code, private evidence, or identifiable pilot records through the default campaign interface.",
+      "scope_item_id": "AUTH-003",
+      "group_id": "authorization",
+      "source_ref": "docs/product/prd.md#authorization-and-impact",
+      "status": "missing",
+      "task_refs": [
+        "M2",
+        "M4",
+        "M8",
+        "M9",
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "AUTH-003"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "AUTH-003",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2",
+        "M4",
+        "M8",
+        "M9",
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "The API Provider and the public cannot retrieve raw consumer code, private evidence, or identifiable pilot records through the default campaign interface."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Private runtime and pilot artifacts live outside the consumer checkout and public source repository by default, are non-committable, and automatically enforce TTL plus deletion on revocation at creation, read, process startup, and the next run, with a deletion receipt or durable orphan report and retry-safe operator recovery that does not rewrite historical closure. Provider attestations expose only exact consumer-consented fields; public evidence exposes only separately consented redacted aggregates or hashes. Consent identifies provider export and public commit as irreversible; revocation stops future disclosure and deletes Lumyn-controlled private copies but cannot promise recall from recipients or public history.",
+      "scope_item_id": "AUTH-004",
+      "group_id": "authorization",
+      "source_ref": "docs/product/prd.md#authorization-and-impact",
+      "status": "missing",
+      "task_refs": [
+        "M2",
+        "M4",
+        "M5",
+        "M6",
+        "M7",
+        "M8",
+        "M9",
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "AUTH-004"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "AUTH-004",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2",
+        "M4",
+        "M5",
+        "M6",
+        "M7",
+        "M8",
+        "M9",
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Private runtime and pilot artifacts live outside the consumer checkout and public source repository by default, are non-committable, and automatically enforce TTL plus deletion on revocation at creation, read, process startup, and the next run, with a deletion receipt or durable orphan report and retry-safe operator recovery that does not rewrite historical closure. Provider attestations expose only exact consumer-consented fields; public evidence exposes only separately consented redacted aggregates or hashes. Consent identifies provider export and public commit as irreversible; revocation stops future disclosure and deletes Lumyn-controlled private copies but cannot promise recall from recipients or public history."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Sandbox verification separately authorizes transmitted payload classes, uses synthetic or approved non-sensitive test data, forbids production customer data and secrets, and records provider logging, retention, and deletion terms.",
+      "scope_item_id": "AUTH-005",
+      "group_id": "authorization",
+      "source_ref": "docs/product/prd.md#authorization-and-impact",
+      "status": "missing",
+      "task_refs": [
+        "M2",
+        "M8",
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "AUTH-005"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "AUTH-005",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2",
+        "M8",
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Sandbox verification separately authorizes transmitted payload classes, uses synthetic or approved non-sensitive test data, forbids production customer data and secrets, and records provider logging, retention, and deletion terms."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Lumyn detects the selected official npm SDK and current version.",
+      "scope_item_id": "IMP-001",
+      "group_id": "impact",
+      "source_ref": "docs/product/prd.md#authorization-and-impact",
+      "status": "missing",
+      "task_refs": [
+        "M4"
+      ],
+      "acceptance_item_ids": [
+        "IMP-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "IMP-001",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M4"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Lumyn detects the selected official npm SDK and current version."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Lumyn identifies all annotated directly imported affected call sites in the fixed supported corpus.",
+      "scope_item_id": "IMP-002",
+      "group_id": "impact",
+      "source_ref": "docs/product/prd.md#authorization-and-impact",
+      "status": "missing",
+      "task_refs": [
+        "M4"
+      ],
+      "acceptance_item_ids": [
+        "IMP-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "IMP-002",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M4"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Lumyn identifies all annotated directly imported affected call sites in the fixed supported corpus."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Lumyn detects one-hop wrappers but does not patch uncertain wrapper usage without input.",
+      "scope_item_id": "IMP-003",
+      "group_id": "impact",
+      "source_ref": "docs/product/prd.md#authorization-and-impact",
+      "status": "missing",
+      "task_refs": [
+        "M4"
+      ],
+      "acceptance_item_ids": [
+        "IMP-003"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "IMP-003",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M4"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Lumyn detects one-hop wrappers but does not patch uncertain wrapper usage without input."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Generated, vendored, dynamic, multi-root, multi-version, and unsupported lockfile cases receive explicit exclusion or failure status.",
+      "scope_item_id": "IMP-004",
+      "group_id": "impact",
+      "source_ref": "docs/product/prd.md#authorization-and-impact",
+      "status": "missing",
+      "task_refs": [
+        "M4"
+      ],
+      "acceptance_item_ids": [
+        "IMP-004"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "IMP-004",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M4"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Generated, vendored, dynamic, multi-root, multi-version, and unsupported lockfile cases receive explicit exclusion or failure status."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "On held-out fixtures, every supported change class has `100%` recall, at least `95%` precision, and zero false `unaffected` results. `uncertain`, `unsupported`, or missed on a known-supported affected site counts as a false negative. Per-class and aggregate confusion matrices are reported.",
+      "scope_item_id": "IMP-005",
+      "group_id": "impact",
+      "source_ref": "docs/product/prd.md#authorization-and-impact",
+      "status": "missing",
+      "task_refs": [
+        "M4"
+      ],
+      "acceptance_item_ids": [
+        "IMP-005"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "IMP-005",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M4"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "On held-out fixtures, every supported change class has `100%` recall, at least `95%` precision, and zero false `unaffected` results. `uncertain`, `unsupported`, or missed on a known-supported affected site counts as a false negative. Per-class and aggregate confusion matrices are reported."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Impact analysis performs no repository mutation.",
+      "scope_item_id": "PLAN-001",
+      "group_id": "migration_plan",
+      "source_ref": "docs/product/prd.md#plan-and-patch",
+      "status": "missing",
+      "task_refs": [
+        "M5"
+      ],
+      "acceptance_item_ids": [
+        "PLAN-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PLAN-001",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M5"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Impact analysis performs no repository mutation."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "The Consumer Maintainer can inspect every proposed file, transformation, command, permission, verification level, and residual risk before write approval.",
+      "scope_item_id": "PLAN-002",
+      "group_id": "migration_plan",
+      "source_ref": "docs/product/prd.md#plan-and-patch",
+      "status": "missing",
+      "task_refs": [
+        "M5"
+      ],
+      "acceptance_item_ids": [
+        "PLAN-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PLAN-002",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M5"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "The Consumer Maintainer can inspect every proposed file, transformation, command, permission, verification level, and residual risk before write approval."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "A method or operation rename is patchable only when the packet declares a one-to-one mapping with unchanged call signature, request and response meaning, side effects, and error semantics.",
+      "scope_item_id": "PATCH-001",
+      "group_id": "bounded_patch",
+      "source_ref": "docs/product/prd.md#plan-and-patch",
+      "status": "missing",
+      "task_refs": [
+        "M6"
+      ],
+      "acceptance_item_ids": [
+        "PATCH-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PATCH-001",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M6"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "A method or operation rename is patchable only when the packet declares a one-to-one mapping with unchanged call signature, request and response meaning, side effects, and error semantics."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "A request-property rename or relocation is patchable only when value, type, optionality, cardinality, units, and business meaning are unchanged and no new value is inferred.",
+      "scope_item_id": "PATCH-002",
+      "group_id": "bounded_patch",
+      "source_ref": "docs/product/prd.md#plan-and-patch",
+      "status": "missing",
+      "task_refs": [
+        "M6"
+      ],
+      "acceptance_item_ids": [
+        "PATCH-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PATCH-002",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M6"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "A request-property rename or relocation is patchable only when value, type, optionality, cardinality, units, and business meaning are unchanged and no new value is inferred."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "A response-property rename or relocation modifies only statically identified accesses and is patchable only when value, type, nullability, cardinality, units, and business meaning are unchanged.",
+      "scope_item_id": "PATCH-003",
+      "group_id": "bounded_patch",
+      "source_ref": "docs/product/prd.md#plan-and-patch",
+      "status": "missing",
+      "task_refs": [
+        "M6"
+      ],
+      "acceptance_item_ids": [
+        "PATCH-003"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PATCH-003",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M6"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "A response-property rename or relocation modifies only statically identified accesses and is patchable only when value, type, nullability, cardinality, units, and business meaning are unchanged."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Identical packet, base commit, toolchain digest, package-integrity inputs, and registry snapshot produce the same deterministic patch.",
+      "scope_item_id": "PATCH-004",
+      "group_id": "bounded_patch",
+      "source_ref": "docs/product/prd.md#plan-and-patch",
+      "status": "missing",
+      "task_refs": [
+        "M6"
+      ],
+      "acceptance_item_ids": [
+        "PATCH-004"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PATCH-004",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M6"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Identical packet, base commit, toolchain digest, package-integrity inputs, and registry snapshot produce the same deterministic patch."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Patches remain inside approved paths and diff budgets with no unrelated edits.",
+      "scope_item_id": "PATCH-005",
+      "group_id": "bounded_patch",
+      "source_ref": "docs/product/prd.md#plan-and-patch",
+      "status": "missing",
+      "task_refs": [
+        "M6"
+      ],
+      "acceptance_item_ids": [
+        "PATCH-005"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PATCH-005",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M6"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Patches remain inside approved paths and diff budgets with no unrelated edits."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Any semantic-equivalence precondition failure, missing business value, unsupported change, or ambiguous mapping returns `affected_needs_input` or `unsupported` without edits.",
+      "scope_item_id": "PATCH-006",
+      "group_id": "bounded_patch",
+      "source_ref": "docs/product/prd.md#plan-and-patch",
+      "status": "missing",
+      "task_refs": [
+        "M6"
+      ],
+      "acceptance_item_ids": [
+        "PATCH-006"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PATCH-006",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M6"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Any semantic-equivalence precondition failure, missing business value, unsupported change, or ambiguous mapping returns `affected_needs_input` or `unsupported` without edits."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Lumyn records pre-existing repository failures before mutation.",
+      "scope_item_id": "VER-001",
+      "group_id": "verification",
+      "source_ref": "docs/product/prd.md#verification-and-evidence",
+      "status": "missing",
+      "task_refs": [
+        "M7"
+      ],
+      "acceptance_item_ids": [
+        "VER-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "VER-001",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M7"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Lumyn records pre-existing repository failures before mutation."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Supported patches pass dependency integrity, compile/typecheck, and declared allowlisted tests through a supported fail-closed host-isolation backend or report the exact failed stage. Tests cannot access undeclared mounts, host home or credential stores, agent/container sockets, inherited descriptors, OS credentials, or network, and child processes inherit the same boundary.",
+      "scope_item_id": "VER-002",
+      "group_id": "verification",
+      "source_ref": "docs/product/prd.md#verification-and-evidence",
+      "status": "missing",
+      "task_refs": [
+        "M7"
+      ],
+      "acceptance_item_ids": [
+        "VER-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "VER-002",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M7"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Supported patches pass dependency integrity, compile/typecheck, and declared allowlisted tests through a supported fail-closed host-isolation backend or report the exact failed stage. Tests cannot access undeclared mounts, host home or credential stores, agent/container sockets, inherited descriptors, OS credentials, or network, and child processes inherit the same boundary."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Independent contract or cassette replay, patched-repository replay, patched-repository mock execution, and live sandbox execution use separate canonical labels.",
+      "scope_item_id": "VER-003",
+      "group_id": "verification",
+      "source_ref": "docs/product/prd.md#verification-and-evidence",
+      "status": "missing",
+      "task_refs": [
+        "M7",
+        "M8"
+      ],
+      "acceptance_item_ids": [
+        "VER-003"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "VER-003",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M7",
+        "M8"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Independent contract or cassette replay, patched-repository replay, patched-repository mock execution, and live sandbox execution use separate canonical labels."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Sandbox verification requires approved endpoint and payload allowlists, synthetic or approved non-sensitive data, a non-production credential and namespace, provider logging and retention terms, budgets, cleanup, and an orphan report.",
+      "scope_item_id": "VER-004",
+      "group_id": "verification",
+      "source_ref": "docs/product/prd.md#verification-and-evidence",
+      "status": "missing",
+      "task_refs": [
+        "M8"
+      ],
+      "acceptance_item_ids": [
+        "VER-004"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "VER-004",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M8"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Sandbox verification requires approved endpoint and payload allowlists, synthetic or approved non-sensitive data, a non-production credential and namespace, provider logging and retention terms, budgets, cleanup, and an orphan report."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "A final-state pass with a missing patched-head execution or any boundary, cleanup, redaction, freshness, or evidence-integrity failure cannot return a `workflow_verified_replay`, `workflow_verified_mock`, or `workflow_verified_sandbox` label.",
+      "scope_item_id": "VER-005",
+      "group_id": "verification",
+      "source_ref": "docs/product/prd.md#verification-and-evidence",
+      "status": "missing",
+      "task_refs": [
+        "M7",
+        "M8"
+      ],
+      "acceptance_item_ids": [
+        "VER-005"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "VER-005",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M7",
+        "M8"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "A final-state pass with a missing patched-head execution or any boundary, cleanup, redaction, freshness, or evidence-integrity failure cannot return a `workflow_verified_replay`, `workflow_verified_mock`, or `workflow_verified_sandbox` label."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "On the frozen held-out workflow suite, every positive and negative case receives its exact expected label, with zero false-positive and zero false-negative workflow-verification results.",
+      "scope_item_id": "VER-006",
+      "group_id": "verification",
+      "source_ref": "docs/product/prd.md#verification-and-evidence",
+      "status": "missing",
+      "task_refs": [
+        "M7",
+        "M8"
+      ],
+      "acceptance_item_ids": [
+        "VER-006"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "VER-006",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M7",
+        "M8"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "On the frozen held-out workflow suite, every positive and negative case receives its exact expected label, with zero false-positive and zero false-negative workflow-verification results."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "A `workflow_verified_replay`, `workflow_verified_mock`, or `workflow_verified_sandbox` result requires an approved entrypoint from the exact patched repository head and observed interaction and outcome evidence in that environment. Independent contract or cassette replay is `workflow_contract_replay_passed` and cannot exceed `repo_verified`.",
+      "scope_item_id": "VER-007",
+      "group_id": "verification",
+      "source_ref": "docs/product/prd.md#verification-and-evidence",
+      "status": "missing",
+      "task_refs": [
+        "M7",
+        "M8"
+      ],
+      "acceptance_item_ids": [
+        "VER-007"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "VER-007",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M7",
+        "M8"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "A `workflow_verified_replay`, `workflow_verified_mock`, or `workflow_verified_sandbox` result requires an approved entrypoint from the exact patched repository head and observed interaction and outcome evidence in that environment. Independent contract or cassette replay is `workflow_contract_replay_passed` and cannot exceed `repo_verified`."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Results preserve separate impact, patch, verification, delivery, permission, and residual-risk axes, and `lumyn trace` renders those bound axes locally without network access or provider disclosure.",
+      "scope_item_id": "EVD-001",
+      "group_id": "evidence",
+      "source_ref": "docs/product/prd.md#verification-and-evidence",
+      "status": "missing",
+      "task_refs": [
+        "M2",
+        "M7"
+      ],
+      "acceptance_item_ids": [
+        "EVD-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "EVD-001",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2",
+        "M7"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Results preserve separate impact, patch, verification, delivery, permission, and residual-risk axes, and `lumyn trace` renders those bound axes locally without network access or provider disclosure."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Evidence is bound to packet digest, base/head commits, plan digest, artifact hashes, and verification environment.",
+      "scope_item_id": "EVD-002",
+      "group_id": "evidence",
+      "source_ref": "docs/product/prd.md#verification-and-evidence",
+      "status": "missing",
+      "task_refs": [
+        "M2",
+        "M7"
+      ],
+      "acceptance_item_ids": [
+        "EVD-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "EVD-002",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2",
+        "M7"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Evidence is bound to packet digest, base/head commits, plan digest, artifact hashes, and verification environment."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "A packet or repository-head change invalidates stale evidence.",
+      "scope_item_id": "EVD-003",
+      "group_id": "evidence",
+      "source_ref": "docs/product/prd.md#verification-and-evidence",
+      "status": "missing",
+      "task_refs": [
+        "M2",
+        "M7"
+      ],
+      "acceptance_item_ids": [
+        "EVD-003"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "EVD-003",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2",
+        "M7"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "A packet or repository-head change invalidates stale evidence."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "PR creation requires a separate explicit authorization after the migration plan is reviewed.",
+      "scope_item_id": "PR-001",
+      "group_id": "draft_pr_delivery",
+      "source_ref": "docs/product/prd.md#draft-pr-delivery",
+      "status": "missing",
+      "task_refs": [
+        "M9"
+      ],
+      "acceptance_item_ids": [
+        "PR-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PR-001",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M9"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "PR creation requires a separate explicit authorization after the migration plan is reviewed."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Lumyn writes only a draft PR on an authorized non-default branch.",
+      "scope_item_id": "PR-002",
+      "group_id": "draft_pr_delivery",
+      "source_ref": "docs/product/prd.md#draft-pr-delivery",
+      "status": "missing",
+      "task_refs": [
+        "M9"
+      ],
+      "acceptance_item_ids": [
+        "PR-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PR-002",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M9"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Lumyn writes only a draft PR on an authorized non-default branch."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "The PR includes provider packet provenance, impact scope, changed files, dependency delta, generation method, exact commands and results, baseline failures, workflow environment, permissions used, unsupported cases, residual risk, rollback guidance, and a reviewer checklist.",
+      "scope_item_id": "PR-003",
+      "group_id": "draft_pr_delivery",
+      "source_ref": "docs/product/prd.md#draft-pr-delivery",
+      "status": "missing",
+      "task_refs": [
+        "M9"
+      ],
+      "acceptance_item_ids": [
+        "PR-003"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PR-003",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M9"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "The PR includes provider packet provenance, impact scope, changed files, dependency delta, generation method, exact commands and results, baseline failures, workflow environment, permissions used, unsupported cases, residual risk, rollback guidance, and a reviewer checklist."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Repeated delivery for the same campaign/repository/base state is idempotent and does not create duplicate PRs.",
+      "scope_item_id": "PR-004",
+      "group_id": "draft_pr_delivery",
+      "source_ref": "docs/product/prd.md#draft-pr-delivery",
+      "status": "missing",
+      "task_refs": [
+        "M9"
+      ],
+      "acceptance_item_ids": [
+        "PR-004"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PR-004",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M9"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Repeated delivery for the same campaign/repository/base state is idempotent and does not create duplicate PRs."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "A provider-sponsored connection counts only after the provider signs an acknowledgement for a valid consumer-signed, invitation-bound, non-replayed minimal connection receipt whose signer is authenticated to the invited organization and whose unit nonce maps to one opaque repository. Richer provider-visible campaign status remains separately authorized and contains only consumer-consented fields.",
+      "scope_item_id": "PR-005",
+      "group_id": "draft_pr_delivery",
+      "source_ref": "docs/product/prd.md#draft-pr-delivery",
+      "status": "missing",
+      "task_refs": [
+        "M9"
+      ],
+      "acceptance_item_ids": [
+        "PR-005"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PR-005",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M9"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "A provider-sponsored connection counts only after the provider signs an acknowledgement for a valid consumer-signed, invitation-bound, non-replayed minimal connection receipt whose signer is authenticated to the invited organization and whose unit nonce maps to one opaque repository. Richer provider-visible campaign status remains separately authorized and contains only consumer-consented fields."
+      ],
+      "requires_human_approval": false,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Before migration-plan implementation proceeds, one qualified API Provider supplies written commitment for a consequential migration within six months, a named economic buyer and operator, authoritative source and target artifacts, prerelease-sharing authority, a non-production sandbox, a signed canary packet proving at least one supported change class, an operational signed provider-status channel with its key and maximum-age policy, and a provider receipt-acknowledgement key and endpoint or offline exchange contract, plus an agreed paid-pilot price and decision process. The provider also documents recurring-value potential through at least two consequential migrations or deprecations expected within 12 months, or at least 20 named managed integrations eligible for an annual connected-repository program, and names the post-pilot annual-platform or second-campaign purchase decision.",
+      "scope_item_id": "DISC-001",
+      "group_id": "design_partner_qualification",
+      "source_ref": "docs/product/prd.md#design-partner-qualification",
+      "status": "missing",
+      "task_refs": [
+        "M2.5",
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "DISC-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "DISC-001",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2.5",
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Before migration-plan implementation proceeds, one qualified API Provider supplies written commitment for a consequential migration within six months, a named economic buyer and operator, authoritative source and target artifacts, prerelease-sharing authority, a non-production sandbox, a signed canary packet proving at least one supported change class, an operational signed provider-status channel with its key and maximum-age policy, and a provider receipt-acknowledgement key and endpoint or offline exchange contract, plus an agreed paid-pilot price and decision process. The provider also documents recurring-value potential through at least two consequential migrations or deprecations expected within 12 months, or at least 20 named managed integrations eligible for an annual connected-repository program, and names the post-pilot annual-platform or second-campaign purchase decision."
+      ],
+      "requires_human_approval": true,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Before migration-plan implementation proceeds, a frozen candidate cohort contains at least five distinct eligible repository IDs across at least three Consumer Organizations, with one accountable maintainer per repository. Every repository matches the supported GitHub and TypeScript/Node shape and is prequalified as plausibly using an affected source version, operation, or field. One funnel unit is counted per repository. The invitation window, absolute campaign judgment deadline, baseline, one primary provider outcome and its material threshold, correction rubric, payment and contribution evidence, confidentiality, retention, and consented-data protocol are frozen before outcomes are observed. Before identifiable evidence is collected, stored, or disclosed, a manual privacy/legal preflight fixes allowed private fields, participant consent, the approved external private root, TTL, expiry/revocation deletion, receipt/orphan ownership, the minimal signed connection-receipt fields, provider-authenticated consumer signer binding, provider-signed acknowledgement and one-invitation-unit cardinality, and separately consented public fields. Every candidate environment also proves a supported OS/architecture and fail-closed host-isolation backend before qualification. The protocol states that provider export and public commit cannot be recalled.",
+      "scope_item_id": "DISC-002",
+      "group_id": "design_partner_qualification",
+      "source_ref": "docs/product/prd.md#design-partner-qualification",
+      "status": "missing",
+      "task_refs": [
+        "M2.5",
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "DISC-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "DISC-002",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M2.5",
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Before migration-plan implementation proceeds, a frozen candidate cohort contains at least five distinct eligible repository IDs across at least three Consumer Organizations, with one accountable maintainer per repository. Every repository matches the supported GitHub and TypeScript/Node shape and is prequalified as plausibly using an affected source version, operation, or field. One funnel unit is counted per repository. The invitation window, absolute campaign judgment deadline, baseline, one primary provider outcome and its material threshold, correction rubric, payment and contribution evidence, confidentiality, retention, and consented-data protocol are frozen before outcomes are observed. Before identifiable evidence is collected, stored, or disclosed, a manual privacy/legal preflight fixes allowed private fields, participant consent, the approved external private root, TTL, expiry/revocation deletion, receipt/orphan ownership, the minimal signed connection-receipt fields, provider-authenticated consumer signer binding, provider-signed acknowledgement and one-invitation-unit cardinality, and separately consented public fields. Every candidate environment also proves a supported OS/architecture and fail-closed host-isolation backend before qualification. The protocol states that provider export and public commit cannot be recalled."
+      ],
+      "requires_human_approval": true,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "The `DISC-001` provider advances with the committed migration and preregistered protocol without changing thresholds after outcomes are visible.",
+      "scope_item_id": "PILOT-001",
+      "group_id": "design_partner_pilot",
+      "source_ref": "docs/product/prd.md#design-partner-pilot",
+      "status": "missing",
+      "task_refs": [
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "PILOT-001"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PILOT-001",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "The `DISC-001` provider advances with the committed migration and preregistered protocol without changing thresholds after outcomes are visible."
+      ],
+      "requires_human_approval": true,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "At least five distinct prequalified eligible repositories from the frozen `DISC-002` cohort, spanning at least three Consumer Organizations, are invited. A repository contributes at most one funnel unit.",
+      "scope_item_id": "PILOT-002",
+      "group_id": "design_partner_pilot",
+      "source_ref": "docs/product/prd.md#design-partner-pilot",
+      "status": "missing",
+      "task_refs": [
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "PILOT-002"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PILOT-002",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "At least five distinct prequalified eligible repositories from the frozen `DISC-002` cohort, spanning at least three Consumer Organizations, are invited. A repository contributes at most one funnel unit."
+      ],
+      "requires_human_approval": true,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "At least three distinct Consumer Organizations each explicitly issue repository authorization and import a provider-signed acknowledgement for one valid minimal connection receipt bound to an authenticated consumer signer and one eligible-repository invitation unit within 30 days of invitation. Across those connected repositories, median calendar time from invitation receipt to the first valid impact report is at most seven days, median total Consumer Organization security, privacy, platform, and maintainer hands-on labor over that interval is at most two hours, and median Consumer Maintainer in-product hands-on time from starting `campaign accept` through authorization issuance to the first valid impact report is at most 60 minutes. Lumyn and provider assistance are measured separately; custom product code or provider access to source invalidates the observation.",
+      "scope_item_id": "PILOT-003",
+      "group_id": "design_partner_pilot",
+      "source_ref": "docs/product/prd.md#design-partner-pilot",
+      "status": "missing",
+      "task_refs": [
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "PILOT-003"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PILOT-003",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "At least three distinct Consumer Organizations each explicitly issue repository authorization and import a provider-signed acknowledgement for one valid minimal connection receipt bound to an authenticated consumer signer and one eligible-repository invitation unit within 30 days of invitation. Across those connected repositories, median calendar time from invitation receipt to the first valid impact report is at most seven days, median total Consumer Organization security, privacy, platform, and maintainer hands-on labor over that interval is at most two hours, and median Consumer Maintainer in-product hands-on time from starting `campaign accept` through authorization issuance to the first valid impact report is at most 60 minutes. Lumyn and provider assistance are measured separately; custom product code or provider access to source invalidates the observation."
+      ],
+      "requires_human_approval": true,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "At least three evidence-backed draft PRs are generated for three distinct eligible repositories within 14 calendar days of repository authorization; the clock has no test-duration or other pause.",
+      "scope_item_id": "PILOT-004",
+      "group_id": "design_partner_pilot",
+      "source_ref": "docs/product/prd.md#design-partner-pilot",
+      "status": "missing",
+      "task_refs": [
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "PILOT-004"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PILOT-004",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "At least three evidence-backed draft PRs are generated for three distinct eligible repositories within 14 calendar days of repository authorization; the clock has no test-duration or other pause."
+      ],
+      "requires_human_approval": true,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "At least three PRs from three distinct eligible repositories across at least three Consumer Organizations merge within 45 days of PR creation. This threshold is frozen before the first invitation and cannot be rebaselined after outcomes are observed.",
+      "scope_item_id": "PILOT-005",
+      "group_id": "design_partner_pilot",
+      "source_ref": "docs/product/prd.md#design-partner-pilot",
+      "status": "missing",
+      "task_refs": [
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "PILOT-005"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PILOT-005",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "At least three PRs from three distinct eligible repositories across at least three Consumer Organizations merge within 45 days of PR creation. This threshold is frozen before the first invitation and cannot be rebaselined after outcomes are observed."
+      ],
+      "requires_human_approval": true,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "At least two of the first three merged PRs require no substantive manual correction from PR creation through a fixed 30-day post-merge observation window. A migration-attributable revert or corrective fix counts as substantive correction. At least two of those three PRs also achieve `workflow_verified_mock` or `workflow_verified_sandbox` from the exact patched head before merge; a missing approved entrypoint or weaker evidence does not pass this gate.",
+      "scope_item_id": "PILOT-006",
+      "group_id": "design_partner_pilot",
+      "source_ref": "docs/product/prd.md#design-partner-pilot",
+      "status": "missing",
+      "task_refs": [
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "PILOT-006"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PILOT-006",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "At least two of the first three merged PRs require no substantive manual correction from PR creation through a fixed 30-day post-merge observation window. A migration-attributable revert or corrective fix counts as substantive correction. At least two of those three PRs also achieve `workflow_verified_mock` or `workflow_verified_sandbox` from the exact patched head before merge; a missing approved entrypoint or weaker evidence does not pass this gate."
+      ],
+      "requires_human_approval": true,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Campaign setup, onboarding, support, repository-based conversion, automation, lead-time, contribution, cost-per-merge, and actual legacy-retirement duration are measured against a baseline frozen before the first invitation and judged by the preregistered absolute campaign deadline. Campaign contribution is non-negative, and the one preregistered primary provider outcome achieves either at least 20% improvement in support hours per merged repository, at least 20% improvement in authorization-to-merge lead time, or retirement of the targeted legacy version from at least 60% of the frozen eligible-repository cohort by day 120. A missing or `not_measurable` primary outcome fails this gate.",
+      "scope_item_id": "PILOT-007",
+      "group_id": "design_partner_pilot",
+      "source_ref": "docs/product/prd.md#design-partner-pilot",
+      "status": "missing",
+      "task_refs": [
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "PILOT-007"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PILOT-007",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Campaign setup, onboarding, support, repository-based conversion, automation, lead-time, contribution, cost-per-merge, and actual legacy-retirement duration are measured against a baseline frozen before the first invitation and judged by the preregistered absolute campaign deadline. Campaign contribution is non-negative, and the one preregistered primary provider outcome achieves either at least 20% improvement in support hours per merged repository, at least 20% improvement in authorization-to-merge lead time, or retirement of the targeted legacy version from at least 60% of the frozen eligible-repository cohort by day 120. A missing or `not_measurable` primary outcome fails this gate."
+      ],
+      "requires_human_approval": true,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "The provider pays the preregistered pilot invoice at a price at least equal to frozen Lumyn campaign COGS and executes a paid renewal, expansion, or purchase order before the campaign judgment deadline. Letters of intent, compliments, nominal payments, and informal willingness-to-pay statements do not qualify.",
+      "scope_item_id": "PILOT-008",
+      "group_id": "design_partner_pilot",
+      "source_ref": "docs/product/prd.md#design-partner-pilot",
+      "status": "missing",
+      "task_refs": [
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "PILOT-008"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PILOT-008",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "The provider pays the preregistered pilot invoice at a price at least equal to frozen Lumyn campaign COGS and executes a paid renewal, expansion, or purchase order before the campaign judgment deadline. Letters of intent, compliments, nominal payments, and informal willingness-to-pay statements do not qualify."
+      ],
+      "requires_human_approval": true,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    },
+    {
+      "scope_item": "Paid continuation covers repeatable platform use: an annual connected-repository program or a second named migration campaign. Preregistered recurring delivery economics show at least 60% projected gross margin after Lumyn onboarding, support, infrastructure, and external-tool COGS, excluding separately itemized one-time core product development, and no more than four Lumyn operator hours per merged repository after campaign setup. Provider and consumer labor are reported separately as buyer total cost and never netted into Lumyn gross margin.",
+      "scope_item_id": "PILOT-009",
+      "group_id": "design_partner_pilot",
+      "source_ref": "docs/product/prd.md#design-partner-pilot",
+      "status": "missing",
+      "task_refs": [
+        "M10"
+      ],
+      "acceptance_item_ids": [
+        "PILOT-009"
+      ],
+      "acceptance_item_statuses": [
+        {
+          "acceptance_item_id": "PILOT-009",
+          "status": "missing",
+          "evidence_refs": [],
+          "repair_task_refs": []
+        }
+      ],
+      "implemented_task_refs": [],
+      "remaining_task_refs": [
+        "M10"
+      ],
+      "evidence_refs": [],
+      "acceptance_criteria": [
+        "Paid continuation covers repeatable platform use: an annual connected-repository program or a second named migration campaign. Preregistered recurring delivery economics show at least 60% projected gross margin after Lumyn onboarding, support, infrastructure, and external-tool COGS, excluding separately itemized one-time core product development, and no more than four Lumyn operator hours per merged repository after campaign setup. Provider and consumer labor are reported separately as buyer total cost and never netted into Lumyn gross margin."
+      ],
+      "requires_human_approval": true,
+      "notes": [
+        "Closure requires item-level evidence; task or delivery-slice completion alone is insufficient."
+      ]
+    }
+  ],
+  "delivery_slices": [
+    {
+      "slice_id": "migration_foundation",
+      "name": "Migration Foundation",
+      "source_ref": "docs/product/plan.md#wave-1",
+      "required_for_completion": true,
+      "public_release_boundary": false,
+      "task_refs": [
+        "M0",
+        "M1",
+        "M2"
+      ],
+      "acceptance_group_refs": [
+        "retained_foundation",
+        "product_rebaseline",
+        "provider_change",
+        "migration_benchmark",
+        "two_sided_activation",
+        "authorization",
+        "evidence"
+      ],
+      "acceptance_item_ids": [
+        "BASE-001",
+        "BASE-002",
+        "BASE-003",
+        "BASE-004",
+        "BASE-005",
+        "REB-001",
+        "REB-002",
+        "REB-003",
+        "CHG-001",
+        "CHG-002",
+        "CHG-003",
+        "CHG-004",
+        "CORPUS-001",
+        "CORPUS-002",
+        "CORPUS-003",
+        "ACT-001",
+        "ACT-002",
+        "AUTH-001",
+        "AUTH-002",
+        "AUTH-003",
+        "AUTH-004",
+        "AUTH-005",
+        "EVD-001",
+        "EVD-002",
+        "EVD-003"
+      ],
+      "status": "partial",
+      "implemented_acceptance_item_ids": [
+        "BASE-001",
+        "BASE-002",
+        "BASE-004",
+        "BASE-005",
+        "REB-003"
+      ],
+      "remaining_acceptance_item_ids": [
+        "BASE-003",
+        "REB-001",
+        "REB-002",
+        "CHG-001",
+        "CHG-002",
+        "CHG-003",
+        "CHG-004",
+        "CORPUS-001",
+        "CORPUS-002",
+        "CORPUS-003",
+        "ACT-001",
+        "ACT-002",
+        "AUTH-001",
+        "AUTH-002",
+        "AUTH-003",
+        "AUTH-004",
+        "AUTH-005",
+        "EVD-001",
+        "EVD-002",
+        "EVD-003"
+      ]
+    },
+    {
+      "slice_id": "migration_engine",
+      "name": "Verified Migration Engine",
+      "source_ref": "docs/product/plan.md#wave-2",
+      "required_for_completion": true,
+      "public_release_boundary": false,
+      "task_refs": [
+        "M3",
+        "M4",
+        "M5",
+        "M6",
+        "M7",
+        "M8",
+        "M9"
+      ],
+      "acceptance_group_refs": [
+        "provider_change",
+        "two_sided_activation",
+        "authorization",
+        "impact",
+        "migration_plan",
+        "bounded_patch",
+        "verification",
+        "evidence",
+        "draft_pr_delivery"
+      ],
+      "acceptance_item_ids": [
+        "CHG-001",
+        "CHG-002",
+        "CHG-003",
+        "CHG-004",
+        "ACT-003",
+        "AUTH-001",
+        "AUTH-002",
+        "AUTH-003",
+        "AUTH-004",
+        "AUTH-005",
+        "IMP-001",
+        "IMP-002",
+        "IMP-003",
+        "IMP-004",
+        "IMP-005",
+        "PLAN-001",
+        "PLAN-002",
+        "PATCH-001",
+        "PATCH-002",
+        "PATCH-003",
+        "PATCH-004",
+        "PATCH-005",
+        "PATCH-006",
+        "VER-001",
+        "VER-002",
+        "VER-003",
+        "VER-004",
+        "VER-005",
+        "VER-006",
+        "VER-007",
+        "EVD-001",
+        "EVD-002",
+        "EVD-003",
+        "PR-001",
+        "PR-002",
+        "PR-003",
+        "PR-004",
+        "PR-005"
+      ],
+      "status": "partial",
+      "implemented_acceptance_item_ids": [],
+      "remaining_acceptance_item_ids": [
+        "CHG-001",
+        "CHG-002",
+        "CHG-003",
+        "CHG-004",
+        "ACT-003",
+        "AUTH-001",
+        "AUTH-002",
+        "AUTH-003",
+        "AUTH-004",
+        "AUTH-005",
+        "IMP-001",
+        "IMP-002",
+        "IMP-003",
+        "IMP-004",
+        "IMP-005",
+        "PLAN-001",
+        "PLAN-002",
+        "PATCH-001",
+        "PATCH-002",
+        "PATCH-003",
+        "PATCH-004",
+        "PATCH-005",
+        "PATCH-006",
+        "VER-001",
+        "VER-002",
+        "VER-003",
+        "VER-004",
+        "VER-005",
+        "VER-006",
+        "VER-007",
+        "EVD-001",
+        "EVD-002",
+        "EVD-003",
+        "PR-001",
+        "PR-002",
+        "PR-003",
+        "PR-004",
+        "PR-005"
+      ]
+    },
+    {
+      "slice_id": "design_partner_pilot",
+      "name": "Design-Partner Migration Campaign",
+      "source_ref": "docs/product/plan.md#design-partner-qualification",
+      "required_for_completion": true,
+      "public_release_boundary": false,
+      "task_refs": [
+        "M2.5",
+        "M10"
+      ],
+      "acceptance_group_refs": [
+        "design_partner_qualification",
+        "design_partner_pilot"
+      ],
+      "acceptance_item_ids": [
+        "DISC-001",
+        "DISC-002",
+        "PILOT-001",
+        "PILOT-002",
+        "PILOT-003",
+        "PILOT-004",
+        "PILOT-005",
+        "PILOT-006",
+        "PILOT-007",
+        "PILOT-008",
+        "PILOT-009"
+      ],
+      "status": "partial",
+      "implemented_acceptance_item_ids": [],
+      "remaining_acceptance_item_ids": [
+        "DISC-001",
+        "DISC-002",
+        "PILOT-001",
+        "PILOT-002",
+        "PILOT-003",
+        "PILOT-004",
+        "PILOT-005",
+        "PILOT-006",
+        "PILOT-007",
+        "PILOT-008",
+        "PILOT-009"
+      ]
+    }
+  ],
+  "full_mvp_closure_rule": "All 62 acceptance items must be implemented with direct evidence or have an explicit PRD-allowed approved terminal disposition. Delivery slices and task completion are coverage lenses, never substitutes for item-level closure."
+}

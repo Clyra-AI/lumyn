@@ -1,0 +1,586 @@
+{
+  "artifact_type": "acceptance_mapping",
+  "schema_version": "0.1",
+  "source_prd_ref": "docs/product/prd.md",
+  "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+  "decomposition_mode": "prd_acceptance_item_ids",
+  "groups": [
+    {
+      "group_id": "retained_foundation",
+      "title": "Retained Foundation",
+      "source_ref": "docs/product/prd.md#retained-foundation",
+      "required": true,
+      "task_refs": [
+        "T1",
+        "M0",
+        "T2",
+        "T2.7",
+        "T2.5",
+        "T3",
+        "M3",
+        "T2.6"
+      ],
+      "acceptance_refs": [
+        "BASE-001",
+        "BASE-002",
+        "BASE-003",
+        "BASE-004",
+        "BASE-005"
+      ],
+      "acceptance_item_ids": [
+        "BASE-001",
+        "BASE-002",
+        "BASE-003",
+        "BASE-004",
+        "BASE-005"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M0/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M3/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "migration_foundation"
+      ]
+    },
+    {
+      "group_id": "product_rebaseline",
+      "title": "Product Rebaseline",
+      "source_ref": "docs/product/prd.md#product-rebaseline",
+      "required": true,
+      "task_refs": [
+        "M0"
+      ],
+      "acceptance_refs": [
+        "REB-001",
+        "REB-002",
+        "REB-003"
+      ],
+      "acceptance_item_ids": [
+        "REB-001",
+        "REB-002",
+        "REB-003"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M0/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "migration_foundation"
+      ]
+    },
+    {
+      "group_id": "provider_change",
+      "title": "Provider Change",
+      "source_ref": "docs/product/prd.md#provider-change-and-benchmark",
+      "required": true,
+      "task_refs": [
+        "M2",
+        "M3",
+        "M6",
+        "M8",
+        "M9"
+      ],
+      "acceptance_refs": [
+        "CHG-001",
+        "CHG-002",
+        "CHG-003",
+        "CHG-004"
+      ],
+      "acceptance_item_ids": [
+        "CHG-001",
+        "CHG-002",
+        "CHG-003",
+        "CHG-004"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M2/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M3/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M8/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M9/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "migration_foundation",
+        "migration_engine"
+      ]
+    },
+    {
+      "group_id": "migration_benchmark",
+      "title": "Migration Benchmark",
+      "source_ref": "docs/product/prd.md#provider-change-and-benchmark",
+      "required": true,
+      "task_refs": [
+        "M1"
+      ],
+      "acceptance_refs": [
+        "CORPUS-001",
+        "CORPUS-002",
+        "CORPUS-003"
+      ],
+      "acceptance_item_ids": [
+        "CORPUS-001",
+        "CORPUS-002",
+        "CORPUS-003"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M1/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "migration_foundation"
+      ]
+    },
+    {
+      "group_id": "two_sided_activation",
+      "title": "Two-Sided Activation",
+      "source_ref": "docs/product/prd.md#two-sided-activation",
+      "required": true,
+      "task_refs": [
+        "M2",
+        "M7"
+      ],
+      "acceptance_refs": [
+        "ACT-001",
+        "ACT-002",
+        "ACT-003"
+      ],
+      "acceptance_item_ids": [
+        "ACT-001",
+        "ACT-002",
+        "ACT-003"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M2/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M7/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "migration_foundation",
+        "migration_engine"
+      ]
+    },
+    {
+      "group_id": "authorization",
+      "title": "Authorization",
+      "source_ref": "docs/product/prd.md#authorization-and-impact",
+      "required": true,
+      "task_refs": [
+        "M2",
+        "M4",
+        "M5",
+        "M6",
+        "M7",
+        "M8",
+        "M9",
+        "M10"
+      ],
+      "acceptance_refs": [
+        "AUTH-001",
+        "AUTH-002",
+        "AUTH-003",
+        "AUTH-004",
+        "AUTH-005"
+      ],
+      "acceptance_item_ids": [
+        "AUTH-001",
+        "AUTH-002",
+        "AUTH-003",
+        "AUTH-004",
+        "AUTH-005"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M2/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M4/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M6/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M8/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M9/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M10/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "migration_foundation",
+        "migration_engine"
+      ]
+    },
+    {
+      "group_id": "impact",
+      "title": "Repository Impact",
+      "source_ref": "docs/product/prd.md#authorization-and-impact",
+      "required": true,
+      "task_refs": [
+        "M4"
+      ],
+      "acceptance_refs": [
+        "IMP-001",
+        "IMP-002",
+        "IMP-003",
+        "IMP-004",
+        "IMP-005"
+      ],
+      "acceptance_item_ids": [
+        "IMP-001",
+        "IMP-002",
+        "IMP-003",
+        "IMP-004",
+        "IMP-005"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M4/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "migration_engine"
+      ]
+    },
+    {
+      "group_id": "migration_plan",
+      "title": "Migration Plan",
+      "source_ref": "docs/product/prd.md#plan-and-patch",
+      "required": true,
+      "task_refs": [
+        "M5"
+      ],
+      "acceptance_refs": [
+        "PLAN-001",
+        "PLAN-002"
+      ],
+      "acceptance_item_ids": [
+        "PLAN-001",
+        "PLAN-002"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M5/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "migration_engine"
+      ]
+    },
+    {
+      "group_id": "bounded_patch",
+      "title": "Bounded Patch",
+      "source_ref": "docs/product/prd.md#plan-and-patch",
+      "required": true,
+      "task_refs": [
+        "M6"
+      ],
+      "acceptance_refs": [
+        "PATCH-001",
+        "PATCH-002",
+        "PATCH-003",
+        "PATCH-004",
+        "PATCH-005",
+        "PATCH-006"
+      ],
+      "acceptance_item_ids": [
+        "PATCH-001",
+        "PATCH-002",
+        "PATCH-003",
+        "PATCH-004",
+        "PATCH-005",
+        "PATCH-006"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M6/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "migration_engine"
+      ]
+    },
+    {
+      "group_id": "verification",
+      "title": "Verification",
+      "source_ref": "docs/product/prd.md#verification-and-evidence",
+      "required": true,
+      "task_refs": [
+        "M7",
+        "M8"
+      ],
+      "acceptance_refs": [
+        "VER-001",
+        "VER-002",
+        "VER-003",
+        "VER-004",
+        "VER-005",
+        "VER-006",
+        "VER-007"
+      ],
+      "acceptance_item_ids": [
+        "VER-001",
+        "VER-002",
+        "VER-003",
+        "VER-004",
+        "VER-005",
+        "VER-006",
+        "VER-007"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M7/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M8/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "migration_engine"
+      ]
+    },
+    {
+      "group_id": "evidence",
+      "title": "Evidence",
+      "source_ref": "docs/product/prd.md#verification-and-evidence",
+      "required": true,
+      "task_refs": [
+        "M2",
+        "M7"
+      ],
+      "acceptance_refs": [
+        "EVD-001",
+        "EVD-002",
+        "EVD-003"
+      ],
+      "acceptance_item_ids": [
+        "EVD-001",
+        "EVD-002",
+        "EVD-003"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M2/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M7/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "migration_foundation",
+        "migration_engine"
+      ]
+    },
+    {
+      "group_id": "draft_pr_delivery",
+      "title": "Draft PR Delivery",
+      "source_ref": "docs/product/prd.md#draft-pr-delivery",
+      "required": true,
+      "task_refs": [
+        "M9"
+      ],
+      "acceptance_refs": [
+        "PR-001",
+        "PR-002",
+        "PR-003",
+        "PR-004",
+        "PR-005"
+      ],
+      "acceptance_item_ids": [
+        "PR-001",
+        "PR-002",
+        "PR-003",
+        "PR-004",
+        "PR-005"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M9/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "migration_engine"
+      ]
+    },
+    {
+      "group_id": "design_partner_qualification",
+      "title": "Design-Partner Qualification",
+      "source_ref": "docs/product/prd.md#design-partner-qualification",
+      "required": true,
+      "task_refs": [
+        "M2.5",
+        "M10"
+      ],
+      "acceptance_refs": [
+        "DISC-001",
+        "DISC-002"
+      ],
+      "acceptance_item_ids": [
+        "DISC-001",
+        "DISC-002"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M2.5/validation_commands",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M10/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "design_partner_pilot"
+      ]
+    },
+    {
+      "group_id": "design_partner_pilot",
+      "title": "Design-Partner Pilot",
+      "source_ref": "docs/product/prd.md#design-partner-pilot",
+      "required": true,
+      "task_refs": [
+        "M10"
+      ],
+      "acceptance_refs": [
+        "PILOT-001",
+        "PILOT-002",
+        "PILOT-003",
+        "PILOT-004",
+        "PILOT-005",
+        "PILOT-006",
+        "PILOT-007",
+        "PILOT-008",
+        "PILOT-009"
+      ],
+      "acceptance_item_ids": [
+        "PILOT-001",
+        "PILOT-002",
+        "PILOT-003",
+        "PILOT-004",
+        "PILOT-005",
+        "PILOT-006",
+        "PILOT-007",
+        "PILOT-008",
+        "PILOT-009"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M10/validation_commands"
+      ],
+      "delivery_slice_refs": [
+        "design_partner_pilot"
+      ]
+    }
+  ],
+  "delivery_slices": [
+    {
+      "slice_id": "migration_foundation",
+      "name": "Migration Foundation",
+      "source_ref": "docs/product/plan.md#wave-1",
+      "required_for_completion": true,
+      "public_release_boundary": false,
+      "task_refs": [
+        "M0",
+        "M1",
+        "M2"
+      ],
+      "acceptance_group_refs": [
+        "retained_foundation",
+        "product_rebaseline",
+        "provider_change",
+        "migration_benchmark",
+        "two_sided_activation",
+        "authorization",
+        "evidence"
+      ],
+      "acceptance_item_ids": [
+        "BASE-001",
+        "BASE-002",
+        "BASE-003",
+        "BASE-004",
+        "BASE-005",
+        "REB-001",
+        "REB-002",
+        "REB-003",
+        "CHG-001",
+        "CHG-002",
+        "CHG-003",
+        "CHG-004",
+        "CORPUS-001",
+        "CORPUS-002",
+        "CORPUS-003",
+        "ACT-001",
+        "ACT-002",
+        "AUTH-001",
+        "AUTH-002",
+        "AUTH-003",
+        "AUTH-004",
+        "AUTH-005",
+        "EVD-001",
+        "EVD-002",
+        "EVD-003"
+      ]
+    },
+    {
+      "slice_id": "migration_engine",
+      "name": "Verified Migration Engine",
+      "source_ref": "docs/product/plan.md#wave-2",
+      "required_for_completion": true,
+      "public_release_boundary": false,
+      "task_refs": [
+        "M3",
+        "M4",
+        "M5",
+        "M6",
+        "M7",
+        "M8",
+        "M9"
+      ],
+      "acceptance_group_refs": [
+        "provider_change",
+        "two_sided_activation",
+        "authorization",
+        "impact",
+        "migration_plan",
+        "bounded_patch",
+        "verification",
+        "evidence",
+        "draft_pr_delivery"
+      ],
+      "acceptance_item_ids": [
+        "CHG-001",
+        "CHG-002",
+        "CHG-003",
+        "CHG-004",
+        "ACT-003",
+        "AUTH-001",
+        "AUTH-002",
+        "AUTH-003",
+        "AUTH-004",
+        "AUTH-005",
+        "IMP-001",
+        "IMP-002",
+        "IMP-003",
+        "IMP-004",
+        "IMP-005",
+        "PLAN-001",
+        "PLAN-002",
+        "PATCH-001",
+        "PATCH-002",
+        "PATCH-003",
+        "PATCH-004",
+        "PATCH-005",
+        "PATCH-006",
+        "VER-001",
+        "VER-002",
+        "VER-003",
+        "VER-004",
+        "VER-005",
+        "VER-006",
+        "VER-007",
+        "EVD-001",
+        "EVD-002",
+        "EVD-003",
+        "PR-001",
+        "PR-002",
+        "PR-003",
+        "PR-004",
+        "PR-005"
+      ]
+    },
+    {
+      "slice_id": "design_partner_pilot",
+      "name": "Design-Partner Migration Campaign",
+      "source_ref": "docs/product/plan.md#design-partner-qualification",
+      "required_for_completion": true,
+      "public_release_boundary": false,
+      "task_refs": [
+        "M2.5",
+        "M10"
+      ],
+      "acceptance_group_refs": [
+        "design_partner_qualification",
+        "design_partner_pilot"
+      ],
+      "acceptance_item_ids": [
+        "DISC-001",
+        "DISC-002",
+        "PILOT-001",
+        "PILOT-002",
+        "PILOT-003",
+        "PILOT-004",
+        "PILOT-005",
+        "PILOT-006",
+        "PILOT-007",
+        "PILOT-008",
+        "PILOT-009"
+      ]
+    }
+  ]
+}
