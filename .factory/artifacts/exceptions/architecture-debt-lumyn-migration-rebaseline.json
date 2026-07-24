@@ -9,7 +9,7 @@
       "scripts/validate_repo_pack.py"
     ],
     "line_ceilings": {
-      "scripts/validate_repo_pack.py": 807
+      "scripts/validate_repo_pack.py": 803
     },
     "budget": {
       "warn_line_threshold": 1200,
@@ -25,7 +25,7 @@
     "make prepush-full",
     "canonical Factory schemas and validate-repo-pack must pass",
     "factoryd doctor must emit an architecture_budget_report with no unexcepted fail-level source",
-    "scripts/validate_repo_pack.py cannot grow beyond 807 lines; M0 follow-up work must preserve or reduce this ceiling"
+    "scripts/validate_repo_pack.py cannot grow beyond 803 lines; M0 follow-up work must preserve or reduce this ceiling"
   ],
   "follow_up_refs": [
     ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",

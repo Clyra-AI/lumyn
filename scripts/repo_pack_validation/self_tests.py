@@ -269,6 +269,17 @@ def run_repo_pack_self_tests(
     else:
         raise AssertionError("historical-plan config remained selectable")
 
+    autoship_active_config = copy.deepcopy(base["autoship"])
+    try:
+        validate_active_config(autoship_active_config, tasks)
+    except AssertionError as exc:
+        _require(
+            "must remain safe-attended" in str(exc),
+            f"active-autoship self-test failed unexpectedly: {exc}",
+        )
+    else:
+        raise AssertionError("autoship-enabled active config remained selectable")
+
     active_config = copy.deepcopy(base["config"])
     active_config["repos"]["lumyn"]["capability_grants"] = [
         {
