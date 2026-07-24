@@ -23,8 +23,10 @@ func TestOperatingPackExists(t *testing.T) {
 		"WORKFLOW.md",
 		"README.md",
 		"docs/product/prd.md",
-		".factory/artifacts/prd-to-plan/lumyn-mvp/context-brief.json",
-		".factory/artifacts/prd-to-plan/lumyn-mvp/execution-plan.json",
+		"docs/product/plan.md",
+		"docs/architecture/adr-0002-provider-sponsored-customer-controlled-migrations.md",
+		".factory/artifacts/prd-to-plan/lumyn-migration-mvp/context-brief.json",
+		".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
 	} {
 		if _, err := os.Stat(filepath.Join(root, relativePath)); err != nil {
 			t.Fatalf("%s: %v", relativePath, err)
@@ -39,8 +41,11 @@ func TestPRDReferencesAreRepoRelative(t *testing.T) {
 		t.Fatalf("read prd: %v", err)
 	}
 	prd := string(payload)
-	if !strings.Contains(prd, "Lumyn OSS MVP") {
-		t.Fatal("prd should name Lumyn OSS MVP")
+	if !strings.Contains(prd, "Provider-Sponsored Verified API Migrations") {
+		t.Fatal("prd should name the provider-sponsored verified API migration MVP")
+	}
+	if !strings.Contains(prd, "API Consumer Job") {
+		t.Fatal("prd should preserve the customer-side job and authority")
 	}
 	if strings.Contains(prd, "/"+("Users")+"/") {
 		t.Fatal("prd should not contain machine-local user paths")

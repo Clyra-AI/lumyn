@@ -10,7 +10,7 @@
 /docs/architecture/** @davidahmann
 
 # Product contracts and executable schema surfaces require owner review.
-/docs/product/prd.md @davidahmann
+/docs/product/** @davidahmann
 /schemas/** @davidahmann
 /cmd/** @davidahmann
 /internal/** @davidahmann

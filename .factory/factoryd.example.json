@@ -8,9 +8,9 @@
       "repo_path": "..",
       "default_branch": "main",
       "artifact_root": ".factory/artifacts",
-      "task_packets": ".factory/artifacts/prd-to-plan/lumyn-mvp/task-packets.json",
-      "scope_closure_map": ".factory/artifacts/prd-to-plan/lumyn-mvp/scope-closure-map.json",
-      "validation_contract": ".factory/artifacts/prd-to-plan/lumyn-mvp/validation-contract.json",
+      "task_packets": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+      "scope_closure_map": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json",
+      "validation_contract": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
       "validation_commands": [
         "python3 scripts/validate_repo_pack.py --self-test",
         "python3 scripts/validate_repo_pack.py"
@@ -64,9 +64,9 @@
         "post_merge_command": "",
         "scope_closure_command": ""
       },
-      "approval_posture": "human approval required for live credentials, high-risk tasks, and merge",
-      "credential_posture": "no ambient secrets during deterministic MVP bootstrap",
-      "network_posture": "offline by default until live sandbox/model work is approved",
+      "approval_posture": "Factory worker grants use only approval, credentials, and network; Factory dispatch does not validate or confer private Lumyn product authority, which Lumyn enforces at each live-action boundary, and no grant implies human merge authority",
+      "credential_posture": "no ambient customer or provider secrets; repository commands run through a fail-closed host-isolation backend with exact mounts, sanitized environment, closed host credential/socket/descriptor surfaces, and inherited child restrictions; approved sandbox and GitHub credentials are task-scoped and isolated",
+      "network_posture": "offline by default; provider-status, package-registry, sandbox, GitHub branch, and GitHub PR destinations require separate task-scoped allowlists",
       "capability_grants": [],
       "budget": {
         "max_worker_tokens": 0,
@@ -80,9 +80,9 @@
         "fail_line_threshold": 2500,
         "source_extensions": [".go", ".py", ".ts", ".tsx", ".js", ".jsx"],
         "excluded_dirs": [".git", ".factoryd", ".factory/tmp", "workspaces", ".venv", "__pycache__", "build", "dist", "node_modules", "vendor"],
-        "exception_refs": [".factory/artifacts/exceptions/architecture-debt-lumyn-source.json"]
+        "exception_refs": [".factory/artifacts/exceptions/architecture-debt-lumyn-migration-rebaseline.json"]
       },
-      "acceptance_ledger": ".factory/artifacts/prd-to-plan/lumyn-mvp/acceptance-ledger.json"
+      "acceptance_ledger": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json"
     }
   }
 }

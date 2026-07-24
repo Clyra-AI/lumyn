@@ -10,7 +10,7 @@ from typing import Any
 
 FACTORYD_REPO_KEY = "lumyn"
 ARCHITECTURE_BUDGET_EXCEPTION_REFS = [
-    ".factory/artifacts/exceptions/architecture-debt-lumyn-source.json",
+    ".factory/artifacts/exceptions/architecture-debt-lumyn-migration-rebaseline.json",
 ]
 ARCHITECTURE_BUDGET_EXCEPTION_PATHS = [
     "scripts/validate_repo_pack.py",

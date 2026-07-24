@@ -1,5 +1,11 @@
 # Lumyn MVP PRD-To-Plan
 
+> **Superseded historical plan — do not dispatch.** This directory is retained
+> only as immutable planning history. The active plan is
+> `.factory/artifacts/prd-to-plan/lumyn-migration-mvp/`; its first selectable
+> task is `M0`. Every instruction below describes the former product direction
+> and is non-operative.
+
 This directory contains the initial Factory planning artifacts derived from:
 
 ```text
@@ -8,7 +14,8 @@ docs/product/prd.md
 
 The artifacts use repo-relative paths so they can be consumed from any machine or Factory worker.
 
-Initial implementation should start with task `T1` in `task-packets.json`.
+The historical implementation sequence began with task `T1` in
+`task-packets.json`; that instruction must not be dispatched now.
 
 The plan treats the historical `v0.0`, `v0.1`, and `v0.2` labels as required
 internal MVP capability slices, not optional releases:
