@@ -718,11 +718,11 @@
       "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
       "blocked_by": [],
       "allowed_paths": [
-        ".factory/artifacts/product-signals/M2.5/",
-        "docs/product/"
+        ".factory/artifacts/product-signals/M2.5/"
       ],
       "forbidden_paths": [
         ".git/",
+        "docs/product/",
         ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/",
         ".factory/artifacts/lifecycle-evidence/M2.5/",

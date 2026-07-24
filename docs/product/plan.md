@@ -658,11 +658,13 @@ cohort before Lumyn builds the expensive repository-specific execution stages.
   opportunities fail to prepay or recruit rather than silently broadening the
   product.
 
-#### Expected repo areas
+#### Expected write boundaries
 
 - approved private external evidence system;
-- redacted public evidence under the future pilot artifact area;
-- `docs/product/`;
+- `.factory/artifacts/product-signals/M2.5/` for consented, redacted public
+  evidence only;
+- no `docs/product/` write; any finding that changes product truth must use a
+  separate reviewed rebaseline and regenerate the active control set;
 - validation scripts and schemas created only in later implementation tasks.
 
 #### Evidence checks

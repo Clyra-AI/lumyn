@@ -632,6 +632,15 @@ def validate_migration_task_contracts(
         }.intersection(m0_paths),
         "M0 must not include planning-control compilation paths",
     )
+    m25_paths = set(tasks["M2.5"].get("allowed_paths", []))
+    _require(
+        m25_paths == {".factory/artifacts/product-signals/M2.5/"},
+        "M2.5 writes must remain limited to task-scoped product-signal evidence",
+    )
+    _require(
+        "docs/product/" in set(tasks["M2.5"].get("forbidden_paths", [])),
+        "M2.5 must forbid writes to product source-of-truth documents",
+    )
     _require(
         {"PACK-001", "IMPACT-005", "AGENT-001", "VER-006", "PILOT-005"}.issubset(
             set(tasks["M1"].get("acceptance_item_ids", []))

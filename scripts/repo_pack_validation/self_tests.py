@@ -59,6 +59,14 @@ def _ledger_item(payload: Payload, item_id: str) -> dict[str, Any]:
     )
 
 
+def _closure_item(payload: Payload, item_id: str) -> dict[str, Any]:
+    return next(
+        item
+        for item in payload["closure"]["items"]
+        if item.get("scope_item_id") == item_id
+    )
+
+
 def _remove_task_acceptance(
     payload: Payload,
     task_id: str,
@@ -214,6 +222,18 @@ def run_repo_pack_self_tests(
         (
             lambda value: _task(value, "M2.5")["blocked_by"].append("M0"),
             "dependency graph",
+        ),
+        (
+            lambda value: _task(value, "M2.5")["allowed_paths"].append(
+                "docs/product/"
+            ),
+            "M2.5 writes must remain limited",
+        ),
+        (
+            lambda value: _closure_item(value, "BASE-001")[
+                "remaining_task_refs"
+            ].clear(),
+            "retain every active v3 task",
         ),
         (
             lambda value: _task(value, "M2.5")["gated_acceptance_items"][0].__setitem__(
