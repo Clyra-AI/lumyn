@@ -999,19 +999,19 @@ def validate_closure(
             item.get("acceptance_item_ids") == [item_id],
             f"{item_id} closure must be item-granular",
         )
+        require(
+            item.get("implemented_task_refs") == [],
+            f"{item_id} cannot claim an unexecuted v3 task",
+        )
+        require(
+            list_of_strings(item.get("remaining_task_refs"))
+            and item.get("remaining_task_refs") == item.get("task_refs"),
+            f"{item_id} must retain every active v3 task as remaining scope",
+        )
         if expected == "carried_forward":
             require(
                 item.get("evidence_refs") == ledger_item.get("evidence_refs"),
                 f"{item_id} closure evidence differs from ledger",
-            )
-            require(
-                item.get("implemented_task_refs") == [],
-                f"{item_id} cannot claim an unexecuted v3 task",
-            )
-        else:
-            require(
-                list_of_strings(item.get("remaining_task_refs")),
-                f"{item_id} planned closure requires remaining task refs",
             )
     slices = validate_slices(
         closure.get("delivery_slices"),
