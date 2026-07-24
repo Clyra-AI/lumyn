@@ -1,36 +1,33 @@
-# Lumyn Migration MVP Factory Plan
+# Lumyn v3 Migration Factory Plan
 
-This is the active Factory planning generation for the Lumyn
-provider-sponsored, customer-controlled migration MVP.
+This is the active repo-local planning generation for Lumyn v3 services-led,
+provider-paid API and SDK sunset campaigns.
 
 Authored sources:
 
-- `docs/product/prd.md`
-- `docs/product/plan.md`
-- `docs/architecture/adr-0002-provider-sponsored-customer-controlled-migrations.md`
+- `docs/product/prd.md` — exactly 49 item-level acceptance units
+- `docs/product/plan.md` — M0 through M10
+- `docs/architecture/adr-0003-services-led-bounded-agent-migration-execution.md`
 
-Control files:
+The package compiles consumer-local deterministic and bounded-agent generation,
+exact model and product-action controls, independent deterministic verification,
+multi-form local export, optional draft PR delivery, paid qualification, and a
+fair generic-agent baseline.
 
-- `context-brief.json`
-- `risk-classification.json`
-- `execution-plan.json`
-- `task-packets.json`
-- `validation-contract.json`
-- `acceptance-ledger.json`
-- `acceptance-mapping.json`
-- `scope-closure-map.json`
+Dispatch status: **paused and fail closed**.
 
-These files are one generation and must be updated atomically when product
-scope, authority, runtime pins, task dependencies, validation, acceptance, or
-Factory compatibility changes. Product workers may read them but may not update
-canonical closure directly.
+The repo-local v3 planning rebaseline is complete, but the external Factory
+`profiles/lumyn.yaml` contract still represents v2 and `factoryd` has not been
+qualified against this exact v3 task, authority, model, evidence, and closure
+generation. No task, including M0, may dispatch until both dependencies are
+updated, evidenced, and the full repo gate passes. The planning rebaseline is a
+pre-dispatch control update; it is not M0 execution or M0 closure.
 
-The previous `.factory/artifacts/prd-to-plan/lumyn-mvp/` task and control
-artifacts are immutable historical evidence for the superseded agent-readiness
-plan. Its README contains only a non-operative dispatch tombstone. It is not an
-active task source. Carry-forward references in this generation prove only the
-exact CLI, schema, source-intake, planning, and delivery foundations they name.
+The historical `.factory/artifacts/prd-to-plan/lumyn-mvp/` package remains
+immutable and non-active.
 
-Current closure: 5 of 62 acceptance
-items have direct carry-forward or rebaseline evidence. All remaining items are
-planned and must close through item-level evidence.
+Current closure: 3 of 49 items have direct carry-forward evidence
+(`BASE-001`, `BASE-002`, and `BASE-004`). Every other item remains planned.
+Conditional items require explicit disposition evidence; in particular,
+`EXP-003` needs either automated-delivery proof or dated frozen manual-only
+protocol evidence for `not_applicable`.

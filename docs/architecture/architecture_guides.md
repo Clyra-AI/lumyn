@@ -1,28 +1,34 @@
 # Lumyn Architecture Guide
 
+Status: v3 planning architecture; product runtime not implemented
+
 ## Architecture Objective
 
-Lumyn turns a signed API-provider change, verified against a consumer-pinned
-provider trust root and provider-to-package ownership binding, into a bounded,
-verified draft PR inside a consumer-authorized repository without granting the
-provider implicit access to consumer code.
-
-The product begins with a standard campaign kit and signed invitation, not an
-ad hoc operator workflow. Before invitation acceptance, the consumer enrolls
-the provider root/package binding from a separately authenticated bundle and
-out-of-band confirmed fingerprint. Enrollment and acceptance persist only
-outside the checkout and produce a no-authority authorization request. A
-synthetic offline canary must prove the complete local path through a draft-PR
-preview before any live integration is presented as working.
+Lumyn turns provider-confirmed API or SDK sunset intent into a bounded,
+evidence-backed migration handoff inside a consumer-authorized repository.
+Provider sponsorship never grants access to consumer code, and bounded-agent
+generation never grants a model authority over repository scope, verification,
+GitHub delivery, or merge.
 
 The architecture optimizes for:
 
-- explicit authority;
-- local or consumer-CI execution;
-- deterministic, explainable impact and patching;
-- proof-honest verification;
-- fail-closed mutation and disclosure;
-- evidence bound to exact inputs.
+- services-led campaign operation without ambient operator authority;
+- consumer-local or consumer-controlled CI execution;
+- deterministic transforms for exact mappings;
+- bounded-agent generation for approved repository-specific changes;
+- deterministic, baseline-aware verification;
+- exact model egress, credential, network, disclosure, and cost controls;
+- patch and PR-bundle handoff without requiring GitHub access;
+- optional separately authorized remote branch and draft PR;
+- proof-honest evidence and human merge authority.
+
+This guide defines planned boundaries. The compiled v3 control set is
+repo-local planning and validation authority; it does not implement the v3
+runtime or authorize a live product action.
+
+factoryd dispatch remains paused. A separate reviewed change must rebaseline
+the external Factory `profiles/lumyn.yaml` profile and qualify the factoryd
+bundle/runtime against the exact active mission before any task is unpaused.
 
 ## Trust And Data Planes
 
@@ -30,22 +36,27 @@ The architecture optimizes for:
 
 Owns:
 
-- API-provider identity;
-- provider change packet and lifecycle;
-- source/target versions and provenance;
-- invited cohort;
-- compatibility deadline;
-- sandbox semantics;
-- provider-authenticated consumer receipt-key bindings and provider-signed,
-  deduplicated minimal connection-receipt acknowledgements;
-- optional consumer-consented richer status attestations.
+- provider identity and accountable campaign operator;
+- the paid sunset objective and compatibility window;
+- provider-confirmed source/target semantics;
+- migration guidance, canary information, and rollback guidance;
+- a signed declarative provider packet when one is available and confirmed;
+- the invited cohort and commercial campaign decision.
 
 Does not own:
 
 - consumer repository access;
-- consumer commands or credentials;
+- consumer commands, model credentials, or execution;
 - raw source, diffs, logs, traces, prompts, or responses;
-- consumer branch or merge authority.
+- consumer branch, PR, review, or merge authority.
+
+The provider packet is authoritative change data when supplied and confirmed.
+It cannot execute code or widen policy. V3 defers elaborate provider PKI,
+continuous provider-status resolution, and receipt-backed billing.
+
+The v2 `provider-authenticated consumer receipt-key bindings` and
+provider-signed acknowledgement design remains historical context, not an
+active v3 dependency.
 
 ### Consumer Execution Plane
 
@@ -53,646 +64,496 @@ Owns:
 
 - repository and selected package root;
 - read/write path scopes;
-- branch namespace;
-- command allowlist;
-- command host-isolation policy and backend;
-- provider-status snapshot and exact online-refresh policy;
-- dependency lifecycle-script posture;
-- network allowlist;
-- non-production sandbox credentials;
-- private impact, plan, patch, and verification evidence;
-- an explicitly configured private runtime root outside the checkout and any
-  public source repository;
-- automatic private-record TTL and expiry/revocation deletion on creation,
-  read, startup, and the next run, plus deletion receipts or orphan reports;
-- draft-PR approval;
+- migration-plan approval;
+- isolated workspace and local branch;
+- command allowlist and host-isolation policy;
+- model disclosure, endpoint, credential, tool, and budget policy;
+- dependency and package-registry policy;
+- private impact, plan, prompt, response, patch, verification, and PR-bundle
+  evidence;
+- optional remote branch and draft-PR authorization;
 - review and merge.
 
-### Optional Future Model Plane
+Consumer-private runtime state lives outside the checkout and public source
+repository with explicit retention, deletion, and evidence ownership.
 
-Model-assisted patching is outside the MVP. If introduced, it is a third trust
-boundary with independent endpoint, credential, data-disclosure, budget,
-retention, and output-verification policy. It never inherits API-provider or
-consumer authority.
+### Bounded Model Plane
+
+The model plane is active v3 planned scope and a separate trust boundary.
+
+It receives only consumer-authorized, minimized request classes through:
+
+- `model_request_disclosure`;
+- `model_network`;
+- `model_credential`.
+
+It is pinned to an exact endpoint, model/version, parameters, prompt/tool
+definitions, and turn/token/time/retry/cost budgets. Provider material,
+repository content, tool output, and model output are all untrusted data.
+
+The model plane:
+
+- cannot widen tools, paths, network, credentials, or budget;
+- cannot approve a plan or product grant;
+- cannot invoke undeclared shell or network actions;
+- cannot label a result verified;
+- cannot write a remote branch or PR;
+- cannot expose consumer material to the API Provider;
+- cannot self-grade against evaluator-controlled holdouts.
 
 ## Authority Flow
 
 ```text
 API Provider
-  publishes signed declarative packet
-          |
-          v
-Provider campaign plane
-  distributes immutable packet; invites; authenticates receipt signers;
-  signs deduplicated receipt acknowledgements and consented richer status only
-          |
-          | invitation (no repo authority)
-          v
+  funds campaign and confirms sunset intent
+        |
+        v
+Provider Campaign Plane
+  supplies guidance and optional signed declarative packet
+        |
+        | no repository authority
+        v
 Consumer Maintainer
-  pins provider trust root -> accepts no-authority request
-  -> explicitly issues signed read authorization
-  -> optionally signs and submits connection receipt
-  -> verifies and imports provider-signed acknowledgement
-  -> reviews plan
-  -> grants local write/commands -> grants registry if needed
-  -> grants sandbox and payload disclosure if needed
-  -> grants remote branch -> grants draft PR
-          |
-          v
-Consumer execution plane
-  resolves signed current provider status -> verifies signature/package binding
-  -> impact -> patch -> host-isolated verify -> draft PR
+  authorizes read-only impact
+  -> approves no-write migration plan
+  -> authorizes exact local write/command/model boundaries
+        |
+        v
+Consumer Execution Plane
+  deterministic transform or bounded-agent generation
+  -> deterministic verification
+  -> patch + optional local branch + PR bundle
+        |
+        +--> optional remote branch grant
+        +--> optional draft-PR grant
+        |
+        v
+Consumer review and merge
 ```
 
-Each arrow is an explicit state transition with independent evidence.
+Lumyn Operator assistance is an operating role, not an authority plane.
 
 ## Product State Machines
 
-### Provider Packet
+### Provider Intent
 
 ```text
-draft -> published -> superseded | withdrawn
+draft
+-> provider_confirmed
+-> selected_for_campaign
+-> superseded | withdrawn | completed
 ```
 
-- Published content is immutable.
-- Published means immutable for the authorized audience, not publicly
-  disclosed.
-- A new digest creates a new version.
-- Signature, issuer-to-package binding, audience, issue time, expiry, key
-  rotation, revocation, withdrawal, and replay checks must all pass.
-- Superseded or withdrawn packets cannot start new patch runs.
+If a signed declarative packet is used:
+
+```text
+draft
+-> signed
+-> confirmed
+-> selected_for_campaign
+-> superseded | withdrawn | expired
+```
+
+Stale, conflicting, unconfirmed, or executable intent blocks planning or
+mutation.
 
 ### Consumer Authorization
 
 ```text
-request_rendered -> issued -> active -> expired | revoked
+not_requested
+-> read_requested
+-> read_authorized
+-> plan_ready
+-> plan_approved
+-> local_execution_authorized
+-> [model_authorized]
+-> [remote_branch_authorized]
+-> [draft_pr_authorized]
+-> expired | revoked
 ```
 
-A request has no authority. Issuance and revocation are explicit
-consumer-signed private-state actions and perform no granted side effect.
-Repository read, local write, host-isolated command execution, provider-status
-read, package-registry network, sandbox network, sandbox credential, sandbox
-request disclosure, remote branch write, PR write, minimal campaign receipt,
-richer provider reporting, retention, and deletion grants have separate state,
-scope, expiry, and revocation. No grant implies another.
+Each transition is action-specific. Approval at one state does not imply the
+next.
 
 ### Migration
 
 ```text
 not_analyzed
--> impact_complete
--> plan_pending_approval
--> plan_approved
--> patch_generated
--> verification_complete
--> draft_pr_authorized
--> draft_pr_open
--> merged | closed | blocked | superseded
+-> impacted
+-> planned
+-> deterministic_candidate | agent_candidate | needs_input | unsupported
+-> locally_patched
+-> verified | partial | failed | stale
+-> patch_delivered
+-> [local_branch_prepared]
+-> pr_bundle_ready
+-> [remote_branch_pushed]
+-> [draft_pr_open]
+-> merged | closed | reverted
 ```
 
-Stale packet, plan, base/head, or evidence moves the migration to `blocked` or
-`superseded`; it does not silently resume.
+Generation mode and verification strength remain independent.
 
 ## Component Boundaries
 
 | Component | Responsibility | Must not own |
 |---|---|---|
-| CLI | command parsing, config, JSON envelope, exits | product inference |
-| Source intake | pinned OpenAPI/docs/SDK refs, parsing, fingerprints | call-site patching |
-| Change normalizer | supported semantic change entries | consumer repo writes |
-| Packet verifier | signature, trust root, API-provider/package binding, lifecycle, provenance, digest, declarative policy | packet authoring authority |
-| Provider-status resolver | pinned signer, signed offline snapshots, exact authorized endpoint reads, freshness and replay | repository or consumer disclosure |
-| Authorization engine | no-authority requests, consumer-signed issue/revoke, exact grants, expiry, revocation | provider campaign intent or side-effect execution |
-| TypeScript analyzer | SDK/version, imports, call sites, exclusions | file mutation |
-| Impact engine | applicability and coverage classification | patch application |
-| Migration planner | complete no-write plan | filesystem writes |
-| Workspace manager | isolated workspace and safe paths | semantic transformations |
-| Patch engine | three deterministic recipes and manifest | arbitrary business inference |
-| Command runner | allowlisted baseline/build/test execution through exact fail-closed host isolation | ambient host access or sandbox credential distribution |
-| Replay verifier | deterministic workflow evidence | live outcome claims |
-| Sandbox verifier | approved live read-back, budgets, cleanup | production access |
-| Evidence engine | normalized axes, hashes, freshness, redaction | unsupported roll-up claims |
-| Retention manager | automatic TTL/revocation deletion, receipts, retry, orphan recovery, `artifacts gc` | authority extension or historical-closure rewriting |
-| PR adapter | idempotent draft branch/PR delivery | merge |
-| Receipt exchange | provider-authenticated consumer signer binding, minimal receipt issue/submit, provider verification/deduplication/signing, consumer acknowledgement import | repository identity or richer outcome status |
-| Attestation exporter | consumer-signed, receipt/evidence-bound richer campaign status | raw consumer evidence |
-| Outcome ingester | merged/closed/reverted/corrected provenance | silent recipe mutation |
+| CLI | parsing, config, JSON envelope, exits | product inference |
+| Campaign intake | provider-paid scope and confirmed intent | repository authority |
+| Source intake | pinned provider materials and SDK refs | consumer writes |
+| Intent normalizer | typed changes and unresolved questions | arbitrary execution |
+| Authorization engine | exact consumer grants, expiry, revocation | side-effect execution |
+| TypeScript analyzer | package, imports, call sites, exclusions | file mutation |
+| Impact engine | applicability and coverage | patch application |
+| Migration planner | complete no-write route and budgets | approval or writes |
+| Workspace manager | isolated workspace, safe paths, local branch | semantic decisions |
+| Deterministic transformer | exact supported mappings | repository inference |
+| Agent runner | bounded model/tool loop and provenance | verification, approval, GitHub |
+| Command runner | exact host-isolated commands | ambient host access |
+| Verification engine | deterministic checks and evidence | patch generation |
+| Sandbox verifier | optional approved read-back | production access |
+| Evidence engine | axes, hashes, freshness, redaction | unsupported roll-up |
+| PR-bundle renderer | reviewable offline handoff | remote write |
+| GitHub adapter | optional remote branch and draft PR | merge |
+| Attestation exporter | optional consented provider status | raw consumer evidence |
 
-Keep these boundaries in separate packages or small interfaces. Do not add
-impact, patch, GitHub, or attestation behavior to `internal/source`.
-M3 implements the packet verifier in `internal/trust/`; schema-only M2 work and
-commercial canary inspection cannot substitute for that runtime boundary.
-M7 exposes the evidence engine through local-only `lumyn trace` rendering;
-rendering does not cross the provider-attestation or network boundary.
+Keep components behind small interfaces. Do not add impact, agent, patch,
+verification, or GitHub behavior to `internal/source`.
 
 ## Initial Architecture Spine
 
 ```text
-provider source/target artifacts
--> standard campaign kit
--> configured signing and immutable provider change packet
--> signed invitation
--> packet validation
--> independently authenticated provider enrollment
--> consumer campaign acceptance
--> explicit consumer-signed authorization issuance
--> [optional authenticated signer binding, signed minimal receipt, and provider-signed acknowledgement]
--> signed current provider-status resolution
--> TypeScript repository analysis
--> impact report
--> migration plan
+provider-paid campaign scope
+-> provider-confirmed source/target intent
+-> [optional signed declarative provider packet]
+-> consumer read authorization
+-> TypeScript impact report
+-> no-write migration plan
 -> plan approval
--> isolated deterministic patch
--> host-isolated repository baseline and post-patch checks
--> replay/mock workflow evidence
--> [independently authorized sandbox evidence]
--> migration evidence packet
--> explicit draft-PR delivery
--> [optional consented campaign attestation]
--> outcome evidence
+-> local write/command authorization
+-> [model disclosure/network/credential authorization when needed]
+-> isolated deterministic or bounded-agent patch candidate
+-> deterministic repository and workflow verification
+-> patch artifact
+-> optional local branch
+-> PR bundle
+-> [optional remote branch]
+-> [optional draft PR]
+-> consumer review and merge
+-> [optional consented provider status]
 ```
-
-Sandbox verification and draft-PR delivery are independent successors to the
-offline verification spine. M9 cannot inherit or require M8 sandbox authority,
-and absence of provider-reporting consent suppresses only that optional output.
 
 ## Artifact Ownership
 
 ### Provider-Controlled Inputs
 
-- provider change packet;
-- public or prerelease source/target refs;
-- canary fixtures;
-- sandbox and rollback guidance.
+- confirmed sunset objective and deadline;
+- source/target API or SDK artifacts;
+- migration guidance and semantic intent;
+- optional signed declarative packet;
+- sandbox semantics and rollback guidance.
+
+These inputs cannot execute code or grant consumer authority.
 
 ### Consumer-Private Artifacts
 
 - repository authorization;
-- signed authorization revocation;
-- provider enrollment and signed status snapshots;
-- provider-authenticated consumer receipt-key bindings, signed campaign
-  connection receipts, and provider-signed acknowledgements;
-- detailed impact report;
-- migration plan;
-- patch manifest and diff;
-- command logs;
-- workflow traces;
-- credentials and secret-bearing runtime state;
-- detailed verification report.
-- evaluator-controlled held-out repositories, inputs, answer keys, expected
-  patches or labels, and raw traces. An independent holdout owner provisions
-  and freezes these before scoring; they remain outside the checkout and every
-  implementation-worker mount, prompt, and environment.
+- impact and migration plan;
+- model disclosure/network/credential grants;
+- prompts, responses, tool traces, token/cost records;
+- workspace, patch, local branch, and verification;
+- PR bundle and optional GitHub result;
+- retention/deletion evidence.
 
 ### Provider-Visible By Explicit Consent
 
-- minimal provider-acknowledged connection unit containing only campaign and
-  packet binding, eligible-repository unit and invitation nonces, opaque
-  per-campaign organization/repository IDs, connection event/time, tool/schema
-  versions, consent-policy and authenticated key-binding digests, consumer
-  issuer fingerprint, audience, expiry, nonce, signature, and the
-  provider-signed receipt-digest/deduplication acknowledgement;
-- richer campaign/repository pseudonymous status only under a separate grant;
-- authorization state;
-- impact found/no impact/blocked state;
-- draft PR opened;
-- merged/closed;
-- consumer-approved failure category;
-- timing and aggregate outcome fields.
+- campaign-level status fields;
+- opaque repository status;
+- verification boundary;
+- merge/close outcome when consented.
 
-Provider-visible schemas use field allowlists; they are not redacted copies of a
-larger private object.
+Raw source, diffs, prompts, responses, logs, traces, and credentials are private
+by default.
 
 ### Storage And Disclosure Boundary
 
-- Consumer-private runtime and identifiable pilot artifacts live in an
-  explicitly configured consumer-controlled state root outside the checkout
-  and any public source repository.
-- The runtime rejects a private root that resolves inside either boundary,
-  including through a symlink. Repository ignore rules for legacy roots are
-  defense in depth, not storage authorization.
-- Private artifacts carry authorization-bound TTL and are deleted on expiry or
-  revocation automatically at creation, read, process startup, and the next
-  run. Cleanup emits a deletion receipt or an orphan report.
-- `lumyn artifacts gc` is an explicit recovery surface for retrying partial
-  deletion and inspecting unresolved orphans. It cannot extend TTL, revive
-  revoked authority, or alter historical closure claims.
-- The committed holdout manifest may contain only opaque case IDs,
-  non-resolving provenance class and license posture, a frozen suite
-  commitment, and encrypted or HMAC artifact commitments. It contains no
-  source URL, repository or package identifier, plaintext content digest, raw
-  private content, or machine-local path. The M1 lifecycle-owned
-  `holdout_result` binds independent provisioning and that frozen commitment.
-  M1 declares provision mode, `holdout_provisioning_required`, an opaque
-  private namespace, and the HMAC algorithm; that gate creates future-use
-  evidence and is not current-candidate evaluation. M4/M6/M7 declare
-  `holdout_evaluation_required`; their evaluate-mode policies resolve and bind
-  the exact trusted M1 result bytes. Static planning never fabricates the
-  future commitment.
-- Provider-visible and public are separate consent decisions. The only public
-  pilot artifacts are explicitly public, consented, redacted aggregates and
-  evidence hashes under
-  `.factory/artifacts/pilot/lumyn-migration-mvp/public/`.
-- Provider export and public commit are irreversible disclosure boundaries.
-  Revocation stops future sharing and deletes Lumyn-controlled private copies;
-  it cannot recall provider records, Git history, clones, or caches.
+Private product state lives in a configured consumer-controlled root outside
+the checkout and public source repository. Provider disclosure and model
+disclosure are separate. Both require exact field/request policies.
+
+Committed Factory artifacts contain source-safe control, lifecycle, or
+aggregate/hash evidence only. They refer to private evidence by opaque ID and
+digest.
 
 ### Factory Worker Versus Product Authority
 
-Factory controls repository implementation work with its closed
-`approval`, `credentials`, and `network` capabilities. Lumyn controls consumer
-operations with separate private, schema-backed product grants such as
-`customer_repo_read`, `provider_trust_status_read`, `command_execution`,
-`sandbox_request_disclosure`, `github_pr_write`, `campaign_receipt`,
-`provider_attestation`, `artifact_retention`, and `artifact_deletion`.
-Factory approval may cite the opaque digest of a validated product
-authorization bundle, but the bundle is evaluated by Lumyn's authorization
-contract and no Factory grant conveys product authority. Factory selection and
-dispatch validate implementation-worker controls and task declarations, not
-the private product bundle. Lumyn revalidates current packet trust and the
-exact applicable bundle internally, immediately before every local, sandbox,
-GitHub, or attestation side effect and retry. A standalone
-`lumyn authorization validate` result is diagnostic and closure evidence, not
-cached runtime authority.
+Factory uses only its closed `approval`, `credentials`, and `network`
+capabilities for implementation workers. Lumyn product grants remain private
+and action-specific. Factory dispatch cannot confer repository, model, branch,
+PR, or merge authority.
 
-The narrower M2.5 evidence-handling approval binds the canonical digest of its
-exact private fields, storage boundary, consent, TTL, deletion, orphan,
-minimal-receipt, public-disclosure, and disclosure-irreversibility scope. A
-generic approval or a digest from an earlier scope cannot release collection.
+The active repo-local v3 control set does not by itself qualify factoryd.
+Until the external profile and factoryd runtime are requalified, the
+mission-paused configs are an enforced stop rather than an executable
+implementation path.
 
 ### Independent Promotion Evidence
 
-When a task requires independent review, the lifecycle order after
-`code-review` is `holdout-evaluator`, `trace-grader`, then
-`evidence-attestor`, before `commit-push`. These evaluators are external or
-human-operated trust principals, not implementation-worker modes. Each emits a
-schema-valid passing artifact bound to the exact task, work item, lifecycle run,
-current validation run, candidate digest, and work-proof marker digest in the
-trusted Factory evidence root. The lifecycle namespace is not writable by the
-implementation worker. Shipping fails before commit or PR creation if evidence
-is missing, stale, replayed, self-authored, malformed, or non-passing, or if its
-review lens/reviewer class differs from the task-level requirement.
-Only workers selected by the task run: M1 provisions and freezes its suite
-through `holdout-evaluator`, while M10 uses only `evidence-attestor` to review
-privacy-approved campaign calculations and never receives the benchmark
-holdout root.
+When task policy selects `code-review`, `holdout-evaluator`, `trace-grader`, or
+`evidence-attestor`, each writes current, task-bound evidence outside the
+implementation worker's writable scope. Shipping fails before `commit-push`
+when required independent evidence is absent, stale, self-authored, or
+non-passing.
 
 ## Evidence Model
 
-Migration evidence has orthogonal axes:
+Evidence preserves separate axes for:
 
+- provider-confirmed intent;
 - impact coverage;
-- patch state and provenance;
-- repository verification;
-- workflow environment and outcome;
-- cleanup, boundary, and redaction;
-- delivery;
+- generation mode and provenance;
+- patch scope;
+- repository baseline and checks;
+- workflow execution;
+- model disclosure and cost;
+- delivery state;
 - permission state;
 - residual risk.
 
-Evidence binds to:
+Bind evidence to:
 
-- packet digest;
-- source and target artifact digests;
-- repository base and head commits;
+- intent and source/target digests;
+- repository base and candidate heads;
 - plan digest;
-- patch/recipe digests;
+- deterministic recipe or model/prompt/tool provenance;
+- patch digest;
 - command and environment identity;
 - workflow/cassette/sandbox identity;
-- evidence artifact hashes.
+- artifact hashes.
 
-Any bound input change invalidates dependent evidence.
+Changing any bound input invalidates dependent evidence.
 
-Verification uses the canonical labels `not_run`, `static_verified`,
+Canonical verification labels remain `not_run`, `static_verified`,
 `repo_verified`, `workflow_contract_replay_passed`,
 `workflow_verified_replay`, `workflow_verified_mock`,
 `workflow_verified_sandbox`, `partial`, `failed`, `gap`, and `stale`.
-Independent contract or cassette replay is
-`workflow_contract_replay_passed` and cannot exceed `repo_verified`.
-`workflow_verified_replay`, `workflow_verified_mock`, and
-`workflow_verified_sandbox` require an approved entrypoint executed from the
-exact patched repository head and observed interaction and outcome evidence in
-that named environment. Results copied from the base commit, another head, or
-an independently executed contract/cassette are not causal patched-head proof.
-A missing causal execution or any boundary, cleanup, redaction, freshness, or
-evidence-integrity failure prevents a workflow-verified label.
+
+Agent completion is never a verification label.
 
 ## Structured Parser Boundaries
 
 - OpenAPI, JSON, YAML, manifests, lockfiles, schemas, CI results, and GitHub
-  responses use structured parsers or APIs.
-- TypeScript supported impact uses an AST or comparably structured parser.
-- Text search may seed discovery but cannot alone prove a patchable call site.
-- The consumer selects one canonical package/read root. All manifests,
-  lockfiles, TypeScript sources, `tsconfig` `extends`, project references, and
-  resolved module paths must remain inside that root after real-path
-  resolution.
-- Symlink escape, path traversal, an out-of-root `tsconfig` reference, or an
-  ambiguous/multiple package root fails closed before analysis.
+  responses use structured parsers or stable APIs.
+- Supported TypeScript impact uses an AST or comparably structured parser.
+- Text search can seed discovery but cannot prove patchability.
+- The consumer selects one canonical package/read root.
+- Symlink escape, path traversal, out-of-root references, and ambiguous roots
+  fail before analysis.
 - External refs remain blocked in deterministic tests.
-- Parser cycles, missing refs, and source/SDK disagreement fail closed.
 
 ## Patch Safety Boundary
 
-Patch application must:
+Every patch mode must:
 
-- start from an approved immutable plan;
-- revalidate the current packet bytes, digest, provider trust root and package
-  binding, lifecycle, audience, expiry, rotation, revocation, withdrawal,
-  supersession, and replay state immediately before every write; plan-time
-  trust is never cached across a mutation boundary;
-- run in an isolated worktree or disposable equivalent;
+- start from an immutable approved plan;
+- bind current provider-confirmed intent and repository base;
+- run in an isolated worktree or equivalent;
 - canonicalize and validate real paths;
-- reject path traversal and symlink escape;
-- exclude generated, vendored, minified, cache, and build output;
-- enforce writable paths, file count, line count, and diff content budgets;
-- map every edit to packet change and recipe IDs;
-- remain deterministic for identical pinned inputs;
-- mutate `package-lock.json` only with exact Node and npm versions, a pinned
-  registry or offline snapshot, recorded package-integrity inputs, lifecycle
-  scripts disabled, and a bound toolchain digest;
-- produce rollback evidence;
+- reject traversal and symlink escape;
+- exclude generated, vendored, cache, and build output unless explicitly
+  approved;
+- enforce writable paths and file/line/diff budgets;
+- map each edit to a plan item;
+- produce generation provenance and rollback evidence;
 - leave the default branch untouched.
+
+Deterministic mode additionally records the recipe and produces the same patch
+for identical pinned inputs.
+
+Agent mode additionally enforces exact model, endpoint, prompt/tool, disclosure,
+network, credential, turn/token/time/retry/cost, and tool-call boundaries. It
+does not claim byte-identical patch determinism.
 
 ## Command Execution Boundary
 
 Repository commands are untrusted code:
 
 - exact allowlist and working directory;
-- exact read-only/writable mounts plus neutral home and temp roots;
-- explicit executable and toolchain roots;
+- exact read-only/writable mounts and neutral home/temp;
+- explicit executable/toolchain roots;
 - timeout and output budgets;
 - network disabled by default;
-- package-registry access requires a separate `package_registry_read` grant
-  restricted to the approved registry or snapshot and package set;
-- dependency lifecycle scripts disabled by default;
-- exact Node/npm versions, registry identity, package-integrity inputs, and
-  toolchain digest recorded for any lockfile mutation;
-- sanitized environment classes and no ambient secrets;
-- no host home, SSH/GPG/cloud credential stores, keychain or OS credentials;
-- no agent, Docker, or unrelated local-service sockets;
-- no inherited file descriptors beyond standard streams;
-- child processes inherit mounts, environment, socket, descriptor, credential,
-  network, and resource restrictions;
-- a supported fail-closed isolation backend is mandatory and an unavailable or
-  unverifiable backend blocks before launch;
-- sandbox credentials absent from build/test stages;
-- pre-patch baseline separated from post-patch result;
-- output stored by bounded artifact ref and hash;
-- cancellation and crash recovery leave a typed result.
+- lifecycle scripts disabled by default;
+- sanitized environment and no ambient secrets;
+- no host home, credential stores, OS credentials, agent/Docker/unrelated
+  sockets, or extra inherited descriptors;
+- child processes inherit every restriction;
+- an unenforceable host-isolation backend blocks before launch;
+- pre-patch baseline remains separate from post-patch result.
+
+Model tools do not bypass this boundary.
 
 ## Live Sandbox Boundary
 
-Sandbox verification requires:
-
-- task-scoped API-provider and environment identity;
-- non-production credentials;
-- a `sandbox_network` grant naming the destination and operation allowlists;
-- an independent `sandbox_credential` grant naming the non-production
-  credential class, scopes, injection stage, expiry, and revocation;
-- a separate `sandbox_request_disclosure` grant naming transmitted payload
-  classes;
-- synthetic or explicitly approved non-sensitive test data only; production
-  customer data, PII, credentials, and secrets are prohibited;
-- declared provider logging behavior, retention period, and deletion terms;
-- namespace and idempotency key;
-- request/write budgets;
-- settle/retry limits;
-- cleanup;
-- orphan evidence;
-- explicit statement that sandbox proof is not production proof.
-- current packet trust and every exact product grant revalidated inside Lumyn
-  immediately before each sandbox call and retry from a current signed offline
-  status snapshot or exact `provider_trust_status_read` grant; Factory worker
-  grants do not confer this authority.
-
-Production access is outside the MVP.
+Optional sandbox verification requires separate request disclosure, network,
+and credential grants. It uses non-production data and credentials, exact
+endpoint/operations, request/write budgets, idempotency, cleanup, retention, and
+orphan evidence. Sandbox proof is independent from local deterministic
+verification and optional draft-PR delivery.
 
 ## GitHub Boundary
 
-- Repository read, `github_branch_write`, and `github_pr_write` are separate;
-  none implies another.
-- Installation tokens are repository-scoped and short-lived.
-- Only the authorized branch namespace may be used.
-- Default-branch write is prohibited.
+- Patch and PR-bundle delivery require no GitHub credential.
+- Local branch creation remains inside the consumer execution plane.
+- Remote branch write and draft-PR write are separate grants.
 - PRs are draft-only.
-- Idempotency binds campaign, repository, packet, and base state.
-- Current packet trust plus branch, PR, reporting, retention, and deletion
-  authority are revalidated inside Lumyn from a current signed offline status
-  snapshot or exact `provider_trust_status_read` grant immediately before every
-  remote read-modify-write and retry.
-- Lumyn does not merge.
+- Idempotency binds repository, base, head, and plan/evidence digests.
+- Default-branch writes and auto-merge are prohibited.
+- Provider payment never authorizes a GitHub action.
 
 ## Systems Thinking Map
 
-State owners:
+| State | Owner | Feedback | Failure signal | Recovery |
+|---|---|---|---|---|
+| Campaign scope | API Provider + Lumyn Operator | confirmed sunset decision | unclear intent or no accountable buyer | re-scope or stop |
+| Repository authority | Consumer | grant/revoke | missing or stale grant | request exact authority |
+| Model authority | Consumer | request/cost/provenance evidence | disclosure, credential, endpoint, or budget drift | stop and reauthorize |
+| Patch candidate | Consumer execution plane | diff and provenance | scope escape or unsupported inference | discard workspace |
+| Verification | Consumer execution plane | pinned command evidence | stale head or failed check | repair or report |
+| PR bundle | Consumer | review feedback | incomplete evidence or residual risk | regenerate bundle |
+| Remote branch/PR | Consumer | GitHub state | stale base, duplicate, or denied grant | refresh or remain offline |
+| Merge | Consumer Maintainer | CI/review/outcome | close, revert, or correction | human remediation |
 
-- provider packet: API Provider;
-- API-provider trust root and authorization: API Consumer Organization;
-- active plan and acceptance: Lumyn repository/Factory;
-- patch and detailed evidence: consumer execution plane;
-- attestation: consumer-consented export;
-- merge outcome: consumer repository.
-
-Feedback sources:
-
-- schema and parser validation;
-- corpus precision/recall;
-- golden patch comparison;
-- compile/typecheck/tests;
-- replay and sandbox read-back;
-- cleanup/orphan evidence;
-- PR correction and merge outcome;
-- provider support and migration metrics;
-- invite-to-consent conversion.
-
-Deletion blast radius:
-
-- deleting packet provenance invalidates migration trust;
-- deleting authorization invalidates further execution;
-- expiry or revocation triggers private-record deletion and a deletion receipt
-  or orphan report;
-- revocation blocks future provider/public disclosure but cannot recall copies
-  already exported or committed;
-- deleting plan or patch hashes invalidates evidence;
-- deleting workflow/cassette invalidates replay proof;
-- deleting private logs may preserve a bounded attestation but prevents detailed
-  audit;
-- deleting active Factory artifacts prevents governed dispatch;
-- deleting historical evidence must not be used to rewrite old closure claims.
-
-Medium/high-risk tasks record state owner, feedback source, deletion impact,
-rollback/deletion test, and source-of-truth changes.
+Do not optimize generation quality while hiding consent, activation, review, or
+operator cost.
 
 ## TDD And Red-First Expectations
 
-- Behavior changes start with a failing unit, fixture, contract, golden patch,
-  scenario, or permission test when practical.
-- Schemas add invalid fixtures before accepting new shapes.
-- Impact tasks fix ground truth before scoring.
-- Patch tasks fix expected patches before implementation.
-- Verification tasks include false-green cases first.
-- GitHub and sandbox tasks use mocks before live access.
-- If red-first is impractical, validation evidence records the exact reason and
-  compensating proof.
+- Add a failing unit, integration, scenario, permission, prompt-injection, or
+  budget test before behavior when practical.
+- Freeze corpus ground truth before scoring.
+- Fix expected deterministic patches before implementing recipes.
+- For agent mode, freeze outcome constraints and evaluators without exposing
+  held-out answers.
+- Add false-green verification cases first.
+- Use mocks before live model, sandbox, or GitHub access.
 
 ## ADR And Decision Triggers
 
 Require an ADR or decision update for:
 
-- provider/consumer authority;
-- execution-plane or data-sharing changes;
-- command or JSON contract changes;
-- schema compatibility;
-- parser runtime boundary;
-- patch isolation or filesystem ownership;
-- credential or network posture;
+- authority, execution-plane, or data-sharing changes;
+- model provider, endpoint, credential, disclosure, or budget posture;
+- agent tools or isolation;
+- public command or schema contracts;
+- patch/branch/PR-bundle ownership;
+- verification semantics;
 - GitHub permissions;
-- workflow proof semantics;
-- model-assisted patching;
 - hosted campaign coordination;
 - release/distribution posture;
-- major performance or reliability tradeoffs.
+- major performance, cost, or reliability tradeoffs.
 
-ADR-0002 records the product and trust reframe. ADR-0001 remains historical
-context for the retained evidence foundation.
+ADR-0003 governs services-led bounded-agent execution. ADR-0002 remains
+historical context for the v2 provider-sponsored deterministic-first rebaseline.
 
 ## Performance And Cost Triggers
 
-- Impact analysis target: median under five minutes on the fixed corpus.
-- Draft-PR preparation target: median under twenty minutes excluding
-  repository-defined test duration.
-- Parser startup, repository size, file count, AST memory, test duration,
-  sandbox requests, artifact size, and GitHub calls are explicit budgets.
-- Fan-out across repositories is not introduced before one-repository
-  determinism and authorization are proven.
-- Model cost is not an MVP budget because model-assisted patching is deferred.
+- Measure impact analysis, generation, verification, and PR-bundle duration
+  separately.
+- Record repository size, file count, AST memory, command duration, artifact
+  size, and GitHub calls.
+- Agent mode records prompt/response size, turns, tokens, retries, wall time,
+  model cost, tool calls, and operator interventions.
+- Budget exhaustion fails closed; it never silently switches model or widens
+  scope.
+- Provider and consumer labor remain visible beside Lumyn operator time.
 
 ## Reliability And Recovery Triggers
 
 Test:
 
-- interrupted workspace creation;
-- stale base or packet;
-- partial patch;
-- command timeout;
-- flaky/pre-existing tests;
-- sandbox timeout and drift;
-- cleanup and orphan failure;
-- GitHub retry and duplicate PR;
-- revoked or expired authorization;
-- revocation, packet rotation, or packet withdrawal between validation and a
-  local, sandbox, or remote side effect;
-- partial private-artifact deletion, process restart, retry, deletion-receipt
-  loss, and orphan recovery;
-- redaction failure;
-- attestation retry/idempotency.
+- interrupted workspace and partial patch;
+- stale base, intent, plan, or model policy;
+- model timeout, malformed tool call, prompt injection, budget exhaustion, and
+  partial response;
+- command timeout and flaky/pre-existing tests;
+- sandbox drift and cleanup failure;
+- PR-bundle regeneration;
+- GitHub retry, stale branch, and duplicate PR;
+- revoked or expired authority;
+- redaction and private-artifact deletion failure.
 
-Retries never widen permissions or change idempotency identity. Recovery cannot
-reuse stale evidence.
+Retries preserve the same authorization and idempotency identity.
 
 ## Trust-Mode Posture
 
-### Deterministic Benchmark
+### Public Fixture Planning
 
-- no network;
-- no ambient secrets;
-- no customer repository;
+- no consumer repository;
+- no live model or external credential;
 - no GitHub write;
-- no provider sandbox;
-- committed permitted fixtures only.
+- pinned, licensed, source-safe fixtures only.
 
 ### Consumer Repository Read
 
-- task-scoped read grant;
-- explicit consumer-signed issuance after a no-authority request;
-- current signed offline provider-status snapshot or exact authorized online
-  refresh;
-- no mutation;
+- exact task-scoped read grant;
+- read-only impact;
 - no provider visibility.
 
 ### Consumer Mutation
 
 - approved plan digest;
 - scoped isolated write;
-- exact commands through the fail-closed host-isolation backend;
+- exact command boundary;
 - no network by default.
-- package-registry access, when required, is a separate destination- and
-  package-scoped grant.
+
+### Bounded Agent
+
+- exact disclosure, endpoint, credential, tools, and budgets;
+- isolated workspace;
+- no ambient authority;
+- untrusted output;
+- independent deterministic verification.
 
 ### Live Sandbox
 
-- separate non-production credential/network and request-disclosure grants;
-- synthetic or approved non-sensitive payloads only;
-- declared provider logging, retention, and deletion terms;
-- cleanup and orphan evidence.
+- optional non-production verification;
+- separate disclosure, network, and credential grants;
+- cleanup and evidence.
 
 ### Draft PR
 
-- separate remote-branch-write and PR-write grants;
-- draft-only non-default branch.
+- optional remote branch plus separate draft-PR grant;
+- evidence-bound idempotency;
+- no merge authority.
 
 ### Provider Attestation
 
-- exact field-level consumer consent.
+- optional exact field allowlist;
+- no raw consumer evidence by default.
 
 ## Runtime Shape
 
-Current:
+```text
+Go orchestration core
+  -> structured provider-intent intake
+  -> TypeScript impact adapter
+  -> migration planner
+  -> deterministic transformer
+  -> bounded-agent adapter
+  -> isolated workspace and command runner
+  -> deterministic verification engine
+  -> evidence and PR-bundle renderer
+  -> optional sandbox adapter
+  -> optional GitHub adapter
+```
 
-- `cmd/lumyn/`: command entry and process exit.
-- `internal/config/`: repo-local config.
-- `internal/result/`: stable command-result envelope.
-- `internal/exitcode/`: stable exit codes.
-- `internal/source/`: OpenAPI/docs parsing and findings.
-- `internal/version/`: version metadata.
-- `schemas/`: current executable contracts.
-
-Planned boundaries:
-
-- `internal/change/`
-- `internal/trust/`
-- `internal/authorization/`
-- `internal/isolation/`
-- `internal/receipt/`
-- `internal/typescript/`
-- `internal/impact/`
-- `internal/migrationplan/`
-- `internal/workspace/`
-- `internal/patch/`
-- `internal/verify/`
-- `internal/replay/`
-- `internal/live/`
-- `internal/evidence/`
-- `internal/retention/`
-- `internal/report/`
-- `internal/github/`
-- `internal/attestation/`
-- `internal/outcome/`
-
-Private product artifact roots are added only outside the checkout and public
-source repository, after their schema, explicit configuration, TTL, cleanup
-ownership, deletion receipt/orphan behavior, and reference contract are
-implemented. Only synthetic/licensed fixtures and consented aggregate/hash-only
-public evidence are committable.
-
-The current repository and pilot package are not called OSS. Design-partner
-distribution requires explicit terms, security/support routes, signed
-provenance, checksums, and install-integrity instructions. Public OSS/self-serve
-requires an approved license and security, contribution, support, and
-vulnerability-response policies.
+Keep model adapters behind a narrow interface. No model endpoint, SDK, or
+hosted control plane becomes an implicit dependency.
 
 ## Architecture Budget And Decomposition
 
-Source files warn at `1200` lines and fail at `2500` lines. New product domains
-must not be appended to the source parser or repo-pack orchestration.
-
-The rebaseline should shrink the plan validator below its previous
-shrink-only ceiling. The existing architecture-debt exception remains valid
-only while its recorded line ceiling matches the file and expires according to
-policy. Remove it in a dedicated validated change when the validator no longer
-needs an exception.
-
-`internal/source` is already decomposed. Preserve that progress by placing
-change normalization, TypeScript analysis, impact, patch, verification, GitHub,
-and attestation in their own bounded packages.
+Source files warn at 1200 lines and fail at 2500 lines under the repository
+architecture-budget policy. Decompose campaign intake, authorization, impact,
+planning, agent execution, patching, verification, PR-bundle rendering, and
+GitHub delivery rather than creating a product monolith.

@@ -45,6 +45,13 @@ _PREFLIGHT_DIGEST_FIELDS = (
     "product_runtime_authority",
     "failure_behavior",
 )
+_CONDITIONAL_ACTIVATION_DIGEST_FIELDS = (
+    "task_id",
+    "action_mode",
+    "selected_capabilities",
+    "evidence_ref",
+    "expires_at",
+)
 
 
 def manual_preflight_scope_digest(preflight: dict[str, Any]) -> str:
@@ -52,6 +59,21 @@ def manual_preflight_scope_digest(preflight: dict[str, Any]) -> str:
 
     canonical = json.dumps(
         {field: preflight.get(field) for field in _PREFLIGHT_DIGEST_FIELDS},
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    )
+    return f"sha256:{hashlib.sha256(canonical.encode()).hexdigest()}"
+
+
+def conditional_activation_scope_digest(activation: dict[str, Any]) -> str:
+    """Hash the exact route-selected conditional Factory capability set."""
+
+    canonical = json.dumps(
+        {
+            field: activation.get(field)
+            for field in _CONDITIONAL_ACTIVATION_DIGEST_FIELDS
+        },
         ensure_ascii=False,
         separators=(",", ":"),
         sort_keys=True,
@@ -136,7 +158,7 @@ def _future_expiry(value: Any, label: str) -> None:
 
 
 def validate_active_repo_safety(repo: Any, artifact_refs: dict[str, str]) -> None:
-    """Keep the gitignored active daemon config attended and locally bounded."""
+    """Keep every checked-in or local v3 daemon config dispatch-paused."""
 
     _require(isinstance(repo, dict), ".factory/factoryd.json missing repos.lumyn")
     ref_fields = {
@@ -155,8 +177,45 @@ def validate_active_repo_safety(repo: Any, artifact_refs: dict[str, str]) -> Non
         repo.get("auto_ship") is False
         and isinstance(shipping, dict)
         and shipping.get("enabled") is False,
-        ".factory/factoryd.json must remain safe-attended; use "
-        "factoryd.autoship.example.json for full-loop shipping",
+        ".factory/factoryd.json must keep auto_ship and shipping disabled",
+    )
+    for field in (
+        "push_required",
+        "pr_required",
+        "ci_required",
+        "codex_review_required",
+        "merge_required",
+        "post_merge_required",
+        "scope_closure_required",
+    ):
+        _require(
+            shipping.get(field) is False,
+            f".factory/factoryd.json shipping.{field} must remain false",
+        )
+    control = repo.get("runtime_control")
+    _require(
+        isinstance(control, dict) and control.get("mission_paused") is True,
+        ".factory/factoryd.json runtime_control.mission_paused must be true",
+    )
+    _require(
+        control.get("conflict_behavior") == "fail_closed",
+        ".factory/factoryd.json conflict behavior must fail closed",
+    )
+    _require(
+        control.get("release_freeze", {}).get("enabled") is True,
+        ".factory/factoryd.json release freeze must remain enabled",
+    )
+    launch = control.get("launch_request", {})
+    _require(
+        launch.get("requested_action") == "pause_mission"
+        and launch.get("expected_decision") == "deny"
+        and launch.get("reason_code")
+        == "factory_profile_and_runtime_v3_unqualified",
+        ".factory/factoryd.json launch request must deny v3 dispatch",
+    )
+    _require(
+        repo.get("capability_grants") == [],
+        ".factory/factoryd.json grants must remain empty while dispatch is paused",
     )
 
 
@@ -170,11 +229,16 @@ def validate_authority_grants(
     Exact Lumyn product permissions are separate private authorization artifacts
     named by each task's ``product_authority_requirements``. Factory grants only
     authorize the worker to consume an already validated product bundle.
+    Conditional Factory grants additionally bind one frozen task/action mode,
+    exact selected capability set, evidence ref, digest, and expiry.
     """
 
     _require(isinstance(grants, list), "active capability_grants must be a list")
     seen: set[tuple[str, str]] = set()
     approved: dict[str, set[str]] = {}
+    conditional_selected: dict[str, set[str]] = {}
+    conditional_granted: dict[str, set[str]] = {}
+    conditional_scope_digest: dict[str, str] = {}
     for index, grant in enumerate(grants):
         label = f"active capability grant {index}"
         _require(isinstance(grant, dict), f"{label} must be an object")
@@ -185,12 +249,77 @@ def validate_authority_grants(
         pair = (task_id, capability)
         _require(pair not in seen, f"{label} duplicates grant {task_id}/{capability}")
         seen.add(pair)
-        declared = set(tasks[task_id].get("requires_capabilities", []))
+        required = set(tasks[task_id].get("requires_capabilities", []))
+        conditional = set(
+            tasks[task_id].get("conditional_factory_capabilities", [])
+        )
+        declared = required | conditional
         _require(capability in declared, f"{label} capability is not declared by task {task_id}")
         if grant.get("approved") is not True:
             continue
         _scoped_ref(grant.get("evidence_ref"), f"{label}.evidence_ref")
         _future_expiry(grant.get("expires_at"), f"{label}.expires_at")
+        if capability in conditional and capability not in required:
+            activation = grant.get("conditional_activation")
+            _require(
+                isinstance(activation, dict),
+                f"{label}.conditional_activation is required",
+            )
+            _require(
+                activation.get("task_id") == task_id,
+                f"{label}.conditional_activation must bind task {task_id}",
+            )
+            _exact_text(
+                activation.get("action_mode"),
+                f"{label}.conditional_activation.action_mode",
+            )
+            selected = activation.get("selected_capabilities")
+            _exact_list(
+                selected,
+                f"{label}.conditional_activation.selected_capabilities",
+            )
+            _require(
+                selected == sorted(selected),
+                f"{label}.conditional_activation.selected_capabilities must be sorted",
+            )
+            selected_set = set(selected)
+            _require(
+                selected_set.issubset(conditional),
+                f"{label}.conditional_activation selects undeclared capabilities",
+            )
+            _require(
+                capability in selected_set,
+                f"{label} is outside its selected conditional capability set",
+            )
+            _scoped_ref(
+                activation.get("evidence_ref"),
+                f"{label}.conditional_activation.evidence_ref",
+            )
+            _future_expiry(
+                activation.get("expires_at"),
+                f"{label}.conditional_activation.expires_at",
+            )
+            _require(
+                grant.get("expires_at") == activation.get("expires_at"),
+                f"{label} expiry must equal its conditional activation expiry",
+            )
+            digest = activation.get("scope_digest")
+            _require(
+                _SHA256.fullmatch(str(digest)) is not None
+                and digest == conditional_activation_scope_digest(activation),
+                f"{label}.conditional_activation.scope_digest must bind its exact scope",
+            )
+            prior_digest = conditional_scope_digest.setdefault(task_id, digest)
+            _require(
+                prior_digest == digest,
+                f"{task_id} grants must use one conditional activation",
+            )
+            prior_selected = conditional_selected.setdefault(task_id, selected_set)
+            _require(
+                prior_selected == selected_set,
+                f"{task_id} conditional activation selections differ",
+            )
+            conditional_granted.setdefault(task_id, set()).add(capability)
         preflight = tasks[task_id].get("manual_external_evidence_preflight")
         if capability == "approval" and isinstance(preflight, dict):
             expected_digest = manual_preflight_scope_digest(preflight)
@@ -223,3 +352,8 @@ def validate_authority_grants(
             continue
         missing = expected - task_grants
         _require(not missing, f"{task_id} active grants missing exact Factory capabilities {sorted(missing)}")
+    for task_id, selected in conditional_selected.items():
+        _require(
+            conditional_granted.get(task_id, set()) == selected,
+            f"{task_id} active grants must match its exact selected conditional capabilities",
+        )
