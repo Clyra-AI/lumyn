@@ -1,7 +1,8 @@
 {
   "factory": {
     "repo_path": "${FACTORY_REPO}",
-    "profile_path": "profiles/lumyn.yaml"
+    "profile_path": "profiles/lumyn.yaml",
+    "profile_compatibility_status": "blocked_v3_profile_update_required"
   },
   "repos": {
     "lumyn": {
@@ -23,20 +24,22 @@
       "runtime_control": {
         "owner": "factoryd-operator",
         "autonomy_level": "restricted",
-        "mission_paused": false,
+        "mission_paused": true,
         "mission_canceled": false,
-        "disabled_adapters": [],
+        "disabled_adapters": [
+          "codex_cli"
+        ],
         "max_write_scope_paths": [],
         "release_freeze": {
-          "enabled": false,
-          "reason": "",
+          "enabled": true,
+          "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
           "exception_ref": ""
         },
         "launch_request": {
-          "requested_action": "continue_mission",
+          "requested_action": "pause_mission",
           "requested_adapter": "codex_cli",
-          "expected_decision": "allow",
-          "reason_code": "within_runtime_control_limits"
+          "expected_decision": "deny",
+          "reason_code": "factory_profile_and_runtime_v3_unqualified"
         },
         "conflict_behavior": "fail_closed"
       },
@@ -44,21 +47,21 @@
       "worker_timeout_seconds": 1800,
       "lease_ttl_seconds": 3600,
       "mode": "until_blocked",
-      "auto_ship": true,
+      "auto_ship": false,
       "shipping": {
-        "enabled": true,
+        "enabled": false,
         "provider": "github_cli",
         "skip_commit": false,
         "commit_message": "factoryd: complete {task_id}",
         "merge_method": "squash",
         "scope_closure_mode": "semantic",
-        "push_required": true,
-        "pr_required": true,
-        "ci_required": true,
-        "codex_review_required": true,
-        "merge_required": true,
-        "post_merge_required": true,
-        "scope_closure_required": true,
+        "push_required": false,
+        "pr_required": false,
+        "ci_required": false,
+        "codex_review_required": false,
+        "merge_required": false,
+        "post_merge_required": false,
+        "scope_closure_required": false,
         "push_command": "",
         "open_pr_command": "",
         "ci_command": "",
@@ -67,9 +70,11 @@
         "post_merge_command": "",
         "scope_closure_command": ""
       },
-      "approval_posture": "Factory worker grants use only approval, credentials, and network; Factory dispatch does not validate or confer private Lumyn product authority, which Lumyn enforces at each live-action boundary, and daemon shipping never grants product auto-merge",
-      "credential_posture": "no ambient customer or provider secrets; repository commands run through a fail-closed host-isolation backend with exact mounts, sanitized environment, closed host credential/socket/descriptor surfaces, and inherited child restrictions; approved sandbox and GitHub credentials are task-scoped and isolated",
-      "network_posture": "offline by default; provider-status, package-registry, sandbox, GitHub branch, and GitHub PR destinations require separate task-scoped allowlists",
+      "approval_posture": "Factory worker capabilities are only approval, credentials, and network; they never substitute for separate Lumyn product action authorization or human merge.",
+      "credential_posture": "no ambient consumer, API Provider, Model Provider, sandbox, or GitHub credentials; any future credential is exact and task-scoped",
+      "network_posture": "offline by default; any future model, registry, sandbox, or GitHub endpoint is exact and task-scoped",
+      "dispatch_posture": "Factory dispatch paused: the external v3 profile and factoryd qualification are required before any task may run.",
+      "template_status": "autoship_template_paused_until_v3_qualification",
       "capability_grants": [],
       "budget": {
         "max_worker_tokens": 0,
@@ -81,9 +86,29 @@
         "policy_ref": "https://github.com/Clyra-AI/factory/blob/main/docs/standards/architecture-fitness-standard.md#default-budget",
         "warn_line_threshold": 1200,
         "fail_line_threshold": 2500,
-        "source_extensions": [".go", ".py", ".ts", ".tsx", ".js", ".jsx"],
-        "excluded_dirs": [".git", ".factoryd", ".factory/tmp", "workspaces", ".venv", "__pycache__", "build", "dist", "node_modules", "vendor"],
-        "exception_refs": [".factory/artifacts/exceptions/architecture-debt-lumyn-migration-rebaseline.json"]
+        "source_extensions": [
+          ".go",
+          ".py",
+          ".ts",
+          ".tsx",
+          ".js",
+          ".jsx"
+        ],
+        "excluded_dirs": [
+          ".git",
+          ".factoryd",
+          ".factory/tmp",
+          "workspaces",
+          ".venv",
+          "__pycache__",
+          "build",
+          "dist",
+          "node_modules",
+          "vendor"
+        ],
+        "exception_refs": [
+          ".factory/artifacts/exceptions/architecture-debt-lumyn-migration-rebaseline.json"
+        ]
       },
       "acceptance_ledger": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json"
     }

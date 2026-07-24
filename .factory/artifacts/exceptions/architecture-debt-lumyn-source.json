@@ -9,14 +9,14 @@
       "scripts/validate_repo_pack.py"
     ],
     "line_ceilings": {
-      "scripts/validate_repo_pack.py": 879
+      "scripts/validate_repo_pack.py": 8
     },
     "budget": {
       "warn_line_threshold": 1200,
       "fail_line_threshold": 2500
     }
   },
-  "reason": "Lumyn's repo-pack validator has been split below the Factory warning threshold. The architecture-budget logic, self-test fixture harness, shared repo-pack contract constants, acceptance artifact checks, model-provider gate checks, factoryd config checks, guide/CI control checks, safety/risk checks, task-special checks, and planning/artifact contract checks now live in focused helper modules; the remaining exception is a shrink-only ceiling for validator orchestration so new product work does not repeat the monolith pattern.",
+  "reason": "Lumyn's repo-pack validator is split into focused validation modules covering v3 acceptance, dependency, model-boundary, authority, dispatch-pause, evidence, and negative checks. scripts/validate_repo_pack.py is an exact 8-line CLI entrypoint. scripts/repo_pack_validation/validator.py and the focused modules remain unexcepted and subject to the normal 1200-line warning and 2500-line failure thresholds. This shrink-only entrypoint ceiling prevents new product work from recreating the former orchestration monolith.",
   "owner": "lumyn-maintainers",
   "approved_by": "architecture-review",
   "approved_at": "2026-07-01T00:00:00Z",
@@ -24,7 +24,8 @@
   "compensating_validation": [
     "make prepush-full",
     "factoryd doctor emits architecture_budget_report with no unexcepted fail-level source and keeps scripts/validate_repo_pack.py shrink-only ceiling visible",
-    "tasks touching scripts/validate_repo_pack.py must avoid net line growth above 879 lines unless they are shrink-only decomposition work",
+    "tasks touching scripts/validate_repo_pack.py must preserve its finalized 8-line thin-entrypoint ceiling; substantive validator work belongs in focused scripts/repo_pack_validation modules",
+    "scripts/repo_pack_validation/validator.py remains unexcepted and below the normal 1200-line warning threshold",
     "tasks touching internal/source must keep source files below the architecture warning threshold unless a new approved exception is recorded"
   ],
   "follow_up_refs": [
@@ -32,20 +33,13 @@
   ],
   "evidence_refs": [
     "scripts/validate_repo_pack.py",
+    "scripts/repo_pack_validation/validator.py",
+    "scripts/repo_pack_validation/task_contracts.py",
+    "scripts/repo_pack_validation/runtime_pins.py",
+    "scripts/repo_pack_validation/authority.py",
+    "scripts/repo_pack_validation/self_tests.py",
     "scripts/repo_pack_architecture.py",
-    "scripts/repo_pack_contracts.py",
-    "scripts/repo_pack_acceptance.py",
-    "scripts/repo_pack_model_provider.py",
-    "scripts/repo_pack_factoryd.py",
-    "scripts/repo_pack_ci.py",
-    "scripts/repo_pack_safety.py",
-    "scripts/repo_pack_task_specials.py",
-    "scripts/repo_pack_planning.py",
     "scripts/repo_pack_self_test.py",
-    "internal/source/config.go",
-    "internal/source/fingerprint.go",
-    "internal/source/openapi.go",
-    "internal/source/openapi_auth.go",
     "docs/architecture/findings/TEMP_FINDING_2026-06-30_lumyn_arch_budget.md"
   ]
 }

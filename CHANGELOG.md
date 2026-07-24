@@ -4,112 +4,105 @@
 
 ### Added
 
-- Initial Factory-compatible repository operating pack.
-- T2 executable JSON Schema contracts for workflow, evidence, cassette, proof, command-result, redaction, and related artifact models.
-- Local safety/corpus-ready normalized result and failure evidence fields with `corpus_eligible: false` validation.
-- A provider-sponsored, customer-controlled API migration PRD, architecture
-  decision, implementation plan, and active Factory control set.
-- Planned `lumyn artifacts gc [--dry-run]` recovery for private-artifact
-  TTL/revocation deletion, receipts, and orphan reporting.
-- Planned standard campaign-kit creation, configured packet publication, signed
-  invitations, no-authority consumer `campaign accept`, explicit signed
-  authorization issue/revoke, signed provider-status snapshots, minimal signed
-  connection receipts, and a receipt-backed synthetic offline canary through a
-  local draft-PR preview.
+- Added ADR-0003 and a v3 product/engineering planning contract for
+  services-led, provider-paid API and SDK sunset campaigns.
+- Added hybrid patch routing: deterministic transforms for exact mappings and
+  a consumer-local bounded coding agent for approved repository-specific work.
+- Added exact model request-disclosure, endpoint, credential, tool, path,
+  token, time, retry, cost, provenance, retention, and deletion boundaries.
+- Added patch artifact and PR bundle as the no-GitHub baseline handoff, with
+  optional local branch, remote branch, and draft PR as separate delivery
+  states.
+- Added a source-aligned v3 compiled Factory control set covering context,
+  risk, execution, task packets, validation, acceptance, mapping, and closure.
+- Added explicit factoryd mission pause and compatibility gates for the
+  external Factory profile, factoryd bundle/runtime, and exact active mission.
+- Retained the Go CLI/config/result foundation, `lumyn init`, `lumyn check`,
+  local source parsing, executable schemas, validation, coverage, CodeQL,
+  branch protection, and Factory lifecycle controls.
 
 ### Changed
 
-- Reframed Lumyn from generic agent-readiness evaluation to verified migration
-  campaigns for API providers and authorized TypeScript/Node customer
-  repositories.
-- Made the API provider the campaign sponsor and economic buyer while keeping
-  repository reads, writes, commands, credentials, disclosure, PR creation,
-  review, and merge under explicit customer authority.
-- Narrowed the MVP to declarative provider change packets, read-only impact,
-  three deterministic transformations, evidence-scoped verification, and
-  customer-authorized draft GitHub PRs.
-- Reclassified the prior `lumyn-mvp` plan and evidence as immutable historical
-  records; the active plan is now `lumyn-migration-mvp`.
-- Preregistered commercial validation around five distinct eligible
-  repositories across at least three organizations, supported-change canary
-  evidence, fixed deadlines, post-merge observation, non-negative campaign
-  contribution, and executed paid continuation.
-- Added real independent holdout, trace-grade, and evidence-attestation
-  promotion gates before commit/push for the tasks that rely on those proofs.
-- Split M8 sandbox verification from M9 draft-PR delivery and made provider
-  reporting optional, so consumers can authorize a verified draft PR without
-  granting sandbox or provider-attestation access.
-- Made design-partner sandbox proof action-specific: the campaign can use
-  exact-patched-head mock proof without a sandbox grant, while separately
-  authorized repositories may add sandbox evidence.
-- Added invitation-to-impact elapsed time and total consumer security,
-  privacy, platform, and maintainer labor to activation, so the pilot cannot
-  hide pre-acceptance onboarding friction.
-- Added recurring-value qualification plus preregistered annual/second-campaign
-  margin and Lumyn operator-effort gates; provider and consumer labor remains
-  separate buyer total cost.
-- Defined acknowledged, consumer-signed minimal connection receipts as the
-  only sponsored connected-repository meter, with provider-authenticated
-  consumer signer binding, one-invitation-unit cardinality, pinned online or
-  offline exchange, and provider-signed deduplicated acknowledgements, while
-  keeping richer provider reporting separately optional.
-- Replaced the premature OSS claim with explicit design-partner distribution
-  terms and a separate license/security/support/release-integrity gate for any
-  future public OSS or self-serve release.
+- Reframed Lumyn from generic agent-readiness evaluation and the v2
+  deterministic/receipt-first migration plan to verified API migration
+  execution.
+- Made the API Provider the initial campaign buyer while preserving API
+  Consumer Organization authority over repository access, execution, model
+  egress, credentials, disclosure, review, and merge.
+- Made services-led local or consumer-CI execution the initial form factor;
+  hosted SaaS is not required for the first campaign.
+- Kept provider-confirmed migration intent authoritative and signed
+  declarative packets supported, while deferring mandatory packet PKI,
+  continuous provider status, connection receipts, acknowledgements, and
+  receipt-backed billing.
+- Made generation provenance independent from deterministic, exact-candidate
+  verification strength.
+- Replaced checked-in v2 active-control claims under
+  `lumyn-migration-mvp` with the regenerated v3 compiled control set.
+- Preserved `.factory/artifacts/prd-to-plan/lumyn-mvp/`, ADR-0002, and their
+  lifecycle evidence as immutable historical records.
+- Clarified that the repo-local v3 compilation is planning and validation
+  authority only. It authorizes no product runtime implementation or live
+  action.
+- Kept factoryd dispatch paused until the external Factory
+  `profiles/lumyn.yaml` profile and factoryd bundle/runtime are separately
+  requalified and a bounded task is explicitly unpaused.
+- Replaced the premature OSS claim with explicitly licensed,
+  integrity-signed design-partner distribution and a separate gate for any
+  future public OSS, self-serve, or Homebrew release.
 
 ### Deprecated
 
-- Generic live agent evaluation, model-provider panels, public API teardown
-  content, and buy-side monitoring of every vendor as mandatory MVP scope.
-
-### Removed
+- Deprecated the v2 deterministic-only execution boundary and
+  PKI/receipt-first activation and billing path as active v3 requirements.
+- Deprecated generic live-agent evaluation, model-provider panels, public API
+  teardown content, and buy-side monitoring of every vendor as mandatory MVP
+  scope.
 
 ### Fixed
 
-- Planning now records that unimplemented `record`, `verify`, `trace`, `demo`,
-  `share`, and `eval` commands must fail closed before migration execution work
-  begins.
-- Product documentation no longer describes recorder, replay, live
-  verification, reporting, GitHub delivery, migration patching, or live agent
-  evaluation as implemented.
+- Aligned product, workflow, developer, architecture, Factory-integration, and
+  repository-agent documents with the compiled v3 control state.
+- Removed stale language that called the active compiled directory a checked-in
+  v2 or “next” generation.
+- Made factoryd readiness and product implementation explicitly separate from
+  successful repo-local planning compilation.
+- Recorded current generic-success placeholders for unimplemented `record`,
+  `verify`, `trace`, `demo`, `share`, `eval`, and migration-runtime commands as
+  M0 blockers; this planning rebaseline does not claim the typed fail-closed
+  command behavior is implemented.
+- Stopped describing recorder, replay, live verification, reporting, GitHub
+  delivery, migration patching, or bounded-agent execution as implemented.
 
 ### Security
 
-- Defined separate provider and consumer data planes, signed immutable
-  provider packets with a consumer-pinned trust root and provider/package
-  binding, independently scoped capabilities, private artifact
-  TTL/deletion, no provider access to raw customer repository data by default,
-  bounded writes, sandbox isolation, draft-only PRs, and human merge authority.
-- Separated Factory worker `approval`/`credentials`/`network` grants from exact
-  private Lumyn product authorizations, and separated field-allowlisted
-  provider attestations from aggregate/hash-only public evidence.
-- Required current packet trust and exact product authority to be revalidated
-  inside Lumyn immediately before every local, sandbox, GitHub, or attestation
-  side effect and retry; Factory dispatch and standalone validation output do
-  not confer runtime authority.
-- Required every trust refresh to use either a signed offline provider-status
-  snapshot inside the pinned maximum age or an exact authorized endpoint read,
-  and required repository commands to use a fail-closed host-isolation backend
-  that denies undeclared mounts, credentials, sockets, descriptors, and child
-  escape.
-- Required design-partner qualification to prove an operational provider-status
-  channel and an enforceable supported host-isolation backend for each
-  candidate environment before migration-plan work can begin.
-- Made provider export and public commit explicit irreversible disclosure
-  boundaries: revocation blocks future sharing and deletes Lumyn-controlled
-  private copies but cannot claim to recall recipient copies or public history.
-- Added a narrow manual privacy/legal preflight before identifiable
-  design-partner evidence collection and automatic private-artifact
-  TTL/revocation enforcement with retry-safe deletion receipts and orphan
-  recovery.
-- Bound that preflight to an exact scope digest, rejected semantic-wildcard
-  Factory grants, made first-time provider trust enrollment independently
-  authenticated, and restricted the committed holdout manifest to
-  non-resolving provenance and keyed/encrypted commitments. Held-out inputs and
-  answer keys stay hidden from implementation workers, and independent
-  lifecycle evidence is schema-valid,
-  current-candidate-bound, provenance-backed, and unwritable by the executor.
-- Split holdout policy into non-circular provision and evaluate modes: M1
-  creates the keyed suite commitment independently, while later scoring tasks
-  resolve and byte-bind the trusted M1 result instead of fabricating a future
-  commitment in the static plan.
+- Separated API-provider disclosure from model-provider disclosure and
+  required exact consumer authorization for model endpoint, model/version,
+  credentials, network, logging/training/retention, tools, paths, and resource
+  budgets.
+- Treated repository content, provider material, tool output, and model output
+  as untrusted data that cannot widen policy, authority, tools, writable paths,
+  network, disclosure, credentials, or budgets.
+- Prohibited agent self-approval, self-verification, default-branch writes, and
+  automatic merge.
+- Required exact-candidate deterministic verification, human review and merge,
+  fail-closed host isolation for repository commands, and separate grants for
+  repository read/write, commands, models, registries, sandboxes, remote
+  branches, and draft PRs.
+- Kept raw consumer code, diffs, logs, traces, prompts, responses, credentials,
+  and private evidence outside public source and API-provider visibility by
+  default.
+- Kept Factory worker `approval`, `credentials`, and `network` grants separate
+  from private Lumyn product authorization.
+- Prevented factoryd dispatch while its mission is paused or its external
+  profile, runtime bundle, schemas, or active-mission semantics are
+  unqualified.
+
+### Historical Unreleased Rebaseline
+
+Before v3, this unreleased repository briefly carried a deterministic-first,
+packet-PKI, provider-status, connection-receipt, and receipt-backed campaign
+plan with 62 acceptance items across `M0` through `M10`. That design is retained
+in ADR-0002, Git history, and immutable historical Factory evidence so its
+decisions and proofs remain auditable. It is not current product, billing,
+dispatch, validation, or rollout authority.

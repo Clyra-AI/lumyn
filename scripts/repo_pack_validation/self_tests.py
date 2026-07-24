@@ -1,4 +1,4 @@
-"""Negative tests for the Lumyn repo-pack validator."""
+"""Negative tests for the Lumyn v3 repo-pack validator."""
 
 from __future__ import annotations
 
@@ -6,8 +6,13 @@ import copy
 from collections.abc import Callable
 from typing import Any
 
-from repo_pack_validation.authority import validate_authority_grants
+from repo_pack_validation.authority import (
+    conditional_activation_scope_digest,
+    manual_preflight_scope_digest,
+    validate_authority_grants,
+)
 from repo_pack_validation.markdown_refs import _markdown_anchors
+from repo_pack_validation.task_contracts import _policy_digest
 
 
 Payload = dict[str, dict[str, Any]]
@@ -38,6 +43,108 @@ def _expect_failure(
     raise AssertionError(f"self-test mutation did not fail: {expected}")
 
 
+def _task(payload: Payload, task_id: str) -> dict[str, Any]:
+    return next(
+        task
+        for task in payload["packets"]["tasks"]
+        if task.get("task_id") == task_id
+    )
+
+
+def _ledger_item(payload: Payload, item_id: str) -> dict[str, Any]:
+    return next(
+        item
+        for item in payload["ledger"]["items"]
+        if item.get("acceptance_item_id") == item_id
+    )
+
+
+def _remove_task_acceptance(
+    payload: Payload,
+    task_id: str,
+    acceptance_item_id: str,
+) -> None:
+    task = _task(payload, task_id)
+    task["acceptance_item_ids"].remove(acceptance_item_id)
+    task["acceptance_checks"] = [
+        check
+        for check in task["acceptance_checks"]
+        if not str(check).startswith(f"{acceptance_item_id}:")
+    ]
+
+
+def _move_task_acceptance(
+    payload: Payload,
+    source_task_id: str,
+    target_task_id: str,
+    acceptance_item_id: str,
+) -> None:
+    _remove_task_acceptance(payload, source_task_id, acceptance_item_id)
+    target = _task(payload, target_task_id)
+    source_text = next(
+        item["source_text"]
+        for item in payload["ledger"]["items"]
+        if item.get("acceptance_item_id") == acceptance_item_id
+    )
+    target["acceptance_item_ids"].append(acceptance_item_id)
+    target["acceptance_checks"].append(
+        f"{acceptance_item_id}: {source_text}"
+    )
+
+
+def _remove_holdout_prohibition(payload: Payload, field: str) -> None:
+    policy = _task(payload, "M1")["holdout_policy"]
+    policy["prohibited_committed_fields"].remove(field)
+    policy["policy_digest"] = _policy_digest(policy)
+
+
+def _change_holdout_baseline(payload: Payload, value: str) -> None:
+    policy = _task(payload, "M1")["holdout_policy"]
+    policy["comparison_baseline"] = value
+    policy["policy_digest"] = _policy_digest(policy)
+
+
+def _weaken_preflight_consent(payload: Payload) -> None:
+    preflight = _task(payload, "M2.5")["manual_external_evidence_preflight"]
+    preflight["participant_consent_required"] = False
+    preflight["approval_scope_digest"] = manual_preflight_scope_digest(preflight)
+
+
+def _conditional_grants(
+    task_id: str,
+    action_mode: str,
+    selected_capabilities: list[str],
+) -> list[dict[str, Any]]:
+    selected = sorted(selected_capabilities)
+    activation = {
+        "task_id": task_id,
+        "action_mode": action_mode,
+        "selected_capabilities": selected,
+        "evidence_ref": f"private:authorizations/{task_id}-activation.json",
+        "expires_at": "2099-01-01T00:00:00Z",
+    }
+    activation["scope_digest"] = conditional_activation_scope_digest(activation)
+    grants: list[dict[str, Any]] = []
+    for capability in selected:
+        grant: dict[str, Any] = {
+            "task_id": task_id,
+            "capability": capability,
+            "approved": True,
+            "evidence_ref": (
+                f"private:authorizations/{task_id}-{capability}.json"
+            ),
+            "expires_at": activation["expires_at"],
+            "conditional_activation": activation,
+        }
+        if capability == "credentials":
+            grant["credential_scopes"] = ["bounded-worker"]
+            grant["credential_environment"] = "consumer-controlled"
+        elif capability == "network":
+            grant["network_allowlist"] = ["api.example.com:443"]
+        grants.append(grant)
+    return grants
+
+
 def run_repo_pack_self_tests(
     base: Payload,
     *,
@@ -47,7 +154,7 @@ def run_repo_pack_self_tests(
     historical_plan_rel: str,
     expected_capabilities: dict[str, set[str]],
 ) -> None:
-    """Prove the validator rejects drift in authority, evidence, and scope."""
+    """Prove drift cannot enable dispatch, authority, false closure, or weak proof."""
 
     tasks = validate_loaded(base, validate_configs=False)
     _require(
@@ -58,39 +165,41 @@ def run_repo_pack_self_tests(
         == {"api-trust", "code-mode"},
         "Markdown heading slugs must use rendered inline text",
     )
-    _require(
-        _markdown_anchors("# foo\n# foo\n# foo-1\n")
-        == {"foo", "foo-1", "foo-1-1"},
-        "Markdown heading suffix collisions must use an unoccupied slug",
-    )
+
     mutations: list[tuple[Callable[[Payload], Any], str]] = [
         (
             lambda value: value["ledger"]["items"].pop(),
             "compiled acceptance text differs from PRD",
         ),
         (
-            lambda value: value["packets"]["tasks"][9][
-                "required_worker_chain"
-            ].__setitem__(2, "ship-pr"),
+            lambda value: _ledger_item(value, "BASE-001")[
+                "evidence_refs"
+            ].remove(
+                ".factory/artifacts/task-runs/T3/validation-report.json"
+            ),
+            "carry-forward evidence is semantically incomplete",
+        ),
+        (
+            lambda value: _task(value, "M8")["required_worker_chain"].__setitem__(
+                2, "ship-pr"
+            ),
             "worker chain",
         ),
         (
-            lambda value: value["packets"]["tasks"][0][
-                "acceptance_item_ids"
-            ].remove("REB-001"),
-            "inherited acceptance IDs",
+            lambda value: _move_task_acceptance(
+                value, "M0", "M1", "BASE-005"
+            ),
+            "primary acceptance ownership",
         ),
         (
-            lambda value: value["packets"]["tasks"][9].__setitem__(
-                "auto_merge", True
-            ),
+            lambda value: _task(value, "M9").__setitem__("auto_merge", True),
             "forbidden product capability",
         ),
         (
-            lambda value: value["packets"]["tasks"][9]["factoryd_runtime"][
+            lambda value: _task(value, "M8")["factoryd_runtime"][
                 "capability_grants"
             ][0].__setitem__("approved", True),
-            "planning-time capability grants",
+            "planning grants",
         ),
         (
             lambda value: value["mapping"]["groups"][0][
@@ -99,169 +208,130 @@ def run_repo_pack_self_tests(
             "exact PRD acceptance set",
         ),
         (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M4"
-            )["allowed_paths"].append(
-                ".factory/artifacts/lifecycle-evidence/M4/"
+            lambda value: _task(value, "M9")["blocked_by"].append("M8"),
+            "dependency graph",
+        ),
+        (
+            lambda value: _task(value, "M2.5")["blocked_by"].append("M0"),
+            "dependency graph",
+        ),
+        (
+            lambda value: _task(value, "M2.5")["gated_acceptance_items"][0].__setitem__(
+                "required_milestone", "M1"
             ),
-            "implementation writes to lifecycle-owned evidence",
+            "DISC-003",
         ),
         (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M7"
-            )["validation_contract_inheritance"]["required_review"].__setitem__(
-                "review_type", "security"
+            _weaken_preflight_consent,
+            "participant_consent_required",
+        ),
+        (
+            lambda value: _task(value, "M0")["allowed_paths"].append(
+                "scripts/repo_pack_validation/"
             ),
-            "inherited review requirement",
+            "M0 allowed paths",
         ),
         (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M9"
-            )["blocked_by"].append("M8"),
-            "independently deliverable",
+            lambda value: _remove_holdout_prohibition(value, "answer_key"),
+            "answer or resolving material",
         ),
         (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M1"
-            )["holdout_suite_policy"]["prohibited_committed_fields"].remove(
-                "answer_key"
+            lambda value: _change_holdout_baseline(
+                value, "unbounded_generic_agent"
             ),
-            "resolving provenance and answer material",
+            "generic-agent baseline",
         ),
         (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M1"
-            )["holdout_suite_policy"]["prohibited_committed_fields"].remove(
-                "source_url"
+            lambda value: _task(value, "M6")["bounded_agent_contract"][
+                "exact_fields"
+            ].remove("cost_budget"),
+            "model control fields",
+        ),
+        (
+            lambda value: _task(value, "M6")["bounded_agent_contract"][
+                "untrusted_inputs"
+            ].remove("repository_source"),
+            "untrusted agent inputs",
+        ),
+        (
+            lambda value: _task(value, "M7")[
+                "deterministic_verification_contract"
+            ].__setitem__("independent_from_generation", False),
+            "verification independent_from_generation",
+        ),
+        (
+            lambda value: _task(value, "M7")[
+                "deterministic_verification_contract"
+            ].__setitem__("verify_mutates_candidate", True),
+            "explicitly non-mutating",
+        ),
+        (
+            lambda value: _task(value, "M7")[
+                "deterministic_verification_contract"
+            ]["repair_authorization"].__setitem__(
+                "prior_verification_evidence_invalidated", False
             ),
-            "resolving provenance and answer material",
+            "invalidate prior proof",
         ),
         (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M1"
-            )["holdout_policy"].__setitem__("mode", "evaluate"),
-            "without a fabricated pre-existing commitment",
+            lambda value: _task(value, "M7")[
+                "deterministic_verification_contract"
+            ]["candidate_modes"].remove("imported_manual"),
+            "imported manual candidates",
         ),
         (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M1"
-            )["lifecycle_gates"].update(
-                {
-                    "holdout_provisioning_required": False,
-                    "holdout_evaluation_required": True,
-                }
+            lambda value: _task(value, "M6")[
+                "manual_candidate_contract"
+            ].__setitem__("command", "git apply"),
+            "manual candidate import",
+        ),
+        (
+            lambda value: _task(value, "M9")["delivery_contract"].__setitem__(
+                "auto_merge", True
             ),
-            "must not claim current-candidate holdout evaluation",
+            "forbidden product capability",
         ),
         (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M4"
-            )["holdout_policy"].__setitem__(
-                "provisioning_result_ref",
-                ".factory/artifacts/lifecycle-evidence/M4/holdout-result.json",
+            lambda value: _task(value, "M9")[
+                "outcome_record_contract"
+            ].__setitem__("append_only", False),
+            "append-only",
+        ),
+        (
+            lambda value: _task(value, "M9")[
+                "outcome_record_contract"
+            ]["durable_outcomes"].remove("reverted"),
+            "reversion",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
+            ].__setitem__("provider_code_access", True),
+            "forbidden product capability",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
+            ].__setitem__("payment_posture", "refundable_intent"),
+            "cleared non-refundable",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
+            ].__setitem__("material_provider_outcome_pass_required", False),
+            "provider-outcome metric",
+        ),
+        (
+            lambda value: _task(value, "M3")["factoryd_runtime"].__setitem__(
+                "dispatch_enabled", True
             ),
-            "independently provisioned M1 holdout result",
+            "dispatch must be disabled",
         ),
         (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M10"
-            )["blocked_by"].append("M8"),
-            "without forcing sandbox proof",
-        ),
-        (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M10"
-            ).__setitem__(
-                "holdout_policy",
-                copy.deepcopy(
-                    next(
-                        task
-                        for task in value["packets"]["tasks"]
-                        if task["task_id"] == "M4"
-                    )["holdout_policy"]
-                ),
+            lambda value: value["plan"]["alignment_gate"].__setitem__(
+                "implementation_may_start", True
             ),
-            "must not declare holdout policy without holdout-evaluator",
-        ),
-        (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M10"
-            )["product_authority_requirements"].remove("campaign_receipt"),
-            "product authority requirements differ",
-        ),
-        (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M8"
-            )["optional_product_action_capabilities"].remove(
-                "provider_trust_status_read"
-            ),
-            "optional product authority requirements differ",
-        ),
-        (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M2.5"
-            )["manual_external_evidence_preflight"].__setitem__(
-                "approved_private_storage_boundary",
-                "a changed boundary",
-            ),
-            "scope digest must match its canonical content",
-        ),
-        (
-            lambda value: next(
-                task
-                for task in value["packets"]["tasks"]
-                if task["task_id"] == "M2.5"
-            )["manual_external_evidence_preflight"].__setitem__(
-                "allowed_private_fields",
-                [
-                    field
-                    for field in next(
-                        task
-                        for task in value["packets"]["tasks"]
-                        if task["task_id"] == "M2.5"
-                    )["manual_external_evidence_preflight"][
-                        "allowed_private_fields"
-                    ]
-                    if "provider-authenticated consumer signer binding"
-                    not in field
-                ],
-            ),
-            "preflight must bind provider-authenticated consumer signer binding",
-        ),
-        (
-            lambda value: value["plan"].__setitem__(
-                "rollback_or_deletion_test",
-                [
-                    "Revoke everything and verify no public or provider-facing copy survives."
-                ],
-            ),
-            "irreversible external-disclosure semantics",
+            "implementation must remain blocked",
         ),
         (
             lambda value: value["context"]["alignment_decisions"]["resolved"][
@@ -281,50 +351,31 @@ def run_repo_pack_self_tests(
         "task_packets"
     ] = f"{historical_plan_rel}/task-packets.json"
     try:
-        validate_config_payload(
-            historical_config, "self-test historical config", autoship=False
-        )
+        validate_config_payload(historical_config, "historical config")
     except AssertionError as exc:
         _require(
             "task_packets ref is stale" in str(exc),
             f"historical-plan self-test failed unexpectedly: {exc}",
         )
     else:
-        raise AssertionError("historical-plan config remained selectable")
+        raise AssertionError("historical plan remained selectable")
 
-    autoship_active_config = copy.deepcopy(base["autoship"])
+    enabled_config = copy.deepcopy(base["config"])
+    enabled_config["repos"]["lumyn"]["runtime_control"]["mission_paused"] = False
+    enabled_config["repos"]["lumyn"]["runtime_control"]["launch_request"][
+        "expected_decision"
+    ] = "allow"
     try:
-        validate_active_config(autoship_active_config, tasks)
+        validate_config_payload(enabled_config, "enabled config")
     except AssertionError as exc:
         _require(
-            "must remain safe-attended" in str(exc),
-            f"active-autoship self-test failed unexpectedly: {exc}",
+            "mission_paused" in str(exc),
+            f"dispatch-pause self-test failed unexpectedly: {exc}",
         )
     else:
-        raise AssertionError("autoship-enabled active config remained selectable")
+        raise AssertionError("an enabled v3 config remained selectable")
 
-    active_config = copy.deepcopy(base["config"])
-    active_config["repos"]["lumyn"]["capability_grants"] = [
-        {
-            "task_id": "M9",
-            "capability": "approval",
-            "approved": True,
-            "evidence_ref": "private:authorizations/M9.json",
-            "expires_at": "2099-01-01T00:00:00Z",
-        }
-    ]
-    try:
-        validate_active_config(active_config, tasks)
-    except AssertionError as exc:
-        _require(
-            "missing exact Factory capabilities" in str(exc),
-            f"active-grant self-test failed unexpectedly: {exc}",
-        )
-    else:
-        raise AssertionError("partial live capability grant remained selectable")
-
-    product_config = copy.deepcopy(base["config"])
-    product_config["repos"]["lumyn"]["capability_grants"] = [
+    product_grant = [
         {
             "task_id": "M9",
             "capability": "github_pr_write",
@@ -334,61 +385,100 @@ def run_repo_pack_self_tests(
         }
     ]
     try:
-        validate_active_config(product_config, tasks)
+        validate_authority_grants(product_grant, tasks, expected_capabilities)
     except AssertionError as exc:
         _require(
             "unknown or product capability" in str(exc),
-            f"product-capability separation self-test failed unexpectedly: {exc}",
+            f"product-capability separation failed unexpectedly: {exc}",
         )
     else:
-        raise AssertionError(
-            "product authority was accepted as a Factory grant"
+        raise AssertionError("product authority was accepted as a Factory grant")
+
+    for task_id, action_mode in (
+        ("M6", "bounded_agent"),
+        ("M9", "automated_draft_pr"),
+    ):
+        selected = list(tasks[task_id]["conditional_factory_capabilities"])
+        validate_authority_grants(
+            _conditional_grants(task_id, action_mode, selected),
+            tasks,
+            expected_capabilities,
         )
 
-    duplicate_config = copy.deepcopy(base["config"])
-    duplicate_grant = {
-        "task_id": "M2.5",
-        "capability": "approval",
-        "approved": False,
-    }
-    duplicate_config["repos"]["lumyn"]["capability_grants"] = [
-        duplicate_grant,
-        copy.deepcopy(duplicate_grant),
-    ]
-    try:
-        validate_active_config(duplicate_config, tasks)
-    except AssertionError as exc:
-        _require(
-            "duplicates grant" in str(exc),
-            f"duplicate-grant self-test failed unexpectedly: {exc}",
-        )
-    else:
-        raise AssertionError("duplicate Factory grant remained selectable")
-
-    preflight = tasks["M2.5"]["manual_external_evidence_preflight"]
-    wrong_scope_grant = [
-        {
-            "task_id": "M2.5",
-            "capability": "approval",
-            "approved": True,
-            "evidence_ref": preflight["approval_evidence_ref"],
-            "approval_scope_digest": "sha256:" + ("0" * 64),
-            "expires_at": "2099-01-01T00:00:00Z",
-        }
-    ]
+    missing_activation = _conditional_grants(
+        "M6",
+        "bounded_agent",
+        list(tasks["M6"]["conditional_factory_capabilities"]),
+    )
+    missing_activation[0].pop("conditional_activation")
     try:
         validate_authority_grants(
-            wrong_scope_grant, tasks, expected_capabilities
+            missing_activation, tasks, expected_capabilities
         )
     except AssertionError as exc:
         _require(
-            "exactly bind the current manual preflight scope" in str(exc),
-            f"approval-scope self-test failed unexpectedly: {exc}",
+            "conditional_activation is required" in str(exc),
+            f"missing conditional activation failed unexpectedly: {exc}",
         )
     else:
-        raise AssertionError(
-            "a generic or stale M2.5 approval remained selectable"
+        raise AssertionError("conditional grant lacked activation evidence")
+
+    partial_activation = _conditional_grants(
+        "M6",
+        "bounded_agent",
+        list(tasks["M6"]["conditional_factory_capabilities"]),
+    )
+    partial_activation.pop()
+    try:
+        validate_authority_grants(
+            partial_activation, tasks, expected_capabilities
         )
+    except AssertionError as exc:
+        _require(
+            "exact selected conditional capabilities" in str(exc),
+            f"partial conditional activation failed unexpectedly: {exc}",
+        )
+    else:
+        raise AssertionError("partial conditional activation remained valid")
+
+    wrong_task_activation = _conditional_grants(
+        "M6",
+        "bounded_agent",
+        list(tasks["M6"]["conditional_factory_capabilities"]),
+    )
+    wrong_task_activation[0]["conditional_activation"]["task_id"] = "M9"
+    try:
+        validate_authority_grants(
+            wrong_task_activation, tasks, expected_capabilities
+        )
+    except AssertionError as exc:
+        _require(
+            "must bind task M6" in str(exc),
+            f"wrong-task conditional activation failed unexpectedly: {exc}",
+        )
+    else:
+        raise AssertionError("conditional activation accepted the wrong task")
+
+    extra_activation = _conditional_grants(
+        "M9",
+        "automated_draft_pr",
+        list(tasks["M9"]["conditional_factory_capabilities"]),
+    )
+    activation = extra_activation[0]["conditional_activation"]
+    activation["selected_capabilities"].append("github_pr_write")
+    activation["selected_capabilities"].sort()
+    activation["scope_digest"] = conditional_activation_scope_digest(activation)
+    try:
+        validate_authority_grants(
+            extra_activation, tasks, expected_capabilities
+        )
+    except AssertionError as exc:
+        _require(
+            "selects undeclared capabilities" in str(exc),
+            f"extra conditional capability failed unexpectedly: {exc}",
+        )
+    else:
+        raise AssertionError("conditional activation accepted an extra capability")
 
     broad_network_grants = [
         {
@@ -423,58 +513,19 @@ def run_repo_pack_self_tests(
     except AssertionError as exc:
         _require(
             "semantic wildcard" in str(exc),
-            f"semantic-wildcard self-test failed unexpectedly: {exc}",
+            f"network wildcard failed unexpectedly: {exc}",
         )
     else:
-        raise AssertionError(
-            "a semantic-wildcard network grant remained selectable"
-        )
+        raise AssertionError("a wildcard Factory network grant remained selectable")
 
-    duplicate_network_grants = copy.deepcopy(broad_network_grants)
-    duplicate_network_grants[-1]["network_allowlist"] = [
-        "api.stripe.com:443",
-        "API.STRIPE.COM:443",
-    ]
+    active_config = copy.deepcopy(base["config"])
+    active_config["repos"]["lumyn"]["runtime_control"]["mission_paused"] = False
     try:
-        validate_authority_grants(
-            duplicate_network_grants, tasks, expected_capabilities
-        )
+        validate_active_config(active_config, tasks)
     except AssertionError as exc:
         _require(
-            "case-insensitive duplicates" in str(exc),
-            f"network-duplicate self-test failed unexpectedly: {exc}",
+            "mission_paused" in str(exc),
+            f"active-config pause failed unexpectedly: {exc}",
         )
     else:
-        raise AssertionError(
-            "case-insensitive duplicate endpoints remained selectable"
-        )
-
-    unspecified_network_grants = copy.deepcopy(broad_network_grants)
-    unspecified_network_grants[-1]["network_allowlist"] = ["0.0.0.0"]
-    try:
-        validate_authority_grants(
-            unspecified_network_grants, tasks, expected_capabilities
-        )
-    except AssertionError as exc:
-        _require(
-            "unspecified address" in str(exc),
-            f"unspecified-address self-test failed unexpectedly: {exc}",
-        )
-    else:
-        raise AssertionError(
-            "an unspecified network address remained selectable"
-        )
-
-    wildcard_network_grants = copy.deepcopy(broad_network_grants)
-    wildcard_network_grants[-1]["network_allowlist"] = ["*.stripe.com:443"]
-    try:
-        validate_authority_grants(
-            wildcard_network_grants, tasks, expected_capabilities
-        )
-    except AssertionError as exc:
-        _require(
-            "wildcard-free" in str(exc),
-            f"wildcard-host self-test failed unexpectedly: {exc}",
-        )
-    else:
-        raise AssertionError("a wildcard network host remained selectable")
+        raise AssertionError("an enabled v3 active config remained selectable")

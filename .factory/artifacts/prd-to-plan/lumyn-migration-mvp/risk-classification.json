@@ -5,52 +5,40 @@
   "default_risk_class": "high",
   "risk_rules": [
     {
-      "risk_class": "low",
-      "applies_to": [
-        "docs-only clarification with no authority or contract change",
-        "deterministic local fixture formatting"
-      ],
-      "validation_independence": "same agent may implement and validate when red/green evidence is preserved"
-    },
-    {
       "risk_class": "medium",
       "applies_to": [
-        "CLI compatibility",
-        "offline corpus",
-        "provider source parsing",
-        "schema-preserving documentation"
+        "runtime command compatibility",
+        "offline benchmark corpus",
+        "provider-confirmed migration evidence normalization",
+        "read-only integration graph"
       ],
-      "validation_independence": "validation-gate must assess contract, test, and evidence adequacy"
+      "validation_independence": "validation-gate plus risk-selected review"
     },
     {
       "risk_class": "high",
       "applies_to": [
-        "provider change packet trust or status freshness",
-        "consumer authorization issue or revoke",
-        "customer repository read or write",
-        "TypeScript impact classification",
-        "patch generation",
-        "host-isolated command execution",
-        "sandbox credentials or network",
-        "GitHub draft PR write",
-        "minimal campaign receipt",
-        "provider-visible attestation",
-        "irreversible disclosure",
-        "privacy or redaction",
-        "distribution or OSS claim",
-        "product-signal closure"
+        "consumer repository read or write",
+        "bounded agent and prompt injection",
+        "model request disclosure",
+        "model endpoint network",
+        "model credential",
+        "command or package-registry execution",
+        "deterministic verification and false-green prevention",
+        "sandbox credentials, payload, or network",
+        "GitHub draft PR or remote branch",
+        "provider-visible reporting",
+        "generic-agent baseline or paid campaign closure"
       ],
-      "validation_independence": "independent code/security/architecture review or explicit human approval is required before promotion"
+      "validation_independence": "independent review, evaluation, grading, or attestation selected by task risk"
     }
   ],
   "mandatory_stop_conditions": [
-    "changed path falls outside allowed_paths or inside forbidden_paths",
-    "required validation, coverage, required-check, review, or lifecycle evidence fails or is missing",
-    "acceptance item is absent, unmapped, or closed only through a task, phase, or delivery-slice label",
-    "provider packet provenance, current provider-status evidence, explicit consumer-issued authority, evidence freshness, redaction, receipt, or proof boundary is ambiguous",
-    "network, credential, repository write, host-isolated command, provider trust-status read, package registry, sandbox payload disclosure, minimal campaign receipt, richer provider attestation, remote branch, or GitHub PR access is required without the exact task-scoped approval",
-    "implementation would execute provider-supplied scripts, write the default branch, auto-merge, or disclose raw customer data by default",
-    "private runtime or pilot evidence would enter the consumer checkout or public source repository, or a provider/public disclosure is represented as recallable",
-    "runtime, provider, dependency, artifact namespace, authority, acceptance, or Factory contract drift occurs without regenerating the active control set"
+    "Factory profile or factoryd runtime remains unqualified",
+    "acceptance item is absent, unmapped, or closed only by milestone or slice",
+    "provider intent, consumer authority, model boundary, or redaction is ambiguous",
+    "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
+    "generation self-verifies or verification does not bind the exact candidate head",
+    "provider code access, production credential, default-branch write, or auto-merge is requested",
+    "commercial evidence or generic-agent comparison is not direct, frozen, fair, and independently attested"
   ]
 }

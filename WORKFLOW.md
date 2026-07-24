@@ -1,7 +1,7 @@
 # Lumyn Workflow Contract
 
-Version: 2.0
-Status: Normative
+Version: 3.0
+Status: Normative v3 planning contract; product runtime not implemented
 
 ## Work Signal
 
@@ -9,54 +9,61 @@ Lumyn accepts governed work from:
 
 - `docs/product/prd.md`;
 - `docs/product/plan.md`;
-- active Factory task packets under
+- the source-aligned compiled v3 control set under
   `.factory/artifacts/prd-to-plan/lumyn-migration-mvp/`;
 - governed post-PRD findings under `.factory/artifacts/post-prd/`;
-- GitHub issues or pull requests when they map to the active product contract.
+- GitHub issues or pull requests mapped to the approved product contract.
 
-The prior `.factory/artifacts/prd-to-plan/lumyn-mvp/` package and its task-run,
-pilot, and PR-lifecycle evidence are historical. They are not an active work
-signal.
+The active compiled set is repo-local planning and validation authority. It is
+not factoryd execution authority. factoryd dispatch remains paused until the
+external Factory profile and factoryd bundle/runtime are requalified against
+the exact v3 mission.
+
+The prior `.factory/artifacts/prd-to-plan/lumyn-mvp/` package and its task,
+pilot, and PR-lifecycle evidence are immutable historical records.
 
 ## Product Delivery Flow
 
-The product workflow must preserve these state boundaries:
+The services-led v3 workflow preserves these state boundaries:
 
 ```text
-standard provider campaign kit
--> configured signing and immutable packet publication
--> signed provider packet and signed invitation
--> trust-root/package-binding/lifecycle validation
--> packet/canary validation
--> provider invitation
--> independently authenticated provider enrollment and fingerprint confirmation
--> consumer campaign acceptance and no-authority authorization request
--> current provider-status resolution from a signed snapshot or exact authorized read
--> explicit consumer-signed repository authorization issuance
--> [consumer-signed minimal connection receipt, provider-signed acknowledgement, optional]
--> read-only impact
+provider-paid sunset campaign
+-> provider-confirmed migration intent
+-> [signed declarative provider packet, optional authoritative input]
+-> consumer campaign invitation
+-> read-only impact authorization
+-> customer-authorized repository analysis
 -> no-write migration plan
--> consumer local-write/command/required-network-and-credential approval
--> current packet-trust and product-authority revalidation at write boundary
--> isolated patch
--> repository verification
--> [approved sandbox verification, independently optional]
--> consumer remote-branch authorization
--> consumer PR authorization
--> draft PR
+-> consumer plan approval
+-> explicit action-specific consumer execution grants
+-> [deterministic transformation | bounded-agent generation | needs input]
+-> isolated local patch
+-> deterministic repository and workflow verification
+-> patch artifact + optional local branch + PR bundle
+-> [consumer-authorized remote branch, optional]
+-> [consumer-authorized draft PR, optional]
 -> consumer review and merge
--> [separately consented richer provider attestation, optional]
+-> [separately consented provider status, optional]
 ```
 
-No downstream state implies an earlier missing authorization. A provider
-invitation is not repository consent. An approved migration plan is not PR
-authorization. A passing repository check is not workflow proof.
+A Lumyn Operator may coordinate campaign intake, provider confirmation,
+consumer onboarding, and review. Operator participation grants no ambient
+repository, command, model, credential, branch, PR, or merge authority.
 
-An invitation cannot authenticate its own provider root. Initial
-`provider enroll` requires a separately obtained enrollment bundle and expected
-fingerprint from an authenticated provider admin/security channel. Enrollment
-and `campaign accept` write only to external consumer-private state and leave
-the checkout and Git index unchanged.
+A signed declarative provider packet is authoritative when available and
+confirmed. It remains untrusted executable input and cannot widen authority.
+Elaborate packet PKI, continuous status resolution, connection receipts,
+provider acknowledgements, and receipt-backed billing are deferred from the v3
+managed-campaign prerequisite.
+
+No downstream state implies an earlier permission. Provider payment is not
+repository consent. Plan approval is not file-write approval. A patch is not a
+branch. A local branch is not a remote branch. A PR bundle is not a GitHub
+write. A passing repository check is not merge authority.
+
+This document describes planned behavior. M0 must replace every current
+generic-success placeholder with a typed nonzero result before implementation
+acceptance can close; a placeholder is not an implemented command.
 
 ## Normal Factory Chain
 
@@ -72,324 +79,254 @@ the checkout and Git index unchanged.
 10. `post-merge-monitor`
 11. `repair-feedback` when validation, review, shipping, or closure fails
 
-The independent evaluators are external or human-operated lifecycle gates.
-They run after implementation validation and before shipping, and each writes
-a task-bound, current-work-proof, passing artifact in the trusted Factory
-evidence root. The implementation worker cannot self-grade or self-attest.
+Independent lifecycle workers run after implementation validation and before
+shipping. They emit task-bound, current-work-proof, passing artifacts in the
+trusted Factory evidence root. The implementation worker cannot self-review,
+self-grade, self-attest, or write PR-lifecycle evidence.
 
-The active PRD-derived ledger contains exactly 62 item-level acceptance
-controls. Acceptance item IDs remain the closure source; delivery slices are
-coverage and sequencing metadata only.
+Acceptance item IDs remain the closure source. Tasks, waves, and delivery slices
+are sequencing and coverage lenses only.
 
 ## Approval Gates
 
 ### Product Planning
 
-- Plan approval is required before implementation work begins.
-- Runtime, distribution, trust-boundary, artifact namespace, active-plan path,
-  or initial-segment changes require aligned PRD, plan, ADR, Factory profile,
-  task packets, validation contract, acceptance ledger, mapping, and closure
-  updates.
-- M2.5 must close `DISC-001` and `DISC-002` with direct external evidence for
-  one qualified API Provider commitment, a supported-class canary, and a
-  frozen cohort of five distinct eligible repositories across at least three
-  Consumer Organizations before M5 migration-plan implementation begins. The
-  same provider must document either a second consequential
-  migration/deprecation within 12 months or an annual connected-repository
-  opportunity covering at least 20 named managed integrations. Qualification
-  also requires an operational signed provider-status channel, a pinned
-  provider receipt-acknowledgement key plus endpoint or offline exchange, and a
-  supported OS/architecture with enforceable host isolation for every candidate
-  environment.
-- The M2.5 and M10 evidence validators must validate the actual private
-  attestation plus its committed aggregate/hash-only public manifest.
-  `--self-test` proves validator behavior only and cannot close a product
-  signal. An independent `evidence-attestor` record is required.
-- Before M2.5 collects, stores, or discloses identifiable external evidence, a
-  narrow manual privacy/legal preflight under the Factory implementation
-  worker's task-scoped `approval` must name allowed private fields,
-  participant consent, the approved external private root, TTL,
-  expiry/revocation deletion, deletion-receipt and orphan ownership, and the
-  minimal connection-receipt, authenticated consumer signer binding,
-  provider-signed acknowledgement/cardinality policy, and separately consented
-  aggregate/hash-only public fields. Consent states that provider export and
-  public commit cannot be recalled. It is an evidence-handling preflight, not
-  Lumyn runtime product authority. The active M2.5 approval must cite that
-  preflight and exactly match its canonical scope digest; generic approval, an
-  older digest, or a changed field/storage/TTL policy fails closed.
-- M2.5 canary inspection qualifies the opportunity but cannot satisfy the M3
-  signature, trust-root, provider/package-binding, lifecycle, replay, and
-  declarative-only runtime gate.
-- Pilot distribution must carry explicit terms, a security/support route,
-  signed provenance, checksums, and install-integrity instructions. Do not call
-  the current repository or design-partner package OSS.
-
-### Consumer Authorization Issuance
-
-`campaign accept` produces only a reviewable no-authority request. The
-activation process accepts no repository argument and runs with the checkout
-unavailable.
-
-`authorization issue` requires an exact grant manifest, consumer-controlled
-configured signer, campaign/repository binding, issue time, expiry, nonce, and
-revocation route. It writes the private bundle only and performs none of the
-granted actions. `authorization revoke` records a signed grant or bundle
-revocation. Every later side effect independently revalidates the current
-signed state.
-
-### Provider Trust Status
-
-Every side effect consumes either a signed offline provider-status snapshot
-inside the enrollment policy's maximum age or an exact endpoint read under
-`provider_trust_status_read`. The grant names provider/package, endpoint,
-request shape, response budget, maximum age, expiry, and proof that no
-repository or consumer data is transmitted. The signed response binds packet,
-provider, package, campaign, audience, issue time, expiry, rotation epoch,
-revocation/withdrawal state, and anti-replay nonce. Missing, stale, replayed,
-unsigned, wrong-endpoint, or undeclared status access blocks.
-
-The same independently authenticated provider enrollment pins the
-receipt-acknowledgement signing key and allowed online/offline exchange
-classes. An invitation may narrow those values for a campaign and unit but
-cannot introduce a new key or destination.
+- Plan approval is required before implementation or product execution.
+- The PRD, plan, ADRs, operating docs, Factory profile, active compiled
+  artifacts, validators, examples, and fixtures must agree before v3 dispatch.
+- The repo-local v3 compiled set does not close the separate external-profile
+  and factoryd-runtime qualification gate.
+- Services-led discovery may collect provider intent and anonymized planning
+  evidence under an approved privacy scope. It grants no product runtime
+  authority.
+- Before collecting identifiable provider or consumer evidence, approve exact
+  fields, participant consent, storage, retention, deletion, disclosure,
+  confidentiality, and evidence ownership.
+- A provider-paid engagement must identify the sunset objective, accountable
+  provider operator, intended consumer cohort, provider-confirmed semantics,
+  commercial scope, and success decision.
+- Public fixtures prove engineering feasibility only. They do not close product
+  demand, repository consent, or paid campaign evidence.
+- The current rebaseline authorizes no product implementation, consumer
+  repository, model endpoint, external credential, command, network, branch,
+  or PR action.
 
 ### Customer Repository Read
 
-`customer_repo_read` must name:
+`customer_repo_read` names:
 
-- campaign and packet;
-- repository;
+- campaign and provider-confirmed change intent;
+- repository and selected package root;
 - readable paths and exclusions;
-- token/approval expiry;
-- retention scope;
-- deletion scope and receipt owner;
-- consumer evidence owner.
+- expiry and revocation;
+- retention, deletion, and evidence owner.
 
-Impact analysis cannot start without this grant.
+Impact analysis cannot start without this grant and cannot mutate repository
+state.
+
+### Migration Plan
+
+The no-write plan names:
+
+- every affected, excluded, unsupported, and uncertain site;
+- every intended file, dependency, and lockfile change;
+- the route for each change: deterministic, bounded agent, manual input, or
+  blocked;
+- expected commands and verification levels;
+- model disclosure, endpoint, credential, network, tool, and budget needs;
+- delivery targets: patch, local branch, PR bundle, remote branch, or draft PR;
+- residual risk.
+
+The Consumer Maintainer approves the exact plan digest. A changed plan requires
+new approval.
 
 ### Customer Repository Write
 
-`customer_repo_write` must additionally name:
+`customer_repo_write` names:
 
 - approved plan digest;
 - base commit;
 - writable paths;
-- file/line/diff budgets;
-- isolated workspace;
-- rollback posture.
+- file, line, and diff budgets;
+- isolated local workspace;
+- rollback posture;
+- expiry and revocation.
 
-Read authorization never implies local write authorization. Local write
-authorization never implies remote branch write.
+Read authorization never implies write authorization. Local write never implies
+remote branch write.
+
+### Bounded Agent
+
+Agent-assisted generation requires all of:
+
+- an approved plan item explicitly routed to `bounded_agent`;
+- exact model provider, endpoint, model/version, and parameters;
+- exact prompt, system policy, and tool-definition versions or digests;
+- allowed read paths, writable paths, and tool calls;
+- file, line, diff, turn, token, time, retry, and cost budgets;
+- isolated workspace and fail-closed cancellation;
+- separate model request disclosure, network, and credential grants;
+- provenance for every request, response, tool call, attempt, and patch digest;
+- independent verification and human review.
+
+Repository files, provider material, tool output, and model output are untrusted
+data. They cannot alter system policy, permissions, budget, network allowlists,
+tools, or writable paths. A model may propose a patch but cannot approve its
+plan, change its authorization, label itself verified, open a remote branch, or
+create a PR.
+
+Do not claim deterministic patch reproduction for agent mode. Deterministic
+verification remains required for the exact candidate head.
+
+### Model Request Disclosure
+
+`model_request_disclosure` names:
+
+- exact source, metadata, and context classes permitted to leave the consumer
+  plane;
+- prohibited code, secrets, credentials, PII, and production data;
+- redaction and minimization;
+- model-provider logging, training, retention, deletion, and regional posture;
+- prompt/response private-artifact policy;
+- evidence and expiry.
+
+API-provider disclosure and model-provider disclosure are distinct. Neither
+implies the other.
+
+### Model Network
+
+`model_network` names:
+
+- exact endpoint and operation allowlist;
+- request/response size;
+- token, time, retry, concurrency, and cost budgets;
+- model/version pin and failure behavior;
+- expiry and evidence.
+
+No generic internet access, fallback endpoint, silent model upgrade, or
+undeclared tool network is allowed.
+
+### Model Credential
+
+`model_credential` names:
+
+- credential environment and exact scopes;
+- isolated injection stage;
+- expiry and revocation;
+- prohibited persistence and logging;
+- evidence.
+
+Model credentials remain absent from repository commands, build/test stages,
+provider artifacts, and committed evidence.
 
 ### Command Execution
 
-`command_execution` must name:
+`command_execution` names:
 
-- exact commands;
-- working directory;
+- exact commands and working directory;
 - exact read-only and writable mounts;
 - neutral home and temp roots;
 - executable and toolchain roots;
 - timeout and output budgets;
 - dependency lifecycle-script posture;
 - network posture;
-- environment variables by class, never secret values;
-- local socket and inherited-file-descriptor policy;
-- process-tree limits and mandatory child-process inheritance;
-- OS credential access, which defaults to denied;
-- the supported fail-closed isolation backend.
+- environment variable classes, never secret values;
+- local-socket and inherited-descriptor policy;
+- process-tree limits and child-process inheritance;
+- OS credential access, denied by default;
+- a supported fail-closed isolation backend.
 
-Repository commands default to no network, no dependency lifecycle scripts,
-no host home or credential stores, no SSH/GPG/cloud/keychain access, no
-agent/Docker/unrelated local-service sockets, and no inherited descriptors
-beyond standard streams. If the backend cannot enforce the exact boundary, the
-command does not run.
+Repository commands default to no network, no lifecycle scripts, no host home
+or credential stores, no agent/Docker/unrelated service sockets, and no extra
+inherited descriptors. If the boundary cannot be enforced, the command does not
+run.
 
 ### Package Registry
 
-`package_registry_read` is independent from command execution and must name:
-
-- exact Node and npm versions and toolchain digest;
-- exact package/version and package-integrity inputs;
-- registry endpoint or immutable snapshot;
-- read-only network allowlist and budget;
-- disabled lifecycle scripts unless separately approved;
-- expiry and evidence.
-
-Automatic `package-lock.json` mutation is prohibited when any of these pins or
-the registry-network grant is missing.
+`package_registry_read` independently names exact Node/npm and toolchain
+versions, package/version/integrity inputs, registry or immutable snapshot,
+read-only network allowlist and budget, lifecycle-script posture, expiry, and
+evidence.
 
 ### Provider Sandbox
 
-`sandbox_request_disclosure` must separately name:
+Optional sandbox verification independently requires:
 
-- exact transmitted payload classes;
-- synthetic or approved non-sensitive test-data classes;
-- prohibited production customer data, PII, credentials, and secrets;
-- what the provider may log;
-- provider retention and deletion terms;
-- consumer-approved evidence of disclosure and deletion.
+- `sandbox_request_disclosure` for exact payload and data classes plus provider
+  logging, retention, and deletion;
+- `sandbox_network` for the exact non-production endpoint, operations,
+  namespace, request/write budgets, retry, cleanup, and orphan handling;
+- `sandbox_credential` for non-production scopes, injection, expiry, and
+  revocation.
 
-`sandbox_network` must separately name:
+Production data, credentials, PII, and irreversible production mutations are
+prohibited.
 
-- API-provider identity and environment;
-- network allowlist;
-- operation allowlist;
-- resource namespace;
-- request and write budgets;
-- settle/retry posture;
-- cleanup and orphan evidence;
-- approval evidence and expiry.
+### Patch, Branch, PR Bundle, And Draft PR
 
-`sandbox_credential` must separately name the non-production credential class,
-scopes, isolated injection stage, expiry, revocation, and evidence.
+The delivery ladder is:
 
-Sandbox credentials remain isolated from build and repository-test commands.
-Generic network, credential, or payload approval does not satisfy any gate.
+1. patch artifact;
+2. optional local branch;
+3. PR bundle;
+4. optional remote branch;
+5. optional draft PR;
+6. consumer review and merge.
 
-All grants in this section are private, schema-backed Lumyn product
-authorizations. `.factory/factoryd.json` retains Factory's closed
-`approval`, `credentials`, and `network` vocabulary for the implementation
-worker. Its approval evidence may cite an opaque validated product bundle, but
-no Factory grant substitutes for or broadens a Lumyn product authorization.
-Factory selection and dispatch do not evaluate Lumyn product authority. Lumyn
-must revalidate the current packet trust state and exact applicable product
-bundle inside the product immediately before every local, sandbox, GitHub, or
-attestation side effect and every retry; no earlier decision may be cached.
-`lumyn authorization validate` supplies diagnostic and closure proof, not the
-authoritative side-effect gate.
+The PR bundle contains the provider-confirmed intent ref, plan digest, base/head
+identity, patch provenance, model provenance when applicable, deterministic
+verification evidence, excluded/unsupported scope, residual risk, and suggested
+title/body. It requires no GitHub credential.
 
-### GitHub Remote Branch
+`github_branch_write` names the repository, authorized non-default namespace,
+base commit, token expiry, idempotency, and rollback. It grants no PR authority.
 
-`github_branch_write` must name:
+`github_pr_write` names the repository, authorized remote branch, base branch,
+draft-only posture, token expiry, idempotency key, and approved plan/evidence
+refs. It grants no remote-branch or merge authority.
 
-- repository;
-- authorized non-default branch namespace;
-- base commit;
-- installation-token expiry;
-- rollback and idempotency posture.
+The product never writes the default branch or auto-merges.
 
-It grants no authority to create or update a pull request.
+### Optional Provider Reporting
 
-### GitHub Draft PR
-
-`github_pr_write` must name:
-
-- repository;
-- authorized remote branch;
-- base branch;
-- draft-only posture;
-- installation-token expiry;
-- idempotency key;
-- approved plan/evidence refs.
-
-It grants no authority to create the remote branch. The MVP never writes the
-default branch or auto-merges.
-
-### Provider Attestation
-
-`provider_attestation` lists the exact fields the consumer permits Lumyn to
-share plus their retention and deletion terms. Raw source, diffs, logs, traces,
-prompts, responses, credentials, and secret values are excluded by default.
-It is optional for M9 and M10 reporting actions; absence of this grant must
-silence reporting, not block an otherwise authorized draft PR.
-
-### Campaign Connection Receipt
-
-`campaign_receipt` authorizes only the minimal signed sponsored-program meter:
-campaign and packet digest, eligible-repository unit and invitation nonces,
-opaque per-campaign organization/repository IDs, connection event/time,
-tool/schema versions, consent-policy and provider-signed consumer-key-binding
-digests, consumer issuer public-key fingerprint, audience, expiry, anti-replay
-nonce, and signature. Before acknowledgement, the provider authenticates the
-consumer organization through an existing account-admin or documented
-out-of-band ownership channel and signs the receipt-key binding.
-
-The invitation pins the provider acknowledgement key and either the exact
-receipt endpoint or offline exchange contract. Online submission sends only
-the canonical receipt under the exact grant; offline submission uses a bounded
-export/import bundle. The provider-signed acknowledgement binds receipt digest,
-invitation unit, key-binding digest, decision, time, and deduplication key.
-One invitation unit can acknowledge only one opaque repository; an identical
-digest retry is idempotent, while conflicting reuse blocks. The consumer
-verifies and imports the acknowledgement before the unit is treated as
-connected. Declining this grant leaves private local use and draft-PR delivery
-available but excludes the repository from sponsored-program counts.
+`provider_reporting` lists only the exact fields the consumer permits Lumyn to
+share. Raw source, diffs, logs, traces, prompts, responses, and credentials are
+excluded by default. Missing reporting consent does not block local patch,
+branch, PR-bundle, or otherwise authorized draft-PR delivery.
 
 ### Artifact Retention And Deletion
 
-`artifact_retention` names exact artifact classes, their private or disclosed
-storage boundary, TTL, expiry behavior, and evidence owner.
+`artifact_retention` names exact artifact classes, storage boundary, TTL,
+expiry, and evidence owner.
 
-`artifact_deletion` independently names revocation/expiry triggers, deletion
-scope, receipt owner, retry posture, and orphan-report route. A data-producing
-or disclosure grant must reference both authorities; neither is implied by
-repository, command, sandbox, GitHub, or provider-attestation approval.
-
-The private-artifact owner enforces these grants automatically on creation,
-read, process startup, and the next run. `lumyn artifacts gc` retries partial
-deletion and reports unresolved orphans; it cannot extend TTL, revive revoked
-authority, or rewrite historical closure.
-
-Provider export and public commit are irreversible. Revocation blocks future
-sharing and deletes Lumyn-controlled private copies; it cannot erase provider
-records, Git history, clones, or caches. Consent and rollback evidence must say
-so explicitly.
+`artifact_deletion` names revocation/expiry triggers, deletion scope, receipt
+owner, retry, and orphan route. Cleanup cannot extend authority or rewrite
+historical closure.
 
 ### Merge
 
-- Merge approval remains with the Consumer Maintainer for product-generated
-  migration PRs.
-- Merge approval for Lumyn's own repository follows the Factory lifecycle.
+- Consumer Maintainers own review and merge for product-generated migration
+  work.
+- Lumyn repository merges follow the Factory lifecycle.
+- No product or Factory grant authorizes auto-merge.
 
 ## Artifact Rules
 
-- Product source of truth: `docs/product/prd.md`.
-- Human task plan: `docs/product/plan.md`.
-- Active compiled plan:
+- Product source: `docs/product/prd.md`.
+- Human plan: `docs/product/plan.md`.
+- Compiled v3 target:
   `.factory/artifacts/prd-to-plan/lumyn-migration-mvp/`.
-- Historical compiled plan:
-  `.factory/artifacts/prd-to-plan/lumyn-mvp/`.
+- Historical plan: `.factory/artifacts/prd-to-plan/lumyn-mvp/`.
 - Task evidence: `.factory/artifacts/task-runs/<task_id>/`.
-- Independent lifecycle evidence:
-  `.factory/artifacts/lifecycle-evidence/<task_id>/`; this namespace is
-  lifecycle-owned and forbidden to `task-executor`.
+- Independent evidence:
+  `.factory/artifacts/lifecycle-evidence/<task_id>/`.
 - PR lifecycle:
   `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`.
-- Factory scratch: `.factory/tmp/`.
-- Daemon state: `.factoryd/`.
-- Retained synthetic or licensed project fixtures: `workflows/`, `cassettes/`,
-  and `runs/`; these roots do not authorize consumer-private runtime storage.
-- Planned migration artifacts: `changes/`, `authorizations/`, `impacts/`, and
-  `migrations/`, introduced only as schema-backed artifact types.
-- Consumer-private runtime artifacts: an explicitly configured,
-  non-committable root outside the consumer checkout and every public source
-  repository. It holds private workflow, cassette, run, change, authorization,
-  impact, migration, and PR-result instances.
-- Public pilot evidence:
-  `.factory/artifacts/pilot/lumyn-migration-mvp/public/`, containing only
-  consented redacted aggregates and evidence hashes.
-- Holdout inputs and answer material: evaluator-controlled
-  `LUMYN_HOLDOUT_ROOT` outside the checkout and every task-executor mount,
-  prompt, and environment. An independent holdout owner provisions and freezes
-  it. Only a non-resolving manifest of opaque IDs, provenance class and license
-  posture, a frozen suite commitment, and encrypted or HMAC commitments may be
-  committed; source locations, package identifiers, and plaintext content
-  digests may not.
-- M1 provision mode declares only the opaque namespace and keyed-commitment
-  algorithm. Its trusted result creates the suite ref and commitment;
-  M4/M6/M7 evaluate mode resolves and byte-binds that result before scoring.
+- Consumer-private runtime artifacts: configured root outside the checkout and
+  public source repository.
+- Public evidence: separately consented, redacted aggregate/hash evidence only.
 
-Factory refs are repo-relative; private runtime refs are relative to the
-configured private root. Large output is cited by hash and stable artifact
-reference. Private artifacts enforce authorization TTL and deletion on expiry
-or revocation, with deletion receipts or orphan reports. Consumer-private,
-provider-visible, and public artifacts are separate. Provider-visible
-attestations contain only exact consumer-consented fields; public evidence is
-aggregate/hash-only. Provider/public copies are non-recallable after export or
-commit; private deletion evidence must never claim otherwise.
-
-Historical evidence is immutable and may prove only its recorded semantics.
+Historical evidence is immutable and proves only its recorded semantics.
 
 ## Bootstrap Validation Lanes
 
@@ -398,146 +335,102 @@ Historical evidence is immutable and may prove only its recorded semantics.
 - Contract: `make test-contracts`
 - Full: `make prepush-full`
 - Risk: GitHub Actions `CodeQL analyze`
-- Acceptance: active item-level ledger and scope-closure map
-- Cross-system: task-scoped approved sandbox or GitHub integration
+- Acceptance: item-level ledger and closure map
+- Cross-system: separately approved model, sandbox, or GitHub integration
 
 ## PR Lifecycle Baseline
 
-- Local validation gate: `make prepush-full`.
-- GitHub validation check: `validate`.
+- Local gate: `make prepush-full`.
+- GitHub validation: `validate`.
 - Security scanner: `CodeQL analyze`.
-- Required-check manifest: `.github/required-checks.json`.
-- Owner-review policy: `.github/CODEOWNERS`.
-- Action-ref posture: `.github/action-ref-exceptions.yaml`.
-- Structured review: `code-review` for trust, credential, external-call,
-  patch, GitHub, schema, policy, or high-risk behavior.
-- Independent lifecycle evidence: `holdout_result`, `trace_grade_report`, and
-  `attestation_record` when selected by task policy, all verified before
-  `commit-push`. Each artifact must schema-validate and bind the exact task,
-  work item, lifecycle run, current validation run, candidate digest, and work
-  proof marker digest, with passing status and independent worker provenance.
-- Task-level review type and reviewer class are authoritative and must exactly
-  match the inherited validation contract. Shipping rejects a missing,
-  mismatched, stale, or implementation-authored review.
-- Shipping evidence: `commit-push` ship packet.
-- Post-merge evidence: `post-merge-monitor`.
-- Unavailable lifecycle surfaces require an explicit approved exception.
+- Owner review: `.github/CODEOWNERS`.
+- Remote protection audit: `make audit-remote-protection`.
+- Structured `code-review` for model, agent, patch, credential, external-call,
+  GitHub, schema, policy, or other high-risk behavior.
+- Independent holdout, trace-grade, and attestation evidence when selected.
+- Shipping through `commit-push`.
+- Monitoring through `post-merge-monitor`.
 
-Passive Codex review settle is required before merge. Green CI alone is not merge-ready.
-Do not merge manually through `gh pr merge`, the GitHub UI, or a
-connector before the latest-head terminal Codex review signal. A merge without
-that evidence is a process escape and requires recorded follow-up.
-
-GitHub `main` must remain protected by branch protection and the
-`protect-main-from-direct-push` ruleset. Audit live controls with:
-
-```bash
-make audit-remote-protection
-```
+Passive Codex review settle is required before merge.
+Green CI alone is not merge-ready. Do not merge manually through
+`gh pr merge`, the GitHub UI, or a
+connector before the configured terminal latest-head review signal. A merge
+without that evidence is a process escape and requires recorded repair.
 
 ## Validation And Proof Rules
 
-- Capture repository baseline before mutation.
-- Keep impact, patch, verification, delivery, permission, and residual-risk
-  axes separate.
-- Use only the canonical successful-verification labels `static_verified`,
-  `repo_verified`, `workflow_contract_replay_passed`,
-  `workflow_verified_replay`, `workflow_verified_mock`, and
-  `workflow_verified_sandbox`.
-- A `workflow_verified_*` result requires an approved entrypoint executed from
-  the exact patched repository head plus observed interaction and outcome
-  evidence in that named environment. Independent contract or cassette replay
-  is `workflow_contract_replay_passed` and cannot exceed `repo_verified`.
-- Production access is out of scope.
-- Bind evidence to packet, plan, base/head commits, patch, environment, and
-  artifact hashes.
+- Capture the repository baseline before mutation.
+- Keep generation mode separate from verification strength.
+- Bind verification to the exact candidate head and pinned environment.
+- Record agent/model provenance without exposing private prompts or responses.
+- Treat pre-existing failures separately.
 - Stale evidence cannot close acceptance.
-- Boundary, cleanup, orphan, redaction, authorization, or proof failures block
-  stronger verification labels.
-- Unimplemented commands must return typed nonzero results.
+- Boundary, cleanup, redaction, authorization, provenance, or proof failure
+  blocks stronger labels.
 - Public fixtures prove engineering behavior, not demand.
+- Unimplemented commands must return typed nonzero results.
 
 ## Factory And factoryd
 
-Safe attended path:
+The checked-in Factory configs are templates with no active grants. Factory
+worker `approval`, `credentials`, and `network` capabilities never substitute
+for Lumyn product authorization.
 
-```bash
-export FACTORY_REPO=../factory
-factoryd doctor --config .factory/factoryd.example.json --repo lumyn --json
-factoryd run --config .factory/factoryd.example.json --repo lumyn --dry-run --json
-```
+If a reviewed task declares `conditional_factory_capabilities`, a future
+runtime may activate only one frozen task/action mode and its exact sorted
+selected capability set. Every selected grant must carry the same
+task-bound evidence ref, scope digest, and expiry; partial, extra, stale,
+wildcard, or cross-task activation fails closed.
 
-Use `.factory/factoryd.autoship.example.json` only when:
+The factoryd templates remain mission-paused. Do not select or execute v3 work
+through factoryd until a separate reviewed change:
 
-- branch protection and required checks are verified;
-- task paths, commands, evidence, and stop conditions are bounded;
-- passive review, merge, post-merge, and semantic item closure are enforced;
-- every required customer-repository, command, GitHub, sandbox, credential,
-  network, reporting, retention, and deletion capability grant is task-scoped
-  and active;
-- package-registry network, sandbox request disclosure, sandbox access,
-  remote-branch write, and PR write remain separately authorized.
+- rebaselines the external Factory `profiles/lumyn.yaml` profile;
+- qualifies the factoryd bundle/runtime against the exact active mission and
+  schemas;
+- preserves repo-local validator and operating-doc agreement; and
+- explicitly unpauses one bounded task with positive budgets and required
+  grants.
 
-Product workers may emit task-scoped evidence. They must not mutate active
-PRD-derived control truth to bypass a gate.
+The current compiled set remains usable for planning and deterministic
+repo-local validation. Future product workers emit task-scoped evidence and
+cannot mutate canonical planning truth.
 
 ## Post-PRD Findings
 
-Material audit, review, pilot, or recommendation findings are saved as
-structured repo-local finding lists and ingested before implementation.
-Generated post-PRD artifacts become the execution contract for the follow-up
-mission.
-
-Do not alter the PRD from a task-run worker. A human explicitly promotes a
-finding into product scope and then rebaselines all affected planning artifacts.
+Material audit, review, pilot, or recommendation findings are saved as governed
+post-PRD artifacts. A human explicitly promotes a finding into product scope
+and regenerates every affected planning surface.
 
 ## Stop Conditions
 
 Stop and request a human decision if:
 
-- provider and consumer authority are ambiguous;
-- a provider packet can execute code, lacks a valid consumer-pinned trust root
-  or provider-to-package binding, or fails key, timestamp, audience, expiry,
-  rotation, revocation, withdrawal, or replay checks;
-- an exact capability grant is missing or expired;
-- read-only analysis would mutate state;
-- the approved plan, repository base, or packet digest has drifted;
-- current packet trust or exact product authority cannot be revalidated
-  immediately before a local, sandbox, GitHub, or attestation side effect;
-- a local write, command, registry-network, sandbox-network, credential,
-  payload-disclosure, remote-branch, PR, reporting, retention, or deletion
-  boundary is unclear;
+- provider, Lumyn operator, model provider, and consumer authority are unclear;
+- provider intent is unconfirmed or provider material would execute code;
+- the approved plan, base commit, or intent binding has drifted;
+- read-only impact would mutate state;
+- model disclosure, endpoint, credential, tools, network, retention, or budgets
+  are absent or ambiguous;
+- untrusted content attempts to widen authority or tool access;
+- agent generation would self-approve or self-verify;
+- a local write, command, model, registry, sandbox, branch, PR, retention, or
+  deletion boundary is unclear;
+- host isolation cannot be enforced;
 - required business input is missing;
-- a task requires production access;
-- a repository command needs unapproved network or lifecycle scripts;
-- a repository command lacks enforceable host isolation for mounts,
-  environment, credentials, sockets, descriptors, or child processes;
-- packet freshness lacks a current signed offline snapshot or exact authorized
-  provider-status read;
-- lockfile mutation lacks exact Node/npm versions, registry/snapshot,
-  package-integrity inputs, toolchain digest, or registry-network approval;
-- sandbox execution lacks payload/test-data, provider logging, retention,
-  deletion, cleanup, or orphan consent;
+- production access would be required;
 - redaction or evidence freshness is uncertain;
-- private runtime evidence would enter a checkout or public repository, or its
-  automatic TTL/revocation deletion, receipt ownership, or orphan recovery
-  cannot be enforced;
+- private runtime data would enter a checkout or public repository;
+- held-out answer material would be visible to an implementation worker;
 - evidence would be labelled above its proven boundary;
-- provider-visible data exceeds consumer consent;
-- a sponsored connection is counted without an acknowledged valid signed
-  minimal receipt;
-- deletion or rollback evidence claims to recall an already exported or
-  publicly committed copy;
-- remote branch write or PR write is inferred from the other;
+- provider-visible data exceeds consent;
+- a patch, local branch, or PR bundle is treated as remote-write authority;
 - default-branch write or auto-merge is requested;
-- M5 or later migration-plan work would proceed before M2.5 closes
-  `DISC-001` and `DISC-002`;
-- an implementation worker can read held-out answer material or write
-  lifecycle-owned review, holdout, trace-grade, attestation, shipping, or PR
-  lifecycle evidence;
-- M9 draft-PR delivery is made dependent on M8 sandbox access or optional
-  provider reporting;
-- the active PRD, plan, Factory profile, task packets, acceptance ledger,
-  mapping, validation contract, and scope closure disagree;
-- required validation, coverage, CodeQL, review, shipping, post-merge, or
+- a task treats the v3 planning rebaseline as product implementation
+  authorization;
+- factoryd dispatch is attempted while the mission is paused or its external
+  profile, runtime, bundle, or active-mission semantics are unqualified;
+- the PRD, plan, Factory profile, task packets, acceptance ledger, validation
+  contract, mapping, and closure disagree;
+- required validation, coverage, CodeQL, review, `commit-push`, post-merge, or
   item-level evidence is missing without an approved exception.

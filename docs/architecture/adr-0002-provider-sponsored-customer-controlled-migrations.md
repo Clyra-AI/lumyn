@@ -2,11 +2,21 @@
 
 ## Status
 
-Accepted for the Lumyn migration MVP rebaseline.
+Superseded by ADR-0003; retained as an immutable historical v2 record.
 
 ## Date
 
 2026-07-23
+
+## Supersession Note
+
+ADR-0003 supersedes this decision for active v3 planning. This ADR remains an
+immutable record of the v2 provider-sponsored, deterministic-first rebaseline;
+its packet PKI, continuous provider-status, connection-receipt, and
+deterministic-only MVP choices are historical context, not active v3
+requirements. References below to the 62-item plan, `M0` through `M10`,
+provider-status, receipts, or receipt-backed rollout describe that superseded
+decision and must not be used as current dispatch or validation authority.
 
 ## Context
 

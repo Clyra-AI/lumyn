@@ -1,14 +1,14 @@
-# Lumyn MVP — Provider-Sponsored Verified API Migrations
+# Lumyn MVP — Verified API Migration Execution
 
 | Field | Value |
 |---|---|
-| Version | 2.0 |
-| Status | Ready for execution after product rebaseline |
+| Version | 3.0 |
+| Status | Active v3 planning contract; no runtime implementation authorized by this document alone |
 | Owner | Product and Engineering |
-| Last Updated | 2026-07-23 |
+| Last Updated | 2026-07-24 |
 | Primary Audience | Lumyn builders, API-provider design partners, API-consumer maintainers, and technical investors |
 | Source Task Plan | `docs/product/plan.md` |
-| Active Factory Plan | `.factory/artifacts/prd-to-plan/lumyn-migration-mvp/` |
+| Compiled Factory Plan | Repo-local v3 set regenerated; factoryd dispatch paused pending external Factory profile and runtime alignment |
 
 ---
 
@@ -16,302 +16,401 @@
 
 This document is the product source of truth for the Lumyn MVP.
 
-Lumyn enables an API provider to sponsor a migration campaign that helps
-participating API consumers move from an old API or SDK version to a new one.
-For each customer-authorized repository, Lumyn identifies affected code,
-prepares a bounded migration, verifies the repository and relevant business
-workflow, and opens an evidence-backed draft pull request.
+Lumyn is a services-led execution product for consequential API and SDK
+migrations. It translates authoritative migration evidence into a
+repository-specific, tested change that an API Consumer Organization can
+review and adopt. The initial commercial motion is a provider-paid deprecation
+or sunset campaign. A consumer-paid urgent upgrade sprint is a secondary proof
+and revenue offer, not a second marketplace side.
 
 The product promise is:
 
-> When an API provider changes an API or SDK, Lumyn finds the affected code in
-> authorized customer repositories, opens the fix, and shows exactly what was
-> and was not verified.
+> When an API or SDK must change, Lumyn determines how an authorized consumer
+> repository is affected, produces the smallest bounded migration it can
+> justify, verifies the result against that repository's available evidence,
+> and delivers a reviewable patch, branch, PR bundle, or optional draft PR.
 
-This version supersedes the previous product direction in which generic API
-workflow verification and live agent evaluation were the headline product.
-Workflow contracts, evidence schemas, redaction rules, and proof semantics
-remain valuable, but they now serve as the verification foundation for an API
-migration rather than the product's primary job.
+Lumyn is not differentiated by opening a pull request. Generic coding agents
+can already propose code changes. Lumyn is differentiated by combining
+provider change semantics, consumer-local repository understanding, bounded
+hybrid execution, deterministic verification, and proof-honest outcome
+evidence across independent customer environments.
 
-The prior Factory plan under
-`.factory/artifacts/prd-to-plan/lumyn-mvp/` is retained as historical evidence.
-It is not an active execution plan. The active plan is
-`.factory/artifacts/prd-to-plan/lumyn-migration-mvp/`.
+This version supersedes PRD v2.0's deterministic-first patch engine,
+cryptographic two-sided activation, connection-receipt billing, and
+draft-PR-centered product shape. Those mechanisms are not active MVP
+requirements. Historical artifacts remain historical evidence and must not be
+rewritten to claim v3 behavior.
 
 ---
 
 ## Executive Summary
 
-API providers publish migration guides, changelogs, SDK releases, and
-occasionally codemods. The consumer still has to determine whether its
-repository is affected, translate generic guidance into its own abstractions,
-change the code, run the right checks, and decide whether the integration still
-performs the required business job.
+API providers publish changelogs, migration guides, SDK releases, OpenAPI
+descriptions, examples, and occasionally codemods or agent instructions. An
+API consumer still has to determine where its integration lives, understand
+local wrappers and data mappings, change the code, repair repository-specific
+failures, run the right checks, and decide whether the integration still
+performs its business job.
 
 Lumyn closes that loop:
 
 ```text
-signed provider change intent
--> customer-authorized repository impact
+official/public/provider change evidence
+-> normalized migration pack
+-> consumer-local integration graph
 -> reviewable migration plan
--> bounded patch
--> repository and workflow verification
--> evidence-backed draft PR
--> customer review and merge
+-> deterministic transforms + bounded coding agent
+-> baseline-aware compile/test/mock/sandbox repair loop
+-> verified migration outcome
+-> patch, branch, PR bundle, or optional draft PR
 ```
 
-Lumyn is provider-sponsored and customer-controlled:
+The operating model is provider-funded and consumer-controlled:
 
-- The API provider is the initial economic buyer and campaign sponsor.
-- The API consumer owns the repository, credentials, execution environment,
-  disclosure choices, and merge decision.
-- Provider sponsorship never grants the provider access to customer code.
-- The consumer explicitly approves read, write, command, network, credential,
-  PR, and reporting scopes.
-- Lumyn never auto-merges in the MVP.
+- The API Provider is the main economic buyer and campaign sponsor.
+- The API Consumer Organization owns repository, execution, model-data,
+  credential, disclosure, review, and merge authority.
+- Provider payment never grants access to consumer source code.
+- The coding agent runs through a consumer-local or explicitly
+  consumer-approved execution boundary.
+- The API Provider never receives raw code, diffs, prompts, responses, logs,
+  traces, or credentials by default.
+- Lumyn never writes to the default branch or auto-merges in the MVP.
 
-The commercial outcome is not merely a generated PR. It is faster completion
-of a provider migration campaign: more customers safely moved off an old
-version, less support work, fewer migration incidents, and a shorter legacy
-compatibility tail.
+The commercial outcome is a completed and evidenced migration, not a generated
+PR. For an API Provider, value is a shorter legacy-version tail, fewer support
+hours, lower migration risk, and clearer cohort readiness. For an API Consumer
+Organization, value is less engineering effort and a smaller, better-evidenced
+change to review.
 
 ---
 
 ## Product Thesis
 
-Dependency bots can update version numbers. Codemods can rewrite known syntax.
-Coding agents can propose broader edits. None of those mechanisms alone proves
-that:
+Dependency bots update versions. Vendor codemods rewrite known syntax. Generic
+coding agents can inspect a repository and attempt broader changes. Provider
+SDK and documentation tools explain what changed. None of those mechanisms
+alone owns the cross-company migration outcome:
 
-- every relevant call site was found;
-- the patch stayed within the authorized scope;
-- the repository still builds and passes its selected tests;
-- the integration's important business workflow still completes;
-- unsupported or ambiguous cases were disclosed instead of guessed.
+- provider evidence may not describe consumer abstractions;
+- a generic agent may not know which change semantics are authoritative;
+- syntactically correct changes may be behaviorally wrong;
+- weak or missing tests can create false confidence;
+- the provider cannot inspect private consumer code;
+- the consumer may not trust a provider-controlled mutation path;
+- opening a PR does not prove adoption or legacy-version retirement.
 
-Lumyn's differentiation is the combination of:
+Lumyn's initial differentiation is:
 
 ```text
-authoritative change intent
-+ repository-specific impact analysis
-+ bounded migration
-+ proof-honest workflow verification
-+ two-party authorization
+authoritative migration evidence
++ consumer-local integration graph
++ deterministic and bounded-agent routing
++ baseline-aware verification and repair
++ consumer-controlled delivery
++ consented campaign outcome measurement
 ```
 
-The durable value is a migration evidence chain, not access to a particular
-model.
+Every real migration must be compared with the status-quo baseline:
+
+> official migration guide, vendor skill, or codemod plus a capable generic
+> coding agent such as Codex or Copilot.
+
+If Lumyn does not materially reduce maintainer effort or materially improve
+verified completion without increasing correction risk, it has not
+demonstrated product value.
+
+The intended durable position is cross-company API migration campaign
+execution, not code transformation alone.
 
 ---
 
 ## Roles And Terminology
 
-Use these terms consistently. Avoid the unqualified word `customer` where it is
-unclear which party is meant.
+Use these terms consistently. Avoid the bare word `provider` where it could
+mean the API Provider or Model Provider.
 
 ### API Provider
 
-The company that owns and sells the API or official SDK. It sponsors the
-migration campaign and supplies authoritative change intent.
+The company that owns and sells the API or official SDK. It supplies or
+confirms migration semantics, recruits the sponsored cohort, and pays for the
+initial provider campaign.
 
 ### API Consumer Organization
 
-The organization whose application depends on the provider. It owns the
-repository, credentials, test environment, and integration risk.
+The organization whose application depends on the API Provider. It owns the
+repository, tests, credentials, execution environment, model-data policy, and
+integration risk.
 
 ### Consumer Maintainer
 
-The engineer authorized by the API Consumer Organization to review impact,
-approve execution, inspect the patch, and merge or reject the draft PR.
+The engineer authorized by the API Consumer Organization to approve analysis,
+review the migration plan, authorize execution, inspect the result, and merge
+or reject it.
 
 ### Provider Operator
 
-The provider-side DX, SDK, API-platform, solutions-engineering, or customer
-engineering person who creates and runs the campaign.
+The provider-side DX, SDK, API-platform, customer-engineering, or
+solutions-engineering person who supplies change context and recruits
+participants.
 
 ### Lumyn Operator
 
-A member of the Lumyn team who assists with campaign setup, onboarding,
-operations, or support. Lumyn Operator time is product delivery COGS and is
-measured separately from Provider Operator and Consumer Maintainer time.
+A member of the Lumyn team who prepares migration packs, assists onboarding,
+operates the first campaigns, or supports a consumer upgrade sprint. Lumyn
+Operator time is measured as delivery COGS, separate from product development.
 
-### Provider Change Packet
+### Model Provider
 
-A versioned, signed, declarative artifact that describes a migration from a
-source API/SDK version to a target version. The signature must verify against a
-consumer-pinned API-provider trust root and a verified provider-to-package
-ownership binding. A packet is provider input, not executable code and not
-proof that a generated patch is correct.
+The company or local runtime that supplies the model used by the coding agent.
+It is never referred to as the API Provider. Cloud-model data handling is a
+separate consumer decision and disclosure boundary.
 
-### Provider Enrollment Bundle
+### Agent Runner
 
-A separately obtained, signed bootstrap artifact that binds the API Provider
-organization, official package, root-key fingerprint, rotation policy, and
-revocation/recovery endpoints. It also pins the provider status-signing key,
-maximum acceptable status age, and either an exact status endpoint or the
-contract for an offline signed status snapshot, plus the provider
-receipt-acknowledgement signing key and permitted online or offline receipt
-exchange classes. A campaign invitation narrows these pinned values to one
-campaign and eligible-repository unit; it cannot introduce an untrusted key or
-endpoint. The Consumer Maintainer obtains the bundle and expected fingerprint
-through an authenticated provider admin console, named security contact, or
-another independently verified channel—not from the campaign invitation alone.
+The consumer-approved process or harness that selects model context, invokes
+the Model Provider or local model, exposes bounded tools, applies budgets, and
+records attempt provenance. The Agent Runner operates inside the consumer
+execution boundary and cannot grant itself broader repository or network
+authority.
+
+### Migration Pack
+
+A versioned, digest-bound, declarative artifact assembled from official
+documentation, OpenAPI descriptions, SDK changes, examples, migration
+guidance, provider clarification, and Lumyn analysis. It contains change
+semantics, applicability, known transformations, unsupported conditions,
+verification guidance, provenance, and confirmation status.
+
+A migration pack is classified as:
+
+- `public_derived`: derived from pinned public evidence without provider
+  endorsement;
+- `provider_confirmed`: reviewed and confirmed by an accountable Provider
+  Operator.
+
+A migration pack is untrusted input, cannot execute arbitrary code, and is not
+proof that a candidate is correct.
+
+### Integration Graph
+
+A consumer-local model of where the selected API or SDK appears in the
+repository, including dependency state, imports, aliases, wrappers, adapters,
+call sites, request and response mappings, relevant configuration, tests,
+mocks, cassettes, fixtures, and explicit uncertainty.
+
+### Migration Candidate
+
+A proposed set of code and dependency changes. A candidate may be
+`deterministic`, `agent_assisted`, or `manual`. It is not a verified outcome
+until the verification ladder passes at the declared evidence level.
+
+### Verified Migration Outcome
+
+A migration candidate plus evidence bound to the exact repository base and
+candidate head, with explicit coverage, commands, results, residual risk, and
+proof boundary. `Verified` never means production correctness unless
+production evidence exists; production evidence is outside the MVP.
 
 ### Migration Campaign
 
-One provider change packet plus an invited cohort of API Consumer
-Organizations, their independent authorization states, acknowledged minimal
-connection units, and separately consented richer outcome attestations.
+One migration pack, one API Provider, a bounded cohort of consenting API
+Consumer Organizations, and measured migration outcomes. It is a services-led
+engagement in the MVP, not a two-sided marketplace or cryptographic billing
+network.
+
+### Consumer Upgrade Sprint
+
+A consumer-paid engagement for one consequential migration across one to
+three repositories. It can prove the execution engine and generate revenue,
+but it does not prove provider willingness to pay, provider-led distribution,
+or recurring campaign demand.
+
+### Eligible Consumer Unit
+
+The canonical campaign activation and funnel unit: one distinct API Consumer
+Organization plus one designated primary eligible repository and one
+accountable Consumer Maintainer. Additional repositories from the same
+organization are tracked separately and do not increase the five-unit
+activation denominator.
 
 ### Verified
 
-`Verified` must always name its evidence boundary. The canonical labels are
-`static_verified`, `repo_verified`, `workflow_contract_replay_passed`,
-`workflow_verified_replay`, `workflow_verified_mock`, and
-`workflow_verified_sandbox`. A workflow-verified label requires an approved
-entrypoint executed from the exact patched repository head plus observed
-interaction and outcome evidence in the named environment. Independent
-contract or cassette replay cannot exceed `repo_verified`.
+`Verified` must always name its evidence boundary. The canonical labels remain:
+
+- `static_verified`
+- `repo_verified`
+- `workflow_contract_replay_passed`
+- `workflow_verified_replay`
+- `workflow_verified_mock`
+- `workflow_verified_sandbox`
+
+A `workflow_verified_*` label requires an approved entrypoint executed from
+the exact candidate head plus observed interaction and outcome evidence in the
+named environment. Independent contract or cassette replay cannot exceed
+`repo_verified`.
 
 ---
 
 ## Jobs To Be Done
 
-### API Provider Job
+### Primary API Provider Job
 
-> When we need customers off version X by date Y, help authorized customer
-> teams identify and merge the required code changes so we can retire the old
-> version without support spikes, outages, or an indefinite compatibility tail.
+> When we must retire an API or SDK version by a fixed deadline, help
+> consenting customers complete and verify their repository-specific
+> migrations without our team inspecting their proprietary code, and show us
+> which integrations are actually ready.
 
 ### API Consumer Job
 
-> When an API provider requires a consequential migration, give me a minimal,
-> explainable patch that fits my repository and prove the important integration
-> still works, without giving the provider uncontrolled access to my code or
-> production environment.
+> When an API dependency changes, show exactly how my repository is affected
+> and produce the smallest tested migration I can safely review and adopt.
 
-Both jobs are required. Provider willingness to pay without consumer
-authorization does not create a functioning product.
+Both roles are required for a provider-sponsored campaign. They are not both
+economic buyers. A consumer-paid sprint may operate from public and official
+evidence without making the API Provider a Lumyn customer.
 
 ---
 
 ## Initial Segment
 
-The first design-partner segment is API-first B2B providers with:
+The primary design-partner segment is an API-first B2B provider with:
 
-- a consequential migration planned within six months;
-- roughly 20 to 500 named, managed customer integrations;
-- an official TypeScript/Node SDK published as an npm package;
-- versioned OpenAPI, SDK releases, migration guidance, or equivalent source
-  artifacts;
-- a non-production sandbox with reliable read-back available for the first
-  commercial pilot; each consumer may still choose exact-patched-head mock
-  proof instead, and sandbox use requires its own grants;
-- a DX, SDK, API-platform, solutions-engineering, or customer-engineering team
-  that can recruit consumer maintainers;
-- measurable support or legacy-version cost.
-- either at least two consequential migrations or deprecations expected in the
-  next 12 months, or at least 20 named managed integrations that could support
-  an annual connected-repository program.
+- a hard deprecation, sunset, or migration deadline in the next 90 to 180
+  days;
+- roughly 20 to 500 identifiable managed customer integrations;
+- at least five reachable Eligible Consumer Units across five distinct API
+  Consumer Organizations;
+- material support cost, compatibility cost, revenue risk, or retirement risk;
+- an accountable executive buyer and named Provider Operator;
+- an official TypeScript/Node npm SDK used from a REST API integration;
+- versioned docs, OpenAPI descriptions, SDK releases, migration guidance, or
+  equivalent evidence;
+- repository-level compile, typecheck, or test signals for participating
+  consumers;
+- preferably a non-production sandbox, reliable mock, or read-back signal.
 
-The first campaign should be a provider-managed cohort, not an anonymous
-self-serve ecosystem.
+The first campaign is a named, provider-managed cohort. It is not anonymous
+self-service.
 
 Avoid initially:
 
-- providers that cannot identify or contact integration owners;
+- providers without a hard deadline or meaningful legacy cost;
+- providers unable to identify or recruit five distinct API Consumer
+  Organizations with one designated repository each;
+- migrations dominated by production-only state or irreversible actions;
+- integrations requiring broad production credentials;
+- providers unable to clarify ambiguous change semantics;
 - low-code or generated-client integrations with little application code;
-- providers with no non-production sandbox or reliable outcome signal;
-- migrations dominated by production-only data or irreversible actions;
-- providers that cannot share prerelease intent with participating consumers;
-- integrations that require broad production credentials;
-- providers whose consequential changes are too rare to support recurring
-  value.
+- migrations dominated by auth redesign, webhook semantics, GraphQL, gRPC, or
+  new business values;
+- consumer repositories with no usable compile, typecheck, test, mock, replay,
+  or sandbox signal.
+
+The secondary consumer-paid segment is an organization with an urgent,
+consequential migration, one to three TypeScript/Node repositories, useful
+verification signals, and an engineering buyer willing to fund a bounded
+upgrade sprint.
 
 ### Development Entry Boundary
 
-Lumyn does not need a contracted API Provider to begin M0-M4 engineering.
-Publicly available API documentation, OpenAPI descriptions, published SDK
-releases, migration guides, and license-compatible synthetic or historical
-fixtures are sufficient to build and test the contracts, corpus, semantic
-change intake, and read-only impact engine. Every input is pinned, provenance-
-and license-checked, and treated as untrusted.
+Lumyn does not need a contracted API Provider to begin the foundational
+engineering work. Pinned public documentation, OpenAPI descriptions, SDK
+releases, migration guides, license-compatible historical examples, and
+synthetic fixtures are sufficient to develop:
 
-Those public inputs do not constitute a provider-authored signed packet,
-provider endorsement, prerelease intent, sandbox authority, reachable customer
-cohort, or evidence of demand. M5 migration-plan implementation and the
-commercial pilot remain gated by M2.5's direct provider commitment,
-supported-class signed canary, and frozen qualified cohort. Public artifacts
-accelerate engineering; they do not counterfeit the sell-side relationship.
+- migration-pack intake and provenance;
+- semantic change normalization;
+- a TypeScript integration graph;
+- deterministic transforms;
+- bounded-agent contracts plus a deterministic fake and status-quo baseline
+  harness;
+- verification and evidence contracts;
+- status-quo baseline experiments.
+
+Public inputs do not establish provider endorsement, prerelease authority,
+demand, a reachable cohort, or repository-specific value. Lumyn may not claim
+customer-specific value until it runs in at least one real, consenting
+consumer repository.
+
+Substantial provider-specific campaign automation remains gated by a prepaid
+qualified campaign. A consumer-paid sprint may prove the engine but does not
+close the provider commercial gate.
 
 ### Buyer And Champion
 
-- Primary economic buyer: the VP or Head of Engineering accountable for the API
-  platform and legacy compatibility/support cost. The startup substitute is
-  the CTO.
-- Primary champion/operator: Head of DX or SDK. API-platform, customer
-  engineering, solutions engineering, support, and security are secondary
-  stakeholders.
-- Required second principal: Consumer Maintainer with authority over the target
-  repository.
+- Primary economic buyer: GM or VP accountable for the API business, VP/Head
+  of Platform or Engineering, or CTO at a smaller provider.
+- Primary champion/operator: Head of DX or SDK, customer engineering, or
+  solutions engineering.
+- Required consumer authority: Consumer Maintainer with repository and merge
+  authority.
+- Consumer-sprint buyer: CTO, VP Engineering, Head of Platform, or engineering
+  leader accountable for the urgent migration.
 
 ---
 
 ## Commercial Model
 
-The initial offer is a paid, services-assisted migration campaign:
+The initial offers are pricing hypotheses to test, not established list
+prices:
 
-- The API Provider pays.
-- API Consumer Organizations participate without a seat charge.
-- The provider supplies a real migration, an accountable operator, a
-  non-production sandbox, a supported-class canary packet, and a reachable
-  cohort.
-- Lumyn may assist with the first change packet and campaign operation.
-- The consumer runs Lumyn locally or in its own CI environment by default.
-- Before the pilot begins, the provider names the decision owner and criteria
-  for converting to an annual connected-repository program or a second named
-  migration campaign.
+| Offer | Buyer | Scope | Price hypothesis |
+|---|---|---|---|
+| Sunset-readiness sprint | API Provider | Migration-pack preparation, cohort qualification, baseline, and campaign plan | `$7.5k–$15k` |
+| Provider migration campaign | API Provider | One migration across three to five consenting repositories | `$25k–$50k` |
+| Additional completed repository | API Provider | One additional repository in the same supported campaign | `$2k–$5k` |
+| Urgent consumer upgrade sprint | API Consumer Organization | One migration across one to three repositories | `$10k–$25k` |
 
-The intended paid continuation is an annual provider platform fee tied to
-connected repositories, with separately priced active campaigns when useful.
-A second one-off services purchase is insufficient unless it is a named step
-into repeatable platform use. Per-consumer-seat pricing is explicitly avoided
-because consumer participation should have minimal friction.
+The main company thesis is the provider-paid migration campaign. The
+consumer-paid sprint is secondary revenue and engine proof.
 
-The consumer-controlled local runner and inspectable source are the trust and
-adoption wedge. Lumyn does not describe the current repository or distribution
-as open source until an explicit license, security policy, contribution policy,
-support boundary, and release-integrity process exist. Design-partner
-distribution uses explicit pilot terms plus a named security and support
-contact. A managed provider coordinator may later handle invitations and
-consented status, but it must not require provider access to consumer source
-code.
+For the first campaigns:
+
+- Lumyn prepares the migration pack with provider input.
+- The API Provider recruits the cohort.
+- The API Consumer Organization runs Lumyn locally or in consumer-controlled
+  CI.
+- Lumyn-assisted model use is included in campaign COGS, or the consumer uses
+  an approved BYOK/local model path.
+- Provider reporting may be a manually prepared, consumer-consented aggregate.
+- API Consumer Organizations pay no campaign seat fee.
+- No annual connected-repository contract is assumed.
+
+Annual platform pricing, hosted coordination, campaign subscriptions, or
+connected-repository billing may be tested only after repeatable evidence from
+a second paid campaign or an executed annual purchase order. A successful
+one-off service engagement does not prove recurring SaaS demand.
 
 ---
 
 ## System Under Test
 
-The system under test is the migration across three surfaces:
+The system under test is:
 
 ```text
-provider change intent
-+ consumer repository
-+ verification environment
+migration evidence
++ consumer-local integration graph
++ generated candidate
++ repository verification signals
 ```
 
-The API surface alone is not the complete system under test. A coding model is
-not the primary system under test.
+The coding agent is an implementation mechanism, but its context selection,
+tool use, attempts, cost, output, and repair behavior are part of the evaluated
+system.
 
-The result must preserve separate evidence about:
+Every result preserves separate evidence about:
 
-- what the provider says changed;
-- what Lumyn found in the authorized repository;
-- what Lumyn changed;
-- what repository checks ran;
-- what workflow environment ran;
-- what outcome was observed;
-- what remains unsupported, ambiguous, or unverified.
+- what the migration pack says changed;
+- what Lumyn found and did not find;
+- what route each change used;
+- what files and dependencies changed;
+- which agent, model, tools, and budgets were used;
+- what baseline and post-change commands ran;
+- what behavior was observed;
+- what remains unsupported, ambiguous, or unverified;
+- what delivery and provider-reporting actions occurred.
 
 ---
 
@@ -319,241 +418,109 @@ The result must preserve separate evidence about:
 
 ### 1. Two Principals, Two Authorities
 
-The provider is authoritative about intended API/SDK semantics. The consumer is
-authoritative about repository access, execution, disclosure, and merge.
-Neither authority implies the other.
+The API Provider is authoritative about intended API or SDK semantics. The API
+Consumer Organization is authoritative about repository, execution,
+model-data, disclosure, and merge. Neither authority implies the other.
 
 ### 2. Read Before Write
 
 Impact analysis is read-only. The Consumer Maintainer sees an impact report and
-migration plan before authorizing file changes.
+migration plan before authorizing mutation.
 
-### 3. Declarative Provider Input
+### 3. Provider Evidence Is Declarative
 
-Provider change packets may declare mappings, constraints, defaults, and
-verification references. They may not carry arbitrary provider-supplied
-scripts in the MVP.
+Migration packs may contain mappings, constraints, examples, and verification
+references. They may not execute arbitrary provider-supplied scripts.
 
-### 4. Deterministic Before Model-Assisted
+### 4. Deterministic Controls, Hybrid Generation
 
-The MVP supports bounded deterministic transformations first. Model-assisted
-patching is a future, separately approved execution mode. Any future model
-output remains untrusted until the same evidence gates pass.
+Known safe changes use deterministic transforms. Repository-specific
+adaptation may use a bounded coding agent. Missing semantics, required business
+input, unsafe access, or inadequate proof is blocked.
 
-### 5. Proof Is Multidimensional
+Determinism governs pinned inputs, codemods, scope, budgets, commands,
+verification, evidence, and status. It does not require byte-identical
+agent-generated source.
 
-Impact coverage, patch provenance, repository validation, workflow evidence,
-cleanup, boundaries, and residual risk remain separate axes. Lumyn never
-compresses them into an unsupported green result.
+### 5. Agent Output Is An Untrusted Candidate
 
-### 6. Customer-Controlled Execution
+The agent cannot declare its own result verified. The same independent
+verification ladder applies to deterministic and agent-assisted candidates.
 
-Repository analysis, patching, tests, and credentials run in a
-consumer-controlled local or CI environment by default. Raw code, diffs, logs,
-traces, prompts, responses, and credentials are not shared with the provider
-unless the consumer explicitly consents.
+### 6. Proof Is Multidimensional
 
-### 7. Fail Closed
+Impact coverage, generation provenance, repository validation, workflow
+evidence, boundaries, cleanup, and residual risk remain separate axes. No
+single green status hides a weaker axis.
 
-Unknown wrappers, dynamic call construction, unsupported package managers,
-ambiguous mappings, missing business values, stale packets, unsafe redaction,
-or uncertain verification yield `needs_input`, `unsupported`, `uncertain`, or
-`blocked`—never a speculative patch or false verified result.
+### 7. Consumer-Controlled Execution And Disclosure
 
-### 8. Human Merge Authority
+Repository analysis, candidate generation, commands, credentials, and raw
+evidence run inside a consumer-local or explicitly consumer-approved boundary.
+Any cloud-model context transfer is disclosed separately and never implies
+disclosure to the API Provider.
 
-Lumyn opens draft PRs only. It never writes to the default branch and never
-auto-merges during the MVP.
+### 8. Fail Closed
+
+Lumyn may retain an explicitly unverified candidate for diagnosis. It may not
+label or deliver it as verified when scope, authorization, redaction, baseline,
+commands, evidence, or outcome checks are incomplete or failed.
+
+### 9. Human Adoption Authority
+
+Lumyn never writes to the default branch or auto-merges. The Consumer
+Maintainer retains normal review, branch protection, CI, and merge control.
 
 ---
 
 ## MVP Product Flow
 
-### 1. Provider Authors A Change Packet
+### 1. Qualify The Migration
 
-The Provider Operator starts from a versioned Lumyn campaign kit. The kit
-contains the packet template, canary manifest, signed-invitation contract,
-consumer-connect instructions, consent/disclosure fields, and receipt
-contracts. `lumyn campaign kit create` materializes it. `lumyn change publish`
-validates and signs canonical packet bytes through a configured signer and
-emits an immutable published packet. `lumyn campaign invite create` binds that
-packet to the campaign, audience, expiry, confidentiality posture, and
-consumer-visible authority request and emits the signed invitation. Signing
-secrets are never embedded in the kit, packet, invitation, or repository.
+Lumyn and the Provider Operator confirm the deadline, source and target
+versions, expected cohort, evidence sources, buyer, operator, verification
+signals, and campaign price. The first provider campaign does not proceed
+without the commercial gates in this PRD.
 
-The Provider Operator creates a packet containing:
+### 2. Build The Migration Pack
 
-- API-provider identity and packet issuer;
-- verified provider-organization and official-package ownership binding;
-- signing-key ID and algorithm;
-- packet ID and lifecycle status;
-- issue time, expiry, nonce, authorized audience, and confidentiality class;
-- source and target API/SDK versions;
-- immutable source references, tags, and digests;
-- official npm package and supported version range;
-- typed semantic changes;
-- explicit operation, symbol, request-field, or response-field mappings;
-- applicability conditions;
-- deterministic derivation or default rules where applicable;
-- unsupported and human-input-required conditions;
-- safe file and transformation boundaries;
-- migration deadline and compatibility window;
-- sandbox or mock verification references;
-- rollback and support guidance;
-- key-rotation, revocation, and packet-withdrawal references;
-- confidentiality posture for prerelease changes;
-- a signature over the canonical packet bytes and immutable input manifest.
+`lumyn pack` normalizes pinned docs, OpenAPI or SDK diffs, examples, and
+provider clarification. Conflicts and ambiguity remain visible. A
+`public_derived` pack may drive engineering fixtures or a consumer sprint; a
+provider-funded campaign requires accountable provider confirmation before a
+real consumer mutation.
 
-Packets use the lifecycle:
+### 3. Establish The Consumer-Local Boundary
 
-```text
-draft -> published -> superseded | withdrawn
-```
+The Consumer Maintainer selects:
 
-A published packet is immutable for its authorized audience; `published` does
-not mean publicly disclosed. A correction creates a new packet version.
-Expired, replayed, wrong-audience, withdrawn, superseded, revoked-key,
-signature-invalid, or freshness-unverifiable packets cannot start or continue
-mutation. Provider enrollment pins the consumer trust root and binds the
-provider organization to the official SDK package. Initial enrollment requires
-`lumyn provider enroll` with a provider enrollment bundle and an expected
-fingerprint confirmed through an independent authenticated channel. An
-invitation can reference a root or enrollment location but cannot authenticate
-its own root. Registry/package provenance may corroborate the binding but is
-not sufficient by itself. Normal rotation must be signed by the currently
-pinned root. Emergency recovery requires explicit out-of-band re-enrollment,
-freezes open campaigns, and invalidates prior unexecuted approvals. Rotation
-and revocation state must be fresh enough for the packet policy before every
-side effect. Freshness comes from either a signed, unexpired offline provider
-status snapshot or an exact-endpoint read under a separate
-`provider_trust_status_read` grant. The status response is signed by the pinned
-provider status key, is bound to the provider, package, campaign, packet
-digest, issue time, expiry, rotation epoch, revocation and withdrawal state,
-and carries an anti-replay nonce. Online requests disclose no repository,
-consumer, or migration evidence. If neither a current snapshot nor an
-authorized status read is available, Lumyn blocks.
+- repository and package root;
+- readable and writable paths;
+- approved commands;
+- dependency-install policy;
+- network and credential posture;
+- model mode, Model Provider, data-egress policy, and context boundary;
+- agent token, cost, time, attempt, file, and diff budgets;
+- verification environments;
+- output form and optional provider-visible status fields.
 
-### 2. Provider Proves The Packet On Canary Fixtures
+No selected scope implies another. Production credentials and production
+mutation are prohibited.
 
-Before customer distribution, Lumyn validates the packet against provider-owned
-or licensed canary repositories with:
+### 4. Build The Integration Graph And Impact Report
 
-- pinned source inputs;
-- annotated affected call sites;
-- expected patches;
-- expected verification outcomes;
-- negative and unsupported cases.
-
-### 3. Provider Invites A Cohort
-
-The provider identifies a bounded set of API Consumer Organizations and sends a
-signed campaign invitation produced from the standard kit. The invitation
-binds the provider, package, campaign, packet digest, non-authoritative
-trust-enrollment instructions, expiry, confidentiality posture,
-consumer-visible authority request, one eligible-repository unit nonce, the
-enrollment-pinned provider receipt-acknowledgement signing-key reference, and
-either an enrollment-approved receipt endpoint or offline receipt-exchange
-contract. It contains no repository token, trusted root, or implicit grant. An
-invitation grants no repository access, cannot self-authenticate its signing
-key, and can acknowledge at most one opaque repository unit.
-
-Before the Lumyn implementation worker collects, stores, or discloses
-identifiable design-partner evidence, a narrow manual privacy/legal preflight
-under Factory task-scoped `approval` must fix the allowed private fields,
-participant consent, approved external private storage boundary, TTL,
-expiry/revocation deletion, deletion-receipt and orphan ownership, and the
-minimal connection-receipt and separately consented aggregate/hash-only public
-fields. It identifies provider export and public commit as irreversible
-disclosures. This preflight governs evidence handling only. It is not Lumyn
-runtime product authority and cannot authorize repository, sandbox, GitHub, or
-provider-attestation actions. The active M2.5 Factory approval grant must cite
-both the preflight evidence and the canonical digest of this exact scope; a
-generic approval or a digest from an earlier field/storage/TTL policy cannot
-release evidence collection.
-
-### 4. Consumer Enrolls The Provider And Authorizes A Repository
-
-Before accepting an invitation from a new provider, the Consumer Maintainer
-runs `lumyn provider enroll` with the separately obtained enrollment bundle and
-out-of-band confirmed fingerprint. Enrollment stores the pinned root and
-provider/package binding in the configured consumer-private state root outside
-the repository. The supported activation runner accepts no repository
-argument, starts from a neutral directory, and mounts only the enrollment input
-and private state root; the checkout is unavailable to the process.
-
-The Consumer Maintainer then runs `lumyn campaign accept` to verify the signed
-invitation, provider/package binding, packet digest, expiry, and already pinned
-trust root. Acceptance writes campaign state only to that external private root
-and renders a reviewable, still-unapproved authorization-request template. It
-uses the same activation isolation boundary and grants no capability by itself.
-
-After reviewing the request, the Consumer Maintainer runs `lumyn authorization
-issue` with an exact grant manifest and a consumer-controlled configured
-signer. The command emits a signed, time-bounded private authorization bundle
-outside the checkout. `lumyn authorization revoke` records a signed revocation
-for one grant or the whole bundle. Issuance and revocation do not perform the
-authorized side effect; every later action revalidates the current bundle at
-its own boundary.
-
-The grant manifest explicitly approves:
-
-- repository and campaign;
-- readable paths;
-- writable paths;
-- branch namespace;
-- allowed commands;
-- network destinations;
-- sandbox credential scope;
-- dependency-install posture;
-- PR creation;
-- independent `artifact_retention` and `artifact_deletion` grants;
-- the minimal connection-receipt disclosure, if joining the sponsored program;
-- exact richer status metadata, if any, that may be shared with the provider.
-
-Authorization is per repository and per campaign, revocable, and time-bounded.
-Tokens must expire. Production credentials and production mutations are out of
-scope.
-
-For a provider-sponsored program, the consumer may separately issue a minimal
-signed campaign connection receipt. Before acknowledgement, the provider
-authenticates the consumer organization through its existing customer-admin
-channel or a documented out-of-band ownership check and signs a
-`consumer-receipt-key-binding` over the invitation, opaque organization ID,
-consumer receipt public-key fingerprint, verification method, verifier, and
-expiry. The opt-in receipt contains only the campaign and packet digest,
-eligible-repository unit and invitation nonces, opaque per-campaign
-organization and repository IDs, connection event and time,
-tool/schema versions, consent-policy and key-binding digests, issuer public-key
-fingerprint, anti-replay nonce, audience, expiry, and signature. It contains no
-repository name, source, diff, logs, test output, or credentials.
-
-`lumyn campaign receipt submit` either sends the canonical receipt to the exact
-pinned endpoint under the `campaign_receipt` grant or writes an offline export
-bundle for provider import. The provider verifies the authenticated key
-binding, signature, invitation, packet, audience, expiry, consent, and unit
-cardinality, then returns a signed `campaign-receipt-ack` bound to the receipt
-digest, provider acknowledgement key, decision, time, and deduplication key.
-The consumer verifies and imports that acknowledgement. One invitation unit
-can acknowledge only one opaque repository ID; an identical receipt digest is
-idempotent, while a different repository or receipt for the same unit nonce
-conflicts and cannot count. A provider counts and bills only a valid,
-provider-acknowledged, non-replayed unit. A consumer that declines this
-disclosure may still use Lumyn privately, but is not counted as a connected
-repository in the sponsored program.
-
-### 5. Lumyn Produces A Read-Only Impact Report
-
-Lumyn detects:
+`lumyn impact` runs read-only and detects:
 
 - installed SDK package and version;
-- package manifest and supported lockfile state;
-- direct SDK imports;
-- statically resolvable one-hop local wrappers;
-- affected operations, symbols, request fields, and response fields;
-- excluded generated or vendored code;
-- ambiguous, dynamic, or unsupported usage.
+- package and lockfile state;
+- direct and aliased imports;
+- local wrappers and adapters;
+- affected call sites and data mappings;
+- relevant configuration, tests, mocks, cassettes, and fixtures;
+- generated, vendored, or excluded paths;
+- dynamic, ambiguous, and unsupported usage.
 
-Impact status is one of:
+Impact status is:
 
 ```text
 unaffected
@@ -563,114 +530,98 @@ unsupported
 uncertain
 ```
 
-`unaffected` is allowed only when the analyzed scope and coverage are explicit.
+`unaffected` is allowed only when analyzed scope, coverage, and limitations are
+explicit.
 
-### 6. Consumer Reviews The Migration Plan
+### 5. Produce And Approve The Migration Plan
 
-The migration plan names:
+`lumyn plan` names:
 
-- every planned file change;
-- every affected and excluded call site;
-- dependency and lockfile changes;
-- transformation recipe and provenance;
-- expected commands;
-- workflow verification level;
-- network and credential requirements;
-- residual risks and unsupported cases.
+- every planned or conditionally planned file;
+- every affected, excluded, and uncertain call site;
+- dependency and lockfile intent;
+- the route for each item: `deterministic`, `agent_assisted`, `manual`,
+  `needs_input`, or `blocked`;
+- agent context, tools, commands, model policy, and budgets;
+- verification stages;
+- delivery mode;
+- residual risk and required human input.
 
-No source file is changed before this plan is approved.
+Planning performs no write. Approval binds the exact pack, repository base,
+scope, route, model policy, budgets, and commands.
 
-### 7. Lumyn Applies A Bounded Patch
+### 6. Produce A Bounded Candidate
 
-The patch runs in an isolated worktree or equivalent disposable workspace.
-Writes are restricted to approved paths and a declared diff budget. Identical
-pinned inputs and the same deterministic recipe must produce the same patch.
-Immediately before each file or lockfile write, Lumyn revalidates the current
-packet bytes, digest, trust root, provider/package binding, lifecycle, audience,
-expiry, rotation, revocation, withdrawal, supersession, and replay state. A
-plan-time trust decision is never cached across the mutation boundary.
+`lumyn apply` runs in an isolated worktree or consumer-approved equivalent:
 
-### 8. Lumyn Runs The Verification Ladder
+1. deterministic codemods apply known safe mappings;
+2. the bounded coding agent receives only the approved migration context and
+   repository context;
+3. a Consumer Maintainer or Lumyn Operator may instead make approved manual
+   edits in that worktree, after which `lumyn candidate import --manual`
+   validates and binds the diff to the exact repository base, candidate head,
+   migration pack, plan, and route;
+4. all writes remain within approved files and diff budgets;
+5. every edit maps to a migration-pack item and repository evidence;
+6. no new network, credential, command, path, or task scope is inferred.
 
-Verification proceeds in order:
+The default maximum is three agent or repair attempts. A higher limit requires
+new Consumer Maintainer approval.
 
-1. packet, plan, and patch integrity;
-2. dependency and lockfile integrity;
-3. repository baseline comparison;
+### 7. Verify, Then Separately Authorize Repair
+
+`lumyn verify` is non-mutating with respect to the candidate. It executes:
+
+1. migration-pack, plan, and candidate integrity;
+2. pre-existing repository baseline comparison;
+3. dependency and lockfile integrity;
 4. compile and typecheck;
 5. consumer-allowlisted tests;
-6. independent contract/cassette replay, labeled
-   `workflow_contract_replay_passed`;
-7. deterministic replay or mock execution from an approved entrypoint at the
-   exact patched repository head;
-8. provider sandbox read-back from that patched head when separately approved;
-9. cleanup, action-boundary, and redaction checks.
+6. optional contract or cassette replay;
+7. optional exact-head mock or replay execution;
+8. optional separately approved provider sandbox read-back;
+9. boundary, redaction, cleanup, and evidence checks.
 
-Before Lumyn is demonstrated to a provider as an end-to-end product, `lumyn
-canary run --offline` must take the standard synthetic campaign kit through
-signed invitation acceptance, explicit synthetic consumer-signed authorization
-issuance, impact, plan, bounded patch, host-isolated deterministic replay or
-mock verification, evidence rendering, and a local draft-PR preview. It uses no
-live credential, sandbox, network, provider-reporting, or remote write
-capability. Any unimplemented stage returns a typed nonzero result.
+When a diagnostic failure is actionable and still within the approved plan,
+the Consumer Maintainer may separately authorize `lumyn repair`. The repair
+authorization binds the failed candidate and evidence, exact repair intent,
+remaining write and model-data permissions, and remaining time, token, cost,
+attempt, file, and diff budgets. Repair creates a new candidate head,
+invalidates prior verification evidence, and requires a fresh `lumyn verify`
+run. It cannot expand scope. A non-diagnostic failure, missing business input,
+or exhausted budget becomes `needs_input`, `blocked`, or `failed`.
 
-Repository tests are untrusted code. They run with network disabled by default.
-Package lifecycle scripts are disabled by default and require separate consumer
-approval. Sandbox credentials are isolated from general build and test
-commands.
+Repository tests are untrusted code. They run in a consumer-approved execution
+environment, without network or secrets by default. Dependency lifecycle
+scripts, registry access, and sandbox credentials require distinct approval.
 
-### 9. Lumyn Opens A Draft PR
+### 8. Export The Outcome
 
-PR creation is a separate explicit write action. The PR is bound to:
+`lumyn export` produces the local evidence bundle plus one of:
 
-- provider change packet digest;
-- repository base commit;
-- generated head commit;
-- migration plan digest;
-- evidence artifact digests.
+- patch;
+- local branch;
+- PR-ready bundle for manual push;
+- optional draft PR after short-lived GitHub authorization is implemented and
+  separately approved.
 
-Draft-PR delivery depends on repository and deterministic workflow proof, not
-on live sandbox availability. When separately authorized sandbox evidence
-exists, Lumyn includes it without upgrading weaker evidence. Provider reporting
-is a different optional action and never blocks PR creation.
+A manually pushed branch or PR bundle is acceptable for the first services
+pilot. It does not count as proof of automated PR delivery.
 
-The PR becomes stale when its base/head or packet changes.
-Immediately before every repository, host-command, provider-status,
-package-registry, sandbox, minimal campaign-receipt, richer
-provider-attestation, remote-branch, PR, retention, or deletion side effect and
-retry, Lumyn revalidates current packet trust and the exact applicable private
-product grants. Factory worker `approval`, `credentials`, and `network` grants
-govern implementation work only; Factory selection and dispatch do not
-validate or confer Lumyn product authority.
+### 9. Record Adoption And Campaign Outcome
 
-### 10. Consumer Reviews And Merges
+The Consumer Maintainer may record `consumer_accepted`, merged, closed,
+reverted, or corrected outcomes. `consumer_accepted` requires a durable
+consumer-acceptance artifact containing the Consumer Maintainer identity and
+authority, API Consumer Organization, repository, exact candidate head,
+verification-evidence digest, adoption decision, and timestamp. Plan approval,
+candidate generation, PR creation, or an informal acknowledgement is not
+consumer acceptance. Later correction or reversion appends a new outcome and
+does not rewrite the historical acceptance record.
 
-The Consumer Maintainer retains normal branch-protection, review, CI, and merge
-controls.
-
-### 11. Provider Receives Separately Consented Richer Campaign Status
-
-After the distinct minimal connection-receipt flow, the consumer may
-separately authorize a richer campaign attestation such as:
-
-```text
-invited -> authorized -> impact_found -> plan_approved
--> draft_pr_open -> merged | closed | blocked
-```
-
-Source code, raw diffs, logs, traces, prompts, responses, and credentials are
-not provider-visible by default.
-
-### 12. Independent Promotion Evidence
-
-For tasks selected by risk and evidence policy, independent or human-operated
-`holdout-evaluator`, `trace-grader`, and `evidence-attestor` gates run in that
-order after code review and before commit/push. They emit passing artifacts
-bound to the exact task and current validation work proof in the trusted
-Factory evidence root. The implementation worker cannot self-grade or
-self-attest, and shipping fails before commit or PR creation when required
-independent evidence is missing, stale, malformed, self-authored, or
-non-passing.
+The API Provider receives only consumer-consented campaign status or
+aggregates. Source code and raw execution evidence are not provider-visible by
+default.
 
 ---
 
@@ -678,56 +629,61 @@ non-passing.
 
 ### Supported Repository Shape
 
-- GitHub repository.
-- TypeScript source discoverable from a checked-in `tsconfig.json`.
-- Direct dependency on one official npm SDK in `package.json`.
-- One SDK major migration per campaign.
-- Direct imports are patchable.
-- Statically resolvable one-hop wrappers are detectable but may return
-  `affected_needs_input`.
-- `package-lock.json` is the first automatically writable lockfile. Automatic
-  mutation requires the exact Node and npm versions, registry endpoint or
-  immutable snapshot, package integrity inputs, toolchain digest, disabled
-  lifecycle scripts, and a separately authorized registry-network capability.
-- `pnpm-lock.yaml` and `yarn.lock` are detectable but impact-only until their
-  update behavior is explicitly implemented and tested.
+- Git repository; GitHub is the first optional remote-delivery target.
+- TypeScript source discoverable from checked-in project configuration.
+- One explicitly selected package root.
+- One official npm SDK dependency and one source-to-target migration.
+- Direct imports, aliases, local wrappers, adapters, and statically traceable
+  call sites.
+- `package-lock.json` is the first automatically writable lockfile.
+- `pnpm-lock.yaml` and `yarn.lock` are impact-only until separately
+  implemented and tested.
 - Generated, vendored, minified, and build-output paths are excluded.
-- Monorepos are supported only when one package root is explicitly selected.
+- A monorepo is supported only when one package root is explicitly selected.
 
-### Supported Change Classes
+### Supported Routing Classes
 
-The first deterministic patch engine supports exactly:
+#### Deterministic
 
-1. SDK method or API-operation rename with an explicit one-to-one mapping.
-2. Request-property rename or relocation with an explicit mapping and no new
-   business value.
-3. Response-property rename or relocation with an explicit mapping and
-   statically identifiable consumer access.
+- SDK dependency and import update.
+- Method or operation rename with explicit semantic equivalence.
+- Request-property rename or relocation with no new business value.
+- Response-property rename or relocation with statically identifiable access.
 
-Dependency version and import updates needed by those changes are included.
+#### Agent Assisted
 
-A newly required field may be patched only after a later contract explicitly
-defines a deterministic derivation or constant default. Otherwise it returns
-`affected_needs_input`.
+- Bounded updates to local wrappers, adapters, call sites, and directly
+  related tests when the migration semantics are explicit.
+- Type or signature adaptation that introduces no new business decision.
+- Repository-specific repair after compile, typecheck, or allowlisted test
+  failure when the repair remains within the approved migration scope.
+
+#### Blocked
+
+- A newly required business value without deterministic derivation or human
+  input.
+- Authentication or authorization redesign.
+- Webhook or event-semantics changes.
+- Production-only behavior or irreversible actions.
+- Ambiguous provider semantics.
+- Missing repository verification signal.
+- Scope that exceeds approved paths, commands, credentials, network, model
+  policy, or budgets.
 
 ### Explicitly Unsupported In The MVP
 
-- Authentication or authorization migrations.
-- Webhook and event-semantics migrations.
-- GraphQL, gRPC, JSON-RPC, and body-dispatched operation migration.
-- Arbitrary business-logic changes.
-- Dynamic reflection or runtime-generated method names.
-- More than one selected package root.
+- GraphQL, gRPC, JSON-RPC, and body-dispatched operation migrations.
 - Generated-client regeneration.
-- Production credentials or production mutations.
-- Arbitrary provider-supplied scripts.
-- Automatic merge.
+- Cross-language migrations.
+- More than one selected package root.
+- Broad production credentials or production mutation.
+- Arbitrary provider-supplied executable scripts.
+- Autonomous merge.
+- General-purpose repository refactoring unrelated to the migration.
 
 ---
 
 ## Product Status Axes
-
-Lumyn must preserve these axes independently.
 
 ### Impact
 
@@ -738,21 +694,23 @@ Lumyn must preserve these axes independently.
 - `unsupported`
 - `uncertain`
 
-### Patch
+### Route
+
+- `not_routed`
+- `deterministic`
+- `agent_assisted`
+- `manual`
+- `blocked`
+
+### Candidate
 
 - `not_attempted`
 - `planned`
-- `generated`
+- `candidate_generated`
+- `repairing`
+- `needs_input`
 - `failed`
 - `stale`
-
-Patch provenance is separately:
-
-- `deterministic`
-- `model_assisted`
-- `manual`
-
-Only `deterministic` is an MVP generation mode.
 
 ### Verification
 
@@ -771,476 +729,264 @@ Only `deterministic` is an MVP generation mode.
 ### Delivery
 
 - `not_requested`
+- `patch_exported`
+- `local_branch_ready`
+- `pr_bundle_ready`
+- `remote_branch_pushed`
 - `draft_pr_open`
+- `consumer_accepted`
 - `merged`
 - `closed`
 - `blocked`
 - `superseded`
 
-No single roll-up status may hide a weaker axis.
+No roll-up may hide a weaker axis.
 
 ---
 
 ## Evidence Contract
 
-Every migration result must report:
+Every outcome reports:
 
-- API-provider identity and change authority;
-- campaign and packet IDs;
-- source and target versions;
-- packet digest and source provenance;
-- repository identity without exposing it beyond consent;
-- base and head commit;
-- analyzed paths and explicit exclusions;
+- API Provider and migration-pack identity;
+- public-derived or provider-confirmed provenance;
+- source and target versions and source digests;
+- repository base and candidate head;
+- analyzed paths, exclusions, and integration-graph uncertainty;
 - affected, unaffected, unsupported, and uncertain call sites;
-- impact precision/recall evidence when running a benchmark;
-- migration recipe and patch provenance;
-- changed files and dependency/lockfile delta;
-- exact commands and results;
-- pre-existing baseline failures;
-- verification environment: static, repository, replay, mock, or sandbox;
-- business-outcome/read-back evidence;
-- cleanup, boundary, and redaction results;
-- permissions, network destinations, and credential classes used;
-- residual unsupported call sites and risks;
+- deterministic, agent-assisted, and manual route by change item;
+- changed files and dependency or lockfile delta;
+- Agent Runner, adapter, model class, Model Provider or local mode, and
+  version;
+- model-data policy and context-policy digest;
+- tool, command, path, network, credential, time, token, cost, attempt, file,
+  and diff budgets;
+- attempt and repair history without persisting raw prompts by default;
+- human input and approval events;
+- exact baseline and post-change commands and results;
+- verification environment and observed outcome;
+- pre-existing failures, residual risk, and unsupported items;
+- redaction, boundary, and cleanup results;
+- delivery mode and outcome;
+- consumer-acceptance actor, authority, candidate/evidence binding, decision,
+  and timestamp when `consumer_accepted` is claimed;
 - artifact hashes and freshness;
-- rollback guidance;
-- reviewer checklist.
+- model/tool cost, elapsed time, Consumer Maintainer time, and Lumyn Operator
+  time;
+- rollback guidance and reviewer checklist.
 
-Evidence is invalidated when the packet, repository base/head, plan, patch, or
-verification inputs change.
+Evidence becomes stale when the pack, repository base or head, plan, model
+policy, candidate, commands, or verification inputs change.
 
-The existing proof-strength labels remain useful inside workflow evidence, but
-they do not replace the migration axes above.
+Raw prompts, model responses, source, diffs, logs, traces, and credentials are
+consumer-private by default. Provider-visible summaries contain only
+separately consented fields.
 
 ---
 
 ## Command Model
 
-`lumyn` remains the primary local command surface.
-
-### Required MVP Commands
+`lumyn` remains the primary local surface.
 
 | Command | Purpose |
 |---|---|
 | `lumyn init` | Initialize repo-local Lumyn configuration |
-| `lumyn check` | Validate configured source paths and local prerequisites |
-| `lumyn campaign kit create` | Create the standard provider campaign kit, canary manifest, invitation template, and receipt contracts |
-| `lumyn change publish --packet <draft> --signer <signer-ref>` | Validate, sign through a configured signer, and publish immutable packet bytes without exporting signing secrets |
-| `lumyn campaign invite create --campaign <config> --packet <published> --signer <signer-ref>` | Bind the published packet to a campaign/audience and emit a signed, expiring invitation with a no-authority request |
-| `lumyn provider enroll --bundle <bundle> --fingerprint <expected>` | Pin a provider root and provider/package binding from a separately authenticated bootstrap bundle; never trust invitation-supplied root material |
-| `lumyn campaign accept --invitation <invitation>` | Verify the invitation against an already pinned root, initialize campaign state outside the repository, and render a no-authority authorization request |
-| `lumyn trust refresh --provider <provider-id> [--snapshot <signed-snapshot> \| --online]` | Import a signed offline status snapshot or, under an exact `provider_trust_status_read` grant, fetch one from the pinned endpoint without disclosing consumer or repository data |
-| `lumyn authorization issue --request <request> --grant <grant-manifest> --signer <consumer-signer-ref>` | Explicitly issue a signed, private, time-bounded product-authority bundle after review; issuance performs no repository, command, network, sandbox, or GitHub action |
-| `lumyn authorization revoke --authorization <id> --reason <reason> --signer <consumer-signer-ref>` | Record a signed grant or bundle revocation in consumer-private state |
-| `lumyn change validate <packet>` | Validate packet schema, provenance, lifecycle, and pinned inputs |
-| `lumyn impact --change <packet> --repo <path>` | Produce a read-only impact report |
-| `lumyn authorization validate --bundle <private-ref> --task <task>` | Validate an exact private product-authority bundle for diagnostics and closure evidence |
-| `lumyn campaign receipt issue --authorization <id> --binding <provider-signed-key-binding> --consent <policy> --signer <consumer-signer-ref> --out <receipt>` | Optionally join a provider-sponsored program by emitting the minimal signed connection receipt; private local use does not require this disclosure |
-| `lumyn campaign receipt submit --receipt <receipt> [--online \| --out <offline-bundle>]` | Under the exact `campaign_receipt` grant, submit only the canonical receipt to the invitation-pinned endpoint or create the bounded offline exchange bundle |
-| `lumyn campaign receipt acknowledge --receipt <receipt> --binding <verified-binding> --signer <provider-ack-signer> --out <ack>` | Provider-side verification and idempotent acknowledgement bound to authenticated consumer signer, invitation unit, receipt digest, and deduplication key |
-| `lumyn campaign receipt ack import --ack <provider-signed-ack>` | Verify the provider acknowledgement against the invitation-pinned acknowledgement key and record the sponsored-program unit locally |
-| `lumyn migrate plan --impact <report>` | Produce a reviewable no-write migration plan |
-| `lumyn migrate apply --plan <plan>` | Apply an approved plan in an isolated workspace |
-| `lumyn verify --migration <result>` | Run the declared verification ladder |
-| `lumyn canary run --kit <kit> --repo <synthetic-repo> --offline --pr-preview <path>` | Run the receipt-backed synthetic end-to-end activation and migration canary without live credentials, network, sandbox, reporting, or remote writes |
-| `lumyn trace <evidence>` | Render local evidence without changing state |
-| `lumyn artifacts gc [--dry-run]` | Retry or preview TTL/revocation deletion and report unresolved private-artifact orphans |
-| `lumyn pr create --draft <result>` | Open an explicitly authorized draft PR |
+| `lumyn check` | Validate configured sources and local prerequisites |
+| `lumyn pack` | Build or validate a migration pack from pinned evidence |
+| `lumyn impact` | Produce a read-only integration graph and impact report |
+| `lumyn plan` | Produce a no-write routed migration plan |
+| `lumyn apply` | Produce a bounded deterministic or agent-assisted candidate |
+| `lumyn candidate import --manual` | Validate and bind an approved manual candidate to the base, pack, plan, and route |
+| `lumyn verify` | Non-mutating baseline-aware candidate verification |
+| `lumyn repair` | Separately authorized bounded repair that creates a new candidate for fresh verification |
+| `lumyn export` | Export evidence plus patch, branch, or PR-ready bundle |
+| `lumyn trace` | Render local evidence without changing state |
+| `lumyn outcome record` | Record durable consumer acceptance, merge, closure, correction, or reversion evidence |
+| `lumyn pr create --draft` | Optional later draft-PR delivery using short-lived authorization |
 
-The command grammar may be implemented incrementally, but unimplemented
-commands must return a typed nonzero result. They must never return a generic
-successful command envelope.
+The command grammar may be implemented incrementally. Unimplemented commands
+return a typed nonzero result and never a generic successful envelope.
 
-### Deferred Commands
-
-Generic `record`, `eval`, `demo`, and `share` product surfaces are not required
-for the migration MVP. The narrowly specified `canary run` command is required
-and must not route through the generic unimplemented `demo` surface. Workflow
-recording may return later as a verification authoring aid. Model-provider
-evaluation is not part of the customer-facing MVP.
-
-### Stable Exit Codes
-
-- `0`: success
-- `1`: general or internal error
-- `2`: invalid usage, invalid input, parse error, or local configuration error
-- `3`: source or provider-change completeness failure in strict mode
-- `4`: provider-change, authorization, migration-plan, or workflow-contract
-  validation failure
-- `5`: migration application or verification failure
-- `6`: reserved for the pre-2.0 live-eval threshold contract; not emitted by
-  migration MVP commands
-- `7`: authorization, credential, auth, or environment error
-- `8`: dependency, API provider, GitHub, sandbox, or network error
-- `9`: packet, impact, plan, patch, trace, cassette, evidence, or replay
-  integrity failure
-
-### Command Result Compatibility
-
-The existing `lumyn.command_result` version `1.0` remains supported while the
-migration result schemas are introduced. Existing `provider_metadata` means
-model-provider metadata and must not be reused for the API Provider. New
-contracts use explicit names such as:
-
-- `api_provider_id`
-- `change_authority`
-- `model_provider_metadata`
-
-Migration commands must not set `eval_mode: surface_only`. During the
-compatibility window, non-applicable legacy fields remain explicitly
-`not_applicable` until a versioned result-schema migration removes them.
+Stable exit codes `0` through `9` remain reserved according to the existing
+compatibility contract. Exit code `6` remains reserved. API Provider identity
+uses `api_provider_id` or `change_authority`; Model Provider metadata uses
+`model_provider_metadata`.
 
 ---
 
 ## Artifact Model
 
-### Retained Verification Artifacts
+The MVP introduces only:
 
-The retained executable schema inventory is:
-
-- `workflow-contract.schema.json`
-- `expected-outcome.schema.json`
-- `validator.schema.json`
-- `action-boundary.schema.json`
-- `human-annotation.schema.json`
-- `required-context.schema.json`
-- `state-binding.schema.json`
-- `canonical-trace.schema.json`
-- `evidence-event.schema.json`
-- `cassette.schema.json`
-- `result-axes.schema.json`
-- `proof-strength.schema.json`
-- `command-result.schema.json`
-- `redaction-config.schema.json`
-
-### Planned Migration Artifacts
-
-- `campaign-kit`
-- `provider-enrollment`
-- `provider-status-snapshot`
-- `provider-change`
-- `campaign-invitation`
-- `authorization-request`
-- `repository-authorization`
-- `authorization-revocation`
-- `consumer-receipt-key-binding`
-- `campaign-connection-receipt`
-- `campaign-receipt-ack`
+- `migration-pack`
+- `integration-graph`
 - `impact-report`
 - `migration-plan`
-- `patch-manifest`
+- `candidate-manifest`
+- `agent-attempt`
 - `migration-verification`
-- `migration-pr-result`
-- `campaign-attestation`
-- `offline-canary-receipt`
+- `export-result`
+- `campaign-summary`
 - `remediation-outcome`
 
-These planned artifacts do not become executable contracts until their schema,
-valid/invalid fixtures, compatibility posture, and validator tests ship in the
-same task.
+An artifact becomes executable only when its schema, valid and invalid
+fixtures, compatibility posture, and validator tests ship together.
 
-### Product Artifact Layout
+Product artifacts are separated as:
 
 ```text
-consumer checkout (committable)
+consumer checkout
   lumyn.yaml
-  examples/                 # synthetic/public, licensed fixtures only
-  examples/holdout-manifest.json  # opaque IDs and digests; no held-out inputs or answers
+  public or synthetic fixtures only
 
-consumer-private runtime root (outside the checkout)
-  providers/<api-provider>/enrollment.json
-  providers/<api-provider>/status-snapshots/<snapshot-id>.json
-  campaigns/<campaign-id>/acceptance.json
-  campaigns/<campaign-id>/consumer-receipt-key-bindings/<binding-id>.json
-  campaigns/<campaign-id>/connection-receipts/<receipt-id>.json
-  campaigns/<campaign-id>/connection-receipt-acks/<receipt-id>.json
-  changes/<api-provider>/<change-id>.json
-  authorizations/<campaign-id>/<repository-id>.json
-  revocations/<authorization-id>.json
-  impacts/<run-id>.json
-  migrations/<run-id>/
-    plan.json
-    patch-manifest.json
-    verification.json
-    pr-result.json
-  workflows/<workflow-id>.yaml
-  cassettes/<workflow-id>.json
-  runs/<run-id>/
-    trace.json
-    report.html
-  retention/
-    deletion-receipts/<artifact-id>.json
-    orphans/<artifact-id>.json
+consumer-private state root outside the checkout
+  packs/
+  graphs/
+  impacts/
+  plans/
+  candidates/
+  attempts/
+  verification/
+  exports/
 
-evaluator-controlled holdout root (outside checkout and task-executor access)
-  suites/<suite-id>/
-    inputs/
-    answer-key/
-    expected-patches/
-
-public pilot evidence
-  .factory/artifacts/pilot/lumyn-migration-mvp/public/
-    aggregate.json
-    evidence-hashes.json
+consumer-consented API Provider summary
+  campaign status or aggregate only
 ```
 
-The private runtime root is configured explicitly, cannot resolve inside the
-consumer checkout or any public source repository, is excluded from source
-control, and enforces authorization TTL plus deletion on expiry or revocation
-at creation, read, process startup, and the next run. Deletion is retry-safe
-and produces a receipt or durable orphan record. `lumyn artifacts gc` is the
-operator recovery surface for retrying partial cleanup and inspecting orphans;
-it cannot extend TTL, revive revoked authority, or rewrite historical closure.
-Repository-root ignore rules are defense in depth for a misconfigured or legacy
-runtime, not permission to store private artifacts there. Only synthetic or
-licensed fixtures may be committed under `examples/`. Provider-visible
-attestations and public pilot evidence are separate disclosure products:
-provider attestations may contain only the exact fields authorized by that
-consumer, while public pilot evidence may contain only separately consented,
-redacted aggregates or hashes. Neither may contain unconsented private
-evidence. Export to a provider and commit to public history are irreversible
-disclosure boundaries: revocation stops future export and deletes only
-Lumyn-controlled private copies. It cannot promise recall from a recipient,
-clone, cache, or Git history.
+The private root cannot resolve inside the checkout or public source
+repository. Private artifacts have explicit retention and deletion policy.
+The first services pilot may use documented operator-managed cleanup; a
+productized deletion-receipt and orphan-recovery control plane is deferred.
 
 ---
 
-## Trust And Authorization Contract
+## Trust, Authorization, And Data Boundaries
 
-### Provider Change Channel
+### Migration Evidence
 
-The provider change channel is a software supply-chain boundary.
+- Migration packs are declarative, versioned, digest-bound, and inspectable.
+- Public-derived evidence is labeled honestly.
+- A provider-funded campaign requires accountable provider confirmation before
+  a real consumer mutation.
+- Conflicting or incomplete semantics block affected routes.
+- Provider-supplied executable migration code is prohibited.
 
-- Packets must identify their issuer.
-- Published packets must be immutable and digest-bound.
-- The signature must verify against a consumer-pinned provider trust root,
-  including verified organization/package ownership, issuer key, issue time,
-  audience, expiry, rotation, revocation, withdrawal, and replay checks.
-- The consumer must be able to inspect the packet before authorization.
-- Packet mappings cannot execute arbitrary code.
-- A withdrawn or superseded packet blocks new mutation.
-- Packet trust is revalidated immediately before every local, sandbox, or
-  remote side effect and retry; no prior validation decision is reusable.
-- Revalidation consumes either a signed offline status snapshot within the
-  enrollment policy's maximum age or a freshly fetched snapshot under an exact
-  `provider_trust_status_read` grant. The grant binds one provider, package,
-  status endpoint, request shape, response budget, and expiry; it cannot carry
-  consumer or repository data. Missing, stale, unsigned, replayed, or
-  wrong-endpoint status blocks.
-- Packet provenance is necessary context, not correctness proof.
+### Repository
 
-### Repository Access
+- Analysis requires explicit read scope and performs no mutation.
+- Write scope is separate and binds the exact plan and base.
+- Candidate generation runs in an isolated worktree or consumer-approved
+  equivalent.
+- Remote branch and PR actions are separate from local mutation.
+- Default-branch write and auto-merge are prohibited.
 
-- Impact analysis begins read-only.
-- Read and write permissions are separate.
-- Allowed paths and excluded paths are explicit.
-- Patch execution occurs outside the default working tree.
-- Default-branch writes are prohibited.
-- Remote branch write and PR write are separate permissions.
-- Installation tokens are scoped and time-bounded.
-- Authorization can be revoked.
+### Coding Agent And Model
 
-### Command Execution
+- The Consumer Maintainer approves the agent runner, model mode, Model
+  Provider, context boundary, data egress, retention posture, tools, and
+  budgets.
+- The agent receives no ambient secrets.
+- Raw repository content is not transmitted to a cloud Model Provider unless
+  the consumer explicitly approves that mode.
+- BYOK and local-model use are supported as policy choices, not required public
+  product integrations in the first pilot.
+- The API Provider never receives agent context by virtue of sponsorship.
+
+### Commands, Credentials, And Network
 
 - Commands are allowlisted and displayed before execution.
-- Repository commands run only through a supported fail-closed isolation
-  backend. The grant binds exact read-only and writable mounts, a neutral home
-  and temp root, executable/toolchain roots, sanitized environment classes,
-  inherited file descriptors, local socket policy, process-tree limits, and OS
-  credential access.
-- The default isolation profile exposes no host home, SSH/GPG/cloud credential
-  stores, keychain, agent or Docker sockets, unrelated local services, or
-  inherited descriptors beyond standard streams. Child processes inherit the
-  same restrictions. If the backend cannot enforce them, the command does not
-  run.
-- Repository tests run without network by default.
-- Dependency lifecycle scripts are disabled by default.
-- Registry network, sandbox network, and lifecycle-script enablement require
-  separate consumer approval.
-- Lockfile mutation is bound to exact Node/npm versions, registry/snapshot,
-  package-integrity inputs, and the toolchain digest.
-- Pre-existing failing checks are captured before mutation.
-- Commands must have time and output budgets.
+- Repository commands run in a consumer-approved environment with explicit
+  mounts, environment, process, timeout, and output limits.
+- Tests run without network and secrets by default.
+- Dependency lifecycle scripts and registry access require separate approval.
+- Sandbox network, transmitted payload classes, and non-production credentials
+  require separate approval.
+- Production credentials and production mutation are prohibited.
 
-### Credentials And Network
+### Sharing
 
-- Production credentials are prohibited.
-- Sandbox credentials are limited to sandbox verification.
-- Build and test commands do not receive sandbox credentials.
-- Network destinations are allowlisted.
-- Sandbox writes use namespaces, request budgets, cleanup, and orphan reporting.
-- Sandbox access separately authorizes transmitted payload classes. It uses
-  synthetic or approved non-sensitive test data; production customer data,
-  PII, credentials, and secrets are prohibited.
-- The grant records what the provider can log, the retention period, deletion
-  terms, and the consumer-approved payload disclosure.
+The API Provider receives no raw consumer source or private evidence by
+default. Consumer consent is required before sharing repository identity,
+impact counts, candidate state, verification state, failure reason, merge
+state, or retirement state.
 
-### Data Sharing
-
-The provider receives no raw repository data by default.
-
-A provider-sponsored connection meter is a separate opt-in disclosure. Its
-minimal signed receipt is schema-validated, audience/expiry/nonce checked,
-bound to the invitation, packet, opaque organization/repository IDs, consent
-policy, provider-authenticated consumer key binding, and consumer-controlled
-issuer key. The provider-signed acknowledgement binds the receipt digest,
-invitation unit, verified key-binding digest, decision, time, and
-deduplication key. One invitation unit acknowledges at most one opaque
-repository ID; same-digest retry is idempotent and conflicting reuse blocks.
-Only acknowledged valid receipts count as connected repositories. Declining
-the receipt leaves private local use available but excludes that repository
-from sponsored-program counting and billing.
-
-Consumer consent is required before sharing:
-
-- repository identity;
-- affected-file counts;
-- patch or PR state;
-- validation status;
-- workflow status;
-- failure reason;
-- merge outcome.
-
-Raw source, diffs, logs, traces, prompts, responses, credentials, and secret
-values are excluded from default attestations.
-
-Private runtime and pilot records expire according to the authorization and are
-deleted on revocation automatically at creation, read, process startup, and the
-next run. A deletion receipt or orphan report is required, and operator
-recovery cannot rewrite historical closure.
-Provider visibility does not imply public disclosure. Public evidence requires
-separate consent and is aggregate/hash-only. Consent for provider export or
-public commit must disclose that the copy is not recallable. Revocation blocks
-future disclosure and deletes Lumyn-controlled private copies; it cannot erase
-a provider recipient's records, public Git history, clones, or caches.
+Provider reporting may initially be manual. A hosted coordinator, signed
+status exchange, and cryptographic billing receipts are deferred until demand
+and operational need are proven.
 
 ---
 
 ## Functional Requirements
 
-### FR1: Provider Change Contract
+### FR1: Migration-Pack Intake
 
-Lumyn must validate versioned, immutable, declarative provider change packets
-with provenance, lifecycle, semantic mappings, applicability, unsupported
-conditions, verification references, and rollback guidance, and must revalidate
-their current trust state at every side-effect boundary.
+Lumyn must normalize pinned official or public migration evidence into a
+versioned, provenance-visible, non-executable migration pack.
 
-### FR2: Two-Party Authorization
+### FR2: Consumer-Local Integration Graph
 
-Lumyn must keep provider campaign authority separate from consumer repository,
-execution, credential, disclosure, and merge authority. Lumyn product code,
-not Factory dispatch, enforces the private product bundle immediately before
-each live action.
+Lumyn must identify dependency state, imports, wrappers, call sites, mappings,
+relevant tests, and explicit uncertainty inside the authorized scope.
 
 ### FR3: Read-Only Impact
 
-Lumyn must produce an impact report without modifying source files, dependency
-files, lockfiles, branches, or PRs.
+Lumyn must produce an impact report without modifying repository, dependency,
+lockfile, branch, or remote state.
 
-### FR4: TypeScript SDK Analysis
+### FR4: Routed Migration Plan
 
-Lumyn must detect the selected npm SDK/version, direct imports, affected call
-sites, one-hop wrapper uncertainty, generated/vendored exclusions, and
-unsupported repository shapes.
+Lumyn must produce a reviewable no-write plan that classifies every affected
+item as deterministic, agent-assisted, manual, needs-input, or blocked.
 
-### FR5: Explicit Impact Coverage
+### FR5: Deterministic Execution
 
-Lumyn must report analyzed scope, exclusions, uncertainty, and residual
-unsupported call sites. It must not infer global downstream coverage from
-participating repositories.
+Known safe transforms must be repeatable for identical pinned inputs and stay
+within approved boundaries.
 
-### FR6: Reviewable Migration Plan
+### FR6: Bounded Agent Execution
 
-Lumyn must create a no-write plan that identifies every proposed file,
-transformation, command, permission, network destination, verification level,
-and residual risk.
+Agent-assisted work must enforce approved context, paths, tools, commands,
+model policy, attempts, time, token, cost, file, and diff budgets.
 
-### FR7: Bounded Deterministic Patch
+### FR7: Repair Loop
 
-Lumyn must implement only declared supported transformations, remain within
-approved files and diff budgets, and produce reproducible output for identical
-pinned inputs. It must revalidate packet trust immediately before each write.
+Lumyn may use diagnostic verification failures for bounded repair without
+expanding the approved plan. Exhausted or non-diagnostic cases stop.
 
-### FR8: Repository Baseline
+### FR8: Baseline-Aware Verification
 
-Lumyn must capture pre-existing dependency, compile, typecheck, and selected
-test status before applying the patch so existing failures are not attributed
-to the migration.
+Lumyn must distinguish pre-existing failures from migration-attributable
+failures and preserve the exact evidence boundary.
 
-### FR9: Verification Ladder
+### FR9: Evidence-Bound Outcome
 
-Lumyn must execute verification in declared order and record skipped, blocked,
-failed, stale, and passed stages separately.
+Every outcome must bind pack, base, candidate, plan, route, agent provenance,
+commands, verification, residual risk, and artifact hashes.
 
-### FR10: Workflow Outcome Proof
+### FR10: Multi-Form Export
 
-Lumyn must reuse schema-backed workflow, replay, evidence, boundary, cleanup,
-redaction, and read-back semantics to distinguish static, repository, replay,
-mock, and sandbox proof. A workflow-verified label requires causal execution
-from the exact patched repository head; independent contract replay uses
-`workflow_contract_replay_passed` and cannot exceed `repo_verified`.
+Lumyn must export evidence plus a patch, branch, or PR-ready bundle without
+requiring a hosted service.
 
-### FR11: Evidence-Bound Result
+### FR11: Optional Draft PR
 
-Lumyn must bind impact, patch, and verification evidence to the packet digest,
-base commit, head commit, plan digest, and artifact hashes.
+Draft-PR delivery must use short-lived, least-privilege authorization and
+remain distinct from code generation and verification.
 
-### FR12: Draft PR Delivery
+### FR12: Consented Campaign Reporting
 
-Lumyn must require explicit PR-write authorization, create a draft PR only,
-include the required evidence and reviewer checklist, and behave idempotently
-for the same campaign/repository/base state.
+Provider-visible reporting must contain only consumer-consented fields and
+must never be a prerequisite for private consumer execution.
 
-### FR13: Consented Connection Receipt And Richer Campaign Attestation
+### FR13: Outcome Feedback
 
-Lumyn must distinguish the minimal signed campaign connection receipt from
-optional richer provider reporting. A consumer joins provider-sponsored
-counting only by explicitly issuing the receipt; private local use and
-draft-PR delivery remain available without it. The provider must verify the
-receipt's provider-authenticated consumer signer binding, invitation and packet
-binding, audience, expiry, nonce, signature, and one-unit cardinality before
-acknowledging or billing it. The acknowledgement is provider-signed, bound to
-the receipt digest and deduplication key, and portable through a pinned endpoint
-or bounded offline export/import exchange. Any richer campaign attestation
-requires a separate field allowlist and may return only those approved fields.
+Lumyn must record accepted, merged, closed, reverted, and substantively
+corrected outcomes with provenance.
 
-### FR14: Outcome Feedback
+### FR14: Stable Machine Interface
 
-Lumyn must record merged, closed, reverted, and substantively corrected
-outcomes with provenance. Outcome feedback may inform future remediation
-recipes, but cannot silently change an active packet or patch rule.
-
-### FR15: Stable Machine Interface
-
-Every state-returning command must support stable JSON, typed errors,
-non-interactive execution, and the stable exit-code contract. Factory and
-committable public artifact references are repo-relative. Consumer-private
-runtime references are relative to the explicitly configured private state
-root and appear in public or provider-visible records only as opaque IDs and
-digests.
-
-### FR16: Private-Artifact Lifecycle
-
-Lumyn must automatically enforce private-artifact TTL and
-expiry/revocation deletion at creation, read, process startup, and the next
-run; emit deletion receipts or durable orphan reports; retry safely after
-partial deletion or crash; expose `lumyn artifacts gc` for operator recovery;
-and never rewrite historical closure to hide deleted evidence.
-
-### FR17: Two-Sided Activation
-
-Lumyn must provide a standard provider campaign kit, configured-signing packet
-publication, a signed invitation, out-of-band-authenticated provider
-enrollment, consumer campaign acceptance plus an authorization-request receipt,
-explicit signed authorization issuance and revocation, an optional signed
-campaign connection receipt with provider-authenticated signer binding and a
-provider-signed acknowledgement exchange, and a synthetic offline end-to-end
-canary.
-Invitations cannot authenticate their own root. Enrollment and acceptance run
-without the checkout mounted; no activation request implies repository or
-product authority, and no provider demonstration may use a false-green or
-partially implemented command path.
+State-returning commands must support stable JSON, typed errors,
+non-interactive execution, and versioned artifacts.
 
 ---
 
@@ -1248,72 +994,61 @@ partially implemented command path.
 
 ### NFR1: Fail-Closed Honesty
 
-Unsupported, ambiguous, stale, unauthorized, unredactable, or unverified states
-must never report a successful migration or verified workflow.
+Unsupported, ambiguous, unauthorized, unredactable, out-of-budget, or
+unverified states never report a verified migration.
 
-### NFR2: Determinism
+### NFR2: Controlled Determinism
 
-Pinned public fixtures and deterministic patch recipes must produce stable
-impact, patch, and evidence results on repeated runs.
+Pinned inputs, deterministic transforms, routing, verification commands,
+evidence, and status are repeatable. Agent source output need not be
+byte-identical.
 
 ### NFR3: Consumer Privacy
 
-Consumer code and private evidence remain in the consumer-controlled execution
-plane, outside the checkout and public source repository, by default. Runtime
-artifacts enforce TTL and deletion on expiry or revocation at every lifecycle
-entry point; only explicitly consented redacted aggregates or hashes may be
-public. Provider export and public commit are disclosed as irreversible:
-revocation stops future sharing and removes Lumyn-controlled private copies,
-but cannot promise recall from recipients, Git history, clones, or caches.
+Consumer code and private evidence remain in the approved consumer execution
+plane except for explicitly disclosed Model Provider context and
+consumer-consented provider summaries.
 
-### NFR4: Least Privilege
+### NFR4: Bounded Autonomy
 
-Read, write, command, provider-status read, registry, credential, PR, campaign
-receipt, richer reporting, retention, and deletion permissions are
-independently bounded and evidenced.
+An agent cannot widen paths, tools, commands, network, credentials, model
+policy, task intent, or budgets.
 
-### NFR5: Redaction Before Persistence
+### NFR5: Least Privilege
 
-Secrets must be redacted before persistence or sharing. Redaction uncertainty
+Read, write, command, model-data, registry, sandbox, credential, remote branch,
+PR, retention, deletion, and provider-reporting scopes are independent.
+
+### NFR6: Redaction Before Persistence
+
+Secrets are redacted before persistence or sharing. Redaction uncertainty
 blocks the affected artifact.
 
-### NFR6: Explainability
+### NFR7: Explainability
 
-Every changed file and call site must map to a provider change entry and
-migration recipe. Unsupported cases must include a concrete reason and next
-action.
+Every edit maps to a migration-pack item, repository evidence, route, and
+rationale. Unsupported cases include a reason and next action.
 
-### NFR7: Artifact Stability
+### NFR8: Artifact Stability
 
 Persisted artifacts are versioned, schema-backed, digest-bound, and
-migration-aware. Factory and committable public artifacts are repo-relative;
-consumer-private artifacts are private-root-relative and cross a disclosure
-boundary only through opaque IDs and digests.
+migration-aware.
 
-### NFR8: Recovery And Idempotency
+### NFR9: Recovery And Idempotency
 
-Interrupted or repeated runs must not duplicate branches, draft PRs, sandbox
-resources, connection-receipt units or acknowledgements, richer campaign
-attestations, deletion receipts, or orphan records.
+Interrupted or repeated runs do not duplicate candidates, branches, PRs,
+sandbox resources, or API Provider campaign summaries.
 
-### NFR9: Bounded Performance
+### NFR10: Bounded Performance And Cost
 
-On the fixed MVP benchmark, median read-only impact analysis should complete in
-under five minutes and median draft-PR preparation in under twenty minutes,
-excluding repository-defined test duration.
+On the fixed benchmark, median read-only impact completes in under five
+minutes. Every agent run has explicit time, token, cost, attempt, file, and
+diff budgets.
 
-### NFR10: No Production Dependency
+### NFR11: No Production Dependency
 
-The deterministic benchmark and default consumer run require no production
-credentials, production traffic, or production mutation.
-
-### NFR11: Host Isolation
-
-Repository-defined commands run only when a supported isolation backend can
-enforce exact mounts, sanitized environment, closed local-socket and inherited
-descriptor policy, process-tree inheritance, resource budgets, and denial of
-host home, credential stores, agents, keychains, and container-control sockets.
-An unavailable or unverifiable isolation backend blocks execution.
+The benchmark and default consumer run require no production credentials,
+traffic, or mutation.
 
 ---
 
@@ -1321,568 +1056,336 @@ An unavailable or unverifiable isolation backend blocks execution.
 
 Required failure classes include:
 
-- `packet_invalid`
-- `packet_untrusted`
-- `packet_superseded`
-- `packet_withdrawn`
+- `migration_pack_invalid`
+- `migration_evidence_ambiguous`
 - `source_target_mismatch`
-- `spec_sdk_mapping_incomplete`
+- `provider_confirmation_missing`
 - `authorization_missing`
 - `authorization_expired`
-- `authorization_revoked`
-- `provider_status_stale`
-- `provider_status_read_not_allowed`
 - `read_scope_exceeded`
 - `write_scope_exceeded`
-- `command_not_allowed`
-- `command_isolation_unavailable`
-- `command_isolation_violation`
-- `network_not_allowed`
-- `credential_scope_invalid`
 - `unsupported_repository_shape`
 - `unsupported_package_manager`
 - `multiple_sdk_versions`
+- `repo_context_insufficient`
 - `dynamic_usage_uncertain`
-- `wrapper_usage_needs_input`
-- `generated_or_vendored_code`
 - `impact_uncertain`
 - `required_business_value_missing`
 - `unsupported_change_class`
-- `patch_conflict`
-- `patch_stale`
+- `test_signal_insufficient`
+- `plan_stale`
+- `candidate_conflict`
+- `candidate_stale`
 - `diff_budget_exceeded`
+- `agent_not_authorized`
+- `agent_scope_exceeded`
+- `agent_budget_exhausted`
+- `repair_limit_reached`
+- `model_unavailable`
+- `model_data_policy_blocked`
+- `human_input_required`
 - `baseline_already_failing`
 - `dependency_integrity_failed`
 - `compile_failed`
 - `typecheck_failed`
 - `tests_failed`
 - `tests_flaky`
+- `verification_non_diagnostic`
 - `replay_failed`
 - `sandbox_unavailable`
-- `sandbox_drift`
 - `workflow_proof_gap`
-- `cleanup_failed`
-- `orphan_detected`
 - `redaction_uncertain`
 - `evidence_stale`
+- `export_failed`
 - `duplicate_pr`
-- `campaign_receipt_invalid`
-- `campaign_receipt_signer_untrusted`
-- `campaign_receipt_unit_conflict`
-- `campaign_receipt_ack_invalid`
-- `campaign_receipt_not_consented`
-- `provider_attestation_not_consented`
+- `provider_reporting_not_consented`
 
-Failure summaries must cite concrete artifact references. Unsupported model
-diagnosis must not be presented as fact.
+Failures cite concrete artifact references. Agent diagnosis is labeled as
+interpretation until independently verified.
 
 ---
 
 ## Acceptance Tests
 
-The active acceptance ledger enumerates exactly 62 item-level closure units.
-Group headings, epics, waves, and an overall MVP label cannot substitute for
-item-level evidence.
+The v3 acceptance ledger contains 49 item-level closure units. Group headings,
+milestones, phases, and an overall MVP label cannot substitute for evidence
+against the applicable item IDs.
 
 ### Retained Foundation
 
-1. `BASE-001`: The Go CLI, config discovery, stable result envelope, exit-code
-   constants, and local validation baseline remain functional.
+1. `BASE-001`: The Go CLI, configuration, stable result envelope, exit codes,
+   `lumyn init`, and `lumyn check` remain functional.
 2. `BASE-002`: Existing workflow, evidence, cassette, trace, proof, boundary,
    redaction, and command-result schemas remain executable and versioned.
-3. `BASE-003`: CI, coverage, CodeQL, CODEOWNERS, required checks, passive review,
+3. `BASE-003`: CI, coverage, CodeQL, CODEOWNERS, required checks, review,
    shipping, and post-merge governance remain enforced.
-4. `BASE-004`: OpenAPI/docs intake produces structured refs, fingerprints,
-   deprecation findings, and concrete source locations.
-5. `BASE-005`: The dev/architecture planning policies and 12-level test matrix
-   remain propagated into every runner-ready migration task.
+4. `BASE-004`: Existing OpenAPI and local-doc intake continues to produce
+   structured refs, fingerprints, deprecation findings, and concrete source
+   locations.
+5. `BASE-005`: Unimplemented commands return typed nonzero results, and API
+   Provider versus Model Provider terminology is unambiguous.
 
-### Product Rebaseline
+### Migration Pack
 
-1. `REB-001`: Unimplemented commands return a typed nonzero result instead of a
-   generic pass.
-2. `REB-002`: API-provider identity and model-provider metadata are
-   unambiguous in schemas, CLI results, docs, and fixtures.
-3. `REB-003`: Historical task evidence remains immutable and the old plan is
-   explicitly non-active.
+1. `PACK-001`: Pinned public docs, OpenAPI descriptions, SDK releases, and
+   migration guidance can produce a versioned `public_derived` migration pack
+   with source digests and license/provenance records.
+2. `PACK-002`: A pack records source and target versions, typed change
+   semantics, applicability, known mappings, verification guidance, ambiguity,
+   and unsupported cases.
+3. `PACK-003`: Provider confirmation is independently recorded for a sponsored
+   live campaign; public-derived evidence is never represented as provider
+   endorsement, and provider input cannot execute code.
+4. `PACK-004`: Conflicting, incomplete, stale, or semantically ambiguous
+   evidence blocks affected routes instead of inviting the agent to infer
+   provider intent.
 
-### Provider Change And Benchmark
+### Impact And Integration Graph
 
-1. `CHG-001`: A valid packet includes pinned source/target artifacts, typed
-   semantic mappings, an immutable digest, and declared audience and
-   confidentiality, and passes schema and semantic validation.
-2. `CHG-002`: Draft, superseded, withdrawn, expired, wrong-audience,
-   revoked-key, replayed, mutated-after-publish, or provenance-mismatched
-   packets block mutation, including when the state changes after planning but
-   before a local, sandbox, or remote side effect.
-3. `CHG-003`: A provider packet cannot execute arbitrary scripts.
-4. `CHG-004`: A published packet is trusted only when its signature verifies
-   against a consumer-pinned API-provider trust root and its issuer-to-package
-   binding, key, timestamp, audience, expiry, rotation, revocation, and replay
-   checks pass immediately before every side effect and retry; no prior trust
-   result is cached. Current status comes from either a signed offline snapshot
-   within the pinned maximum age or an exact-endpoint read under
-   `provider_trust_status_read`; missing, stale, replayed, unsigned, or
-   undeclared status access blocks. Published means immutable for its
-   authorized audience, not publicly disclosed.
-5. `CORPUS-001`: At least three provider-change packets, one per supported
-   change class, and at least nine visible development consumer fixtures,
-   three per class, contain frozen ground truth. Each class has at least 20
-   annotated affected sites and 20 annotated non-affected candidate sites. An
-   independent holdout owner provisions and freezes a separate
-   evaluator-controlled holdout containing at least one repository per class.
-   Only opaque case IDs, non-resolving provenance class and license posture, a
-   frozen suite commitment, and encrypted or HMAC artifact commitments are
-   committed. Source URLs, repository or package identifiers, plaintext
-   content digests, held-out inputs, and answer keys are never committed,
-   mounted, passed, or exposed to the task executor.
-6. `CORPUS-002`: Negative development fixtures cover unsupported, ambiguous,
-   stale, out-of-boundary, semantic-non-equivalence, and false-verification
-   cases. The evaluator-controlled held-out workflow suite has at least two
-   positive and two negative patched-repository executions for every
-   deterministic verification environment label emitted by the MVP, and
-   returns aggregate results and digests without answer material.
-7. `CORPUS-003`: Public fixtures are described as engineering benchmarks, not
-   evidence of provider demand.
+1. `IMPACT-001`: Impact analysis is read-only and remains inside the exact
+   authorized repository and package-root scope.
+2. `IMPACT-002`: Lumyn detects the selected official npm SDK, installed
+   version, package manifest, supported lockfile, direct imports, and aliases.
+3. `IMPACT-003`: The integration graph represents statically traceable
+   wrappers, adapters, call sites, request/response mappings, relevant
+   configuration, tests, mocks, cassettes, and fixtures.
+4. `IMPACT-004`: Generated, vendored, dynamic, multi-root, multi-version, and
+   unsupported cases receive explicit exclusion, uncertainty, or failure
+   status; no result implies global downstream coverage.
+5. `IMPACT-005`: On frozen held-out fixtures, supported affected sites meet
+   the preregistered recall and precision thresholds with zero false
+   `unaffected` results; real-repository value is not claimed from fixtures
+   alone.
 
-### Two-Sided Activation
+### Plan And Routing
 
-1. `ACT-001`: A Provider Operator can create a standard campaign kit, author
-   and validate a declarative change packet, sign and publish immutable packet
-   bytes through a configured signer, and then create a signed campaign
-   invitation without embedding signing secrets or granting repository access.
-2. `ACT-002`: A Consumer Maintainer can enroll the provider from a separately
-   authenticated enrollment bundle and out-of-band confirmed fingerprint,
-   pin the provider root and package binding, and then verify and accept the
-   signed invitation. Enrollment and acceptance store state only in the
-   consumer-private root with the checkout unavailable and produce a reviewable
-   authorization request. They grant no authority. The maintainer can then
-   explicitly issue and revoke a signed, time-bounded private authorization
-   bundle and, independently, opt into a signed minimal campaign connection
-   receipt without bespoke artifact authoring or repository disclosure.
-3. `ACT-003`: A synthetic offline canary runs the published packet and
-   invitation through consumer acceptance, explicit authorization issuance,
-   impact, plan, bounded patch, host-isolated replay or mock verification,
-   evidence rendering, and a local draft-PR preview with receipts, while using
-   no live credentials, sandbox, provider export, network, or remote write.
-   Any missing implementation stage returns a typed nonzero result, so provider
-   demonstrations cannot false-green.
+1. `PLAN-001`: The plan names every proposed or conditional file, route,
+   command, model policy, permission, budget, verification stage, and residual
+   risk without modifying repository or Git state.
+2. `PLAN-002`: Every affected item is explicitly classified as
+   `deterministic`, `agent_assisted`, `manual`, `needs_input`, or `blocked`.
+3. `PLAN-003`: Consumer approval binds the exact pack, repository base, paths,
+   route, model-data policy, tools, commands, budgets, and verification intent;
+   any change invalidates approval.
 
-### Authorization And Impact
+### Bounded Hybrid Execution
 
-1. `AUTH-001`: Repository analysis requires per-campaign, per-repository,
-   time-bounded read authorization.
-2. `AUTH-002`: Local write, host-isolated command execution, provider trust
-   status read, registry network, sandbox network, credential, remote branch
-   write, PR write, minimal campaign receipt, richer provider attestation,
-   retention, and deletion are separate, time-bounded scopes. Issuance and
-   revocation are signed consumer actions; no grant implies another.
-3. `AUTH-003`: The API Provider and the public cannot retrieve raw consumer
-   code, private evidence, or identifiable pilot records through the default
-   campaign interface.
-4. `AUTH-004`: Private runtime and pilot artifacts live outside the consumer
-   checkout and public source repository by default, are non-committable,
-   and automatically enforce TTL plus deletion on revocation at creation, read,
-   process startup, and the next run, with a deletion receipt or durable orphan
-   report and retry-safe operator recovery that does not rewrite historical
-   closure. Provider attestations expose only exact consumer-consented fields;
-   public evidence exposes only separately consented redacted aggregates or
-   hashes. Consent identifies provider export and public commit as irreversible;
-   revocation stops future disclosure and deletes Lumyn-controlled private
-   copies but cannot promise recall from recipients or public history.
-5. `AUTH-005`: Sandbox verification separately authorizes transmitted payload
-   classes, uses synthetic or approved non-sensitive test data, forbids
-   production customer data and secrets, and records provider logging,
-   retention, and deletion terms.
-6. `IMP-001`: Lumyn detects the selected official npm SDK and current version.
-7. `IMP-002`: Lumyn identifies all annotated directly imported affected call
-   sites in the fixed supported corpus.
-8. `IMP-003`: Lumyn detects one-hop wrappers but does not patch uncertain
-   wrapper usage without input.
-9. `IMP-004`: Generated, vendored, dynamic, multi-root, multi-version, and
-   unsupported lockfile cases receive explicit exclusion or failure status.
-10. `IMP-005`: On held-out fixtures, every supported change class has `100%`
-    recall, at least `95%` precision, and zero false `unaffected` results.
-    `uncertain`, `unsupported`, or missed on a known-supported affected site
-    counts as a false negative. Per-class and aggregate confusion matrices are
-    reported.
+1. `AGENT-001`: Deterministic transforms produce byte-stable candidates for
+   identical pinned inputs.
+2. `AGENT-002`: Agent-assisted execution occurs only in a consumer-local or
+   explicitly consumer-approved environment and discloses Model Provider,
+   context, data-egress, and retention posture before execution.
+3. `AGENT-003`: The agent enforces approved path, tool, command, network,
+   credential, time, token, cost, attempt, file, and diff budgets.
+4. `AGENT-004`: Every agent edit maps to a migration-pack item, integration
+   graph evidence, and recorded rationale; unrelated edits fail.
+5. `AGENT-005`: The repair loop performs no more than the approved attempts,
+   cannot expand scope, and stops on non-diagnostic failure or exhausted
+   budget.
+6. `AGENT-006`: Missing business values, auth redesign, event semantics,
+   production-only behavior, and ambiguous provider intent return
+   `needs_input` or `blocked` without speculative completion.
+7. `AGENT-007`: Agent evidence records runner, adapter, model class/version,
+   model-data and context-policy digests, tools, commands, attempts, token and
+   cost use, changed files, and human input without persisting secrets or raw
+   prompts by default.
 
-### Plan And Patch
+### Verification
 
-1. `PLAN-001`: Impact analysis performs no repository mutation.
-2. `PLAN-002`: The Consumer Maintainer can inspect every proposed file,
-   transformation, command, permission, verification level, and residual risk
-   before write approval.
-3. `PATCH-001`: A method or operation rename is patchable only when the packet
-   declares a one-to-one mapping with unchanged call signature, request and
-   response meaning, side effects, and error semantics.
-4. `PATCH-002`: A request-property rename or relocation is patchable only when
-   value, type, optionality, cardinality, units, and business meaning are
-   unchanged and no new value is inferred.
-5. `PATCH-003`: A response-property rename or relocation modifies only
-   statically identified accesses and is patchable only when value, type,
-   nullability, cardinality, units, and business meaning are unchanged.
-6. `PATCH-004`: Identical packet, base commit, toolchain digest,
-   package-integrity inputs, and registry snapshot produce the same
-   deterministic patch.
-7. `PATCH-005`: Patches remain inside approved paths and diff budgets with no
-   unrelated edits.
-8. `PATCH-006`: Any semantic-equivalence precondition failure, missing business
-   value, unsupported change, or ambiguous mapping returns
-   `affected_needs_input` or `unsupported` without edits.
+1. `VER-001`: Lumyn records pre-existing dependency, compile, typecheck, and
+   selected-test failures before candidate generation.
+2. `VER-002`: Deterministic, agent-assisted, and imported manual candidates run
+   the same dependency-integrity, compile/typecheck, and
+   consumer-allowlisted test ladder in the approved execution environment.
+3. `VER-003`: Static, repository, independent contract replay, exact-head
+   replay, mock, and sandbox evidence use distinct canonical labels.
+4. `VER-004`: Every `workflow_verified_*` result causally executes an approved
+   entrypoint from the exact candidate head and records observed interaction
+   and outcome evidence.
+5. `VER-005`: Failed, missing, stale, out-of-boundary, unredactable, or
+   inconclusive evidence cannot produce a verified label; repair failures
+   remain visible.
+6. `VER-006`: The frozen negative suite has zero false verified outcomes, and
+   all evidence binds pack, plan, base, candidate, route, agent provenance,
+   commands, environment, and artifact hashes.
 
-### Verification And Evidence
+### Export And Delivery
 
-1. `VER-001`: Lumyn records pre-existing repository failures before mutation.
-2. `VER-002`: Supported patches pass dependency integrity, compile/typecheck,
-   and declared allowlisted tests through a supported fail-closed host-isolation
-   backend or report the exact failed stage. Tests cannot access undeclared
-   mounts, host home or credential stores, agent/container sockets, inherited
-   descriptors, OS credentials, or network, and child processes inherit the
-   same boundary.
-3. `VER-003`: Independent contract or cassette replay, patched-repository
-   replay, patched-repository mock execution, and live sandbox execution use
-   separate canonical labels.
-4. `VER-004`: Sandbox verification requires approved endpoint and payload
-   allowlists, synthetic or approved non-sensitive data, a non-production
-   credential and namespace, provider logging and retention terms, budgets,
-   cleanup, and an orphan report.
-5. `VER-005`: A final-state pass with a missing patched-head execution or any
-   boundary, cleanup, redaction, freshness, or evidence-integrity failure
-   cannot return a `workflow_verified_replay`, `workflow_verified_mock`, or
-   `workflow_verified_sandbox` label.
-6. `VER-006`: On the frozen held-out workflow suite, every positive and
-   negative case receives its exact expected label, with zero false-positive
-   and zero false-negative workflow-verification results.
-7. `VER-007`: A `workflow_verified_replay`, `workflow_verified_mock`, or
-   `workflow_verified_sandbox` result requires an approved entrypoint from the
-   exact patched repository head and observed interaction and outcome evidence
-   in that environment. Independent contract or cassette replay is
-   `workflow_contract_replay_passed` and cannot exceed `repo_verified`.
-8. `EVD-001`: Results preserve separate impact, patch, verification, delivery,
-   permission, and residual-risk axes, and `lumyn trace` renders those bound
-   axes locally without network access or provider disclosure.
-9. `EVD-002`: Evidence is bound to packet digest, base/head commits, plan
-   digest, artifact hashes, and verification environment.
-10. `EVD-003`: A packet or repository-head change invalidates stale evidence.
+1. `EXP-001`: Lumyn exports complete local evidence plus a patch, local branch,
+   or PR-ready bundle without requiring a hosted service.
+2. `EXP-002`: A manual branch or PR bundle is labeled manual delivery and
+   cannot count as automated PR delivery.
+3. `EXP-003`: When the frozen campaign protocol selects automated delivery,
+   it uses a short-lived, least-privilege token, writes only a non-default
+   branch and draft PR, is idempotent, and never auto-merges. Otherwise the
+   item closes `not_applicable` only with dated protocol evidence selecting
+   manual patch, branch, or PR-bundle delivery and no automated-delivery claim.
+4. `EXP-004`: Provider-visible status contains only consumer-consented fields
+   and excludes raw source, diffs, prompts, responses, logs, traces, and
+   credentials.
 
-### Draft PR Delivery
+### Trust And Privacy
 
-1. `PR-001`: PR creation requires a separate explicit authorization after the
-   migration plan is reviewed.
-2. `PR-002`: Lumyn writes only a draft PR on an authorized non-default branch.
-3. `PR-003`: The PR includes provider packet provenance, impact scope, changed
-   files, dependency delta, generation method, exact commands and results,
-   baseline failures, workflow environment, permissions used, unsupported
-   cases, residual risk, rollback guidance, and a reviewer checklist.
-4. `PR-004`: Repeated delivery for the same campaign/repository/base state is
-   idempotent and does not create duplicate PRs.
-5. `PR-005`: A provider-sponsored connection counts only after the provider
-   signs an acknowledgement for a valid consumer-signed, invitation-bound,
-   non-replayed minimal connection receipt whose signer is authenticated to the
-   invited organization and whose unit nonce maps to one opaque repository.
-   Richer provider-visible campaign status remains separately authorized and
-   contains only consumer-consented fields.
+1. `TRUST-001`: Repository read, local write, commands, model-data egress,
+   registry, sandbox, credentials, remote branch, PR, retention, deletion, and
+   provider reporting are independently approved.
+2. `TRUST-002`: Migration packs and provider artifacts cannot execute code;
+   production credentials and production mutation are prohibited.
+3. `TRUST-003`: Cloud-model context transfer, BYOK, and local-model posture are
+   explicit; secrets and prohibited data are redacted or blocked before model
+   or artifact persistence.
+4. `TRUST-004`: Consumer-private artifacts remain outside the checkout and
+   public repository, and provider sponsorship never grants source or model
+   context access.
 
 ### Design-Partner Qualification
 
-1. `DISC-001`: Before migration-plan implementation proceeds, one qualified API
-   Provider supplies written commitment for a consequential migration within
-   six months, a named economic buyer and operator, authoritative source and
-   target artifacts, prerelease-sharing authority, a non-production sandbox,
-   a signed canary packet proving at least one supported change class, an
-   operational signed provider-status channel with its key and maximum-age
-   policy, and a provider receipt-acknowledgement key and endpoint or offline
-   exchange contract, plus an agreed paid-pilot price and decision process.
-   The provider also documents recurring-value potential through at least two
-   consequential migrations or deprecations expected within 12 months, or at
-   least 20 named managed integrations eligible for an annual
-   connected-repository program, and names the post-pilot annual-platform or
-   second-campaign purchase decision.
-2. `DISC-002`: Before migration-plan implementation proceeds, a frozen candidate
-   cohort contains at least five distinct eligible repository IDs across at
-   least three Consumer Organizations, with one accountable maintainer per
-   repository. Every repository matches the supported GitHub and
-   TypeScript/Node shape and is prequalified as plausibly using an affected
-   source version, operation, or field. One funnel unit is counted per
-   repository. The invitation window, absolute campaign judgment deadline,
-   baseline, one primary provider outcome and its material threshold,
-   correction rubric, payment and contribution evidence, confidentiality,
-   retention, and consented-data protocol are frozen before outcomes are
-   observed. Before identifiable evidence is collected, stored, or disclosed,
-   a manual privacy/legal preflight fixes allowed private fields, participant
-   consent, the approved external private root, TTL, expiry/revocation
-   deletion, receipt/orphan ownership, the minimal signed connection-receipt
-   fields, provider-authenticated consumer signer binding,
-   provider-signed acknowledgement and one-invitation-unit cardinality, and
-   separately consented public fields. Every candidate environment also proves
-   a supported OS/architecture and fail-closed host-isolation backend before
-   qualification. The protocol states that provider export and public commit
-   cannot be recalled.
+1. `DISC-001`: One qualified API Provider clears at least `$25,000` in
+   non-refundable prepaid funds for a defined migration campaign and names an
+   economic buyer, Provider Operator, hard deadline, source and target
+   versions, and decision process.
+2. `DISC-002`: Before campaign-specific migration execution, the API Provider
+   identifies at least five reachable Eligible Consumer Units across five
+   distinct API Consumer Organizations, each with an accountable maintainer
+   and useful verification signals.
+3. `DISC-003`: After the v3 privacy, model-data, authorization, and evidence
+   contracts are approved, and before the first invitation, the parties freeze
+   cohort, eligibility, price, evidence sources, privacy and model-data
+   protocol, baseline method, material maintainer comparison threshold,
+   correction rubric, campaign COGS boundary, measurement windows, one
+   material provider-outcome metric and threshold, and absolute judgment
+   deadline. A provider threshold is material only when the economic buyer
+   records that meeting it would justify a retirement or paid-continuation
+   decision and missing it makes the campaign fail.
 
-### Design-Partner Pilot
+### Provider Campaign Pilot
 
-1. `PILOT-001`: The `DISC-001` provider advances with the committed migration
-   and preregistered protocol without changing thresholds after outcomes are
-   visible.
-2. `PILOT-002`: At least five distinct prequalified eligible repositories from
-   the frozen `DISC-002` cohort, spanning at least three Consumer
-   Organizations, are invited. A repository contributes at most one funnel
-   unit.
-3. `PILOT-003`: At least three distinct Consumer Organizations each explicitly
-   issue repository authorization and import a provider-signed acknowledgement
-   for one valid minimal connection receipt bound to an authenticated consumer
-   signer and one eligible-repository invitation unit within 30 days of
-   invitation. Across those connected repositories, median calendar time from
-   invitation receipt to the first valid impact report is at most seven days,
-   median total Consumer Organization security, privacy, platform, and
-   maintainer hands-on labor over that interval is at most two hours, and
-   median Consumer Maintainer in-product hands-on time from starting `campaign
-   accept` through authorization issuance to the first valid impact report is
-   at most 60 minutes. Lumyn and provider assistance are measured separately;
-   custom product code or provider access to source invalidates the
-   observation.
-4. `PILOT-004`: At least three evidence-backed draft PRs are generated for
-   three distinct eligible repositories within 14 calendar days of repository
-   authorization; the clock has no test-duration or other pause.
-5. `PILOT-005`: At least three PRs from three distinct eligible repositories
-   across at least three Consumer Organizations merge within 45 days of PR
-   creation. This threshold is frozen before the first invitation and cannot
-   be rebaselined after outcomes are observed.
-6. `PILOT-006`: At least two of the first three merged PRs require no
-   substantive manual correction from PR creation through a fixed 30-day
-   post-merge observation window. A migration-attributable revert or
-   corrective fix counts as substantive correction. At least two of those
-   three PRs also achieve `workflow_verified_mock` or
-   `workflow_verified_sandbox` from the exact patched head before merge; a
-   missing approved entrypoint or weaker evidence does not pass this gate.
-7. `PILOT-007`: Campaign setup, onboarding, support, repository-based
-   conversion, automation, lead-time, contribution, cost-per-merge, and actual
-   legacy-retirement duration are measured against a baseline frozen before
-   the first invitation and judged by the preregistered absolute campaign
-   deadline. Campaign contribution is non-negative, and the one preregistered
-   primary provider outcome achieves either at least 20% improvement in
-   support hours per merged repository, at least 20% improvement in
-   authorization-to-merge lead time, or retirement of the targeted legacy
-   version from at least 60% of the frozen eligible-repository cohort by day
-   120. A missing or `not_measurable` primary outcome fails this gate.
-8. `PILOT-008`: The provider pays the preregistered pilot invoice at a price at
-   least equal to frozen Lumyn campaign COGS and executes a paid renewal,
-   expansion, or purchase order before the campaign judgment deadline.
-   Letters of intent, compliments, nominal payments, and informal
-   willingness-to-pay statements do not qualify.
-9. `PILOT-009`: Paid continuation covers repeatable platform use: an annual
-   connected-repository program or a second named migration campaign.
-   Preregistered recurring delivery economics show at least 60% projected gross
-   margin after Lumyn onboarding, support, infrastructure, and external-tool
-   COGS, excluding separately itemized one-time core product development, and
-   no more than four Lumyn operator hours per merged repository after campaign
-   setup. Provider and consumer labor are reported separately as buyer total
-   cost and never netted into Lumyn gross margin.
+1. `PILOT-001`: At least five prequalified Eligible Consumer Units across five
+   distinct API Consumer Organizations are invited without changing the
+   frozen cohort after outcomes are visible.
+2. `PILOT-002`: At least three repositories complete valid consumer-local
+   impact scans within 14 calendar days of their invitations.
+3. `PILOT-003`: At least two distinct repositories produce tested, reviewable
+   migration outcomes with explicit evidence boundaries by the frozen pilot
+   deadline.
+4. `PILOT-004`: At least one verified migration outcome is accepted or merged
+   by its Consumer Maintainer; closed, rejected, reverted, and corrected
+   outcomes remain visible.
+5. `PILOT-005`: Against the frozen guide/codemod plus generic-agent baseline,
+   Lumyn reduces median Consumer Maintainer hands-on time by at least 30%
+   without a worse substantive-correction, revert, or false-verification rate,
+   or clears another equally material threshold frozen before execution.
+6. `PILOT-006`: Actual cleared payment, model/tool COGS, Lumyn Operator hours,
+   Consumer Maintainer time, support effort, and the frozen primary provider
+   outcome are measured from source evidence, and the provider outcome clears
+   its frozen material threshold.
+7. `PILOT-007`: Every migration records accepted, merged, closed, reverted,
+   corrected, blocked, and residual-risk outcomes through the frozen
+   observation window.
+8. `PILOT-008`: The campaign receives a pass or fail at the frozen judgment
+   deadline. Failure to prepay, recruit, activate, outperform the generic
+   baseline, clear the material provider-outcome threshold, or produce
+   verified outcomes triggers a documented stop or reframe; the experiment
+   cannot remain open indefinitely.
 
 ---
 
 ## Success Metrics
 
-### North-Star Metric
+### North Star
 
-`verified migration PRs merged per active provider campaign`
+`verified migration outcomes accepted per active provider campaign`
 
-This is accompanied by the evidence boundary; a PR is not counted as verified
-when required verification stages were skipped or stale.
+Each outcome carries its evidence boundary. A generated candidate or opened PR
+does not count.
+
+### Provider Outcome
+
+Freeze exactly one primary provider outcome and material pass threshold before
+the first invitation. The default is the share of the frozen target cohort
+that is off the deprecated API or SDK version by the migration deadline.
+Provider support hours per accepted migration or invitation-to-accepted-
+migration lead time may be selected instead when the economic buyer records
+that the threshold is material to retirement or paid continuation. The cohort
+denominator and legacy-version retirement share remain reported whenever they
+are measurable.
 
 ### Funnel
-
-Track:
 
 ```text
 eligible
 -> invited
 -> consented
--> analyzed
--> affected
--> plan approved
--> patch generated
+-> impacted
+-> migration planned
+-> candidate produced
 -> repo verified
--> draft PR opened
--> merged
+-> consumer accepted
+-> merged or deployed
+-> legacy version retired
 ```
 
-Report conversion and time between every stage. A strong patch engine with poor
-invite-to-consent conversion is a failed provider-led product.
+Report conversion and elapsed time between every stage.
 
 ### Technical Quality
 
-- Impact recall and precision by supported change class.
-- Supported holdout patches reaching `repo_verified`.
-- Substantive manual-correction rate.
-- Unrelated-edit rate.
+- Impact recall and precision by supported route.
 - False `unaffected` rate.
-- False-positive and false-negative rate for each canonical
-  `workflow_verified_*` label.
-- Deterministic repeatability.
-- Median impact and PR-preparation duration.
+- Deterministic transform repeatability.
+- Agent scope-violation rate.
+- Agent-assisted completion rate.
+- Human-input and blocked rate.
+- Verification pass and false-verification rate.
+- Substantive correction and revert rate.
+- Unrelated-edit rate.
+- Repair attempts per accepted outcome.
+- Median impact, generation, verification, and export time.
 
-Held-out scoring is frozen before M4 implementation scoring and uses:
+### Economics And Effort
 
-```text
-recall = TP / (TP + FN)
-precision = TP / (TP + FP)
-false_unaffected_rate =
-  affected sites labeled unaffected / all affected sites
-```
+- Provider campaign revenue and actual payment.
+- Model, tool, infrastructure, and Lumyn Operator COGS.
+- Campaign contribution.
+- Consumer Maintainer hands-on time.
+- Lumyn Operator hours per verified and accepted migration.
+- Provider setup and support hours.
+- Cost per verified and accepted migration.
+- Guide/codemod plus generic-agent baseline delta.
+- Legacy cohort retirement rate.
 
-An `uncertain`, `unsupported`, or missed result on a known-supported affected
-site is a false negative. Report each class independently and the micro/macro
-aggregate. A verifier that always returns `gap` fails the positive cases.
-Independent contract replay that does not execute patched code is not a
-workflow-positive case.
-
-Only a non-resolving opaque holdout manifest is committed. It contains opaque
-case IDs, provenance class and license posture, a frozen suite commitment, and
-encrypted or HMAC artifact commitments. It contains no source URL, repository
-or package identifier, plaintext content digest, input, answer key, expected
-label, expected patch, or raw trace. An independent holdout owner provisions
-and freezes the private suite, and the lifecycle-owned M1 `holdout_result`
-binds its frozen commitment before implementation scoring. Held-out material
-lives under an evaluator-controlled private root such as
-`LUMYN_HOLDOUT_ROOT`. That root is not mounted into, passed to, named in the
-prompt for, or exposed through the environment of `task-executor`, M4, M6, or
-M7. Only `holdout-evaluator` receives it, and the repository receives aggregate
-counts, commitments, and the lifecycle-owned result—not answer material.
-
-The static task contract does not fabricate that commitment before the private
-suite exists. M1 uses `holdout_policy.mode: provision` and
-`holdout_provisioning_required` with an opaque private namespace and the
-`hmac-sha256` commitment algorithm. Provisioning proves future-suite creation;
-it does not claim that M1's current candidate passed hidden evaluation. Its
-independent result creates the opaque suite ref and keyed commitment. M4, M6,
-and M7 use `holdout_policy.mode: evaluate` and
-`holdout_evaluation_required`, resolving that trusted M1 result; each
-evaluation result binds the exact provisioning-result ref and bytes used for
-the run. Replacing the referenced result invalidates evaluation evidence.
-
-### Provider Economics
-
-- `campaign_setup_hours`: Lumyn plus provider time for packet authoring, canary
-  fixtures, and cohort preparation before the first invitation.
-- `median_invitation_to_first_impact_days`: Median calendar time from a
-  Consumer Organization's receipt of the invitation to its first valid impact
-  report.
-- `consumer_activation_hands_on_hours`: Total Consumer Organization security,
-  privacy, platform, and maintainer hands-on labor from invitation receipt to
-  the first valid impact report.
-- `consumer_maintainer_in_product_hours`: Consumer Maintainer hands-on time
-  from starting `campaign accept` through authorization issuance to the first
-  valid impact report.
-- `lumyn_onboarding_hours`: Lumyn operator time from invitation to the first
-  valid impact report, excluding core product development.
-- `provider_onboarding_hours`: provider operator time from invitation to the
-  first valid impact report.
-- `provider_support_hours_per_merged_repo`: provider DX, support, and solutions
-  hours during the measurement window divided by merged PRs.
-- `median_authorization_to_merge_days`: median calendar days from the
-  repository authorization timestamp to merge for the frozen cohort.
-- `automation_rate`: merged PRs without substantive correction divided by
-  `affected_supported` repositories.
-- `eligible_to_merge_conversion`: distinct merged eligible repositories divided
-  by the frozen eligible-repository cohort; every repository contributes at
-  most one numerator and denominator unit.
-- `acknowledged_connected_repositories`: distinct non-replayed minimal
-  connection receipts whose invitation, packet, opaque organization/repository
-  IDs, provider-authenticated consumer key binding, issuer, audience, expiry,
-  nonce, consent-policy digest, signature, one-unit cardinality, and
-  provider-signed acknowledgement were verified. This is the only
-  connected-repository billing denominator.
-- `median_invite_to_merge_days`.
-- `buyer_total_cost_per_merged_pr`: loaded provider and consumer labor plus the
-  provider fee and provider-borne external spend, divided by merged PRs.
-- `lumyn_campaign_cogs`: frozen campaign-specific Lumyn onboarding, operations,
-  support, infrastructure, and external-tool cost, excluding separately
-  itemized one-time core product development.
-- `campaign_contribution`: recognized pilot revenue minus
-  `lumyn_campaign_cogs`.
-- `projected_recurring_gross_margin`: annual-program or second-campaign revenue
-  minus projected recurring Lumyn COGS, divided by that revenue. Provider and
-  consumer labor is buyer total cost, not Lumyn COGS.
-- `lumyn_operator_hours_per_merged_repo`: Lumyn onboarding, operations, and
-  support hours after campaign setup divided by merged PRs.
-- `legacy_retirement_delta`: current actual retirement duration, measured from
-  the current packet publication or migration announcement to actual legacy
-  retirement, minus the comparable prior migration's actual duration. If the
-  current legacy surface has not retired by the frozen judgment deadline or no
-  reliable comparator exists, report `not_measurable`; do not claim
-  improvement.
-- `legacy_cohort_retirement_rate`: distinct frozen eligible repositories whose
-  resolved dependency state no longer includes the targeted legacy SDK/API
-  version by day 120, divided by the frozen eligible-repository cohort.
-- `primary_provider_outcome`: exactly one of
-  `provider_support_hours_per_merged_repo`,
-  `median_authorization_to_merge_days`, or
-  `legacy_cohort_retirement_rate`, selected before the first invitation. The
-  first two pass only at 20% or greater improvement against a comparable
-  frozen baseline; the third passes only at 60% or greater. A missing
-  comparator makes the first two ineligible for selection, and a missing or
-  `not_measurable` selected outcome fails `PILOT-007`.
-- Paid pilot receipt, campaign contribution, an annual connected-repository or
-  second-migration continuation, projected recurring gross margin, and
-  executed purchase evidence.
-
-`substantive_manual_correction` means a human edit from PR creation through the
-fixed 30-day post-merge observation window that changes the migrated API/SDK
-invocation, request/response mapping, error handling, workflow behavior, or a
-Lumyn-generated semantic edit. A migration-attributable post-merge revert or
-corrective fix counts. Formatting, deterministic lockfile normalization,
-comments, and unrelated pre-existing CI repair do not count, but must still be
-recorded.
-
-Before the first invitation, freeze the distinct eligible-repository cohort,
-organization IDs, one accountable maintainer per repository, invitation
-window, 30-day consent window, minimal connection-receipt schema,
-provider-authenticated consumer signer binding, acknowledgement signing key,
-endpoint or offline exchange, one-invitation-unit cardinality and deduplication
-rule, supported consumer OS/architecture/isolation-backend matrix, provider
-status channel and maximum-age policy, unpaused 14-calendar-day PR window,
-45-day merge window,
-30-day post-merge observation window, an absolute campaign judgment deadline
-no later than 120 days after the first invitation, comparable prior migration,
-one primary provider outcome and its material threshold, loaded labor rates,
-the boundary between one-time core product development and Lumyn campaign
-COGS, pilot price, contribution threshold, recurring gross-margin and
-operator-hour thresholds, provider and consumer buyer-TCO treatment,
-correction rubric, exact provider-visible fields, public evidence fields, the
-irreversibility of provider/public disclosure, confidentiality, retention, and
-consented-data protocol.
+`substantive_manual_correction` means a human edit after Lumyn export that
+changes migrated API invocation, request or response mapping, error handling,
+workflow behavior, or another Lumyn-generated semantic edit. Formatting,
+comments, deterministic lockfile normalization, and unrelated pre-existing CI
+repair do not count, but remain recorded.
 
 ---
 
 ## Distribution
 
-The initial distribution motion is provider-led and services-assisted:
+The initial provider motion is direct and services-led:
 
-1. Recruit a provider with an active migration, recurring-value potential, and
-   a named cohort.
-2. Create the standard campaign kit, signed packet, signed invitation, and
-   provider canary.
-3. Prove the synthetic offline end-to-end canary before demonstrating the
-   product.
-4. Let the provider invite consumer maintainers through the standard artifact.
-5. Use consumer-side `campaign accept`, explicit authorization issuance, and
-   the local/CI runner to earn trust.
-6. Count a sponsored connection only from the acknowledged minimal signed
-   receipt; return richer status only under separate consent.
-7. Convert successful campaign evidence into an annual connected-repository
-   program or second named migration campaign.
+1. Sell an active sunset or deprecation campaign to an accountable provider
+   buyer.
+2. Prepay and qualify the cohort before substantial campaign-specific
+   automation.
+3. Lumyn prepares the migration pack with the Provider Operator.
+4. The API Provider recruits participating Consumer Maintainers.
+5. Consumers run impact, planning, generation, and verification locally or in
+   consumer-controlled CI.
+6. Lumyn exports consumer-controlled outcomes and manually aggregates
+   consented campaign status.
+7. Productize repeated operational friction only after the pilot.
 
-The current repository and design-partner distribution are not represented as
-open source. A public OSS or self-serve release is a separate gate requiring an
-approved license, `SECURITY.md`, contribution and support policies, signed
-release provenance, install-integrity verification, and a maintained
-vulnerability-response route.
+The secondary motion is a paid urgent consumer upgrade sprint. It is useful
+for engine proof and cash but does not validate provider-led distribution.
 
-Public Stripe, GitHub, OpenAI, or synthetic fixtures are engineering
-benchmarks. They are not customer proof and must not be represented as provider
-endorsement.
+The MVP does not require hosted SaaS, a long-lived GitHub installation,
+automatic PR delivery, a campaign dashboard, an annual connected-repository
+program, or public OSS distribution.
+
+Public fixtures are engineering benchmarks, not provider endorsement or
+customer proof.
 
 ---
 
@@ -1890,93 +1393,97 @@ endorsement.
 
 Implemented today:
 
-- Go CLI, config, exit-code, and command-result foundation.
+- Go CLI, configuration, exit-code, and command-result foundation.
 - `lumyn init`.
 - `lumyn check`.
-- OpenAPI and local-doc source parsing, refs, fingerprints, and findings.
-- Executable workflow/evidence/cassette/proof/boundary/redaction schemas.
-- CI, coverage, CodeQL, branch-policy, review, Factory planning, and shipping
-  governance.
+- OpenAPI and local-doc parsing, refs, fingerprints, and findings.
+- Executable workflow, evidence, cassette, proof, boundary, redaction, and
+  command-result schemas.
+- CI, coverage, CodeQL, branch policy, review, Factory planning, shipping, and
+  post-merge governance.
 
-Designed or schema-backed but not implemented as a runtime:
+Designed, schema-backed, or planned but not implemented as the v3 runtime:
 
-- workflow recording;
-- replay verification;
-- live sandbox verification;
-- HTML report rendering;
-- GitHub product integration;
-- migration impact analysis;
-- patch generation;
-- migration PR delivery;
-- provider enrollment and provider-status refresh;
-- explicit authorization issuance and revocation;
-- provider-authenticated connection-receipt issuance, acknowledgement, and
-  import;
-- fail-closed host command isolation;
-- live agent evaluation.
+- migration-pack normalization;
+- TypeScript integration graph and impact analysis;
+- deterministic migration transforms;
+- coding-agent adapter and consumer-approved execution boundary;
+- bounded agent and repair budgets;
+- hybrid migration planning and routing;
+- repository verification orchestration;
+- replay, mock, or sandbox verification runtime;
+- agent provenance and cost evidence;
+- patch, branch, and PR-bundle export;
+- optional GitHub draft-PR delivery;
+- consented provider campaign reporting;
+- migration outcome ingestion.
 
 The current command dispatcher recognizes several unimplemented commands and
-can return a base success envelope. The first implementation task must correct
-that false-green behavior.
+can return a base success envelope. M0 must correct that false-green behavior;
+this planning rebaseline does not implement the correction.
 
-Existing task-run, PR-lifecycle, pilot, and closure evidence remains historical
-and immutable. New acceptance items may cite old evidence only where the old
-semantics genuinely prove the new foundation.
+Historical v2 planning and task evidence remains immutable. The current
+repo-local compiled Factory set was regenerated from this v3 PRD and
+`docs/product/plan.md`. It is planning and validation authority, not product
+runtime or factoryd execution authority. factoryd remains paused until the
+external Factory profile and factoryd runtime are separately aligned and
+approved.
 
 ---
 
 ## Risks
 
-1. **Two-sided activation:** Providers may pay but fail to recruit consumer
-   maintainers.
-2. **Repository trust:** Consumers may reject the authorization or execution
-   model.
-3. **Supply-chain risk:** A compromised provider packet could attempt to steer
-   customer code changes.
-4. **Codemod ceiling:** Simple mappings may look interchangeable with vendor
-   codemods unless impact coverage and workflow proof add clear value.
-5. **Semantic ambiguity:** Real migrations may require business values that no
-   provider packet can infer.
-6. **Repository complexity:** Wrappers, monorepos, generated code, multiple SDK
-   versions, and dynamic use may dominate.
-7. **Sandbox mismatch:** Sandbox behavior may not represent production.
-8. **False confidence:** A weak verification stage may be mistaken for business
-   outcome proof.
-9. **Episodic demand:** Consequential migrations may be too infrequent for the
-   intended recurring model.
-10. **Provider reachability:** Providers may not know which repositories or
-    maintainers depend on them.
-11. **Data leakage:** Logs, traces, diffs, or attestations could expose consumer
-    information without strict separation and redaction.
+1. **Generic-agent substitution:** Guide plus Codex or Copilot may perform
+   equivalently.
+2. **Provider activation:** A willing provider may fail to recruit consumers.
+3. **Consumer trust:** Repository or model-data policies may block execution.
+4. **Weak tests:** A repository may not provide enough evidence for a useful
+   verified result.
+5. **Semantic ambiguity:** Provider materials may omit business decisions.
+6. **Repository complexity:** Wrappers, dynamic use, monorepos, generated code,
+   and multiple SDK versions may dominate.
+7. **Agent reliability:** The bounded agent may produce unrelated, brittle, or
+   expensive candidates.
+8. **Services economics:** Model, support, and operator COGS may prevent
+   attractive margins.
+9. **Sandbox mismatch:** Non-production behavior may not represent production.
+10. **False confidence:** A weak verification stage may be mistaken for
+    business-outcome proof.
+11. **Provider visibility:** Aggregate status may not prove deployed retirement.
+12. **Episodic demand:** Consequential migrations may not recur often enough
+    for SaaS.
+13. **Data leakage:** Model context, logs, traces, diffs, or summaries may
+    expose consumer information.
 
 ---
 
 ## Falsification And Reframe Gates
 
-Reconsider the provider-led thesis when either two qualified provider
-commitment attempts fail `DISC-001` or `DISC-002`, or the first qualified
-campaign misses any required `PILOT` gate by its frozen absolute judgment
-deadline. Judge earlier when a gate becomes mathematically impossible.
-Abandonment, no invitation, insufficient authorization, late PR creation,
-insufficient merges, poor correction-free or workflow-verified performance,
-excessive onboarding or operator effort, negative contribution, recurring
-gross margin below the frozen threshold, a missed or unmeasurable primary
-provider outcome, missing repeatable paid continuation, or a
-migration-attributable post-merge revert all count as failure; they cannot keep
-the experiment open indefinitely. Do not select only successful applicants,
-change the cohort after seeing outcomes, or rebaseline a threshold after the
-first invitation.
+Stop provider-specific control-plane or SaaS investment when:
 
-Also record, without hiding it behind a broader scope, when:
+- no qualified provider clears at least `$25,000` in non-refundable prepaid
+  funds;
+- the provider cannot recruit five Eligible Consumer Units across five
+  distinct API Consumer Organizations;
+- fewer than three impact scans complete within 14 days;
+- fewer than two tested, reviewable outcomes result by the frozen deadline;
+- no Consumer Maintainer accepts a verified outcome;
+- guide or vendor tooling plus a generic agent performs materially
+  equivalently;
+- the frozen primary provider outcome misses its material threshold;
+- model, support, or operator COGS makes the campaign uneconomic;
+- most real repositories are blocked by unsupported semantics or inadequate
+  verification;
+- the provider cannot measure a meaningful retirement, support, or lead-time
+  outcome.
 
-- most affected repositories require unsupported business input or dynamic
-  analysis;
-- providers cannot supply stable prerelease artifacts or verification
-  semantics;
-- migration frequency cannot support recurring provider value.
+A successful consumer-paid sprint may justify continued engine development. It
+does not justify claims about provider demand or recurring campaign software.
+If consumer sprints repeatedly pay while providers refuse to prepay or recruit,
+explicitly consider a consumer-services reframe rather than hiding that result.
 
-These are product-learning gates, not criteria to conceal through broader
-scope.
+Do not change cohorts, thresholds, correction definitions, or deadlines after
+outcomes are visible. Abandonment and timeout count as failure.
 
 ---
 
@@ -1984,44 +1491,59 @@ scope.
 
 The MVP does not:
 
-1. scan repositories that have not been explicitly authorized;
+1. scan repositories without explicit authorization;
 2. claim coverage of every downstream integration;
-3. grant API Providers access to consumer code by virtue of payment;
-4. execute arbitrary provider-supplied scripts;
-5. infer missing business values;
-6. support every language, SDK, package manager, or API style;
-7. support auth, webhook, event, GraphQL, gRPC, or production migrations;
-8. regenerate arbitrary clients;
-9. become a generic dependency updater or coding agent;
-10. sell generic agent readiness or agent evaluation;
-11. require OpenAI or Anthropic model-provider adapters;
-12. make a hosted dashboard a prerequisite for consumer execution;
-13. use production credentials or mutate production;
-14. write to the default branch;
-15. auto-merge;
-16. train shared models on private consumer artifacts;
-17. present public benchmark fixtures as commercial validation.
+3. grant API Providers access to consumer code or model context;
+4. become a generic coding agent or dependency updater;
+5. build a universal API-change monitor;
+6. infer missing business values or provider semantics;
+7. support every language, SDK, package manager, or API style;
+8. support auth, webhook/event, GraphQL, gRPC, generated-client, or production
+   migrations;
+9. execute arbitrary provider-supplied scripts;
+10. require a hosted SaaS coordinator or dashboard;
+11. require a long-lived GitHub installation;
+12. claim manual bundle delivery as automated PR delivery;
+13. build provider PKI, signed invitations, status channels, or cryptographic
+    connection receipts before operational need is proven;
+14. assume annual connected-repository pricing;
+15. use production credentials or mutate production;
+16. write to the default branch or auto-merge;
+17. train shared models on private consumer artifacts;
+18. present public fixtures or consumer-paid work as provider commercial
+    validation.
 
 ---
 
 ## Definition Of MVP Success
 
-Lumyn reaches commercial MVP success only when:
+Lumyn reaches first commercial MVP success only when:
 
-- all required technical acceptance items for the supported change classes are
-  implemented with evidence;
-- no required trust or authorization item is deferred without explicit
-  approval;
-- the fixed benchmark has zero false workflow-verification results;
-- the standard provider kit, signed invitation, consumer-connect flow, and
-  offline synthetic end-to-end canary pass without hidden operator authority;
-- one qualified provider campaign completes the design-partner pilot gates;
-- provider and consumer participants both accept the evidence and control
-  model;
-- paid continuation covers an annual connected-repository program or second
-  named migration, and meets the frozen recurring gross-margin and
-  operator-effort gates.
+- the applicable technical acceptance items pass with current evidence;
+- one qualified API Provider clears at least `$25,000` in non-refundable
+  prepaid funds;
+- the provider identifies and invites five Eligible Consumer Units across five
+  distinct API Consumer Organizations;
+- three real repositories complete consumer-local impact analysis within 14
+  days;
+- at least two repositories produce tested, reviewable migration outcomes;
+- at least one verified outcome is accepted or merged;
+- Lumyn materially beats the frozen guide/codemod plus generic-agent baseline
+  without worse correction, revert, or false-verification risk;
+- the frozen primary provider outcome clears its material threshold;
+- no candidate is falsely labeled verified;
+- campaign revenue, model/tool COGS, Lumyn Operator time, Consumer Maintainer
+  time, and the provider outcome are measured;
+- the campaign receives an explicit pass, fail, or reframe decision by its
+  frozen deadline.
 
-The implementation sequence and bounded task packets are defined in
-`docs/product/plan.md` and
-`.factory/artifacts/prd-to-plan/lumyn-migration-mvp/`.
+A second paid campaign or annual purchase order is evidence for repeatability
+and a later SaaS decision. It is not required to close the first MVP
+experiment.
+
+Implementation sequence, ownership, and validation are defined in
+`docs/product/plan.md`. The compiled Factory artifacts and repo-local operating
+contracts are reconciled for v3 planning. This PRD, plan, and compilation do
+not authorize runtime implementation or live product action; a later
+implementation task requires explicit approval, and factoryd use additionally
+requires its paused external profile/runtime gate to clear.

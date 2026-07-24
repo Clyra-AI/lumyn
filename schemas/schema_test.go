@@ -51,16 +51,25 @@ func TestRequiredSchemasCompile(t *testing.T) {
 	}
 }
 
-func TestRequiredSchemaNamesMatchPRD(t *testing.T) {
+func TestRequiredSchemaFamiliesMatchPRD(t *testing.T) {
 	root := repoRoot(t)
 	payload, err := os.ReadFile(filepath.Join(root, "docs/product/prd.md"))
 	if err != nil {
 		t.Fatalf("read PRD: %v", err)
 	}
 	prd := string(payload)
-	for _, name := range requiredSchemas {
-		if !strings.Contains(prd, name) {
-			t.Fatalf("PRD does not name required schema %s", name)
+	for _, family := range []string{
+		"workflow",
+		"evidence",
+		"cassette",
+		"trace",
+		"proof",
+		"boundary",
+		"redaction",
+		"command-result",
+	} {
+		if !strings.Contains(prd, family) {
+			t.Fatalf("PRD does not retain the %s schema family", family)
 		}
 	}
 }
