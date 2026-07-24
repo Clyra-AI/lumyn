@@ -135,6 +135,31 @@ def _future_expiry(value: Any, label: str) -> None:
     _require(parsed.tzinfo is not None and parsed > datetime.now(timezone.utc), f"{label} must be a future instant")
 
 
+def validate_active_repo_safety(repo: Any, artifact_refs: dict[str, str]) -> None:
+    """Keep the gitignored active daemon config attended and locally bounded."""
+
+    _require(isinstance(repo, dict), ".factory/factoryd.json missing repos.lumyn")
+    ref_fields = {
+        "task_packets": "packets",
+        "scope_closure_map": "closure",
+        "validation_contract": "contract",
+        "acceptance_ledger": "ledger",
+    }
+    for field, ref_key in ref_fields.items():
+        _require(
+            repo.get(field) == artifact_refs[ref_key],
+            f".factory/factoryd.json {field} ref is stale",
+        )
+    shipping = repo.get("shipping")
+    _require(
+        repo.get("auto_ship") is False
+        and isinstance(shipping, dict)
+        and shipping.get("enabled") is False,
+        ".factory/factoryd.json must remain safe-attended; use "
+        "factoryd.autoship.example.json for full-loop shipping",
+    )
+
+
 def validate_authority_grants(
     grants: Any,
     tasks: dict[str, dict[str, Any]],

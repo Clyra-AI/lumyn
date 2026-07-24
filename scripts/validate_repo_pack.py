@@ -11,7 +11,7 @@ from typing import Any
 
 from repo_pack_architecture import validate_architecture_budget_policy
 from repo_pack_validation.acceptance_text import validate_acceptance_text
-from repo_pack_validation.authority import validate_authority_grants
+from repo_pack_validation.authority import validate_active_repo_safety, validate_authority_grants
 from repo_pack_validation.runtime_pins import validate_runtime_pins
 from repo_pack_validation.self_tests import run_repo_pack_self_tests
 from repo_pack_validation.task_contracts import validate_migration_task_contracts
@@ -751,11 +751,7 @@ def validate_loaded(data: dict[str, dict[str, Any]], *, validate_configs: bool =
 
 def validate_active_config(config: dict[str, Any], tasks: dict[str, dict[str, Any]]) -> None:
     repo = config.get("repos", {}).get("lumyn")
-    require(isinstance(repo, dict), ".factory/factoryd.json missing repos.lumyn")
-    require(repo.get("task_packets") == ARTIFACT_REFS["packets"], ".factory/factoryd.json task_packets ref is stale")
-    require(repo.get("scope_closure_map") == ARTIFACT_REFS["closure"], ".factory/factoryd.json closure ref is stale")
-    require(repo.get("validation_contract") == ARTIFACT_REFS["contract"], ".factory/factoryd.json validation contract ref is stale")
-    require(repo.get("acceptance_ledger") == ARTIFACT_REFS["ledger"], ".factory/factoryd.json ledger ref is stale")
+    validate_active_repo_safety(repo, ARTIFACT_REFS)
     validate_authority_grants(repo.get("capability_grants"), tasks, EXPECTED_CAPABILITIES)
 
 
