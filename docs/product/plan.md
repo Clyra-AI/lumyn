@@ -2,10 +2,12 @@
 
 **Date:** 2026-07-25
 **Source of truth:** `docs/product/prd.md`
-**Status:** Active v3.1 planning contract. The external Factory profile is
-aligned; factoryd task dispatch remains paused until its bundle/runtime and
-exact mission are qualified and explicitly unpaused. Separately approved
-attended tasks remain available
+**Status:** Active v3.1 planning contract. A v3.1 source update has landed in
+the external Factory profile, but this compiled control generation still
+records Factory profile/runtime compatibility as unqualified. factoryd task
+dispatch remains paused until the complete control set is regenerated and its
+bundle/runtime and exact mission are qualified and explicitly unpaused.
+Separately approved attended tasks remain available
 **Scope:** Build and validate one provider-originated TypeScript/Node API
 sunset campaign in which a provider publishes one confirmed change, authorized
 consumer installations produce repository-specific verified updates, and
@@ -202,8 +204,10 @@ M0 dispatch baseline:
   `semantic_role: model_provider`, keeps legacy payloads valid, and stops
   setting evaluation metadata on `init` and `check`.
 - The repo-local v3 contract, task packets, and acceptance ledger are
-  rebaselined. Factory `profiles/lumyn.yaml` is aligned to v3.1; factoryd
-  bundle/runtime qualification and unpause remain separate and incomplete.
+  rebaselined. A v3.1 source update has landed in Factory
+  `profiles/lumyn.yaml`, but this compiled generation still records Factory
+  profile/runtime compatibility as unqualified. Regeneration, factoryd
+  bundle/runtime qualification, and unpause remain incomplete.
 - Historical task evidence proves only the exact foundation it recorded.
 
 No line in this plan represents an unimplemented surface as shipped.
@@ -407,12 +411,15 @@ rebaseline. It regenerates the 53-item acceptance ledger, mapping, execution
 plan, task packets, validation contract, and closure map without changing
 runtime product behavior. Historical v2 evidence remains immutable.
 
-The external Factory profile is aligned to v3.1. The checked-in factoryd
-mission stays paused until its bundle/runtime qualifies the exact active
-mission and a bounded task is explicitly unpaused. That pause blocks factoryd
-dispatch only. A separately approved attended task may use the same packet and
-full lifecycle gates without claiming factoryd readiness. No implementation
-task is approved by this rebaseline itself.
+A v3.1 source update has landed in the external Factory profile, but the active
+compiled control set remains the authority for factoryd and still records
+Factory profile/runtime compatibility as unqualified. The checked-in factoryd
+mission therefore stays paused until the complete control set is regenerated,
+its bundle/runtime qualifies the exact active mission, and a bounded task is
+explicitly unpaused. That pause blocks factoryd dispatch only. A separately
+approved attended task may use the same packet and full lifecycle gates while
+recording current external dependencies separately; it does not claim factoryd
+readiness. No implementation task is approved by this rebaseline itself.
 
 ---
 
@@ -2000,11 +2007,13 @@ before execution.
 - This change aligns the PRD, plan, operating docs, ADRs, compiled 53-item
   control set, validators, and paused factoryd templates.
 - No runtime implementation task is authorized by this planning change.
-- The external Factory profile is aligned. factoryd execution remains paused
-  until its bundle/runtime and exact mission are qualified and explicitly
-  unpaused. An attended implementation path outside factoryd still requires
-  explicit task approval and every repo-local lifecycle gate; it does not prove
-  factoryd readiness.
+- A v3.1 source update has landed in the external Factory profile, but the
+  active compiled generation still records Factory profile/runtime
+  compatibility as unqualified. factoryd execution remains paused until the
+  complete controls are regenerated and its bundle/runtime and exact mission
+  are qualified and explicitly unpaused. An attended implementation path
+  outside factoryd still requires explicit task approval and every repo-local
+  lifecycle gate; it does not prove factoryd readiness.
 
 ### Wave 1
 

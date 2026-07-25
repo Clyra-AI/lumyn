@@ -27,12 +27,12 @@
     "producer_class": "peer_agent"
   },
   "current_work": {
-    "validation_run_id": "validation:2026-07-25T18:38:55Z:lumyn-v3-m0",
-    "candidate_digest": "sha256:79ad239e707c478ff091fd3b2382a655f53ceb8b12244b9017e78b6c756f1daf",
+    "validation_run_id": "validation:2026-07-25T18:57:00Z:lumyn-v3-m0-loop1",
+    "candidate_digest": "sha256:855f554ae6c8ff1b957c496d4d2983739caee3cdf4abcbb9b8227b66fc3694d9",
     "work_proof_markers": [
       {
         "ref": ".factory/artifacts/task-runs/M0/work-proof-marker.json",
-        "sha256": "sha256:64d7075a0d6db246dcf2cd076b6ac0322333a48086fd15aa015fba50bddf0c88"
+        "sha256": "sha256:0e37ba2322482e018b08f1cc51470cb270590cc670a21d5d6536327b283fa449"
       }
     ]
   },
@@ -59,8 +59,8 @@
   "residual_risks": [
     "GitHub validate, CodeQL, passive latest-head Codex review, merge, and post-merge monitoring remain required downstream lifecycle gates.",
     "The v1.0 provider_metadata object remains extension-open for historical compatibility, so semantic_role becomes schema-enforced only in the planned version 2.0 contract; current Go writers emit only model_provider.",
-    "Factory PR 267's recorded upstream review-signal process escape is not treated as factoryd qualification or as Lumyn M0 PR-lifecycle proof.",
-    "The factoryd bundle and runtime remain unqualified for Lumyn v3.1, and dispatch must stay paused."
+    "The external Factory v3.1 source-profile update has landed, but the unchanged active compiled generation remains authoritative for factoryd and still records profile/runtime compatibility as unqualified; factoryd dispatch must stay paused until complete control regeneration, exact-mission runtime qualification, and explicit unpause.",
+    "Factory PR 267's recorded upstream review-signal process escape is not treated as factoryd qualification or as Lumyn M0 PR-lifecycle proof."
   ],
   "evidence_refs": [
     ".factory/artifacts/task-runs/M0/validation-report.json",
@@ -85,7 +85,8 @@
     ],
     "source_of_truth_changes": [
       "commandImplementationStatus in cmd/lumyn/main.go is the authoritative implemented, unimplemented, or unknown command classifier for the retained command surface.",
-      "ADR-0006 is the terminology and migration authority while the five executable v1.0 schemas retain their pre-M0 accepted language exactly."
+      "ADR-0006 is the terminology and migration authority while the five executable v1.0 schemas retain their pre-M0 accepted language exactly.",
+      "The unchanged active compiled controls remain authoritative for factoryd compatibility; attended M0 evidence records the later external source-profile commit separately without reinterpreting or qualifying that compiled snapshot."
     ],
     "feedback_plan": [
       "Keep process-level CLI envelope tests, schema compatibility fixtures, exit-code tests, coverage, repo-pack validation, GitHub validate, CodeQL, passive latest-head Codex review, and post-merge main monitoring in the promotion loop.",
@@ -99,7 +100,7 @@
       "The change has no external state to delete; a rollback must revert command classification, Go terminology, fixtures, tests, docs, and changelog together and then rerun make prepush-full.",
       "Removing the new discriminator from current writers or narrowing the v1.0 validators must fail the writer and compatibility tests before promotion."
     ],
-    "system_model_summary": "M0 establishes one fail-closed command-classification boundary and explicit internal Model Provider terminology while preserving the exact v1.0 schema acceptance language; independent local verification and later PR lifecycle gates remain separate authorities."
+    "system_model_summary": "M0 establishes one fail-closed command-classification boundary and explicit internal Model Provider terminology while preserving the exact v1.0 schema acceptance language. Attended M0 execution records its current external dependency independently, while the unchanged compiled generation remains the factoryd compatibility authority and keeps factoryd paused pending full regeneration and qualification; independent local verification and later PR lifecycle gates remain separate authorities."
   },
-  "created_at": "2026-07-25T18:42:54Z"
+  "created_at": "2026-07-25T19:00:09Z"
 }

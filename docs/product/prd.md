@@ -8,7 +8,7 @@
 | Last Updated | 2026-07-25 |
 | Primary Audience | Lumyn builders, API-provider design partners, API-consumer maintainers, and technical investors |
 | Source Task Plan | `docs/product/plan.md` |
-| Compiled Factory Plan | Repo-local v3.1 set regenerated; external Factory profile aligned; factoryd dispatch paused pending bundle/runtime qualification and explicit unpause |
+| Compiled Factory Plan | Repo-local v3.1 set regenerated before the external profile source update; active controls still record Factory profile/runtime compatibility as unqualified, so factoryd dispatch remains paused pending full regeneration, bundle/runtime qualification, and explicit unpause |
 
 ---
 
@@ -1952,9 +1952,11 @@ behavior is not implemented. M0 makes each return a typed nonzero
 Historical v2 planning and task evidence remains immutable. The current
 repo-local compiled Factory set was regenerated from this v3 PRD and
 `docs/product/plan.md`. It is planning and validation authority, not product
-runtime or factoryd execution authority. The external Factory profile is
-aligned; factoryd remains paused until its bundle/runtime is qualified against
-the exact mission and a bounded task is explicitly unpaused.
+runtime or factoryd execution authority. A v3.1 source update has landed in the
+external Factory profile, but the active compiled generation still records
+Factory profile/runtime compatibility as unqualified. factoryd remains paused
+until the controls are regenerated, its bundle/runtime is qualified against
+the exact mission, and a bounded task is explicitly unpaused.
 
 ---
 

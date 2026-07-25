@@ -3,7 +3,7 @@
   "task_id": "M0",
   "work_item_id": "lumyn-v3-m0",
   "required_proof_level": "workflow_behavior",
-  "candidate_digest": "sha256:79ad239e707c478ff091fd3b2382a655f53ceb8b12244b9017e78b6c756f1daf",
+  "candidate_digest": "sha256:855f554ae6c8ff1b957c496d4d2983739caee3cdf4abcbb9b8227b66fc3694d9",
   "levels": [
     {
       "level": "syntax",

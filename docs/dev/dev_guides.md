@@ -44,9 +44,11 @@ No model SDK or endpoint is implicitly approved by this planning rebaseline.
 
 The checked-in compiled set is regenerated from the approved v3.1 PRD and plan
 and is the repo-local source for acceptance counts, task mappings, validation,
-and closure. It authorizes no product runtime implementation. The external
-Factory profile is aligned to v3.1; factoryd dispatch remains paused pending
-bundle/runtime qualification and an explicit bounded-task unpause.
+and closure. It authorizes no product runtime implementation. A v3.1 source
+update has landed in the external Factory profile, but the active compiled
+controls still record Factory profile/runtime compatibility as unqualified.
+factoryd dispatch remains paused pending full control regeneration,
+bundle/runtime qualification, and an explicit bounded-task unpause.
 
 ## CI Lane Mapping
 
@@ -174,9 +176,10 @@ Scanner failure blocks closure without a scoped approved exception.
   lifecycle gates, evidence, proof, capability, budget, stop, changelog, and
   semantic-invariant fields.
 - This rebaseline authorizes no product runtime implementation.
-- factoryd execution remains blocked until its bundle/runtime is qualified
-  against the exact active v3 mission and a bounded task is explicitly
-  unpaused. The external Factory profile is aligned but is not runtime proof.
+- factoryd execution remains blocked until the complete control set is
+  regenerated, its bundle/runtime is qualified against the exact active v3
+  mission, and a bounded task is explicitly unpaused. The landed external
+  source-profile update is not runtime proof.
 
 ## Docs Parity
 
@@ -199,9 +202,11 @@ Active planning sources:
 Behavior, status, generation modes, verification labels, artifact paths,
 authority, Agent Runner/model policy, budgets, and implementation claims must
 agree.
-The external Factory profile is aligned to v3.1 but is not qualified by the
-repo-local compilation and does not prove factoryd execution. Dispatch remains
-paused until the factoryd bundle/runtime and exact active mission qualify.
+A v3.1 source update has landed in the external Factory profile, but the active
+repo-local compilation still records Factory profile/runtime compatibility as
+unqualified and remains authoritative for factoryd. Dispatch stays paused
+until complete control regeneration and factoryd bundle/runtime and exact
+active-mission qualification.
 
 ## Structured Data Policy
 

@@ -4,8 +4,8 @@
   "task_id": "M0",
   "work_item_id": "lumyn-v3-m0",
   "worker": "task-executor",
-  "generated_at": "2026-07-25T18:38:55Z",
-  "validation_run_id": "validation:2026-07-25T18:38:55Z:lumyn-v3-m0",
+  "generated_at": "2026-07-25T18:57:00Z",
+  "validation_run_id": "validation:2026-07-25T18:57:00Z:lumyn-v3-m0-loop1",
   "objective": "Correct command and result foundations without reinterpreting historical evidence.",
   "task_packet_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M0",
   "dispatch_authorization": {
@@ -15,11 +15,11 @@
     "factoryd_dispatch_enabled": false,
     "factory_profile_ref": "Clyra-AI/factory@ca94bc4cf28da09d097524c1610385ec32af2665:profiles/lumyn.yaml",
     "factory_profile_landed_commit": "ca94bc4cf28da09d097524c1610385ec32af2665",
-    "factory_profile_status": "v3_1_aligned_runtime_not_qualified"
+    "factory_profile_status": "source_profile_updated_compiled_controls_and_runtime_unqualified"
   },
   "current_work": {
     "base_head": "1c8d43e54e8b907873ba80fc1a070018fd12c5be",
-    "candidate_digest": "sha256:79ad239e707c478ff091fd3b2382a655f53ceb8b12244b9017e78b6c756f1daf",
+    "candidate_digest": "sha256:855f554ae6c8ff1b957c496d4d2983739caee3cdf4abcbb9b8227b66fc3694d9",
     "digest_method": "sha256 of sorted repo-relative implementation path and file-sha256 manifest; task-run and lifecycle evidence excluded"
   },
   "red_evidence": [
@@ -145,6 +145,17 @@
       {
         "severity": "P2",
         "summary": "Removed the stale changelog statement that still described pre-M0 generic-success behavior."
+      }
+    ],
+    "fresh_review_required": true
+  },
+  "pr_review_remediation": {
+    "loop": 1,
+    "reviewer": "chatgpt-codex-connector",
+    "resolved_findings": [
+      {
+        "severity": "P1",
+        "summary": "Made the active compiled control set authoritative for factoryd compatibility, recorded the later external source-profile update without treating it as qualification, and kept factoryd paused pending full regeneration and runtime qualification."
       }
     ],
     "fresh_review_required": true
