@@ -22,14 +22,17 @@ regenerated from the v3.1 PRD and plan. It is one repo-local planning, task,
 validation, acceptance, and closure authority, not product runtime or factoryd
 execution authority.
 
-The external Factory `profiles/lumyn.yaml` profile is aligned to v3.1.
-factoryd dispatch remains paused because its bundle/runtime and exact active
-mission have not been qualified. Profile alignment alone authorizes no product
-implementation or live product action.
+A v3.1 source update has landed in the external Factory
+`profiles/lumyn.yaml` profile, but the active compiled control generation still
+records Factory profile/runtime compatibility as unqualified. factoryd
+dispatch remains paused until the complete controls are regenerated and its
+bundle/runtime and exact active mission are qualified. A source-profile update
+alone authorizes no product implementation or live product action.
 A compiled task packet's `factory_compatibility` block records the external
-posture observed when that generation was produced. Attended dispatch evidence
-must verify current external dependencies separately; it must not hand-edit a
-compiled snapshot or reinterpret it as factoryd qualification.
+posture observed when that generation was produced and remains authoritative
+for factoryd. Attended dispatch evidence may verify current external
+dependencies separately; it must not hand-edit a compiled snapshot or
+reinterpret the source update as factoryd qualification.
 A separately approved attended task may use the same packet and full lifecycle
 gates without claiming factoryd readiness. The checked-in pause therefore
 blocks factoryd dispatch, not every possible human-run implementation path.

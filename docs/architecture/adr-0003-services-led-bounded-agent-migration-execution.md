@@ -59,10 +59,12 @@ For active v3.1, ADR-0004 makes the provider-originated installed channel the
 product identity and at least one composed tested draft PR mandatory product
 proof. Services remain the onboarding motion.
 
-The v3 PRD, product plan, operating docs, repo-local compiled controls, and
-external Factory profile are aligned as planning authority. That alignment
-does not implement the product or qualify factoryd execution. factoryd remains
-paused until its bundle/runtime is qualified against the exact active mission.
+The v3 PRD, product plan, operating docs, and repo-local compiled controls are
+aligned as planning authority. A v3.1 source update has landed in the external
+Factory profile, but the active compiled controls still record Factory
+profile/runtime compatibility as unqualified and remain authoritative for
+factoryd. factoryd remains paused until the controls are regenerated and its
+bundle/runtime is qualified against the exact active mission.
 
 ## Commercial Motion
 
@@ -275,10 +277,11 @@ The implementation-to-merge chain remains:
 Factory uses only `approval`, `credentials`, and `network` for its workers.
 Those grants do not substitute for Lumyn product authority.
 
-The repo-local compiled v3 control set and aligned external profile do not by
-themselves authorize an implementation task. factoryd dispatch remains paused
-until its runtime is qualified and a bounded task is explicitly authorized and
-unpaused.
+The repo-local compiled v3 control set does not by itself authorize an
+implementation task. Its Factory compatibility state remains unqualified even
+though an external source-profile update has landed. factoryd dispatch remains
+paused until the controls are regenerated, its runtime is qualified, and a
+bounded task is explicitly authorized and unpaused.
 
 ## Consequences
 
@@ -343,11 +346,13 @@ Rejected. Consumer review and merge remain part of the safety contract.
 
 ## Rollout And Rollback
 
-Rollout begins with aligned planning documents, this ADR, the regenerated
-repo-local v3 Factory control set, and the aligned external Factory profile. No
-product implementation or live campaign action occurs in this planning
-change. The checked-in factoryd templates remain mission-paused until
-bundle/runtime and exact-mission qualification land in separate reviewed work.
+Rollout begins with aligned planning documents, this ADR, and the regenerated
+repo-local v3 Factory control set. A later v3.1 external source-profile update
+does not change the compatibility state recorded by that compiled generation.
+No product implementation or live campaign action occurs in this planning
+change. The checked-in factoryd templates remain mission-paused until complete
+control regeneration plus bundle/runtime and exact-mission qualification land
+in separate reviewed work.
 
 Initial implementation uses pinned public/synthetic fixtures, mocked model
 routes, negative disclosure and injection fixtures, and evaluator-controlled
