@@ -21,6 +21,9 @@
         "Consumer Installation expiry, revocation, policy widening, or ambient authority",
         "consumer repository read or write",
         "bounded agent and prompt injection",
+        "Agent Runner qualification, version drift, clean-session isolation, native configuration, or silent fallback",
+        "Agent Runner authentication, credential ownership, and usage-billing ownership",
+        "Agent Runner Vendor and downstream Model Provider disclosure",
         "model request disclosure",
         "model endpoint network",
         "model credential",
@@ -29,7 +32,9 @@
         "sandbox credentials, payload, or network",
         "GitHub draft PR or remote branch",
         "event-bound provider-visible reporting and status inference",
-        "generic-agent baseline or paid campaign closure"
+        "generic-agent baseline or paid campaign closure",
+        "Agent Runner executable supply-chain integrity and repository-local path shadowing",
+        "Agent Runner auth mode and entitlement validity"
       ],
       "validation_independence": "independent review, evaluation, grading, or attestation selected by task risk"
     }

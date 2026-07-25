@@ -16,6 +16,36 @@
   a consumer-local bounded coding agent for approved repository-specific work.
 - Added exact model request-disclosure, endpoint, credential, tool, path,
   token, time, retry, cost, provenance, retention, and deletion boundaries.
+- Added ADR-0005 and an adapter-neutral customer-selected Agent Runner
+  contract: Codex and Claude Code launch targets behind common conformance and
+  live-canary gates, with Cursor deferred behind the same gate.
+- Added explicit `consumer_managed` and
+  `provider_sponsored_lumyn_managed` execution-funding modes, separate
+  credential and usage-billing ownership, clean ephemeral sessions,
+  native-agent-configuration policy, and no-silent-fallback controls.
+- Added executable managed-credential broker bounds for issuer, exact audience,
+  one-time redemption into a quota-bound attempt session, no refresh or
+  cross-attempt replay, revocation, and usage reconciliation; managed mode is
+  unavailable without vendor-native enforcement or an approved
+  budget-enforcing proxy.
+- Added runner-host isolation contracts for mounts, host credentials, sockets,
+  descriptors, child processes, egress, cleanup, and malicious-child/tool
+  tests; executable plugins, MCP servers, and hooks are prohibited for MVP.
+- Added an independent verifier boundary with a fresh exact-head view,
+  separate process, frozen command/configuration digests, no runner/model
+  credentials, and an evidence writer unavailable to generation.
+- Added exact product-action route capability unions for impact, candidate,
+  verification, and repair actions, plus fail-closed agent-only repair
+  authorization.
+- Added machine-enforced repository-command isolation across M6–M10, including
+  exact commands, mounts, neutral roots, environment, credential, socket, and
+  descriptor denial, pinned qualified backend identity, hard resource quotas,
+  inherited child limits, offline/lifecycle defaults, and fail-closed cleanup.
+- Added agent-route topology minimum scope sets and a separate
+  credential-bearing sandbox-entrypoint isolation contract with endpoint-only
+  egress, teardown, cleanup, and orphan evidence.
+- Added separate Agent Runner Vendor versus Model Provider roles and
+  `agent_runner_network`/`agent_runner_credential` product capabilities.
 - Added patch artifact and PR bundle as the no-GitHub fallback, with local
   branch, short-lived remote branch, and tested draft PR as separate delivery
   states.
@@ -50,6 +80,25 @@
   store token-issuance policy, never GitHub tokens.
 - Made the coding agent a replaceable adapter and explicit status-quo
   comparator rather than Lumyn's proprietary differentiation.
+- Made the API Consumer Organization select the exact qualified Agent Runner
+  adapter/version and funding route. Agent output and self-reported tests
+  remain generation evidence; independent exact-head verification remains
+  Lumyn-owned.
+- Defaulted `agent_execution_policy` to `disabled` so notify-only, scan-only,
+  and deterministic-only installations need no runner credential; any
+  agent-assisted route now pauses for explicit configured authorization.
+- Required one same-run first-campaign proof from authenticated provider event
+  and installed preauthorization through an organically agent-assisted item on
+  the consumer-selected qualified runner, independent exact-head verification,
+  a tested Lumyn-opened draft PR, and a consented provider-received status
+  projection; separate agent, delivery, or reporting runs do not qualify.
+- Split remote branch push from draft-PR creation into separate atomic M9
+  actions, removed aggregate generation/delivery routes, and made M9/M10
+  compositions dereference and exactly match their M4/M6/M7/M8/M9 source
+  route contracts.
+- Made raw code, diffs, prompts, responses, agent sessions, tool traces, logs,
+  and credentials never API-provider-visible; provider disclosure is limited
+  to enumerated, consumer-consented status or aggregates.
 - Kept provider-confirmed migration intent authoritative and signed
   declarative packets supported, while deferring mandatory packet PKI,
   continuous provider status, connection receipts, acknowledgements, and

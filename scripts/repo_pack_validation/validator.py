@@ -102,12 +102,23 @@ EXPECTED_CAPABILITIES = {
     "M10": {"approval", "credentials", "network"},
 }
 EXPECTED_CONDITIONAL_CAPABILITIES = {
-    task: {"approval", "credentials", "network"} for task in ("M1", "M6")
+    "M6": {"approval", "credentials", "network"},
 }
 EXPECTED_PRODUCT_AUTHORITIES = {
+    "M4": {
+        "customer_repo_read",
+        "artifact_retention",
+        "artifact_deletion",
+    },
     "M6": {
         "customer_repo_read",
         "customer_repo_write",
+        "command_execution",
+        "artifact_retention",
+        "artifact_deletion",
+    },
+    "M7": {
+        "customer_repo_read",
         "command_execution",
         "artifact_retention",
         "artifact_deletion",
@@ -142,16 +153,30 @@ EXPECTED_PRODUCT_AUTHORITIES = {
     },
 }
 EXPECTED_OPTIONAL_PRODUCT_AUTHORITIES = {
-    "M1": {"model_request_disclosure", "model_network", "model_credential"},
     "M6": {
+        "agent_runner_credential",
+        "agent_runner_network",
+        "model_request_disclosure",
+        "model_network",
+        "model_credential",
+        "package_registry_read",
+    },
+    "M7": {
+        "customer_repo_write",
+        "agent_runner_credential",
+        "agent_runner_network",
         "model_request_disclosure",
         "model_network",
         "model_credential",
         "package_registry_read",
     },
     "M8": set(),
-    "M9": {"model_request_disclosure", "model_network", "model_credential", "package_registry_read", "provider_reporting"},
+    "M9": {
+        "provider_reporting",
+    },
     "M10": {
+        "agent_runner_credential",
+        "agent_runner_network",
         "model_request_disclosure",
         "model_network",
         "model_credential",
@@ -165,6 +190,340 @@ PRODUCT_AUTHORITY_CAPABILITIES = (
     set().union(*EXPECTED_PRODUCT_AUTHORITIES.values())
     | set().union(*EXPECTED_OPTIONAL_PRODUCT_AUTHORITIES.values())
 )
+
+PRODUCT_AUTHORITY_SCOPE_SEMANTICS = (
+    "task_level_capability_universe_not_runtime_grant; "
+    "named_route_exact_union_governs_each_action"
+)
+
+CONDITIONAL_CAPABILITY_PREDICATES = {
+    "agent_runner_credential": (
+        "agent_route_topology_is_runner_mediated_or_hybrid"
+    ),
+    "agent_runner_network": (
+        "agent_route_topology_is_runner_mediated_or_hybrid"
+    ),
+    "model_credential": "agent_route_topology_is_direct_model_or_hybrid",
+    "model_network": "agent_route_topology_is_direct_model_or_hybrid",
+    "model_request_disclosure": "agent_route_topology_is_not_local_runtime",
+    "package_registry_read": (
+        "approved_action_requires_registry_or_immutable_snapshot_access"
+    ),
+}
+
+AGENT_ROUTE_AUTHORIZATION_TOPOLOGY_CONTRACT = {
+    "selector_field": "agent_route_topology",
+    "allowed_values": [
+        "local_runtime",
+        "runner_mediated",
+        "direct_model",
+        "hybrid",
+    ],
+    "exactly_one_topology_selected": True,
+    "minimum_capability_sets": {
+        "local_runtime": [],
+        "runner_mediated": [
+            "agent_runner_credential",
+            "agent_runner_network",
+            "model_request_disclosure",
+        ],
+        "direct_model": [
+            "model_credential",
+            "model_network",
+            "model_request_disclosure",
+        ],
+        "hybrid": [
+            "agent_runner_credential",
+            "agent_runner_network",
+            "model_credential",
+            "model_network",
+            "model_request_disclosure",
+        ],
+    },
+    "selected_topology_minimum_capabilities_required": True,
+    "unselected_topology_capabilities_authorized": False,
+    "local_runtime_external_egress_allowed": False,
+}
+
+
+def _product_route(
+    required: tuple[str, ...],
+    conditional: tuple[str, ...] = (),
+    delegated_route_ref: str | None = None,
+    *,
+    agent_topology: bool = False,
+) -> dict[str, Any]:
+    route: dict[str, Any] = {
+        "required_capabilities": sorted(required),
+        "conditionally_selected_capabilities": sorted(conditional),
+        "exact_selected_union_frozen_before_action": True,
+        "unselected_capabilities_authorized": False,
+    }
+    if conditional:
+        route["conditional_capability_predicates"] = {
+            capability: CONDITIONAL_CAPABILITY_PREDICATES[capability]
+            for capability in sorted(conditional)
+        }
+    if agent_topology:
+        route["authorization_topology_contract"] = (
+            AGENT_ROUTE_AUTHORIZATION_TOPOLOGY_CONTRACT
+        )
+    if delegated_route_ref is not None:
+        route["delegated_route_ref"] = delegated_route_ref
+    return route
+
+
+EXPECTED_PRODUCT_ACTION_ROUTES = {
+    "M4": {
+        "impact_read_only": _product_route(
+            ("artifact_deletion", "artifact_retention", "customer_repo_read")
+        ),
+    },
+    "M6": {
+        "deterministic_candidate": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "customer_repo_read",
+                "customer_repo_write",
+            )
+        ),
+        "deterministic_package_tool_candidate": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+                "customer_repo_write",
+            ),
+            ("package_registry_read",),
+        ),
+        "agent_assisted_candidate": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+                "customer_repo_write",
+            ),
+            (
+                "agent_runner_credential",
+                "agent_runner_network",
+                "model_credential",
+                "model_network",
+                "model_request_disclosure",
+                "package_registry_read",
+            ),
+            agent_topology=True,
+        ),
+    },
+    "M7": {
+        "verify": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+            ),
+            ("package_registry_read",),
+        ),
+        "repair_agent_assisted": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+                "customer_repo_write",
+            ),
+            (
+                "agent_runner_credential",
+                "agent_runner_network",
+                "model_credential",
+                "model_network",
+                "model_request_disclosure",
+                "package_registry_read",
+            ),
+            agent_topology=True,
+        ),
+    },
+    "M8": {
+        "sandbox_read_back": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+                "sandbox_credential",
+                "sandbox_network",
+                "sandbox_request_disclosure",
+            )
+        ),
+    },
+    "M9": {
+        "local_export": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+            )
+        ),
+        "local_branch": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+                "customer_repo_write",
+            )
+        ),
+        "remote_branch_push": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+                "github_branch_write",
+            )
+        ),
+        "draft_pr_create": _product_route(
+            ("artifact_deletion", "artifact_retention", "github_pr_write")
+        ),
+        "provider_status_decline": _product_route(
+            ("artifact_deletion", "artifact_retention")
+        ),
+        "provider_status_transmit": _product_route(
+            ("artifact_deletion", "artifact_retention", "provider_reporting")
+        ),
+    },
+    "M10": {
+        "impact_read_only": _product_route(
+            ("artifact_deletion", "artifact_retention", "customer_repo_read"),
+            delegated_route_ref="M4/impact_read_only",
+        ),
+        "deterministic_candidate": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "customer_repo_read",
+                "customer_repo_write",
+            ),
+            delegated_route_ref="M6/deterministic_candidate",
+        ),
+        "deterministic_package_tool_candidate": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+                "customer_repo_write",
+            ),
+            ("package_registry_read",),
+            "M6/deterministic_package_tool_candidate",
+        ),
+        "agent_assisted_candidate": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+                "customer_repo_write",
+            ),
+            (
+                "agent_runner_credential",
+                "agent_runner_network",
+                "model_credential",
+                "model_network",
+                "model_request_disclosure",
+                "package_registry_read",
+            ),
+            "M6/agent_assisted_candidate",
+            agent_topology=True,
+        ),
+        "verify": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+            ),
+            ("package_registry_read",),
+            "M7/verify",
+        ),
+        "repair_agent_assisted": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+                "customer_repo_write",
+            ),
+            (
+                "agent_runner_credential",
+                "agent_runner_network",
+                "model_credential",
+                "model_network",
+                "model_request_disclosure",
+                "package_registry_read",
+            ),
+            "M7/repair_agent_assisted",
+            agent_topology=True,
+        ),
+        "sandbox_read_back": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+                "sandbox_credential",
+                "sandbox_network",
+                "sandbox_request_disclosure",
+            ),
+            delegated_route_ref="M8/sandbox_read_back",
+        ),
+        "local_export": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+            ),
+            delegated_route_ref="M9/local_export",
+        ),
+        "local_branch": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+                "customer_repo_write",
+            ),
+            delegated_route_ref="M9/local_branch",
+        ),
+        "remote_branch_push": _product_route(
+            (
+                "artifact_deletion",
+                "artifact_retention",
+                "command_execution",
+                "customer_repo_read",
+                "github_branch_write",
+            ),
+            delegated_route_ref="M9/remote_branch_push",
+        ),
+        "draft_pr_create": _product_route(
+            ("artifact_deletion", "artifact_retention", "github_pr_write"),
+            delegated_route_ref="M9/draft_pr_create",
+        ),
+        "provider_status_decline": _product_route(
+            ("artifact_deletion", "artifact_retention"),
+            delegated_route_ref="M9/provider_status_decline",
+        ),
+        "provider_status_transmit": _product_route(
+            ("artifact_deletion", "artifact_retention", "provider_reporting"),
+            delegated_route_ref="M9/provider_status_transmit",
+        ),
+    },
+}
 FACTORY_CAPABILITIES = {"approval", "credentials", "network"}
 REQUIRED_TASK_FIELDS = {
     "task_id",
@@ -203,12 +562,15 @@ REQUIRED_DOCS = {
         "services-assisted",
         "provider-paid",
         "bounded agent",
+        "customer-selected Agent Runner",
         "Planning-only, not implemented",
         HISTORICAL_PLAN_REL,
     ],
     "AGENTS.md": [
         "Two Principals, Two Authorities",
         "model_request_disclosure",
+        "agent_runner_network",
+        "agent_runner_credential",
         "model_network",
         "model_credential", "provider_reporting",
         "Passive Codex review settle is required before merge",
@@ -216,6 +578,7 @@ REQUIRED_DOCS = {
     "WORKFLOW.md": [
         "provider-confirmed",
         "bounded agent",
+        "Agent Runner Selection And Funding",
         "PR bundle",
         "Green CI alone is not merge-ready",
         "process escape", "provider_reporting",
@@ -226,6 +589,8 @@ REQUIRED_DOCS = {
         "Provider Change Contract",
         "provider-paid",
         "bounded coding agent",
+        "customer-selected",
+        "provider_sponsored_lumyn_managed",
         "generic coding agent",
         "53 item-level closure units",
         "Falsification And Reframe Gates",
@@ -233,6 +598,7 @@ REQUIRED_DOCS = {
     "docs/product/plan.md": [
         "M0: Correct command and result foundations",
         "M6: Implement deterministic transforms and the bounded coding agent",
+        "Codex and Claude Code",
         "M9: Export evidence and open a tested draft PR",
         "M10: Run one prepaid provider-originated update campaign",
         "all 53 PRD acceptance items",
@@ -240,6 +606,8 @@ REQUIRED_DOCS = {
     "docs/dev/dev_guides.md": [
         "services-assisted, provider-paid",
         "Bounded Agent Policy",
+        "agent_runner_network",
+        "agent_runner_credential",
         "deterministic verification", "provider_reporting",
         "Do not merge manually through `gh pr merge`",
     ],
@@ -247,6 +615,7 @@ REQUIRED_DOCS = {
         "Provider Change And Campaign Plane",
         "Consumer Execution Plane",
         "Bounded Model Plane",
+        "Agent Runner Plane",
         "Patch Safety Boundary",
         "GitHub Boundary",
     ],
@@ -262,16 +631,23 @@ REQUIRED_DOCS = {
         "Provider Change Event",
         "Delivery And Status",
     ],
+    "docs/architecture/adr-0005-customer-selected-agent-runners.md": [
+        "Customer-Selected Agent Runners",
+        "consumer_managed",
+        "provider_sponsored_lumyn_managed",
+        "Independent Verification",
+    ],
     "docs/factory/README.md": [
         PLAN_REL,
         "Product Authority Is Not Factory Authority",
-        "model_request_disclosure", "provider_reporting",
+        "model_request_disclosure", "agent_runner_network",
+        "agent_runner_credential", "provider_reporting",
         "immutable historical records",
     ],
     ".factory/README.md": [
         PLAN_REL,
         "factoryd dispatch remains paused",
-        "immutable records", "provider_reporting",
+        "immutable records", "Agent Runner", "provider_reporting",
     ],
 }
 MACHINE_LOCAL_RE = re.compile(
@@ -447,6 +823,9 @@ def validate_context(context: dict[str, Any]) -> None:
         "provider change contract",
         "consumer installation",
         "bounded agent",
+        "customer-selected qualified bounded agent runner",
+        "codex and claude code",
+        "agent_execution_policy",
         "deterministic verification",
         "local fallback",
         "tested draft pr",
@@ -492,6 +871,9 @@ def validate_risk(risk: dict[str, Any]) -> None:
         "model credential",
         "prompt injection",
         "bounded agent",
+        "agent runner qualification",
+        "agent runner authentication",
+        "usage-billing ownership",
         "deterministic verification",
         "github draft pr",
         "event-bound provider-visible reporting",
@@ -707,18 +1089,34 @@ def validate_plan(plan: dict[str, Any], required_ids: set[str]) -> None:
         and coverage.get("group_only_refs_allowed") is False,
         "execution acceptance coverage is stale",
     )
-    locked = json.dumps(plan.get("locked_decisions", {})).lower()
+    locked_decisions = plan.get("locked_decisions")
+    require(
+        isinstance(locked_decisions, list)
+        and all(nonempty_string(value) for value in locked_decisions)
+        and len(locked_decisions) == len(set(locked_decisions)),
+        "execution locked decisions must be unique non-empty strings",
+    )
+    locked = json.dumps(locked_decisions).lower()
     for token in (
         "provider-originated",
         "services-assisted",
         "provider-paid",
         "consumer-local",
-        "bounded agent",
+        "customer-selected qualified bounded agent runner",
+        "codex and claude code",
+        "agent_execution_policy",
+        "clean ephemeral session",
+        "consumer_managed",
+        "no adapter",
         "consumer installation",
         "deterministic verification",
         "model request disclosure",
         "generic-agent baseline",
-        "tested draft pr",
+        "same run",
+        "organically agent-assisted",
+        "consumer-selected qualified runner",
+        "tested lumyn-opened draft pr",
+        "provider-received consented status projection",
         "silence is unknown",
         "no auto-merge",
     ):
@@ -798,6 +1196,106 @@ def validate_task(
         optional_product
         == EXPECTED_OPTIONAL_PRODUCT_AUTHORITIES.get(task_id, set()),
         f"{task_id} optional product action scopes differ",
+    )
+    route_contract = task.get("product_action_route_contract", {})
+    expected_routes = EXPECTED_PRODUCT_ACTION_ROUTES.get(task_id, {})
+    if product or optional_product:
+        require(
+            task.get("product_authority_scope_semantics")
+            == PRODUCT_AUTHORITY_SCOPE_SEMANTICS,
+            f"{task_id} product authority arrays must be capability universes",
+        )
+        require(
+            bool(route_contract),
+            f"{task_id} must define at least one exact product action route",
+        )
+    declared_route_capabilities: set[str] = set()
+    for route_id, route in route_contract.items():
+        required_route_capabilities = route.get("required_capabilities", [])
+        conditional_route_capabilities = route.get(
+            "conditionally_selected_capabilities", []
+        )
+        require(
+            isinstance(required_route_capabilities, list)
+            and all(
+                nonempty_string(capability)
+                for capability in required_route_capabilities
+            )
+            and len(required_route_capabilities)
+            == len(set(required_route_capabilities)),
+            f"{task_id}/{route_id} required route capabilities must be unique",
+        )
+        require(
+            isinstance(conditional_route_capabilities, list)
+            and all(
+                nonempty_string(capability)
+                for capability in conditional_route_capabilities
+            )
+            and len(conditional_route_capabilities)
+            == len(set(conditional_route_capabilities)),
+            f"{task_id}/{route_id} conditional route capabilities must be unique",
+        )
+        required_route_set = set(required_route_capabilities)
+        conditional_route_set = set(conditional_route_capabilities)
+        require(
+            required_route_set.isdisjoint(conditional_route_set),
+            f"{task_id}/{route_id} route capability classes must be disjoint",
+        )
+        predicates = route.get("conditional_capability_predicates", {})
+        require(
+            (
+                conditional_route_set
+                and isinstance(predicates, dict)
+                and set(predicates) == conditional_route_set
+                and all(
+                    predicates[capability]
+                    == CONDITIONAL_CAPABILITY_PREDICATES.get(capability)
+                    and nonempty_string(predicates[capability])
+                    for capability in conditional_route_set
+                )
+            )
+            or (not conditional_route_set and predicates in ({}, None)),
+            f"{task_id}/{route_id} conditional capability predicates differ",
+        )
+        agent_route_capabilities = {
+            "agent_runner_credential",
+            "agent_runner_network",
+            "model_credential",
+            "model_network",
+            "model_request_disclosure",
+        }
+        topology = route.get("authorization_topology_contract")
+        if conditional_route_set.intersection(agent_route_capabilities):
+            require(
+                topology == AGENT_ROUTE_AUTHORIZATION_TOPOLOGY_CONTRACT
+                and all(
+                    set(capabilities).issubset(conditional_route_set)
+                    for capabilities in topology[
+                        "minimum_capability_sets"
+                    ].values()
+                ),
+                f"{task_id}/{route_id} agent authorization topology differs",
+            )
+        else:
+            require(
+                topology is None,
+                f"{task_id}/{route_id} unexpected agent authorization topology",
+            )
+        route_union = required_route_set | conditional_route_set
+        declared_route_capabilities.update(route_union)
+        require(
+            route_union.issubset(product | optional_product)
+            and route.get("exact_selected_union_frozen_before_action") is True
+            and route.get("unselected_capabilities_authorized") is False,
+            f"{task_id}/{route_id} product action scope union is not exact",
+        )
+    require(
+        declared_route_capabilities == product | optional_product,
+        f"{task_id} routes must cover its exact product capability universe",
+    )
+    require(
+        route_contract == expected_routes,
+        f"{task_id} exact product action route contract differs",
     )
     require(
         task.get("requires_credentials") is ("credentials" in required_capabilities),
@@ -943,8 +1441,52 @@ def validate_contract(contract: dict[str, Any], required_ids: set[str]) -> None:
         "never substitute" in authority.get("separation_rule", "").lower(),
         "validation contract must separate Factory and product authority",
     )
+    require(
+        authority.get("task_and_campaign_arrays")
+        == "capability_universe_only_not_runtime_grant"
+        and authority.get(
+            "named_product_action_route_required_when_scopes_declared"
+        ) is True
+        and authority.get(
+            "exact_required_and_selected_conditional_union_frozen_before_action"
+        ) is True
+        and authority.get("route_scope_classes_disjoint_and_unique") is True
+        and authority.get(
+            "routes_cover_exact_task_capability_universe"
+        ) is True
+        and authority.get(
+            "campaign_aggregate_union_authorized_per_installation"
+        ) is False
+        and authority.get(
+            "remote_branch_and_draft_pr_are_atomic_actions"
+        ) is True
+        and authority.get("aggregate_composed_action_route_allowed") is False
+        and authority.get(
+            "delegated_route_semantics_must_match_source"
+        ) is True,
+        "validation contract must enforce exact per-action route authority",
+    )
     model = contract.get("model_control_requirements", {})
     for field in (
+        "agent_execution_policy",
+        "agent_runner",
+        "executable",
+        "auth_and_entitlement",
+        "onboarding_preflight",
+        "route_identity",
+        "m1_live_execution",
+        "commercial_prequalification",
+        "session",
+        "runner_host_isolation",
+        "funding",
+        "managed_credential",
+        "ownership",
+        "native_configuration",
+        "fallback",
+        "verification_boundary",
+        "verifier_isolation",
+        "repository_command_isolation",
+        "sandbox_entrypoint_isolation",
         "disclosure",
         "endpoint",
         "credential",
@@ -959,6 +1501,103 @@ def validate_contract(contract: dict[str, Any], required_ids: set[str]) -> None:
         "provenance",
     ):
         require(field in model, f"validation contract model controls missing {field}")
+    conditional = contract.get("conditional_acceptance_rules", {})
+    install_rule = str(conditional.get("INSTALL-001", "")).lower()
+    require(
+        all(
+            token in install_rule
+            for token in (
+                "disabled",
+                "configured",
+                "only configured",
+                "exact agent runner route",
+            )
+        ),
+        "validation contract INSTALL-001 must preserve conditional Agent Runner setup",
+    )
+    pilot_rule = str(conditional.get("PILOT-003", "")).lower()
+    require(
+        all(
+            token in pilot_rule
+            for token in (
+                "real consumer-selected",
+                "agent-assisted",
+                "independent exact-head",
+                "installed-preauthorization",
+                "same run",
+                "organically",
+                "provider-received",
+                "deterministic rerouting",
+            )
+        ),
+        "validation contract PILOT-003 must preserve both agent and composed-delivery proofs",
+    )
+    agent_rule = str(conditional.get("AGENT-007", "")).lower()
+    require(
+        all(
+            token in agent_rule
+            for token in (
+                "managed-credential broker",
+                "runner-host isolation",
+                "blocks before launch",
+            )
+        ),
+        "validation contract AGENT-007 must enforce broker and host isolation",
+    )
+    verifier_rule = str(conditional.get("VER-002", "")).lower()
+    require(
+        all(
+            token in verifier_rule
+            for token in (
+                "fresh exact-head",
+                "separate process",
+                "frozen command/configuration",
+                "no agent runner/model credentials",
+                "evidence writer unavailable to generation",
+            )
+        ),
+        "validation contract VER-002 must enforce verifier isolation",
+    )
+    evidence_rule = str(conditional.get("VER-006", "")).lower()
+    require(
+        all(
+            token in evidence_rule
+            for token in (
+                "explicit agent_execution_policy",
+                "every candidate and evidence outcome",
+                "only when policy=configured",
+            )
+        ),
+        "validation contract VER-006 must make runner provenance conditional",
+    )
+    verification = contract.get("verification_requirements", {})
+    for field in (
+        "independent_from_generation",
+        "exact_candidate_head",
+        "non_mutating_verify",
+        "separate_repair_action",
+        "model_self_verification_forbidden",
+        "automated_draft_pr_required_for_exp_003",
+        "manual_delivery_cannot_close_automated_delivery",
+        "fresh_verification_view",
+        "separate_verifier_process",
+        "agent_runner_and_model_credentials_absent",
+        "generation_session_cannot_write_verification_evidence",
+        "verification_command_digest_frozen",
+        "verification_configuration_digest_frozen",
+        "repair_requires_configured_agent_execution_policy",
+    ):
+        require(
+            verification.get(field) is True,
+            f"validation contract verification requirement {field} must be true",
+        )
+    require(
+        verification.get("agent_reported_tests_qualify") is False
+        and verification.get("verification_evidence_writer")
+        == "independent_verifier_evidence_boundary"
+        and verification.get("repair_route") == "agent_assisted_only",
+        "validation contract verifier or repair boundary drifted",
+    )
     validate_pause_contract(
         contract.get("factoryd_runtime_requirements"),
         "validation contract factoryd runtime",

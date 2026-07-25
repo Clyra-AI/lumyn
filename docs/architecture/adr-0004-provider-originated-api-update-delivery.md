@@ -11,6 +11,9 @@ ADR-0003 remains authoritative only for bounded-agent execution, deterministic
 verification, consumer privacy, and human merge control. This ADR supersedes
 ADR-0003's services-led product identity, manual-first proof, and
 optional-draft-PR product-proof clauses.
+ADR-0005 refines the replaceable Agent Runner seam, customer selection,
+adapter qualification, execution funding, credential ownership, and
+independent-verification boundary.
 
 ## Date
 
@@ -111,7 +114,9 @@ A Consumer Installation is a revocable, expiring consumer-owned policy binding:
 - authorization mode: `per_event_approval` or
   `installed_preauthorization`;
 - readable and writable paths and commands;
-- model-data, network, registry, sandbox, and credential posture;
+- exact qualified Agent Runner adapter/version, execution-funding mode,
+  credential and usage-billing owners, native agent configuration, and
+  Agent Runner/model-data/network/credential posture;
 - remote-branch and draft-PR scopes;
 - provider-visible fields, retention, and deletion.
 
@@ -129,8 +134,14 @@ policy pauses for explicit consumer approval.
 ## Coding Agent And Verification
 
 The coding agent is a replaceable implementation adapter and the explicit
-status-quo comparator, not Lumyn's proprietary moat. The first implementation
-may use the existing Codex harness through a narrow runner seam.
+status-quo comparator, not Lumyn's proprietary moat. Under ADR-0005, the
+installation defaults agent execution to disabled. Notify-only, scan-only, and
+deterministic-only routes require no runner credential. An agent-assisted route
+pauses until the consumer configures one exact qualified adapter/version and
+funding route. Codex and Claude Code are launch targets behind one conformance
+contract; Cursor is deferred behind the same gate. Every attempt starts a clean
+session, and no adapter, model, credential-owner, or billing-owner fallback is
+silent.
 
 Agent output remains an untrusted candidate. Deterministic and agent-assisted
 candidates use the same exact-head, baseline-aware verification ladder defined
@@ -151,9 +162,12 @@ independent verification, branch, and draft-PR path; standalone PR creation,
 attended event import, and imported manual candidates do not qualify.
 The composed path then records an event-bound local status projection or
 explicit reporting decline. Provider transmission is separately consented and
-cannot block the PR, but the qualifying pilot run must transmit a projection
-bound to that same event, installation authorization, candidate, verification
-evidence, and draft PR.
+cannot block the PR. For `PILOT-003`, the same qualifying composed run must
+contain an organically `agent_assisted` plan item on a consumer-selected
+qualified runner, pass independent exact-head verification, open the Lumyn
+draft PR, and transmit the projection bound to that event, installation
+authorization, candidate, verification evidence, and draft PR. Separate agent
+and deterministic-delivery runs or deterministic rerouting do not qualify.
 
 A narrowly scoped GitHub App installation may persist at the consumer's
 discretion. Its installation tokens are short-lived and least-privilege; a
@@ -180,13 +194,15 @@ The first campaign is provider-paid and services-assisted. The provider must:
   outcome frozen before execution.
 
 Pilot proof requires three valid repository scans, two tested reviewable
-outcomes, at least one Lumyn-opened draft PR, at least one consumer-accepted or
-merged verified outcome, a fair guide/codemod-plus-generic-agent comparison,
-and the frozen provider outcome without worse correction, revert, or false
-verification. At least one draft PR must begin at the authenticated provider
-channel, use installed preauthorization, follow Lumyn deterministic or
-agent-assisted generation without bespoke operator edits, pass independent
-verification, and emit a consented event-bound provider status projection.
+outcomes, at least one consumer-accepted or merged verified outcome, a fair
+guide/codemod-plus-generic-agent comparison, and the frozen provider outcome
+without worse correction, revert, or false verification. One qualifying
+outcome must itself begin at the authenticated provider channel, use installed
+preauthorization, contain an organically agent-assisted item on a
+consumer-selected qualified runner without bespoke operator edits, pass
+independent exact-head verification, become a Lumyn-opened draft PR, and emit
+the consented provider-received status projection. A deterministic-only
+campaign can prove the provider channel but not `PILOT-003`.
 
 The north star is the share of all Eligible Consumer Units in the frozen
 targeted cohort with an accepted or merged verified Lumyn PR by the provider

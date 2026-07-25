@@ -7,9 +7,11 @@ route, consumer repository access, credential, command, network grant, branch
 write, or PR write is authorized by this decision.
 
 ADR-0004 supersedes this ADR's services-led product identity, manual-first
-proof, and optional-draft-PR clauses. This ADR remains authoritative only for
-bounded-agent execution, deterministic verification, consumer privacy, and
-human merge control.
+proof, and optional-draft-PR clauses. ADR-0005 refines Agent Runner selection,
+qualification, funding, credentials, and session isolation. This ADR remains
+authoritative only for bounded-agent execution, deterministic verification,
+consumer privacy, and human merge control where those later decisions do not
+provide a more specific rule.
 
 ## Date
 
@@ -223,8 +225,10 @@ writes the default branch or auto-merges.
 
 API-provider disclosure and model-provider disclosure are separate boundaries.
 
-Raw consumer code, diffs, logs, traces, prompts, responses, credentials, and
-private evidence are not API-provider-visible by default.
+Raw consumer code, diffs, logs, traces, prompts, responses, agent sessions,
+credentials, and private evidence are never API-provider-visible. Only
+enumerated, consumer-consented campaign status or aggregate fields may cross
+that boundary.
 
 Only the exact consumer-authorized request classes may reach the model
 endpoint. Secrets, credentials, PII, and production data are prohibited unless
@@ -285,8 +289,8 @@ Positive:
   campaign infrastructure.
 - The bounded agent expands migration coverage without weakening consumer
   authority or proof standards.
-- Patch and PR-bundle handoff removes GitHub credentials from the minimum
-  success path.
+- Patch and PR-bundle handoff preserves a no-GitHub recovery path. It does not
+  satisfy automated-delivery or commercial-MVP success.
 - Provider intent, generation provenance, verification, and delivery remain
   independently inspectable.
 - Operator work produces explicit productization evidence instead of being

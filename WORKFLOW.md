@@ -118,6 +118,10 @@ are sequencing and coverage lenses only.
 - The current rebaseline authorizes no product implementation, consumer
   repository, model endpoint, external credential, command, network, branch,
   or PR action.
+- Task- and campaign-level product-authority arrays are capability universes,
+  not grants. Every product side effect requires one named route whose exact
+  required plus conditionally selected union is frozen before action; composed
+  runs reuse validated routes rather than authorizing their aggregate union.
 
 ### Customer Repository Read
 
@@ -168,11 +172,16 @@ remote branch write.
 Agent-assisted generation requires all of:
 
 - an authorized plan item explicitly routed to `agent_assisted`;
+- a consumer-selected, qualified exact Agent Runner adapter and version;
+- an ephemeral clean session that does not resume personal or unrelated agent
+  history;
 - exact model provider, endpoint, model/version, and parameters;
 - exact prompt, system policy, and tool-definition versions or digests;
 - allowed read paths, writable paths, and tool calls;
 - file, line, diff, turn, token, time, retry, and cost budgets;
 - isolated workspace and fail-closed cancellation;
+- separate Agent Runner network and credential grants when the adapter requires
+  them;
 - separate model request disclosure, network, and credential grants;
 - provenance for every request, response, tool call, attempt, and patch digest;
 - independent verification and human review.
@@ -186,6 +195,69 @@ create a PR.
 Do not claim deterministic patch reproduction for agent mode. Deterministic
 verification remains required for the exact candidate head.
 
+### Agent Runner Selection And Funding
+
+The first supported adapters are `codex` and `claude_code`, but neither is
+advertised or used live until its pinned adapter version and executable digest
+from an approved source pass the common contract suite and an explicitly
+approved live canary. Its auth mode and entitlement class must allow the
+intended non-interactive local or CI use. `cursor` is deferred until it passes
+the same gate. `agent_execution_policy` defaults to `disabled`; notify-only,
+scan-only, and deterministic-only runs require no Agent Runner credential. An
+agent-assisted route pauses until the Consumer Maintainer explicitly configures
+and authorizes one exact qualified route. Lumyn does not silently change
+adapter, version, Model Provider, model, endpoint, credential owner, or
+usage-billing owner.
+
+Every agent-enabled run declares one execution-funding mode:
+
+- `consumer_managed` is the default configured mode. The API Consumer
+  Organization owns and authorizes a qualifying agent account, enterprise
+  subscription, API credential, or local runtime and owns third-party usage
+  billing. The route must expose actual downstream model identity and permit
+  non-interactive automation. Lumyn receives no reusable credential.
+- `provider_sponsored_lumyn_managed` is optional. The API Provider funds the
+  campaign, while Lumyn owns approved agent/model usage billing and injects
+  only a task-scoped brokered credential into the consumer-authorized local or
+  CI boundary. The broker binds issuer, installation/event/plan/attempt and
+  runner/model audience and maximum one-hour TTL. One-time redemption creates
+  one attempt-scoped session; multiple calls are allowed only within hard token
+  and cost quotas, with no refresh, post-attempt replay, or cross-attempt
+  reuse. Revocation and reconciliation require a vendor-native bounded
+  credential or approved budget-enforcing proxy; otherwise the managed route
+  is unavailable. The API Provider receives no credential, code, context, or
+  agent-session access.
+
+Static native user or project rules and memories are ignored unless explicitly
+selected in the installation. If selected, their identity and digest are
+recorded, they are treated as untrusted context, and they cannot widen Lumyn's
+tool, path, network, credential, disclosure, or budget authority. Executable
+plugins, MCP servers, and hooks are prohibited for the MVP. Every attempt
+resolves the approved executable by canonical path and digest, uses neutral
+home/config roots, and rejects repository-local PATH shadowing.
+
+The runner process receives only explicit read-only and writable mounts, no
+host home or OS credential store, no ambient service sockets or unrelated
+inherited descriptors, inherited child-process limits, host-enforced egress,
+and evidence-backed cleanup. If the host cannot enforce that boundary, the
+runner does not launch.
+
+### Agent Runner Network
+
+`agent_runner_network` names the exact Agent Runner Vendor control-plane
+endpoint and operations. It is distinct from `model_network`, including when
+the selected runner brokers or multiplexes access to a downstream Model
+Provider. Opaque or changing downstream model routes do not qualify for the
+MVP.
+
+### Agent Runner Credential
+
+`agent_runner_credential` names credential owner, auth mode, entitlement class,
+injection environment, scopes, expiry, revocation, prohibited persistence and
+logging, and evidence. A consumer account credential and a direct Model
+Provider credential are not interchangeable. Missing, ambient, reusable,
+owner-ambiguous, or entitlement-invalid credentials block execution.
+
 ### Model Request Disclosure
 
 `model_request_disclosure` names:
@@ -194,7 +266,8 @@ verification remains required for the exact candidate head.
   plane;
 - prohibited code, secrets, credentials, PII, and production data;
 - redaction and minimization;
-- model-provider logging, training, retention, deletion, and regional posture;
+- Agent Runner Vendor and downstream Model Provider processing, logging,
+  training, retention, deletion, and regional posture;
 - prompt/response private-artifact policy;
 - evidence and expiry.
 
@@ -211,8 +284,8 @@ implies the other.
 - model/version pin and failure behavior;
 - expiry and evidence.
 
-No generic internet access, fallback endpoint, silent model upgrade, or
-undeclared tool network is allowed.
+No generic internet access, fallback endpoint, silent model or adapter upgrade,
+or undeclared tool network is allowed.
 
 ### Model Credential
 
@@ -241,13 +314,25 @@ provider artifacts, and committed evidence.
 - environment variable classes, never secret values;
 - local-socket and inherited-descriptor policy;
 - process-tree limits and child-process inheritance;
-- OS credential access, denied by default;
+- exact isolation backend, version, configuration digest, qualification
+  digest, and host platform;
+- hard CPU-time, memory, PID, process-tree-depth, disk, and open-file quotas;
+- absolute denial of host OS credential stores and credentials;
+- only explicit task-scoped credential injection or broker handles authorized
+  by the named credential grant;
 - a supported fail-closed isolation backend.
 
-Repository commands default to no network, no lifecycle scripts, no host home
-or credential stores, no agent/Docker/unrelated service sockets, and no extra
-inherited descriptors. If the boundary cannot be enforced, the command does not
-run.
+Repository commands use no host home or host credential stores, no
+agent/Docker/unrelated service sockets, and no extra inherited descriptors.
+Network and lifecycle scripts remain disabled unless their separate exact
+route grants select them. If the boundary cannot be enforced, the command does
+not run.
+
+An agent action also freezes exactly one `agent_route_topology`. Local runtime
+grants no external egress. Runner-mediated execution requires Agent Runner
+network/credential and model-disclosure scopes; direct-model execution
+requires model network/credential/disclosure scopes; hybrid requires both.
+Package-registry read is independently conditional.
 
 ### Package Registry
 
@@ -310,13 +395,20 @@ reporting decline. Standalone PR creation, attended event import, imported
 manual candidates, and manual bundles remain valid recovery surfaces but
 cannot close that proof. Provider transmission is optional for technical
 delivery; the qualifying pilot run must transmit its consented projection.
+`PILOT-003` further requires that this qualifying composed run itself contain
+an organically `agent_assisted` plan item on a consumer-selected qualified
+runner, pass independent exact-head verification, open the Lumyn draft PR, and
+transmit the bound status projection. A separate agent run plus deterministic
+delivery run does not qualify, and deterministic work cannot be rerouted to
+manufacture proof.
 
 ### Optional Provider Reporting
 
 `provider_reporting` lists only the exact fields the consumer permits Lumyn to
-share. Raw source, diffs, logs, traces, prompts, responses, and credentials are
-excluded by default. Missing reporting consent does not block local patch,
-branch, PR-bundle, or otherwise authorized draft-PR delivery.
+share. Raw source, diffs, logs, traces, prompts, responses, agent sessions, and
+credentials are never shareable with the API Provider. Missing reporting
+consent does not block local patch, branch, PR-bundle, or otherwise authorized
+draft-PR delivery.
 
 ### Artifact Retention And Deletion
 
@@ -386,6 +478,9 @@ without that evidence is a process escape and requires recorded repair.
 - Capture the repository baseline before mutation.
 - Keep generation mode separate from verification strength.
 - Bind verification to the exact candidate head and pinned environment.
+- Run verification in a fresh process and view with frozen command and
+  verification-configuration digests, no Agent Runner/model credentials, and
+  no generation-owned verification-evidence write handle.
 - Record agent/model provenance without exposing private prompts or responses.
 - Treat pre-existing failures separately.
 - Stale evidence cannot close acceptance.

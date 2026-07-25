@@ -5,7 +5,7 @@
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
   "acceptance_mapping_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
   "acceptance_item_count": 53,
-  "last_updated_at": "2026-07-24T00:00:00Z",
+  "last_updated_at": "2026-07-25T00:00:00Z",
   "closure_status": "partial",
   "full_mvp_closure_rule": "Every acceptance item must have direct terminal evidence or an approved item-specific disposition. Milestones and delivery slices cannot close items.",
   "delivery_slices": [
