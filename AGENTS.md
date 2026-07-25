@@ -1,26 +1,27 @@
 # AGENTS.md — Lumyn Repository Contract
 
-Version: 3.0
-Status: Normative v3 planning contract; product runtime not implemented
+Version: 3.1
+Status: Normative v3.1 planning contract; product runtime not implemented
 Scope: This repository only.
 
 ## 1. Scope And Intent
 
-- Build Lumyn as a provider-sponsored, customer-controlled service for verified
-  API and SDK sunset migrations.
+- Build Lumyn as the provider-to-consumer application layer for consequential
+  API and SDK changes: provider-originated intent to consumer-controlled,
+  tested draft PR and consented rollout evidence.
 - Treat `docs/product/prd.md` as the product source of truth.
 - Treat `docs/product/plan.md` as the human-readable active plan.
-- Treat the v3 operating documents and the compiled control set under
+- Treat the v3.1 operating documents and the compiled control set under
   `.factory/artifacts/prd-to-plan/lumyn-migration-mvp/` as one planning
   authority.
 - Do not describe bounded-agent migration execution, patch delivery, branch
   delivery, PR-bundle delivery, or draft-PR delivery as implemented.
-- Regenerate the complete active v3 control set whenever its PRD, plan,
+- Regenerate the complete active v3.1 control set whenever its PRD, plan,
   acceptance, task, validation, or closure semantics change. Do not hand-edit
   one compiled artifact to bypass another.
 - Keep factoryd dispatch paused. The external Factory
   `profiles/lumyn.yaml` profile and the factoryd bundle/runtime have not been
-  requalified against this v3 generation.
+  requalified against this v3.1 generation.
 - Treat this rebaseline as planning and control work only. It authorizes no
   product runtime implementation or live product action.
 - Keep `.factory/artifacts/prd-to-plan/lumyn-mvp/` and its task, pilot, and
@@ -40,11 +41,14 @@ Scope: This repository only.
 Every product change should improve one or more of:
 
 - provider-paid completion of a consequential API or SDK sunset campaign;
-- provider-confirmed, reviewable migration intent;
+- provider-originated, reusable, confirmed change intent;
+- revocable consumer installation and event-specific authorization;
 - consumer-controlled repository access and execution;
 - bounded deterministic or agent-assisted patch candidates;
 - deterministic, baseline-aware repository and workflow verification;
-- legible patch, local-branch, PR-bundle, and optional draft-PR handoff;
+- tested draft-PR delivery with legible patch, local-branch, and PR-bundle
+  fallback;
+- event-bound, consumer-consented provider rollout status;
 - exact model egress, credential, network, disclosure, cost, and provenance
   controls;
 - proof-honest residual-risk reporting;
@@ -78,16 +82,32 @@ Do not use bare `provider` where the meaning could be ambiguous.
 
 - Analyze only explicitly authorized repositories.
 - Never claim coverage of all downstream integrations.
-- A signed declarative provider packet is authoritative when supplied and
-  confirmed, but v3 does not require an elaborate packet PKI, online status
-  service, or receipt protocol before a services-led campaign can be planned.
+- A Provider Change Contract is authoritative when accountably confirmed. Its
+  provider event and contract remain non-executable data, and v3.1 does not
+  require an elaborate PKI, universal event network, or receipt protocol.
 - Provider material is data, never executable authority. Do not execute
   provider-supplied scripts or let repository/provider content widen tools,
   permissions, network access, or writable paths.
-- Record the provider-confirmed source, target, semantic intent, unresolved
-  questions, and provenance used by every migration plan.
+- Record stable change identity, audience, source, target, semantic intent,
+  unresolved questions, provenance, confirmation, and
+  supersession/withdrawal state used by every migration plan.
+- The first provider channel is a signed versioned manifest at a pinned
+  provider-controlled HTTPS URL. It embeds the Provider Change Contract or
+  pins its exact provider-controlled URL. Verify origin, enrolled key,
+  sequence, freshness, retrieved-byte contract digest, audience, and lifecycle
+  state; attended import is recovery and cannot authorize
+  installed-preauthorization writes.
+- Derive every update-run authorization from a revocable Consumer Installation
+  binding provider/channel, repository/package root, selectors, actions,
+  model-data, GitHub, retention, expiry, and disclosure. Provider input may
+  narrow but never widen that authority.
 - Impact analysis is read-only.
-- A Consumer Maintainer must approve the migration plan before any write.
+- Planning is read-only and must precede every write. A Consumer Maintainer
+  either approves the exact event plan or has explicitly selected bounded
+  `installed_preauthorization`; any out-of-policy plan pauses before mutation.
+- Treat installation action modes as ceilings. Store no GitHub token in an
+  installation; issue a short-lived token through the approved local or CI
+  credential broker only for an in-policy delivery step.
 - Run patching only in an isolated consumer-local workspace within approved
   paths and file, line, and diff budgets.
 - Prefer a deterministic transform when the approved intent maps exactly to a
@@ -119,10 +139,10 @@ Do not use bare `provider` where the meaning could be ambiguous.
   exact request classes, model-provider logging/training/retention terms, and
   deletion posture.
 - Preserve these delivery states separately: patch artifact, optional local
-  branch, PR bundle, optional remote branch, optional draft PR, review, and
-  merge.
-- Local patch and PR-bundle delivery require no GitHub credential. Remote branch
-  and draft-PR delivery require separate authorization.
+  branch, PR bundle, remote branch, draft PR, review, and merge.
+- Local patch and PR-bundle fallback require no GitHub credential. Remote
+  branch and draft-PR delivery require separate short-lived authorization;
+  manual-only delivery cannot close the product proof.
 - Never write to the default branch or auto-merge.
 - Use only the canonical successful-verification labels `static_verified`,
   `repo_verified`, `workflow_contract_replay_passed`,
@@ -138,7 +158,8 @@ Do not use bare `provider` where the meaning could be ambiguous.
 
 ## 5. Initial MVP Boundary
 
-- Provider-paid, services-led API or SDK sunset campaigns.
+- Provider-paid API or SDK update channels launched through services-assisted
+  sunset campaigns.
 - Consumer-local or consumer-controlled CI execution.
 - GitHub-hosted TypeScript/Node repositories.
 - One explicitly selected package root and one official npm SDK per run.
@@ -146,8 +167,8 @@ Do not use bare `provider` where the meaning could be ambiguous.
 - Deterministic transformations where exact mappings are available.
 - Bounded-agent patch generation for approved repository-specific changes.
 - Deterministic repository and workflow verification for every candidate patch.
-- Patch artifact and PR bundle as baseline handoff.
-- Optional local branch, remote branch, and draft PR under separate grants.
+- Patch artifact, local branch, and PR bundle as fallback handoff.
+- At least one tested draft PR under separate short-lived branch and PR grants.
 - Human review and merge.
 - Authentication, production-data migrations, cross-language campaigns,
   generated-client regeneration, default-branch writes, and automatic merge
@@ -167,7 +188,8 @@ Do not use bare `provider` where the meaning could be ambiguous.
 - `schemas/`: versioned executable artifact contracts.
 - `cmd/lumyn/`: CLI entrypoint and process result.
 - `internal/source/`: source parsing only.
-- Future `internal/change/`, `internal/authorization/`, `internal/impact/`,
+- Future `internal/change/`, `internal/installation/`,
+  `internal/authorization/`, `internal/impact/`, `internal/status/`,
   `internal/migrationplan/`, `internal/agent/`, `internal/workspace/`,
   `internal/patch/`, `internal/verify/`, and `internal/github/`: distinct
   product boundaries.
@@ -210,8 +232,9 @@ Live product work uses private, schema-backed, task-scoped grants:
 - `github_pr_write`: repository, authorized remote branch, base branch,
   draft-only posture, token expiry, idempotency key, and approved plan/evidence
   refs;
-- `provider_reporting`: optional exact fields the consumer permits Lumyn to
-  share with the API Provider;
+- `provider_reporting`: exact event-bound fields the consumer permits Lumyn to
+  share with the API Provider; campaign proof requires a consented status
+  projection, never raw evidence;
 - `artifact_retention` and `artifact_deletion`: exact artifact classes, storage
   boundary, TTL, expiry/revocation triggers, receipt owner, retry, and orphan
   route.
@@ -294,7 +317,7 @@ The PR lifecycle report path remains:
 - Language: Go.
 - Go version: `1.26.5`.
 - Module: `github.com/Clyra-AI/lumyn`.
-- Product status: v3 planning and compiled controls only; bounded-agent
+- Product status: v3.1 planning and compiled controls only; bounded-agent
   execution is not implemented.
 - Initial distribution: explicitly licensed, integrity-signed design-partner
   local runner or consumer-controlled CI package.
@@ -318,7 +341,7 @@ or explicit decision update before implementation.
 ## 11. Factory And factoryd Operation
 
 Factory owns the planning, task-packet, validation, review, shipping, and
-evidence contracts. The repo-local v3 control set is planning authority, not
+evidence contracts. The repo-local v3.1 control set is planning authority, not
 factoryd execution proof.
 
 factoryd dispatch remains paused until a separate, reviewed change:

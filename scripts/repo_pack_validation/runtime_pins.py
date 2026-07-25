@@ -1,4 +1,4 @@
-"""Canonical runtime pins for the paused Lumyn v3 planning generation."""
+"""Canonical runtime pins for the paused Lumyn v3.1 planning generation."""
 
 from __future__ import annotations
 
@@ -22,12 +22,14 @@ EXPECTED_RUNTIME_PINS = {
         "public OSS, self-serve, and Homebrew require a separate approved gate"
     ),
     "provider_intent_policy": (
-        "services-led provider-paid API or SDK sunset campaign with "
-        "provider-confirmed source and target semantics; a signed declarative "
-        "provider packet is authoritative when supplied and confirmed, remains "
-        "data, cannot execute code, and grants no consumer repository authority; "
-        "mandatory packet PKI, continuous status, connection receipts, and "
-        "receipt-backed billing are deferred"
+        "provider-originated API or SDK update delivery launched through a "
+        "provider-paid, services-assisted sunset campaign; one accountably "
+        "confirmed Provider Change Contract is reused by the exact invited "
+        "cohort, each non-executable provider event binds its exact digest, "
+        "audience, deadline, and supersession state, and neither contract nor "
+        "event grants consumer repository authority; a universal registry, "
+        "elaborate provider PKI, connection receipts, and receipt-backed billing "
+        "are deferred"
     ),
     "model_policy": (
         "bounded agent use requires exact model provider, endpoint, model and "
@@ -36,8 +38,8 @@ EXPECTED_RUNTIME_PINS = {
         "environment and scopes, network endpoint and operations, read and write "
         "paths, file, line, diff, turn, token, time, retry, concurrency, attempt, "
         "and cost budgets, plus request, response, tool-call, usage, and patch "
-        "provenance; repository, provider, tool, and model content is untrusted "
-        "and cannot widen any boundary"
+        "provenance; the coding agent is replaceable, and repository, provider, "
+        "tool, and model content is untrusted and cannot widen any boundary"
     ),
     "verification_policy": (
         "deterministic repository and workflow verification is independent from "
@@ -47,9 +49,11 @@ EXPECTED_RUNTIME_PINS = {
     ),
     "delivery_policy": (
         "complete local evidence plus patch, optional local branch, and PR-ready "
-        "bundle is the baseline; optional remote branch and draft PR require "
-        "separate exact authorization; default-branch writes and auto-merge are "
-        "forbidden"
+        "bundle is the fallback; at least one tested draft PR requires separate "
+        "short-lived non-default-branch and PR authorization, evidence-bound "
+        "idempotency, and no auto-merge; manual delivery cannot close automated-"
+        "delivery acceptance; provider status is event-bound, consumer-consented, "
+        "provenance-labeled, and never inferred from silence"
     ),
     "artifact_namespace": (
         ".factory/artifacts contains source-safe Factory controls and separately "
@@ -59,14 +63,15 @@ EXPECTED_RUNTIME_PINS = {
     ),
     "live_work_policy": (
         "Factory worker capabilities are only approval, credentials, and "
-        "network and never substitute for Lumyn product action scopes; model "
-        "disclosure, model network, model credential, repository, command, "
-        "registry, sandbox, GitHub, reporting, retention, and deletion actions "
-        "are separate, expiring, revocable, fail-closed product grants"
+        "network and never substitute for Lumyn product action scopes; consumer "
+        "installation, event-specific authorization, model disclosure, "
+        "model network, model credential, repository, command, registry, sandbox, "
+        "GitHub, reporting, retention, and deletion actions are separate, "
+        "expiring, revocable, fail-closed product grants"
     ),
     "dispatch_policy": (
         "factoryd dispatch is paused and fail-closed until the external "
-        "profiles/lumyn.yaml contract is updated for v3 and factoryd is "
+        "profiles/lumyn.yaml contract is updated for v3.1 and factoryd is "
         "qualified against this regenerated task, authority, model, evidence, "
         "and closure generation"
     ),
@@ -76,5 +81,5 @@ EXPECTED_RUNTIME_PINS = {
 def validate_runtime_pins(value: Any, label: str) -> None:
     if value != EXPECTED_RUNTIME_PINS:
         raise AssertionError(
-            f"{label} runtime pins differ from the paused Lumyn v3 contract"
+            f"{label} runtime pins differ from the paused Lumyn v3.1 contract"
         )

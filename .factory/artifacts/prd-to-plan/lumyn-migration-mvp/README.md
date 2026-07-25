@@ -1,33 +1,41 @@
-# Lumyn v3 Migration Factory Plan
+# Lumyn v3.1 Provider Update-Delivery Factory Plan
 
-This is the active repo-local planning generation for Lumyn v3 services-led,
-provider-paid API and SDK sunset campaigns.
+This is the active repo-local planning generation for provider-originated API
+update delivery launched through a provider-paid, services-assisted API or SDK
+sunset campaign.
 
 Authored sources:
 
-- `docs/product/prd.md` — exactly 49 item-level acceptance units
+- `docs/product/prd.md` — exactly 53 item-level acceptance units
 - `docs/product/plan.md` — M0 through M10
+- `docs/architecture/adr-0004-provider-originated-api-update-delivery.md`
 - `docs/architecture/adr-0003-services-led-bounded-agent-migration-execution.md`
 
-The package compiles consumer-local deterministic and bounded-agent generation,
-exact model and product-action controls, independent deterministic verification,
-multi-form local export, optional draft PR delivery, paid qualification, and a
-fair generic-agent baseline.
+The package compiles a reusable Provider Change Contract and exact event,
+revocable Consumer Installation, consumer-local repository impact, deterministic
+and replaceable bounded-agent generation, independent verification, local
+fallback export, required pilot draft-PR delivery, consented provider status,
+paid qualification, and a fair generic-agent baseline.
 
-Dispatch status: **paused and fail closed**.
+Execution status: **no task approved; factoryd paused and fail closed**.
 
-The repo-local v3 planning rebaseline is complete, but the external Factory
+The repo-local v3.1 planning rebaseline is complete, but the external Factory
 `profiles/lumyn.yaml` contract still represents v2 and `factoryd` has not been
-qualified against this exact v3 task, authority, model, evidence, and closure
-generation. No task, including M0, may dispatch until both dependencies are
-updated, evidenced, and the full repo gate passes. The planning rebaseline is a
-pre-dispatch control update; it is not M0 execution or M0 closure.
+qualified against this exact v3.1 task, installation, authority, model,
+delivery, status, evidence, and closure
+generation. A separately approved attended task may use this packet and the
+full lifecycle gates without claiming factoryd readiness. No task, including
+M0, is approved by this generation. factoryd may not dispatch until both
+external dependencies are updated, evidenced, and the full repo gate passes.
+The planning rebaseline is a pre-dispatch control update; it is not M0
+execution or M0 closure.
 
 The historical `.factory/artifacts/prd-to-plan/lumyn-mvp/` package remains
 immutable and non-active.
 
-Current closure: 3 of 49 items have direct carry-forward evidence
+Current closure: 3 of 53 items have direct carry-forward evidence
 (`BASE-001`, `BASE-002`, and `BASE-004`). Every other item remains planned.
-Conditional items require explicit disposition evidence; in particular,
-`EXP-003` needs either automated-delivery proof or dated frozen manual-only
-protocol evidence for `not_applicable`.
+Conditional items require explicit disposition evidence. `EXP-003` is not
+conditional: it closes only with tested automated draft-PR evidence. Manual
+patch, branch, or PR-bundle fallback cannot close it or prove automated
+delivery.

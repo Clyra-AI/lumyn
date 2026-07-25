@@ -26,6 +26,7 @@ func TestOperatingPackExists(t *testing.T) {
 		"docs/product/plan.md",
 		"docs/architecture/adr-0002-provider-sponsored-customer-controlled-migrations.md",
 		"docs/architecture/adr-0003-services-led-bounded-agent-migration-execution.md",
+		"docs/architecture/adr-0004-provider-originated-api-update-delivery.md",
 		".factory/artifacts/prd-to-plan/lumyn-migration-mvp/context-brief.json",
 		".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
 	} {
@@ -42,8 +43,8 @@ func TestPRDReferencesAreRepoRelative(t *testing.T) {
 		t.Fatalf("read prd: %v", err)
 	}
 	prd := string(payload)
-	if !strings.Contains(prd, "Verified API Migration Execution") {
-		t.Fatal("prd should name the v3 verified API migration execution MVP")
+	if !strings.Contains(prd, "Provider-Originated API Update Delivery") {
+		t.Fatal("prd should name the v3.1 provider-originated API update-delivery MVP")
 	}
 	if !strings.Contains(prd, "Primary API Provider Job") {
 		t.Fatal("prd should name the provider-side job and buyer")
@@ -51,7 +52,7 @@ func TestPRDReferencesAreRepoRelative(t *testing.T) {
 	if !strings.Contains(prd, "API Consumer Job") {
 		t.Fatal("prd should preserve the consumer-side job and authority")
 	}
-	if !strings.Contains(prd, "49 item-level closure units") {
+	if !strings.Contains(prd, "53 item-level closure units") {
 		t.Fatal("prd should state the v3 item-level acceptance count")
 	}
 	if strings.Contains(prd, "/"+("Users")+"/") {

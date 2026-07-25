@@ -11,7 +11,7 @@ from repo_pack_validation.authority import manual_preflight_scope_digest
 
 TASK_DEPENDENCIES = {
     "M0": [],
-    "M1": ["M0"],
+    "M1": ["M0", "M2"],
     "M2": ["M0"],
     "M2.5": [],
     "M3": ["M1", "M2"],
@@ -28,9 +28,15 @@ PRIMARY_ACCEPTANCE = {
     "M0": {f"BASE-{number:03d}" for number in range(1, 6)},
     "M2": {f"TRUST-{number:03d}" for number in range(1, 5)},
     "M2.5": {f"DISC-{number:03d}" for number in range(1, 4)},
-    "M3": {f"PACK-{number:03d}" for number in range(1, 5)},
+    "M3": (
+        {f"PACK-{number:03d}" for number in range(1, 5)}
+        | {f"EVENT-{number:03d}" for number in range(1, 3)}
+    ),
     "M4": {f"IMPACT-{number:03d}" for number in range(1, 6)},
-    "M5": {f"PLAN-{number:03d}" for number in range(1, 4)},
+    "M5": (
+        {f"INSTALL-{number:03d}" for number in range(1, 3)}
+        | {f"PLAN-{number:03d}" for number in range(1, 4)}
+    ),
     "M6": {f"AGENT-{number:03d}" for number in range(1, 8)},
     "M7": {f"VER-{number:03d}" for number in range(1, 7)},
     "M9": {f"EXP-{number:03d}" for number in range(1, 5)},
@@ -149,8 +155,9 @@ def _policy_digest(policy: dict[str, Any]) -> str:
 def _validate_paused_runtime(task: dict[str, Any]) -> None:
     task_id = str(task["task_id"])
     _require(
-        task.get("dispatch_status") == "paused_factory_profile_and_runtime_unqualified",
-        f"{task_id} must remain dispatch-paused",
+        task.get("dispatch_status")
+        == "attended_task_requires_explicit_approval_factoryd_paused",
+        f"{task_id} must require attended approval while factoryd is paused",
     )
     runtime = task.get("factoryd_runtime")
     _require(isinstance(runtime, dict), f"{task_id}.factoryd_runtime is required")
@@ -159,12 +166,12 @@ def _validate_paused_runtime(task: dict[str, Any]) -> None:
     _require(runtime.get("fail_closed") is True, f"{task_id} runtime must fail closed")
     _require(
         runtime.get("profile_compatibility_status")
-        == "blocked_v3_profile_update_required",
+        == "blocked_v3_1_profile_update_required",
         f"{task_id} must record the incompatible v2 Factory profile",
     )
     _require(
         runtime.get("runtime_qualification_status")
-        == "blocked_factoryd_v3_qualification_required",
+        == "blocked_factoryd_v3_1_qualification_required",
         f"{task_id} must record missing factoryd v3 qualification",
     )
     control = runtime.get("runtime_control")
@@ -342,6 +349,146 @@ def _validate_preflight(task: dict[str, Any]) -> None:
         digest == manual_preflight_scope_digest(preflight),
         "M2.5 preflight scope digest drifted",
     )
+    readiness = task.get("readiness_sprint_contract", {})
+    _require(
+        readiness.get("minimum_price_usd") == 7500
+        and readiness.get("maximum_price_usd") == 15000
+        and readiness.get("creditable_toward_campaign") is True
+        and readiness.get("may_close_disc_001") is False
+        and readiness.get("may_authorize_repository_work") is False
+        and readiness.get("proof_boundary")
+        == "paid_discovery_not_provider_to_consumer_delivery",
+        "M2.5 readiness sprint must remain paid discovery, not campaign proof",
+    )
+
+
+def _validate_update_delivery_contracts(
+    m1: dict[str, Any], m2: dict[str, Any]
+) -> None:
+    skeleton = m1.get("walking_skeleton_contract")
+    _require(isinstance(skeleton, dict), "M1 walking skeleton contract is required")
+    _require(
+        skeleton.get("input_mode") == "public_or_synthetic_only"
+        and skeleton.get("external_write_mode") == "deterministic_fakes_only"
+        and skeleton.get("generic_agent_harness")
+        == "existing_codex_harness_through_replaceable_adapter",
+        "M1 walking skeleton must be public-fixture, fake-write, and adapter-based",
+    )
+    _require(
+        skeleton.get("stages")
+        == [
+            "provider_change_event",
+            "consumer_installation",
+            "repository_impact",
+            "migration_plan",
+            "candidate",
+            "verification",
+            "pr_bundle",
+        ],
+        "M1 walking skeleton stages drifted",
+    )
+    _require(
+        {
+            "EVENT-001", "EVENT-002", "INSTALL-001", "INSTALL-002",
+            "DISC-001", "DISC-002", "EXP-003", "PILOT-002", "PILOT-003",
+            "PILOT-004",
+        } == set(skeleton.get("cannot_close_acceptance_items", [])),
+        "M1 walking skeleton must not claim commercial, real-repo, or automated-PR proof",
+    )
+    _require(
+        skeleton.get("live_model_leg_requires_conditional_grants") is True
+        and skeleton.get("no_grant_fallback")
+        == "same_adapter_contract_with_deterministic_fake",
+        "M1 live model leg must be conditional with a deterministic-fake fallback",
+    )
+    channel = m2.get("update_channel_contract")
+    _require(isinstance(channel, dict), "M2 update channel contract is required")
+    _require(
+        channel.get("provider_change_contract_confirmation")
+        == "once_per_exact_version"
+        and channel.get("provider_event_non_executable") is True
+        and channel.get("authenticated_origin_required_for_unattended_writes") is True,
+        "M2 provider change contract and event posture drifted",
+    )
+    _require(
+        {
+            "event_id", "event_version", "issuer", "api_or_sdk",
+            "contract_digest", "contract_location", "audience", "deadline",
+            "severity", "sequence", "issued_at", "expires_at", "transport_origin",
+            "signature_provenance", "supersession_or_withdrawal",
+        }
+        == set(channel.get("provider_event_fields", []))
+        and {
+            "duplicate", "replayed", "stale", "conflicting", "expired",
+            "superseded", "withdrawn", "wrong_audience", "origin_mismatch",
+            "signature_invalid", "unauthenticated",
+        }
+        == set(channel.get("rejected_event_states", [])),
+        "M2 provider event fields or fail-closed states drifted",
+    )
+    transport = channel.get("provider_channel_transport", {})
+    _require(
+        transport.get("transport_id")
+        == "pinned_provider_https_signed_manifest_v1"
+        and transport.get("publisher") == "provider_operator"
+        and transport.get("exact_https_url_pinned") is True
+        and transport.get("campaign_public_key_pinned") is True
+        and transport.get("detached_signature_required") is True
+        and transport.get("monotonic_sequence_required") is True
+        and transport.get("issued_and_expiry_required") is True
+        and set(transport.get("contract_delivery_modes", []))
+        == {"embedded", "exact_provider_https_url"}
+        and transport.get("contract_retrieved_bytes_digest_verified") is True
+        and transport.get("attended_import_mode") == "recovery_only"
+        and transport.get("attended_import_counts_as_channel_delivery") is False
+        and transport.get(
+            "attended_import_may_authorize_installed_preauthorization"
+        ) is False,
+        "M2 first provider-channel transport or recovery boundary drifted",
+    )
+    _require(
+        {
+            "provider_or_channel", "channel_origin_and_authentication_key",
+            "repository", "package_root", "audience_or_version_selectors",
+            "allowed_actions", "authorization_mode", "paths", "commands",
+            "model_data_and_budgets", "github_token_issuance_policy",
+            "provider_reporting", "retention_and_deletion", "disclosure",
+            "expiry", "revocation",
+        }
+        == set(channel.get("consumer_installation_fields", []))
+        and {
+            "notify_only", "scan_only", "prepare_patch", "open_draft_pr",
+        }
+        == set(channel.get("consumer_installation_action_modes", []))
+        and set(channel.get("consumer_installation_authorization_modes", []))
+        == {"per_event_approval", "installed_preauthorization"}
+        and channel.get("event_specific_authorization_snapshot_required") is True
+        and channel.get("event_may_widen_installation") is False,
+        "M2 Consumer Installation scope or derived authorization drifted",
+    )
+    _require(
+        channel.get("action_modes_are_ceilings") is True
+        and channel.get("stored_github_token_allowed") is False
+        and channel.get("per_event_approval_binds_exact_plan") is True
+        and channel.get(
+            "installed_preauthorization_requires_all_bound_values_in_policy"
+        ) is True
+        and channel.get("action_mode_alone_grants_side_effect") is False,
+        "M2 installation authorization mode is ambient or under-specified",
+    )
+    status = channel.get("provider_status", {})
+    _require(
+        status.get("exact_event_and_evidence_binding") is True
+        and status.get("consumer_consent_required") is True
+        and set(status.get("provenance_labels", []))
+        == {"observed", "consumer_reported", "unknown"}
+        and status.get("silence_is_unknown") is True
+        and status.get("merge_is_not_retired") is True
+        and status.get("not_applicable_requires_explicit_evidence") is True
+        and status.get("unaffected_requires_explicit_evidence") is True
+        and status.get("raw_consumer_evidence") is False,
+        "M2 provider status projection is not proof-honest",
+    )
 
 
 def _validate_model_contract(task: dict[str, Any]) -> None:
@@ -441,13 +588,13 @@ def _validate_export(task: dict[str, Any]) -> None:
     contract = task.get("delivery_contract")
     _require(isinstance(contract, dict), "M9 delivery contract is required")
     _require(
-        contract.get("baseline_forms")
+        contract.get("fallback_forms")
         == ["evidence_bundle", "patch", "optional_local_branch", "pr_ready_bundle"],
-        "M9 must preserve the multi-form local export baseline",
+        "M9 must preserve the multi-form local export fallback",
     )
     _require(
-        contract.get("optional_remote_forms") == ["remote_branch", "draft_pr"],
-        "M9 optional remote forms drifted",
+        contract.get("required_remote_forms") == ["remote_branch", "draft_pr"],
+        "M9 required remote forms drifted",
     )
     _require(
         contract.get("remote_branch_and_pr_separate_grants") is True,
@@ -459,31 +606,68 @@ def _validate_export(task: dict[str, Any]) -> None:
         "M9 must forbid default-branch write and auto-merge",
     )
     _require(
-        contract.get("exp_003_applicability")
-        == "binary_frozen_before_execution",
-        "M9 EXP-003 applicability must be frozen and binary",
+        contract.get("short_lived_least_privilege_token") is True
+        and contract.get("github_app_installation_may_persist") is True
+        and contract.get("long_lived_token_allowed") is False
+        and contract.get("broad_organization_grant_allowed") is False
+        and contract.get("non_default_branch_only") is True
+        and contract.get("idempotency_evidence_required") is True
+        and contract.get("tested_candidate_evidence_required") is True,
+        "M9 automated delivery must be short-lived, non-default, tested, and idempotent",
     )
-    automated = " ".join(contract.get("automated_path_requires", [])).lower()
-    manual = " ".join(contract.get("not_applicable_path_requires", [])).lower()
-    for token in (
-        "dated frozen campaign protocol",
-        "short-lived least-privilege token",
-        "non-default branch",
-        "draft pr",
-        "idempotency evidence",
-        "no auto-merge evidence",
-    ):
-        _require(token in automated, f"M9 automated EXP-003 evidence missing {token}")
-    for token in (
-        "dated frozen campaign protocol",
-        "manual-only delivery",
-        "patch, local branch, or pr-bundle evidence",
-        "no automated-delivery claim",
-    ):
-        _require(token in manual, f"M9 manual EXP-003 evidence missing {token}")
     _require(
-        contract.get("missing_protocol_behavior") == "EXP-003 remains open",
-        "M9 cannot infer EXP-003 applicability without protocol evidence",
+        contract.get("manual_delivery_cannot_close_exp_003") is True
+        and contract.get("missing_automated_evidence_behavior")
+        == "EXP-003 remains open",
+        "M9 cannot waive automated draft-PR proof",
+    )
+    status = contract.get("provider_status_contract", {})
+    _require(
+        status.get("exact_event_and_evidence_binding") is True
+        and status.get("consumer_consented_fields_only") is True
+        and status.get("silence_is_unknown") is True
+        and status.get("merge_is_not_retired") is True
+        and status.get("not_applicable_requires_explicit_evidence") is True
+        and status.get("unaffected_requires_explicit_evidence") is True
+        and status.get("raw_consumer_evidence") is False,
+        "M9 provider status must be consented, evidence-bound, and proof-honest",
+    )
+    _require(
+        set(contract.get("idempotency_binding_fields", []))
+        == {
+            "provider_change_event", "provider_change_contract",
+            "consumer_installation_authorization", "repository",
+            "repository_base", "candidate_head", "migration_plan",
+            "verification_evidence",
+        },
+        "M9 idempotency must bind the full event-to-evidence identity",
+    )
+    composed = task.get("composed_update_contract", {})
+    _require(
+        composed.get("command") == "lumyn update --event"
+        and composed.get("required_stages")
+        == [
+            "provider_change_event", "consumer_installation",
+            "repository_impact", "migration_plan", "lumyn_candidate",
+            "independent_verification", "remote_branch", "draft_pr",
+            "provider_status_projection",
+        ]
+        and set(composed.get("qualifying_candidate_modes", []))
+        == {"deterministic", "agent_assisted"}
+        and composed.get("installed_action_ceiling_required") == "open_draft_pr"
+        and set(composed.get("authorization_modes_supported", []))
+        == {"per_event_approval", "installed_preauthorization"}
+        and composed.get("imported_manual_candidate_qualifies") is False
+        and composed.get("standalone_pr_create_qualifies") is False
+        and composed.get("attended_event_import_qualifies") is False
+        and composed.get("pilot_requires_installed_preauthorization") is True,
+        "M9 composed provider-event-to-draft-PR proof drifted",
+    )
+    _require(
+        composed.get("provider_status_projection_generated_locally") is True
+        and composed.get("provider_transmission_optional_for_exp_003") is True
+        and composed.get("pilot_same_run_provider_projection_required") is True,
+        "M9 status projection must stay bound to the composed proof run",
     )
     outcome = task.get("outcome_record_contract")
     _require(isinstance(outcome, dict), "M9 outcome record contract is required")
@@ -509,6 +693,13 @@ def _validate_export(task: dict[str, Any]) -> None:
     _require(
         "internal/outcome/" in task.get("allowed_paths", []),
         "M9 must own the future internal/outcome path",
+    )
+
+
+def _validate_repair_path(task: dict[str, Any]) -> None:
+    _require(
+        "internal/authorization/" in task.get("allowed_paths", []),
+        "M7 must own the future internal/authorization path",
     )
 
 
@@ -551,6 +742,40 @@ def _validate_campaign(task: dict[str, Any]) -> None:
         and contract.get("minimum_reviewable_outcomes") == 2
         and contract.get("minimum_accepted_or_merged_outcomes") == 1,
         "M10 technical campaign minima must remain 3 scans, 2 outcomes, and 1 accepted or merged outcome",
+    )
+    _require(
+        contract.get("provider_led_distribution_and_onboarding_required") is True
+        and contract.get("minimum_lumyn_opened_tested_draft_prs") == 1
+        and contract.get("minimum_composed_lumyn_draft_prs") == 1
+        and contract.get(
+            "composed_pr_requires_installed_preauthorization"
+        ) is True
+        and set(contract.get("composed_pr_candidate_modes", []))
+        == {"deterministic", "agent_assisted"}
+        and contract.get("bespoke_operator_edits_qualify") is False
+        and contract.get("standalone_pr_creation_qualifies") is False
+        and contract.get("manual_only_delivery_fails_campaign") is True,
+        "M10 must prove one composed Lumyn-generated installed-event draft PR",
+    )
+    _require(
+        contract.get("provider_status_exact_event_and_evidence_binding") is True
+        and contract.get("provider_status_consumer_consent_required") is True
+        and contract.get("silence_is_unknown") is True
+        and contract.get("merge_is_not_retired") is True,
+        "M10 rollout status must be consented, event-bound, and proof-honest",
+    )
+    _require(
+        contract.get("minimum_provider_status_projections") == 1
+        and contract.get(
+            "provider_status_projection_must_bind_composed_pr"
+        ) is True
+        and contract.get("explicit_status_decline_record_required") is True,
+        "M10 must prove at least one real provider status projection",
+    )
+    _require(
+        contract.get("campaign_economics_threshold")
+        and contract.get("campaign_economics_threshold_pass_required") is True,
+        "M10 must freeze and pass a contribution-margin or automation threshold",
     )
     advantage = str(contract.get("material_advantage_threshold", "")).lower()
     _require(
@@ -663,6 +888,7 @@ def validate_migration_task_contracts(
         "M5 must wait for paid campaign qualification",
     )
     _validate_holdout_contracts(tasks)
+    _validate_update_delivery_contracts(tasks["M1"], tasks["M2"])
     _validate_preflight(tasks["M2.5"])
     _require(
         tasks["M2.5"].get("blocked_by") == [],
@@ -704,6 +930,7 @@ def validate_migration_task_contracts(
         "M6 manual candidate import must bind the full candidate provenance",
     )
     _validate_verification(tasks["M7"])
+    _validate_repair_path(tasks["M7"])
     _validate_export(tasks["M9"])
     _validate_campaign(tasks["M10"])
     for task in tasks.values():

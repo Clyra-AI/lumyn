@@ -2,7 +2,7 @@
   "factory": {
     "repo_path": "${FACTORY_REPO}",
     "profile_path": "profiles/lumyn.yaml",
-    "profile_compatibility_status": "blocked_v3_profile_update_required"
+    "profile_compatibility_status": "blocked_v3_1_profile_update_required"
   },
   "repos": {
     "lumyn": {
@@ -32,14 +32,14 @@
         "max_write_scope_paths": [],
         "release_freeze": {
           "enabled": true,
-          "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
+          "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
           "exception_ref": ""
         },
         "launch_request": {
           "requested_action": "pause_mission",
           "requested_adapter": "codex_cli",
           "expected_decision": "deny",
-          "reason_code": "factory_profile_and_runtime_v3_unqualified"
+          "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
         },
         "conflict_behavior": "fail_closed"
       },
@@ -73,7 +73,7 @@
       "approval_posture": "Factory worker capabilities are only approval, credentials, and network; they never substitute for separate Lumyn product action authorization or human merge.",
       "credential_posture": "no ambient consumer, API Provider, Model Provider, sandbox, or GitHub credentials; any future credential is exact and task-scoped",
       "network_posture": "offline by default; any future model, registry, sandbox, or GitHub endpoint is exact and task-scoped",
-      "dispatch_posture": "Factory dispatch paused: the external v3 profile and factoryd qualification are required before any task may run.",
+      "dispatch_posture": "factoryd dispatch paused: external v3.1 profile and factoryd qualification are required before any task may run through factoryd; separately approved attended tasks use the same packets and lifecycle gates",
       "template_status": "autoship_template_paused_until_v3_qualification",
       "capability_grants": [],
       "budget": {

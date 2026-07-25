@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the paused Lumyn v3 planning and Factory control generation."""
+"""Validate the paused Lumyn v3.1 planning and Factory control generation."""
 
 from __future__ import annotations
 
@@ -54,20 +54,20 @@ EXPECTED_TASK_IDS = tuple(TASK_DEPENDENCIES)
 MILESTONE_REFS = {
     "M0": "docs/product/plan.md#m0-correct-command-and-result-foundations",
     "M1": "docs/product/plan.md#m1-build-deterministic-agent-assisted-blocked-and-generic-agent-benchmarks",
-    "M2": "docs/product/plan.md#m2-define-migration-agent-verification-export-and-privacy-contracts",
+    "M2": "docs/product/plan.md#m2-define-update-installation-agent-verification-delivery-and-privacy-contracts",
     "M2.5": "docs/product/plan.md#m25-pre-sell-and-qualify-one-provider-campaign",
-    "M3": "docs/product/plan.md#m3-normalize-migration-evidence-into-a-migration-pack",
-    "M4": "docs/product/plan.md#m4-build-the-consumer-local-typescript-integration-graph-and-impact-report",
+    "M3": "docs/product/plan.md#m3-normalize-provider-intent-into-a-reusable-provider-change-contract",
+    "M4": "docs/product/plan.md#m4-build-the-consumer-local-typescript-repository-impact-inventory",
     "M5": "docs/product/plan.md#m5-produce-a-no-write-migration-plan-and-consumer-approval-boundary",
     "M6": "docs/product/plan.md#m6-implement-deterministic-transforms-and-the-bounded-coding-agent",
     "M7": "docs/product/plan.md#m7-verify-deterministic-agent-assisted-and-manual-candidates",
     "M8": "docs/product/plan.md#m8-add-optional-provider-sandbox-read-back",
-    "M9": "docs/product/plan.md#m9-export-evidence-patch-branch-pr-bundle-and-optional-draft-pr",
-    "M10": "docs/product/plan.md#m10-run-one-prepaid-provider-sunset-campaign",
+    "M9": "docs/product/plan.md#m9-export-evidence-and-open-a-tested-draft-pr",
+    "M10": "docs/product/plan.md#m10-run-one-prepaid-provider-originated-update-campaign",
 }
-EXPECTED_GROUP_IDS = {
-    "retained_foundation",
+EXPECTED_GROUP_IDS = {"retained_foundation",
     "migration_pack",
+    "provider_change_event", "consumer_installation",
     "impact_and_integration_graph",
     "plan_and_routing",
     "bounded_hybrid_execution",
@@ -98,11 +98,11 @@ EXPECTED_CARRY_FORWARD = {"BASE-001", "BASE-002", "BASE-004"}
 EXPECTED_CAPABILITIES = {
     "M2.5": {"approval"},
     "M8": {"approval", "credentials", "network"},
+    "M9": {"approval", "credentials", "network"},
     "M10": {"approval", "credentials", "network"},
 }
 EXPECTED_CONDITIONAL_CAPABILITIES = {
-    "M6": {"approval", "credentials", "network"},
-    "M9": {"approval", "credentials", "network"},
+    task: {"approval", "credentials", "network"} for task in ("M1", "M6")
 }
 EXPECTED_PRODUCT_AUTHORITIES = {
     "M6": {
@@ -124,6 +124,9 @@ EXPECTED_PRODUCT_AUTHORITIES = {
     "M9": {
         "customer_repo_read",
         "customer_repo_write",
+        "command_execution",
+        "github_branch_write",
+        "github_pr_write",
         "artifact_retention",
         "artifact_deletion",
     },
@@ -131,11 +134,15 @@ EXPECTED_PRODUCT_AUTHORITIES = {
         "customer_repo_read",
         "customer_repo_write",
         "command_execution",
+        "github_branch_write",
+        "github_pr_write",
+        "provider_reporting",
         "artifact_retention",
         "artifact_deletion",
     },
 }
 EXPECTED_OPTIONAL_PRODUCT_AUTHORITIES = {
+    "M1": {"model_request_disclosure", "model_network", "model_credential"},
     "M6": {
         "model_request_disclosure",
         "model_network",
@@ -143,7 +150,7 @@ EXPECTED_OPTIONAL_PRODUCT_AUTHORITIES = {
         "package_registry_read",
     },
     "M8": set(),
-    "M9": {"github_branch_write", "github_pr_write", "provider_reporting"},
+    "M9": {"model_request_disclosure", "model_network", "model_credential", "package_registry_read", "provider_reporting"},
     "M10": {
         "model_request_disclosure",
         "model_network",
@@ -152,9 +159,6 @@ EXPECTED_OPTIONAL_PRODUCT_AUTHORITIES = {
         "sandbox_request_disclosure",
         "sandbox_network",
         "sandbox_credential",
-        "github_branch_write",
-        "github_pr_write",
-        "provider_reporting",
     },
 }
 PRODUCT_AUTHORITY_CAPABILITIES = (
@@ -162,7 +166,6 @@ PRODUCT_AUTHORITY_CAPABILITIES = (
     | set().union(*EXPECTED_OPTIONAL_PRODUCT_AUTHORITIES.values())
 )
 FACTORY_CAPABILITIES = {"approval", "credentials", "network"}
-
 REQUIRED_TASK_FIELDS = {
     "task_id",
     "milestone_ref",
@@ -194,10 +197,10 @@ REQUIRED_TASK_FIELDS = {
     "validation_commands",
     "stop_conditions",
 }
-
 REQUIRED_DOCS = {
     "README.md": [
-        "services-led",
+        "provider-originated change event",
+        "services-assisted",
         "provider-paid",
         "bounded agent",
         "Planning-only, not implemented",
@@ -218,29 +221,30 @@ REQUIRED_DOCS = {
         "process escape", "provider_reporting",
     ],
     "docs/product/prd.md": [
-        "Verified API Migration Execution",
-        "services-led",
+        "Provider-Originated API Update Delivery",
+        "Consumer Installation",
+        "Provider Change Contract",
         "provider-paid",
         "bounded coding agent",
         "generic coding agent",
-        "49 item-level closure units",
+        "53 item-level closure units",
         "Falsification And Reframe Gates",
     ],
     "docs/product/plan.md": [
         "M0: Correct command and result foundations",
         "M6: Implement deterministic transforms and the bounded coding agent",
-        "M9: Export evidence, patch, branch, PR bundle, and optional draft PR",
-        "M10: Run one prepaid provider sunset campaign",
-        "all 49 PRD acceptance items",
+        "M9: Export evidence and open a tested draft PR",
+        "M10: Run one prepaid provider-originated update campaign",
+        "all 53 PRD acceptance items",
     ],
     "docs/dev/dev_guides.md": [
-        "services-led, provider-paid",
+        "services-assisted, provider-paid",
         "Bounded Agent Policy",
         "deterministic verification", "provider_reporting",
         "Do not merge manually through `gh pr merge`",
     ],
     "docs/architecture/architecture_guides.md": [
-        "Provider Campaign Plane",
+        "Provider Change And Campaign Plane",
         "Consumer Execution Plane",
         "Bounded Model Plane",
         "Patch Safety Boundary",
@@ -248,9 +252,15 @@ REQUIRED_DOCS = {
     ],
     "docs/architecture/adr-0003-services-led-bounded-agent-migration-execution.md": [
         "Services-Led Bounded-Agent Migration Execution",
-        "planning decision",
+        "Partially superseded by ADR-0004",
         "Deterministic Verification",
         "Delivery Ladder",
+    ],
+    "docs/architecture/adr-0004-provider-originated-api-update-delivery.md": [
+        "Provider-Originated API Update Delivery",
+        "Consumer Installation",
+        "Provider Change Event",
+        "Delivery And Status",
     ],
     "docs/factory/README.md": [
         PLAN_REL,
@@ -264,12 +274,10 @@ REQUIRED_DOCS = {
         "immutable records", "provider_reporting",
     ],
 }
-
 MACHINE_LOCAL_RE = re.compile(
     r"(?:^|[\s\"'])(?:/Users/|/home/|file://|[A-Za-z]:\\\\)"
 )
 ACCEPTANCE_ID_RE = re.compile(r"`([A-Z]+-\d{3})`:")
-
 
 def fail(message: str) -> None:
     raise AssertionError(message)
@@ -352,8 +360,8 @@ def expected_acceptance_ids() -> set[str]:
     )[0]
     ids = set(ACCEPTANCE_ID_RE.findall(section))
     require(
-        len(ids) == 49,
-        f"PRD must define exactly 49 unique acceptance IDs; found {len(ids)}",
+        len(ids) == 53,
+        f"PRD must define exactly 53 unique acceptance IDs; found {len(ids)}",
     )
     return ids
 
@@ -400,13 +408,13 @@ def validate_pause_contract(value: Any, label: str) -> None:
     require(value.get("fail_closed") is True, f"{label} must fail closed")
     require(
         value.get("profile_compatibility_status")
-        == "blocked_v3_profile_update_required",
+        == "blocked_v3_1_profile_update_required",
         f"{label} must record the v2 Factory profile incompatibility",
     )
     require(
         value.get("runtime_qualification_status")
-        == "blocked_factoryd_v3_qualification_required",
-        f"{label} must require factoryd v3 qualification",
+        == "blocked_factoryd_v3_1_qualification_required",
+        f"{label} must require factoryd v3.1 qualification",
     )
     dependencies = value.get("unblock_dependencies")
     require(
@@ -434,13 +442,15 @@ def validate_context(context: dict[str, Any]) -> None:
     )
     resolved = json.dumps(alignment.get("resolved", [])).lower()
     for token in (
-        "services-led",
         "provider-paid",
+        "services-assisted",
+        "provider change contract",
+        "consumer installation",
         "bounded agent",
         "deterministic verification",
-        "local export",
-        "optional draft pr",
-        "signed declarative provider packet",
+        "local fallback",
+        "tested draft pr",
+        "consented rollout status",
     ):
         require(token in resolved, f"context decisions missing {token}")
     baseline = json.dumps(context.get("proven_findings", [])).lower()
@@ -473,7 +483,9 @@ def validate_risk(risk: dict[str, Any]) -> None:
     require(risk.get("default_risk_class") == "high", "default risk must be high")
     serialized = json.dumps(risk).lower()
     for token in (
-        "provider-confirmed migration evidence",
+        "provider-confirmed provider change contract",
+        "provider event authenticity",
+        "consumer installation",
         "consumer repository read or write",
         "model request disclosure",
         "model endpoint network",
@@ -482,7 +494,7 @@ def validate_risk(risk: dict[str, Any]) -> None:
         "bounded agent",
         "deterministic verification",
         "github draft pr",
-        "provider-visible reporting",
+        "event-bound provider-visible reporting",
         "generic-agent baseline",
         "paid campaign",
     ):
@@ -697,14 +709,17 @@ def validate_plan(plan: dict[str, Any], required_ids: set[str]) -> None:
     )
     locked = json.dumps(plan.get("locked_decisions", {})).lower()
     for token in (
-        "services-led",
+        "provider-originated",
+        "services-assisted",
         "provider-paid",
         "consumer-local",
         "bounded agent",
+        "consumer installation",
         "deterministic verification",
         "model request disclosure",
         "generic-agent baseline",
-        "optional draft pr",
+        "tested draft pr",
+        "silence is unknown",
         "no auto-merge",
     ):
         require(token in locked, f"execution locked decisions missing {token}")
@@ -729,8 +744,8 @@ def validate_task(
     )
     require(
         task.get("dispatch_status")
-        == "paused_factory_profile_and_runtime_unqualified",
-        f"{task_id} must remain dispatch-paused",
+        == "attended_task_requires_explicit_approval_factoryd_paused",
+        f"{task_id} must require attended approval while factoryd is paused",
     )
     ids = task.get("acceptance_item_ids")
     require(list_of_strings(ids), f"{task_id} acceptance IDs must be non-empty")
@@ -1061,7 +1076,7 @@ def validate_config_payload(config: dict[str, Any], label: str) -> None:
         "product action",
         "no ambient",
         "offline by default",
-        "v3 profile",
+        "v3.1 profile",
         "factoryd qualification",
     ):
         require(token in posture, f"{label} posture missing {token}")

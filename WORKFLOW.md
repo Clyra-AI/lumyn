@@ -1,7 +1,7 @@
 # Lumyn Workflow Contract
 
-Version: 3.0
-Status: Normative v3 planning contract; product runtime not implemented
+Version: 3.1
+Status: Normative v3.1 planning contract; product runtime not implemented
 
 ## Work Signal
 
@@ -17,44 +17,52 @@ Lumyn accepts governed work from:
 The active compiled set is repo-local planning and validation authority. It is
 not factoryd execution authority. factoryd dispatch remains paused until the
 external Factory profile and factoryd bundle/runtime are requalified against
-the exact v3 mission.
+the exact v3.1 mission.
 
 The prior `.factory/artifacts/prd-to-plan/lumyn-mvp/` package and its task,
 pilot, and PR-lifecycle evidence are immutable historical records.
 
 ## Product Delivery Flow
 
-The services-led v3 workflow preserves these state boundaries:
+The provider-originated v3.1 workflow preserves these state boundaries:
 
 ```text
 provider-paid sunset campaign
--> provider-confirmed migration intent
--> [signed declarative provider packet, optional authoritative input]
+-> provider-confirmed Provider Change Contract
+-> provider-originated change event
 -> consumer campaign invitation
--> read-only impact authorization
+-> consumer installation of provider/channel and action policy
+-> event-specific authorization derived without widening
 -> customer-authorized repository analysis
 -> no-write migration plan
--> consumer plan approval
+-> exact per-event approval or installed-preauthorization policy evaluation
 -> explicit action-specific consumer execution grants
 -> [deterministic transformation | bounded-agent generation | needs input]
 -> isolated local patch
 -> deterministic repository and workflow verification
--> patch artifact + optional local branch + PR bundle
--> [consumer-authorized remote branch, optional]
--> [consumer-authorized draft PR, optional]
+-> patch artifact + optional local branch + PR bundle fallback
+-> consumer-authorized non-default remote branch
+-> consumer-authorized tested draft PR
 -> consumer review and merge
--> [separately consented provider status, optional]
+-> separately consented, event-bound provider rollout status
 ```
 
 A Lumyn Operator may coordinate campaign intake, provider confirmation,
 consumer onboarding, and review. Operator participation grants no ambient
 repository, command, model, credential, branch, PR, or merge authority.
 
-A signed declarative provider packet is authoritative when available and
-confirmed. It remains untrusted executable input and cannot widen authority.
-Elaborate packet PKI, continuous status resolution, connection receipts,
-provider acknowledgements, and receipt-backed billing are deferred from the v3
-managed-campaign prerequisite.
+A Provider Change Contract is authoritative when accountably confirmed. It and
+its provider event remain untrusted, non-executable input and cannot widen a
+Consumer Installation. Duplicate, stale, conflicting, superseded, withdrawn,
+wrong-audience, and unauthenticated events fail closed. Elaborate PKI,
+universal event distribution, connection receipts, provider acknowledgements,
+and receipt-backed billing are deferred from the v3.1 campaign prerequisite.
+The first concrete channel is a signed versioned JSON manifest at an exact
+provider-controlled HTTPS URL pinned with its campaign key during
+installation. It embeds the Provider Change Contract or names the exact
+provider-controlled HTTPS URL whose retrieved bytes must match the event
+digest. Attended import is recovery, not provider-channel or
+installed-preauthorization proof.
 
 No downstream state implies an earlier permission. Provider payment is not
 repository consent. Plan approval is not file-write approval. A patch is not a
@@ -93,10 +101,10 @@ are sequencing and coverage lenses only.
 
 - Plan approval is required before implementation or product execution.
 - The PRD, plan, ADRs, operating docs, Factory profile, active compiled
-  artifacts, validators, examples, and fixtures must agree before v3 dispatch.
-- The repo-local v3 compiled set does not close the separate external-profile
+  artifacts, validators, examples, and fixtures must agree before v3.1 dispatch.
+- The repo-local v3.1 compiled set does not close the separate external-profile
   and factoryd-runtime qualification gate.
-- Services-led discovery may collect provider intent and anonymized planning
+- Services-assisted discovery may collect provider intent and anonymized planning
   evidence under an approved privacy scope. It grants no product runtime
   authority.
 - Before collecting identifiable provider or consumer evidence, approve exact
@@ -159,7 +167,7 @@ remote branch write.
 
 Agent-assisted generation requires all of:
 
-- an approved plan item explicitly routed to `bounded_agent`;
+- an authorized plan item explicitly routed to `agent_assisted`;
 - exact model provider, endpoint, model/version, and parameters;
 - exact prompt, system policy, and tool-definition versions or digests;
 - allowed read paths, writable paths, and tool calls;
@@ -269,9 +277,13 @@ The delivery ladder is:
 1. patch artifact;
 2. optional local branch;
 3. PR bundle;
-4. optional remote branch;
-5. optional draft PR;
+4. separately authorized remote branch;
+5. separately authorized draft PR;
 6. consumer review and merge.
+
+An installation may remain scan-only or use manual fallback, but the first
+provider campaign does not pass until at least one tested outcome reaches step
+5 through Lumyn's short-lived delivery path.
 
 The PR bundle contains the provider-confirmed intent ref, plan digest, base/head
 identity, patch provenance, model provenance when applicable, deterministic
@@ -280,12 +292,24 @@ title/body. It requires no GitHub credential.
 
 `github_branch_write` names the repository, authorized non-default namespace,
 base commit, token expiry, idempotency, and rollback. It grants no PR authority.
+The durable Consumer Installation stores only token-issuance policy; an
+approved local or CI broker mints the short-lived GitHub App installation
+token at runtime.
 
 `github_pr_write` names the repository, authorized remote branch, base branch,
 draft-only posture, token expiry, idempotency key, and approved plan/evidence
 refs. It grants no remote-branch or merge authority.
 
 The product never writes the default branch or auto-merges.
+
+`lumyn update --event` is the composed product path. `EXP-003` requires one
+provider-channel event to traverse installation, impact, plan, Lumyn
+deterministic or agent-assisted generation, independent verification, remote
+branch, draft PR, and local event-bound status projection or explicit
+reporting decline. Standalone PR creation, attended event import, imported
+manual candidates, and manual bundles remain valid recovery surfaces but
+cannot close that proof. Provider transmission is optional for technical
+delivery; the qualifying pilot run must transmit its consented projection.
 
 ### Optional Provider Reporting
 

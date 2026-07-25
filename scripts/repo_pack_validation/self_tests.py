@@ -1,4 +1,4 @@
-"""Negative tests for the Lumyn v3 repo-pack validator."""
+"""Negative tests for the Lumyn v3.1 repo-pack validator."""
 
 from __future__ import annotations
 
@@ -246,6 +246,12 @@ def run_repo_pack_self_tests(
             "participant_consent_required",
         ),
         (
+            lambda value: _task(value, "M2.5")[
+                "readiness_sprint_contract"
+            ].__setitem__("may_close_disc_001", True),
+            "readiness sprint must remain paid discovery",
+        ),
+        (
             lambda value: _task(value, "M0")["allowed_paths"].append(
                 "scripts/repo_pack_validation/"
             ),
@@ -260,6 +266,52 @@ def run_repo_pack_self_tests(
                 value, "unbounded_generic_agent"
             ),
             "generic-agent baseline",
+        ),
+        (
+            lambda value: _task(value, "M1")[
+                "walking_skeleton_contract"
+            ]["stages"].remove("consumer_installation"),
+            "walking skeleton stages",
+        ),
+        (
+            lambda value: _task(value, "M1")[
+                "conditional_factory_capabilities"
+            ].clear(),
+            "conditional Factory capabilities",
+        ),
+        (
+            lambda value: _task(value, "M2")[
+                "update_channel_contract"
+            ].__setitem__("event_may_widen_installation", True),
+            "Consumer Installation",
+        ),
+        (
+            lambda value: _task(value, "M2")[
+                "update_channel_contract"
+            ]["provider_channel_transport"].__setitem__(
+                "detached_signature_required", False
+            ),
+            "provider-channel transport",
+        ),
+        (
+            lambda value: _task(value, "M2")[
+                "update_channel_contract"
+            ]["provider_channel_transport"].__setitem__(
+                "contract_retrieved_bytes_digest_verified", False
+            ),
+            "provider-channel transport",
+        ),
+        (
+            lambda value: _task(value, "M2")[
+                "update_channel_contract"
+            ].__setitem__("stored_github_token_allowed", True),
+            "installation authorization mode",
+        ),
+        (
+            lambda value: _task(value, "M2")[
+                "update_channel_contract"
+            ]["provider_status"].__setitem__("merge_is_not_retired", False),
+            "status projection",
         ),
         (
             lambda value: _task(value, "M6")["bounded_agent_contract"][
@@ -300,6 +352,12 @@ def run_repo_pack_self_tests(
             "imported manual candidates",
         ),
         (
+            lambda value: _task(value, "M7")["allowed_paths"].remove(
+                "internal/authorization/"
+            ),
+            "M7 must own the future internal/authorization path",
+        ),
+        (
             lambda value: _task(value, "M6")[
                 "manual_candidate_contract"
             ].__setitem__("command", "git apply"),
@@ -310,6 +368,42 @@ def run_repo_pack_self_tests(
                 "auto_merge", True
             ),
             "forbidden product capability",
+        ),
+        (
+            lambda value: _task(value, "M9")["delivery_contract"].__setitem__(
+                "manual_delivery_cannot_close_exp_003", False
+            ),
+            "cannot waive automated draft-PR proof",
+        ),
+        (
+            lambda value: _task(value, "M9")["delivery_contract"].__setitem__(
+                "long_lived_token_allowed", True
+            ),
+            "short-lived",
+        ),
+        (
+            lambda value: _task(value, "M9")["delivery_contract"][
+                "provider_status_contract"
+            ].__setitem__("silence_is_unknown", False),
+            "provider status",
+        ),
+        (
+            lambda value: _task(value, "M9")[
+                "composed_update_contract"
+            ].__setitem__("standalone_pr_create_qualifies", True),
+            "composed provider-event-to-draft-PR proof",
+        ),
+        (
+            lambda value: _task(value, "M9")[
+                "composed_update_contract"
+            ].__setitem__("pilot_same_run_provider_projection_required", False),
+            "status projection must stay bound",
+        ),
+        (
+            lambda value: _task(value, "M9")[
+                "product_authority_requirements"
+            ].append("provider_reporting"),
+            "product authority requirements",
         ),
         (
             lambda value: _task(value, "M9")[
@@ -340,6 +434,32 @@ def run_repo_pack_self_tests(
                 "paid_campaign_contract"
             ].__setitem__("material_provider_outcome_pass_required", False),
             "provider-outcome metric",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
+            ].__setitem__("minimum_lumyn_opened_tested_draft_prs", 0),
+            "composed Lumyn-generated",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
+            ].__setitem__("minimum_provider_status_projections", 0),
+            "real provider status projection",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
+            ].__setitem__(
+                "provider_status_projection_must_bind_composed_pr", False
+            ),
+            "real provider status projection",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
+            ].__setitem__("campaign_economics_threshold_pass_required", False),
+            "contribution-margin or automation threshold",
         ),
         (
             lambda value: _task(value, "M3")["factoryd_runtime"].__setitem__(
@@ -415,8 +535,8 @@ def run_repo_pack_self_tests(
         raise AssertionError("product authority was accepted as a Factory grant")
 
     for task_id, action_mode in (
+        ("M1", "generic_agent_benchmark"),
         ("M6", "bounded_agent"),
-        ("M9", "automated_draft_pr"),
     ):
         selected = list(tasks[task_id]["conditional_factory_capabilities"])
         validate_authority_grants(
@@ -480,9 +600,9 @@ def run_repo_pack_self_tests(
         raise AssertionError("conditional activation accepted the wrong task")
 
     extra_activation = _conditional_grants(
-        "M9",
-        "automated_draft_pr",
-        list(tasks["M9"]["conditional_factory_capabilities"]),
+        "M6",
+        "bounded_agent",
+        list(tasks["M6"]["conditional_factory_capabilities"]),
     )
     activation = extra_activation[0]["conditional_activation"]
     activation["selected_capabilities"].append("github_pr_write")

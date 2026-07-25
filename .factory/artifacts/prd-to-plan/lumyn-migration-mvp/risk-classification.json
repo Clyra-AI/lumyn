@@ -8,15 +8,17 @@
       "risk_class": "medium",
       "applies_to": [
         "runtime command compatibility",
-        "offline benchmark corpus",
-        "provider-confirmed migration evidence normalization",
-        "read-only integration graph"
+        "offline benchmark corpus and walking skeleton",
+        "provider-confirmed Provider Change Contract normalization",
+        "read-only repository impact inventory"
       ],
       "validation_independence": "validation-gate plus risk-selected review"
     },
     {
       "risk_class": "high",
       "applies_to": [
+        "provider event authenticity, replay, audience, supersession, or withdrawal",
+        "Consumer Installation expiry, revocation, policy widening, or ambient authority",
         "consumer repository read or write",
         "bounded agent and prompt injection",
         "model request disclosure",
@@ -26,19 +28,22 @@
         "deterministic verification and false-green prevention",
         "sandbox credentials, payload, or network",
         "GitHub draft PR or remote branch",
-        "provider-visible reporting",
+        "event-bound provider-visible reporting and status inference",
         "generic-agent baseline or paid campaign closure"
       ],
       "validation_independence": "independent review, evaluation, grading, or attestation selected by task risk"
     }
   ],
   "mandatory_stop_conditions": [
-    "Factory profile or factoryd runtime remains unqualified",
+    "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
     "acceptance item is absent, unmapped, or closed only by milestone or slice",
     "provider intent, consumer authority, model boundary, or redaction is ambiguous",
     "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
     "generation self-verifies or verification does not bind the exact candidate head",
     "provider code access, production credential, default-branch write, or auto-merge is requested",
-    "commercial evidence or generic-agent comparison is not direct, frozen, fair, and independently attested"
+    "commercial evidence or generic-agent comparison is not direct, frozen, fair, and independently attested",
+    "provider event is unauthenticated, stale, conflicting, wrong-audience, superseded, or withdrawn",
+    "event-specific authority widens the Consumer Installation or provider status is inferred from silence",
+    "manual-only delivery is proposed as automated draft-PR proof"
   ]
 }
