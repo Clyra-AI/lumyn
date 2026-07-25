@@ -44,9 +44,9 @@ No model SDK or endpoint is implicitly approved by this planning rebaseline.
 
 The checked-in compiled set is regenerated from the approved v3.1 PRD and plan
 and is the repo-local source for acceptance counts, task mappings, validation,
-and closure. It authorizes no product runtime implementation. factoryd dispatch
-remains paused pending external Factory-profile and factoryd-runtime
-qualification.
+and closure. It authorizes no product runtime implementation. The external
+Factory profile is aligned to v3.1; factoryd dispatch remains paused pending
+bundle/runtime qualification and an explicit bounded-task unpause.
 
 ## CI Lane Mapping
 
@@ -174,9 +174,9 @@ Scanner failure blocks closure without a scoped approved exception.
   lifecycle gates, evidence, proof, capability, budget, stop, changelog, and
   semantic-invariant fields.
 - This rebaseline authorizes no product runtime implementation.
-- factoryd execution remains blocked until the external Factory profile and
-  factoryd bundle/runtime are requalified against the exact active v3 mission
-  and a bounded task is explicitly unpaused.
+- factoryd execution remains blocked until its bundle/runtime is qualified
+  against the exact active v3 mission and a bounded task is explicitly
+  unpaused. The external Factory profile is aligned but is not runtime proof.
 
 ## Docs Parity
 
@@ -199,9 +199,9 @@ Active planning sources:
 Behavior, status, generation modes, verification labels, artifact paths,
 authority, Agent Runner/model policy, budgets, and implementation claims must
 agree.
-The external Factory profile is a required dependency but is not qualified by
-the repo-local v3 compilation; factoryd dispatch remains paused until that
-paired work lands.
+The external Factory profile is aligned to v3.1 but is not qualified by the
+repo-local compilation and does not prove factoryd execution. Dispatch remains
+paused until the factoryd bundle/runtime and exact active mission qualify.
 
 ## Structured Data Policy
 
@@ -219,6 +219,22 @@ Structured outputs:
   identity;
 - avoid machine-local paths and secret values;
 - fail on malformed or ambiguous input.
+
+## Result And Evidence Compatibility
+
+- `lumyn.command_result` remains at schema version `1.0` for M0.
+- The v1.0 serialized `provider_metadata` key is legacy Model Provider metadata
+  only. New writers add `semantic_role: model_provider`; historical payloads
+  without it and payloads using previously allowed unknown extensions remain
+  schema-valid. Unknown extensions do not override the key's Model Provider
+  meaning and are not current writer output.
+- API Provider identity uses `api_provider_id` or `change_authority`. Agent
+  Runner Vendor identity uses `agent_runner_vendor_metadata`.
+- A future serialized rename to `model_provider_metadata` requires schema
+  version `2.0`, frozen executable v1.0 schemas, dual version-discriminated
+  readers, current and legacy fixtures, v2.0 invalid mixed-role fixtures, and a
+  new provenance-linked artifact rather than historical in-place rewriting.
+- ADR-0006 is the normative migration decision.
 
 ## Agent-Native CLI Policy
 

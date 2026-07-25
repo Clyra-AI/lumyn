@@ -62,6 +62,9 @@ func TestCLIEmitsCommandResultEnvelope(t *testing.T) {
 	if providerMetadata["applicable"] != false {
 		t.Fatalf("provider_metadata.applicable = %v, want false", providerMetadata["applicable"])
 	}
+	if providerMetadata["semantic_role"] != "model_provider" {
+		t.Fatalf("provider_metadata.semantic_role = %v, want model_provider", providerMetadata["semantic_role"])
+	}
 }
 
 func TestCLIInitWritesConfigAndSourceArtifact(t *testing.T) {
@@ -202,21 +205,44 @@ func TestCLIRejectsUnknownCommandWithJSONEnvelope(t *testing.T) {
 	}
 }
 
-func TestCLIAcceptsRequiredTraceCommand(t *testing.T) {
+func TestCLIRejectsRecognizedUnimplementedCommandsWithTypedEnvelope(t *testing.T) {
 	binary := buildTestBinary(t)
-	command := exec.Command(binary, "trace")
-	output, err := command.Output()
-	if err != nil {
-		t.Fatalf("run lumyn trace: %v", err)
-	}
+	for _, commandName := range []string{"record", "verify", "trace", "demo", "share", "eval"} {
+		commandName := commandName
+		t.Run(commandName, func(t *testing.T) {
+			command := exec.Command(binary, commandName)
+			output, err := command.Output()
+			if err == nil {
+				t.Fatalf("unimplemented command %q should fail", commandName)
+			}
+			var exitErr *exec.ExitError
+			if !errors.As(err, &exitErr) {
+				t.Fatalf("unexpected error type: %v", err)
+			}
+			if exitErr.ExitCode() != exitcode.InvalidUsageOrInput {
+				t.Fatalf("exit code = %d, want %d", exitErr.ExitCode(), exitcode.InvalidUsageOrInput)
+			}
 
-	payload := decodeCommandResult(t, output)
-	validateCommandResultSchema(t, payload)
-	if payload["command"] != "trace" {
-		t.Fatalf("command = %v, want trace", payload["command"])
-	}
-	if payload["status"] != "pass" {
-		t.Fatalf("status = %v, want pass", payload["status"])
+			payload := decodeCommandResult(t, output)
+			validateCommandResultSchema(t, payload)
+			if payload["command"] != commandName {
+				t.Fatalf("command = %v, want %s", payload["command"], commandName)
+			}
+			if payload["status"] != "fail" {
+				t.Fatalf("status = %v, want fail", payload["status"])
+			}
+			if payload["finding_kind"] != "command_error" {
+				t.Fatalf("finding_kind = %v, want command_error", payload["finding_kind"])
+			}
+			errorsValue, ok := payload["errors"].([]any)
+			if !ok || len(errorsValue) != 1 {
+				t.Fatalf("errors = %#v, want one typed error", payload["errors"])
+			}
+			typedError, ok := errorsValue[0].(map[string]any)
+			if !ok || typedError["code"] != "command_not_implemented" {
+				t.Fatalf("errors[0] = %#v, want command_not_implemented", errorsValue[0])
+			}
+		})
 	}
 }
 
@@ -233,6 +259,21 @@ func TestCommandResultForArgsDefaultsToHelp(t *testing.T) {
 	}
 	if payload.Metadata["runtime"] != "go" {
 		t.Fatalf("metadata.runtime = %v, want go", payload.Metadata["runtime"])
+	}
+}
+
+func TestCommandResultForArgsKeepsFoundationCommandsImplemented(t *testing.T) {
+	for _, commandName := range []string{"help", "version"} {
+		payload, code := commandResultForArgs([]string{commandName}, time.Now())
+		if code != exitcode.Success {
+			t.Fatalf("%s exit code = %d, want %d", commandName, code, exitcode.Success)
+		}
+		if payload.Status != "pass" {
+			t.Fatalf("%s status = %q, want pass", commandName, payload.Status)
+		}
+		if payload.Command != commandName {
+			t.Fatalf("command = %q, want %q", payload.Command, commandName)
+		}
 	}
 }
 
@@ -267,6 +308,9 @@ func TestCommandResultForArgsRunsInitAndStrictCheck(t *testing.T) {
 	if initPayload.Status != "pass" {
 		t.Fatalf("init status = %q, want pass", initPayload.Status)
 	}
+	if initPayload.EvalMode != "not_applicable" {
+		t.Fatalf("init eval mode = %q, want not_applicable", initPayload.EvalMode)
+	}
 	if initPayload.Metadata["source_finding_count"] != 0 {
 		t.Fatalf("init source_finding_count = %v, want 0", initPayload.Metadata["source_finding_count"])
 	}
@@ -277,6 +321,9 @@ func TestCommandResultForArgsRunsInitAndStrictCheck(t *testing.T) {
 	}
 	if checkPayload.Status != "fail" {
 		t.Fatalf("strict check status = %q, want fail", checkPayload.Status)
+	}
+	if checkPayload.EvalMode != "not_applicable" {
+		t.Fatalf("check eval mode = %q, want not_applicable", checkPayload.EvalMode)
 	}
 	if checkPayload.FindingKind == "none" {
 		t.Fatalf("strict check finding kind should identify the source finding")
@@ -356,6 +403,27 @@ func TestCommandResultForArgsHandlesJSONFlagAndBadCommandFlags(t *testing.T) {
 func TestCommandFromArgsUsesFirstArg(t *testing.T) {
 	if got := commandFromArgs([]string{"verify", "ignored"}); got != "verify" {
 		t.Fatalf("commandFromArgs = %q, want verify", got)
+	}
+}
+
+func TestCommandImplementationStatusIsExplicitAndFailClosed(t *testing.T) {
+	tests := map[string]implementationStatus{
+		"help":    commandImplemented,
+		"version": commandImplemented,
+		"init":    commandImplemented,
+		"check":   commandImplemented,
+		"record":  commandUnimplemented,
+		"verify":  commandUnimplemented,
+		"trace":   commandUnimplemented,
+		"demo":    commandUnimplemented,
+		"share":   commandUnimplemented,
+		"eval":    commandUnimplemented,
+		"future":  commandUnknown,
+	}
+	for commandName, expected := range tests {
+		if got := commandImplementationStatus(commandName); got != expected {
+			t.Fatalf("commandImplementationStatus(%q) = %d, want %d", commandName, got, expected)
+		}
 	}
 }
 

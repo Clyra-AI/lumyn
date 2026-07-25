@@ -1,0 +1,59 @@
+{
+  "artifact_type": "work_proof_marker",
+  "schema_version": "1.0",
+  "task_id": "M0",
+  "work_item_id": "lumyn-v3-m0",
+  "generated_at": "2026-07-25T18:38:55Z",
+  "marker": "lumyn-v3-m0-command-result-foundations",
+  "base_head": "1c8d43e54e8b907873ba80fc1a070018fd12c5be",
+  "candidate_digest": "sha256:79ad239e707c478ff091fd3b2382a655f53ceb8b12244b9017e78b6c756f1daf",
+  "digest_method": "sha256 of sorted repo-relative implementation path and file-sha256 manifest; task-run and lifecycle evidence excluded",
+  "summary": "Made recognized compatibility placeholders fail typed and nonzero, removed evaluation metadata from init/check, preserved exit codes, and made v1.0 Model Provider terminology explicit without invalidating legacy artifacts.",
+  "changed_paths": [
+    "CHANGELOG.md",
+    "cmd/lumyn/main.go",
+    "cmd/lumyn/main_test.go",
+    "docs/architecture/adr-0001-safety-corpus-evidence-contracts.md",
+    "docs/architecture/adr-0003-services-led-bounded-agent-migration-execution.md",
+    "docs/architecture/adr-0006-command-result-v1-provider-terminology.md",
+    "docs/architecture/architecture_guides.md",
+    "docs/dev/dev_guides.md",
+    "docs/factory/README.md",
+    "docs/product/plan.md",
+    "docs/product/prd.md",
+    "internal/exitcode/exitcode_test.go",
+    "internal/result/result.go",
+    "internal/result/result_test.go",
+    "schemas/canonical-trace.schema.json",
+    "schemas/cassette.schema.json",
+    "schemas/command-result.schema.json",
+    "schemas/evidence-event.schema.json",
+    "schemas/result-axes.schema.json",
+    "schemas/schema_test.go",
+    "tests/fixtures/command-result/legacy-agent-runner-vendor-extension-v1.0.json",
+    "tests/fixtures/command-result/legacy-api-provider-extension-v1.0.json",
+    "tests/fixtures/command-result/model-provider-legacy-v1.0.json",
+    "tests/fixtures/command-result/model-provider-v1.0.json"
+  ],
+  "behavior_proof": {
+    "recognized_unimplemented_commands": [
+      "record",
+      "verify",
+      "trace",
+      "demo",
+      "share",
+      "eval"
+    ],
+    "unimplemented_exit_code": 2,
+    "unimplemented_error_code": "command_not_implemented",
+    "init_check_eval_mode": "not_applicable",
+    "reserved_exit_code_6_preserved": true,
+    "schema_version": "1.0",
+    "legacy_provider_metadata_role": "model_provider",
+    "historical_v1_payloads_preserved": true
+  },
+  "validation_refs": [
+    ".factory/artifacts/task-runs/M0/validation-report.json",
+    ".factory/artifacts/task-runs/M0/proof-of-behavior-scorecard.json"
+  ]
+}

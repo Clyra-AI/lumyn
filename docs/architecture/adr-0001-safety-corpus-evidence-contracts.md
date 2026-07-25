@@ -9,7 +9,7 @@ Accepted for T2.7 foundation work.
 Lumyn must preserve normalized result and failure evidence before downstream
 record, verify, boundary, report, CI, share, and eval surfaces start emitting
 artifacts. The contract has to make proof strength, boundary status, safety
-relevance, fix target, surface identity, eval mode, and provider/model context
+relevance, fix target, surface identity, eval mode, and Model Provider context
 machine-readable without introducing hosted telemetry or corpus upload behavior.
 
 ## Decision
@@ -18,11 +18,13 @@ machine-readable without introducing hosted telemetry or corpus upload behavior.
 `evidence-event.schema.json` now require local safety/corpus-ready fields:
 `finding_kind`, `proof_strength`, `action_boundary_status`,
 `security_relevance`, `fix_target`, `surface_fingerprint`, `eval_mode`,
-`provider_metadata`, and `corpus_eligible`.
+the legacy v1.0 `provider_metadata` key, and `corpus_eligible`.
 
-`corpus_eligible` is required and must be `false` for the MVP. Provider/model
-metadata is represented as a required object with an `applicable` flag; when it
-is not applicable, provider and model are explicitly `not_applicable`.
+`corpus_eligible` is required and must be `false` for the MVP. The legacy
+`provider_metadata` object represents Model Provider metadata only and has an
+`applicable` flag; when it is not applicable, provider and model are explicitly
+`not_applicable`. ADR-0006 governs its role discriminator and versioned rename
+path. API Provider and Agent Runner Vendor identity never use this object.
 
 Boundary violations that involve forbidden endpoints, scope escalation, data
 exposure risk, or out-of-policy actions can be represented as

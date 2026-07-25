@@ -43,7 +43,15 @@ func commandResultForArgs(args []string, started time.Time) (result.CommandResul
 
 	payload := baseCommandResult(command, started)
 	exitCode := exitcode.Success
-	if !isKnownCommand(command) {
+	switch commandImplementationStatus(command) {
+	case commandUnimplemented:
+		return commandInputError(
+			payload,
+			started,
+			"command_not_implemented",
+			fmt.Errorf("command %q is recognized but not implemented", command),
+		)
+	case commandUnknown:
 		payload.Status = "fail"
 		payload.FindingKind = "command_error"
 		payload.FixTarget = "command"
@@ -69,7 +77,6 @@ func initCommandResult(args []string, started time.Time) (result.CommandResult, 
 		return commandInputError(payload, started, "init_failed", err)
 	}
 	payload.RedactionStatus = "applied"
-	payload.EvalMode = "surface_only"
 	payload.SurfaceFingerprint = report.SurfaceFingerprint
 	payload.Artifacts = append(payload.Artifacts,
 		result.ArtifactRef{Path: options.ConfigPath, Type: "config"},
@@ -93,7 +100,6 @@ func checkCommandResult(args []string, started time.Time) (result.CommandResult,
 	}
 
 	payload.RedactionStatus = "applied"
-	payload.EvalMode = "surface_only"
 	payload.SurfaceFingerprint = report.SurfaceFingerprint
 	payload.Artifacts = append(payload.Artifacts, result.ArtifactRef{Path: report.ReportPath, Type: "source_check"})
 	attachSourceReportMetadata(&payload, report, strict)
@@ -204,10 +210,11 @@ func baseCommandResult(command string, started time.Time) result.CommandResult {
 		FixTarget:            fixTarget,
 		SurfaceFingerprint:   "not_applicable",
 		EvalMode:             "not_applicable",
-		ProviderMetadata: result.ProviderMetadata{
-			Applicable: false,
-			Provider:   "not_applicable",
-			Model:      "not_applicable",
+		ModelProviderMetadata: result.ModelProviderMetadata{
+			Applicable:    false,
+			SemanticRole:  "model_provider",
+			ModelProvider: "not_applicable",
+			Model:         "not_applicable",
 		},
 		CorpusEligible: false,
 	}
@@ -235,11 +242,21 @@ func commandMetadata() map[string]any {
 	}
 }
 
-func isKnownCommand(command string) bool {
+type implementationStatus uint8
+
+const (
+	commandUnknown implementationStatus = iota
+	commandImplemented
+	commandUnimplemented
+)
+
+func commandImplementationStatus(command string) implementationStatus {
 	switch command {
-	case "help", "version", "init", "check", "record", "verify", "trace", "demo", "share", "eval":
-		return true
+	case "help", "version", "init", "check":
+		return commandImplemented
+	case "record", "verify", "trace", "demo", "share", "eval":
+		return commandUnimplemented
 	default:
-		return false
+		return commandUnknown
 	}
 }

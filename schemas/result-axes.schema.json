@@ -93,7 +93,8 @@
       "$ref": "#/$defs/eval_mode"
     },
     "provider_metadata": {
-      "$ref": "#/$defs/provider_metadata"
+      "description": "Legacy v1.0 serialized key for Model Provider metadata only; it never identifies the API Provider or Agent Runner Vendor.",
+      "$ref": "#/$defs/legacy_model_provider_metadata"
     },
     "corpus_eligible": {
       "const": false
@@ -172,7 +173,8 @@
         "unknown"
       ]
     },
-    "provider_metadata": {
+    "legacy_model_provider_metadata": {
+      "description": "Model Provider metadata carried under the legacy v1.0 provider_metadata key.",
       "type": "object",
       "required": [
         "applicable",

@@ -32,9 +32,10 @@ This guide defines planned boundaries. The compiled v3.1 control set is
 repo-local planning and validation authority; it does not implement the v3.1
 runtime or authorize a live product action.
 
-factoryd dispatch remains paused. A separate reviewed change must rebaseline
-the external Factory `profiles/lumyn.yaml` profile and qualify the factoryd
-bundle/runtime against the exact active mission before any task is unpaused.
+The external Factory `profiles/lumyn.yaml` profile is aligned to v3.1.
+factoryd dispatch remains paused. A separate reviewed change must qualify the
+factoryd bundle/runtime against the exact active mission before any task is
+unpaused.
 
 ## Trust And Data Planes
 
@@ -389,10 +390,10 @@ verification, optional sandbox, delivery, and reporting routes per
 installation/event/run; it never grants their aggregate union to every
 participant.
 
-The active repo-local v3 control set does not by itself qualify factoryd.
-Until the external profile and factoryd runtime are requalified, the
-mission-paused configs are an enforced stop rather than an executable
-implementation path.
+The active repo-local v3 control set and aligned external profile do not by
+themselves qualify factoryd. Until the bundle/runtime and exact mission are
+qualified, the mission-paused configs are an enforced stop rather than an
+executable implementation path.
 
 ### Independent Promotion Evidence
 

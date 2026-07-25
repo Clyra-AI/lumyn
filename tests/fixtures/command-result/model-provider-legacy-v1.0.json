@@ -1,0 +1,26 @@
+{
+  "object_type": "lumyn.command_result",
+  "schema_version": "1.0",
+  "metadata": {},
+  "command": "check",
+  "status": "pass",
+  "mode": "check",
+  "warnings": [],
+  "errors": [],
+  "artifacts": [],
+  "duration_ms": 0,
+  "redaction_status": "not_applicable",
+  "finding_kind": "none",
+  "proof_strength": "unknown",
+  "action_boundary_status": "not_configured",
+  "security_relevance": "none",
+  "fix_target": "not_applicable",
+  "surface_fingerprint": "not_applicable",
+  "eval_mode": "not_applicable",
+  "provider_metadata": {
+    "applicable": false,
+    "provider": "not_applicable",
+    "model": "not_applicable"
+  },
+  "corpus_eligible": false
+}
