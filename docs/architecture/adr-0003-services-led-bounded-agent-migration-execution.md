@@ -2,9 +2,14 @@
 
 ## Status
 
-Accepted as the v3 planning decision. No product runtime implementation, model
+Partially superseded by ADR-0004. No product runtime implementation, model
 route, consumer repository access, credential, command, network grant, branch
 write, or PR write is authorized by this decision.
+
+ADR-0004 supersedes this ADR's services-led product identity, manual-first
+proof, and optional-draft-PR clauses. This ADR remains authoritative only for
+bounded-agent execution, deterministic verification, consumer privacy, and
+human merge control.
 
 ## Date
 
@@ -37,16 +42,20 @@ cannot be treated as verification.
 
 ## Decision
 
-Lumyn v3 will pursue services-led, provider-paid API and SDK sunset campaigns
+Lumyn v3.0 selected services-led, provider-paid API and SDK sunset campaigns
 using hybrid patch generation:
 
 - deterministic transforms for exact supported mappings;
 - a consumer-local bounded agent for approved repository-specific changes;
 - deterministic repository and workflow verification for every candidate;
-- patch artifact and PR bundle as the baseline handoff;
-- optional local branch, remote branch, and draft PR under progressively
-  separate consumer authorization;
+- patch artifact and PR bundle as recovery and review surfaces;
+- local branch, remote branch, and draft PR under progressively separate
+  consumer authorization;
 - human review and merge.
+
+For active v3.1, ADR-0004 makes the provider-originated installed channel the
+product identity and at least one composed tested draft PR mandatory product
+proof. Services remain the onboarding motion.
 
 The v3 PRD, product plan, operating docs, and repo-local compiled controls are
 aligned as planning authority. That alignment does not implement the product or
@@ -189,8 +198,8 @@ Delivery states are separate:
 1. patch artifact;
 2. optional local branch;
 3. PR bundle;
-4. optional remote branch;
-5. optional draft PR;
+4. remote branch when the installed action requires it;
+5. draft PR when the installed action requires it;
 6. consumer review and merge.
 
 The PR bundle is a consumer-local artifact containing:
@@ -205,7 +214,9 @@ The PR bundle is a consumer-local artifact containing:
 - suggested PR title and body.
 
 Patch, local branch, and PR-bundle creation require no GitHub credential.
-Remote branch and draft-PR actions require separate exact grants. Lumyn never
+Remote branch and draft-PR actions require separate exact grants. These
+surfaces remain optional per installation, but ADR-0004 requires the first
+provider campaign to prove at least one composed tested draft PR. Lumyn never
 writes the default branch or auto-merges.
 
 ## Data And Disclosure
@@ -311,10 +322,12 @@ model.
 Rejected because provider payment cannot authorize consumer code, credentials,
 commands, branches, PRs, or merge.
 
-### Mandatory GitHub Delivery
+### Mandatory GitHub Delivery For Every Installation
 
-Rejected because a verified patch and PR bundle can deliver value without
-remote credentials. Draft PR remains optional.
+Rejected because a verified patch and PR bundle must remain available without
+remote credentials. Superseded in part by ADR-0004: draft PR remains optional
+per installation, but at least one composed tested draft PR is mandatory for
+first-campaign product proof.
 
 ### PKI And Receipt Infrastructure First
 

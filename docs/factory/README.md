@@ -1,12 +1,12 @@
 # Lumyn Factory Integration
 
-Status: v3 repo-local controls compiled; factoryd dispatch paused
+Status: v3.1 repo-local controls compiled; factoryd dispatch paused
 
 Source-safe Factory control and lifecycle artifacts live under
 `.factory/artifacts/`. Consumer-private runtime artifacts and identifiable
 campaign evidence do not.
 
-- Active compiled v3 control set:
+- Active compiled v3.1 control set:
   `.factory/artifacts/prd-to-plan/lumyn-migration-mvp/`
 - Historical agent-readiness plan:
   `.factory/artifacts/prd-to-plan/lumyn-mvp/`
@@ -18,40 +18,43 @@ campaign evidence do not.
 - Daemon scratch/state: `.factory/tmp/` and `.factoryd/`
 
 The checked-in `lumyn-migration-mvp` directory contains the control set
-regenerated from the v3 PRD and plan. It is one repo-local planning, task,
+regenerated from the v3.1 PRD and plan. It is one repo-local planning, task,
 validation, acceptance, and closure authority, not product runtime or factoryd
 execution authority.
 
 factoryd dispatch remains paused because the external Factory
 `profiles/lumyn.yaml` profile and the factoryd bundle/runtime have not been
-requalified against the exact v3 mission. This rebaseline authorizes no product
+requalified against the exact v3.1 mission. This rebaseline authorizes no product
 implementation or live product action.
+A separately approved attended task may use the same packet and full lifecycle
+gates without claiming factoryd readiness. The checked-in pause therefore
+blocks factoryd dispatch, not every possible human-run implementation path.
 
 The former `lumyn-mvp` package and its task, pilot, lifecycle, PR, and exception
 artifacts are immutable historical records. They must not be rewritten to imply
-v3 behavior.
+v3.1 behavior.
 
-## V3 Compiled Control Boundary
+## V3.1 Compiled Control Boundary
 
 The active compiled generation covers:
 
-- provider-paid, services-led API or SDK sunset campaigns;
-- provider-confirmed source/target intent;
-- an optional signed declarative provider packet as authoritative confirmed
-  data, never executable authority;
+- provider-originated API update delivery launched through a provider-paid,
+  services-assisted sunset campaign;
+- one reusable provider-confirmed Provider Change Contract and exact event;
+- revocable Consumer Installation and event-specific authorization;
 - consumer-local deterministic or bounded-agent generation;
 - exact model disclosure, endpoint, credential, network, tool, provenance, and
   budget controls;
 - deterministic repository and workflow verification;
-- patch artifact, optional local branch, and PR bundle as the no-GitHub
-  baseline;
-- optional remote branch and optional draft PR under separate grants;
+- patch artifact, optional local branch, and PR bundle as fallback;
+- short-lived remote branch and required pilot draft PR under separate grants;
+- event-bound, consented provider rollout status;
 - consumer review and merge;
 - no provider access to code, default-branch write, or auto-merge.
 
-Elaborate packet PKI, continuous provider-status resolution, connection
-receipts, acknowledgements, and receipt-backed billing are deferred v2
-concepts, not active v3 prerequisites.
+Universal event distribution, elaborate provider PKI, hosted status,
+connection receipts, acknowledgements, and receipt-backed billing are deferred
+concepts, not active v3.1 prerequisites.
 
 This rebaseline is planning and control work only. It authorizes no product
 implementation, model endpoint, consumer repository, credential, command,
@@ -65,7 +68,7 @@ while the mission is paused.
 
 Before a future factoryd dispatch, a separate reviewed change must prove:
 
-- the external Factory `profiles/lumyn.yaml` profile describes v3 runtime,
+- the external Factory `profiles/lumyn.yaml` profile describes v3.1 runtime,
   validation, evidence, and capability posture;
 - the exact factoryd binary, bundle, schemas, semantic validators, and
   active-mission resolution support this compiled generation;
@@ -236,7 +239,7 @@ Before any future live task, validate:
 - commands and host isolation;
 - model disclosure/network/credential and budgets when applicable;
 - optional sandbox grants;
-- optional remote-branch and draft-PR grants;
+- separately approved, short-lived remote-branch and draft-PR grants;
 - expiry, revocation, retention, deletion, and evidence refs.
 
 Empty grants prove only that offline planning and fixture validation can remain

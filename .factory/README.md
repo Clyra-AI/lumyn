@@ -1,6 +1,6 @@
 # Factory Artifacts
 
-Status: v3 repo-local controls compiled; factoryd dispatch paused
+Status: v3.1 repo-local controls compiled; factoryd dispatch paused
 
 - `.factory/artifacts/`: committed, source-safe Factory planning, validation,
   closure, and handoff artifacts. It is not a consumer-private runtime store.
@@ -14,13 +14,13 @@ Status: v3 repo-local controls compiled; factoryd dispatch paused
 - `.factory/factoryd.autoship.example.json`: mission-paused future full-loop
   template; it authorizes no shipping.
 
-The active compiled v3 planning and control set is:
+The active compiled v3.1 planning and control set is:
 
 ```text
 .factory/artifacts/prd-to-plan/lumyn-migration-mvp/
 ```
 
-The checked-in contents were regenerated from the v3 PRD and plan as one
+The checked-in contents were regenerated from the v3.1 PRD and plan as one
 repo-local context, risk, execution, task, validation, acceptance, mapping, and
 closure control set. They are planning and validation authority, not product
 runtime or factoryd execution authority.
@@ -29,6 +29,9 @@ factoryd dispatch remains paused because the external Factory
 `profiles/lumyn.yaml` profile and the factoryd bundle/runtime have not been
 requalified against this exact generation. A separate reviewed change must
 prove that compatibility and explicitly unpause one bounded task.
+This pause is scoped to factoryd. A separately approved attended task may use
+the same packet and full lifecycle gates without claiming factoryd readiness;
+this planning generation itself approves no such task.
 
 The prior plan remains:
 
@@ -40,23 +43,27 @@ It and its task, pilot, lifecycle, PR, and exception artifacts are historical
 evidence of the superseded product direction. They remain immutable records;
 do not reinterpret or rewrite them.
 
-## V3 Control Set
+## V3.1 Control Set
 
 The compiled control set represents:
 
-- provider-paid, services-led API or SDK sunset campaigns;
-- provider-confirmed intent, with a signed declarative packet as optional
-  authoritative input;
+- provider-originated API update delivery launched through a provider-paid,
+  services-assisted sunset campaign;
+- one reusable provider-confirmed Provider Change Contract and exact
+  provider-originated event;
+- revocable Consumer Installation and event-specific authorization;
 - consumer-local deterministic or bounded-agent patch generation;
 - exact model disclosure, endpoint, credential, network, tool, token, time,
   retry, cost, path, and diff controls;
 - deterministic verification independent from generation mode;
-- patch artifact, optional local branch, and PR bundle without GitHub access;
-- separately authorized optional remote branch and draft PR;
+- patch artifact, optional local branch, and PR-bundle fallback without GitHub
+  access;
+- separately authorized short-lived remote branch and required pilot draft PR;
+- event-bound, consented provider status with no inference from silence;
 - no default-branch write or auto-merge;
 - no provider access to consumer code;
-- deferred elaborate provider PKI, status, receipt, acknowledgement, and
-  receipt-backed billing.
+- deferred universal event registry, elaborate provider PKI, hosted status
+  service, receipt acknowledgement, and receipt-backed billing.
 
 Every new acceptance item remains `planned` until direct evidence closes it.
 Retained evidence may carry forward only when its recorded semantics genuinely
@@ -72,11 +79,11 @@ product grants remain private and action-specific:
 - model request disclosure, network, and credential;
 - package registry;
 - optional sandbox;
-- optional remote branch and draft PR;
-- optional `provider_reporting`;
+- short-lived remote branch and draft PR;
+- event-bound, consumer-consented `provider_reporting`;
 - retention and deletion.
 
-Empty checked-in grants authorize nothing. The v3 rebaseline grants no product
+Empty checked-in grants authorize nothing. The v3.1 rebaseline grants no product
 implementation, customer repository, model, credential, command, network,
 branch, PR, or merge authority.
 

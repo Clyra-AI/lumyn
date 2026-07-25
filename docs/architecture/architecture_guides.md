@@ -1,29 +1,34 @@
 # Lumyn Architecture Guide
 
-Status: v3 planning architecture; product runtime not implemented
+Status: v3.1 planning architecture; product runtime not implemented
 
 ## Architecture Objective
 
-Lumyn turns provider-confirmed API or SDK sunset intent into a bounded,
-evidence-backed migration handoff inside a consumer-authorized repository.
-Provider sponsorship never grants access to consumer code, and bounded-agent
-generation never grants a model authority over repository scope, verification,
-GitHub delivery, or merge.
+Lumyn is the provider-to-consumer application layer for consequential API and
+SDK changes. It carries one provider-confirmed change event through a
+revocable Consumer Installation into repository-specific impact, a verified
+candidate, a tested draft PR, and consented rollout status. Provider
+sponsorship never grants access to consumer code, and bounded-agent generation
+never grants a model authority over repository scope, verification, GitHub
+delivery, or merge.
 
 The architecture optimizes for:
 
-- services-led campaign operation without ambient operator authority;
+- services-assisted campaign onboarding without ambient operator authority;
+- reusable Provider Change Contracts and authenticated change events;
+- consumer-installed, event-specific authorization that cannot widen;
 - consumer-local or consumer-controlled CI execution;
 - deterministic transforms for exact mappings;
 - bounded-agent generation for approved repository-specific changes;
 - deterministic, baseline-aware verification;
 - exact model egress, credential, network, disclosure, and cost controls;
-- patch and PR-bundle handoff without requiring GitHub access;
-- optional separately authorized remote branch and draft PR;
+- patch and PR-bundle fallback without requiring GitHub access;
+- separately authorized short-lived remote branch and required pilot draft PR;
+- event-bound, consented provider status with no inference from silence;
 - proof-honest evidence and human merge authority.
 
-This guide defines planned boundaries. The compiled v3 control set is
-repo-local planning and validation authority; it does not implement the v3
+This guide defines planned boundaries. The compiled v3.1 control set is
+repo-local planning and validation authority; it does not implement the v3.1
 runtime or authorize a live product action.
 
 factoryd dispatch remains paused. A separate reviewed change must rebaseline
@@ -32,15 +37,19 @@ bundle/runtime against the exact active mission before any task is unpaused.
 
 ## Trust And Data Planes
 
-### Provider Campaign Plane
+### Provider Change And Campaign Plane
 
 Owns:
 
 - provider identity and accountable campaign operator;
 - the paid sunset objective and compatibility window;
-- provider-confirmed source/target semantics;
+- provider-confirmed source/target semantics in a reusable Provider Change
+  Contract;
+- signed versioned change event at a pinned provider-controlled HTTPS URL,
+  embedded or exact-URL Provider Change Contract delivery, retrieved-byte
+  digest, audience, monotonic sequence, freshness, deadline, severity, and
+  supersession/withdrawal state;
 - migration guidance, canary information, and rollback guidance;
-- a signed declarative provider packet when one is available and confirmed;
 - the invited cohort and commercial campaign decision.
 
 Does not own:
@@ -50,9 +59,14 @@ Does not own:
 - raw source, diffs, logs, traces, prompts, or responses;
 - consumer branch, PR, review, or merge authority.
 
-The provider packet is authoritative change data when supplied and confirmed.
-It cannot execute code or widen policy. V3 defers elaborate provider PKI,
-continuous provider-status resolution, and receipt-backed billing.
+The Provider Change Contract is authoritative change data when accountably
+confirmed. It and its event cannot execute code or widen policy. Duplicate,
+stale, conflicting, superseded, withdrawn, wrong-audience, or unauthenticated
+events fail closed. V3.1 defers elaborate provider PKI, a universal event
+network, and receipt-backed billing.
+The first transport uses one campaign signing key and a pinned provider HTTPS
+origin. Attended file import is recovery and cannot prove provider-channel
+delivery or authorize installed-preauthorization writes.
 
 The v2 `provider-authenticated consumer receipt-key bindings` and
 provider-signed acknowledgement design remains historical context, not an
@@ -62,16 +76,21 @@ active v3 dependency.
 
 Owns:
 
+- revocable provider/channel installation, repository/package binding,
+  selectors, action ceilings, `per_event_approval` or
+  `installed_preauthorization`, GitHub token-issuance policy, expiry, and
+  disclosure policy;
+- immutable event-specific authorization derived without widening;
 - repository and selected package root;
 - read/write path scopes;
-- migration-plan approval;
+- exact per-event migration-plan approval or installed-policy plan evaluation;
 - isolated workspace and local branch;
 - command allowlist and host-isolation policy;
 - model disclosure, endpoint, credential, tool, and budget policy;
 - dependency and package-registry policy;
 - private impact, plan, prompt, response, patch, verification, and PR-bundle
   evidence;
-- optional remote branch and draft-PR authorization;
+- short-lived remote branch and draft-PR authorization;
 - review and merge.
 
 Consumer-private runtime state lives outside the checkout and public source
@@ -79,7 +98,7 @@ repository with explicit retention, deletion, and evidence ownership.
 
 ### Bounded Model Plane
 
-The model plane is active v3 planned scope and a separate trust boundary.
+The model plane is active v3.1 planned scope and a separate trust boundary.
 
 It receives only consumer-authorized, minimized request classes through:
 
@@ -105,66 +124,68 @@ The model plane:
 
 ```text
 API Provider
-  funds campaign and confirms sunset intent
+  funds campaign, confirms one change contract, publishes event
         |
         v
-Provider Campaign Plane
-  supplies guidance and optional signed declarative packet
+Provider Change And Campaign Plane
+  supplies non-executable event and contract
         |
         | no repository authority
         v
 Consumer Maintainer
-  authorizes read-only impact
-  -> approves no-write migration plan
+  installs provider channel and bounded actions
+  -> authorizes event-specific read-only impact
+  -> chooses exact-plan approval or installed-policy evaluation
   -> authorizes exact local write/command/model boundaries
         |
         v
 Consumer Execution Plane
   deterministic transform or bounded-agent generation
   -> deterministic verification
-  -> patch + optional local branch + PR bundle
+  -> patch + optional local branch + PR bundle fallback
         |
-        +--> optional remote branch grant
-        +--> optional draft-PR grant
+        +--> short-lived remote branch grant
+        +--> short-lived draft-PR grant
         |
         v
 Consumer review and merge
+        |
+        v
+Consented event-bound provider status projection
 ```
 
 Lumyn Operator assistance is an operating role, not an authority plane.
 
 ## Product State Machines
 
-### Provider Intent
+### Provider Change Contract And Event
 
 ```text
-draft
+contract_draft
 -> provider_confirmed
--> selected_for_campaign
--> superseded | withdrawn | completed
+-> event_published
+-> received | superseded | withdrawn | expired
 ```
 
-If a signed declarative packet is used:
+Duplicate, stale, conflicting, unconfirmed, unauthenticated, wrong-audience,
+superseded, withdrawn, or executable intent blocks planning or mutation.
+The first event transport is a signed versioned JSON manifest fetched from the
+exact provider-controlled HTTPS URL and verified against the campaign key
+pinned by the installation. It embeds the Provider Change Contract or names
+its exact provider-controlled HTTPS URL; retrieved bytes must match the event's
+contract digest.
+
+### Consumer Installation And Authorization
 
 ```text
-draft
--> signed
--> confirmed
--> selected_for_campaign
--> superseded | withdrawn | expired
-```
-
-Stale, conflicting, unconfirmed, or executable intent blocks planning or
-mutation.
-
-### Consumer Authorization
-
-```text
-not_requested
--> read_requested
+not_installed
+-> notify_only | scan_only | prepare_patch | open_draft_pr
+-> per_event_approval | installed_preauthorization
+-> event_received
+-> event_authorization_frozen
 -> read_authorized
 -> plan_ready
--> plan_approved
+-> exact_plan_approved | installed_policy_satisfied
 -> local_execution_authorized
 -> [model_authorized]
 -> [remote_branch_authorized]
@@ -172,8 +193,10 @@ not_requested
 -> expired | revoked
 ```
 
-Each transition is action-specific. Approval at one state does not imply the
-next.
+Action modes are ceilings and each transition is separately policy-checked. An
+event can narrow but never widen the installed policy. The installation stores
+no GitHub token; an approved local or CI broker mints a short-lived GitHub App
+installation token only after the bound runtime delivery policy is satisfied.
 
 ### Migration
 
@@ -188,7 +211,7 @@ not_analyzed
 -> [local_branch_prepared]
 -> pr_bundle_ready
 -> [remote_branch_pushed]
--> [draft_pr_open]
+-> draft_pr_open
 -> merged | closed | reverted
 ```
 
@@ -199,7 +222,9 @@ Generation mode and verification strength remain independent.
 | Component | Responsibility | Must not own |
 |---|---|---|
 | CLI | parsing, config, JSON envelope, exits | product inference |
-| Campaign intake | provider-paid scope and confirmed intent | repository authority |
+| Campaign intake | provider-paid scope, distribution, confirmed intent | repository authority |
+| Change-event intake | issuer, audience, deadline, contract binding, supersession | executable instructions or consumer authority |
+| Installation engine | provider/channel, repository, actions, expiry, revocation, disclosure | cross-repository or ambient authority |
 | Source intake | pinned provider materials and SDK refs | consumer writes |
 | Intent normalizer | typed changes and unresolved questions | arbitrary execution |
 | Authorization engine | exact consumer grants, expiry, revocation | side-effect execution |
@@ -214,8 +239,8 @@ Generation mode and verification strength remain independent.
 | Sandbox verifier | optional approved read-back | production access |
 | Evidence engine | axes, hashes, freshness, redaction | unsupported roll-up |
 | PR-bundle renderer | reviewable offline handoff | remote write |
-| GitHub adapter | optional remote branch and draft PR | merge |
-| Attestation exporter | optional consented provider status | raw consumer evidence |
+| GitHub adapter | short-lived remote branch and tested draft PR | merge |
+| Status projector | event-bound consented provider status and provenance | raw evidence or inferred retirement |
 
 Keep components behind small interfaces. Do not add impact, agent, patch,
 verification, or GitHub behavior to `internal/source`.
@@ -224,12 +249,13 @@ verification, or GitHub behavior to `internal/source`.
 
 ```text
 provider-paid campaign scope
--> provider-confirmed source/target intent
--> [optional signed declarative provider packet]
--> consumer read authorization
--> TypeScript impact report
+-> provider-confirmed Provider Change Contract
+-> provider-originated change event
+-> Consumer Installation
+-> event-specific read authorization
+-> TypeScript repository impact inventory
 -> no-write migration plan
--> plan approval
+-> exact plan approval or installed-preauthorization policy evaluation
 -> local write/command authorization
 -> [model disclosure/network/credential authorization when needed]
 -> isolated deterministic or bounded-agent patch candidate
@@ -237,10 +263,10 @@ provider-paid campaign scope
 -> patch artifact
 -> optional local branch
 -> PR bundle
--> [optional remote branch]
--> [optional draft PR]
+-> short-lived remote branch
+-> tested draft PR
 -> consumer review and merge
--> [optional consented provider status]
+-> consented event-bound provider status
 ```
 
 ## Artifact Ownership
@@ -250,19 +276,19 @@ provider-paid campaign scope
 - confirmed sunset objective and deadline;
 - source/target API or SDK artifacts;
 - migration guidance and semantic intent;
-- optional signed declarative packet;
+- Provider Change Contract and exact provider event;
 - sandbox semantics and rollback guidance.
 
 These inputs cannot execute code or grant consumer authority.
 
 ### Consumer-Private Artifacts
 
-- repository authorization;
-- impact and migration plan;
+- Consumer Installation and event-specific authorization;
+- repository impact inventory and migration plan;
 - model disclosure/network/credential grants;
 - prompts, responses, tool traces, token/cost records;
 - workspace, patch, local branch, and verification;
-- PR bundle and optional GitHub result;
+- PR bundle and GitHub result;
 - retention/deletion evidence.
 
 ### Provider-Visible By Explicit Consent
@@ -399,15 +425,25 @@ Optional sandbox verification requires separate request disclosure, network,
 and credential grants. It uses non-production data and credentials, exact
 endpoint/operations, request/write budgets, idempotency, cleanup, retention, and
 orphan evidence. Sandbox proof is independent from local deterministic
-verification and optional draft-PR delivery.
+verification and required pilot draft-PR delivery.
 
 ## GitHub Boundary
 
 - Patch and PR-bundle delivery require no GitHub credential.
 - Local branch creation remains inside the consumer execution plane.
-- Remote branch write and draft-PR write are separate grants.
+- The GitHub App installation may persist; its installation token is
+  short-lived, least-privilege, issued at runtime, and never stored in the
+  Consumer Installation.
+- Remote branch write and draft-PR write are separate exact grants.
+- A manual fallback cannot close automated-delivery acceptance.
 - PRs are draft-only.
-- Idempotency binds repository, base, head, and plan/evidence digests.
+- Idempotency binds event, Provider Change Contract, Consumer Installation
+  authorization, repository, base, head, plan, and verification-evidence
+  digests.
+- `EXP-003` requires the composed provider-channel event through
+  installation, impact, plan, Lumyn-generated candidate, verification,
+  branch, draft-PR, and local status-projection path. Transmission is optional
+  for technical delivery but the pilot projection must bind that same run.
 - Default-branch writes and auto-merge are prohibited.
 - Provider payment never authorizes a GitHub action.
 
@@ -453,8 +489,9 @@ Require an ADR or decision update for:
 - release/distribution posture;
 - major performance, cost, or reliability tradeoffs.
 
-ADR-0003 governs services-led bounded-agent execution. ADR-0002 remains
-historical context for the v2 provider-sponsored deterministic-first rebaseline.
+ADR-0004 governs provider-originated API update delivery. ADR-0003 governs the
+bounded-agent execution and trust substrate. ADR-0002 remains historical
+context for the v2 provider-sponsored deterministic-first rebaseline.
 
 ## Performance And Cost Triggers
 
@@ -523,20 +560,23 @@ Retries preserve the same authorization and idempotency identity.
 
 ### Draft PR
 
-- optional remote branch plus separate draft-PR grant;
+- short-lived remote branch plus separate draft-PR grant;
 - evidence-bound idempotency;
 - no merge authority.
 
-### Provider Attestation
+### Provider Status Projection
 
-- optional exact field allowlist;
+- exact consumer-consented field allowlist and event/evidence binding;
+- observed, consumer-reported, and unknown provenance;
+- no `not_applicable` or `unaffected` from silence and no `retired` from merge;
 - no raw consumer evidence by default.
 
 ## Runtime Shape
 
 ```text
 Go orchestration core
-  -> structured provider-intent intake
+  -> structured Provider Change Contract and event intake
+  -> Consumer Installation and event-authorization engine
   -> TypeScript impact adapter
   -> migration planner
   -> deterministic transformer
@@ -545,7 +585,8 @@ Go orchestration core
   -> deterministic verification engine
   -> evidence and PR-bundle renderer
   -> optional sandbox adapter
-  -> optional GitHub adapter
+  -> short-lived GitHub adapter
+  -> consented status projector
 ```
 
 Keep model adapters behind a narrow interface. No model endpoint, SDK, or
@@ -554,6 +595,7 @@ hosted control plane becomes an implicit dependency.
 ## Architecture Budget And Decomposition
 
 Source files warn at 1200 lines and fail at 2500 lines under the repository
-architecture-budget policy. Decompose campaign intake, authorization, impact,
-planning, agent execution, patching, verification, PR-bundle rendering, and
-GitHub delivery rather than creating a product monolith.
+architecture-budget policy. Decompose change/event intake, installation,
+authorization, impact, planning, agent execution, patching, verification,
+PR-bundle rendering, GitHub delivery, and status projection rather than
+creating a product monolith.

@@ -20,8 +20,8 @@
     },
     {
       "group_id": "migration_pack",
-      "title": "Migration Pack",
-      "source_ref": "docs/product/prd.md#migration-pack",
+      "title": "Provider Change Contract",
+      "source_ref": "docs/product/prd.md#provider-change-contract",
       "primary_task_ref": "M3",
       "acceptance_item_ids": [
         "PACK-001",
@@ -31,9 +31,29 @@
       ]
     },
     {
+      "group_id": "provider_change_event",
+      "title": "Provider Change Event",
+      "source_ref": "docs/product/prd.md#provider-change-event",
+      "primary_task_ref": "M3",
+      "acceptance_item_ids": [
+        "EVENT-001",
+        "EVENT-002"
+      ]
+    },
+    {
+      "group_id": "consumer_installation",
+      "title": "Consumer Installation",
+      "source_ref": "docs/product/prd.md#consumer-installation",
+      "primary_task_ref": "M5",
+      "acceptance_item_ids": [
+        "INSTALL-001",
+        "INSTALL-002"
+      ]
+    },
+    {
       "group_id": "impact_and_integration_graph",
-      "title": "Impact And Integration Graph",
-      "source_ref": "docs/product/prd.md#impact-and-integration-graph",
+      "title": "Impact And Repository Inventory",
+      "source_ref": "docs/product/prd.md#impact-and-repository-inventory",
       "primary_task_ref": "M4",
       "acceptance_item_ids": [
         "IMPACT-001",
@@ -138,7 +158,7 @@
   "delivery_slices": [
     {
       "slice_id": "migration_foundation",
-      "title": "Migration foundation and qualification",
+      "title": "Provider change, installation, impact, and qualification",
       "required_for_completion": true,
       "task_refs": [
         "M0",
@@ -159,6 +179,10 @@
         "PACK-002",
         "PACK-003",
         "PACK-004",
+        "EVENT-001",
+        "EVENT-002",
+        "INSTALL-001",
+        "INSTALL-002",
         "IMPACT-001",
         "IMPACT-002",
         "IMPACT-003",
@@ -175,7 +199,7 @@
     },
     {
       "slice_id": "hybrid_migration_engine",
-      "title": "Hybrid candidate, verification, and export",
+      "title": "Hybrid candidate, verification, and tested draft-PR delivery",
       "required_for_completion": true,
       "task_refs": [
         "M6",
@@ -205,7 +229,7 @@
     },
     {
       "slice_id": "provider_campaign",
-      "title": "Paid provider qualification and campaign outcome",
+      "title": "Paid provider distribution and rollout outcome",
       "required_for_completion": true,
       "task_refs": [
         "M2.5",

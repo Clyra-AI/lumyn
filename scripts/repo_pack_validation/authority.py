@@ -210,8 +210,8 @@ def validate_active_repo_safety(repo: Any, artifact_refs: dict[str, str]) -> Non
         launch.get("requested_action") == "pause_mission"
         and launch.get("expected_decision") == "deny"
         and launch.get("reason_code")
-        == "factory_profile_and_runtime_v3_unqualified",
-        ".factory/factoryd.json launch request must deny v3 dispatch",
+        == "factory_profile_and_runtime_v3_1_unqualified",
+        ".factory/factoryd.json launch request must deny v3.1 dispatch",
     )
     _require(
         repo.get("capability_grants") == [],

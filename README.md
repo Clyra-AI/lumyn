@@ -1,23 +1,26 @@
 # Lumyn
 
-Lumyn is planning a provider-sponsored, customer-controlled service for
-verified API and SDK sunset migrations.
+Lumyn is planning the provider-to-consumer application layer for important API
+and SDK updates.
 
-An API Provider pays Lumyn to help move an invited customer cohort off a legacy
-surface. Each API Consumer Organization keeps control of its repository,
-commands, model egress, credentials, disclosure, review, and merge.
+An API Provider publishes one confirmed change and pays Lumyn to carry it into
+an invited customer cohort. Each API Consumer Organization installs the exact
+channel and actions it accepts and keeps control of its repository, commands,
+model egress, credentials, disclosure, review, and merge.
 
 The v3 product path is:
 
 ```text
-provider-confirmed sunset intent
--> customer-authorized read-only impact
+provider-originated change event
+-> reusable Provider Change Contract
+-> customer-installed channel and action policy
+-> customer-authorized read-only repository impact
 -> reviewable migration plan
--> deterministic transform or consumer-local bounded agent
+-> deterministic transform or replaceable consumer-local bounded agent
 -> deterministic repository and workflow verification
--> patch + optional local branch + PR bundle
--> optional customer-authorized remote branch and draft PR
+-> tested customer-authorized draft PR
 -> customer review and merge
+-> consented provider rollout status
 ```
 
 Provider sponsorship does not grant access to consumer code. Lumyn never
@@ -25,8 +28,10 @@ writes the default branch or auto-merges.
 
 The canonical product contract is [docs/product/prd.md](docs/product/prd.md).
 The human-readable plan is [docs/product/plan.md](docs/product/plan.md).
+[ADR-0004](docs/architecture/adr-0004-provider-originated-api-update-delivery.md)
+governs the v3.1 provider-to-consumer product direction.
 [ADR-0003](docs/architecture/adr-0003-services-led-bounded-agent-migration-execution.md)
-governs the v3 execution model.
+remains the bounded-agent execution and trust decision.
 [ADR-0002](docs/architecture/adr-0002-provider-sponsored-customer-controlled-migrations.md)
 is retained as historical context for the v2 deterministic-first rebaseline.
 
@@ -36,32 +41,38 @@ The active compiled Factory planning and control set is:
 .factory/artifacts/prd-to-plan/lumyn-migration-mvp/
 ```
 
-It is regenerated from the v3 PRD and plan as one source-aligned set. It
+It is regenerated from the v3.1 PRD and plan as one source-aligned set. It
 provides repo-local planning and validation authority, not product runtime or
 factoryd execution authority. factoryd dispatch remains paused because the
 external Factory `profiles/lumyn.yaml` profile and factoryd bundle/runtime have
-not yet been requalified against this v3 generation.
+not yet been requalified against this v3.1 generation.
 
 The earlier `.factory/artifacts/prd-to-plan/lumyn-mvp/` package is immutable
 historical evidence and is not active.
 
 ## Product Wedge
 
-The initial offer is a services-led, provider-paid sunset campaign for
-participating GitHub repositories that use an official TypeScript/Node SDK.
-Lumyn helps the provider normalize and confirm the change intent, works with
-consumer maintainers to authorize local execution, and returns evidence-backed
-migration handoff artifacts.
+The product wedge is a per-provider update channel for an official
+TypeScript/Node SDK. The initial offer is a services-assisted, provider-paid
+sunset campaign: Lumyn helps the provider normalize and confirm one Provider
+Change Contract and event, helps consumer maintainers install bounded local
+policy, and opens evidence-backed tested draft PRs.
 
-A signed declarative provider packet is authoritative when available and
-confirmed. It remains data, never executable code. V3 does not make elaborate
-provider PKI, continuous provider-status resolution, connection receipts, or
-receipt-backed billing prerequisites for the first managed campaigns.
+A signed event manifest at a pinned provider-controlled HTTPS URL is the first
+channel. It embeds the Provider Change Contract or pins the exact
+provider-controlled URL whose retrieved bytes must match its digest. The
+provider publishes it; Lumyn may assist setup. It remains data, never
+executable code. An attended import is recovery, not channel or
+unattended-delivery proof. V3 does not make elaborate provider PKI, continuous
+provider-status resolution, connection receipts, or receipt-backed billing
+prerequisites for the first managed campaigns.
 The v2 provider-authenticated receipt flow is historical compatibility context,
 not active v3 authority or billing policy.
 
-The Consumer Maintainer reviews a no-write impact report and migration plan
-before any change. Each approved plan item routes to one of:
+Impact and planning are always no-write. The Consumer Maintainer either
+approves the exact event plan or installs narrowly bounded preauthorization;
+any plan outside the installed policy pauses before mutation. Each authorized
+plan item routes to one of:
 
 - a deterministic transformation for an exact supported mapping;
 - a bounded agent for repository-specific reasoning;
@@ -83,15 +94,17 @@ are `static_verified`, `repo_verified`,
 `workflow_contract_replay_passed`, `workflow_verified_replay`,
 `workflow_verified_mock`, and `workflow_verified_sandbox`.
 
-The default handoff requires no GitHub credential:
+Every run retains a no-GitHub fallback:
 
 - patch artifact;
 - optional local branch;
 - reviewable PR bundle with plan, diff, verification, provenance, and residual
   risk.
 
-Remote branch creation and draft-PR creation are separate optional actions with
-separate consumer authorization. Merge always remains human-controlled.
+Remote branch creation and draft-PR creation are separate consumer-authorized
+actions. At least one Lumyn-opened draft PR is required to prove the first
+provider campaign; manual fallback does not prove automated delivery. Merge
+always remains human-controlled.
 
 ## Current Implementation Status
 
@@ -108,7 +121,8 @@ Implemented:
 
 Planning-only, not implemented:
 
-- services-led campaign intake and provider-confirmed sunset intent;
+- provider event, Provider Change Contract, and services-assisted campaign intake;
+- consumer installation and event-specific authorization;
 - migration corpus and bounded-agent holdouts;
 - consumer repository and model execution authorization;
 - TypeScript repository impact analysis;
@@ -116,7 +130,8 @@ Planning-only, not implemented:
 - deterministic and bounded-agent patch generation;
 - repository and workflow verification runtime;
 - patch, local-branch, and PR-bundle handoff;
-- optional remote branch and draft-PR delivery;
+- short-lived remote branch and draft-PR delivery;
+- event-bound consented provider status projection;
 - private-artifact retention/deletion and operator recovery;
 - design-partner campaign measurement.
 
@@ -168,7 +183,7 @@ integrity gate.
 - `docs/product/plan.md`: human-readable plan
 - `docs/dev/dev_guides.md`: engineering and validation contract
 - `docs/architecture/architecture_guides.md`: architecture and trust boundaries
-- `.factory/artifacts/prd-to-plan/lumyn-migration-mvp/`: v3 compiled-plan target
+- `.factory/artifacts/prd-to-plan/lumyn-migration-mvp/`: v3.1 compiled-plan target
 - `.factory/artifacts/prd-to-plan/lumyn-mvp/`: immutable historical plan
 - `.factory/artifacts/lifecycle-evidence/`: independent lifecycle evidence
 - `.factory/artifacts/pr-lifecycle/`: Factory PR lifecycle evidence
@@ -190,10 +205,12 @@ Actions runs the same gate through `validate` and runs CodeQL through
 ## Factory Operation
 
 Factory supplies planning, task-packet, validation, review, shipping, and
-evidence contracts. The active v3 control set is compiled planning authority,
+evidence contracts. The active v3.1 control set is compiled planning authority,
 but the checked-in factoryd templates remain paused. This rebaseline grants no
 product implementation, consumer repository, model, credential, command,
 network, GitHub, or merge authority.
+Separately approved attended tasks may use the same packets and lifecycle
+gates without claiming factoryd readiness.
 
 Factory's `approval`, `credentials`, and `network` grants govern its
 implementation worker. They do not validate or confer Lumyn product authority.

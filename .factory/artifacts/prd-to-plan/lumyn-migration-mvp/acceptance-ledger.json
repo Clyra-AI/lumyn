@@ -6,7 +6,7 @@
   "last_updated_at": "2026-07-24T00:00:00Z",
   "source_prd_ref": "docs/product/prd.md",
   "source_ref": "docs/product/prd.md",
-  "acceptance_item_count": 49,
+  "acceptance_item_count": 53,
   "coverage_policy": {
     "enumerated_items_required": true,
     "group_only_refs_allowed": false,
@@ -152,8 +152,8 @@
     {
       "acceptance_item_id": "PACK-001",
       "group_id": "migration_pack",
-      "source_ref": "docs/product/prd.md#migration-pack",
-      "source_text": "Pinned public docs, OpenAPI descriptions, SDK releases, and migration guidance can produce a versioned `public_derived` migration pack with source digests and license/provenance records.",
+      "source_ref": "docs/product/prd.md#provider-change-contract",
+      "source_text": "Pinned public docs, OpenAPI descriptions, SDK releases, and migration guidance can produce a versioned `public_derived` Provider Change Contract with source digests and license/provenance records.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -175,8 +175,8 @@
     {
       "acceptance_item_id": "PACK-002",
       "group_id": "migration_pack",
-      "source_ref": "docs/product/prd.md#migration-pack",
-      "source_text": "A pack records source and target versions, typed change semantics, applicability, known mappings, verification guidance, ambiguity, and unsupported cases.",
+      "source_ref": "docs/product/prd.md#provider-change-contract",
+      "source_text": "A Provider Change Contract records stable change identity, source and target versions, audience and applicability, typed semantics, known mappings, verification guidance, ambiguity, unsupported cases, and supersession or withdrawal state.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -197,8 +197,8 @@
     {
       "acceptance_item_id": "PACK-003",
       "group_id": "migration_pack",
-      "source_ref": "docs/product/prd.md#migration-pack",
-      "source_text": "Provider confirmation is independently recorded for a sponsored live campaign; public-derived evidence is never represented as provider endorsement, and provider input cannot execute code.",
+      "source_ref": "docs/product/prd.md#provider-change-contract",
+      "source_text": "Accountable provider confirmation is independently recorded once and is reusable across the invited, consenting cohort for the exact contract version; public-derived evidence is never represented as provider endorsement, and provider input cannot execute code or grant repository authority.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -219,7 +219,7 @@
     {
       "acceptance_item_id": "PACK-004",
       "group_id": "migration_pack",
-      "source_ref": "docs/product/prd.md#migration-pack",
+      "source_ref": "docs/product/prd.md#provider-change-contract",
       "source_text": "Conflicting, incomplete, stale, or semantically ambiguous evidence blocks affected routes instead of inviting the agent to infer provider intent.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
@@ -239,9 +239,105 @@
       ]
     },
     {
+      "acceptance_item_id": "EVENT-001",
+      "group_id": "provider_change_event",
+      "source_ref": "docs/product/prd.md#provider-change-event",
+      "kind": "product_and_quality_contract",
+      "evidence_mode": "automated_and_reviewed",
+      "closure_required_for": [
+        "v3_mvp"
+      ],
+      "task_refs": [
+        "M1",
+        "M2",
+        "M3"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M3/acceptance_checks"
+      ],
+      "status": "planned",
+      "risk_class": "high",
+      "notes": [
+        "No v3 closure is claimed; direct item-level evidence is required."
+      ],
+      "source_text": "Lumyn accepts a Provider Change Event only when its immutable identity and version, provider-controlled pinned transport or attended-recovery provenance, issuer and authentication, monotonic sequence and freshness, embedded or exact-URL contract delivery and retrieved-byte digest, API or SDK, audience, deadline, severity, and supersession or withdrawal state validate; the event and Provider Change Contract remain non-executable."
+    },
+    {
+      "acceptance_item_id": "EVENT-002",
+      "group_id": "provider_change_event",
+      "source_ref": "docs/product/prd.md#provider-change-event",
+      "kind": "product_and_quality_contract",
+      "evidence_mode": "automated_and_reviewed",
+      "closure_required_for": [
+        "v3_mvp"
+      ],
+      "task_refs": [
+        "M1",
+        "M2",
+        "M3"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M3/acceptance_checks"
+      ],
+      "status": "planned",
+      "risk_class": "high",
+      "notes": [
+        "No v3 closure is claimed; direct item-level evidence is required."
+      ],
+      "source_text": "Duplicate, replayed, stale, conflicting, expired, superseded, withdrawn, wrong-audience, or unauthenticated events fail closed; an attended import cannot count as provider-channel delivery or authorize an installed-preauthorization write."
+    },
+    {
+      "acceptance_item_id": "INSTALL-001",
+      "group_id": "consumer_installation",
+      "source_ref": "docs/product/prd.md#consumer-installation",
+      "kind": "product_and_quality_contract",
+      "evidence_mode": "automated_and_reviewed",
+      "closure_required_for": [
+        "v3_mvp"
+      ],
+      "task_refs": [
+        "M1",
+        "M2",
+        "M5"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M5/acceptance_checks"
+      ],
+      "status": "planned",
+      "risk_class": "high",
+      "notes": [
+        "No v3 closure is claimed; direct item-level evidence is required."
+      ],
+      "source_text": "A revocable Consumer Installation binds the exact provider-controlled channel and authentication key, repository and package root, audience or version selectors, action ceiling, authorization mode, paths, commands, model-data policy and budgets, GitHub token-issuance policy, provider-reporting fields, retention and deletion, expiry, and revocation without storing a GitHub token."
+    },
+    {
+      "acceptance_item_id": "INSTALL-002",
+      "group_id": "consumer_installation",
+      "source_ref": "docs/product/prd.md#consumer-installation",
+      "kind": "product_and_quality_contract",
+      "evidence_mode": "automated_and_reviewed",
+      "closure_required_for": [
+        "v3_mvp"
+      ],
+      "task_refs": [
+        "M1",
+        "M2",
+        "M5"
+      ],
+      "validation_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M5/acceptance_checks"
+      ],
+      "status": "planned",
+      "risk_class": "high",
+      "notes": [
+        "No v3 closure is claimed; direct item-level evidence is required."
+      ],
+      "source_text": "Every event-specific authorization is an immutable, non-widening derivation of the installation; `per_event_approval` binds the exact plan, while `installed_preauthorization` permits side effects only when event, plan, commands, paths, model policy, budgets, verification, and short-lived credential issuance all satisfy the installed policy. An action-mode label alone grants no side effect."
+    },
+    {
       "acceptance_item_id": "IMPACT-001",
       "group_id": "impact_and_integration_graph",
-      "source_ref": "docs/product/prd.md#impact-and-integration-graph",
+      "source_ref": "docs/product/prd.md#impact-and-repository-inventory",
       "source_text": "Impact analysis is read-only and remains inside the exact authorized repository and package-root scope.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
@@ -263,7 +359,7 @@
     {
       "acceptance_item_id": "IMPACT-002",
       "group_id": "impact_and_integration_graph",
-      "source_ref": "docs/product/prd.md#impact-and-integration-graph",
+      "source_ref": "docs/product/prd.md#impact-and-repository-inventory",
       "source_text": "Lumyn detects the selected official npm SDK, installed version, package manifest, supported lockfile, direct imports, and aliases.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
@@ -285,8 +381,8 @@
     {
       "acceptance_item_id": "IMPACT-003",
       "group_id": "impact_and_integration_graph",
-      "source_ref": "docs/product/prd.md#impact-and-integration-graph",
-      "source_text": "The integration graph represents statically traceable wrappers, adapters, call sites, request/response mappings, relevant configuration, tests, mocks, cassettes, and fixtures.",
+      "source_ref": "docs/product/prd.md#impact-and-repository-inventory",
+      "source_text": "The repository impact inventory represents statically traceable wrappers, adapters, call sites, request/response mappings, relevant configuration, tests, mocks, cassettes, and fixtures.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -307,7 +403,7 @@
     {
       "acceptance_item_id": "IMPACT-004",
       "group_id": "impact_and_integration_graph",
-      "source_ref": "docs/product/prd.md#impact-and-integration-graph",
+      "source_ref": "docs/product/prd.md#impact-and-repository-inventory",
       "source_text": "Generated, vendored, dynamic, multi-root, multi-version, and unsupported cases receive explicit exclusion, uncertainty, or failure status; no result implies global downstream coverage.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
@@ -329,7 +425,7 @@
     {
       "acceptance_item_id": "IMPACT-005",
       "group_id": "impact_and_integration_graph",
-      "source_ref": "docs/product/prd.md#impact-and-integration-graph",
+      "source_ref": "docs/product/prd.md#impact-and-repository-inventory",
       "source_text": "On frozen held-out fixtures, supported affected sites meet the preregistered recall and precision thresholds with zero false `unaffected` results; real-repository value is not claimed from fixtures alone.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
@@ -397,7 +493,7 @@
       "acceptance_item_id": "PLAN-003",
       "group_id": "plan_and_routing",
       "source_ref": "docs/product/prd.md#plan-and-routing",
-      "source_text": "Consumer approval binds the exact pack, repository base, paths, route, model-data policy, tools, commands, budgets, and verification intent; any change invalidates approval.",
+      "source_text": "Consumer authorization, whether exact per-event approval or installed preauthorization, binds the event, Provider Change Contract, Consumer Installation and derived authorization, repository base, paths, route, model-data policy, tools, commands, budgets, disclosure, delivery, and verification intent; any out-of-policy change invalidates or pauses the run.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -488,7 +584,7 @@
       "acceptance_item_id": "AGENT-004",
       "group_id": "bounded_hybrid_execution",
       "source_ref": "docs/product/prd.md#bounded-hybrid-execution",
-      "source_text": "Every agent edit maps to a migration-pack item, integration graph evidence, and recorded rationale; unrelated edits fail.",
+      "source_text": "Every agent edit maps to a Provider Change Contract item, repository-impact evidence, and recorded rationale; unrelated edits fail.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -693,7 +789,7 @@
       "acceptance_item_id": "VER-006",
       "group_id": "verification",
       "source_ref": "docs/product/prd.md#verification",
-      "source_text": "The frozen negative suite has zero false verified outcomes, and all evidence binds pack, plan, base, candidate, route, agent provenance, commands, environment, and artifact hashes.",
+      "source_text": "The frozen negative suite has zero false verified outcomes, and all evidence binds event, Provider Change Contract, Consumer Installation and derived authorization, plan, base, candidate, route, agent provenance, commands, environment, and artifact hashes.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -760,8 +856,8 @@
       "acceptance_item_id": "EXP-003",
       "group_id": "export_and_delivery",
       "source_ref": "docs/product/prd.md#export-and-delivery",
-      "source_text": "When the frozen campaign protocol selects automated delivery, it uses a short-lived, least-privilege token, writes only a non-default branch and draft PR, is idempotent, and never auto-merges. Otherwise the item closes `not_applicable` only with dated protocol evidence selecting manual patch, branch, or PR-bundle delivery and no automated-delivery claim.",
-      "kind": "conditional_delivery_gate",
+      "source_text": "From a valid provider-channel event accepted by an `open_draft_pr` Consumer Installation, `lumyn update --event` composes impact, plan, a Lumyn deterministic or agent-assisted candidate, independent verification, non-default-branch write, and tested draft-PR creation using a short-lived least-privilege token and evidence-bound idempotency, with no auto-merge, then records a local event-bound status projection or explicit reporting decline. Provider transmission remains separately consented and cannot block the draft PR. Standalone PR creation, an imported manual candidate, or a manual patch, branch, or PR bundle cannot close this item.",
+      "kind": "mandatory_delivery_gate",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
         "v3_mvp"
@@ -782,7 +878,7 @@
       "acceptance_item_id": "EXP-004",
       "group_id": "export_and_delivery",
       "source_ref": "docs/product/prd.md#export-and-delivery",
-      "source_text": "Provider-visible status contains only consumer-consented fields and excludes raw source, diffs, prompts, responses, logs, traces, and credentials.",
+      "source_text": "Provider-visible status is bound to the exact event and evidence, contains only consumer-consented fields, distinguishes observed, consumer-reported, and unknown state, never infers `not_applicable` or `unaffected` from silence or `retired` from merge, and excludes raw source, diffs, prompts, responses, logs, traces, and credentials.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -804,7 +900,7 @@
       "acceptance_item_id": "TRUST-001",
       "group_id": "trust_and_privacy",
       "source_ref": "docs/product/prd.md#trust-and-privacy",
-      "source_text": "Repository read, local write, commands, model-data egress, registry, sandbox, credentials, remote branch, PR, retention, deletion, and provider reporting are independently approved.",
+      "source_text": "A revocable Consumer Installation binds provider or channel, repository and package root, audience or version selectors, allowed actions, paths, commands, model-data egress, registry, sandbox, credentials, remote branch, PR, retention, deletion, provider reporting, expiry, and disclosure; each event-specific authorization is derived without widening that installed policy.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -826,7 +922,7 @@
       "acceptance_item_id": "TRUST-002",
       "group_id": "trust_and_privacy",
       "source_ref": "docs/product/prd.md#trust-and-privacy",
-      "source_text": "Migration packs and provider artifacts cannot execute code; production credentials and production mutation are prohibited.",
+      "source_text": "Provider Change Contracts, events, and provider artifacts cannot execute code; production credentials and production mutation are prohibited.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -914,7 +1010,7 @@
       "acceptance_item_id": "DISC-002",
       "group_id": "design_partner_qualification",
       "source_ref": "docs/product/prd.md#design-partner-qualification",
-      "source_text": "Before campaign-specific migration execution, the API Provider identifies at least five reachable Eligible Consumer Units across five distinct API Consumer Organizations, each with an accountable maintainer and useful verification signals.",
+      "source_text": "Before campaign-specific migration execution, the API Provider commits to distribute the update and lead onboarding for at least five reachable Eligible Consumer Units across five distinct API Consumer Organizations, each with an accountable maintainer and useful verification signals.",
       "kind": "external_evidence_gate",
       "evidence_mode": "independent_attestation",
       "closure_required_for": [
@@ -936,7 +1032,7 @@
       "acceptance_item_id": "DISC-003",
       "group_id": "design_partner_qualification",
       "source_ref": "docs/product/prd.md#design-partner-qualification",
-      "source_text": "After the v3 privacy, model-data, authorization, and evidence contracts are approved, and before the first invitation, the parties freeze cohort, eligibility, price, evidence sources, privacy and model-data protocol, baseline method, material maintainer comparison threshold, correction rubric, campaign COGS boundary, measurement windows, one material provider-outcome metric and threshold, and absolute judgment deadline. A provider threshold is material only when the economic buyer records that meeting it would justify a retirement or paid-continuation decision and missing it makes the campaign fail.",
+      "source_text": "After the v3 privacy, model-data, authorization, and evidence contracts are approved, and before the first invitation, the parties freeze cohort, eligibility, price, evidence sources, privacy and model-data protocol, baseline method, material maintainer comparison threshold, correction rubric, campaign COGS boundary, minimum contribution margin or maximum Lumyn Operator hours per reviewable outcome, measurement windows, one material provider-outcome metric and threshold, and absolute judgment deadline. A provider threshold is material only when the economic buyer records that meeting it would justify a retirement or paid-continuation decision and missing it makes the campaign fail.",
       "kind": "external_evidence_gate",
       "evidence_mode": "independent_attestation",
       "closure_required_for": [
@@ -1002,7 +1098,7 @@
       "acceptance_item_id": "PILOT-003",
       "group_id": "provider_campaign_pilot",
       "source_ref": "docs/product/prd.md#provider-campaign-pilot",
-      "source_text": "At least two distinct repositories produce tested, reviewable migration outcomes with explicit evidence boundaries by the frozen pilot deadline.",
+      "source_text": "At least two distinct repositories produce tested, reviewable migration outcomes with explicit evidence boundaries by the frozen pilot deadline; at least one starts from the authenticated provider channel, uses `installed_preauthorization`, is generated through Lumyn's deterministic or agent-assisted path without bespoke Lumyn Operator code edits, is independently verified, and is delivered by the composed `lumyn update --event` flow as a Lumyn-opened draft PR, then emits a consumer-consented provider status projection bound to that same event, installation authorization, candidate, verification evidence, and draft PR.",
       "kind": "external_evidence_gate",
       "evidence_mode": "independent_attestation",
       "closure_required_for": [
@@ -1069,7 +1165,7 @@
       "acceptance_item_id": "PILOT-006",
       "group_id": "provider_campaign_pilot",
       "source_ref": "docs/product/prd.md#provider-campaign-pilot",
-      "source_text": "Actual cleared payment, model/tool COGS, Lumyn Operator hours, Consumer Maintainer time, support effort, and the frozen primary provider outcome are measured from source evidence, and the provider outcome clears its frozen material threshold.",
+      "source_text": "Actual cleared payment, model/tool COGS, Lumyn Operator hours, Consumer Maintainer time, support effort, and the frozen primary provider outcome are measured from source evidence, and the provider outcome clears its frozen material threshold while the campaign clears its frozen contribution-margin or operator-automation threshold.",
       "kind": "external_evidence_gate",
       "evidence_mode": "independent_attestation",
       "closure_required_for": [
@@ -1091,7 +1187,7 @@
       "acceptance_item_id": "PILOT-007",
       "group_id": "provider_campaign_pilot",
       "source_ref": "docs/product/prd.md#provider-campaign-pilot",
-      "source_text": "Every migration records accepted, merged, closed, reverted, corrected, blocked, and residual-risk outcomes through the frozen observation window.",
+      "source_text": "Every migration records accepted, merged, closed, reverted, corrected, blocked, and residual-risk outcomes through the frozen observation window; each participating installation emits or explicitly declines its allowlisted event-bound status projection, and the projection from the qualifying `PILOT-003` run reaches the API Provider.",
       "kind": "external_evidence_gate",
       "evidence_mode": "independent_attestation",
       "closure_required_for": [

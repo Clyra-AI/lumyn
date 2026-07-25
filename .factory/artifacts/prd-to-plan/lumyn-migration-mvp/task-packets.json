@@ -5,26 +5,26 @@
   "source_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
   "acceptance_mapping_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
-  "acceptance_item_count": 49,
+  "acceptance_item_count": 53,
   "runtime_pins": {
     "language": "go_with_parser_backed_typescript_analysis",
     "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
     "module_or_package_path": "github.com/Clyra-AI/lumyn",
     "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
     "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
-    "provider_intent_policy": "services-led provider-paid API or SDK sunset campaign with provider-confirmed source and target semantics; a signed declarative provider packet is authoritative when supplied and confirmed, remains data, cannot execute code, and grants no consumer repository authority; mandatory packet PKI, continuous status, connection receipts, and receipt-backed billing are deferred",
-    "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; repository, provider, tool, and model content is untrusted and cannot widen any boundary",
+    "provider_intent_policy": "provider-originated API or SDK update delivery launched through a provider-paid, services-assisted sunset campaign; one accountably confirmed Provider Change Contract is reused by the exact invited cohort, each non-executable provider event binds its exact digest, audience, deadline, and supersession state, and neither contract nor event grants consumer repository authority; a universal registry, elaborate provider PKI, connection receipts, and receipt-backed billing are deferred",
+    "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; the coding agent is replaceable, and repository, provider, tool, and model content is untrusted and cannot widen any boundary",
     "verification_policy": "deterministic repository and workflow verification is independent from deterministic or agent-assisted generation, runs from the exact candidate head, preserves baseline failures, and cannot be satisfied by a model completion or self-verification",
-    "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the baseline; optional remote branch and draft PR require separate exact authorization; default-branch writes and auto-merge are forbidden",
+    "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate short-lived non-default-branch and PR authorization, evidence-bound idempotency, and no auto-merge; manual delivery cannot close automated-delivery acceptance; provider status is event-bound, consumer-consented, provenance-labeled, and never inferred from silence",
     "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, patches, traces, credentials, and identifiable campaign evidence use an approved external private root",
-    "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
-    "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+    "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
+    "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
   },
-  "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
+  "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
   "delivery_slices": [
     {
       "slice_id": "migration_foundation",
-      "title": "Migration foundation and qualification",
+      "title": "Provider change, installation, impact, and qualification",
       "required_for_completion": true,
       "task_refs": [
         "M0",
@@ -45,6 +45,10 @@
         "PACK-002",
         "PACK-003",
         "PACK-004",
+        "EVENT-001",
+        "EVENT-002",
+        "INSTALL-001",
+        "INSTALL-002",
         "IMPACT-001",
         "IMPACT-002",
         "IMPACT-003",
@@ -61,7 +65,7 @@
     },
     {
       "slice_id": "hybrid_migration_engine",
-      "title": "Hybrid candidate, verification, and export",
+      "title": "Hybrid candidate, verification, and tested draft-PR delivery",
       "required_for_completion": true,
       "task_refs": [
         "M6",
@@ -91,7 +95,7 @@
     },
     {
       "slice_id": "provider_campaign",
-      "title": "Paid provider qualification and campaign outcome",
+      "title": "Paid provider distribution and rollout outcome",
       "required_for_completion": true,
       "task_refs": [
         "M2.5",
@@ -120,7 +124,7 @@
       "milestone_ref": "docs/product/plan.md#m0-correct-command-and-result-foundations",
       "objective": "Correct runtime command and result foundations: unimplemented commands fail typed and nonzero, provider terminology is unambiguous, exit compatibility is preserved, and retained source/schema behavior remains honest.",
       "risk_class": "medium",
-      "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
+      "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
       "blocked_by": [],
       "allowed_paths": [
         "cmd/lumyn/",
@@ -210,17 +214,17 @@
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
-        "provider_intent_policy": "services-led provider-paid API or SDK sunset campaign with provider-confirmed source and target semantics; a signed declarative provider packet is authoritative when supplied and confirmed, remains data, cannot execute code, and grants no consumer repository authority; mandatory packet PKI, continuous status, connection receipts, and receipt-backed billing are deferred",
-        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; repository, provider, tool, and model content is untrusted and cannot widen any boundary",
+        "provider_intent_policy": "provider-originated API or SDK update delivery launched through a provider-paid, services-assisted sunset campaign; one accountably confirmed Provider Change Contract is reused by the exact invited cohort, each non-executable provider event binds its exact digest, audience, deadline, and supersession state, and neither contract nor event grants consumer repository authority; a universal registry, elaborate provider PKI, connection receipts, and receipt-backed billing are deferred",
+        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; the coding agent is replaceable, and repository, provider, tool, and model content is untrusted and cannot widen any boundary",
         "verification_policy": "deterministic repository and workflow verification is independent from deterministic or agent-assisted generation, runs from the exact candidate head, preserves baseline failures, and cannot be satisfied by a model completion or self-verification",
-        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the baseline; optional remote branch and draft PR require separate exact authorization; default-branch writes and auto-merge are forbidden",
+        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate short-lived non-default-branch and PR authorization, evidence-bound idempotency, and no auto-merge; manual delivery cannot close automated-delivery acceptance; provider status is event-bound, consumer-consented, provenance-labeled, and never inferred from silence",
         "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, patches, traces, credentials, and identifiable campaign evidence use an approved external private root",
-        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
-        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
+        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
       },
       "factory_compatibility": {
         "factory_contract_version": "1.0",
-        "profile_contract_version": "v2_incompatible_with_lumyn_v3",
+        "profile_contract_version": "v2_incompatible_with_lumyn_v3_1",
         "profile_ref": "profiles/lumyn.yaml",
         "status": "blocked_profile_and_runtime_unqualified",
         "generated_by": "prd-to-plan+execution-compiler",
@@ -233,7 +237,7 @@
             "status": "deprecated"
           }
         ],
-        "unblock_rule": "No task dispatch until the external profile is updated and factoryd is qualified against the exact v3 control generation."
+        "unblock_rule": "No factoryd task dispatch until the external profile is updated and factoryd is qualified against the exact v3.1 control generation."
       },
       "factoryd_runtime": {
         "state_dir": ".factoryd/",
@@ -243,18 +247,18 @@
         "worker_command": "",
         "dispatch_enabled": false,
         "fail_closed": true,
-        "profile_compatibility_status": "blocked_v3_profile_update_required",
-        "runtime_qualification_status": "blocked_factoryd_v3_qualification_required",
+        "profile_compatibility_status": "blocked_v3_1_profile_update_required",
+        "runtime_qualification_status": "blocked_factoryd_v3_1_qualification_required",
         "unblock_dependencies": [
-          "Update external Factory profiles/lumyn.yaml to the approved v3 services-led hybrid contract.",
-          "Qualify factoryd against this exact v3 task, authority, bounded-model, evidence, and closure generation.",
+          "Update external Factory profiles/lumyn.yaml to the approved v3.1 provider-originated update-delivery contract.",
+          "Qualify factoryd against this exact v3.1 task, installation, authority, bounded-model, delivery, status, evidence, and closure generation.",
           "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after both external dependencies are recorded."
         ],
         "approval_posture": "Factory approval never substitutes for exact private Lumyn product action authorization or human merge.",
         "credential_posture": "no ambient consumer, provider, model, sandbox, or GitHub secrets",
         "network_posture": "offline by default; exact task-scoped endpoints only",
         "runtime_control": {
-          "control_id": "runtime-control-lumyn-v3-m0",
+          "control_id": "runtime-control-lumyn-v3-1-m0",
           "owner": "lumyn-maintainers",
           "autonomy_level": "restricted",
           "mission_paused": true,
@@ -265,7 +269,7 @@
           "max_write_scope_paths": [],
           "release_freeze": {
             "enabled": true,
-            "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
+            "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
             "exception_ref": ""
           },
           "launch_request": {
@@ -273,7 +277,7 @@
             "requested_write_paths": [],
             "requested_adapter": "codex_cli",
             "expected_decision": "deny",
-            "reason_code": "factory_profile_and_runtime_v3_unqualified"
+            "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
           },
           "conflict_behavior": "fail_closed"
         },
@@ -286,7 +290,7 @@
         "python3 scripts/validate_repo_pack.py"
       ],
       "stop_conditions": [
-        "Factory profile or factoryd runtime remains unqualified",
+        "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
         "acceptance item is absent, unmapped, or closed only by milestone or slice",
         "provider intent, consumer authority, model boundary, or redaction is ambiguous",
         "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
@@ -301,11 +305,12 @@
       "task_order": 2,
       "work_item_id": "lumyn-v3-m1",
       "milestone_ref": "docs/product/plan.md#m1-build-deterministic-agent-assisted-blocked-and-generic-agent-benchmarks",
-      "objective": "Freeze provenance-backed deterministic, agent-assisted, blocked, and negative migration benchmarks plus a fair generic-agent baseline under the same snapshot, evidence, commands, role, and time budget.",
+      "objective": "Freeze provenance-backed deterministic, agent-assisted, blocked, and negative benchmarks plus a fair generic-agent baseline, and prove a public-fixture event-to-PR-bundle walking skeleton with deterministic external-write fakes.",
       "risk_class": "medium",
-      "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
+      "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
       "blocked_by": [
-        "M0"
+        "M0",
+        "M2"
       ],
       "allowed_paths": [
         "examples/migration-packs/",
@@ -332,6 +337,10 @@
       ],
       "acceptance_item_ids": [
         "PACK-001",
+        "EVENT-001",
+        "EVENT-002",
+        "INSTALL-001",
+        "INSTALL-002",
         "IMPACT-005",
         "AGENT-001",
         "AGENT-002",
@@ -344,16 +353,20 @@
         "PILOT-005"
       ],
       "acceptance_checks": [
-        "PACK-001: Pinned public docs, OpenAPI descriptions, SDK releases, and migration guidance can produce a versioned `public_derived` migration pack with source digests and license/provenance records.",
+        "PACK-001: Pinned public docs, OpenAPI descriptions, SDK releases, and migration guidance can produce a versioned `public_derived` Provider Change Contract with source digests and license/provenance records.",
+        "EVENT-001: Lumyn accepts a Provider Change Event only when its immutable identity and version, provider-controlled pinned transport or attended-recovery provenance, issuer and authentication, monotonic sequence and freshness, embedded or exact-URL contract delivery and retrieved-byte digest, API or SDK, audience, deadline, severity, and supersession or withdrawal state validate; the event and Provider Change Contract remain non-executable.",
+        "EVENT-002: Duplicate, replayed, stale, conflicting, expired, superseded, withdrawn, wrong-audience, or unauthenticated events fail closed; an attended import cannot count as provider-channel delivery or authorize an installed-preauthorization write.",
+        "INSTALL-001: A revocable Consumer Installation binds the exact provider-controlled channel and authentication key, repository and package root, audience or version selectors, action ceiling, authorization mode, paths, commands, model-data policy and budgets, GitHub token-issuance policy, provider-reporting fields, retention and deletion, expiry, and revocation without storing a GitHub token.",
+        "INSTALL-002: Every event-specific authorization is an immutable, non-widening derivation of the installation; `per_event_approval` binds the exact plan, while `installed_preauthorization` permits side effects only when event, plan, commands, paths, model policy, budgets, verification, and short-lived credential issuance all satisfy the installed policy. An action-mode label alone grants no side effect.",
         "IMPACT-005: On frozen held-out fixtures, supported affected sites meet the preregistered recall and precision thresholds with zero false `unaffected` results; real-repository value is not claimed from fixtures alone.",
         "AGENT-001: Deterministic transforms produce byte-stable candidates for identical pinned inputs.",
         "AGENT-002: Agent-assisted execution occurs only in a consumer-local or explicitly consumer-approved environment and discloses Model Provider, context, data-egress, and retention posture before execution.",
         "AGENT-003: The agent enforces approved path, tool, command, network, credential, time, token, cost, attempt, file, and diff budgets.",
-        "AGENT-004: Every agent edit maps to a migration-pack item, integration graph evidence, and recorded rationale; unrelated edits fail.",
+        "AGENT-004: Every agent edit maps to a Provider Change Contract item, repository-impact evidence, and recorded rationale; unrelated edits fail.",
         "AGENT-005: The repair loop performs no more than the approved attempts, cannot expand scope, and stops on non-diagnostic failure or exhausted budget.",
         "AGENT-006: Missing business values, auth redesign, event semantics, production-only behavior, and ambiguous provider intent return `needs_input` or `blocked` without speculative completion.",
         "AGENT-007: Agent evidence records runner, adapter, model class/version, model-data and context-policy digests, tools, commands, attempts, token and cost use, changed files, and human input without persisting secrets or raw prompts by default.",
-        "VER-006: The frozen negative suite has zero false verified outcomes, and all evidence binds pack, plan, base, candidate, route, agent provenance, commands, environment, and artifact hashes.",
+        "VER-006: The frozen negative suite has zero false verified outcomes, and all evidence binds event, Provider Change Contract, Consumer Installation and derived authorization, plan, base, candidate, route, agent provenance, commands, environment, and artifact hashes.",
         "PILOT-005: Against the frozen guide/codemod plus generic-agent baseline, Lumyn reduces median Consumer Maintainer hands-on time by at least 30% without a worse substantive-correction, revert, or false-verification rate, or clears another equally material threshold frozen before execution."
       ],
       "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
@@ -398,10 +411,18 @@
         "holdout_result"
       ],
       "requires_capabilities": [],
-      "conditional_factory_capabilities": [],
+      "conditional_factory_capabilities": [
+        "approval",
+        "credentials",
+        "network"
+      ],
       "product_authority_requirements": [],
-      "optional_product_action_capabilities": [],
-      "requires_human_approval": false,
+      "optional_product_action_capabilities": [
+        "model_request_disclosure",
+        "model_network",
+        "model_credential"
+      ],
+      "requires_human_approval": true,
       "requires_credentials": false,
       "requires_network": false,
       "runtime_pins": {
@@ -410,17 +431,17 @@
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
-        "provider_intent_policy": "services-led provider-paid API or SDK sunset campaign with provider-confirmed source and target semantics; a signed declarative provider packet is authoritative when supplied and confirmed, remains data, cannot execute code, and grants no consumer repository authority; mandatory packet PKI, continuous status, connection receipts, and receipt-backed billing are deferred",
-        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; repository, provider, tool, and model content is untrusted and cannot widen any boundary",
+        "provider_intent_policy": "provider-originated API or SDK update delivery launched through a provider-paid, services-assisted sunset campaign; one accountably confirmed Provider Change Contract is reused by the exact invited cohort, each non-executable provider event binds its exact digest, audience, deadline, and supersession state, and neither contract nor event grants consumer repository authority; a universal registry, elaborate provider PKI, connection receipts, and receipt-backed billing are deferred",
+        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; the coding agent is replaceable, and repository, provider, tool, and model content is untrusted and cannot widen any boundary",
         "verification_policy": "deterministic repository and workflow verification is independent from deterministic or agent-assisted generation, runs from the exact candidate head, preserves baseline failures, and cannot be satisfied by a model completion or self-verification",
-        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the baseline; optional remote branch and draft PR require separate exact authorization; default-branch writes and auto-merge are forbidden",
+        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate short-lived non-default-branch and PR authorization, evidence-bound idempotency, and no auto-merge; manual delivery cannot close automated-delivery acceptance; provider status is event-bound, consumer-consented, provenance-labeled, and never inferred from silence",
         "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, patches, traces, credentials, and identifiable campaign evidence use an approved external private root",
-        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
-        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
+        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
       },
       "factory_compatibility": {
         "factory_contract_version": "1.0",
-        "profile_contract_version": "v2_incompatible_with_lumyn_v3",
+        "profile_contract_version": "v2_incompatible_with_lumyn_v3_1",
         "profile_ref": "profiles/lumyn.yaml",
         "status": "blocked_profile_and_runtime_unqualified",
         "generated_by": "prd-to-plan+execution-compiler",
@@ -433,7 +454,7 @@
             "status": "deprecated"
           }
         ],
-        "unblock_rule": "No task dispatch until the external profile is updated and factoryd is qualified against the exact v3 control generation."
+        "unblock_rule": "No factoryd task dispatch until the external profile is updated and factoryd is qualified against the exact v3.1 control generation."
       },
       "factoryd_runtime": {
         "state_dir": ".factoryd/",
@@ -443,18 +464,18 @@
         "worker_command": "",
         "dispatch_enabled": false,
         "fail_closed": true,
-        "profile_compatibility_status": "blocked_v3_profile_update_required",
-        "runtime_qualification_status": "blocked_factoryd_v3_qualification_required",
+        "profile_compatibility_status": "blocked_v3_1_profile_update_required",
+        "runtime_qualification_status": "blocked_factoryd_v3_1_qualification_required",
         "unblock_dependencies": [
-          "Update external Factory profiles/lumyn.yaml to the approved v3 services-led hybrid contract.",
-          "Qualify factoryd against this exact v3 task, authority, bounded-model, evidence, and closure generation.",
+          "Update external Factory profiles/lumyn.yaml to the approved v3.1 provider-originated update-delivery contract.",
+          "Qualify factoryd against this exact v3.1 task, installation, authority, bounded-model, delivery, status, evidence, and closure generation.",
           "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after both external dependencies are recorded."
         ],
         "approval_posture": "Factory approval never substitutes for exact private Lumyn product action authorization or human merge.",
         "credential_posture": "no ambient consumer, provider, model, sandbox, or GitHub secrets",
         "network_posture": "offline by default; exact task-scoped endpoints only",
         "runtime_control": {
-          "control_id": "runtime-control-lumyn-v3-m1",
+          "control_id": "runtime-control-lumyn-v3-1-m1",
           "owner": "lumyn-maintainers",
           "autonomy_level": "restricted",
           "mission_paused": true,
@@ -465,7 +486,7 @@
           "max_write_scope_paths": [],
           "release_freeze": {
             "enabled": true,
-            "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
+            "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
             "exception_ref": ""
           },
           "launch_request": {
@@ -473,7 +494,7 @@
             "requested_write_paths": [],
             "requested_adapter": "codex_cli",
             "expected_decision": "deny",
-            "reason_code": "factory_profile_and_runtime_v3_unqualified"
+            "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
           },
           "conflict_behavior": "fail_closed"
         },
@@ -486,7 +507,7 @@
         "python3 scripts/validate_repo_pack.py"
       ],
       "stop_conditions": [
-        "Factory profile or factoryd runtime remains unqualified",
+        "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
         "acceptance item is absent, unmapped, or closed only by milestone or slice",
         "provider intent, consumer authority, model boundary, or redaction is ambiguous",
         "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
@@ -495,6 +516,35 @@
         "commercial evidence or generic-agent comparison is not direct, frozen, fair, and independently attested",
         "task path or acceptance scope changes without a regenerated control set"
       ],
+      "walking_skeleton_contract": {
+        "input_mode": "public_or_synthetic_only",
+        "stages": [
+          "provider_change_event",
+          "consumer_installation",
+          "repository_impact",
+          "migration_plan",
+          "candidate",
+          "verification",
+          "pr_bundle"
+        ],
+        "generic_agent_harness": "existing_codex_harness_through_replaceable_adapter",
+        "external_write_mode": "deterministic_fakes_only",
+        "cannot_close_acceptance_items": [
+          "EVENT-001",
+          "EVENT-002",
+          "INSTALL-001",
+          "INSTALL-002",
+          "DISC-001",
+          "DISC-002",
+          "EXP-003",
+          "PILOT-002",
+          "PILOT-003",
+          "PILOT-004"
+        ],
+        "proof_boundary": "contract_composition_not_product_or_commercial_proof",
+        "live_model_leg_requires_conditional_grants": true,
+        "no_grant_fallback": "same_adapter_contract_with_deterministic_fake"
+      },
       "holdout_policy": {
         "mode": "provision",
         "private_root_env": "LUMYN_HOLDOUT_ROOT",
@@ -525,10 +575,10 @@
       "task_id": "M2",
       "task_order": 3,
       "work_item_id": "lumyn-v3-m2",
-      "milestone_ref": "docs/product/plan.md#m2-define-migration-agent-verification-export-and-privacy-contracts",
-      "objective": "Define executable migration-pack, integration, plan, candidate, bounded agent, verification, export, campaign, privacy, redaction, authorization, and evidence contracts without provider PKI, receipt billing, or hosted control-plane prerequisites.",
+      "milestone_ref": "docs/product/plan.md#m2-define-update-installation-agent-verification-delivery-and-privacy-contracts",
+      "objective": "Define executable provider-event, Provider Change Contract, Consumer Installation, event authorization, repository-impact, plan, candidate, replaceable-agent, verification, delivery, status, privacy, redaction, and evidence contracts without universal registry, receipt billing, or hosted control-plane prerequisites.",
       "risk_class": "high",
-      "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
+      "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
       "blocked_by": [
         "M0"
       ],
@@ -543,7 +593,10 @@
         "examples/",
         "tests/",
         "docs/",
-        "CHANGELOG.md"
+        "CHANGELOG.md",
+        "internal/change/",
+        "internal/installation/",
+        "internal/status/"
       ],
       "forbidden_paths": [
         ".git/",
@@ -559,14 +612,22 @@
         "hosted control plane, provider PKI, connection receipt billing, or annual platform claims"
       ],
       "acceptance_item_ids": [
+        "EVENT-001",
+        "EVENT-002",
+        "INSTALL-001",
+        "INSTALL-002",
         "TRUST-001",
         "TRUST-002",
         "TRUST-003",
         "TRUST-004"
       ],
       "acceptance_checks": [
-        "TRUST-001: Repository read, local write, commands, model-data egress, registry, sandbox, credentials, remote branch, PR, retention, deletion, and provider reporting are independently approved.",
-        "TRUST-002: Migration packs and provider artifacts cannot execute code; production credentials and production mutation are prohibited.",
+        "EVENT-001: Lumyn accepts a Provider Change Event only when its immutable identity and version, provider-controlled pinned transport or attended-recovery provenance, issuer and authentication, monotonic sequence and freshness, embedded or exact-URL contract delivery and retrieved-byte digest, API or SDK, audience, deadline, severity, and supersession or withdrawal state validate; the event and Provider Change Contract remain non-executable.",
+        "EVENT-002: Duplicate, replayed, stale, conflicting, expired, superseded, withdrawn, wrong-audience, or unauthenticated events fail closed; an attended import cannot count as provider-channel delivery or authorize an installed-preauthorization write.",
+        "INSTALL-001: A revocable Consumer Installation binds the exact provider-controlled channel and authentication key, repository and package root, audience or version selectors, action ceiling, authorization mode, paths, commands, model-data policy and budgets, GitHub token-issuance policy, provider-reporting fields, retention and deletion, expiry, and revocation without storing a GitHub token.",
+        "INSTALL-002: Every event-specific authorization is an immutable, non-widening derivation of the installation; `per_event_approval` binds the exact plan, while `installed_preauthorization` permits side effects only when event, plan, commands, paths, model policy, budgets, verification, and short-lived credential issuance all satisfy the installed policy. An action-mode label alone grants no side effect.",
+        "TRUST-001: A revocable Consumer Installation binds provider or channel, repository and package root, audience or version selectors, allowed actions, paths, commands, model-data egress, registry, sandbox, credentials, remote branch, PR, retention, deletion, provider reporting, expiry, and disclosure; each event-specific authorization is derived without widening that installed policy.",
+        "TRUST-002: Provider Change Contracts, events, and provider artifacts cannot execute code; production credentials and production mutation are prohibited.",
         "TRUST-003: Cloud-model context transfer, BYOK, and local-model posture are explicit; secrets and prohibited data are redacted or blocked before model or artifact persistence.",
         "TRUST-004: Consumer-private artifacts remain outside the checkout and public repository, and provider sponsorship never grants source or model context access."
       ],
@@ -622,17 +683,17 @@
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
-        "provider_intent_policy": "services-led provider-paid API or SDK sunset campaign with provider-confirmed source and target semantics; a signed declarative provider packet is authoritative when supplied and confirmed, remains data, cannot execute code, and grants no consumer repository authority; mandatory packet PKI, continuous status, connection receipts, and receipt-backed billing are deferred",
-        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; repository, provider, tool, and model content is untrusted and cannot widen any boundary",
+        "provider_intent_policy": "provider-originated API or SDK update delivery launched through a provider-paid, services-assisted sunset campaign; one accountably confirmed Provider Change Contract is reused by the exact invited cohort, each non-executable provider event binds its exact digest, audience, deadline, and supersession state, and neither contract nor event grants consumer repository authority; a universal registry, elaborate provider PKI, connection receipts, and receipt-backed billing are deferred",
+        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; the coding agent is replaceable, and repository, provider, tool, and model content is untrusted and cannot widen any boundary",
         "verification_policy": "deterministic repository and workflow verification is independent from deterministic or agent-assisted generation, runs from the exact candidate head, preserves baseline failures, and cannot be satisfied by a model completion or self-verification",
-        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the baseline; optional remote branch and draft PR require separate exact authorization; default-branch writes and auto-merge are forbidden",
+        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate short-lived non-default-branch and PR authorization, evidence-bound idempotency, and no auto-merge; manual delivery cannot close automated-delivery acceptance; provider status is event-bound, consumer-consented, provenance-labeled, and never inferred from silence",
         "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, patches, traces, credentials, and identifiable campaign evidence use an approved external private root",
-        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
-        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
+        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
       },
       "factory_compatibility": {
         "factory_contract_version": "1.0",
-        "profile_contract_version": "v2_incompatible_with_lumyn_v3",
+        "profile_contract_version": "v2_incompatible_with_lumyn_v3_1",
         "profile_ref": "profiles/lumyn.yaml",
         "status": "blocked_profile_and_runtime_unqualified",
         "generated_by": "prd-to-plan+execution-compiler",
@@ -645,7 +706,7 @@
             "status": "deprecated"
           }
         ],
-        "unblock_rule": "No task dispatch until the external profile is updated and factoryd is qualified against the exact v3 control generation."
+        "unblock_rule": "No factoryd task dispatch until the external profile is updated and factoryd is qualified against the exact v3.1 control generation."
       },
       "factoryd_runtime": {
         "state_dir": ".factoryd/",
@@ -655,18 +716,18 @@
         "worker_command": "",
         "dispatch_enabled": false,
         "fail_closed": true,
-        "profile_compatibility_status": "blocked_v3_profile_update_required",
-        "runtime_qualification_status": "blocked_factoryd_v3_qualification_required",
+        "profile_compatibility_status": "blocked_v3_1_profile_update_required",
+        "runtime_qualification_status": "blocked_factoryd_v3_1_qualification_required",
         "unblock_dependencies": [
-          "Update external Factory profiles/lumyn.yaml to the approved v3 services-led hybrid contract.",
-          "Qualify factoryd against this exact v3 task, authority, bounded-model, evidence, and closure generation.",
+          "Update external Factory profiles/lumyn.yaml to the approved v3.1 provider-originated update-delivery contract.",
+          "Qualify factoryd against this exact v3.1 task, installation, authority, bounded-model, delivery, status, evidence, and closure generation.",
           "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after both external dependencies are recorded."
         ],
         "approval_posture": "Factory approval never substitutes for exact private Lumyn product action authorization or human merge.",
         "credential_posture": "no ambient consumer, provider, model, sandbox, or GitHub secrets",
         "network_posture": "offline by default; exact task-scoped endpoints only",
         "runtime_control": {
-          "control_id": "runtime-control-lumyn-v3-m2",
+          "control_id": "runtime-control-lumyn-v3-1-m2",
           "owner": "lumyn-maintainers",
           "autonomy_level": "restricted",
           "mission_paused": true,
@@ -677,7 +738,7 @@
           "max_write_scope_paths": [],
           "release_freeze": {
             "enabled": true,
-            "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
+            "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
             "exception_ref": ""
           },
           "launch_request": {
@@ -685,7 +746,7 @@
             "requested_write_paths": [],
             "requested_adapter": "codex_cli",
             "expected_decision": "deny",
-            "reason_code": "factory_profile_and_runtime_v3_unqualified"
+            "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
           },
           "conflict_behavior": "fail_closed"
         },
@@ -698,7 +759,7 @@
         "python3 scripts/validate_repo_pack.py"
       ],
       "stop_conditions": [
-        "Factory profile or factoryd runtime remains unqualified",
+        "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
         "acceptance item is absent, unmapped, or closed only by milestone or slice",
         "provider intent, consumer authority, model boundary, or redaction is ambiguous",
         "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
@@ -706,7 +767,108 @@
         "provider code access, production credential, default-branch write, or auto-merge is requested",
         "commercial evidence or generic-agent comparison is not direct, frozen, fair, and independently attested",
         "task path or acceptance scope changes without a regenerated control set"
-      ]
+      ],
+      "update_channel_contract": {
+        "provider_change_contract_confirmation": "once_per_exact_version",
+        "provider_event_fields": [
+          "event_id",
+          "event_version",
+          "issuer",
+          "api_or_sdk",
+          "contract_digest",
+          "contract_location",
+          "audience",
+          "deadline",
+          "severity",
+          "sequence",
+          "issued_at",
+          "expires_at",
+          "transport_origin",
+          "signature_provenance",
+          "supersession_or_withdrawal"
+        ],
+        "provider_event_non_executable": true,
+        "authenticated_origin_required_for_unattended_writes": true,
+        "rejected_event_states": [
+          "duplicate",
+          "replayed",
+          "stale",
+          "conflicting",
+          "expired",
+          "superseded",
+          "withdrawn",
+          "wrong_audience",
+          "origin_mismatch",
+          "signature_invalid",
+          "unauthenticated"
+        ],
+        "consumer_installation_fields": [
+          "provider_or_channel",
+          "channel_origin_and_authentication_key",
+          "repository",
+          "package_root",
+          "audience_or_version_selectors",
+          "allowed_actions",
+          "authorization_mode",
+          "paths",
+          "commands",
+          "model_data_and_budgets",
+          "github_token_issuance_policy",
+          "provider_reporting",
+          "retention_and_deletion",
+          "disclosure",
+          "expiry",
+          "revocation"
+        ],
+        "consumer_installation_action_modes": [
+          "notify_only",
+          "scan_only",
+          "prepare_patch",
+          "open_draft_pr"
+        ],
+        "event_specific_authorization_snapshot_required": true,
+        "event_may_widen_installation": false,
+        "provider_status": {
+          "exact_event_and_evidence_binding": true,
+          "consumer_consent_required": true,
+          "provenance_labels": [
+            "observed",
+            "consumer_reported",
+            "unknown"
+          ],
+          "silence_is_unknown": true,
+          "merge_is_not_retired": true,
+          "raw_consumer_evidence": false,
+          "not_applicable_requires_explicit_evidence": true,
+          "unaffected_requires_explicit_evidence": true
+        },
+        "provider_channel_transport": {
+          "transport_id": "pinned_provider_https_signed_manifest_v1",
+          "publisher": "provider_operator",
+          "exact_https_url_pinned": true,
+          "campaign_public_key_pinned": true,
+          "detached_signature_required": true,
+          "monotonic_sequence_required": true,
+          "issued_and_expiry_required": true,
+          "contract_delivery_modes": [
+            "embedded",
+            "exact_provider_https_url"
+          ],
+          "contract_retrieved_bytes_digest_verified": true,
+          "attended_import_mode": "recovery_only",
+          "attended_import_counts_as_channel_delivery": false,
+          "attended_import_may_authorize_installed_preauthorization": false
+        },
+        "consumer_installation_authorization_modes": [
+          "per_event_approval",
+          "installed_preauthorization"
+        ],
+        "action_modes_are_ceilings": true,
+        "stored_github_token_allowed": false,
+        "per_event_approval_binds_exact_plan": true,
+        "installed_preauthorization_requires_all_bound_values_in_policy": true,
+        "action_mode_alone_grants_side_effect": false
+      }
     },
     {
       "task_id": "M2.5",
@@ -715,7 +877,7 @@
       "milestone_ref": "docs/product/plan.md#m25-pre-sell-and-qualify-one-provider-campaign",
       "objective": "Secure cleared non-refundable provider prepayment and five reachable Eligible Consumer Units across five distinct organizations, then close DISC-003 only after approved M2 privacy, model-data, authorization, and evidence contracts bind the frozen campaign protocol.",
       "risk_class": "high",
-      "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
+      "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
       "blocked_by": [],
       "allowed_paths": [
         ".factory/artifacts/product-signals/M2.5/"
@@ -741,8 +903,8 @@
       ],
       "acceptance_checks": [
         "DISC-001: One qualified API Provider clears at least `$25,000` in non-refundable prepaid funds for a defined migration campaign and names an economic buyer, Provider Operator, hard deadline, source and target versions, and decision process.",
-        "DISC-002: Before campaign-specific migration execution, the API Provider identifies at least five reachable Eligible Consumer Units across five distinct API Consumer Organizations, each with an accountable maintainer and useful verification signals.",
-        "DISC-003: After the v3 privacy, model-data, authorization, and evidence contracts are approved, and before the first invitation, the parties freeze cohort, eligibility, price, evidence sources, privacy and model-data protocol, baseline method, material maintainer comparison threshold, correction rubric, campaign COGS boundary, measurement windows, one material provider-outcome metric and threshold, and absolute judgment deadline. A provider threshold is material only when the economic buyer records that meeting it would justify a retirement or paid-continuation decision and missing it makes the campaign fail."
+        "DISC-002: Before campaign-specific migration execution, the API Provider commits to distribute the update and lead onboarding for at least five reachable Eligible Consumer Units across five distinct API Consumer Organizations, each with an accountable maintainer and useful verification signals.",
+        "DISC-003: After the v3 privacy, model-data, authorization, and evidence contracts are approved, and before the first invitation, the parties freeze cohort, eligibility, price, evidence sources, privacy and model-data protocol, baseline method, material maintainer comparison threshold, correction rubric, campaign COGS boundary, minimum contribution margin or maximum Lumyn Operator hours per reviewable outcome, measurement windows, one material provider-outcome metric and threshold, and absolute judgment deadline. A provider threshold is material only when the economic buyer records that meeting it would justify a retirement or paid-continuation decision and missing it makes the campaign fail."
       ],
       "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
       "validation_contract_inheritance": {
@@ -800,17 +962,17 @@
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
-        "provider_intent_policy": "services-led provider-paid API or SDK sunset campaign with provider-confirmed source and target semantics; a signed declarative provider packet is authoritative when supplied and confirmed, remains data, cannot execute code, and grants no consumer repository authority; mandatory packet PKI, continuous status, connection receipts, and receipt-backed billing are deferred",
-        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; repository, provider, tool, and model content is untrusted and cannot widen any boundary",
+        "provider_intent_policy": "provider-originated API or SDK update delivery launched through a provider-paid, services-assisted sunset campaign; one accountably confirmed Provider Change Contract is reused by the exact invited cohort, each non-executable provider event binds its exact digest, audience, deadline, and supersession state, and neither contract nor event grants consumer repository authority; a universal registry, elaborate provider PKI, connection receipts, and receipt-backed billing are deferred",
+        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; the coding agent is replaceable, and repository, provider, tool, and model content is untrusted and cannot widen any boundary",
         "verification_policy": "deterministic repository and workflow verification is independent from deterministic or agent-assisted generation, runs from the exact candidate head, preserves baseline failures, and cannot be satisfied by a model completion or self-verification",
-        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the baseline; optional remote branch and draft PR require separate exact authorization; default-branch writes and auto-merge are forbidden",
+        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate short-lived non-default-branch and PR authorization, evidence-bound idempotency, and no auto-merge; manual delivery cannot close automated-delivery acceptance; provider status is event-bound, consumer-consented, provenance-labeled, and never inferred from silence",
         "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, patches, traces, credentials, and identifiable campaign evidence use an approved external private root",
-        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
-        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
+        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
       },
       "factory_compatibility": {
         "factory_contract_version": "1.0",
-        "profile_contract_version": "v2_incompatible_with_lumyn_v3",
+        "profile_contract_version": "v2_incompatible_with_lumyn_v3_1",
         "profile_ref": "profiles/lumyn.yaml",
         "status": "blocked_profile_and_runtime_unqualified",
         "generated_by": "prd-to-plan+execution-compiler",
@@ -823,7 +985,7 @@
             "status": "deprecated"
           }
         ],
-        "unblock_rule": "No task dispatch until the external profile is updated and factoryd is qualified against the exact v3 control generation."
+        "unblock_rule": "No factoryd task dispatch until the external profile is updated and factoryd is qualified against the exact v3.1 control generation."
       },
       "factoryd_runtime": {
         "state_dir": ".factoryd/",
@@ -833,18 +995,18 @@
         "worker_command": "",
         "dispatch_enabled": false,
         "fail_closed": true,
-        "profile_compatibility_status": "blocked_v3_profile_update_required",
-        "runtime_qualification_status": "blocked_factoryd_v3_qualification_required",
+        "profile_compatibility_status": "blocked_v3_1_profile_update_required",
+        "runtime_qualification_status": "blocked_factoryd_v3_1_qualification_required",
         "unblock_dependencies": [
-          "Update external Factory profiles/lumyn.yaml to the approved v3 services-led hybrid contract.",
-          "Qualify factoryd against this exact v3 task, authority, bounded-model, evidence, and closure generation.",
+          "Update external Factory profiles/lumyn.yaml to the approved v3.1 provider-originated update-delivery contract.",
+          "Qualify factoryd against this exact v3.1 task, installation, authority, bounded-model, delivery, status, evidence, and closure generation.",
           "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after both external dependencies are recorded."
         ],
         "approval_posture": "Factory approval never substitutes for exact private Lumyn product action authorization or human merge.",
         "credential_posture": "no ambient consumer, provider, model, sandbox, or GitHub secrets",
         "network_posture": "offline by default; exact task-scoped endpoints only",
         "runtime_control": {
-          "control_id": "runtime-control-lumyn-v3-m2-5",
+          "control_id": "runtime-control-lumyn-v3-1-m2-5",
           "owner": "lumyn-maintainers",
           "autonomy_level": "restricted",
           "mission_paused": true,
@@ -855,7 +1017,7 @@
           "max_write_scope_paths": [],
           "release_freeze": {
             "enabled": true,
-            "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
+            "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
             "exception_ref": ""
           },
           "launch_request": {
@@ -863,7 +1025,7 @@
             "requested_write_paths": [],
             "requested_adapter": "codex_cli",
             "expected_decision": "deny",
-            "reason_code": "factory_profile_and_runtime_v3_unqualified"
+            "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
           },
           "conflict_behavior": "fail_closed"
         },
@@ -884,7 +1046,7 @@
         "python3 scripts/validate_repo_pack.py"
       ],
       "stop_conditions": [
-        "Factory profile or factoryd runtime remains unqualified",
+        "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
         "acceptance item is absent, unmapped, or closed only by milestone or slice",
         "provider intent, consumer authority, model boundary, or redaction is ambiguous",
         "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
@@ -931,6 +1093,14 @@
         "approval_evidence_ref": "pending:external-evidence/M2.5-preflight",
         "approval_scope_digest": "sha256:8ea2204c69c748208b7d96d52d1cd1439ff68d6d7b99e884fc7c33679c238e58"
       },
+      "readiness_sprint_contract": {
+        "minimum_price_usd": 7500,
+        "maximum_price_usd": 15000,
+        "creditable_toward_campaign": true,
+        "may_close_disc_001": false,
+        "may_authorize_repository_work": false,
+        "proof_boundary": "paid_discovery_not_provider_to_consumer_delivery"
+      },
       "gated_acceptance_items": [
         {
           "acceptance_item_id": "DISC-003",
@@ -949,10 +1119,10 @@
       "task_id": "M3",
       "task_order": 5,
       "work_item_id": "lumyn-v3-m3",
-      "milestone_ref": "docs/product/plan.md#m3-normalize-migration-evidence-into-a-migration-pack",
-      "objective": "Normalize pinned public or provider-confirmed migration evidence into a versioned, provenance-bound migration pack that remains declarative data and blocks conflicting, stale, incomplete, executable, or ambiguous input.",
+      "milestone_ref": "docs/product/plan.md#m3-normalize-provider-intent-into-a-reusable-provider-change-contract",
+      "objective": "Normalize pinned public or provider-confirmed evidence into a reusable, versioned Provider Change Contract and exact provider event that remain non-executable data and block conflicting, stale, superseded, withdrawn, wrong-audience, or ambiguous input.",
       "risk_class": "medium",
-      "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
+      "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
       "blocked_by": [
         "M1",
         "M2"
@@ -964,7 +1134,8 @@
         "examples/migration-packs/",
         "tests/",
         "docs/",
-        "CHANGELOG.md"
+        "CHANGELOG.md",
+        "internal/change/"
       ],
       "forbidden_paths": [
         ".git/",
@@ -983,13 +1154,17 @@
         "PACK-001",
         "PACK-002",
         "PACK-003",
-        "PACK-004"
+        "PACK-004",
+        "EVENT-001",
+        "EVENT-002"
       ],
       "acceptance_checks": [
-        "PACK-001: Pinned public docs, OpenAPI descriptions, SDK releases, and migration guidance can produce a versioned `public_derived` migration pack with source digests and license/provenance records.",
-        "PACK-002: A pack records source and target versions, typed change semantics, applicability, known mappings, verification guidance, ambiguity, and unsupported cases.",
-        "PACK-003: Provider confirmation is independently recorded for a sponsored live campaign; public-derived evidence is never represented as provider endorsement, and provider input cannot execute code.",
-        "PACK-004: Conflicting, incomplete, stale, or semantically ambiguous evidence blocks affected routes instead of inviting the agent to infer provider intent."
+        "PACK-001: Pinned public docs, OpenAPI descriptions, SDK releases, and migration guidance can produce a versioned `public_derived` Provider Change Contract with source digests and license/provenance records.",
+        "PACK-002: A Provider Change Contract records stable change identity, source and target versions, audience and applicability, typed semantics, known mappings, verification guidance, ambiguity, unsupported cases, and supersession or withdrawal state.",
+        "PACK-003: Accountable provider confirmation is independently recorded once and is reusable across the invited, consenting cohort for the exact contract version; public-derived evidence is never represented as provider endorsement, and provider input cannot execute code or grant repository authority.",
+        "PACK-004: Conflicting, incomplete, stale, or semantically ambiguous evidence blocks affected routes instead of inviting the agent to infer provider intent.",
+        "EVENT-001: Lumyn accepts a Provider Change Event only when its immutable identity and version, provider-controlled pinned transport or attended-recovery provenance, issuer and authentication, monotonic sequence and freshness, embedded or exact-URL contract delivery and retrieved-byte digest, API or SDK, audience, deadline, severity, and supersession or withdrawal state validate; the event and Provider Change Contract remain non-executable.",
+        "EVENT-002: Duplicate, replayed, stale, conflicting, expired, superseded, withdrawn, wrong-audience, or unauthenticated events fail closed; an attended import cannot count as provider-channel delivery or authorize an installed-preauthorization write."
       ],
       "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
       "validation_contract_inheritance": {
@@ -1043,17 +1218,17 @@
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
-        "provider_intent_policy": "services-led provider-paid API or SDK sunset campaign with provider-confirmed source and target semantics; a signed declarative provider packet is authoritative when supplied and confirmed, remains data, cannot execute code, and grants no consumer repository authority; mandatory packet PKI, continuous status, connection receipts, and receipt-backed billing are deferred",
-        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; repository, provider, tool, and model content is untrusted and cannot widen any boundary",
+        "provider_intent_policy": "provider-originated API or SDK update delivery launched through a provider-paid, services-assisted sunset campaign; one accountably confirmed Provider Change Contract is reused by the exact invited cohort, each non-executable provider event binds its exact digest, audience, deadline, and supersession state, and neither contract nor event grants consumer repository authority; a universal registry, elaborate provider PKI, connection receipts, and receipt-backed billing are deferred",
+        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; the coding agent is replaceable, and repository, provider, tool, and model content is untrusted and cannot widen any boundary",
         "verification_policy": "deterministic repository and workflow verification is independent from deterministic or agent-assisted generation, runs from the exact candidate head, preserves baseline failures, and cannot be satisfied by a model completion or self-verification",
-        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the baseline; optional remote branch and draft PR require separate exact authorization; default-branch writes and auto-merge are forbidden",
+        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate short-lived non-default-branch and PR authorization, evidence-bound idempotency, and no auto-merge; manual delivery cannot close automated-delivery acceptance; provider status is event-bound, consumer-consented, provenance-labeled, and never inferred from silence",
         "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, patches, traces, credentials, and identifiable campaign evidence use an approved external private root",
-        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
-        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
+        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
       },
       "factory_compatibility": {
         "factory_contract_version": "1.0",
-        "profile_contract_version": "v2_incompatible_with_lumyn_v3",
+        "profile_contract_version": "v2_incompatible_with_lumyn_v3_1",
         "profile_ref": "profiles/lumyn.yaml",
         "status": "blocked_profile_and_runtime_unqualified",
         "generated_by": "prd-to-plan+execution-compiler",
@@ -1066,7 +1241,7 @@
             "status": "deprecated"
           }
         ],
-        "unblock_rule": "No task dispatch until the external profile is updated and factoryd is qualified against the exact v3 control generation."
+        "unblock_rule": "No factoryd task dispatch until the external profile is updated and factoryd is qualified against the exact v3.1 control generation."
       },
       "factoryd_runtime": {
         "state_dir": ".factoryd/",
@@ -1076,18 +1251,18 @@
         "worker_command": "",
         "dispatch_enabled": false,
         "fail_closed": true,
-        "profile_compatibility_status": "blocked_v3_profile_update_required",
-        "runtime_qualification_status": "blocked_factoryd_v3_qualification_required",
+        "profile_compatibility_status": "blocked_v3_1_profile_update_required",
+        "runtime_qualification_status": "blocked_factoryd_v3_1_qualification_required",
         "unblock_dependencies": [
-          "Update external Factory profiles/lumyn.yaml to the approved v3 services-led hybrid contract.",
-          "Qualify factoryd against this exact v3 task, authority, bounded-model, evidence, and closure generation.",
+          "Update external Factory profiles/lumyn.yaml to the approved v3.1 provider-originated update-delivery contract.",
+          "Qualify factoryd against this exact v3.1 task, installation, authority, bounded-model, delivery, status, evidence, and closure generation.",
           "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after both external dependencies are recorded."
         ],
         "approval_posture": "Factory approval never substitutes for exact private Lumyn product action authorization or human merge.",
         "credential_posture": "no ambient consumer, provider, model, sandbox, or GitHub secrets",
         "network_posture": "offline by default; exact task-scoped endpoints only",
         "runtime_control": {
-          "control_id": "runtime-control-lumyn-v3-m3",
+          "control_id": "runtime-control-lumyn-v3-1-m3",
           "owner": "lumyn-maintainers",
           "autonomy_level": "restricted",
           "mission_paused": true,
@@ -1098,7 +1273,7 @@
           "max_write_scope_paths": [],
           "release_freeze": {
             "enabled": true,
-            "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
+            "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
             "exception_ref": ""
           },
           "launch_request": {
@@ -1106,7 +1281,7 @@
             "requested_write_paths": [],
             "requested_adapter": "codex_cli",
             "expected_decision": "deny",
-            "reason_code": "factory_profile_and_runtime_v3_unqualified"
+            "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
           },
           "conflict_behavior": "fail_closed"
         },
@@ -1119,7 +1294,7 @@
         "python3 scripts/validate_repo_pack.py"
       ],
       "stop_conditions": [
-        "Factory profile or factoryd runtime remains unqualified",
+        "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
         "acceptance item is absent, unmapped, or closed only by milestone or slice",
         "provider intent, consumer authority, model boundary, or redaction is ambiguous",
         "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
@@ -1133,10 +1308,10 @@
       "task_id": "M4",
       "task_order": 6,
       "work_item_id": "lumyn-v3-m4",
-      "milestone_ref": "docs/product/plan.md#m4-build-the-consumer-local-typescript-integration-graph-and-impact-report",
-      "objective": "Build a consumer-local TypeScript integration graph and read-only impact report with explicit affected, unaffected, uncertain, unsupported, and excluded scope, validated against the frozen holdout.",
+      "milestone_ref": "docs/product/plan.md#m4-build-the-consumer-local-typescript-repository-impact-inventory",
+      "objective": "Build a consumer-local TypeScript repository impact inventory, represented internally as an integration graph, with explicit affected, unaffected, uncertain, unsupported, and excluded scope validated against the frozen holdout.",
       "risk_class": "high",
-      "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
+      "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
       "blocked_by": [
         "M3"
       ],
@@ -1172,7 +1347,7 @@
       "acceptance_checks": [
         "IMPACT-001: Impact analysis is read-only and remains inside the exact authorized repository and package-root scope.",
         "IMPACT-002: Lumyn detects the selected official npm SDK, installed version, package manifest, supported lockfile, direct imports, and aliases.",
-        "IMPACT-003: The integration graph represents statically traceable wrappers, adapters, call sites, request/response mappings, relevant configuration, tests, mocks, cassettes, and fixtures.",
+        "IMPACT-003: The repository impact inventory represents statically traceable wrappers, adapters, call sites, request/response mappings, relevant configuration, tests, mocks, cassettes, and fixtures.",
         "IMPACT-004: Generated, vendored, dynamic, multi-root, multi-version, and unsupported cases receive explicit exclusion, uncertainty, or failure status; no result implies global downstream coverage.",
         "IMPACT-005: On frozen held-out fixtures, supported affected sites meet the preregistered recall and precision thresholds with zero false `unaffected` results; real-repository value is not claimed from fixtures alone."
       ],
@@ -1230,17 +1405,17 @@
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
-        "provider_intent_policy": "services-led provider-paid API or SDK sunset campaign with provider-confirmed source and target semantics; a signed declarative provider packet is authoritative when supplied and confirmed, remains data, cannot execute code, and grants no consumer repository authority; mandatory packet PKI, continuous status, connection receipts, and receipt-backed billing are deferred",
-        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; repository, provider, tool, and model content is untrusted and cannot widen any boundary",
+        "provider_intent_policy": "provider-originated API or SDK update delivery launched through a provider-paid, services-assisted sunset campaign; one accountably confirmed Provider Change Contract is reused by the exact invited cohort, each non-executable provider event binds its exact digest, audience, deadline, and supersession state, and neither contract nor event grants consumer repository authority; a universal registry, elaborate provider PKI, connection receipts, and receipt-backed billing are deferred",
+        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; the coding agent is replaceable, and repository, provider, tool, and model content is untrusted and cannot widen any boundary",
         "verification_policy": "deterministic repository and workflow verification is independent from deterministic or agent-assisted generation, runs from the exact candidate head, preserves baseline failures, and cannot be satisfied by a model completion or self-verification",
-        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the baseline; optional remote branch and draft PR require separate exact authorization; default-branch writes and auto-merge are forbidden",
+        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate short-lived non-default-branch and PR authorization, evidence-bound idempotency, and no auto-merge; manual delivery cannot close automated-delivery acceptance; provider status is event-bound, consumer-consented, provenance-labeled, and never inferred from silence",
         "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, patches, traces, credentials, and identifiable campaign evidence use an approved external private root",
-        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
-        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
+        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
       },
       "factory_compatibility": {
         "factory_contract_version": "1.0",
-        "profile_contract_version": "v2_incompatible_with_lumyn_v3",
+        "profile_contract_version": "v2_incompatible_with_lumyn_v3_1",
         "profile_ref": "profiles/lumyn.yaml",
         "status": "blocked_profile_and_runtime_unqualified",
         "generated_by": "prd-to-plan+execution-compiler",
@@ -1253,7 +1428,7 @@
             "status": "deprecated"
           }
         ],
-        "unblock_rule": "No task dispatch until the external profile is updated and factoryd is qualified against the exact v3 control generation."
+        "unblock_rule": "No factoryd task dispatch until the external profile is updated and factoryd is qualified against the exact v3.1 control generation."
       },
       "factoryd_runtime": {
         "state_dir": ".factoryd/",
@@ -1263,18 +1438,18 @@
         "worker_command": "",
         "dispatch_enabled": false,
         "fail_closed": true,
-        "profile_compatibility_status": "blocked_v3_profile_update_required",
-        "runtime_qualification_status": "blocked_factoryd_v3_qualification_required",
+        "profile_compatibility_status": "blocked_v3_1_profile_update_required",
+        "runtime_qualification_status": "blocked_factoryd_v3_1_qualification_required",
         "unblock_dependencies": [
-          "Update external Factory profiles/lumyn.yaml to the approved v3 services-led hybrid contract.",
-          "Qualify factoryd against this exact v3 task, authority, bounded-model, evidence, and closure generation.",
+          "Update external Factory profiles/lumyn.yaml to the approved v3.1 provider-originated update-delivery contract.",
+          "Qualify factoryd against this exact v3.1 task, installation, authority, bounded-model, delivery, status, evidence, and closure generation.",
           "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after both external dependencies are recorded."
         ],
         "approval_posture": "Factory approval never substitutes for exact private Lumyn product action authorization or human merge.",
         "credential_posture": "no ambient consumer, provider, model, sandbox, or GitHub secrets",
         "network_posture": "offline by default; exact task-scoped endpoints only",
         "runtime_control": {
-          "control_id": "runtime-control-lumyn-v3-m4",
+          "control_id": "runtime-control-lumyn-v3-1-m4",
           "owner": "lumyn-maintainers",
           "autonomy_level": "restricted",
           "mission_paused": true,
@@ -1285,7 +1460,7 @@
           "max_write_scope_paths": [],
           "release_freeze": {
             "enabled": true,
-            "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
+            "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
             "exception_ref": ""
           },
           "launch_request": {
@@ -1293,7 +1468,7 @@
             "requested_write_paths": [],
             "requested_adapter": "codex_cli",
             "expected_decision": "deny",
-            "reason_code": "factory_profile_and_runtime_v3_unqualified"
+            "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
           },
           "conflict_behavior": "fail_closed"
         },
@@ -1306,7 +1481,7 @@
         "python3 scripts/validate_repo_pack.py"
       ],
       "stop_conditions": [
-        "Factory profile or factoryd runtime remains unqualified",
+        "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
         "acceptance item is absent, unmapped, or closed only by milestone or slice",
         "provider intent, consumer authority, model boundary, or redaction is ambiguous",
         "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
@@ -1328,9 +1503,9 @@
       "task_order": 7,
       "work_item_id": "lumyn-v3-m5",
       "milestone_ref": "docs/product/plan.md#m5-produce-a-no-write-migration-plan-and-consumer-approval-boundary",
-      "objective": "Produce a no-write migration plan that routes every affected item and binds exact paths, model-data policy, tools, commands, budgets, verification, delivery, and consumer approval before mutation.",
+      "objective": "Produce a no-write migration plan that routes every affected item and binds the exact event, contract, Consumer Installation, derived authorization, paths, model-data policy, tools, commands, budgets, verification, delivery, and disclosure before mutation.",
       "risk_class": "high",
-      "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
+      "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
       "blocked_by": [
         "M2",
         "M2.5",
@@ -1343,7 +1518,8 @@
         "examples/",
         "tests/",
         "docs/",
-        "CHANGELOG.md"
+        "CHANGELOG.md",
+        "internal/installation/"
       ],
       "forbidden_paths": [
         ".git/",
@@ -1359,14 +1535,18 @@
         "hosted control plane, provider PKI, connection receipt billing, or annual platform claims"
       ],
       "acceptance_item_ids": [
+        "INSTALL-001",
+        "INSTALL-002",
         "PLAN-001",
         "PLAN-002",
         "PLAN-003"
       ],
       "acceptance_checks": [
+        "INSTALL-001: A revocable Consumer Installation binds the exact provider-controlled channel and authentication key, repository and package root, audience or version selectors, action ceiling, authorization mode, paths, commands, model-data policy and budgets, GitHub token-issuance policy, provider-reporting fields, retention and deletion, expiry, and revocation without storing a GitHub token.",
+        "INSTALL-002: Every event-specific authorization is an immutable, non-widening derivation of the installation; `per_event_approval` binds the exact plan, while `installed_preauthorization` permits side effects only when event, plan, commands, paths, model policy, budgets, verification, and short-lived credential issuance all satisfy the installed policy. An action-mode label alone grants no side effect.",
         "PLAN-001: The plan names every proposed or conditional file, route, command, model policy, permission, budget, verification stage, and residual risk without modifying repository or Git state.",
         "PLAN-002: Every affected item is explicitly classified as `deterministic`, `agent_assisted`, `manual`, `needs_input`, or `blocked`.",
-        "PLAN-003: Consumer approval binds the exact pack, repository base, paths, route, model-data policy, tools, commands, budgets, and verification intent; any change invalidates approval."
+        "PLAN-003: Consumer authorization, whether exact per-event approval or installed preauthorization, binds the event, Provider Change Contract, Consumer Installation and derived authorization, repository base, paths, route, model-data policy, tools, commands, budgets, disclosure, delivery, and verification intent; any out-of-policy change invalidates or pauses the run."
       ],
       "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
       "validation_contract_inheritance": {
@@ -1420,17 +1600,17 @@
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
-        "provider_intent_policy": "services-led provider-paid API or SDK sunset campaign with provider-confirmed source and target semantics; a signed declarative provider packet is authoritative when supplied and confirmed, remains data, cannot execute code, and grants no consumer repository authority; mandatory packet PKI, continuous status, connection receipts, and receipt-backed billing are deferred",
-        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; repository, provider, tool, and model content is untrusted and cannot widen any boundary",
+        "provider_intent_policy": "provider-originated API or SDK update delivery launched through a provider-paid, services-assisted sunset campaign; one accountably confirmed Provider Change Contract is reused by the exact invited cohort, each non-executable provider event binds its exact digest, audience, deadline, and supersession state, and neither contract nor event grants consumer repository authority; a universal registry, elaborate provider PKI, connection receipts, and receipt-backed billing are deferred",
+        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; the coding agent is replaceable, and repository, provider, tool, and model content is untrusted and cannot widen any boundary",
         "verification_policy": "deterministic repository and workflow verification is independent from deterministic or agent-assisted generation, runs from the exact candidate head, preserves baseline failures, and cannot be satisfied by a model completion or self-verification",
-        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the baseline; optional remote branch and draft PR require separate exact authorization; default-branch writes and auto-merge are forbidden",
+        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate short-lived non-default-branch and PR authorization, evidence-bound idempotency, and no auto-merge; manual delivery cannot close automated-delivery acceptance; provider status is event-bound, consumer-consented, provenance-labeled, and never inferred from silence",
         "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, patches, traces, credentials, and identifiable campaign evidence use an approved external private root",
-        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
-        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
+        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
       },
       "factory_compatibility": {
         "factory_contract_version": "1.0",
-        "profile_contract_version": "v2_incompatible_with_lumyn_v3",
+        "profile_contract_version": "v2_incompatible_with_lumyn_v3_1",
         "profile_ref": "profiles/lumyn.yaml",
         "status": "blocked_profile_and_runtime_unqualified",
         "generated_by": "prd-to-plan+execution-compiler",
@@ -1443,7 +1623,7 @@
             "status": "deprecated"
           }
         ],
-        "unblock_rule": "No task dispatch until the external profile is updated and factoryd is qualified against the exact v3 control generation."
+        "unblock_rule": "No factoryd task dispatch until the external profile is updated and factoryd is qualified against the exact v3.1 control generation."
       },
       "factoryd_runtime": {
         "state_dir": ".factoryd/",
@@ -1453,18 +1633,18 @@
         "worker_command": "",
         "dispatch_enabled": false,
         "fail_closed": true,
-        "profile_compatibility_status": "blocked_v3_profile_update_required",
-        "runtime_qualification_status": "blocked_factoryd_v3_qualification_required",
+        "profile_compatibility_status": "blocked_v3_1_profile_update_required",
+        "runtime_qualification_status": "blocked_factoryd_v3_1_qualification_required",
         "unblock_dependencies": [
-          "Update external Factory profiles/lumyn.yaml to the approved v3 services-led hybrid contract.",
-          "Qualify factoryd against this exact v3 task, authority, bounded-model, evidence, and closure generation.",
+          "Update external Factory profiles/lumyn.yaml to the approved v3.1 provider-originated update-delivery contract.",
+          "Qualify factoryd against this exact v3.1 task, installation, authority, bounded-model, delivery, status, evidence, and closure generation.",
           "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after both external dependencies are recorded."
         ],
         "approval_posture": "Factory approval never substitutes for exact private Lumyn product action authorization or human merge.",
         "credential_posture": "no ambient consumer, provider, model, sandbox, or GitHub secrets",
         "network_posture": "offline by default; exact task-scoped endpoints only",
         "runtime_control": {
-          "control_id": "runtime-control-lumyn-v3-m5",
+          "control_id": "runtime-control-lumyn-v3-1-m5",
           "owner": "lumyn-maintainers",
           "autonomy_level": "restricted",
           "mission_paused": true,
@@ -1475,7 +1655,7 @@
           "max_write_scope_paths": [],
           "release_freeze": {
             "enabled": true,
-            "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
+            "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
             "exception_ref": ""
           },
           "launch_request": {
@@ -1483,7 +1663,7 @@
             "requested_write_paths": [],
             "requested_adapter": "codex_cli",
             "expected_decision": "deny",
-            "reason_code": "factory_profile_and_runtime_v3_unqualified"
+            "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
           },
           "conflict_behavior": "fail_closed"
         },
@@ -1496,7 +1676,7 @@
         "python3 scripts/validate_repo_pack.py"
       ],
       "stop_conditions": [
-        "Factory profile or factoryd runtime remains unqualified",
+        "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
         "acceptance item is absent, unmapped, or closed only by milestone or slice",
         "provider intent, consumer authority, model boundary, or redaction is ambiguous",
         "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
@@ -1525,9 +1705,9 @@
       "task_order": 8,
       "work_item_id": "lumyn-v3-m6",
       "milestone_ref": "docs/product/plan.md#m6-implement-deterministic-transforms-and-the-bounded-coding-agent",
-      "objective": "Produce bounded candidates through deterministic transforms, a consumer-local coding agent, or approved manual edits imported with `lumyn candidate import --manual`; enforce exact model, context, credential, network, path, tool, attempt, token, time, diff, cost, and provenance controls.",
+      "objective": "Produce bounded candidates through deterministic transforms, a replaceable consumer-local coding-agent adapter, or approved manual edits imported with `lumyn candidate import --manual`; enforce exact model, context, credential, network, path, tool, attempt, token, time, diff, cost, and provenance controls.",
       "risk_class": "high",
-      "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
+      "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
       "blocked_by": [
         "M5"
       ],
@@ -1568,7 +1748,7 @@
         "AGENT-001: Deterministic transforms produce byte-stable candidates for identical pinned inputs.",
         "AGENT-002: Agent-assisted execution occurs only in a consumer-local or explicitly consumer-approved environment and discloses Model Provider, context, data-egress, and retention posture before execution.",
         "AGENT-003: The agent enforces approved path, tool, command, network, credential, time, token, cost, attempt, file, and diff budgets.",
-        "AGENT-004: Every agent edit maps to a migration-pack item, integration graph evidence, and recorded rationale; unrelated edits fail.",
+        "AGENT-004: Every agent edit maps to a Provider Change Contract item, repository-impact evidence, and recorded rationale; unrelated edits fail.",
         "AGENT-005: The repair loop performs no more than the approved attempts, cannot expand scope, and stops on non-diagnostic failure or exhausted budget.",
         "AGENT-006: Missing business values, auth redesign, event semantics, production-only behavior, and ambiguous provider intent return `needs_input` or `blocked` without speculative completion.",
         "AGENT-007: Agent evidence records runner, adapter, model class/version, model-data and context-policy digests, tools, commands, attempts, token and cost use, changed files, and human input without persisting secrets or raw prompts by default."
@@ -1642,17 +1822,17 @@
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
-        "provider_intent_policy": "services-led provider-paid API or SDK sunset campaign with provider-confirmed source and target semantics; a signed declarative provider packet is authoritative when supplied and confirmed, remains data, cannot execute code, and grants no consumer repository authority; mandatory packet PKI, continuous status, connection receipts, and receipt-backed billing are deferred",
-        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; repository, provider, tool, and model content is untrusted and cannot widen any boundary",
+        "provider_intent_policy": "provider-originated API or SDK update delivery launched through a provider-paid, services-assisted sunset campaign; one accountably confirmed Provider Change Contract is reused by the exact invited cohort, each non-executable provider event binds its exact digest, audience, deadline, and supersession state, and neither contract nor event grants consumer repository authority; a universal registry, elaborate provider PKI, connection receipts, and receipt-backed billing are deferred",
+        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; the coding agent is replaceable, and repository, provider, tool, and model content is untrusted and cannot widen any boundary",
         "verification_policy": "deterministic repository and workflow verification is independent from deterministic or agent-assisted generation, runs from the exact candidate head, preserves baseline failures, and cannot be satisfied by a model completion or self-verification",
-        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the baseline; optional remote branch and draft PR require separate exact authorization; default-branch writes and auto-merge are forbidden",
+        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate short-lived non-default-branch and PR authorization, evidence-bound idempotency, and no auto-merge; manual delivery cannot close automated-delivery acceptance; provider status is event-bound, consumer-consented, provenance-labeled, and never inferred from silence",
         "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, patches, traces, credentials, and identifiable campaign evidence use an approved external private root",
-        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
-        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
+        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
       },
       "factory_compatibility": {
         "factory_contract_version": "1.0",
-        "profile_contract_version": "v2_incompatible_with_lumyn_v3",
+        "profile_contract_version": "v2_incompatible_with_lumyn_v3_1",
         "profile_ref": "profiles/lumyn.yaml",
         "status": "blocked_profile_and_runtime_unqualified",
         "generated_by": "prd-to-plan+execution-compiler",
@@ -1665,7 +1845,7 @@
             "status": "deprecated"
           }
         ],
-        "unblock_rule": "No task dispatch until the external profile is updated and factoryd is qualified against the exact v3 control generation."
+        "unblock_rule": "No factoryd task dispatch until the external profile is updated and factoryd is qualified against the exact v3.1 control generation."
       },
       "factoryd_runtime": {
         "state_dir": ".factoryd/",
@@ -1675,18 +1855,18 @@
         "worker_command": "",
         "dispatch_enabled": false,
         "fail_closed": true,
-        "profile_compatibility_status": "blocked_v3_profile_update_required",
-        "runtime_qualification_status": "blocked_factoryd_v3_qualification_required",
+        "profile_compatibility_status": "blocked_v3_1_profile_update_required",
+        "runtime_qualification_status": "blocked_factoryd_v3_1_qualification_required",
         "unblock_dependencies": [
-          "Update external Factory profiles/lumyn.yaml to the approved v3 services-led hybrid contract.",
-          "Qualify factoryd against this exact v3 task, authority, bounded-model, evidence, and closure generation.",
+          "Update external Factory profiles/lumyn.yaml to the approved v3.1 provider-originated update-delivery contract.",
+          "Qualify factoryd against this exact v3.1 task, installation, authority, bounded-model, delivery, status, evidence, and closure generation.",
           "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after both external dependencies are recorded."
         ],
         "approval_posture": "Factory approval never substitutes for exact private Lumyn product action authorization or human merge.",
         "credential_posture": "no ambient consumer, provider, model, sandbox, or GitHub secrets",
         "network_posture": "offline by default; exact task-scoped endpoints only",
         "runtime_control": {
-          "control_id": "runtime-control-lumyn-v3-m6",
+          "control_id": "runtime-control-lumyn-v3-1-m6",
           "owner": "lumyn-maintainers",
           "autonomy_level": "restricted",
           "mission_paused": true,
@@ -1697,7 +1877,7 @@
           "max_write_scope_paths": [],
           "release_freeze": {
             "enabled": true,
-            "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
+            "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
             "exception_ref": ""
           },
           "launch_request": {
@@ -1705,7 +1885,7 @@
             "requested_write_paths": [],
             "requested_adapter": "codex_cli",
             "expected_decision": "deny",
-            "reason_code": "factory_profile_and_runtime_v3_unqualified"
+            "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
           },
           "conflict_behavior": "fail_closed"
         },
@@ -1718,7 +1898,7 @@
         "python3 scripts/validate_repo_pack.py"
       ],
       "stop_conditions": [
-        "Factory profile or factoryd runtime remains unqualified",
+        "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
         "acceptance item is absent, unmapped, or closed only by milestone or slice",
         "provider intent, consumer authority, model boundary, or redaction is ambiguous",
         "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
@@ -1802,7 +1982,7 @@
       "milestone_ref": "docs/product/plan.md#m7-verify-deterministic-agent-assisted-and-manual-candidates",
       "objective": "Run non-mutating `lumyn verify` from the exact candidate head with a pre-existing-failure baseline and deterministic proof labels; any repair is a separate bounded attempt that produces a new candidate and evidence.",
       "risk_class": "high",
-      "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
+      "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
       "blocked_by": [
         "M6"
       ],
@@ -1812,6 +1992,7 @@
         "internal/replay/",
         "internal/evidence/",
         "internal/redaction/",
+        "internal/authorization/",
         "schemas/",
         "workflows/",
         "cassettes/",
@@ -1847,7 +2028,7 @@
         "VER-003: Static, repository, independent contract replay, exact-head replay, mock, and sandbox evidence use distinct canonical labels.",
         "VER-004: Every `workflow_verified_*` result causally executes an approved entrypoint from the exact candidate head and records observed interaction and outcome evidence.",
         "VER-005: Failed, missing, stale, out-of-boundary, unredactable, or inconclusive evidence cannot produce a verified label; repair failures remain visible.",
-        "VER-006: The frozen negative suite has zero false verified outcomes, and all evidence binds pack, plan, base, candidate, route, agent provenance, commands, environment, and artifact hashes."
+        "VER-006: The frozen negative suite has zero false verified outcomes, and all evidence binds event, Provider Change Contract, Consumer Installation and derived authorization, plan, base, candidate, route, agent provenance, commands, environment, and artifact hashes."
       ],
       "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
       "validation_contract_inheritance": {
@@ -1905,17 +2086,17 @@
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
-        "provider_intent_policy": "services-led provider-paid API or SDK sunset campaign with provider-confirmed source and target semantics; a signed declarative provider packet is authoritative when supplied and confirmed, remains data, cannot execute code, and grants no consumer repository authority; mandatory packet PKI, continuous status, connection receipts, and receipt-backed billing are deferred",
-        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; repository, provider, tool, and model content is untrusted and cannot widen any boundary",
+        "provider_intent_policy": "provider-originated API or SDK update delivery launched through a provider-paid, services-assisted sunset campaign; one accountably confirmed Provider Change Contract is reused by the exact invited cohort, each non-executable provider event binds its exact digest, audience, deadline, and supersession state, and neither contract nor event grants consumer repository authority; a universal registry, elaborate provider PKI, connection receipts, and receipt-backed billing are deferred",
+        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; the coding agent is replaceable, and repository, provider, tool, and model content is untrusted and cannot widen any boundary",
         "verification_policy": "deterministic repository and workflow verification is independent from deterministic or agent-assisted generation, runs from the exact candidate head, preserves baseline failures, and cannot be satisfied by a model completion or self-verification",
-        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the baseline; optional remote branch and draft PR require separate exact authorization; default-branch writes and auto-merge are forbidden",
+        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate short-lived non-default-branch and PR authorization, evidence-bound idempotency, and no auto-merge; manual delivery cannot close automated-delivery acceptance; provider status is event-bound, consumer-consented, provenance-labeled, and never inferred from silence",
         "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, patches, traces, credentials, and identifiable campaign evidence use an approved external private root",
-        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
-        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
+        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
       },
       "factory_compatibility": {
         "factory_contract_version": "1.0",
-        "profile_contract_version": "v2_incompatible_with_lumyn_v3",
+        "profile_contract_version": "v2_incompatible_with_lumyn_v3_1",
         "profile_ref": "profiles/lumyn.yaml",
         "status": "blocked_profile_and_runtime_unqualified",
         "generated_by": "prd-to-plan+execution-compiler",
@@ -1928,7 +2109,7 @@
             "status": "deprecated"
           }
         ],
-        "unblock_rule": "No task dispatch until the external profile is updated and factoryd is qualified against the exact v3 control generation."
+        "unblock_rule": "No factoryd task dispatch until the external profile is updated and factoryd is qualified against the exact v3.1 control generation."
       },
       "factoryd_runtime": {
         "state_dir": ".factoryd/",
@@ -1938,18 +2119,18 @@
         "worker_command": "",
         "dispatch_enabled": false,
         "fail_closed": true,
-        "profile_compatibility_status": "blocked_v3_profile_update_required",
-        "runtime_qualification_status": "blocked_factoryd_v3_qualification_required",
+        "profile_compatibility_status": "blocked_v3_1_profile_update_required",
+        "runtime_qualification_status": "blocked_factoryd_v3_1_qualification_required",
         "unblock_dependencies": [
-          "Update external Factory profiles/lumyn.yaml to the approved v3 services-led hybrid contract.",
-          "Qualify factoryd against this exact v3 task, authority, bounded-model, evidence, and closure generation.",
+          "Update external Factory profiles/lumyn.yaml to the approved v3.1 provider-originated update-delivery contract.",
+          "Qualify factoryd against this exact v3.1 task, installation, authority, bounded-model, delivery, status, evidence, and closure generation.",
           "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after both external dependencies are recorded."
         ],
         "approval_posture": "Factory approval never substitutes for exact private Lumyn product action authorization or human merge.",
         "credential_posture": "no ambient consumer, provider, model, sandbox, or GitHub secrets",
         "network_posture": "offline by default; exact task-scoped endpoints only",
         "runtime_control": {
-          "control_id": "runtime-control-lumyn-v3-m7",
+          "control_id": "runtime-control-lumyn-v3-1-m7",
           "owner": "lumyn-maintainers",
           "autonomy_level": "restricted",
           "mission_paused": true,
@@ -1960,7 +2141,7 @@
           "max_write_scope_paths": [],
           "release_freeze": {
             "enabled": true,
-            "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
+            "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
             "exception_ref": ""
           },
           "launch_request": {
@@ -1968,7 +2149,7 @@
             "requested_write_paths": [],
             "requested_adapter": "codex_cli",
             "expected_decision": "deny",
-            "reason_code": "factory_profile_and_runtime_v3_unqualified"
+            "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
           },
           "conflict_behavior": "fail_closed"
         },
@@ -1981,7 +2162,7 @@
         "python3 scripts/validate_repo_pack.py"
       ],
       "stop_conditions": [
-        "Factory profile or factoryd runtime remains unqualified",
+        "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
         "acceptance item is absent, unmapped, or closed only by milestone or slice",
         "provider intent, consumer authority, model boundary, or redaction is ambiguous",
         "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
@@ -2093,7 +2274,7 @@
       "milestone_ref": "docs/product/plan.md#m8-add-optional-provider-sandbox-read-back",
       "objective": "Conditionally add exact-head non-production sandbox read-back under separate payload-disclosure, network, credential, retention, cleanup, budget, and orphan controls without making sandbox proof mandatory.",
       "risk_class": "high",
-      "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
+      "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
       "blocked_by": [
         "M7"
       ],
@@ -2194,17 +2375,17 @@
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
-        "provider_intent_policy": "services-led provider-paid API or SDK sunset campaign with provider-confirmed source and target semantics; a signed declarative provider packet is authoritative when supplied and confirmed, remains data, cannot execute code, and grants no consumer repository authority; mandatory packet PKI, continuous status, connection receipts, and receipt-backed billing are deferred",
-        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; repository, provider, tool, and model content is untrusted and cannot widen any boundary",
+        "provider_intent_policy": "provider-originated API or SDK update delivery launched through a provider-paid, services-assisted sunset campaign; one accountably confirmed Provider Change Contract is reused by the exact invited cohort, each non-executable provider event binds its exact digest, audience, deadline, and supersession state, and neither contract nor event grants consumer repository authority; a universal registry, elaborate provider PKI, connection receipts, and receipt-backed billing are deferred",
+        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; the coding agent is replaceable, and repository, provider, tool, and model content is untrusted and cannot widen any boundary",
         "verification_policy": "deterministic repository and workflow verification is independent from deterministic or agent-assisted generation, runs from the exact candidate head, preserves baseline failures, and cannot be satisfied by a model completion or self-verification",
-        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the baseline; optional remote branch and draft PR require separate exact authorization; default-branch writes and auto-merge are forbidden",
+        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate short-lived non-default-branch and PR authorization, evidence-bound idempotency, and no auto-merge; manual delivery cannot close automated-delivery acceptance; provider status is event-bound, consumer-consented, provenance-labeled, and never inferred from silence",
         "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, patches, traces, credentials, and identifiable campaign evidence use an approved external private root",
-        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
-        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
+        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
       },
       "factory_compatibility": {
         "factory_contract_version": "1.0",
-        "profile_contract_version": "v2_incompatible_with_lumyn_v3",
+        "profile_contract_version": "v2_incompatible_with_lumyn_v3_1",
         "profile_ref": "profiles/lumyn.yaml",
         "status": "blocked_profile_and_runtime_unqualified",
         "generated_by": "prd-to-plan+execution-compiler",
@@ -2217,7 +2398,7 @@
             "status": "deprecated"
           }
         ],
-        "unblock_rule": "No task dispatch until the external profile is updated and factoryd is qualified against the exact v3 control generation."
+        "unblock_rule": "No factoryd task dispatch until the external profile is updated and factoryd is qualified against the exact v3.1 control generation."
       },
       "factoryd_runtime": {
         "state_dir": ".factoryd/",
@@ -2227,18 +2408,18 @@
         "worker_command": "",
         "dispatch_enabled": false,
         "fail_closed": true,
-        "profile_compatibility_status": "blocked_v3_profile_update_required",
-        "runtime_qualification_status": "blocked_factoryd_v3_qualification_required",
+        "profile_compatibility_status": "blocked_v3_1_profile_update_required",
+        "runtime_qualification_status": "blocked_factoryd_v3_1_qualification_required",
         "unblock_dependencies": [
-          "Update external Factory profiles/lumyn.yaml to the approved v3 services-led hybrid contract.",
-          "Qualify factoryd against this exact v3 task, authority, bounded-model, evidence, and closure generation.",
+          "Update external Factory profiles/lumyn.yaml to the approved v3.1 provider-originated update-delivery contract.",
+          "Qualify factoryd against this exact v3.1 task, installation, authority, bounded-model, delivery, status, evidence, and closure generation.",
           "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after both external dependencies are recorded."
         ],
         "approval_posture": "Factory approval never substitutes for exact private Lumyn product action authorization or human merge.",
         "credential_posture": "no ambient consumer, provider, model, sandbox, or GitHub secrets",
         "network_posture": "offline by default; exact task-scoped endpoints only",
         "runtime_control": {
-          "control_id": "runtime-control-lumyn-v3-m8",
+          "control_id": "runtime-control-lumyn-v3-1-m8",
           "owner": "lumyn-maintainers",
           "autonomy_level": "restricted",
           "mission_paused": true,
@@ -2249,7 +2430,7 @@
           "max_write_scope_paths": [],
           "release_freeze": {
             "enabled": true,
-            "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
+            "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
             "exception_ref": ""
           },
           "launch_request": {
@@ -2257,7 +2438,7 @@
             "requested_write_paths": [],
             "requested_adapter": "codex_cli",
             "expected_decision": "deny",
-            "reason_code": "factory_profile_and_runtime_v3_unqualified"
+            "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
           },
           "conflict_behavior": "fail_closed"
         },
@@ -2289,7 +2470,7 @@
         "python3 scripts/validate_repo_pack.py"
       ],
       "stop_conditions": [
-        "Factory profile or factoryd runtime remains unqualified",
+        "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
         "acceptance item is absent, unmapped, or closed only by milestone or slice",
         "provider intent, consumer authority, model boundary, or redaction is ambiguous",
         "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
@@ -2303,10 +2484,10 @@
       "task_id": "M9",
       "task_order": 11,
       "work_item_id": "lumyn-v3-m9",
-      "milestone_ref": "docs/product/plan.md#m9-export-evidence-patch-branch-pr-bundle-and-optional-draft-pr",
-      "objective": "Export complete local evidence plus patch, optional local branch, and PR-ready bundle; conditionally create a non-default remote branch and draft PR under separate grants, with EXP-003 closed by automated evidence or dated frozen manual-only not-applicable evidence.",
+      "milestone_ref": "docs/product/plan.md#m9-export-evidence-and-open-a-tested-draft-pr",
+      "objective": "Export complete local fallback evidence plus patch, optional local branch, and PR-ready bundle; open a tested draft PR on a non-default branch under separate short-lived grants; emit an event-bound, consumer-consented provider status projection; EXP-003 closes only with automated draft-PR evidence.",
       "risk_class": "high",
-      "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
+      "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
       "blocked_by": [
         "M7"
       ],
@@ -2318,7 +2499,8 @@
         "schemas/",
         "tests/",
         "docs/",
-        "CHANGELOG.md"
+        "CHANGELOG.md",
+        "internal/status/"
       ],
       "forbidden_paths": [
         ".git/",
@@ -2342,8 +2524,8 @@
       "acceptance_checks": [
         "EXP-001: Lumyn exports complete local evidence plus a patch, local branch, or PR-ready bundle without requiring a hosted service.",
         "EXP-002: A manual branch or PR bundle is labeled manual delivery and cannot count as automated PR delivery.",
-        "EXP-003: When the frozen campaign protocol selects automated delivery, it uses a short-lived, least-privilege token, writes only a non-default branch and draft PR, is idempotent, and never auto-merges. Otherwise the item closes `not_applicable` only with dated protocol evidence selecting manual patch, branch, or PR-bundle delivery and no automated-delivery claim.",
-        "EXP-004: Provider-visible status contains only consumer-consented fields and excludes raw source, diffs, prompts, responses, logs, traces, and credentials."
+        "EXP-003: From a valid provider-channel event accepted by an `open_draft_pr` Consumer Installation, `lumyn update --event` composes impact, plan, a Lumyn deterministic or agent-assisted candidate, independent verification, non-default-branch write, and tested draft-PR creation using a short-lived least-privilege token and evidence-bound idempotency, with no auto-merge, then records a local event-bound status projection or explicit reporting decline. Provider transmission remains separately consented and cannot block the draft PR. Standalone PR creation, an imported manual candidate, or a manual patch, branch, or PR bundle cannot close this item.",
+        "EXP-004: Provider-visible status is bound to the exact event and evidence, contains only consumer-consented fields, distinguishes observed, consumer-reported, and unknown state, never infers `not_applicable` or `unaffected` from silence or `retired` from merge, and excludes raw source, diffs, prompts, responses, logs, traces, and credentials."
       ],
       "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
       "validation_contract_inheritance": {
@@ -2384,43 +2566,48 @@
         "post_merge_report",
         "scope_closure_report"
       ],
-      "requires_capabilities": [],
-      "conditional_factory_capabilities": [
+      "requires_capabilities": [
         "approval",
         "credentials",
         "network"
       ],
+      "conditional_factory_capabilities": [],
       "product_authority_requirements": [
         "artifact_deletion",
         "artifact_retention",
+        "command_execution",
         "customer_repo_read",
-        "customer_repo_write"
+        "customer_repo_write",
+        "github_branch_write",
+        "github_pr_write"
       ],
       "optional_product_action_capabilities": [
-        "github_branch_write",
-        "github_pr_write",
+        "model_credential",
+        "model_network",
+        "model_request_disclosure",
+        "package_registry_read",
         "provider_reporting"
       ],
       "requires_human_approval": true,
-      "requires_credentials": false,
-      "requires_network": false,
+      "requires_credentials": true,
+      "requires_network": true,
       "runtime_pins": {
         "language": "go_with_parser_backed_typescript_analysis",
         "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
-        "provider_intent_policy": "services-led provider-paid API or SDK sunset campaign with provider-confirmed source and target semantics; a signed declarative provider packet is authoritative when supplied and confirmed, remains data, cannot execute code, and grants no consumer repository authority; mandatory packet PKI, continuous status, connection receipts, and receipt-backed billing are deferred",
-        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; repository, provider, tool, and model content is untrusted and cannot widen any boundary",
+        "provider_intent_policy": "provider-originated API or SDK update delivery launched through a provider-paid, services-assisted sunset campaign; one accountably confirmed Provider Change Contract is reused by the exact invited cohort, each non-executable provider event binds its exact digest, audience, deadline, and supersession state, and neither contract nor event grants consumer repository authority; a universal registry, elaborate provider PKI, connection receipts, and receipt-backed billing are deferred",
+        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; the coding agent is replaceable, and repository, provider, tool, and model content is untrusted and cannot widen any boundary",
         "verification_policy": "deterministic repository and workflow verification is independent from deterministic or agent-assisted generation, runs from the exact candidate head, preserves baseline failures, and cannot be satisfied by a model completion or self-verification",
-        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the baseline; optional remote branch and draft PR require separate exact authorization; default-branch writes and auto-merge are forbidden",
+        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate short-lived non-default-branch and PR authorization, evidence-bound idempotency, and no auto-merge; manual delivery cannot close automated-delivery acceptance; provider status is event-bound, consumer-consented, provenance-labeled, and never inferred from silence",
         "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, patches, traces, credentials, and identifiable campaign evidence use an approved external private root",
-        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
-        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
+        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
       },
       "factory_compatibility": {
         "factory_contract_version": "1.0",
-        "profile_contract_version": "v2_incompatible_with_lumyn_v3",
+        "profile_contract_version": "v2_incompatible_with_lumyn_v3_1",
         "profile_ref": "profiles/lumyn.yaml",
         "status": "blocked_profile_and_runtime_unqualified",
         "generated_by": "prd-to-plan+execution-compiler",
@@ -2433,7 +2620,7 @@
             "status": "deprecated"
           }
         ],
-        "unblock_rule": "No task dispatch until the external profile is updated and factoryd is qualified against the exact v3 control generation."
+        "unblock_rule": "No factoryd task dispatch until the external profile is updated and factoryd is qualified against the exact v3.1 control generation."
       },
       "factoryd_runtime": {
         "state_dir": ".factoryd/",
@@ -2443,18 +2630,18 @@
         "worker_command": "",
         "dispatch_enabled": false,
         "fail_closed": true,
-        "profile_compatibility_status": "blocked_v3_profile_update_required",
-        "runtime_qualification_status": "blocked_factoryd_v3_qualification_required",
+        "profile_compatibility_status": "blocked_v3_1_profile_update_required",
+        "runtime_qualification_status": "blocked_factoryd_v3_1_qualification_required",
         "unblock_dependencies": [
-          "Update external Factory profiles/lumyn.yaml to the approved v3 services-led hybrid contract.",
-          "Qualify factoryd against this exact v3 task, authority, bounded-model, evidence, and closure generation.",
+          "Update external Factory profiles/lumyn.yaml to the approved v3.1 provider-originated update-delivery contract.",
+          "Qualify factoryd against this exact v3.1 task, installation, authority, bounded-model, delivery, status, evidence, and closure generation.",
           "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after both external dependencies are recorded."
         ],
         "approval_posture": "Factory approval never substitutes for exact private Lumyn product action authorization or human merge.",
         "credential_posture": "no ambient consumer, provider, model, sandbox, or GitHub secrets",
         "network_posture": "offline by default; exact task-scoped endpoints only",
         "runtime_control": {
-          "control_id": "runtime-control-lumyn-v3-m9",
+          "control_id": "runtime-control-lumyn-v3-1-m9",
           "owner": "lumyn-maintainers",
           "autonomy_level": "restricted",
           "mission_paused": true,
@@ -2465,7 +2652,7 @@
           "max_write_scope_paths": [],
           "release_freeze": {
             "enabled": true,
-            "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
+            "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
             "exception_ref": ""
           },
           "launch_request": {
@@ -2473,11 +2660,30 @@
             "requested_write_paths": [],
             "requested_adapter": "codex_cli",
             "expected_decision": "deny",
-            "reason_code": "factory_profile_and_runtime_v3_unqualified"
+            "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
           },
           "conflict_behavior": "fail_closed"
         },
-        "capability_grants": []
+        "capability_grants": [
+          {
+            "task_id": "M9",
+            "capability": "approval",
+            "approved": false,
+            "evidence_ref": "pending:factory-grants/M9/approval"
+          },
+          {
+            "task_id": "M9",
+            "capability": "credentials",
+            "approved": false,
+            "evidence_ref": "pending:factory-grants/M9/credentials"
+          },
+          {
+            "task_id": "M9",
+            "capability": "network",
+            "approved": false,
+            "evidence_ref": "pending:factory-grants/M9/network"
+          }
+        ]
       },
       "validation_commands": [
         "make lint-fast",
@@ -2486,7 +2692,7 @@
         "python3 scripts/validate_repo_pack.py"
       ],
       "stop_conditions": [
-        "Factory profile or factoryd runtime remains unqualified",
+        "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
         "acceptance item is absent, unmapped, or closed only by milestone or slice",
         "provider intent, consumer authority, model boundary, or redaction is ambiguous",
         "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
@@ -2496,34 +2702,52 @@
         "task path or acceptance scope changes without a regenerated control set"
       ],
       "delivery_contract": {
-        "baseline_forms": [
+        "fallback_forms": [
           "evidence_bundle",
           "patch",
           "optional_local_branch",
           "pr_ready_bundle"
         ],
-        "optional_remote_forms": [
+        "required_remote_forms": [
           "remote_branch",
           "draft_pr"
         ],
         "remote_branch_and_pr_separate_grants": true,
+        "short_lived_least_privilege_token": true,
+        "github_app_installation_may_persist": true,
+        "long_lived_token_allowed": false,
+        "broad_organization_grant_allowed": false,
+        "non_default_branch_only": true,
+        "idempotency_evidence_required": true,
+        "tested_candidate_evidence_required": true,
+        "manual_delivery_cannot_close_exp_003": true,
         "default_branch_write": false,
         "auto_merge": false,
-        "exp_003_applicability": "binary_frozen_before_execution",
-        "automated_path_requires": [
-          "dated frozen campaign protocol selecting automated delivery",
-          "short-lived least-privilege token",
-          "non-default branch",
-          "draft PR",
-          "idempotency evidence",
-          "no auto-merge evidence"
-        ],
-        "not_applicable_path_requires": [
-          "dated frozen campaign protocol selecting manual-only delivery",
-          "patch, local branch, or PR-bundle evidence",
-          "explicit no automated-delivery claim"
-        ],
-        "missing_protocol_behavior": "EXP-003 remains open"
+        "missing_automated_evidence_behavior": "EXP-003 remains open",
+        "provider_status_contract": {
+          "exact_event_and_evidence_binding": true,
+          "consumer_consented_fields_only": true,
+          "provenance_labels": [
+            "observed",
+            "consumer_reported",
+            "unknown"
+          ],
+          "silence_is_unknown": true,
+          "merge_is_not_retired": true,
+          "raw_consumer_evidence": false,
+          "not_applicable_requires_explicit_evidence": true,
+          "unaffected_requires_explicit_evidence": true
+        },
+        "idempotency_binding_fields": [
+          "provider_change_event",
+          "provider_change_contract",
+          "consumer_installation_authorization",
+          "repository",
+          "repository_base",
+          "candidate_head",
+          "migration_plan",
+          "verification_evidence"
+        ]
       },
       "outcome_record_contract": {
         "command": "lumyn outcome record",
@@ -2541,16 +2765,46 @@
           "corrected",
           "reverted"
         ]
+      },
+      "composed_update_contract": {
+        "command": "lumyn update --event",
+        "required_stages": [
+          "provider_change_event",
+          "consumer_installation",
+          "repository_impact",
+          "migration_plan",
+          "lumyn_candidate",
+          "independent_verification",
+          "remote_branch",
+          "draft_pr",
+          "provider_status_projection"
+        ],
+        "qualifying_candidate_modes": [
+          "deterministic",
+          "agent_assisted"
+        ],
+        "installed_action_ceiling_required": "open_draft_pr",
+        "authorization_modes_supported": [
+          "per_event_approval",
+          "installed_preauthorization"
+        ],
+        "imported_manual_candidate_qualifies": false,
+        "standalone_pr_create_qualifies": false,
+        "attended_event_import_qualifies": false,
+        "pilot_requires_installed_preauthorization": true,
+        "provider_status_projection_generated_locally": true,
+        "provider_transmission_optional_for_exp_003": true,
+        "pilot_same_run_provider_projection_required": true
       }
     },
     {
       "task_id": "M10",
       "task_order": 12,
       "work_item_id": "lumyn-v3-m10",
-      "milestone_ref": "docs/product/plan.md#m10-run-one-prepaid-provider-sunset-campaign",
-      "objective": "Run one paid provider sunset campaign, measure the frozen consumer and generic-agent comparison plus COGS and operator effort, and require a separate material provider-outcome metric, threshold, and pass by the absolute judgment deadline.",
+      "milestone_ref": "docs/product/plan.md#m10-run-one-prepaid-provider-originated-update-campaign",
+      "objective": "Run one paid provider-originated update campaign from one confirmed event through installed consumer policy to tested draft PRs and consented rollout status; measure the generic-agent comparison, COGS, operator effort, and frozen material provider outcome by the absolute judgment deadline.",
       "risk_class": "high",
-      "dispatch_status": "paused_factory_profile_and_runtime_unqualified",
+      "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
       "blocked_by": [
         "M2.5",
         "M7",
@@ -2590,11 +2844,11 @@
       "acceptance_checks": [
         "PILOT-001: At least five prequalified Eligible Consumer Units across five distinct API Consumer Organizations are invited without changing the frozen cohort after outcomes are visible.",
         "PILOT-002: At least three repositories complete valid consumer-local impact scans within 14 calendar days of their invitations.",
-        "PILOT-003: At least two distinct repositories produce tested, reviewable migration outcomes with explicit evidence boundaries by the frozen pilot deadline.",
+        "PILOT-003: At least two distinct repositories produce tested, reviewable migration outcomes with explicit evidence boundaries by the frozen pilot deadline; at least one starts from the authenticated provider channel, uses `installed_preauthorization`, is generated through Lumyn's deterministic or agent-assisted path without bespoke Lumyn Operator code edits, is independently verified, and is delivered by the composed `lumyn update --event` flow as a Lumyn-opened draft PR, then emits a consumer-consented provider status projection bound to that same event, installation authorization, candidate, verification evidence, and draft PR.",
         "PILOT-004: At least one verified migration outcome is accepted or merged by its Consumer Maintainer; closed, rejected, reverted, and corrected outcomes remain visible.",
         "PILOT-005: Against the frozen guide/codemod plus generic-agent baseline, Lumyn reduces median Consumer Maintainer hands-on time by at least 30% without a worse substantive-correction, revert, or false-verification rate, or clears another equally material threshold frozen before execution.",
-        "PILOT-006: Actual cleared payment, model/tool COGS, Lumyn Operator hours, Consumer Maintainer time, support effort, and the frozen primary provider outcome are measured from source evidence, and the provider outcome clears its frozen material threshold.",
-        "PILOT-007: Every migration records accepted, merged, closed, reverted, corrected, blocked, and residual-risk outcomes through the frozen observation window.",
+        "PILOT-006: Actual cleared payment, model/tool COGS, Lumyn Operator hours, Consumer Maintainer time, support effort, and the frozen primary provider outcome are measured from source evidence, and the provider outcome clears its frozen material threshold while the campaign clears its frozen contribution-margin or operator-automation threshold.",
+        "PILOT-007: Every migration records accepted, merged, closed, reverted, corrected, blocked, and residual-risk outcomes through the frozen observation window; each participating installation emits or explicitly declines its allowlisted event-bound status projection, and the projection from the qualifying `PILOT-003` run reaches the API Provider.",
         "PILOT-008: The campaign receives a pass or fail at the frozen judgment deadline. Failure to prepay, recruit, activate, outperform the generic baseline, clear the material provider-outcome threshold, or produce verified outcomes triggers a documented stop or reframe; the experiment cannot remain open indefinitely."
       ],
       "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
@@ -2649,16 +2903,16 @@
         "artifact_retention",
         "command_execution",
         "customer_repo_read",
-        "customer_repo_write"
-      ],
-      "optional_product_action_capabilities": [
+        "customer_repo_write",
         "github_branch_write",
         "github_pr_write",
+        "provider_reporting"
+      ],
+      "optional_product_action_capabilities": [
         "model_credential",
         "model_network",
         "model_request_disclosure",
         "package_registry_read",
-        "provider_reporting",
         "sandbox_credential",
         "sandbox_network",
         "sandbox_request_disclosure"
@@ -2672,17 +2926,17 @@
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
-        "provider_intent_policy": "services-led provider-paid API or SDK sunset campaign with provider-confirmed source and target semantics; a signed declarative provider packet is authoritative when supplied and confirmed, remains data, cannot execute code, and grants no consumer repository authority; mandatory packet PKI, continuous status, connection receipts, and receipt-backed billing are deferred",
-        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; repository, provider, tool, and model content is untrusted and cannot widen any boundary",
+        "provider_intent_policy": "provider-originated API or SDK update delivery launched through a provider-paid, services-assisted sunset campaign; one accountably confirmed Provider Change Contract is reused by the exact invited cohort, each non-executable provider event binds its exact digest, audience, deadline, and supersession state, and neither contract nor event grants consumer repository authority; a universal registry, elaborate provider PKI, connection receipts, and receipt-backed billing are deferred",
+        "model_policy": "bounded agent use requires exact model provider, endpoint, model and version, parameters, prompt and tool digests, selected context and request-disclosure classes, retention and regional posture, credential environment and scopes, network endpoint and operations, read and write paths, file, line, diff, turn, token, time, retry, concurrency, attempt, and cost budgets, plus request, response, tool-call, usage, and patch provenance; the coding agent is replaceable, and repository, provider, tool, and model content is untrusted and cannot widen any boundary",
         "verification_policy": "deterministic repository and workflow verification is independent from deterministic or agent-assisted generation, runs from the exact candidate head, preserves baseline failures, and cannot be satisfied by a model completion or self-verification",
-        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the baseline; optional remote branch and draft PR require separate exact authorization; default-branch writes and auto-merge are forbidden",
+        "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate short-lived non-default-branch and PR authorization, evidence-bound idempotency, and no auto-merge; manual delivery cannot close automated-delivery acceptance; provider status is event-bound, consumer-consented, provenance-labeled, and never inferred from silence",
         "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, patches, traces, credentials, and identifiable campaign evidence use an approved external private root",
-        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
-        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+        "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants",
+        "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
       },
       "factory_compatibility": {
         "factory_contract_version": "1.0",
-        "profile_contract_version": "v2_incompatible_with_lumyn_v3",
+        "profile_contract_version": "v2_incompatible_with_lumyn_v3_1",
         "profile_ref": "profiles/lumyn.yaml",
         "status": "blocked_profile_and_runtime_unqualified",
         "generated_by": "prd-to-plan+execution-compiler",
@@ -2695,7 +2949,7 @@
             "status": "deprecated"
           }
         ],
-        "unblock_rule": "No task dispatch until the external profile is updated and factoryd is qualified against the exact v3 control generation."
+        "unblock_rule": "No factoryd task dispatch until the external profile is updated and factoryd is qualified against the exact v3.1 control generation."
       },
       "factoryd_runtime": {
         "state_dir": ".factoryd/",
@@ -2705,18 +2959,18 @@
         "worker_command": "",
         "dispatch_enabled": false,
         "fail_closed": true,
-        "profile_compatibility_status": "blocked_v3_profile_update_required",
-        "runtime_qualification_status": "blocked_factoryd_v3_qualification_required",
+        "profile_compatibility_status": "blocked_v3_1_profile_update_required",
+        "runtime_qualification_status": "blocked_factoryd_v3_1_qualification_required",
         "unblock_dependencies": [
-          "Update external Factory profiles/lumyn.yaml to the approved v3 services-led hybrid contract.",
-          "Qualify factoryd against this exact v3 task, authority, bounded-model, evidence, and closure generation.",
+          "Update external Factory profiles/lumyn.yaml to the approved v3.1 provider-originated update-delivery contract.",
+          "Qualify factoryd against this exact v3.1 task, installation, authority, bounded-model, delivery, status, evidence, and closure generation.",
           "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after both external dependencies are recorded."
         ],
         "approval_posture": "Factory approval never substitutes for exact private Lumyn product action authorization or human merge.",
         "credential_posture": "no ambient consumer, provider, model, sandbox, or GitHub secrets",
         "network_posture": "offline by default; exact task-scoped endpoints only",
         "runtime_control": {
-          "control_id": "runtime-control-lumyn-v3-m10",
+          "control_id": "runtime-control-lumyn-v3-1-m10",
           "owner": "lumyn-maintainers",
           "autonomy_level": "restricted",
           "mission_paused": true,
@@ -2727,7 +2981,7 @@
           "max_write_scope_paths": [],
           "release_freeze": {
             "enabled": true,
-            "reason": "Lumyn v3 Factory profile and factoryd runtime are not qualified.",
+            "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
             "exception_ref": ""
           },
           "launch_request": {
@@ -2735,7 +2989,7 @@
             "requested_write_paths": [],
             "requested_adapter": "codex_cli",
             "expected_decision": "deny",
-            "reason_code": "factory_profile_and_runtime_v3_unqualified"
+            "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
           },
           "conflict_behavior": "fail_closed"
         },
@@ -2767,7 +3021,7 @@
         "python3 scripts/validate_repo_pack.py"
       ],
       "stop_conditions": [
-        "Factory profile or factoryd runtime remains unqualified",
+        "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
         "acceptance item is absent, unmapped, or closed only by milestone or slice",
         "provider intent, consumer authority, model boundary, or redaction is ambiguous",
         "prompt injection or untrusted content widens paths, tools, credentials, network, disclosure, or budget",
@@ -2845,7 +3099,27 @@
         "lumyn_operator_hours": "measured from source evidence",
         "consumer_maintainer_time": "measured from source evidence",
         "absolute_judgment_deadline": "frozen before invitations",
-        "provider_code_access": false
+        "provider_code_access": false,
+        "provider_led_distribution_and_onboarding_required": true,
+        "minimum_lumyn_opened_tested_draft_prs": 1,
+        "manual_only_delivery_fails_campaign": true,
+        "provider_status_exact_event_and_evidence_binding": true,
+        "provider_status_consumer_consent_required": true,
+        "silence_is_unknown": true,
+        "merge_is_not_retired": true,
+        "minimum_composed_lumyn_draft_prs": 1,
+        "composed_pr_requires_installed_preauthorization": true,
+        "composed_pr_candidate_modes": [
+          "deterministic",
+          "agent_assisted"
+        ],
+        "bespoke_operator_edits_qualify": false,
+        "standalone_pr_creation_qualifies": false,
+        "minimum_provider_status_projections": 1,
+        "provider_status_projection_must_bind_composed_pr": true,
+        "explicit_status_decline_record_required": true,
+        "campaign_economics_threshold": "minimum contribution margin or maximum Lumyn Operator hours per reviewable outcome frozen before invitations",
+        "campaign_economics_threshold_pass_required": true
       }
     }
   ]

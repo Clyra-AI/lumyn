@@ -1,9 +1,10 @@
 # Lumyn Developer Guide
 
-Status: v3 engineering planning contract; product runtime not implemented
+Status: v3.1 engineering planning contract; product runtime not implemented
 
-Engineering work targets services-led, provider-paid API and SDK sunset
-campaigns while execution and authority remain consumer-local.
+Engineering work targets provider-originated API update delivery launched
+through services-assisted, provider-paid sunset campaigns while execution and
+authority remain consumer-local.
 
 ## Toolchain Pins
 
@@ -41,7 +42,7 @@ No model SDK or endpoint is implicitly approved by this planning rebaseline.
 - `make prepush-full`: full local gate before PR or merge.
 - `make audit-remote-protection`: networked GitHub protection audit.
 
-The checked-in compiled set is regenerated from the approved v3 PRD and plan
+The checked-in compiled set is regenerated from the approved v3.1 PRD and plan
 and is the repo-local source for acceptance counts, task mappings, validation,
 and closure. It authorizes no product runtime implementation. factoryd dispatch
 remains paused pending external Factory-profile and factoryd-runtime
@@ -65,8 +66,8 @@ qualification.
 |---|---|---|
 | Tier 1 Unit | Active | Go units through `make test-fast` |
 | Tier 2 Integration | Planned/active | Schema, parser, impact, plan, agent, patch, verification, and bundle integration |
-| Tier 3 End-to-End | Planned | Provider intent to local patch, deterministic verification, and PR bundle; optional branch/PR separately |
-| Tier 4 Acceptance | Active planning | Compiled v3 item-level ledger, mapping, and closure map |
+| Tier 3 End-to-End | Planned | Provider event and installed policy to deterministic verification and tested draft PR; local bundle fallback separately |
+| Tier 4 Acceptance | Active planning | Compiled v3.1 item-level ledger, mapping, and closure map |
 | Tier 5 Hardening | Planned | Path escape, prompt injection, stale input, budget, retry, cleanup, redaction, idempotency |
 | Tier 6 Chaos | Reserved | Model, filesystem, command, sandbox, and GitHub failure injection |
 | Tier 7 Performance | Planned | Impact, generation, verification, PR-bundle, token, cost, and operator budgets |
@@ -74,7 +75,7 @@ qualification.
 | Tier 9 Contract | Active | JSON Schemas, typed exits, compatibility, negative fixtures |
 | Tier 10 UAT | Planned | Consumer authorization, plan approval, review, and handoff |
 | Tier 11 Scenario | Planned | Deterministic and agent-eligible gold, holdout, unsupported, injection, and false-verification corpus |
-| Tier 12 Cross-System Integration | Blocked until approved | Exact model endpoint, optional provider sandbox, optional remote branch, optional draft PR |
+| Tier 12 Cross-System Integration | Blocked until approved | Exact model endpoint, optional provider sandbox, and required short-lived remote branch/draft-PR pilot path |
 
 Runner-ready packets cite each applicable tier or an approved non-applicable
 reason.
@@ -98,7 +99,8 @@ excluded.
 
 Keep these responsibilities separate:
 
-- campaign and provider-intent intake;
+- provider event and Provider Change Contract intake;
+- Consumer Installation and event-specific authorization;
 - product authorization;
 - TypeScript analysis;
 - migration planning;
@@ -107,7 +109,7 @@ Keep these responsibilities separate:
 - workspace and command execution;
 - verification;
 - PR-bundle rendering;
-- optional sandbox and GitHub delivery.
+- optional sandbox and short-lived GitHub delivery.
 
 ## CI And PR Lifecycle
 
@@ -255,20 +257,46 @@ Do not require byte-identical agent output.
 
 Public fixtures demonstrate engineering behavior only.
 
-## API-Provider Change Packet Trust Policy
+## Provider Change Contract And Event Policy
 
-- A provider-confirmed source/target migration contract is required.
-- A signed declarative provider packet is authoritative when supplied and
-  confirmed.
-- Provider artifacts are data, never executable scripts.
-- Record issuer/source, version, digest, confirmation evidence, audience when
-  applicable, and supersession/withdrawal state.
-- Conflicting, stale, unconfirmed, malformed, or executable intent fails closed.
-- The managed v3 wedge does not require elaborate root enrollment, continuous
-  status polling, connection receipts, or receipt-backed billing.
-- Provider payment and packet presence grant no consumer repository, model,
-  command, branch, or PR authority.
+- An accountable Provider Operator confirms one exact source/target Provider
+  Change Contract for reuse across the invited cohort.
+- The first channel is a signed, versioned JSON manifest at an exact
+  provider-controlled HTTPS URL pinned with the campaign key by the
+  installation. The manifest embeds the Provider Change Contract or pins its
+  exact provider-controlled HTTPS URL. Verify origin, key, sequence, freshness,
+  retrieved-byte contract digest, audience, and lifecycle state before policy
+  evaluation.
+- An attended file import is labeled recovery and cannot prove
+  provider-channel delivery or authorize installed-preauthorization writes.
+- Every provider event binds issuer, contract digest, audience, deadline,
+  severity, and supersession or withdrawal state.
+- Provider contracts, events, and artifacts are data, never executable scripts.
+- Duplicate, replayed, stale, conflicting, unconfirmed, unauthenticated,
+  wrong-audience, superseded, withdrawn, malformed, or executable intent fails
+  closed.
+- The managed v3.1 wedge does not require a universal registry, elaborate root
+  enrollment, connection receipts, or receipt-backed billing.
+- Provider payment, contract, and event presence grant no consumer repository,
+  model, command, branch, PR, or disclosure authority.
 - Valid and invalid fixtures cover every active intent boundary.
+
+## Consumer Installation Policy
+
+- Bind provider/channel, repository and package root, audience/version
+  selectors, action ceiling, authorization mode, paths, commands, model-data,
+  GitHub token-issuance policy, reporting, retention, deletion, disclosure,
+  expiry, and revocation.
+- Supported action modes are `notify_only`, `scan_only`, `prepare_patch`, and
+  `open_draft_pr`; supported authorization modes are `per_event_approval` and
+  `installed_preauthorization`.
+- Store no GitHub token. An approved local or CI credential broker issues a
+  short-lived token only for a qualifying runtime delivery step.
+- Freeze an immutable authorization snapshot for each event.
+- An event may narrow but never widen installed authority.
+- Expiry, revocation, wrong audience, action mismatch, cross-repository reuse,
+  authorization-mode mismatch, stored-token input, and attempted policy
+  widening fail closed.
 
 ## TypeScript Impact Policy
 
@@ -286,9 +314,13 @@ Public fixtures demonstrate engineering behavior only.
 
 ## Patch And Filesystem Policy
 
-- No patch before exact plan approval and exact local-write authorization.
+- No patch before a no-write plan and exact local-write authorization. Under
+  `per_event_approval`, authorization includes approval of that exact plan;
+  under `installed_preauthorization`, every bound plan value must satisfy the
+  installed policy or the run pauses.
 - Use an isolated worktree or equivalent disposable workspace.
-- Bind provider-confirmed intent, plan digest, and base commit.
+- Bind the provider event, Provider Change Contract, Consumer Installation,
+  event-specific authorization, plan digest, and base commit.
 - Resolve and validate real paths before writes.
 - Enforce allowed/forbidden paths and file/line/diff budgets.
 - Reject symlink/path traversal escape.
@@ -303,7 +335,7 @@ Public fixtures demonstrate engineering behavior only.
 
 Agent mode requires:
 
-- an approved plan item routed to `bounded_agent`;
+- an approved plan item routed to `agent_assisted`;
 - exact model provider, endpoint, model/version, and parameters;
 - prompt, system policy, and tool-definition digests;
 - exact context selection and request disclosure;
@@ -397,6 +429,20 @@ Every grant names target, scope, expiry, revocation, evidence, and failure
 behavior. Model disclosure, network, and credential grants are independent.
 Patch, local branch, and PR-bundle creation imply no GitHub grant. Remote branch
 and draft-PR grants are independent and neither authorizes merge.
+`provider_reporting` is optional for M9 delivery and cannot block an otherwise
+authorized draft PR; M10 campaign proof separately requires at least one
+consumer-consented event-bound projection.
+
+Automated-delivery acceptance additionally requires short-lived credentials,
+non-default branch, draft-only posture, tested-candidate binding, idempotency,
+and negative proof for default-branch write and auto-merge. Manual fallback
+cannot satisfy that acceptance. `EXP-003` also requires the composed
+provider-channel event -> installation -> impact -> plan -> Lumyn-generated
+candidate -> independent verification -> branch -> draft PR -> local
+status-projection path; standalone PR creation, attended event import, or an
+imported manual candidate cannot close it. Provider transmission remains
+optional for `EXP-003`, but M10 requires the qualifying run's consented
+projection.
 
 Wildcard targets, endpoints, paths, credentials, or budgets are invalid.
 
@@ -419,7 +465,7 @@ Planned commands are not release claims.
   `.factory/artifacts/lifecycle-evidence/<task_id>/`
 - PR lifecycle:
   `.factory/artifacts/pr-lifecycle/<work_item_id>/pr-lifecycle-report.json`
-- Compiled v3 target:
+- Compiled v3.1 target:
   `.factory/artifacts/prd-to-plan/lumyn-migration-mvp/`
 - Historical plan:
   `.factory/artifacts/prd-to-plan/lumyn-mvp/`

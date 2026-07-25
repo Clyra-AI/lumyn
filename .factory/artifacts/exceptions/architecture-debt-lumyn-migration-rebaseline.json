@@ -16,7 +16,7 @@
       "fail_line_threshold": 2500
     }
   },
-  "reason": "The v3 rebaseline covers 49 item-level acceptance units, the M0-M10 graph, bounded-model and product-authority separation, fail-closed Factory dispatch, historical-plan exclusion, and negative self-tests. scripts/validate_repo_pack.py is an exact 8-line CLI entrypoint. The substantive coordinator and focused checks live in scripts/repo_pack_validation, remain unexcepted, and are subject to the normal 1200-line warning and 2500-line failure thresholds. This shrink-only entrypoint ceiling prevents the former orchestration monolith from returning and is not M0 completion evidence.",
+  "reason": "The v3.1 rebaseline covers 53 item-level acceptance units, the M0-M10 graph, bounded-model and product-authority separation, fail-closed factoryd dispatch, separately approved attended execution, historical-plan exclusion, and negative self-tests. scripts/validate_repo_pack.py is an exact 8-line CLI entrypoint. The substantive coordinator and focused checks live in scripts/repo_pack_validation, remain unexcepted, and are subject to the normal 1200-line warning and 2500-line failure thresholds. This shrink-only entrypoint ceiling prevents the former orchestration monolith from returning and is not M0 completion evidence.",
   "owner": "lumyn-maintainers",
   "approved_by": "davidahmann",
   "approved_at": "2026-07-23T22:00:00Z",

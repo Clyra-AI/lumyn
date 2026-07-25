@@ -4,16 +4,22 @@
 
 ### Added
 
-- Added ADR-0003 and a v3 product/engineering planning contract for
-  services-led, provider-paid API and SDK sunset campaigns.
+- Added ADR-0004 and a v3.1 product/engineering planning contract for
+  provider-originated API update delivery launched through services-assisted,
+  provider-paid API and SDK sunset campaigns.
+- Added planned Provider Change Event, Consumer Installation, event-specific
+  authorization, and consented provider-status projection boundaries.
+- Added a concrete first provider transport: signed versioned manifests at a
+  pinned provider-controlled HTTPS origin with sequence, freshness, audience,
+  contract-digest, and lifecycle checks.
 - Added hybrid patch routing: deterministic transforms for exact mappings and
   a consumer-local bounded coding agent for approved repository-specific work.
 - Added exact model request-disclosure, endpoint, credential, tool, path,
   token, time, retry, cost, provenance, retention, and deletion boundaries.
-- Added patch artifact and PR bundle as the no-GitHub baseline handoff, with
-  optional local branch, remote branch, and draft PR as separate delivery
+- Added patch artifact and PR bundle as the no-GitHub fallback, with local
+  branch, short-lived remote branch, and tested draft PR as separate delivery
   states.
-- Added a source-aligned v3 compiled Factory control set covering context,
+- Added a source-aligned v3.1 compiled Factory control set covering context,
   risk, execution, task packets, validation, acceptance, mapping, and closure.
 - Added explicit factoryd mission pause and compatibility gates for the
   external Factory profile, factoryd bundle/runtime, and exact active mission.
@@ -24,13 +30,26 @@
 ### Changed
 
 - Reframed Lumyn from generic agent-readiness evaluation and the v2
-  deterministic/receipt-first migration plan to verified API migration
-  execution.
+  deterministic/receipt-first migration plan to provider-originated API update
+  delivery.
 - Made the API Provider the initial campaign buyer while preserving API
   Consumer Organization authority over repository access, execution, model
   egress, credentials, disclosure, review, and merge.
-- Made services-led local or consumer-CI execution the initial form factor;
-  hosted SaaS is not required for the first campaign.
+- Made services-assisted local or consumer-CI execution the initial onboarding
+  and GTM motion rather than the product identity; hosted SaaS is not required
+  for the first campaign.
+- Made at least one Lumyn-opened tested draft PR mandatory first-campaign
+  product proof; manual patch and PR-bundle handoff remain fallback and cannot
+  close automated-delivery acceptance.
+- Made Provider Change Event and Consumer Installation semantics four direct
+  acceptance units, bringing the active ledger to 53 items, and required a
+  composed provider-event-to-verified-draft-PR proof that excludes imported
+  manual candidates and standalone PR creation.
+- Defined installation action modes as ceilings and separated exact per-event
+  approval from bounded installed preauthorization; durable installations
+  store token-issuance policy, never GitHub tokens.
+- Made the coding agent a replaceable adapter and explicit status-quo
+  comparator rather than Lumyn's proprietary differentiation.
 - Kept provider-confirmed migration intent authoritative and signed
   declarative packets supported, while deferring mandatory packet PKI,
   continuous provider status, connection receipts, acknowledgements, and
@@ -38,15 +57,17 @@
 - Made generation provenance independent from deterministic, exact-candidate
   verification strength.
 - Replaced checked-in v2 active-control claims under
-  `lumyn-migration-mvp` with the regenerated v3 compiled control set.
+  `lumyn-migration-mvp` with the regenerated v3.1 compiled control set.
 - Preserved `.factory/artifacts/prd-to-plan/lumyn-mvp/`, ADR-0002, and their
   lifecycle evidence as immutable historical records.
-- Clarified that the repo-local v3 compilation is planning and validation
+- Clarified that the repo-local v3.1 compilation is planning and validation
   authority only. It authorizes no product runtime implementation or live
   action.
 - Kept factoryd dispatch paused until the external Factory
   `profiles/lumyn.yaml` profile and factoryd bundle/runtime are separately
   requalified and a bounded task is explicitly unpaused.
+- Scoped that pause to factoryd dispatch while retaining a separately approved
+  attended execution path through the same task packets and lifecycle gates.
 - Replaced the premature OSS claim with explicitly licensed,
   integrity-signed design-partner distribution and a separate gate for any
   future public OSS, self-serve, or Homebrew release.
@@ -62,7 +83,7 @@
 ### Fixed
 
 - Aligned product, workflow, developer, architecture, Factory-integration, and
-  repository-agent documents with the compiled v3 control state.
+  repository-agent documents with the compiled v3.1 control state.
 - Removed stale language that called the active compiled directory a checked-in
   v2 or “next” generation.
 - Made factoryd readiness and product implementation explicitly separate from
