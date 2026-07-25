@@ -1,6 +1,7 @@
 package schemas_test
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -237,6 +238,87 @@ func TestPersistedEvidenceEventContainersFailClosed(t *testing.T) {
 	}
 }
 
+func TestLegacyProviderMetadataUnknownExtensionsRemainCompatible(t *testing.T) {
+	root := repoRoot(t)
+	metadata := map[string]any{}
+	tests := map[string]map[string]any{
+		"command-result.schema.json": addSafetyCorpusFields(commandResultSample(metadata), nil),
+		"result-axes.schema.json":    addSafetyCorpusFields(resultAxesSample(metadata), nil),
+		"evidence-event.schema.json": addSafetyCorpusFields(evidenceEvent(metadata), nil),
+		"cassette.schema.json": cassetteSample(metadata, addSafetyCorpusFields(evidenceEvent(metadata), map[string]any{
+			"provider_metadata": modelProviderMetadata("api_provider"),
+		})),
+		"canonical-trace.schema.json": canonicalTraceSample(metadata, addSafetyCorpusFields(evidenceEvent(metadata), map[string]any{
+			"provider_metadata": modelProviderMetadata("agent_runner_vendor"),
+		})),
+	}
+	for schemaName, sample := range tests {
+		schemaName := schemaName
+		sample := sample
+		t.Run(schemaName, func(t *testing.T) {
+			schema, err := jsonschema.Compile(filepath.Join(root, "schemas", schemaName))
+			if err != nil {
+				t.Fatalf("compile schema: %v", err)
+			}
+			if schemaName == "command-result.schema.json" || schemaName == "result-axes.schema.json" || schemaName == "evidence-event.schema.json" {
+				sample["provider_metadata"] = modelProviderMetadata("api_provider")
+			}
+			if err := schema.Validate(sample); err != nil {
+				t.Fatalf("legacy v1.0 unknown extension must remain valid: %v", err)
+			}
+		})
+	}
+}
+
+func TestCommandResultTerminologyCompatibilityFixtures(t *testing.T) {
+	root := repoRoot(t)
+	schema, err := jsonschema.Compile(filepath.Join(root, "schemas", "command-result.schema.json"))
+	if err != nil {
+		t.Fatalf("compile command-result schema: %v", err)
+	}
+	tests := []struct {
+		name      string
+		path      string
+		wantValid bool
+		wantRole  string
+		canonical bool
+	}{
+		{name: "current explicit model role", path: "model-provider-v1.0.json", wantValid: true, wantRole: "model_provider", canonical: true},
+		{name: "legacy omitted role", path: "model-provider-legacy-v1.0.json", wantValid: true},
+		{name: "legacy API Provider extension", path: "legacy-api-provider-extension-v1.0.json", wantValid: true, wantRole: "api_provider"},
+		{name: "legacy Agent Runner Vendor extension", path: "legacy-agent-runner-vendor-extension-v1.0.json", wantValid: true, wantRole: "agent_runner_vendor"},
+	}
+	for _, test := range tests {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			payloadBytes, err := os.ReadFile(filepath.Join(root, "tests", "fixtures", "command-result", test.path))
+			if err != nil {
+				t.Fatalf("read fixture: %v", err)
+			}
+			var payload map[string]any
+			if err := json.Unmarshal(payloadBytes, &payload); err != nil {
+				t.Fatalf("decode fixture: %v", err)
+			}
+			validationErr := schema.Validate(payload)
+			if test.wantValid && validationErr != nil {
+				t.Fatalf("valid fixture rejected: %v", validationErr)
+			}
+			if !test.wantValid && validationErr == nil {
+				t.Fatal("invalid fixture unexpectedly validated")
+			}
+			if test.wantRole != "" {
+				providerMetadata, ok := payload["provider_metadata"].(map[string]any)
+				if !ok || providerMetadata["semantic_role"] != test.wantRole {
+					t.Fatalf("provider_metadata.semantic_role = %v, want %s", providerMetadata["semantic_role"], test.wantRole)
+				}
+			}
+			if test.canonical && test.wantRole != "model_provider" {
+				t.Fatalf("canonical v1.0 writer role = %q, want model_provider", test.wantRole)
+			}
+		})
+	}
+}
+
 func representativeSamples() map[string]any {
 	metadata := map[string]any{}
 	return map[string]any{
@@ -384,12 +466,8 @@ func addSafetyCorpusFields(sample map[string]any, overrides map[string]any) map[
 		"fix_target":             "not_applicable",
 		"surface_fingerprint":    "not_applicable",
 		"eval_mode":              "not_applicable",
-		"provider_metadata": map[string]any{
-			"applicable": false,
-			"provider":   "not_applicable",
-			"model":      "not_applicable",
-		},
-		"corpus_eligible": false,
+		"provider_metadata":      modelProviderMetadata("model_provider"),
+		"corpus_eligible":        false,
 	}
 	for key, value := range defaults {
 		if _, exists := withFields[key]; !exists {
@@ -402,6 +480,15 @@ func addSafetyCorpusFields(sample map[string]any, overrides map[string]any) map[
 		}
 	}
 	return withFields
+}
+
+func modelProviderMetadata(semanticRole string) map[string]any {
+	return map[string]any{
+		"applicable":    false,
+		"semantic_role": semanticRole,
+		"provider":      "not_applicable",
+		"model":         "not_applicable",
+	}
 }
 
 func cassetteSample(metadata map[string]any, event map[string]any) map[string]any {

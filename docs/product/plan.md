@@ -2,10 +2,10 @@
 
 **Date:** 2026-07-25
 **Source of truth:** `docs/product/prd.md`
-**Status:** Active v3.1 planning contract; this change authorizes no runtime
-implementation. factoryd task dispatch remains paused until the external
-Factory profile and factoryd compatibility posture are aligned and explicitly
-approved; separately approved attended tasks remain available
+**Status:** Active v3.1 planning contract. The external Factory profile is
+aligned; factoryd task dispatch remains paused until its bundle/runtime and
+exact mission are qualified and explicitly unpaused. Separately approved
+attended tasks remain available
 **Scope:** Build and validate one provider-originated TypeScript/Node API
 sunset campaign in which a provider publishes one confirmed change, authorized
 consumer installations produce repository-specific verified updates, and
@@ -192,16 +192,18 @@ Not implemented:
 - event-bound consented provider status projections;
 - migration outcome ingestion.
 
-Known correctness debt:
+M0 dispatch baseline:
 
 - `record`, `verify`, `trace`, `demo`, `share`, and `eval` are recognized by
-  the command dispatcher even though they have no implementation and can
-  return a generic pass result.
-- Current result contracts use bare `provider_metadata` for Model Provider
-  metadata and set evaluation-oriented values on non-evaluation commands.
+  the command dispatcher even though they have no implementation. M0 replaces
+  their baseline generic pass with typed `command_not_implemented` failures.
+- Result contract v1.0 retains the legacy serialized `provider_metadata` key
+  for Model Provider metadata. M0 makes new results explicit with
+  `semantic_role: model_provider`, keeps legacy payloads valid, and stops
+  setting evaluation metadata on `init` and `check`.
 - The repo-local v3 contract, task packets, and acceptance ledger are
-  rebaselined, but the external Factory profile and factoryd compatibility
-  posture are not yet aligned; no runtime task has run.
+  rebaselined. Factory `profiles/lumyn.yaml` is aligned to v3.1; factoryd
+  bundle/runtime qualification and unpause remain separate and incomplete.
 - Historical task evidence proves only the exact foundation it recorded.
 
 No line in this plan represents an unimplemented surface as shipped.
@@ -311,8 +313,15 @@ Compatibility rules:
 - Exit code `6` remains reserved.
 - Existing bare `provider_metadata` continues to mean Model Provider metadata
   during the compatibility window.
+- New v1.0 writers emit optional `semantic_role: model_provider`; historical
+  v1.0 payloads without it remain valid. V1.0 schemas preserve their prior
+  unknown-extension openness; an extension value cannot override the key's
+  legacy Model Provider meaning, and current writers emit no other role.
 - API Provider identity uses `api_provider_id` and `change_authority`.
 - New Model Provider fields use `model_provider_metadata`.
+- Renaming the v1.0 key requires a v2.0 schema, frozen v1.0 validators,
+  version-discriminated readers, v2.0 invalid mixed-role fixtures, and a new
+  provenance-linked artifact rather than an in-place historical rewrite.
 - Persisted schema changes require a new version, valid and invalid fixtures,
   compatibility notes, and migration behavior.
 - Unimplemented commands return typed nonzero errors.
@@ -398,11 +407,12 @@ rebaseline. It regenerates the 53-item acceptance ledger, mapping, execution
 plan, task packets, validation contract, and closure map without changing
 runtime product behavior. Historical v2 evidence remains immutable.
 
-The checked-in factoryd mission stays paused until the external Factory
-profile and factoryd compatibility posture are aligned with v3.1. That pause
-blocks factoryd dispatch only. A separately approved attended task may use the
-same packet and full lifecycle gates without claiming factoryd readiness. No
-implementation task is approved by this rebaseline itself.
+The external Factory profile is aligned to v3.1. The checked-in factoryd
+mission stays paused until its bundle/runtime qualifies the exact active
+mission and a bounded task is explicitly unpaused. That pause blocks factoryd
+dispatch only. A separately approved attended task may use the same packet and
+full lifecycle gates without claiming factoryd readiness. No implementation
+task is approved by this rebaseline itself.
 
 ---
 
@@ -1990,10 +2000,11 @@ before execution.
 - This change aligns the PRD, plan, operating docs, ADRs, compiled 53-item
   control set, validators, and paused factoryd templates.
 - No runtime implementation task is authorized by this planning change.
-- factoryd execution remains paused until the external Factory profile and
-  factoryd compatibility posture are aligned. A later attended implementation
-  path outside factoryd still requires explicit task approval and every
-  repo-local lifecycle gate; it does not prove factoryd readiness.
+- The external Factory profile is aligned. factoryd execution remains paused
+  until its bundle/runtime and exact mission are qualified and explicitly
+  unpaused. An attended implementation path outside factoryd still requires
+  explicit task approval and every repo-local lifecycle gate; it does not prove
+  factoryd readiness.
 
 ### Wave 1
 

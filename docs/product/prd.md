@@ -8,7 +8,7 @@
 | Last Updated | 2026-07-25 |
 | Primary Audience | Lumyn builders, API-provider design partners, API-consumer maintainers, and technical investors |
 | Source Task Plan | `docs/product/plan.md` |
-| Compiled Factory Plan | Repo-local v3.1 set regenerated; factoryd dispatch paused pending external Factory profile and runtime alignment |
+| Compiled Factory Plan | Repo-local v3.1 set regenerated; external Factory profile aligned; factoryd dispatch paused pending bundle/runtime qualification and explicit unpause |
 
 ---
 
@@ -1945,16 +1945,16 @@ Designed, schema-backed, or planned but not implemented as the v3 runtime:
 - event-bound consented provider status projection;
 - migration outcome ingestion.
 
-The current command dispatcher recognizes several unimplemented commands and
-can return a base success envelope. M0 must correct that false-green behavior;
-this planning rebaseline does not implement the correction.
+The command dispatcher recognizes several compatibility placeholders whose
+behavior is not implemented. M0 makes each return a typed nonzero
+`command_not_implemented` result; placeholders never report success.
 
 Historical v2 planning and task evidence remains immutable. The current
 repo-local compiled Factory set was regenerated from this v3 PRD and
 `docs/product/plan.md`. It is planning and validation authority, not product
-runtime or factoryd execution authority. factoryd remains paused until the
-external Factory profile and factoryd runtime are separately aligned and
-approved.
+runtime or factoryd execution authority. The external Factory profile is
+aligned; factoryd remains paused until its bundle/runtime is qualified against
+the exact mission and a bounded task is explicitly unpaused.
 
 ---
 

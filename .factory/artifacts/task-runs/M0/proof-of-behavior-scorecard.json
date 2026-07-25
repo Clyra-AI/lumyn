@@ -1,0 +1,115 @@
+{
+  "scorecard_id": "lumyn-v3-m0-proof-20260725",
+  "task_id": "M0",
+  "work_item_id": "lumyn-v3-m0",
+  "required_proof_level": "workflow_behavior",
+  "candidate_digest": "sha256:79ad239e707c478ff091fd3b2382a655f53ceb8b12244b9017e78b6c756f1daf",
+  "levels": [
+    {
+      "level": "syntax",
+      "status": "pass",
+      "summary": "New, legacy, and previously permitted unknown-extension command-result fixtures parse and validate without narrowing v1.0.",
+      "evidence_refs": [
+        "schemas/schema_test.go",
+        "tests/fixtures/command-result/"
+      ]
+    },
+    {
+      "level": "source_evidence",
+      "status": "pass",
+      "summary": "Behavior is bound to M0 acceptance IDs, task packet, exact source paths, schemas, fixtures, and ADR-0006.",
+      "evidence_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M0",
+        "docs/architecture/adr-0006-command-result-v1-provider-terminology.md"
+      ]
+    },
+    {
+      "level": "workflow_behavior",
+      "status": "pass",
+      "summary": "Built CLI process tests prove every documented placeholder exits 2 with a schema-valid typed error while retained commands and parser flows remain green.",
+      "evidence_refs": [
+        "cmd/lumyn/main_test.go",
+        ".factory/artifacts/task-runs/M0/validation-report.json"
+      ]
+    },
+    {
+      "level": "user_visible_behavior",
+      "status": "pass",
+      "summary": "PRD, plan, developer guidance, architecture guidance, Factory integration docs, changelog, and ADR describe the implemented behavior and compatibility boundary.",
+      "evidence_refs": [
+        "docs/product/prd.md",
+        "docs/product/plan.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/adr-0006-command-result-v1-provider-terminology.md",
+        "CHANGELOG.md"
+      ]
+    }
+  ],
+  "overall_status": "pass",
+  "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+  "acceptance_item_ids": [
+    "BASE-001",
+    "BASE-002",
+    "BASE-003",
+    "BASE-004",
+    "BASE-005"
+  ],
+  "acceptance_results": [
+    {
+      "acceptance_item_id": "BASE-001",
+      "status": "verified_retained",
+      "proof_level": "workflow_behavior",
+      "evidence_refs": [
+        "cmd/lumyn/main_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "BASE-002",
+      "status": "verified_retained_and_migration_defined",
+      "proof_level": "source_evidence",
+      "evidence_refs": [
+        "schemas/schema_test.go",
+        "docs/architecture/adr-0006-command-result-v1-provider-terminology.md"
+      ]
+    },
+    {
+      "acceptance_item_id": "BASE-003",
+      "status": "pending_pr_lifecycle",
+      "proof_level": "source_evidence",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M0/validation-report.json"
+      ]
+    },
+    {
+      "acceptance_item_id": "BASE-004",
+      "status": "verified_retained",
+      "proof_level": "workflow_behavior",
+      "evidence_refs": [
+        "cmd/lumyn/main_test.go",
+        "internal/source/"
+      ]
+    },
+    {
+      "acceptance_item_id": "BASE-005",
+      "status": "implemented",
+      "proof_level": "workflow_behavior",
+      "evidence_refs": [
+        "cmd/lumyn/main_test.go",
+        "schemas/schema_test.go"
+      ]
+    }
+  ],
+  "evidence_refs": [
+    ".factory/artifacts/task-runs/M0/validation-report.json",
+    ".factory/artifacts/task-runs/M0/work-proof-marker.json"
+  ],
+  "redaction_posture": {
+    "classification": "source_safe_internal",
+    "customer_safe": false,
+    "redaction_notes": "Contains only repository-relative source, contract, command, digest, and validation metadata; no consumer-private or credential material."
+  },
+  "gap_summary": [
+    "BASE-003 remains pending until PR CI, CodeQL, review, shipping, and post-merge gates complete."
+  ],
+  "recommended_next_action": "Run independent code/architecture review, then enter commit-push land mode."
+}

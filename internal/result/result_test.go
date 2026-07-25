@@ -25,10 +25,11 @@ func TestCommandResultJSONEnvelope(t *testing.T) {
 		FixTarget:            "not_applicable",
 		SurfaceFingerprint:   "not_applicable",
 		EvalMode:             "not_applicable",
-		ProviderMetadata: ProviderMetadata{
-			Applicable: false,
-			Provider:   "not_applicable",
-			Model:      "not_applicable",
+		ModelProviderMetadata: ModelProviderMetadata{
+			Applicable:    false,
+			SemanticRole:  "model_provider",
+			ModelProvider: "not_applicable",
+			Model:         "not_applicable",
 		},
 		CorpusEligible: false,
 	}
@@ -66,5 +67,12 @@ func TestCommandResultJSONEnvelope(t *testing.T) {
 		if _, ok := decoded[key]; !ok {
 			t.Fatalf("missing envelope key %s", key)
 		}
+	}
+	modelProviderMetadata, ok := decoded["provider_metadata"].(map[string]any)
+	if !ok {
+		t.Fatalf("provider_metadata = %T, want object", decoded["provider_metadata"])
+	}
+	if modelProviderMetadata["semantic_role"] != "model_provider" {
+		t.Fatalf("provider_metadata.semantic_role = %v, want model_provider", modelProviderMetadata["semantic_role"])
 	}
 }

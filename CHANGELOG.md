@@ -131,16 +131,21 @@
 
 ### Fixed
 
+- Made recognized but unimplemented `record`, `verify`, `trace`, `demo`,
+  `share`, and `eval` commands return typed `command_not_implemented` results
+  with exit code `2` instead of false-green success envelopes.
+- Stopped assigning evaluation-mode metadata to `lumyn init` and
+  `lumyn check`.
+- Clarified the retained result/evidence schema v1.0 `provider_metadata` key as
+  Model Provider metadata only, added an optional `model_provider` role
+  discriminator for new output, preserved legacy payload validation, and
+  documented the provenance-preserving v2.0 rename path in ADR-0006.
 - Aligned product, workflow, developer, architecture, Factory-integration, and
   repository-agent documents with the compiled v3.1 control state.
 - Removed stale language that called the active compiled directory a checked-in
   v2 or “next” generation.
 - Made factoryd readiness and product implementation explicitly separate from
   successful repo-local planning compilation.
-- Recorded current generic-success placeholders for unimplemented `record`,
-  `verify`, `trace`, `demo`, `share`, `eval`, and migration-runtime commands as
-  M0 blockers; this planning rebaseline does not claim the typed fail-closed
-  command behavior is implemented.
 - Stopped describing recorder, replay, live verification, reporting, GitHub
   delivery, migration patching, or bounded-agent execution as implemented.
 

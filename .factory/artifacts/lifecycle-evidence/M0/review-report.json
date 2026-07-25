@@ -1,0 +1,105 @@
+{
+  "artifact_type": "review_report",
+  "schema_version": "0.1",
+  "task_id": "M0",
+  "work_item_id": "lumyn-v3-m0",
+  "review_type": "architecture",
+  "review_scope": [
+    "git diff 1c8d43e54e8b907873ba80fc1a070018fd12c5be",
+    "cmd/lumyn/",
+    "internal/result/",
+    "internal/exitcode/",
+    "schemas/",
+    "tests/fixtures/command-result/",
+    "docs/product/prd.md",
+    "docs/product/plan.md",
+    "docs/dev/dev_guides.md",
+    "docs/architecture/",
+    "docs/factory/README.md",
+    "CHANGELOG.md",
+    ".factory/artifacts/task-runs/M0/"
+  ],
+  "reviewer_class": "peer_agent",
+  "reviewer_id": "peer-agent:m0-independent-review",
+  "producer": {
+    "worker": "code-review",
+    "producer_id": "peer-agent:m0-independent-review",
+    "producer_class": "peer_agent"
+  },
+  "current_work": {
+    "validation_run_id": "validation:2026-07-25T18:38:55Z:lumyn-v3-m0",
+    "candidate_digest": "sha256:79ad239e707c478ff091fd3b2382a655f53ceb8b12244b9017e78b6c756f1daf",
+    "work_proof_markers": [
+      {
+        "ref": ".factory/artifacts/task-runs/M0/work-proof-marker.json",
+        "sha256": "sha256:64d7075a0d6db246dcf2cd076b6ac0322333a48086fd15aa015fba50bddf0c88"
+      }
+    ]
+  },
+  "risk_class": "medium",
+  "context_isolation": {
+    "allowed_sources": [
+      "execution_plan",
+      "task_packet",
+      "diff",
+      "repo_contracts",
+      "tests",
+      "validation_report",
+      "logs"
+    ],
+    "disallowed_sources": [
+      "private_builder_notes",
+      "unpromoted_chat_reasoning"
+    ],
+    "builder_notes_authoritative": false
+  },
+  "findings": [],
+  "verdict": "approved",
+  "required_fixes": [],
+  "residual_risks": [
+    "GitHub validate, CodeQL, passive latest-head Codex review, merge, and post-merge monitoring remain required downstream lifecycle gates.",
+    "The v1.0 provider_metadata object remains extension-open for historical compatibility, so semantic_role becomes schema-enforced only in the planned version 2.0 contract; current Go writers emit only model_provider.",
+    "Factory PR 267's recorded upstream review-signal process escape is not treated as factoryd qualification or as Lumyn M0 PR-lifecycle proof.",
+    "The factoryd bundle and runtime remain unqualified for Lumyn v3.1, and dispatch must stay paused."
+  ],
+  "evidence_refs": [
+    ".factory/artifacts/task-runs/M0/validation-report.json",
+    ".factory/artifacts/task-runs/M0/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M0/proof-of-behavior-scorecard.json"
+  ],
+  "work_proof_marker_refs": [
+    ".factory/artifacts/task-runs/M0/work-proof-marker.json"
+  ],
+  "approval_effect": {
+    "promotion_decision": "ready_for_pr",
+    "approvals_granted": [
+      "architecture_review_passed",
+      "medium_risk_structured_review_passed"
+    ],
+    "blocks_promotion": false
+  },
+  "systems_questions": {
+    "state_impact": [
+      "M0 changes only local CLI result classification, result terminology, executable schema descriptions, fixtures, tests, and documentation; it creates no consumer, provider, credential, network, GitHub, or hosted runtime state.",
+      "Recognized unimplemented commands now terminate with one typed command_not_implemented result and exit code 2 instead of creating false-green success state."
+    ],
+    "source_of_truth_changes": [
+      "commandImplementationStatus in cmd/lumyn/main.go is the authoritative implemented, unimplemented, or unknown command classifier for the retained command surface.",
+      "ADR-0006 is the terminology and migration authority while the five executable v1.0 schemas retain their pre-M0 accepted language exactly."
+    ],
+    "feedback_plan": [
+      "Keep process-level CLI envelope tests, schema compatibility fixtures, exit-code tests, coverage, repo-pack validation, GitHub validate, CodeQL, passive latest-head Codex review, and post-merge main monitoring in the promotion loop.",
+      "When version 2.0 is introduced, add frozen v1.0 validators, version-discriminated readers, mixed-role negative fixtures, and provenance-preserving migration tests before changing writer defaults."
+    ],
+    "blast_radius": [
+      "Scripts that previously treated record, verify, trace, demo, share, or eval as successful placeholders now receive exit code 2 and a typed error, which is the intended BASE-005 correction.",
+      "New command-result output adds a model_provider discriminator under the extension-open legacy key, while previously valid v1.0 artifacts continue to validate unchanged."
+    ],
+    "rollback_or_deletion_test": [
+      "The change has no external state to delete; a rollback must revert command classification, Go terminology, fixtures, tests, docs, and changelog together and then rerun make prepush-full.",
+      "Removing the new discriminator from current writers or narrowing the v1.0 validators must fail the writer and compatibility tests before promotion."
+    ],
+    "system_model_summary": "M0 establishes one fail-closed command-classification boundary and explicit internal Model Provider terminology while preserving the exact v1.0 schema acceptance language; independent local verification and later PR lifecycle gates remain separate authorities."
+  },
+  "created_at": "2026-07-25T18:42:54Z"
+}

@@ -1,0 +1,161 @@
+{
+  "artifact_type": "validation_report",
+  "schema_version": "1.0",
+  "task_id": "M0",
+  "work_item_id": "lumyn-v3-m0",
+  "worker": "task-executor",
+  "generated_at": "2026-07-25T18:38:55Z",
+  "validation_run_id": "validation:2026-07-25T18:38:55Z:lumyn-v3-m0",
+  "objective": "Correct command and result foundations without reinterpreting historical evidence.",
+  "task_packet_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M0",
+  "dispatch_authorization": {
+    "execution_mode": "attended",
+    "explicit_user_approval": true,
+    "factoryd_selected": false,
+    "factoryd_dispatch_enabled": false,
+    "factory_profile_ref": "Clyra-AI/factory@ca94bc4cf28da09d097524c1610385ec32af2665:profiles/lumyn.yaml",
+    "factory_profile_landed_commit": "ca94bc4cf28da09d097524c1610385ec32af2665",
+    "factory_profile_status": "v3_1_aligned_runtime_not_qualified"
+  },
+  "current_work": {
+    "base_head": "1c8d43e54e8b907873ba80fc1a070018fd12c5be",
+    "candidate_digest": "sha256:79ad239e707c478ff091fd3b2382a655f53ceb8b12244b9017e78b6c756f1daf",
+    "digest_method": "sha256 of sorted repo-relative implementation path and file-sha256 manifest; task-run and lifecycle evidence excluded"
+  },
+  "red_evidence": [
+    {
+      "check": "go test ./cmd/lumyn -run 'TestCLIRejectsRecognizedUnimplementedCommandsWithTypedEnvelope|TestCommandResultForArgsRunsInitAndStrictCheck' -count=1",
+      "status": "failed_as_expected",
+      "summary": "All six recognized placeholders still returned success and init still emitted surface_only evaluation metadata before implementation.",
+      "evidence_refs": [
+        "cmd/lumyn/main_test.go"
+      ]
+    }
+  ],
+  "green_evidence": [
+    {
+      "check": "go test ./cmd/lumyn -run 'TestCLIRejectsRecognizedUnimplementedCommandsWithTypedEnvelope|TestCommandResultForArgsRunsInitAndStrictCheck' -count=1",
+      "status": "pass",
+      "summary": "Typed unimplemented results and non-evaluation init/check metadata passed."
+    },
+    {
+      "check": "go test ./internal/result ./schemas ./cmd/lumyn -count=1",
+      "status": "pass",
+      "summary": "Command results, canonical-writer terminology, fully backward-compatible legacy fixtures, and CLI envelopes passed."
+    },
+    {
+      "check": "make lint-fast",
+      "status": "pass",
+      "summary": "Repository contract checks and go vet passed."
+    },
+    {
+      "check": "make test-fast",
+      "status": "pass",
+      "summary": "All Go packages passed, including retained source parsing behavior."
+    },
+    {
+      "check": "make test-coverage",
+      "status": "pass",
+      "summary": "Overall first-party coverage was 84.3%; stable-package coverage was 95.7%."
+    },
+    {
+      "check": "make test-contracts",
+      "status": "pass",
+      "summary": "Schemas, fixtures, branch-policy self-test, historical evidence, active repo pack, and all Go tests passed."
+    },
+    {
+      "check": "make prepush-full",
+      "status": "pass",
+      "summary": "Formatting, lint, tests, coverage, contracts, repo-pack validation, and build passed."
+    }
+  ],
+  "acceptance_results": [
+    {
+      "acceptance_item_id": "BASE-001",
+      "status": "verified_retained",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M0/work-proof-marker.json",
+        "cmd/lumyn/main_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "BASE-002",
+      "status": "verified_retained_and_migration_defined",
+      "evidence_refs": [
+        "schemas/schema_test.go",
+        "docs/architecture/adr-0006-command-result-v1-provider-terminology.md"
+      ]
+    },
+    {
+      "acceptance_item_id": "BASE-003",
+      "status": "local_gates_pass_lifecycle_pending",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M0/validation-report.json"
+      ]
+    },
+    {
+      "acceptance_item_id": "BASE-004",
+      "status": "verified_retained",
+      "evidence_refs": [
+        "internal/source/",
+        "cmd/lumyn/main_test.go"
+      ]
+    },
+    {
+      "acceptance_item_id": "BASE-005",
+      "status": "implemented",
+      "evidence_refs": [
+        "cmd/lumyn/main.go",
+        "cmd/lumyn/main_test.go",
+        "internal/result/result.go",
+        "schemas/schema_test.go",
+        "tests/fixtures/command-result/"
+      ]
+    }
+  ],
+  "scope_result": {
+    "status": "pass",
+    "allowed_product_roots": [
+      "cmd/lumyn/",
+      "internal/result/",
+      "internal/exitcode/",
+      "schemas/",
+      "tests/",
+      "docs/",
+      "CHANGELOG.md"
+    ],
+    "task_evidence_root": ".factory/artifacts/task-runs/M0/",
+    "forbidden_paths_changed": [],
+    "active_compiled_artifacts_changed": false,
+    "lifecycle_evidence_written_by_task_executor": false
+  },
+  "dependency_result": {
+    "new_dependencies": [],
+    "network_used_by_product_tests": false,
+    "credentials_used": false
+  },
+  "independent_review_remediation": {
+    "initial_review_status": "changes_required",
+    "reviewer": "peer-agent:m0-independent-review",
+    "resolved_findings": [
+      {
+        "severity": "P1",
+        "summary": "Removed same-version semantic_role narrowing from all five v1.0 schema families and added fixtures proving prior unknown extensions remain valid."
+      },
+      {
+        "severity": "P2",
+        "summary": "Removed the stale changelog statement that still described pre-M0 generic-success behavior."
+      }
+    ],
+    "fresh_review_required": true
+  },
+  "changelog_result": "updated",
+  "versioning_result": "v1_0_compatible_optional_discriminator_v2_0_breaking_rename_defined",
+  "promotion_status": "ready_for_independent_code_review",
+  "blockers": [],
+  "residual_risks": [
+    "GitHub validate, CodeQL, passive latest-head Codex review, merge, and post-merge monitoring remain downstream lifecycle gates.",
+    "Factory PR 267 landed with green PR and main validation but without the required latest-head Codex terminal signal; that upstream process escape is recorded and is not treated as factoryd qualification or M0 lifecycle proof.",
+    "The factoryd bundle/runtime remains unqualified and dispatch stays paused."
+  ]
+}
