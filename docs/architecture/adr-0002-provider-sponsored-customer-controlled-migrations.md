@@ -85,8 +85,10 @@ verify against a consumer-pinned API-provider trust root and verified
 provider-to-package ownership binding and their key, timestamp, audience,
 expiry, rotation, revocation, withdrawal, replay, immutability, schema, and
 canary checks pass. `Published` means immutable for the authorized audience,
-not publicly disclosed. Raw code, diffs, logs, traces, and credentials do not
-cross from the consumer plane to the provider plane by default.
+not publicly disclosed. Raw code, diffs, prompts, responses, agent sessions,
+tool traces, logs, and credentials never cross from the consumer plane to the
+provider plane. Only enumerated, consumer-consented campaign status or
+aggregate fields may cross that boundary.
 
 First-time trust enrollment cannot authenticate itself from invitation
 material. A consumer obtains the provider enrollment bundle and expected root

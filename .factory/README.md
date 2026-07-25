@@ -52,13 +52,27 @@ The compiled control set represents:
 - one reusable provider-confirmed Provider Change Contract and exact
   provider-originated event;
 - revocable Consumer Installation and event-specific authorization;
-- consumer-local deterministic or bounded-agent patch generation;
-- exact model disclosure, endpoint, credential, network, tool, token, time,
-  retry, cost, path, and diff controls;
-- deterministic verification independent from generation mode;
+- consumer-local deterministic or bounded-agent patch generation, with agent
+  execution disabled unless explicitly configured;
+- conditional customer-selected qualified Codex or Claude Code Agent Runner,
+  with Cursor deferred behind the same conformance gate;
+- exact Agent Runner/model disclosure, endpoint, credential, network, funding,
+  usage-billing, clean-session, native-configuration, tool, token, time, retry,
+  cost, path, and diff controls;
+- exact route-selected product-action capability unions frozen before action;
+- managed-credential broker, agent-route topology minimums, pinned
+  backend/resource isolation, and separate sandbox-entrypoint contracts,
+  including no executable plugins, MCP servers, or hooks for MVP;
+- deterministic verification in an independent fresh exact-head process
+  without runner/model credentials or a generation-owned evidence writer;
+- agent-only repair under a configured, explicitly authorized route;
 - patch artifact, optional local branch, and PR-bundle fallback without GitHub
   access;
-- separately authorized short-lived remote branch and required pilot draft PR;
+- one same-run first-campaign proof from authenticated provider event and
+  installed preauthorization through an organically agent-assisted item on
+  the consumer-selected qualified runner, independent exact-head verification,
+  a separately authorized tested Lumyn-opened draft PR, and a consented
+  provider-received status projection;
 - event-bound, consented provider status with no inference from silence;
 - no default-branch write or auto-merge;
 - no provider access to consumer code;
@@ -76,6 +90,7 @@ product grants remain private and action-specific:
 
 - repository read/write;
 - command execution;
+- Agent Runner network and credential;
 - model request disclosure, network, and credential;
 - package registry;
 - optional sandbox;

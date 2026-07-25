@@ -42,13 +42,27 @@ The active compiled generation covers:
   services-assisted sunset campaign;
 - one reusable provider-confirmed Provider Change Contract and exact event;
 - revocable Consumer Installation and event-specific authorization;
-- consumer-local deterministic or bounded-agent generation;
-- exact model disclosure, endpoint, credential, network, tool, provenance, and
-  budget controls;
-- deterministic repository and workflow verification;
+- consumer-local deterministic or bounded-agent generation, with agent
+  execution disabled until explicitly configured;
+- conditional customer-selected qualified Codex or Claude Code Agent Runner,
+  with exact executable/auth/entitlement, funding, clean-session, and
+  no-fallback controls;
+- exact Agent Runner/model disclosure, endpoint, credential, network, tool,
+  provenance, and budget controls;
+- exact route-selected product-action capability unions frozen before action;
+- managed-credential broker, agent-route topology minimums, pinned
+  backend/resource isolation, and separate sandbox-entrypoint contracts, with
+  executable plugins, MCP servers, and hooks prohibited for MVP;
+- deterministic repository and workflow verification in a fresh exact-head
+  process without runner/model credentials or a generation-owned evidence
+  writer;
+- agent-only repair under a configured, explicitly authorized route;
 - patch artifact, optional local branch, and PR bundle as fallback;
-- short-lived remote branch and required pilot draft PR under separate grants;
-- event-bound, consented provider rollout status;
+- one same-run first-campaign proof from authenticated provider event and
+  installed preauthorization through an organically agent-assisted item on
+  the consumer-selected qualified runner, independent exact-head verification,
+  a short-lived tested Lumyn-opened draft PR, and an event-bound, consented
+  provider-received status projection;
 - consumer review and merge;
 - no provider access to code, default-branch write, or auto-merge.
 
@@ -105,6 +119,8 @@ V3 product grants remain private, schema-backed, expiring, and revocable:
 - `customer_repo_write`
 - `command_execution`
 - `model_request_disclosure`
+- `agent_runner_network`
+- `agent_runner_credential`
 - `model_network`
 - `model_credential`
 - `package_registry_read`
@@ -123,6 +139,9 @@ Important separations:
 - Lumyn Operator service work is not consumer authority;
 - plan approval is not local-write approval;
 - model disclosure is not provider disclosure;
+- Agent Runner Vendor is not necessarily the Model Provider;
+- Agent Runner network/credential is not model network/credential;
+- provider-sponsored usage is not API Provider agent or repository authority;
 - model disclosure, network, and credential are independent;
 - patch and PR-bundle creation require no GitHub credential;
 - local branch is not remote branch;
@@ -137,6 +156,7 @@ boundary.
 
 Any task that implements or evaluates agent-assisted generation records:
 
+- explicit `agent_execution_policy`;
 - selected model provider, endpoint, model/version, and parameters;
 - prompt/system/tool definition refs or digests;
 - context disclosure and redaction;
@@ -145,9 +165,12 @@ Any task that implements or evaluates agent-assisted generation records:
 - read/write paths and tool allowlist;
 - file, line, diff, turn, token, time, retry, concurrency, and cost budgets;
 - isolated workspace and cleanup;
+- exact managed-credential broker and runner-host isolation evidence when
+  applicable;
 - request, response, tool-call, usage, attempt, and patch provenance;
 - prompt-injection and scope-widening negative tests;
-- deterministic verification from the exact candidate head;
+- deterministic verification from a fresh exact-head view in an independent
+  process without runner/model credentials;
 - independent holdout/review and human approval requirements.
 
 The implementation worker cannot access evaluator-controlled answer material or
@@ -222,8 +245,10 @@ configured root outside the checkout and public source repository. Committed
 records use opaque IDs and digests.
 
 Provider disclosure and model-provider disclosure are separate. Raw source,
-diffs, prompts, responses, logs, traces, credentials, and private evidence are
-not API-provider-visible by default.
+diffs, prompts, responses, agent sessions, logs, traces, credentials, and
+private evidence are never API-provider-visible. Only enumerated,
+consumer-consented campaign status or aggregate fields may cross that
+boundary.
 
 ## Runtime State And Supervision
 
@@ -237,7 +262,8 @@ Before any future live task, validate:
 - exact task and current plan generation;
 - allowed/forbidden paths;
 - commands and host isolation;
-- model disclosure/network/credential and budgets when applicable;
+- Agent Runner executable/auth/entitlement/funding, network/credential, and
+  model disclosure/network/credential and budgets when applicable;
 - optional sandbox grants;
 - separately approved, short-lived remote-branch and draft-PR grants;
 - expiry, revocation, retention, deletion, and evidence refs.

@@ -9,13 +9,29 @@ Authored sources:
 - `docs/product/prd.md` — exactly 53 item-level acceptance units
 - `docs/product/plan.md` — M0 through M10
 - `docs/architecture/adr-0004-provider-originated-api-update-delivery.md`
+- `docs/architecture/adr-0005-customer-selected-agent-runners.md`
 - `docs/architecture/adr-0003-services-led-bounded-agent-migration-execution.md`
 
 The package compiles a reusable Provider Change Contract and exact event,
-revocable Consumer Installation, consumer-local repository impact, deterministic
-and replaceable bounded-agent generation, independent verification, local
-fallback export, required pilot draft-PR delivery, consented provider status,
-paid qualification, and a fair generic-agent baseline.
+revocable Consumer Installation, consumer-local repository impact,
+deterministic generation, and an optional customer-selected qualified Agent
+Runner. `agent_execution_policy` defaults to disabled; configured execution
+targets Codex and Claude Code behind common conformance and separate live
+canaries, while Cursor is deferred. The controls bind clean sessions, funding,
+approved executable source/digest, auth mode and entitlement, actual model
+route, credential and usage-billing owners, Agent Runner/model authority,
+native configuration, no PATH shadowing or silent fallback, independent
+verification, exact route-selected product authority, managed-credential
+broker bounds, agent-route topology minimums, pinned backend/resource
+isolation, a separate sandbox-entrypoint boundary, agent-only repair, local
+fallback export, and one same-run first-campaign proof from authenticated
+provider event and
+installed preauthorization through an organically agent-assisted item on the
+consumer-selected qualified runner, independent exact-head verification, a
+tested Lumyn-opened draft PR, and a consented provider-received status
+projection. It also binds paid qualification and a fair generic-agent
+baseline. Verification runs from a fresh exact-head view in a separate process
+without runner/model credentials or a generation-owned evidence writer.
 
 Execution status: **no task approved; factoryd paused and fail closed**.
 

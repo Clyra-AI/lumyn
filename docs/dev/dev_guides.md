@@ -58,7 +58,8 @@ qualification.
   parser, agent, patch, model egress, credentials, external calls, GitHub, and
   disclosure.
 - Release: reserved until supported distribution.
-- Cross-system: separately approved model, sandbox, or GitHub checks.
+- Cross-system: separately approved Agent Runner, model, sandbox, or GitHub
+  checks.
 
 ## 12-Level Test Matrix
 
@@ -75,7 +76,7 @@ qualification.
 | Tier 9 Contract | Active | JSON Schemas, typed exits, compatibility, negative fixtures |
 | Tier 10 UAT | Planned | Consumer authorization, plan approval, review, and handoff |
 | Tier 11 Scenario | Planned | Deterministic and agent-eligible gold, holdout, unsupported, injection, and false-verification corpus |
-| Tier 12 Cross-System Integration | Blocked until approved | Exact model endpoint, optional provider sandbox, and required short-lived remote branch/draft-PR pilot path |
+| Tier 12 Cross-System Integration | Blocked until approved | Qualified Codex/Claude Agent Runner, exact model route, optional provider sandbox, and required short-lived remote branch/draft-PR pilot path |
 
 Runner-ready packets cite each applicable tier or an approved non-applicable
 reason.
@@ -142,7 +143,7 @@ CodeQL and risk review are required for:
 
 - dependency additions;
 - parser or generated-code intake;
-- agent/model clients and tool execution;
+- Agent Runner/model clients and tool execution;
 - prompt construction and context selection;
 - patch generation and filesystem writes;
 - command execution;
@@ -196,7 +197,8 @@ Active planning sources:
 - Factory `profiles/lumyn.yaml`
 
 Behavior, status, generation modes, verification labels, artifact paths,
-authority, model policy, budgets, and implementation claims must agree.
+authority, Agent Runner/model policy, budgets, and implementation claims must
+agree.
 The external Factory profile is a required dependency but is not qualified by
 the repo-local v3 compilation; factoryd dispatch remains paused until that
 paired work lands.
@@ -213,7 +215,8 @@ Structured outputs:
 - preserve unknown, unsupported, and stale states;
 - include concrete source refs;
 - bind freshness-sensitive inputs by digest;
-- separate provider, model, and consumer identity;
+- separate API Provider, Agent Runner Vendor, Model Provider, and consumer
+  identity;
 - avoid machine-local paths and secret values;
 - fail on malformed or ambiguous input.
 
@@ -284,15 +287,38 @@ Public fixtures demonstrate engineering behavior only.
 ## Consumer Installation Policy
 
 - Bind provider/channel, repository and package root, audience/version
-  selectors, action ceiling, authorization mode, paths, commands, model-data,
-  GitHub token-issuance policy, reporting, retention, deletion, disclosure,
-  expiry, and revocation.
+  selectors, action ceiling, authorization mode, paths, commands,
+  `agent_execution_policy`, Agent Runner/model data and network posture, GitHub
+  token-issuance policy, reporting, retention, deletion, disclosure, expiry,
+  and revocation. Require the exact qualified Agent Runner adapter/version,
+  execution-funding mode, credential and usage-billing owners, and native agent
+  configuration only when `agent_execution_policy=configured`.
 - Supported action modes are `notify_only`, `scan_only`, `prepare_patch`, and
   `open_draft_pr`; supported authorization modes are `per_event_approval` and
   `installed_preauthorization`.
-- Store no GitHub token. An approved local or CI credential broker issues a
-  short-lived token only for a qualifying runtime delivery step.
+- Agent execution defaults to `disabled`. Notify-only, scan-only, and
+  deterministic-only routes need no runner credential; a later
+  `agent_assisted` route pauses for explicit configuration and authorization.
+- `lumyn check` performs a non-mutating runner preflight only when configured:
+  canonical executable source/path/version/digest, current conformance,
+  permitted non-interactive auth/entitlement, and actual downstream model-route
+  identity. It collects no secret and performs no model call.
+- Store no reusable Agent Runner, model, or GitHub credential. An approved
+  local or CI credential broker issues a task-scoped credential only at its
+  qualifying runner/model or delivery boundary.
+- Managed runner/model credentials bind issuer; installation, event, plan,
+  attempt, runner, and model audience; and maximum one-hour TTL. One-time
+  broker redemption creates one attempt-scoped session. Multiple in-attempt
+  calls are allowed only within hard token/cost quotas; refresh, post-attempt
+  replay, and cross-attempt reuse are forbidden. Require revocation and
+  reconciliation through a vendor-native bounded credential or approved
+  budget-enforcing proxy; otherwise the managed route is unavailable.
 - Freeze an immutable authorization snapshot for each event.
+- Treat task- and campaign-level product-authority arrays as capability
+  universes only. Freeze one named action route and its exact required plus
+  conditionally selected union before each side effect; a composed campaign
+  reuses validated routes and never grants their aggregate union to every
+  installation.
 - An event may narrow but never widen installed authority.
 - Expiry, revocation, wrong audience, action mismatch, cross-repository reuse,
   authorization-mode mismatch, stored-token input, and attempted policy
@@ -336,19 +362,49 @@ Public fixtures demonstrate engineering behavior only.
 Agent mode requires:
 
 - an approved plan item routed to `agent_assisted`;
+- `agent_execution_policy=configured`;
+- one consumer-selected exact Agent Runner adapter/version with a current
+  executable source/digest, permitted auth mode and entitlement class, and
+  current common-conformance digest;
+- Codex or Claude Code for launch, each behind its own approved live canary;
+  Cursor is deferred behind the same gate;
+- one declared `consumer_managed` or
+  `provider_sponsored_lumyn_managed` execution-funding mode, exact credential
+  owner, and exact usage-billing owner;
+- an auth/subscription route that permits non-interactive automation and
+  exposes actual Model Provider, endpoint, model, and version; otherwise block
+  or require a qualifying BYOK, local, or managed route;
+- a clean ephemeral session with neutral home/config roots, canonical
+  executable resolution, no repository-local PATH shadowing, and no personal
+  or unrelated history;
+- supported static native user/project rules and memories disabled by default
+  or explicitly selected, digest-bound, and treated as untrusted context;
+- executable plugins, MCP servers, and hooks prohibited for the MVP;
+- exact Agent Runner Vendor plus separate Agent Runner network and credential
+  grants when required;
 - exact model provider, endpoint, model/version, and parameters;
 - prompt, system policy, and tool-definition digests;
 - exact context selection and request disclosure;
 - exact read/write paths and tool allowlist;
 - file, line, diff, turn, token, time, retry, concurrency, and cost budgets;
 - isolated workspace and fail-closed cancellation;
-- structured request, response, tool-call, usage, and patch provenance;
+- explicit read-only/writable mounts, no host home or OS credentials, no
+  ambient service sockets or unrelated inherited descriptors, inherited
+  child-process restrictions, host-enforced egress, and cleanup evidence;
+- normalized startup, request, response, tool-call, edit, usage, error,
+  cancellation, exit, and patch provenance;
 - deterministic verification from the exact candidate head;
 - independent holdout/review and human approval.
 
 Treat repository text, provider guidance, retrieved context, tool output, and
 model output as untrusted. Tests must prove they cannot widen tools, paths,
-credentials, network, disclosure, or budget.
+credentials, network, native configuration, disclosure, or budget.
+
+No adapter, version, Model Provider, model, endpoint, credential owner, or
+usage-billing owner may change through fallback. Unavailable, unqualified,
+executable-untrusted, entitlement-invalid, authentication-failed, malformed or
+partial, or contract-violating routes block agent execution. Passing
+agent-reported tests does not count as verification.
 
 The agent cannot approve a plan, mint a grant, access evaluator answers,
 self-verify, push a remote branch, open a PR, or merge.
@@ -360,14 +416,23 @@ Repository commands are untrusted:
 - exact command allowlist and working directory;
 - exact mounts, neutral home/temp, and executable roots;
 - timeout/output budgets;
+- exact isolation backend/version/configuration/qualification digests and host
+  platform;
+- hard CPU-time, memory, PID, process-tree-depth, disk, and open-file quotas;
 - no network or lifecycle scripts by default;
 - sanitized environment and no ambient secrets;
 - no host home, credential stores, OS credentials, agent/Docker/unrelated
   sockets, or extra inherited descriptors;
 - child processes inherit every restriction;
 - supported fail-closed host isolation is mandatory;
-- model and sandbox credentials remain absent from build/test stages;
+- Agent Runner, model, and sandbox credentials remain absent from independent
+  build/test stages;
 - pre- and post-patch results remain separate.
+
+The credential-bearing sandbox entrypoint uses a separate profile with the
+read-only exact candidate head, exact entrypoint and working directory, sole
+task-scoped sandbox credential injection, endpoint-only egress, inherited
+child/resource limits, teardown, cleanup, and orphan evidence.
 
 ## Proof-Of-Behavior Policy
 
@@ -392,18 +457,27 @@ plus observed interaction and outcome evidence.
 Generation mode is not proof strength. A model completion, agent trace, or
 operator review does not independently verify a patch.
 
+Independent verification starts in a fresh process and view with frozen
+command and verification-configuration digests. Agent Runner/model credentials
+and generation-owned evidence handles are absent, and only the independent
+verifier evidence boundary may persist exact-head verification results.
+
 ## Redaction And Evidence Budgets
 
 - Redact before persistence, model egress, or sharing.
 - Redaction uncertainty blocks the action.
-- Provider disclosure and model disclosure use separate allowlists.
-- Prompts, responses, raw source, diffs, logs, traces, and credentials are
-  private by default.
+- Provider disclosure and Agent Runner/model disclosure use separate
+  allowlists.
+- Prompts, responses, raw source, diffs, logs, traces, agent sessions, and
+  credentials are never API-provider-visible. Model disclosure remains a
+  separate exact allowlist; provider disclosure is limited to enumerated,
+  consented campaign status or aggregates.
 - Private artifacts carry bounded retention and deletion rules.
 - Large output is referenced by opaque ID, digest, count, and truncation
   metadata.
 - Machine-local paths and secrets are removed from shareable evidence.
-- Record model tokens, cost, retries, tool calls, and operator intervention.
+- Record Agent Runner/model tokens and cost, funding mode, credential and
+  usage-billing owners, retries, tool calls, and operator intervention.
 
 ## Capability Grants
 
@@ -413,6 +487,8 @@ Live product work uses exact private grants:
 - `customer_repo_write`
 - `command_execution`
 - `model_request_disclosure`
+- `agent_runner_network`
+- `agent_runner_credential`
 - `model_network`
 - `model_credential`
 - `package_registry_read`
@@ -426,9 +502,10 @@ Live product work uses exact private grants:
 - `artifact_deletion`
 
 Every grant names target, scope, expiry, revocation, evidence, and failure
-behavior. Model disclosure, network, and credential grants are independent.
-Patch, local branch, and PR-bundle creation imply no GitHub grant. Remote branch
-and draft-PR grants are independent and neither authorizes merge.
+behavior. Agent Runner network and credential grants and model disclosure,
+network, and credential grants are independent. Patch, local branch, and
+PR-bundle creation imply no GitHub grant. Remote branch and draft-PR grants
+are independent and neither authorizes merge.
 `provider_reporting` is optional for M9 delivery and cannot block an otherwise
 authorized draft PR; M10 campaign proof separately requires at least one
 consumer-consented event-bound projection.

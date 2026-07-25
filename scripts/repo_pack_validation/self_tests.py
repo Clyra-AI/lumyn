@@ -11,8 +11,13 @@ from repo_pack_validation.authority import (
     manual_preflight_scope_digest,
     validate_authority_grants,
 )
+from repo_pack_validation.acceptance_text import validate_acceptance_text
 from repo_pack_validation.markdown_refs import _markdown_anchors
-from repo_pack_validation.task_contracts import _policy_digest
+from repo_pack_validation.task_contracts import (
+    QUALIFYING_SAME_RUN_EVIDENCE_FIELDS,
+    _policy_digest,
+    validate_delegated_route_refs,
+)
 
 
 Payload = dict[str, dict[str, Any]]
@@ -112,6 +117,12 @@ def _change_holdout_baseline(payload: Payload, value: str) -> None:
     policy["policy_digest"] = _policy_digest(policy)
 
 
+def _remove_holdout_control(payload: Payload, field: str) -> None:
+    policy = _task(payload, "M1")["holdout_policy"]
+    policy["comparison_control_variables"].remove(field)
+    policy["policy_digest"] = _policy_digest(policy)
+
+
 def _weaken_preflight_consent(payload: Payload) -> None:
     preflight = _task(payload, "M2.5")["manual_external_evidence_preflight"]
     preflight["participant_consent_required"] = False
@@ -173,6 +184,39 @@ def run_repo_pack_self_tests(
         == {"api-trust", "code-mode"},
         "Markdown heading slugs must use rendered inline text",
     )
+    try:
+        validate_acceptance_text(
+            "1. `TEST-001`: native-\n configuration\n---\n",
+            {
+                "items": [
+                    {
+                        "acceptance_item_id": "TEST-001",
+                        "source_text": "native- configuration",
+                    }
+                ]
+            },
+        )
+    except AssertionError as exc:
+        _require(
+            "hard-wrap fracture" in str(exc),
+            f"hard-wrap self-test failed unexpectedly: {exc}",
+        )
+    else:
+        raise AssertionError("hard-wrapped acceptance text remained valid")
+
+    delegated_tasks = copy.deepcopy(tasks)
+    delegated_tasks["M10"]["product_action_route_contract"][
+        "impact_read_only"
+    ]["required_capabilities"].append("command_execution")
+    try:
+        validate_delegated_route_refs(delegated_tasks)
+    except AssertionError as exc:
+        _require(
+            "differs from M4/impact_read_only" in str(exc),
+            f"delegated-route self-test failed unexpectedly: {exc}",
+        )
+    else:
+        raise AssertionError("stale copied M10 route remained valid")
 
     mutations: list[tuple[Callable[[Payload], Any], str]] = [
         (
@@ -216,6 +260,63 @@ def run_repo_pack_self_tests(
             "exact PRD acceptance set",
         ),
         (
+            lambda value: value["contract"][
+                "conditional_acceptance_rules"
+            ].__setitem__(
+                "INSTALL-001",
+                "requires exact Agent Runner route for every installation",
+            ),
+            "conditional Agent Runner setup",
+        ),
+        (
+            lambda value: value["contract"][
+                "conditional_acceptance_rules"
+            ].__setitem__(
+                "PILOT-003",
+                "requires only one composed installed-preauthorization draft PR",
+            ),
+            "both agent and composed-delivery proofs",
+        ),
+        (
+            lambda value: value["contract"][
+                "model_control_requirements"
+            ].pop("managed_credential"),
+            "model controls missing managed_credential",
+        ),
+        (
+            lambda value: value["contract"][
+                "authority_requirements"
+            ].__setitem__(
+                "campaign_aggregate_union_authorized_per_installation",
+                True,
+            ),
+            "exact per-action route authority",
+        ),
+        (
+            lambda value: value["contract"][
+                "authority_requirements"
+            ].__setitem__("aggregate_composed_action_route_allowed", True),
+            "exact per-action route authority",
+        ),
+        (
+            lambda value: value["contract"][
+                "model_control_requirements"
+            ].pop("repository_command_isolation"),
+            "model controls missing repository_command_isolation",
+        ),
+        (
+            lambda value: value["contract"][
+                "model_control_requirements"
+            ].pop("sandbox_entrypoint_isolation"),
+            "model controls missing sandbox_entrypoint_isolation",
+        ),
+        (
+            lambda value: value["contract"][
+                "verification_requirements"
+            ].__setitem__("separate_verifier_process", False),
+            "separate_verifier_process must be true",
+        ),
+        (
             lambda value: _task(value, "M9")["blocked_by"].append("M8"),
             "dependency graph",
         ),
@@ -247,9 +348,56 @@ def run_repo_pack_self_tests(
         ),
         (
             lambda value: _task(value, "M2.5")[
+                "consumer_runner_prequalification"
+            ].__setitem__("secret_values_collected", True),
+            "prequalify one feasible",
+        ),
+        (
+            lambda value: _task(value, "M2.5")[
+                "consumer_runner_prequalification"
+            ].__setitem__(
+                "lumyn_adapter_conformance_required_at_prequalification",
+                True,
+            ),
+            "premature conformance",
+        ),
+        (
+            lambda value: _task(value, "M2.5")[
+                "consumer_runner_prequalification"
+            ].__setitem__(
+                "plausible_organic_agent_item_hypothesis_required",
+                False,
+            ),
+            "plausible organic agent-eligible item",
+        ),
+        (
+            lambda value: _task(value, "M2.5")[
                 "readiness_sprint_contract"
             ].__setitem__("may_close_disc_001", True),
             "readiness sprint must remain paid discovery",
+        ),
+        (
+            lambda value: _task(value, "M2.5")[
+                "readiness_sprint_contract"
+            ].__setitem__(
+                "credited_funds_count_only_after_signed_campaign_conversion",
+                False,
+            ),
+            "readiness sprint must remain paid discovery",
+        ),
+        (
+            lambda value: _task(value, "M2.5")[
+                "campaign_offer_contract"
+            ].__setitem__("minimum_tested_reviewable_outcomes", 5),
+            "campaign offer must align",
+        ),
+        (
+            lambda value: _task(value, "M2.5")[
+                "consumer_delivery_prequalification"
+            ].__setitem__(
+                "minimum_provider_status_transmit_willing_consumers", 0
+            ),
+            "draft-PR and provider-status willingness",
         ),
         (
             lambda value: _task(value, "M0")["allowed_paths"].append(
@@ -268,6 +416,12 @@ def run_repo_pack_self_tests(
             "generic-agent baseline",
         ),
         (
+            lambda value: _remove_holdout_control(
+                value, "agent_runner_executable_digest"
+            ),
+            "baseline must isolate Lumyn",
+        ),
+        (
             lambda value: _task(value, "M1")[
                 "walking_skeleton_contract"
             ]["stages"].remove("consumer_installation"),
@@ -275,8 +429,14 @@ def run_repo_pack_self_tests(
         ),
         (
             lambda value: _task(value, "M1")[
+                "walking_skeleton_contract"
+            ].__setitem__("live_agent_execution_allowed", True),
+            "remain offline",
+        ),
+        (
+            lambda value: _task(value, "M1")[
                 "conditional_factory_capabilities"
-            ].clear(),
+            ].append("approval"),
             "conditional Factory capabilities",
         ),
         (
@@ -310,8 +470,114 @@ def run_repo_pack_self_tests(
         (
             lambda value: _task(value, "M2")[
                 "update_channel_contract"
+            ].__setitem__("provider_may_select_agent_runner", True),
+            "Agent Runner selection",
+        ),
+        (
+            lambda value: _task(value, "M2")[
+                "update_channel_contract"
+            ]["consumer_installation_fields"].remove(
+                "agent_execution_policy"
+            ),
+            "Consumer Installation scope",
+        ),
+        (
+            lambda value: _task(value, "M2")[
+                "update_channel_contract"
+            ].__setitem__("agent_execution_policy_default", "configured"),
+            "Consumer Installation scope",
+        ),
+        (
+            lambda value: _task(value, "M2")[
+                "update_channel_contract"
             ]["provider_status"].__setitem__("merge_is_not_retired", False),
             "status projection",
+        ),
+        (
+            lambda value: _task(value, "M2")[
+                "update_channel_contract"
+            ]["provider_status"].__setitem__(
+                "raw_consumer_data_never_provider_visible", False
+            ),
+            "status projection",
+        ),
+        (
+            lambda value: _task(value, "M2")[
+                "managed_credential_contract"
+            ].__setitem__("refresh_allowed", True),
+            "managed credential broker contract",
+        ),
+        (
+            lambda value: _task(value, "M4")[
+                "product_action_route_contract"
+            ]["impact_read_only"]["required_capabilities"].remove(
+                "customer_repo_read"
+            ),
+            "routes must cover its exact product capability universe",
+        ),
+        (
+            lambda value: _task(value, "M8").__setitem__(
+                "product_action_route_contract", {}
+            ),
+            "must define at least one exact product action route",
+        ),
+        (
+            lambda value: _task(value, "M9")[
+                "product_action_route_contract"
+            ]["local_export"]["required_capabilities"].append(
+                "github_pr_write"
+            ),
+            "exact product action route",
+        ),
+        (
+            lambda value: _task(value, "M9")[
+                "product_action_route_contract"
+            ]["remote_branch_push"][
+                "conditionally_selected_capabilities"
+            ].append(
+                "github_branch_write"
+            ),
+            "route capability classes must be disjoint",
+        ),
+        (
+            lambda value: _task(value, "M9")[
+                "delivery_route_composition_contract"
+            ].__setitem__(
+                "aggregate_cross_action_scope_union_authorized",
+                True,
+            ),
+            "atomic delegated actions",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "campaign_route_composition_contract"
+            ]["delegated_route_refs"].remove("M9/provider_status_transmit"),
+            "compose exact delegated routes",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "campaign_route_composition_contract"
+            ]["required_same_run_route_sequence"].remove(
+                "M9/provider_status_transmit"
+            ),
+            "one bound run",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "campaign_route_composition_contract"
+            ]["qualifying_same_run_evidence_binding"].__setitem__(
+                "cross_run_evidence_allowed", True
+            ),
+            "same-run evidence binding",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
+            ].__setitem__(
+                "qualifying_same_run_evidence_binding_ref",
+                "unbound",
+            ),
+            "reference the qualifying same-run",
         ),
         (
             lambda value: _task(value, "M6")["bounded_agent_contract"][
@@ -321,9 +587,73 @@ def run_repo_pack_self_tests(
         ),
         (
             lambda value: _task(value, "M6")["bounded_agent_contract"][
+                "exact_fields"
+            ].remove("agent_runner_adapter"),
+            "model control fields",
+        ),
+        (
+            lambda value: _task(value, "M6")["bounded_agent_contract"][
+                "exact_fields"
+            ].remove("agent_runner_executable_digest"),
+            "model control fields",
+        ),
+        (
+            lambda value: _task(value, "M6")["bounded_agent_contract"][
+                "exact_fields"
+            ].remove("agent_execution_policy"),
+            "model control fields",
+        ),
+        (
+            lambda value: _task(value, "M6")["bounded_agent_contract"].__setitem__(
+                "clean_session_required", False
+            ),
+            "clean_session_required",
+        ),
+        (
+            lambda value: _task(value, "M6")["bounded_agent_contract"].__setitem__(
+                "silent_fallback_allowed", True
+            ),
+            "silent_fallback_allowed",
+        ),
+        (
+            lambda value: _task(value, "M6")["bounded_agent_contract"].__setitem__(
+                "repository_path_shadowing_allowed", True
+            ),
+            "repository_path_shadowing_allowed",
+        ),
+        (
+            lambda value: _task(value, "M6")["bounded_agent_contract"][
                 "untrusted_inputs"
             ].remove("repository_source"),
             "untrusted agent inputs",
+        ),
+        (
+            lambda value: _task(value, "M6")[
+                "runner_host_isolation_contract"
+            ].__setitem__("ambient_service_sockets_allowed", True),
+            "runner host-isolation contract",
+        ),
+        (
+            lambda value: _task(value, "M6")[
+                "runner_host_isolation_contract"
+            ]["hard_resource_quota_fields"].remove("pids"),
+            "runner host-isolation contract",
+        ),
+        (
+            lambda value: _task(value, "M6")[
+                "product_action_route_contract"
+            ]["agent_assisted_candidate"][
+                "authorization_topology_contract"
+            ]["minimum_capability_sets"]["runner_mediated"].remove(
+                "model_request_disclosure"
+            ),
+            "agent authorization topology",
+        ),
+        (
+            lambda value: _task(value, "M6")[
+                "managed_credential_contract"
+            ].__setitem__("maximum_ttl_seconds", 86400),
+            "managed credential broker contract",
         ),
         (
             lambda value: _task(value, "M7")[
@@ -340,10 +670,62 @@ def run_repo_pack_self_tests(
         (
             lambda value: _task(value, "M7")[
                 "deterministic_verification_contract"
+            ].__setitem__("agent_runner_and_model_credentials_absent", False),
+            "agent_runner_and_model_credentials_absent",
+        ),
+        (
+            lambda value: _task(value, "M7")[
+                "repository_command_isolation_contract"
+            ].__setitem__("network_default", "enabled"),
+            "repository-command isolation contract",
+        ),
+        (
+            lambda value: _task(value, "M8")[
+                "repository_command_isolation_contract"
+            ].__setitem__(
+                "agent_runner_model_and_sandbox_credentials_absent",
+                False,
+            ),
+            "repository-command isolation contract",
+        ),
+        (
+            lambda value: _task(value, "M8")[
+                "sandbox_entrypoint_isolation_contract"
+            ].__setitem__(
+                "credential_injection_mode",
+                "ambient_sandbox_credential",
+            ),
+            "sandbox-entrypoint isolation contract",
+        ),
+        (
+            lambda value: _task(value, "M8")[
+                "sandbox_entrypoint_isolation_contract"
+            ]["backend_identity_fields"].remove("version"),
+            "sandbox-entrypoint isolation contract",
+        ),
+        (
+            lambda value: _task(value, "M7")[
+                "deterministic_verification_contract"
+            ]["repair_authorization"].__setitem__(
+                "repair_route", "deterministic_or_agent_assisted"
+            ),
+            "repair must be agent-assisted",
+        ),
+        (
+            lambda value: _task(value, "M7")[
+                "deterministic_verification_contract"
             ]["repair_authorization"].__setitem__(
                 "prior_verification_evidence_invalidated", False
             ),
             "invalidate prior proof",
+        ),
+        (
+            lambda value: _task(value, "M7")[
+                "deterministic_verification_contract"
+            ]["repair_authorization"].__setitem__(
+                "route_change_requires_new_explicit_authorization", False
+            ),
+            "route_change_requires_new_explicit_authorization",
         ),
         (
             lambda value: _task(value, "M7")[
@@ -426,6 +808,18 @@ def run_repo_pack_self_tests(
         (
             lambda value: _task(value, "M10")[
                 "paid_campaign_contract"
+            ].__setitem__("api_provider_agent_access", True),
+            "without provider access",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
+            ].__setitem__("provider_raw_consumer_data_access", True),
+            "without provider access",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
             ].__setitem__("payment_posture", "refundable_intent"),
             "cleared non-refundable",
         ),
@@ -458,8 +852,35 @@ def run_repo_pack_self_tests(
         (
             lambda value: _task(value, "M10")[
                 "paid_campaign_contract"
+            ].__setitem__(
+                "qualifying_composed_pr_requires_organic_agent_assisted_plan_item",
+                False,
+            ),
+            "organic agent-assisted item",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
+            ]["campaign_verdict_values"].append("reframe"),
+            "verdict must be pass/fail",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
             ].__setitem__("campaign_economics_threshold_pass_required", False),
             "contribution-margin or automation threshold",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
+            ].__setitem__("minimum_real_agent_assisted_outcomes", 0),
+            "real consumer-selected",
+        ),
+        (
+            lambda value: _task(value, "M10")[
+                "paid_campaign_contract"
+            ].__setitem__("unmatched_engine_comparison_is_causal", True),
+            "generic-agent baseline must be fair",
         ),
         (
             lambda value: _task(value, "M3")["factoryd_runtime"].__setitem__(
@@ -483,6 +904,25 @@ def run_repo_pack_self_tests(
             "missing Markdown anchor",
         ),
     ]
+    for field in QUALIFYING_SAME_RUN_EVIDENCE_FIELDS:
+        mutations.append(
+            (
+                lambda value, field=field: _task(value, "M10")[
+                    "campaign_route_composition_contract"
+                ]["qualifying_same_run_evidence_binding"][
+                    "binding_fields"
+                ].remove(field),
+                "same-run evidence binding",
+            )
+        )
+    mutations.append(
+        (
+            lambda value: value["plan"]["locked_decisions"].append(
+                value["plan"]["locked_decisions"][0]
+            ),
+            "locked decisions must be unique",
+        )
+    )
     for mutate, expected in mutations:
         _expect_failure(base, mutate, expected, validate_loaded)
 
@@ -534,10 +974,7 @@ def run_repo_pack_self_tests(
     else:
         raise AssertionError("product authority was accepted as a Factory grant")
 
-    for task_id, action_mode in (
-        ("M1", "generic_agent_benchmark"),
-        ("M6", "bounded_agent"),
-    ):
+    for task_id, action_mode in (("M6", "bounded_agent"),):
         selected = list(tasks[task_id]["conditional_factory_capabilities"])
         validate_authority_grants(
             _conditional_grants(task_id, action_mode, selected),

@@ -10,6 +10,7 @@ _ITEM = re.compile(
     r"^\d+\. `([A-Z]+-\d{3})`: (.*?)(?=^\d+\. `[A-Z]+-\d{3}`: |^---\s*$|^##|\Z)",
     re.MULTILINE | re.DOTALL,
 )
+_HARD_WRAP_FRACTURE = re.compile(r"[A-Za-z0-9][/-]\s+[A-Za-z0-9]")
 
 
 def _normalize(value: str) -> str:
@@ -23,6 +24,16 @@ def validate_acceptance_text(prd_text: str, ledger: dict[str, Any]) -> None:
         for item in ledger.get("items", [])
         if isinstance(item, dict)
     }
+    fractured = sorted(
+        f"{scope}:{item_id}"
+        for scope, values in (("authored", authored), ("compiled", compiled))
+        for item_id, text in values.items()
+        if _HARD_WRAP_FRACTURE.search(text)
+    )
+    if fractured:
+        raise AssertionError(
+            f"acceptance text contains hard-wrap fracture: {fractured}"
+        )
     if authored != compiled:
         missing = sorted(set(authored) - set(compiled))
         extra = sorted(set(compiled) - set(authored))

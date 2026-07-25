@@ -27,6 +27,7 @@ func TestOperatingPackExists(t *testing.T) {
 		"docs/architecture/adr-0002-provider-sponsored-customer-controlled-migrations.md",
 		"docs/architecture/adr-0003-services-led-bounded-agent-migration-execution.md",
 		"docs/architecture/adr-0004-provider-originated-api-update-delivery.md",
+		"docs/architecture/adr-0005-customer-selected-agent-runners.md",
 		".factory/artifacts/prd-to-plan/lumyn-migration-mvp/context-brief.json",
 		".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
 	} {
@@ -54,6 +55,12 @@ func TestPRDReferencesAreRepoRelative(t *testing.T) {
 	}
 	if !strings.Contains(prd, "53 item-level closure units") {
 		t.Fatal("prd should state the v3 item-level acceptance count")
+	}
+	if !strings.Contains(prd, "Codex and Claude Code") ||
+		!strings.Contains(prd, "provider_sponsored_lumyn_managed") ||
+		!strings.Contains(prd, "agent_execution_policy") ||
+		!strings.Contains(prd, "real participating repository") {
+		t.Fatal("prd should bind conditional launch runners, funding, and real agent proof")
 	}
 	if strings.Contains(prd, "/"+("Users")+"/") {
 		t.Fatal("prd should not contain machine-local user paths")

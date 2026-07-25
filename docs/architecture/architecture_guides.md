@@ -21,7 +21,8 @@ The architecture optimizes for:
 - deterministic transforms for exact mappings;
 - bounded-agent generation for approved repository-specific changes;
 - deterministic, baseline-aware verification;
-- exact model egress, credential, network, disclosure, and cost controls;
+- exact Agent Runner and model egress, credential, network, disclosure, and
+  cost controls;
 - patch and PR-bundle fallback without requiring GitHub access;
 - separately authorized short-lived remote branch and required pilot draft PR;
 - event-bound, consented provider status with no inference from silence;
@@ -55,7 +56,7 @@ Owns:
 Does not own:
 
 - consumer repository access;
-- consumer commands, model credentials, or execution;
+- consumer commands, Agent Runner/model credentials, or execution;
 - raw source, diffs, logs, traces, prompts, or responses;
 - consumer branch, PR, review, or merge authority.
 
@@ -86,7 +87,11 @@ Owns:
 - exact per-event migration-plan approval or installed-policy plan evaluation;
 - isolated workspace and local branch;
 - command allowlist and host-isolation policy;
-- model disclosure, endpoint, credential, tool, and budget policy;
+- `agent_execution_policy` set to `disabled` or `configured`; only a configured
+  policy binds the exact qualified Agent Runner adapter/version,
+  execution-funding mode, credential and usage-billing owners,
+  clean-session/native-configuration policy, and Agent Runner/model
+  disclosure, endpoint, credential, tool, and budget policy;
 - dependency and package-registry policy;
 - private impact, plan, prompt, response, patch, verification, and PR-bundle
   evidence;
@@ -95,6 +100,58 @@ Owns:
 
 Consumer-private runtime state lives outside the checkout and public source
 repository with explicit retention, deletion, and evidence ownership.
+
+### Agent Runner Plane
+
+The Agent Runner plane is an optional selected adapter inside the Consumer
+Execution Plane, not an independent authority. A Consumer Installation
+defaults `agent_execution_policy` to `disabled`; notify-only, scan-only, and
+deterministic-only routes require no runner credential. An agent-assisted route
+pauses until the Consumer Maintainer explicitly configures it.
+
+Launch targets are pinned Codex and Claude Code adapters after each exact
+version and executable digest from an approved source passes the common
+conformance suite and an approved live canary. The selected auth mode and
+entitlement class must permit the intended automation. Cursor remains deferred
+behind that gate. Each attempt resolves the executable by canonical path,
+rejects repository-local PATH shadowing, and starts a clean ephemeral session
+with neutral home/config roots; personal history is never resumed. Native user
+or project static rules and memories are ignored unless explicitly selected
+and digest-bound as untrusted context. Executable plugins, MCP servers, and
+hooks are prohibited for the MVP.
+
+When configured, the installation chooses default
+`consumer_managed` or optional `provider_sponsored_lumyn_managed` execution.
+Credential owner and usage-billing owner remain explicit. A consumer-managed
+subscription qualifies only when it permits non-interactive automation and
+exposes the actual downstream model route; otherwise execution blocks or uses
+a qualifying BYOK, local, or managed route. The API Provider never receives
+agent selection, credential, code, context, or session authority.
+
+The managed route uses a credential broker with exact issuer,
+installation/event/plan/attempt and runner/model audience and maximum one-hour
+TTL. One-time redemption creates one attempt-scoped session. Multiple
+in-attempt calls are allowed only within hard token/cost quotas; refresh,
+post-attempt replay, and cross-attempt reuse are forbidden. Revocation and
+reconciliation require a vendor-native bounded credential or approved
+budget-enforcing proxy; otherwise the route is unavailable.
+
+The runner process uses explicit read-only/writable mounts, no host home or OS
+credential store, no ambient service sockets or unrelated inherited
+descriptors, inherited child-process limits, host-enforced egress, and
+evidence-backed cleanup. Failure to enforce any boundary blocks launch.
+
+The plane uses separate grants for:
+
+- `agent_runner_network`;
+- `agent_runner_credential`;
+- `model_request_disclosure`;
+- `model_network`;
+- `model_credential`.
+
+The Agent Runner Vendor and downstream Model Provider are recorded separately.
+No adapter/version, model route, endpoint, credential owner, or billing owner
+may change through silent fallback.
 
 ### Bounded Model Plane
 
@@ -136,7 +193,8 @@ Consumer Maintainer
   installs provider channel and bounded actions
   -> authorizes event-specific read-only impact
   -> chooses exact-plan approval or installed-policy evaluation
-  -> authorizes exact local write/command/model boundaries
+  -> [configures exact qualified Agent Runner and funding route if needed]
+  -> authorizes exact local write/command/runner/model boundaries
         |
         v
 Consumer Execution Plane
@@ -187,6 +245,7 @@ not_installed
 -> plan_ready
 -> exact_plan_approved | installed_policy_satisfied
 -> local_execution_authorized
+-> [agent_runner_authorized]
 -> [model_authorized]
 -> [remote_branch_authorized]
 -> [draft_pr_authorized]
@@ -233,7 +292,8 @@ Generation mode and verification strength remain independent.
 | Migration planner | complete no-write route and budgets | approval or writes |
 | Workspace manager | isolated workspace, safe paths, local branch | semantic decisions |
 | Deterministic transformer | exact supported mappings | repository inference |
-| Agent runner | bounded model/tool loop and provenance | verification, approval, GitHub |
+| Agent Runner selector | disabled/configured policy; when configured, exact qualified adapter/version, funding, credentials, billing, native configuration | consumer authority, implicit enablement, or silent fallback |
+| Agent Runner adapter | normalized clean-session model/tool loop and provenance | verification, approval, GitHub |
 | Command runner | exact host-isolated commands | ambient host access |
 | Verification engine | deterministic checks and evidence | patch generation |
 | Sandbox verifier | optional approved read-back | production access |
@@ -257,6 +317,7 @@ provider-paid campaign scope
 -> no-write migration plan
 -> exact plan approval or installed-preauthorization policy evaluation
 -> local write/command authorization
+-> [Agent Runner network/credential authorization when needed]
 -> [model disclosure/network/credential authorization when needed]
 -> isolated deterministic or bounded-agent patch candidate
 -> deterministic repository and workflow verification
@@ -285,7 +346,8 @@ These inputs cannot execute code or grant consumer authority.
 
 - Consumer Installation and event-specific authorization;
 - repository impact inventory and migration plan;
-- model disclosure/network/credential grants;
+- Agent Runner network/credential and model disclosure/network/credential
+  grants;
 - prompts, responses, tool traces, token/cost records;
 - workspace, patch, local branch, and verification;
 - PR bundle and GitHub result;
@@ -298,8 +360,8 @@ These inputs cannot execute code or grant consumer authority.
 - verification boundary;
 - merge/close outcome when consented.
 
-Raw source, diffs, prompts, responses, logs, traces, and credentials are private
-by default.
+Raw source, diffs, prompts, responses, agent sessions, tool traces, logs, and
+credentials are never API-provider-visible.
 
 ### Storage And Disclosure Boundary
 
@@ -318,6 +380,15 @@ capabilities for implementation workers. Lumyn product grants remain private
 and action-specific. Factory dispatch cannot confer repository, model, branch,
 PR, or merge authority.
 
+Task- and campaign-level product-authority arrays describe the complete
+capability universe that implementation may need; they are not runtime grants.
+Each side effect selects a named route, freezes that route's exact required
+plus conditionally selected capability union, and leaves every unselected
+capability unauthorized. A campaign composes the validated impact, candidate,
+verification, optional sandbox, delivery, and reporting routes per
+installation/event/run; it never grants their aggregate union to every
+participant.
+
 The active repo-local v3 control set does not by itself qualify factoryd.
 Until the external profile and factoryd runtime are requalified, the
 mission-paused configs are an enforced stop rather than an executable
@@ -331,6 +402,12 @@ implementation worker's writable scope. Shipping fails before `commit-push`
 when required independent evidence is absent, stale, self-authored, or
 non-passing.
 
+Independent repository verification runs in a fresh process and view with
+frozen command and verification-configuration digests, no Agent Runner/model
+credentials, and no generation-owned evidence handle. Only the
+verifier/evidence boundary can persist verification results for the exact
+candidate head.
+
 ## Evidence Model
 
 Evidence preserves separate axes for:
@@ -341,7 +418,8 @@ Evidence preserves separate axes for:
 - patch scope;
 - repository baseline and checks;
 - workflow execution;
-- model disclosure and cost;
+- Agent Runner/model disclosure, funding, credential/billing ownership, and
+  cost;
 - delivery state;
 - permission state;
 - residual risk.
@@ -351,7 +429,8 @@ Bind evidence to:
 - intent and source/target digests;
 - repository base and candidate heads;
 - plan digest;
-- deterministic recipe or model/prompt/tool provenance;
+- explicit `agent_execution_policy`, plus deterministic recipe provenance or,
+  when configured, exact Agent Runner/model/prompt/tool provenance;
 - patch digest;
 - command and environment identity;
 - workflow/cassette/sandbox identity;
@@ -396,9 +475,13 @@ Every patch mode must:
 Deterministic mode additionally records the recipe and produces the same patch
 for identical pinned inputs.
 
-Agent mode additionally enforces exact model, endpoint, prompt/tool, disclosure,
-network, credential, turn/token/time/retry/cost, and tool-call boundaries. It
-does not claim byte-identical patch determinism.
+Agent mode additionally enforces exact qualified adapter/version, executable
+source/digest and conformance digest, auth mode/entitlement class, clean
+session, funding/credential/billing ownership, native configuration, Agent
+Runner/model endpoint, prompt/tool, disclosure, network, credential, and
+turn/token/time/retry/cost boundaries. It rejects executable
+shadowing and silent fallback and does not claim byte-identical patch
+determinism.
 
 ## Command Execution Boundary
 
@@ -408,6 +491,8 @@ Repository commands are untrusted code:
 - exact read-only/writable mounts and neutral home/temp;
 - explicit executable/toolchain roots;
 - timeout and output budgets;
+- exact backend/version/configuration/qualification identity and host platform;
+- hard CPU-time, memory, PID, process-tree-depth, disk, and open-file quotas;
 - network disabled by default;
 - lifecycle scripts disabled by default;
 - sanitized environment and no ambient secrets;
@@ -427,6 +512,12 @@ endpoint/operations, request/write budgets, idempotency, cleanup, retention, and
 orphan evidence. Sandbox proof is independent from local deterministic
 verification and required pilot draft-PR delivery.
 
+The sandbox entrypoint runs in its own qualified isolation profile with a
+read-only exact-head mount, exact entrypoint/directory, neutral roots,
+sanitized environment, only the task-scoped sandbox credential,
+endpoint/operation-only egress, inherited child and hard resource limits,
+teardown, cleanup, and orphan evidence.
+
 ## GitHub Boundary
 
 - Patch and PR-bundle delivery require no GitHub credential.
@@ -443,7 +534,11 @@ verification and required pilot draft-PR delivery.
 - `EXP-003` requires the composed provider-channel event through
   installation, impact, plan, Lumyn-generated candidate, verification,
   branch, draft-PR, and local status-projection path. Transmission is optional
-  for technical delivery but the pilot projection must bind that same run.
+  for technical delivery. For `PILOT-003`, that same qualifying run must
+  contain an organically agent-assisted plan item on a consumer-selected
+  qualified runner, pass independent exact-head verification, open the Lumyn
+  draft PR, and transmit the bound provider projection. Separate
+  agent/delivery runs or deterministic rerouting do not qualify.
 - Default-branch writes and auto-merge are prohibited.
 - Provider payment never authorizes a GitHub action.
 
@@ -453,7 +548,8 @@ verification and required pilot draft-PR delivery.
 |---|---|---|---|---|
 | Campaign scope | API Provider + Lumyn Operator | confirmed sunset decision | unclear intent or no accountable buyer | re-scope or stop |
 | Repository authority | Consumer | grant/revoke | missing or stale grant | request exact authority |
-| Model authority | Consumer | request/cost/provenance evidence | disclosure, credential, endpoint, or budget drift | stop and reauthorize |
+| Agent Runner authority | Consumer | conformance, session, auth, usage, and cost evidence | adapter/version, native config, credential/billing owner, or fallback drift | stop and reauthorize |
+| Model authority | Consumer | request/cost/provenance evidence | provider, model route, disclosure, credential, endpoint, or budget drift | stop and reauthorize |
 | Patch candidate | Consumer execution plane | diff and provenance | scope escape or unsupported inference | discard workspace |
 | Verification | Consumer execution plane | pinned command evidence | stale head or failed check | repair or report |
 | PR bundle | Consumer | review feedback | incomplete evidence or residual risk | regenerate bundle |
@@ -479,8 +575,10 @@ operator cost.
 Require an ADR or decision update for:
 
 - authority, execution-plane, or data-sharing changes;
-- model provider, endpoint, credential, disclosure, or budget posture;
-- agent tools or isolation;
+- Agent Runner adapter/version/executable, auth/entitlement, conformance,
+  funding, credential/billing, native-configuration, or fallback posture;
+- Model Provider, endpoint, credential, disclosure, or budget posture;
+- agent tools, session, or isolation;
 - public command or schema contracts;
 - patch/branch/PR-bundle ownership;
 - verification semantics;
@@ -489,9 +587,10 @@ Require an ADR or decision update for:
 - release/distribution posture;
 - major performance, cost, or reliability tradeoffs.
 
-ADR-0004 governs provider-originated API update delivery. ADR-0003 governs the
-bounded-agent execution and trust substrate. ADR-0002 remains historical
-context for the v2 provider-sponsored deterministic-first rebaseline.
+ADR-0004 governs provider-originated API update delivery. ADR-0005 governs
+customer-selected Agent Runners. ADR-0003 governs the remaining bounded-agent
+execution and trust substrate. ADR-0002 remains historical context for the v2
+provider-sponsored deterministic-first rebaseline.
 
 ## Performance And Cost Triggers
 
@@ -499,10 +598,11 @@ context for the v2 provider-sponsored deterministic-first rebaseline.
   separately.
 - Record repository size, file count, AST memory, command duration, artifact
   size, and GitHub calls.
-- Agent mode records prompt/response size, turns, tokens, retries, wall time,
-  model cost, tool calls, and operator interventions.
-- Budget exhaustion fails closed; it never silently switches model or widens
-  scope.
+- Agent mode records adapter/version, conformance, funding mode, credential and
+  usage-billing owners, prompt/response size, turns, tokens, retries, wall time,
+  Agent Runner/model cost, tool calls, and operator interventions.
+- Budget exhaustion or runner failure fails closed; it never silently switches
+  adapter, model, credential/billing owner, or scope.
 - Provider and consumer labor remain visible beside Lumyn operator time.
 
 ## Reliability And Recovery Triggers
@@ -510,7 +610,10 @@ context for the v2 provider-sponsored deterministic-first rebaseline.
 Test:
 
 - interrupted workspace and partial patch;
-- stale base, intent, plan, or model policy;
+- stale base, intent, plan, Agent Runner conformance, or model policy;
+- runner executable integrity/shadowing, authentication/entitlement,
+  clean-session, native-configuration, cancellation, malformed/partial output,
+  silent-fallback, and credential-persistence failures;
 - model timeout, malformed tool call, prompt injection, budget exhaustion, and
   partial response;
 - command timeout and flaky/pre-existing tests;
@@ -546,9 +649,14 @@ Retries preserve the same authorization and idempotency identity.
 
 ### Bounded Agent
 
-- exact disclosure, endpoint, credential, tools, and budgets;
+- consumer-selected exact qualified adapter/version/executable,
+  auth/entitlement, and funding route;
+- clean ephemeral session and explicit native-configuration posture;
+- separate Agent Runner/model disclosure, endpoints, credentials, tools, and
+  budgets;
 - isolated workspace;
 - no ambient authority;
+- no silent fallback;
 - untrusted output;
 - independent deterministic verification.
 
@@ -569,7 +677,8 @@ Retries preserve the same authorization and idempotency identity.
 - exact consumer-consented field allowlist and event/evidence binding;
 - observed, consumer-reported, and unknown provenance;
 - no `not_applicable` or `unaffected` from silence and no `retired` from merge;
-- no raw consumer evidence by default.
+- no raw consumer code, diffs, prompts, responses, agent sessions, tool traces,
+  logs, or credentials.
 
 ## Runtime Shape
 
@@ -580,7 +689,8 @@ Go orchestration core
   -> TypeScript impact adapter
   -> migration planner
   -> deterministic transformer
-  -> bounded-agent adapter
+  -> [configured Agent Runner selector and common conformance contract]
+  -> [pinned Codex or Claude Code adapter]
   -> isolated workspace and command runner
   -> deterministic verification engine
   -> evidence and PR-bundle renderer
@@ -589,8 +699,9 @@ Go orchestration core
   -> consented status projector
 ```
 
-Keep model adapters behind a narrow interface. No model endpoint, SDK, or
-hosted control plane becomes an implicit dependency.
+Keep Agent Runner and model adapters behind narrow interfaces. No runner
+account, native configuration, model endpoint, SDK, or hosted control plane
+becomes an implicit dependency.
 
 ## Architecture Budget And Decomposition
 

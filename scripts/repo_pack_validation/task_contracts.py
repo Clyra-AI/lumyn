@@ -55,6 +55,26 @@ CANONICAL_WORKER_ORDER = [
 ]
 
 MODEL_FIELDS = {
+    "agent_execution_policy",
+    "agent_runner_vendor",
+    "agent_runner_adapter",
+    "agent_runner_version",
+    "agent_runner_executable_source",
+    "agent_runner_executable_path",
+    "agent_runner_executable_digest",
+    "agent_runner_conformance_digest",
+    "agent_runner_auth_mode",
+    "agent_runner_entitlement_class",
+    "clean_session_identity",
+    "execution_funding_mode",
+    "credential_owner",
+    "usage_billing_owner",
+    "native_configuration_digest",
+    "agent_runner_credential_environment",
+    "agent_runner_credential_scopes",
+    "agent_runner_network_endpoint",
+    "agent_runner_network_operations",
+    "actual_model_route",
     "model_provider",
     "model_endpoint",
     "model_version",
@@ -94,6 +114,205 @@ UNTRUSTED_AGENT_INPUTS = {
     "model_output",
 }
 
+GENERIC_AGENT_CONTROL_FIELDS = {
+    "repository_snapshot",
+    "authoritative_migration_evidence",
+    "agent_runner_adapter",
+    "agent_runner_version",
+    "agent_runner_executable_digest",
+    "actual_model_provider",
+    "actual_model_version",
+    "auth_mode",
+    "entitlement_class",
+    "execution_funding_mode",
+    "credential_owner",
+    "usage_billing_owner",
+    "context_access_ceiling",
+    "tools",
+    "commands",
+    "engineer_role",
+    "verification_commands_and_time",
+    "attempt_budget",
+    "token_budget",
+    "time_budget",
+    "cost_budget",
+}
+GENERIC_AGENT_TREATMENT = (
+    "lumyn_orchestration_impact_routing_boundary_enforcement_"
+    "independent_verification_delivery_and_status"
+)
+
+RUNNER_PREFLIGHT_FIELDS = {
+    "agent_execution_policy",
+    "agent_runner_adapter",
+    "agent_runner_version",
+    "agent_runner_executable_source",
+    "agent_runner_executable_digest",
+    "agent_runner_auth_mode",
+    "agent_runner_entitlement_class",
+    "actual_model_provider",
+    "actual_model_endpoint",
+    "actual_model_version",
+    "execution_funding_mode",
+    "credential_owner",
+    "usage_billing_owner",
+}
+
+QUALIFYING_SAME_RUN_ROUTE_SEQUENCE = [
+    "M4/impact_read_only",
+    "M6/agent_assisted_candidate",
+    "M7/verify",
+    "M9/remote_branch_push",
+    "M9/draft_pr_create",
+    "M9/provider_status_transmit",
+]
+
+QUALIFYING_SAME_RUN_EVIDENCE_FIELDS = [
+    "run_id",
+    "provider_change_event",
+    "consumer_installation_authorization",
+    "organic_agent_assisted_plan_item",
+    "candidate_head",
+    "verification_evidence_digest",
+    "remote_branch",
+    "draft_pr",
+    "provider_status_projection",
+]
+
+ISOLATION_BACKEND_IDENTITY_FIELDS = [
+    "backend",
+    "version",
+    "configuration_digest",
+    "qualification_digest",
+    "host_platform",
+]
+
+ISOLATION_RESOURCE_QUOTA_FIELDS = [
+    "cpu_time",
+    "memory_bytes",
+    "pids",
+    "process_tree_depth",
+    "disk_bytes",
+    "open_files",
+]
+
+MANAGED_CREDENTIAL_CONTRACT = {
+    "mode": "provider_sponsored_lumyn_managed",
+    "approved_broker_issuer_bound": True,
+    "audience_fields": [
+        "consumer_installation",
+        "provider_change_event",
+        "migration_plan",
+        "agent_attempt",
+        "agent_runner",
+        "model_route",
+    ],
+    "maximum_ttl_seconds": 3600,
+    "broker_redemption_mode": "one_time_into_single_agent_attempt_session",
+    "in_attempt_multiple_calls_allowed_within_hard_quotas": True,
+    "replay_after_attempt_allowed": False,
+    "cross_attempt_credential_reuse_allowed": False,
+    "refresh_allowed": False,
+    "hard_token_quota_required": True,
+    "hard_cost_quota_required": True,
+    "revocation_required": True,
+    "post_run_usage_reconciliation_required": True,
+    "vendor_native_or_budget_enforcing_proxy_required": True,
+    "unsupported_vendor_behavior": "managed_mode_unavailable",
+    "reusable_credential_persistence_allowed": False,
+    "api_provider_credential_access": False,
+}
+
+RUNNER_HOST_ISOLATION_CONTRACT = {
+    "backend_identity_fields": ISOLATION_BACKEND_IDENTITY_FIELDS,
+    "backend_qualification_required": True,
+    "hard_resource_quota_fields": ISOLATION_RESOURCE_QUOTA_FIELDS,
+    "hard_resource_quotas_required": True,
+    "explicit_read_only_and_writable_mounts_required": True,
+    "host_home_mounted": False,
+    "os_credential_access_allowed": False,
+    "ambient_service_sockets_allowed": False,
+    "unrelated_inherited_descriptors_allowed": False,
+    "child_process_restrictions_inherited": True,
+    "host_enforced_egress_required": True,
+    "cleanup_evidence_required": [
+        "process_tree_terminated",
+        "workspace_removed",
+        "credential_revoked",
+        "mount_and_socket_absence",
+    ],
+    "unsupported_host_behavior": "block_before_agent_launch",
+    "executable_extensions_mode": "plugins_mcp_servers_and_hooks_prohibited_for_mvp",
+    "malicious_child_and_tool_negative_tests_required": True,
+    "fork_bomb_and_resource_exhaustion_negative_tests_required": True,
+}
+
+REPOSITORY_COMMAND_ISOLATION_CONTRACT = {
+    "backend_identity_fields": ISOLATION_BACKEND_IDENTITY_FIELDS,
+    "backend_qualification_required": True,
+    "hard_resource_quota_fields": ISOLATION_RESOURCE_QUOTA_FIELDS,
+    "hard_resource_quotas_required": True,
+    "exact_command_allowlist_required": True,
+    "exact_working_directory_required": True,
+    "explicit_read_only_and_writable_mounts_required": True,
+    "neutral_home_and_temp_roots_required": True,
+    "explicit_executable_roots_required": True,
+    "sanitized_environment_required": True,
+    "ambient_secrets_allowed": False,
+    "host_home_mounted": False,
+    "os_credential_access_allowed": False,
+    "ambient_service_sockets_allowed": False,
+    "unrelated_inherited_descriptors_allowed": False,
+    "child_process_restrictions_inherited": True,
+    "network_default": "disabled",
+    "network_enablement_requires_exact_route_grant": True,
+    "lifecycle_scripts_default": "disabled",
+    "lifecycle_script_enablement_requires_separate_approval": True,
+    "host_isolation_backend_required": True,
+    "unsupported_host_behavior": "block_before_command_execution",
+    "timeout_and_output_budgets_required": True,
+    "ambient_credentials_allowed": False,
+    "route_selected_credential_injection_only": True,
+    "agent_runner_model_and_sandbox_credentials_absent": True,
+    "pre_and_post_patch_results_separate": True,
+    "cleanup_evidence_required": [
+        "process_tree_terminated",
+        "workspace_or_mount_cleanup",
+        "socket_and_descriptor_absence",
+    ],
+    "fork_bomb_and_resource_exhaustion_negative_tests_required": True,
+}
+
+SANDBOX_ENTRYPOINT_ISOLATION_CONTRACT = {
+    "backend_identity_fields": ISOLATION_BACKEND_IDENTITY_FIELDS,
+    "backend_qualification_required": True,
+    "hard_resource_quota_fields": ISOLATION_RESOURCE_QUOTA_FIELDS,
+    "hard_resource_quotas_required": True,
+    "exact_candidate_head_read_only_mount_required": True,
+    "exact_entrypoint_and_working_directory_required": True,
+    "neutral_home_and_temp_roots_required": True,
+    "sanitized_environment_required": True,
+    "credential_injection_mode": "sole_task_scoped_sandbox_credential",
+    "unrelated_credentials_allowed": False,
+    "agent_runner_model_and_github_credentials_absent": True,
+    "egress_policy": "exact_sandbox_endpoint_and_operations_only",
+    "ambient_service_sockets_allowed": False,
+    "unrelated_inherited_descriptors_allowed": False,
+    "child_process_restrictions_inherited": True,
+    "timeout_and_output_budgets_required": True,
+    "teardown_required": True,
+    "cleanup_evidence_required": [
+        "process_tree_terminated",
+        "sandbox_credential_revoked",
+        "temporary_workspace_removed",
+        "sandbox_state_cleaned_or_orphan_recorded",
+        "mount_socket_and_descriptor_absence",
+    ],
+    "orphan_evidence_required_when_cleanup_incomplete": True,
+    "unsupported_host_behavior": "block_before_sandbox_entrypoint",
+    "fork_bomb_and_resource_exhaustion_negative_tests_required": True,
+}
+
 CARRY_FORWARD_PROOF = {
     "BASE-001": (
         {"T1", "T3", "M0"},
@@ -124,6 +343,28 @@ CARRY_FORWARD_PROOF = {
 def _require(condition: bool, message: str) -> None:
     if not condition:
         raise AssertionError(message)
+
+
+def _validate_repository_command_isolation(
+    task: dict[str, Any],
+    task_id: str,
+) -> None:
+    _require(
+        task.get("repository_command_isolation_contract")
+        == REPOSITORY_COMMAND_ISOLATION_CONTRACT,
+        f"{task_id} repository-command isolation contract drifted",
+    )
+
+
+def _validate_sandbox_entrypoint_isolation(
+    task: dict[str, Any],
+    task_id: str,
+) -> None:
+    _require(
+        task.get("sandbox_entrypoint_isolation_contract")
+        == SANDBOX_ENTRYPOINT_ISOLATION_CONTRACT,
+        f"{task_id} sandbox-entrypoint isolation contract drifted",
+    )
 
 
 def validate_carry_forward_proof(
@@ -244,8 +485,15 @@ def _validate_holdout_contracts(tasks: dict[str, dict[str, Any]]) -> None:
     )
     _require(
         provision.get("comparison_baseline")
-        == "same_snapshot_evidence_commands_role_and_time_budget_generic_agent",
+        == "matched_agent_engine_and_budget_status_quo",
         "M1 must freeze a fair generic-agent baseline",
+    )
+    _require(
+        set(provision.get("comparison_control_variables", []))
+        == GENERIC_AGENT_CONTROL_FIELDS
+        and provision.get("difference_under_test") == GENERIC_AGENT_TREATMENT
+        and provision.get("unmatched_engine_comparison_is_causal") is False,
+        "M1 baseline must isolate Lumyn from runner, model, auth, funding, and budget effects",
     )
     _require(
         provision.get("policy_digest") == _policy_digest(provision),
@@ -337,6 +585,12 @@ def _validate_preflight(task: dict[str, Any]) -> None:
         "provider operator",
         "eligible consumer",
         "privacy and model-data protocol",
+        "agent execution policy",
+        "runner family",
+        "observable model route",
+        "host-isolation posture",
+        "auth and entitlement",
+        "credential and usage-billing ownership",
         "generic-agent baseline",
         "campaign cogs",
         "lumyn operator hours",
@@ -344,6 +598,49 @@ def _validate_preflight(task: dict[str, Any]) -> None:
         "absolute judgment deadline",
     ):
         _require(token in private_scope, f"M2.5 preflight must bind {token}")
+    runner = task.get("consumer_runner_prequalification", {})
+    _require(
+        runner.get("minimum_agent_assisted_feasible_consumers") == 1
+        and runner.get(
+            "scan_or_deterministic_consumers_may_disable_agent_execution"
+        ) is True
+        and runner.get("feasible_runner_families") == ["codex", "claude_code"]
+        and runner.get(
+            "consumer_selected_or_managed_route_explicitly_consented"
+        ) is True
+        and set(runner.get("exact_fields", [])) == RUNNER_PREFLIGHT_FIELDS
+        and runner.get("noninteractive_automation_required") is True
+        and runner.get("opaque_model_route_allowed") is False
+        and runner.get("secret_values_collected") is False
+        and runner.get("host_isolation_feasibility_required") is True
+        and runner.get(
+            "managed_route_broker_feasibility_required_when_selected"
+        ) is True
+        and runner.get(
+            "lumyn_adapter_conformance_required_at_prequalification"
+        ) is False
+        and runner.get(
+            "lumyn_adapter_conformance_required_before_first_agent_run"
+        ) is True
+        and runner.get(
+            "live_canary_required_before_first_agent_run"
+        ) is True
+        and runner.get(
+            "plausible_organic_agent_item_hypothesis_required"
+        ) is True
+        and runner.get("hypothesis_examples")
+        == [
+            "wrapper_adaptation",
+            "adapter_adaptation",
+            "signature_or_type_adaptation",
+            "related_test_repair",
+        ]
+        and runner.get("new_business_decision_required") is False
+        and runner.get("confirmation_stage") == "M4_M5_impact_and_plan"
+        and runner.get("prequalification_may_force_agent_route") is False
+        and runner.get("frozen_before_invitations") is True,
+        "M2.5 must prequalify one feasible, consented, noninteractive Agent Runner route and plausible organic agent-eligible item without forcing the route, premature conformance, or secrets",
+    )
     digest = preflight.get("approval_scope_digest")
     _require(
         digest == manual_preflight_scope_digest(preflight),
@@ -356,9 +653,55 @@ def _validate_preflight(task: dict[str, Any]) -> None:
         and readiness.get("creditable_toward_campaign") is True
         and readiness.get("may_close_disc_001") is False
         and readiness.get("may_authorize_repository_work") is False
+        and readiness.get(
+            "credited_funds_count_only_after_signed_campaign_conversion"
+        ) is True
+        and readiness.get(
+            "converted_funds_are_non_refundable_campaign_consideration"
+        ) is True
+        and readiness.get("total_cleared_campaign_funds_minimum_usd") == 25000
+        and readiness.get("readiness_sprint_alone_closes_disc_001") is False
         and readiness.get("proof_boundary")
         == "paid_discovery_not_provider_to_consumer_delivery",
         "M2.5 readiness sprint must remain paid discovery, not campaign proof",
+    )
+    offer = task.get("campaign_offer_contract", {})
+    _require(
+        offer.get("included_eligible_consumer_units") == 5
+        and offer.get("minimum_valid_scans") == 3
+        and offer.get("minimum_tested_reviewable_outcomes") == 2
+        and offer.get("scope_posture")
+        == "bounded_campaign_attempt_not_completed_migration_guarantee"
+        and offer.get("consumer_consent_dependency_disclosed") is True
+        and offer.get("additional_repository_default_billable_event")
+        == "independently_verified_lumyn_candidate_and_authorized_tested_draft_pr"
+        and offer.get(
+            "contracted_verified_local_bundle_may_be_billable"
+        ) is True
+        and offer.get(
+            "local_bundle_counts_as_automated_delivery_or_mvp_proof"
+        ) is False,
+        "M2.5 campaign offer must align price, success floor, and billable event",
+    )
+    delivery = task.get("consumer_delivery_prequalification", {})
+    _require(
+        delivery.get(
+            "minimum_installed_preauthorization_draft_pr_willing_consumers"
+        ) == 1
+        and delivery.get(
+            "minimum_provider_status_transmit_willing_consumers"
+        ) == 1
+        and delivery.get(
+            "same_intended_qualifying_consumer_required"
+        ) is True
+        and delivery.get(
+            "exact_allowlisted_event_bound_projection_reviewed"
+        ) is True
+        and delivery.get("willingness_is_runtime_consent") is False
+        and delivery.get(
+            "runtime_provider_reporting_grant_still_required"
+        ) is True,
+        "M2.5 must prequalify draft-PR and provider-status willingness without treating it as consent",
     )
 
 
@@ -371,7 +714,7 @@ def _validate_update_delivery_contracts(
         skeleton.get("input_mode") == "public_or_synthetic_only"
         and skeleton.get("external_write_mode") == "deterministic_fakes_only"
         and skeleton.get("generic_agent_harness")
-        == "existing_codex_harness_through_replaceable_adapter",
+        == "common_agent_runner_contract_with_deterministic_fake",
         "M1 walking skeleton must be public-fixture, fake-write, and adapter-based",
     )
     _require(
@@ -396,10 +739,26 @@ def _validate_update_delivery_contracts(
         "M1 walking skeleton must not claim commercial, real-repo, or automated-PR proof",
     )
     _require(
-        skeleton.get("live_model_leg_requires_conditional_grants") is True
+        skeleton.get("live_agent_execution_allowed") is False
+        and skeleton.get("live_agent_execution_deferred_to") == ["M6", "M10"]
         and skeleton.get("no_grant_fallback")
         == "same_adapter_contract_with_deterministic_fake",
-        "M1 live model leg must be conditional with a deterministic-fake fallback",
+        "M1 must remain offline and defer live Agent Runner execution",
+    )
+    _require(
+        skeleton.get("future_launch_agent_runner_targets")
+        == ["codex", "claude_code"]
+        and skeleton.get("deferred_agent_runner_targets") == ["cursor"]
+        and set(skeleton.get("offline_fake_contract_assertions", []))
+        == {
+            "clean_session",
+            "executable_integrity",
+            "auth_and_entitlement_shape",
+            "neutral_home_and_config",
+            "repository_path_shadowing_rejected",
+            "silent_fallback_rejected",
+        },
+        "M1 must test only the offline common clean-session contract",
     )
     channel = m2.get("update_channel_contract")
     _require(isinstance(channel, dict), "M2 update channel contract is required")
@@ -451,6 +810,13 @@ def _validate_update_delivery_contracts(
             "provider_or_channel", "channel_origin_and_authentication_key",
             "repository", "package_root", "audience_or_version_selectors",
             "allowed_actions", "authorization_mode", "paths", "commands",
+            "agent_execution_policy",
+            "agent_runner_adapter_version_executable_and_conformance_policy",
+            "agent_runner_auth_and_entitlement_policy",
+            "agent_runner_execution_funding_mode",
+            "agent_runner_credential_owner",
+            "agent_runner_usage_billing_owner",
+            "agent_runner_native_configuration_policy",
             "model_data_and_budgets", "github_token_issuance_policy",
             "provider_reporting", "retention_and_deletion", "disclosure",
             "expiry", "revocation",
@@ -463,8 +829,42 @@ def _validate_update_delivery_contracts(
         and set(channel.get("consumer_installation_authorization_modes", []))
         == {"per_event_approval", "installed_preauthorization"}
         and channel.get("event_specific_authorization_snapshot_required") is True
-        and channel.get("event_may_widen_installation") is False,
+        and channel.get("event_may_widen_installation") is False
+        and channel.get("agent_execution_policy_states")
+        == ["disabled", "configured"]
+        and channel.get("agent_execution_policy_default") == "disabled"
+        and channel.get("runner_fields_required_only_when_configured") is True
+        and channel.get("disabled_policy_grants_agent_authority") is False
+        and channel.get(
+            "agent_assisted_route_requires_configured_policy"
+        ) is True
+        and channel.get(
+            "deterministic_route_may_proceed_with_disabled_policy"
+        ) is True,
         "M2 Consumer Installation scope or derived authorization drifted",
+    )
+    _require(
+        channel.get("agent_runner_selection_consumer_owned") is True
+        and channel.get("provider_may_select_agent_runner") is False
+        and channel.get(
+            "stored_reusable_agent_or_model_credential_allowed"
+        ) is False
+        and set(channel.get("execution_funding_modes", []))
+        == {"consumer_managed", "provider_sponsored_lumyn_managed"}
+        and channel.get("launch_agent_runner_targets")
+        == ["codex", "claude_code"]
+        and channel.get("deferred_agent_runner_targets") == ["cursor"]
+        and channel.get("common_adapter_conformance_required") is True
+        and channel.get("executable_integrity_required") is True
+        and channel.get("auth_and_entitlement_qualification_required") is True
+        and channel.get("neutral_home_and_config_required") is True
+        and channel.get("repository_path_shadowing_allowed") is False
+        and channel.get("clean_session_required") is True
+        and channel.get("silent_fallback_allowed") is False
+        and channel.get("configured_route_preflight_required") is True
+        and channel.get("configured_route_preflight_no_model_call") is True
+        and channel.get("configured_route_actual_model_identity_required") is True,
+        "M2 Agent Runner selection, funding, credential, or fallback posture drifted",
     )
     _require(
         channel.get("action_modes_are_ceilings") is True
@@ -486,8 +886,13 @@ def _validate_update_delivery_contracts(
         and status.get("merge_is_not_retired") is True
         and status.get("not_applicable_requires_explicit_evidence") is True
         and status.get("unaffected_requires_explicit_evidence") is True
-        and status.get("raw_consumer_evidence") is False,
+        and status.get("raw_consumer_evidence") is False
+        and status.get("raw_consumer_data_never_provider_visible") is True,
         "M2 provider status projection is not proof-honest",
+    )
+    _require(
+        m2.get("managed_credential_contract") == MANAGED_CREDENTIAL_CONTRACT,
+        "M2 managed credential broker contract drifted",
     )
 
 
@@ -509,13 +914,52 @@ def _validate_model_contract(task: dict[str, Any]) -> None:
         "cannot_self_verify",
         "cannot_push_or_open_pr",
         "cannot_merge",
+        "adapter_conformance_required",
+        "live_canary_per_advertised_version",
+        "clean_session_required",
+        "executable_integrity_required",
+        "auth_and_entitlement_qualification_required",
+        "neutral_home_and_config_required",
+        "native_configuration_cannot_widen",
         "raw_prompt_response_persistence_default",
+        "personal_session_reuse_allowed",
+        "native_configuration_default_enabled",
+        "repository_path_shadowing_allowed",
+        "silent_fallback_allowed",
+        "agent_reported_verification_qualifies",
+        "requires_configured_agent_execution_policy",
+        "actual_model_route_identity_required",
+        "noninteractive_automation_entitlement_required",
     ):
-        expected = False if field == "raw_prompt_response_persistence_default" else True
+        expected = field not in {
+            "raw_prompt_response_persistence_default",
+            "personal_session_reuse_allowed",
+            "native_configuration_default_enabled",
+            "repository_path_shadowing_allowed",
+            "silent_fallback_allowed",
+            "agent_reported_verification_qualifies",
+        }
         _require(
             contract.get(field) is expected,
             f"{task_id} bounded-agent {field} posture drifted",
         )
+    _require(
+        contract.get("launch_adapters") == ["codex", "claude_code"]
+        and contract.get("deferred_adapters") == ["cursor"]
+        and set(contract.get("execution_funding_modes", []))
+        == {"consumer_managed", "provider_sponsored_lumyn_managed"},
+        f"{task_id} Agent Runner launch or funding modes drifted",
+    )
+    _require(
+        task.get("runner_host_isolation_contract")
+        == RUNNER_HOST_ISOLATION_CONTRACT,
+        f"{task_id} runner host-isolation contract drifted",
+    )
+    _require(
+        task.get("managed_credential_contract")
+        == MANAGED_CREDENTIAL_CONTRACT,
+        f"{task_id} managed credential broker contract drifted",
+    )
 
 
 def _validate_verification(task: dict[str, Any]) -> None:
@@ -529,6 +973,12 @@ def _validate_verification(task: dict[str, Any]) -> None:
         "causal_workflow_execution_required",
         "failed_or_stale_evidence_blocks_verified",
         "model_self_verification_forbidden",
+        "fresh_verification_view_required",
+        "separate_verifier_process_required",
+        "agent_runner_and_model_credentials_absent",
+        "generation_session_cannot_write_verification_evidence",
+        "verification_command_digest_frozen",
+        "verification_configuration_digest_frozen",
     ):
         _require(contract.get(field) is True, f"M7 verification {field} must be true")
     _require(
@@ -548,6 +998,20 @@ def _validate_verification(task: dict[str, Any]) -> None:
         "exact_repair_intent",
         "remaining_permissions",
         "remaining_model_data_permissions",
+        "bound_agent_execution_policy",
+        "bound_agent_runner_adapter",
+        "bound_agent_runner_version",
+        "bound_agent_runner_executable_digest",
+        "bound_actual_model_route",
+        "bound_execution_funding_mode",
+        "bound_credential_owner",
+        "bound_usage_billing_owner",
+        "route_change_requires_new_explicit_authorization",
+        "route_change_requires_new_attempt",
+        "route_change_requires_new_candidate",
+        "agent_execution_policy_configured_required",
+        "failed_agent_candidate_reuses_bound_route",
+        "deterministic_or_manual_candidate_requires_new_agent_route_authorization",
         "remaining_time_budget",
         "remaining_token_budget",
         "remaining_cost_budget",
@@ -564,6 +1028,17 @@ def _validate_verification(task: dict[str, Any]) -> None:
         and repair.get("prior_verification_evidence_invalidated") is True
         and repair.get("fresh_full_verify_required") is True,
         "M7 repair must preserve scope, invalidate prior proof, and reverify fully",
+    )
+    _require(
+        repair.get("repair_route") == "agent_assisted_only"
+        and repair.get("disabled_policy_without_new_authorization_behavior")
+        == "needs_input_or_blocked",
+        "M7 repair must be agent-assisted and fail closed without configured authorization",
+    )
+    _require(
+        contract.get("verification_evidence_writer")
+        == "independent_verifier_evidence_boundary",
+        "M7 verification evidence writer must be independent from generation",
     )
     _require(
         set(contract.get("candidate_modes", []))
@@ -669,6 +1144,64 @@ def _validate_export(task: dict[str, Any]) -> None:
         and composed.get("pilot_same_run_provider_projection_required") is True,
         "M9 status projection must stay bound to the composed proof run",
     )
+    route_composition = task.get("delivery_route_composition_contract", {})
+    expected_route_refs = {
+        "M4/impact_read_only",
+        "M6/deterministic_candidate",
+        "M6/deterministic_package_tool_candidate",
+        "M6/agent_assisted_candidate",
+        "M7/verify",
+        "M9/remote_branch_push",
+        "M9/draft_pr_create",
+        "M9/provider_status_decline",
+        "M9/provider_status_transmit",
+    }
+    _require(
+        isinstance(route_composition, dict)
+        and set(route_composition.get("delegated_route_refs", []))
+        == expected_route_refs
+        and route_composition.get("deterministic_sequence")
+        == [
+            "M4/impact_read_only",
+            "M6/deterministic_candidate",
+            "M7/verify",
+            "M9/remote_branch_push",
+            "M9/draft_pr_create",
+        ]
+        and route_composition.get("deterministic_package_tool_sequence")
+        == [
+            "M4/impact_read_only",
+            "M6/deterministic_package_tool_candidate",
+            "M7/verify",
+            "M9/remote_branch_push",
+            "M9/draft_pr_create",
+        ]
+        and route_composition.get("agent_assisted_sequence")
+        == [
+            "M4/impact_read_only",
+            "M6/agent_assisted_candidate",
+            "M7/verify",
+            "M9/remote_branch_push",
+            "M9/draft_pr_create",
+        ]
+        and route_composition.get("terminal_provider_status_routes")
+        == [
+            "M9/provider_status_decline",
+            "M9/provider_status_transmit",
+        ]
+        and route_composition.get("pilot_terminal_provider_status_route")
+        == "M9/provider_status_transmit"
+        and route_composition.get(
+            "each_delegated_action_freezes_own_exact_union"
+        ) is True
+        and route_composition.get(
+            "aggregate_cross_action_scope_union_authorized"
+        ) is False
+        and route_composition.get(
+            "branch_push_and_pr_create_separate_actions"
+        ) is True,
+        "M9 delivery must compose atomic delegated actions without aggregate authority",
+    )
     outcome = task.get("outcome_record_contract")
     _require(isinstance(outcome, dict), "M9 outcome record contract is required")
     _require(
@@ -722,7 +1255,14 @@ def _validate_campaign(task: dict[str, Any]) -> None:
         _require(field in contract, f"M10 campaign contract missing {field}")
     _require(
         contract.get("generic_agent_baseline")
-        == "same_snapshot_evidence_commands_role_and_time_budget",
+        == "matched_agent_engine_and_budget_status_quo",
+        "M10 generic-agent baseline must be fair",
+    )
+    _require(
+        set(contract.get("generic_agent_control_variables", []))
+        == GENERIC_AGENT_CONTROL_FIELDS
+        and contract.get("difference_under_test") == GENERIC_AGENT_TREATMENT
+        and contract.get("unmatched_engine_comparison_is_causal") is False,
         "M10 generic-agent baseline must be fair",
     )
     _require(
@@ -758,6 +1298,17 @@ def _validate_campaign(task: dict[str, Any]) -> None:
         "M10 must prove one composed Lumyn-generated installed-event draft PR",
     )
     _require(
+        contract.get(
+            "qualifying_composed_pr_requires_organic_agent_assisted_plan_item"
+        ) is True
+        and contract.get("deterministic_reroute_for_agent_proof_allowed")
+        is False
+        and contract.get(
+            "separate_agent_and_deterministic_composed_runs_qualify"
+        ) is False,
+        "M10 qualifying composed proof must itself contain an organic agent-assisted item",
+    )
+    _require(
         contract.get("provider_status_exact_event_and_evidence_binding") is True
         and contract.get("provider_status_consumer_consent_required") is True
         and contract.get("silence_is_unknown") is True
@@ -771,6 +1322,12 @@ def _validate_campaign(task: dict[str, Any]) -> None:
         ) is True
         and contract.get("explicit_status_decline_record_required") is True,
         "M10 must prove at least one real provider status projection",
+    )
+    _require(
+        contract.get("campaign_verdict_values") == ["pass", "fail"]
+        and contract.get("reframe_is_post_failure_disposition") is True
+        and contract.get("abandonment_or_timeout_verdict") == "fail",
+        "M10 verdict must be pass/fail with reframe only after failure",
     )
     _require(
         contract.get("campaign_economics_threshold")
@@ -808,6 +1365,203 @@ def _validate_campaign(task: dict[str, Any]) -> None:
     _require(
         contract.get("provider_code_access") is False,
         "M10 must not grant the provider code access",
+    )
+    _require(
+        contract.get("minimum_real_agent_assisted_outcomes") == 1
+        and contract.get("real_consumer_repository_required") is True
+        and contract.get(
+            "agent_assisted_requires_consumer_selected_qualified_runner"
+        ) is True
+        and contract.get(
+            "agent_assisted_independent_exact_head_verification_required"
+        ) is True
+        and contract.get("agent_assisted_bespoke_operator_edits_qualify")
+        is False
+        and contract.get(
+            "deterministic_only_closes_agent_runner_product_proof"
+        ) is False,
+        "M10 must prove one real consumer-selected agent-assisted component of the qualifying same-run outcome",
+    )
+    _require(
+        set(contract.get("execution_funding_modes", []))
+        == {"consumer_managed", "provider_sponsored_lumyn_managed"}
+        and contract.get(
+            "funding_mode_selected_per_agent_enabled_installation"
+        ) is True
+        and contract.get(
+            "runner_configuration_required_only_for_agent_enabled_installations"
+        ) is True
+        and contract.get("credential_owner_recorded") is True
+        and contract.get("usage_billing_owner_recorded") is True
+        and contract.get("api_provider_agent_access") is False
+        and contract.get("provider_raw_consumer_data_access") is False
+        and "Agent Runner" in str(contract.get("campaign_cogs", "")),
+        "M10 must attribute Agent Runner funding, credentials, billing, and COGS without provider access",
+    )
+    composition = task.get("campaign_route_composition_contract")
+    _require(
+        isinstance(composition, dict),
+        "M10 campaign route composition contract is required",
+    )
+    _require(
+        set(composition.get("delegated_route_refs", []))
+        == {
+            "M4/impact_read_only",
+            "M6/deterministic_candidate",
+            "M6/deterministic_package_tool_candidate",
+            "M6/agent_assisted_candidate",
+            "M7/verify",
+            "M7/repair_agent_assisted",
+            "M8/sandbox_read_back",
+            "M9/local_export",
+            "M9/local_branch",
+            "M9/remote_branch_push",
+            "M9/draft_pr_create",
+            "M9/provider_status_decline",
+            "M9/provider_status_transmit",
+        }
+        and composition.get(
+            "per_installation_event_run_route_sequence_frozen"
+        ) is True
+        and composition.get("exact_union_frozen_before_each_action") is True
+        and composition.get("cross_route_aggregate_union_authorized") is False
+        and composition.get(
+            "campaign_authority_arrays_are_aggregate_maxima_not_grants"
+        ) is True,
+        "M10 must compose exact delegated routes without ambient campaign authority",
+    )
+    _require(
+        set(composition.get("required_campaign_proof_routes", []))
+        == {
+            "M6/agent_assisted_candidate",
+            "M9/remote_branch_push",
+            "M9/draft_pr_create",
+            "M9/provider_status_transmit",
+        }
+        and composition.get(
+            "campaign_minimums_grant_per_consumer_authority"
+        ) is False,
+        "M10 proof minima must not grant every consumer agent, GitHub, or reporting authority",
+    )
+    _require(
+        composition.get("required_same_run_route_sequence")
+        == QUALIFYING_SAME_RUN_ROUTE_SEQUENCE
+        and composition.get("required_same_run_id_cardinality") == 1
+        and composition.get("separate_runs_may_satisfy_sequence") is False,
+        "M10 qualifying proof routes must execute in one bound run",
+    )
+    same_run = composition.get("qualifying_same_run_evidence_binding", {})
+    _require(
+        isinstance(same_run, dict)
+        and same_run.get("binding_fields")
+        == QUALIFYING_SAME_RUN_EVIDENCE_FIELDS
+        and same_run.get("all_fields_required") is True
+        and same_run.get("one_value_per_field") is True
+        and same_run.get("all_artifacts_bind_same_run_id") is True
+        and same_run.get(
+            "all_artifacts_bind_same_event_and_installation_authorization"
+        ) is True
+        and same_run.get(
+            "projection_binds_candidate_verification_and_draft_pr"
+        ) is True
+        and same_run.get("cross_run_evidence_allowed") is False
+        and same_run.get("missing_or_mismatched_binding_result")
+        == "PILOT-003 remains open",
+        "M10 qualifying same-run evidence binding is incomplete",
+    )
+    _require(
+        contract.get("qualifying_same_run_route_sequence_ref")
+        == (
+            "campaign_route_composition_contract."
+            "required_same_run_route_sequence"
+        )
+        and contract.get("qualifying_same_run_evidence_binding_ref")
+        == (
+            "campaign_route_composition_contract."
+            "qualifying_same_run_evidence_binding"
+        ),
+        "M10 paid campaign must reference the qualifying same-run route and evidence contracts",
+    )
+
+
+def _resolve_product_route_ref(
+    tasks: dict[str, dict[str, Any]],
+    route_ref: str,
+) -> dict[str, Any]:
+    parts = route_ref.split("/", 1)
+    _require(
+        len(parts) == 2 and all(parts),
+        f"invalid delegated product route ref {route_ref!r}",
+    )
+    task_id, route_id = parts
+    _require(
+        task_id in tasks,
+        f"delegated product route ref names unknown task {task_id}",
+    )
+    routes = tasks[task_id].get("product_action_route_contract", {})
+    _require(
+        isinstance(routes, dict) and route_id in routes,
+        f"delegated product route ref does not resolve: {route_ref}",
+    )
+    route = routes[route_id]
+    _require(
+        isinstance(route, dict),
+        f"delegated product route is not an object: {route_ref}",
+    )
+    return route
+
+
+def validate_delegated_route_refs(
+    tasks: dict[str, dict[str, Any]],
+) -> None:
+    """Prove composed route references resolve to the exact source contracts."""
+
+    for task_id in ("M9", "M10"):
+        key = (
+            "delivery_route_composition_contract"
+            if task_id == "M9"
+            else "campaign_route_composition_contract"
+        )
+        composition = tasks[task_id].get(key, {})
+        for route_ref in composition.get("delegated_route_refs", []):
+            _resolve_product_route_ref(tasks, route_ref)
+
+    m10_routes = tasks["M10"].get("product_action_route_contract", {})
+    _require(
+        isinstance(m10_routes, dict) and bool(m10_routes),
+        "M10 delegated product route contract is required",
+    )
+    for route_id, delegated_route in m10_routes.items():
+        _require(
+            isinstance(delegated_route, dict),
+            f"M10 delegated route {route_id} must be an object",
+        )
+        route_ref = delegated_route.get("delegated_route_ref")
+        _require(
+            isinstance(route_ref, str),
+            f"M10 delegated route {route_id} must name its source route",
+        )
+        source_route = _resolve_product_route_ref(tasks, route_ref)
+        target_route = {
+            key: value
+            for key, value in delegated_route.items()
+            if key != "delegated_route_ref"
+        }
+        _require(
+            target_route == source_route,
+            f"M10 delegated route {route_id} differs from {route_ref}",
+        )
+    _require(
+        {
+            route["delegated_route_ref"]
+            for route in m10_routes.values()
+        }
+        == set(
+            tasks["M10"]["campaign_route_composition_contract"][
+                "delegated_route_refs"
+            ]
+        ),
+        "M10 campaign composition refs must equal its delegated action routes",
     )
 
 
@@ -933,6 +1687,11 @@ def validate_migration_task_contracts(
     _validate_repair_path(tasks["M7"])
     _validate_export(tasks["M9"])
     _validate_campaign(tasks["M10"])
+    for task_id in ("M6", "M7", "M8", "M9", "M10"):
+        _validate_repository_command_isolation(tasks[task_id], task_id)
+    for task_id in ("M8", "M10"):
+        _validate_sandbox_entrypoint_isolation(tasks[task_id], task_id)
+    validate_delegated_route_refs(tasks)
     for task in tasks.values():
         _validate_paused_runtime(task)
         _validate_worker_chain(task)

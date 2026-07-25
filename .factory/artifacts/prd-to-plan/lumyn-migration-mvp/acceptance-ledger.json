@@ -2,8 +2,8 @@
   "artifact_type": "acceptance_ledger",
   "schema_version": "1.0",
   "generated_by": "prd-to-plan+execution-compiler",
-  "generated_at": "2026-07-24T00:00:00Z",
-  "last_updated_at": "2026-07-24T00:00:00Z",
+  "generated_at": "2026-07-25T00:00:00Z",
+  "last_updated_at": "2026-07-25T00:00:00Z",
   "source_prd_ref": "docs/product/prd.md",
   "source_ref": "docs/product/prd.md",
   "acceptance_item_count": 53,
@@ -131,7 +131,7 @@
       "acceptance_item_id": "BASE-005",
       "group_id": "retained_foundation",
       "source_ref": "docs/product/prd.md#retained-foundation",
-      "source_text": "Unimplemented commands return typed nonzero results, and API Provider versus Model Provider terminology is unambiguous.",
+      "source_text": "Unimplemented commands return typed nonzero results, and API Provider, Agent Runner Vendor, and Model Provider terminology is unambiguous.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -308,7 +308,7 @@
       "notes": [
         "No v3 closure is claimed; direct item-level evidence is required."
       ],
-      "source_text": "A revocable Consumer Installation binds the exact provider-controlled channel and authentication key, repository and package root, audience or version selectors, action ceiling, authorization mode, paths, commands, model-data policy and budgets, GitHub token-issuance policy, provider-reporting fields, retention and deletion, expiry, and revocation without storing a GitHub token."
+      "source_text": "A revocable Consumer Installation binds the exact provider-controlled channel and authentication key, repository and package root, audience or version selectors, action ceiling, authorization mode, paths, commands, `agent_execution_policy` (`disabled` or `configured`), model-data policy and budgets, GitHub token-issuance policy, provider-reporting fields, retention and deletion, expiry, and revocation. A configured policy additionally binds the exact Agent Runner adapter/version/executable qualification and auth/entitlement policy, execution-funding mode, credential and usage-billing ownership, and native agent-configuration policy without storing a reusable Agent Runner, model, or GitHub credential; a disabled policy grants none of those capabilities."
     },
     {
       "acceptance_item_id": "INSTALL-002",
@@ -332,7 +332,7 @@
       "notes": [
         "No v3 closure is claimed; direct item-level evidence is required."
       ],
-      "source_text": "Every event-specific authorization is an immutable, non-widening derivation of the installation; `per_event_approval` binds the exact plan, while `installed_preauthorization` permits side effects only when event, plan, commands, paths, model policy, budgets, verification, and short-lived credential issuance all satisfy the installed policy. An action-mode label alone grants no side effect."
+      "source_text": "Every event-specific authorization is an immutable, non-widening derivation of the installation; `per_event_approval` binds the exact plan, while `installed_preauthorization` permits side effects only when event, plan, commands, paths, model policy, budgets, verification, and short-lived credential issuance all satisfy the installed policy. An action-mode label alone grants no side effect, and an `agent_assisted` route pauses unless the installation explicitly configures and authorizes it."
     },
     {
       "acceptance_item_id": "IMPACT-001",
@@ -449,7 +449,7 @@
       "acceptance_item_id": "PLAN-001",
       "group_id": "plan_and_routing",
       "source_ref": "docs/product/prd.md#plan-and-routing",
-      "source_text": "The plan names every proposed or conditional file, route, command, model policy, permission, budget, verification stage, and residual risk without modifying repository or Git state.",
+      "source_text": "The plan names every proposed or conditional file, route, command, explicit `agent_execution_policy`, permission, budget, verification stage, and residual risk without modifying repository or Git state; a configured agent policy additionally names the exact Agent Runner/model and funding/credential/billing policy and native-configuration posture.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -493,7 +493,7 @@
       "acceptance_item_id": "PLAN-003",
       "group_id": "plan_and_routing",
       "source_ref": "docs/product/prd.md#plan-and-routing",
-      "source_text": "Consumer authorization, whether exact per-event approval or installed preauthorization, binds the event, Provider Change Contract, Consumer Installation and derived authorization, repository base, paths, route, model-data policy, tools, commands, budgets, disclosure, delivery, and verification intent; any out-of-policy change invalidates or pauses the run.",
+      "source_text": "Consumer authorization, whether exact per-event approval or installed preauthorization, binds the event, Provider Change Contract, Consumer Installation and derived authorization, repository base, paths, route, `agent_execution_policy`, model-data policy, tools, commands, budgets, disclosure, delivery, and verification intent. A configured agent policy additionally binds Agent Runner adapter/version/executable/conformance and auth/entitlement policy, execution funding, credential and usage-billing owners, and native configuration; any out-of-policy change invalidates or pauses the run.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -538,7 +538,7 @@
       "acceptance_item_id": "AGENT-002",
       "group_id": "bounded_hybrid_execution",
       "source_ref": "docs/product/prd.md#bounded-hybrid-execution",
-      "source_text": "Agent-assisted execution occurs only in a consumer-local or explicitly consumer-approved environment and discloses Model Provider, context, data-egress, and retention posture before execution.",
+      "source_text": "Agent-assisted execution requires `agent_execution_policy=configured` and one Consumer Maintainer-selected, qualified exact Agent Runner adapter/version/executable digest, allowed auth mode and entitlement class, and execution-funding mode; it starts a clean ephemeral session with a neutral home/config root only in a consumer-local or explicitly consumer-approved environment and discloses Agent Runner Vendor, actual Model Provider or local route, credential owner, usage-billing owner, context, data egress, retention, and native configuration posture before execution. Codex and Claude Code are launch targets only after passing the common gate; Cursor is deferred behind it.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -561,7 +561,7 @@
       "acceptance_item_id": "AGENT-003",
       "group_id": "bounded_hybrid_execution",
       "source_ref": "docs/product/prd.md#bounded-hybrid-execution",
-      "source_text": "The agent enforces approved path, tool, command, network, credential, time, token, cost, attempt, file, and diff budgets.",
+      "source_text": "Lumyn's orchestrator and host-isolation boundary enforce approved path, tool, command, Agent Runner and model network, Agent Runner and model credential, time, token, cost, attempt, file, and diff budgets; native agent configuration is disabled or digest-bound as untrusted static context; explicit mounts, OS-credential denial, socket and inherited descriptor denial, child-process restriction inheritance, egress, and cleanup evidence are required; the exact isolation backend, version, configuration and qualification digests, host platform, and hard CPU, memory, PID, process-tree-depth, disk, and open-file quotas are bound and resource-exhaustion tested; executable plugins, MCP servers, and hooks are prohibited, and no adapter, model, credential, or billing-owner fallback occurs.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -607,7 +607,7 @@
       "acceptance_item_id": "AGENT-005",
       "group_id": "bounded_hybrid_execution",
       "source_ref": "docs/product/prd.md#bounded-hybrid-execution",
-      "source_text": "The repair loop performs no more than the approved attempts, cannot expand scope, and stops on non-diagnostic failure or exhausted budget.",
+      "source_text": "The repair loop performs no more than the approved attempts, requires configured agent execution, reuses a failed agent candidate's bound Agent Runner/model/funding/credential/billing route unless a new explicit authorization creates a new attempt and candidate, requires a newly authorized exact agent route for a deterministic or manual candidate, cannot expand scope, and stops on missing authorization, non-diagnostic failure, or exhausted budget.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -653,7 +653,7 @@
       "acceptance_item_id": "AGENT-007",
       "group_id": "bounded_hybrid_execution",
       "source_ref": "docs/product/prd.md#bounded-hybrid-execution",
-      "source_text": "Agent evidence records runner, adapter, model class/version, model-data and context-policy digests, tools, commands, attempts, token and cost use, changed files, and human input without persisting secrets or raw prompts by default.",
+      "source_text": "Agent evidence records Agent Runner Vendor, exact adapter version, executable source/digest and conformance digest, auth mode and entitlement class, clean-session identity, execution-funding mode, credential and usage-billing owners, actual Model Provider, model class and version, native-configuration state/digest, model-data and context-policy digests, tools, commands, attempts, token and cost use, changed files, and human input, never persists reusable credentials or secrets, and does not persist raw prompts or responses by default. Managed credentials additionally record broker issuer, exact audience, TTL, one-time-redemption/attempt-session posture, no refresh or cross-attempt replay/reuse, hard quota, revocation, and reconciliation without secret values.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -698,7 +698,7 @@
       "acceptance_item_id": "VER-002",
       "group_id": "verification",
       "source_ref": "docs/product/prd.md#verification",
-      "source_text": "Deterministic, agent-assisted, and imported manual candidates run the same dependency-integrity, compile/typecheck, and consumer-allowlisted test ladder in the approved execution environment.",
+      "source_text": "Deterministic, agent-assisted, and imported manual candidates run the same dependency-integrity, compile/typecheck, and consumer-allowlisted test ladder in a fresh verification process and view with frozen command/config digests, no Agent Runner/model credentials, and no generation-owned verification-evidence write handle. Repository commands bind a qualified isolation backend identity, exact commands, mounts and environment, hard CPU, memory, PID/process-tree, disk and open-file quotas, inherited child restrictions, offline/lifecycle defaults, and cleanup evidence.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -743,7 +743,7 @@
       "acceptance_item_id": "VER-004",
       "group_id": "verification",
       "source_ref": "docs/product/prd.md#verification",
-      "source_text": "Every `workflow_verified_*` result causally executes an approved entrypoint from the exact candidate head and records observed interaction and outcome evidence.",
+      "source_text": "Every `workflow_verified_*` result causally executes an approved entrypoint from the exact candidate head and records observed interaction and outcome evidence. A sandbox entrypoint uses a separate qualified isolation profile with a read-only exact-head mount, sole task-scoped sandbox credential injection, endpoint-only egress, hard resource quotas, inherited child restrictions, teardown, cleanup, and orphan evidence.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -789,7 +789,7 @@
       "acceptance_item_id": "VER-006",
       "group_id": "verification",
       "source_ref": "docs/product/prd.md#verification",
-      "source_text": "The frozen negative suite has zero false verified outcomes, and all evidence binds event, Provider Change Contract, Consumer Installation and derived authorization, plan, base, candidate, route, agent provenance, commands, environment, and artifact hashes.",
+      "source_text": "The frozen negative suite has zero false verified outcomes, and all evidence binds event, Provider Change Contract, Consumer Installation and derived authorization, plan, base, candidate, route, `agent_execution_policy`, commands, environment, and artifact hashes; configured agent execution additionally binds exact Agent Runner, model, funding, credential, and billing provenance.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -878,7 +878,7 @@
       "acceptance_item_id": "EXP-004",
       "group_id": "export_and_delivery",
       "source_ref": "docs/product/prd.md#export-and-delivery",
-      "source_text": "Provider-visible status is bound to the exact event and evidence, contains only consumer-consented fields, distinguishes observed, consumer-reported, and unknown state, never infers `not_applicable` or `unaffected` from silence or `retired` from merge, and excludes raw source, diffs, prompts, responses, logs, traces, and credentials.",
+      "source_text": "Provider-visible status is bound to the exact event and evidence, contains only consumer-consented fields, distinguishes observed, consumer-reported, and unknown state, never infers `not_applicable` or `unaffected` from silence or `retired` from merge, and excludes raw source, diffs, prompts, responses, agent sessions, tool traces, logs, and credentials.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -900,7 +900,7 @@
       "acceptance_item_id": "TRUST-001",
       "group_id": "trust_and_privacy",
       "source_ref": "docs/product/prd.md#trust-and-privacy",
-      "source_text": "A revocable Consumer Installation binds provider or channel, repository and package root, audience or version selectors, allowed actions, paths, commands, model-data egress, registry, sandbox, credentials, remote branch, PR, retention, deletion, provider reporting, expiry, and disclosure; each event-specific authorization is derived without widening that installed policy.",
+      "source_text": "A revocable Consumer Installation binds provider or channel, repository and package root, audience or version selectors, allowed actions, paths, commands, `agent_execution_policy`, model-data posture, registry, sandbox, remote branch, PR, retention, deletion, provider reporting, expiry, and disclosure. A configured agent policy additionally binds Agent Runner selection, executable, auth, entitlement, funding, native configuration, Agent Runner/model egress, network and credentials, and credential and usage-billing owners; each event-specific authorization is derived without widening that installed policy.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -944,7 +944,7 @@
       "acceptance_item_id": "TRUST-003",
       "group_id": "trust_and_privacy",
       "source_ref": "docs/product/prd.md#trust-and-privacy",
-      "source_text": "Cloud-model context transfer, BYOK, and local-model posture are explicit; secrets and prohibited data are redacted or blocked before model or artifact persistence.",
+      "source_text": "When agent execution is configured, Agent Runner Vendor and Model Provider processing, cloud-model context transfer, qualifying consumer-managed account/subscription/BYOK/local posture, optional provider-sponsored Lumyn-managed usage, actual model-route identity, credential owner, and usage-billing owner are explicit; the API Provider gains no code, context, session, or credential access, and secrets or prohibited data are redacted or blocked before runner/model egress or artifact persistence.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -966,7 +966,7 @@
       "acceptance_item_id": "TRUST-004",
       "group_id": "trust_and_privacy",
       "source_ref": "docs/product/prd.md#trust-and-privacy",
-      "source_text": "Consumer-private artifacts remain outside the checkout and public repository, and provider sponsorship never grants source or model context access.",
+      "source_text": "Consumer-private artifacts remain outside the checkout and public repository, and provider sponsorship never grants source, Agent Runner/model context, session, or credential access.",
       "kind": "product_and_quality_contract",
       "evidence_mode": "automated_and_reviewed",
       "closure_required_for": [
@@ -1010,7 +1010,7 @@
       "acceptance_item_id": "DISC-002",
       "group_id": "design_partner_qualification",
       "source_ref": "docs/product/prd.md#design-partner-qualification",
-      "source_text": "Before campaign-specific migration execution, the API Provider commits to distribute the update and lead onboarding for at least five reachable Eligible Consumer Units across five distinct API Consumer Organizations, each with an accountable maintainer and useful verification signals.",
+      "source_text": "Before campaign-specific migration execution, the API Provider commits to distribute the update and lead onboarding for at least five reachable Eligible Consumer Units across five distinct API Consumer Organizations, each with an accountable maintainer and useful verification signals; at least one consumer prequalifies a consumer-selected Codex or Claude Code route, or explicitly consents to a qualifying managed route, for a real agent-assisted run without disclosing a reusable credential. That repository also has a plausible naturally agent-eligible migration hypothesis grounded in a wrapper, adapter, signature/type adaptation, or related test repair that needs repository-specific reasoning but no new business decision. This prequalification cannot force the route; M4 impact and M5 planning confirm or reject it from authorized evidence. The same intended qualifying consumer reviews the exact allowlisted event-bound provider-status projection and records willingness to authorize transmission if the run qualifies; willingness is not runtime consent.",
       "kind": "external_evidence_gate",
       "evidence_mode": "independent_attestation",
       "closure_required_for": [
@@ -1032,7 +1032,7 @@
       "acceptance_item_id": "DISC-003",
       "group_id": "design_partner_qualification",
       "source_ref": "docs/product/prd.md#design-partner-qualification",
-      "source_text": "After the v3 privacy, model-data, authorization, and evidence contracts are approved, and before the first invitation, the parties freeze cohort, eligibility, price, evidence sources, privacy and model-data protocol, baseline method, material maintainer comparison threshold, correction rubric, campaign COGS boundary, minimum contribution margin or maximum Lumyn Operator hours per reviewable outcome, measurement windows, one material provider-outcome metric and threshold, and absolute judgment deadline. A provider threshold is material only when the economic buyer records that meeting it would justify a retirement or paid-continuation decision and missing it makes the campaign fail.",
+      "source_text": "After the v3 privacy, model-data, authorization, and evidence contracts are approved, and before the first invitation, the parties freeze cohort, eligibility, price, evidence sources, privacy and combined Agent Runner and model-data protocol, permitted execution-funding modes, credential and usage-billing ownership, baseline method, material maintainer comparison threshold, correction rubric, campaign COGS boundary, minimum contribution margin or maximum Lumyn Operator hours per reviewable outcome, measurement windows, one material provider-outcome metric and threshold, and absolute judgment deadline. A provider threshold is material only when the economic buyer records that meeting it would justify a retirement or paid continuation decision and missing it makes the campaign fail.",
       "kind": "external_evidence_gate",
       "evidence_mode": "independent_attestation",
       "closure_required_for": [
@@ -1098,7 +1098,7 @@
       "acceptance_item_id": "PILOT-003",
       "group_id": "provider_campaign_pilot",
       "source_ref": "docs/product/prd.md#provider-campaign-pilot",
-      "source_text": "At least two distinct repositories produce tested, reviewable migration outcomes with explicit evidence boundaries by the frozen pilot deadline; at least one starts from the authenticated provider channel, uses `installed_preauthorization`, is generated through Lumyn's deterministic or agent-assisted path without bespoke Lumyn Operator code edits, is independently verified, and is delivered by the composed `lumyn update --event` flow as a Lumyn-opened draft PR, then emits a consumer-consented provider status projection bound to that same event, installation authorization, candidate, verification evidence, and draft PR.",
+      "source_text": "At least two distinct repositories produce tested, reviewable migration outcomes with explicit evidence boundaries by the frozen pilot deadline. One qualifying outcome itself starts from the authenticated provider channel, uses `installed_preauthorization`, and contains at least one plan item organically classified `agent_assisted` because repository-specific reasoning is necessary. It runs that item through a consumer-selected qualified Agent Runner without bespoke Lumyn Operator code edits, passes independent exact-head verification, and is delivered by the composed `lumyn update --event` flow as a Lumyn-opened draft PR. A consumer-consented provider status projection bound to that same event, installation authorization, candidate, verification evidence, and draft PR reaches the API Provider. Deterministic work may not be rerouted merely to manufacture agent proof; a campaign with no organically agent-eligible qualifying run fails this item.",
       "kind": "external_evidence_gate",
       "evidence_mode": "independent_attestation",
       "closure_required_for": [
@@ -1142,7 +1142,7 @@
       "acceptance_item_id": "PILOT-005",
       "group_id": "provider_campaign_pilot",
       "source_ref": "docs/product/prd.md#provider-campaign-pilot",
-      "source_text": "Against the frozen guide/codemod plus generic-agent baseline, Lumyn reduces median Consumer Maintainer hands-on time by at least 30% without a worse substantive-correction, revert, or false-verification rate, or clears another equally material threshold frozen before execution.",
+      "source_text": "Against the frozen guide/codemod plus generic-agent baseline using the same repository snapshot, authoritative migration evidence, selected Agent Runner adapter/version/executable, actual Model Provider and model version, auth/entitlement and execution-funding route, credential and usage-billing owners, context-access ceiling, tools, commands, and attempt, token, time, and cost budgets, Lumyn reduces median Consumer Maintainer hands-on time by at least 30% without a worse substantive-correction, revert, or false-verification rate, or clears another equally material threshold frozen before execution. Unmatched engine comparisons are descriptive, not causal proof of Lumyn's advantage.",
       "kind": "external_evidence_gate",
       "evidence_mode": "independent_attestation",
       "closure_required_for": [
@@ -1165,7 +1165,7 @@
       "acceptance_item_id": "PILOT-006",
       "group_id": "provider_campaign_pilot",
       "source_ref": "docs/product/prd.md#provider-campaign-pilot",
-      "source_text": "Actual cleared payment, model/tool COGS, Lumyn Operator hours, Consumer Maintainer time, support effort, and the frozen primary provider outcome are measured from source evidence, and the provider outcome clears its frozen material threshold while the campaign clears its frozen contribution-margin or operator-automation threshold.",
+      "source_text": "Actual cleared payment, Agent Runner/model/tool spend by execution-funding mode and usage-billing owner, the subset attributable to Lumyn campaign COGS, Lumyn Operator hours, Consumer Maintainer time, support effort, and the frozen primary provider outcome are measured from source evidence, and the provider outcome clears its frozen material threshold while the campaign clears its frozen contribution-margin or operator-automation threshold.",
       "kind": "external_evidence_gate",
       "evidence_mode": "independent_attestation",
       "closure_required_for": [

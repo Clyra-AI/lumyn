@@ -49,8 +49,8 @@ Every product change should improve one or more of:
 - tested draft-PR delivery with legible patch, local-branch, and PR-bundle
   fallback;
 - event-bound, consumer-consented provider rollout status;
-- exact model egress, credential, network, disclosure, cost, and provenance
-  controls;
+- exact Agent Runner and model egress, credential, network, disclosure, cost,
+  and provenance controls;
 - proof-honest residual-risk reporting;
 - consumer review and human merge authority;
 - fail-closed handling of unsupported or ambiguous integrations.
@@ -71,6 +71,8 @@ intent.
 Use explicit terms:
 
 - `api_provider` or `change_authority` for the API seller;
+- `agent_runner_vendor` for the company supplying the selected coding-agent
+  harness;
 - `model_provider` for the endpoint used by bounded-agent execution;
 - `api_consumer_organization` for the repository-owning organization;
 - `consumer_maintainer` for the human with approval and merge authority;
@@ -98,9 +100,15 @@ Do not use bare `provider` where the meaning could be ambiguous.
   state; attended import is recovery and cannot authorize
   installed-preauthorization writes.
 - Derive every update-run authorization from a revocable Consumer Installation
-  binding provider/channel, repository/package root, selectors, actions,
-  model-data, GitHub, retention, expiry, and disclosure. Provider input may
-  narrow but never widen that authority.
+  binding provider/channel, repository/package root, selectors, actions, exact
+  Agent Runner adapter and version policy, execution-funding mode,
+  credential/usage-billing ownership, model-data, GitHub, retention, expiry,
+  and disclosure. Provider input may narrow but never widen that authority.
+- Treat task- and campaign-level product-authority arrays as capability
+  universes, never runtime grants. Before every product action, select a named
+  route and freeze its exact required plus conditionally selected capability
+  union. A composed campaign must reuse the validated action routes and must
+  not grant their aggregate union to every installation.
 - Impact analysis is read-only.
 - Planning is read-only and must precede every write. A Consumer Maintainer
   either approves the exact event plan or has explicitly selected bounded
@@ -113,9 +121,38 @@ Do not use bare `provider` where the meaning could be ambiguous.
 - Prefer a deterministic transform when the approved intent maps exactly to a
   supported recipe. Use a bounded agent only for approved plan items that need
   repository-specific reasoning.
-- A bounded agent must have exact model, endpoint, credential environment,
-  request disclosure, network allowlist, tools, prompt/tool versions, writable
-  paths, turn, token, time, cost, file, and diff budgets.
+- `agent_execution_policy` defaults to `disabled`; notify-only, scan-only, and
+  deterministic-only work requires no Agent Runner credential. An
+  `agent_assisted` item pauses until the Consumer Maintainer explicitly
+  configures and authorizes a qualifying route.
+- A bounded agent must have the consumer-selected exact Agent Runner adapter
+  and version, executable source/digest, conformance digest, authorized auth
+  mode and entitlement class, model and endpoint, Agent Runner and model
+  credential environments, request disclosure, network allowlists, tools,
+  prompt/tool versions, writable paths, turn, token, time, cost, file, and diff
+  budgets. Launch support is Codex and Claude Code after each adapter passes
+  the common conformance suite and an approved live canary. Cursor remains
+  deferred until it passes the same gate.
+- Start a clean, ephemeral Agent Runner session for every attempt from a
+  neutral home/config root and an explicitly resolved executable. Never resume
+  a personal or unrelated agent conversation or allow repository-local PATH
+  shadowing. Static native user/project rules are ignored unless the consumer
+  explicitly selects them; when selected, their digest is recorded and their
+  content remains untrusted data that cannot widen Lumyn authority. Executable
+  plugins, MCP servers, and hooks are prohibited for the MVP.
+- Run the Agent Runner with explicit mounts, no host home or OS credential
+  store, no ambient service sockets or unrelated inherited descriptors,
+  inherited child-process restrictions, host-enforced egress, a pinned
+  backend/version/configuration and qualification digest plus host platform,
+  hard CPU/memory/PID/process-tree/disk/open-file quotas, and cleanup evidence.
+  An unenforceable boundary blocks launch.
+- Every agent action selects one exact authorization topology: local runtime,
+  runner-mediated, direct-model, or hybrid. Remote topologies cannot launch
+  without their required runner/model network, credential, and disclosure
+  minimums; registry access remains independently selected.
+- Never silently switch Agent Runner adapter, version, Model Provider, model,
+  endpoint, credential owner, or usage-billing owner. An unavailable or
+  unqualified selected route blocks agent execution.
 - Model output is an untrusted patch candidate. It cannot approve its own plan,
   widen its scope, run undeclared tools, access ambient credentials, or grade
   its own result.
@@ -133,11 +170,27 @@ Do not use bare `provider` where the meaning could be ambiguous.
 - Dependency lifecycle scripts require separate consumer approval.
 - Production credentials and production mutations are prohibited in the MVP.
 - Redact secrets before persistence, model egress, or sharing.
-- Raw consumer code, diffs, logs, traces, prompts, responses, and credentials
-  are not visible to the API Provider by default.
+- Raw consumer code, diffs, logs, traces, prompts, responses, agent sessions,
+  and credentials are never visible to the API Provider. Only enumerated,
+  consented campaign status or aggregate fields may cross that boundary.
 - External model disclosure is separate from provider disclosure. It must name
-  exact request classes, model-provider logging/training/retention terms, and
-  deletion posture.
+  exact request classes, Agent Runner Vendor and downstream Model Provider
+  processing, logging/training/retention terms, and deletion posture.
+- For configured execution, the default `consumer_managed` mode uses a
+  qualifying consumer-owned agent account, enterprise subscription, API
+  credential, or local runtime; the consumer owns third-party usage billing
+  and Lumyn receives no reusable credential. The route must expose the actual
+  model identity and permit non-interactive automation. An optional
+  `provider_sponsored_lumyn_managed` mode may use Lumyn-paid, task-scoped
+  credentials inside the same consumer-authorized local or CI boundary. The
+  broker binds issuer, installation/event/plan/attempt and runner/model
+  audience and maximum one-hour TTL. One-time redemption creates one
+  attempt-scoped session; multiple calls are allowed only within hard
+  token/cost quotas, with no refresh, post-attempt replay, or cross-attempt
+  reuse. Revocation and reconciliation through a vendor-native bounded
+  credential or approved budget-enforcing proxy are mandatory. The API
+  Provider pays the campaign but never receives code, context, agent-session
+  access, or credentials in either mode.
 - Preserve these delivery states separately: patch artifact, optional local
   branch, PR bundle, remote branch, draft PR, review, and merge.
 - Local patch and PR-bundle fallback require no GitHub credential. Remote
@@ -161,6 +214,8 @@ Do not use bare `provider` where the meaning could be ambiguous.
 - Provider-paid API or SDK update channels launched through services-assisted
   sunset campaigns.
 - Consumer-local or consumer-controlled CI execution.
+- Consumer-selected Codex or Claude Code Agent Runner after common conformance;
+  Cursor is not launch scope.
 - GitHub-hosted TypeScript/Node repositories.
 - One explicitly selected package root and one official npm SDK per run.
 - Direct imports and statically resolvable wrappers within the approved scope.
@@ -168,7 +223,11 @@ Do not use bare `provider` where the meaning could be ambiguous.
 - Bounded-agent patch generation for approved repository-specific changes.
 - Deterministic repository and workflow verification for every candidate patch.
 - Patch artifact, local branch, and PR bundle as fallback handoff.
-- At least one tested draft PR under separate short-lived branch and PR grants.
+- At least one same-run first-campaign proof from authenticated provider event
+  and installed preauthorization through an organically agent-assisted item on
+  the consumer-selected qualified runner, independent exact-head verification,
+  a tested Lumyn-opened draft PR under separate short-lived grants, and a
+  consented provider-received status projection; separate runs do not qualify.
 - Human review and merge.
 - Authentication, production-data migrations, cross-language campaigns,
   generated-client regeneration, default-branch writes, and automatic merge
@@ -219,6 +278,11 @@ Live product work uses private, schema-backed, task-scoped grants:
 - `model_request_disclosure`: exact source/context classes permitted to leave
   the consumer plane, prohibited classes, redaction, logging, training,
   retention, and deletion terms;
+- `agent_runner_network`: exact Agent Runner Vendor control-plane endpoint and
+  operation allowlist, separate from any downstream model endpoint;
+- `agent_runner_credential`: consumer-owned or task-scoped brokered runner
+  credential environment, auth mode, entitlement class, scopes, isolated
+  injection, expiry, revocation, prohibited persistence, and evidence;
 - `model_network`: exact model-provider endpoint and operation allowlist,
   request/response, token, time, retry, and cost budgets;
 - `model_credential`: credential environment, scopes, isolated injection,
@@ -240,10 +304,12 @@ Live product work uses private, schema-backed, task-scoped grants:
   route.
 
 `customer_repo_read`, `customer_repo_write`, `command_execution`,
-`model_request_disclosure`, `model_network`, `model_credential`,
-`github_branch_write`, and `github_pr_write` are independent. A plan approval is
-not a write grant. A local branch is not a remote branch. A PR bundle is not a
-GitHub write. A remote-branch grant is not a PR grant.
+`model_request_disclosure`, `agent_runner_network`, `agent_runner_credential`,
+`model_network`, `model_credential`, `github_branch_write`, and
+`github_pr_write` are independent. A plan approval is not a write grant. An
+Agent Runner account is not necessarily a direct Model Provider account. A
+local branch is not a remote branch. A PR bundle is not a GitHub write. A
+remote-branch grant is not a PR grant.
 
 Wildcard or ambient grants are prohibited. Model, registry, sandbox, and GitHub
 network allowlists use exact endpoints. Factory's closed worker capabilities
@@ -255,14 +321,21 @@ worker and never substitute for Lumyn product authority.
 - Keep intent, impact, generation mode, patch, verification, delivery,
   permission, cost, and residual-risk axes separate.
 - Bind evidence to provider-confirmed intent, repository base/head, plan digest,
-  generation mode, patch digest, model/prompt/tool provenance when applicable,
-  verification commands, environment, and artifact hashes.
+  generation mode, patch digest, explicit `agent_execution_policy`,
+  verification commands, environment, and artifact hashes. When agent
+  execution is configured, additionally bind selected Agent Runner
+  adapter/version, executable source/digest and conformance digest, auth mode
+  and entitlement class, execution-funding mode, credential and usage-billing
+  ownership, and actual model/prompt/tool provenance.
 - Invalidate dependent evidence when any bound input changes.
 - Capture pre-existing repository failures before patching.
 - Treat deterministic, agent-assisted, and manual patch provenance separately.
 - Treat model completion as generation evidence only.
 - Verification commands and scoring must be independently reproducible from the
   exact candidate head.
+- Independent verification runs in a fresh process and view with frozen
+  command/config digests, no Agent Runner/model credentials, and no
+  generation-owned evidence write handle.
 - Production evidence is outside the MVP.
 - Cleanup failure, boundary violation, redaction uncertainty, stale evidence,
   or missing causal execution blocks stronger verification labels.
@@ -331,7 +404,7 @@ The PR lifecycle report path remains:
   disclosure, retention, token, time, retry, and cost policy before use.
 - Factory artifact namespace: `.factory/artifacts/`.
 - Public OSS/self-serve and Homebrew require a separate approved license,
-  security, contribution, support, vulnerability-response, and release-
+  security, contribution, support, vulnerability-response, and release
   integrity gate.
 
 Changing runtime, execution plane, target language, authority, model egress,
