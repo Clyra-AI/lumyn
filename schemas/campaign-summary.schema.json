@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.campaign_summary.schema.json",
+  "title": "Campaign Summary",
+  "description": "API-provider-visible, consumer-consented aggregate campaign status. Consumer repository contents and private execution evidence are excluded.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "object_type",
+    "schema_version",
+    "campaign_summary_id",
+    "campaign_id",
+    "api_provider_id",
+    "provider_change_event_id",
+    "provider_change_contract_digest",
+    "audience_digest",
+    "status_counts",
+    "projection_refs",
+    "provider_visible_fields",
+    "consent",
+    "interpretation_rules",
+    "privacy",
+    "generated_at",
+    "artifact_digest"
+  ],
+  "properties": {
+    "object_type": { "const": "lumyn.campaign_summary" },
+    "schema_version": { "const": "1.0" },
+    "campaign_summary_id": { "$ref": "#/$defs/identifier" },
+    "campaign_id": { "$ref": "#/$defs/identifier" },
+    "api_provider_id": { "$ref": "#/$defs/identifier" },
+    "provider_change_event_id": { "$ref": "#/$defs/identifier" },
+    "provider_change_contract_digest": { "$ref": "#/$defs/digest" },
+    "audience_digest": { "$ref": "#/$defs/digest" },
+    "status_counts": { "$ref": "#/$defs/statusCounts" },
+    "projection_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/projectionRef" },
+      "uniqueItems": true
+    },
+    "provider_visible_fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "campaign_id",
+          "api_provider_id",
+          "provider_change_event_id",
+          "provider_change_contract_digest",
+          "audience_digest",
+          "status_counts",
+          "projection_refs",
+          "generated_at"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "consent": { "$ref": "#/$defs/consent" },
+    "interpretation_rules": { "$ref": "#/$defs/interpretationRules" },
+    "privacy": { "$ref": "#/$defs/privacy" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "artifact_digest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "statusCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unknown",
+        "received",
+        "not_applicable",
+        "affected",
+        "needs_input",
+        "candidate_ready",
+        "verified",
+        "draft_pr_open",
+        "accepted",
+        "merged",
+        "retired"
+      ],
+      "properties": {
+        "unknown": { "type": "integer", "minimum": 0 },
+        "received": { "type": "integer", "minimum": 0 },
+        "not_applicable": { "type": "integer", "minimum": 0 },
+        "affected": { "type": "integer", "minimum": 0 },
+        "needs_input": { "type": "integer", "minimum": 0 },
+        "candidate_ready": { "type": "integer", "minimum": 0 },
+        "verified": { "type": "integer", "minimum": 0 },
+        "draft_pr_open": { "type": "integer", "minimum": 0 },
+        "accepted": { "type": "integer", "minimum": 0 },
+        "merged": { "type": "integer", "minimum": 0 },
+        "retired": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "projectionRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projection_id", "projection_digest", "status", "provenance"],
+      "properties": {
+        "projection_id": { "$ref": "#/$defs/identifier" },
+        "projection_digest": { "$ref": "#/$defs/digest" },
+        "status": {
+          "enum": ["unknown", "received", "not_applicable", "affected", "needs_input", "candidate_ready", "verified", "draft_pr_open", "accepted", "merged", "retired"]
+        },
+        "provenance": { "enum": ["observed", "consumer_reported", "unknown"] }
+      }
+    },
+    "consent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["consumer_consent_required", "consent_set_digest", "all_included_projections_consented", "revocation_checked_at"],
+      "properties": {
+        "consumer_consent_required": { "const": true },
+        "consent_set_digest": { "$ref": "#/$defs/digest" },
+        "all_included_projections_consented": { "const": true },
+        "revocation_checked_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "interpretationRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["silence", "merged_implies_retired", "not_applicable_requires_evidence", "unaffected_inferred"],
+      "properties": {
+        "silence": { "const": "unknown" },
+        "merged_implies_retired": { "const": false },
+        "not_applicable_requires_evidence": { "const": true },
+        "unaffected_inferred": { "const": false }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "redaction_policy_digest",
+        "redaction_status",
+        "raw_consumer_code_included",
+        "raw_diff_included",
+        "raw_logs_included",
+        "raw_traces_included",
+        "raw_prompts_or_responses_included",
+        "agent_session_data_included",
+        "credentials_included",
+        "consumer_private_evidence_included"
+      ],
+      "properties": {
+        "classification": { "const": "provider_consented_aggregate" },
+        "redaction_policy_digest": { "$ref": "#/$defs/digest" },
+        "redaction_status": { "const": "passed" },
+        "raw_consumer_code_included": { "const": false },
+        "raw_diff_included": { "const": false },
+        "raw_logs_included": { "const": false },
+        "raw_traces_included": { "const": false },
+        "raw_prompts_or_responses_included": { "const": false },
+        "agent_session_data_included": { "const": false },
+        "credentials_included": { "const": false },
+        "consumer_private_evidence_included": { "const": false }
+      }
+    }
+  }
+}

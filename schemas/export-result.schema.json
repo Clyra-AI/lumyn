@@ -1,0 +1,238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.export_result.schema.json",
+  "title": "Export Result",
+  "description": "Consumer-controlled delivery evidence for an exact independently verified candidate. Default-branch writes and automatic merge are prohibited.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "object_type",
+    "schema_version",
+    "export_id",
+    "provider_change_event_id",
+    "provider_change_contract_digest",
+    "consumer_installation_id",
+    "event_authorization_digest",
+    "migration_plan_digest",
+    "candidate_binding",
+    "verification_binding",
+    "delivery",
+    "evidence_bundle_digest",
+    "redaction",
+    "exported_at",
+    "artifact_digest"
+  ],
+  "properties": {
+    "object_type": { "const": "lumyn.export_result" },
+    "schema_version": { "const": "1.0" },
+    "export_id": { "$ref": "#/$defs/identifier" },
+    "provider_change_event_id": { "$ref": "#/$defs/identifier" },
+    "provider_change_contract_digest": { "$ref": "#/$defs/digest" },
+    "consumer_installation_id": { "$ref": "#/$defs/identifier" },
+    "event_authorization_digest": { "$ref": "#/$defs/digest" },
+    "migration_plan_digest": { "$ref": "#/$defs/digest" },
+    "candidate_binding": { "$ref": "#/$defs/candidateBinding" },
+    "verification_binding": { "$ref": "#/$defs/verificationBinding" },
+    "delivery": { "$ref": "#/$defs/delivery" },
+    "evidence_bundle_digest": { "$ref": "#/$defs/digest" },
+    "redaction": { "$ref": "#/$defs/redaction" },
+    "exported_at": { "type": "string", "format": "date-time" },
+    "artifact_digest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "gitCommit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40,64}$"
+    },
+    "candidateBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository_binding_digest", "repository_base_commit", "candidate_head", "candidate_manifest_digest", "patch_digest"],
+      "properties": {
+        "repository_binding_digest": { "$ref": "#/$defs/digest" },
+        "repository_base_commit": { "$ref": "#/$defs/gitCommit" },
+        "candidate_head": { "$ref": "#/$defs/gitCommit" },
+        "candidate_manifest_digest": { "$ref": "#/$defs/digest" },
+        "patch_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "verificationBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verification_id", "verification_digest", "candidate_head", "candidate_manifest_digest", "patch_digest", "verification_label", "fresh"],
+      "properties": {
+        "verification_id": { "$ref": "#/$defs/identifier" },
+        "verification_digest": { "$ref": "#/$defs/digest" },
+        "candidate_head": { "$ref": "#/$defs/gitCommit" },
+        "candidate_manifest_digest": { "$ref": "#/$defs/digest" },
+        "patch_digest": { "$ref": "#/$defs/digest" },
+        "verification_label": {
+          "enum": [
+            "static_verified",
+            "repo_verified",
+            "workflow_contract_replay_passed",
+            "workflow_verified_replay",
+            "workflow_verified_mock",
+            "workflow_verified_sandbox"
+          ]
+        },
+        "fresh": { "const": true }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "state",
+        "artifact_ref",
+        "source_branch",
+        "base_branch",
+        "source_branch_is_default",
+        "default_branch_write",
+        "auto_merge",
+        "github_actions",
+        "delivery_authority",
+        "counts_as_automated_pr_delivery",
+        "human_merge_required"
+      ],
+      "properties": {
+        "mode": { "enum": ["patch", "local_branch", "pr_bundle", "remote_branch", "draft_pr"] },
+        "state": { "enum": ["patch_exported", "local_branch_ready", "pr_bundle_ready", "remote_branch_pushed", "draft_pr_open"] },
+        "artifact_ref": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "source_branch": { "type": ["string", "null"], "maxLength": 256 },
+        "base_branch": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "source_branch_is_default": { "const": false },
+        "default_branch_write": { "const": false },
+        "auto_merge": { "const": false },
+        "github_actions": {
+          "type": "array",
+          "items": { "enum": ["github_branch_write", "github_pr_write"] },
+          "uniqueItems": true
+        },
+        "delivery_authority": { "enum": ["manual_handoff", "lumyn_automated_delivery"] },
+        "counts_as_automated_pr_delivery": { "type": "boolean" },
+        "github_authorization": { "$ref": "#/$defs/githubAuthorization" },
+        "draft": { "type": "boolean" },
+        "human_merge_required": { "const": true }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "mode": { "const": "patch" },
+            "state": { "const": "patch_exported" },
+            "source_branch": { "type": "null" },
+            "github_actions": { "maxItems": 0 },
+            "delivery_authority": { "const": "manual_handoff" },
+            "counts_as_automated_pr_delivery": { "const": false }
+          },
+          "not": { "anyOf": [{ "required": ["github_authorization"] }, { "required": ["draft"] }] }
+        },
+        {
+          "properties": {
+            "mode": { "const": "local_branch" },
+            "state": { "const": "local_branch_ready" },
+            "source_branch": { "type": "string", "minLength": 1 },
+            "github_actions": { "maxItems": 0 },
+            "delivery_authority": { "const": "manual_handoff" },
+            "counts_as_automated_pr_delivery": { "const": false }
+          },
+          "not": { "anyOf": [{ "required": ["github_authorization"] }, { "required": ["draft"] }] }
+        },
+        {
+          "properties": {
+            "mode": { "const": "pr_bundle" },
+            "state": { "const": "pr_bundle_ready" },
+            "source_branch": { "type": "string", "minLength": 1 },
+            "github_actions": { "maxItems": 0 },
+            "delivery_authority": { "const": "manual_handoff" },
+            "counts_as_automated_pr_delivery": { "const": false }
+          },
+          "not": { "anyOf": [{ "required": ["github_authorization"] }, { "required": ["draft"] }] }
+        },
+        {
+          "required": ["github_authorization"],
+          "properties": {
+            "mode": { "const": "remote_branch" },
+            "state": { "const": "remote_branch_pushed" },
+            "source_branch": { "type": "string", "minLength": 1 },
+            "github_actions": { "const": ["github_branch_write"] },
+            "delivery_authority": { "const": "lumyn_automated_delivery" },
+            "counts_as_automated_pr_delivery": { "const": false }
+          },
+          "not": { "required": ["draft"] }
+        },
+        {
+          "required": ["github_authorization", "draft"],
+          "properties": {
+            "mode": { "const": "draft_pr" },
+            "state": { "const": "draft_pr_open" },
+            "source_branch": { "type": "string", "minLength": 1 },
+            "github_actions": { "const": ["github_branch_write", "github_pr_write"] },
+            "delivery_authority": { "const": "lumyn_automated_delivery" },
+            "counts_as_automated_pr_delivery": { "const": true },
+            "draft": { "const": true }
+          }
+        }
+      ]
+    },
+    "githubAuthorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorization_digest",
+        "repository_binding_digest",
+        "source_branch",
+        "base_branch",
+        "base_commit",
+        "idempotency_key",
+        "issued_at",
+        "expires_at",
+        "short_lived",
+        "stored_in_installation"
+      ],
+      "properties": {
+        "authorization_digest": { "$ref": "#/$defs/digest" },
+        "repository_binding_digest": { "$ref": "#/$defs/digest" },
+        "source_branch": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "base_branch": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "base_commit": { "$ref": "#/$defs/gitCommit" },
+        "idempotency_key": { "$ref": "#/$defs/identifier" },
+        "issued_at": { "type": "string", "format": "date-time" },
+        "expires_at": { "type": "string", "format": "date-time" },
+        "short_lived": { "const": true },
+        "stored_in_installation": { "const": false }
+      }
+    },
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_digest",
+        "status",
+        "safe_to_persist",
+        "safe_for_api_provider",
+        "contains_raw_source",
+        "contains_raw_diff",
+        "contains_credentials"
+      ],
+      "properties": {
+        "policy_digest": { "$ref": "#/$defs/digest" },
+        "status": { "const": "passed" },
+        "safe_to_persist": { "const": true },
+        "safe_for_api_provider": { "const": false },
+        "contains_raw_source": { "const": false },
+        "contains_raw_diff": { "const": false },
+        "contains_credentials": { "const": false }
+      }
+    }
+  }
+}

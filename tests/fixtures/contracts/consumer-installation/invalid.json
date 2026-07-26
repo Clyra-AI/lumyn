@@ -1,0 +1,182 @@
+{
+  "object_type": "lumyn.consumer_installation",
+  "schema_version": "1.0",
+  "installation_id": "installation.acme.payments_node",
+  "installation_version": 1,
+  "installation_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "api_provider_id": "api_provider.payments_co",
+  "api_consumer_organization_id": "consumer_org.acme",
+  "consumer_maintainer_id": "consumer_maintainer.acme_platform",
+  "authority_owner_role": "api_consumer_organization",
+  "provider_channel": {
+    "transport_id": "pinned_provider_https_signed_manifest_v1",
+    "manifest_url": "https://updates.payments.example/campaigns/node-v5/event.json",
+    "pinned_origin": "https://updates.payments.example",
+    "campaign_key_id": "campaign_key.payments.node_v5",
+    "campaign_public_key": "ZXhhbXBsZS1jYW1wYWlnbi1wdWJsaWMta2V5LWZvci1maXh0dXJl",
+    "authentication_method": "detached_signature"
+  },
+  "repository": {
+    "host": "github.com",
+    "owner": "acme",
+    "name": "checkout-service",
+    "package_root": ".",
+    "default_branch": "main"
+  },
+  "selectors": {
+    "audience_ids": [
+      "audience.node_sdk_v4_users"
+    ],
+    "package": "@payments/sdk",
+    "package_version_selectors": [
+      ">=4.0.0 <5.0.0"
+    ]
+  },
+  "action_ceiling": "open_draft_pr",
+  "authorization_mode": "installed_preauthorization",
+  "path_policy": {
+    "readable_paths": [
+      "**/*"
+    ],
+    "writable_paths": [
+      "**/*"
+    ],
+    "excluded_paths": []
+  },
+  "commands": [
+    {
+      "command_id": "command.npm_test",
+      "program": "npm",
+      "arguments": [
+        "test"
+      ],
+      "working_directory": ".",
+      "network_mode": "offline",
+      "lifecycle_scripts_allowed": false
+    }
+  ],
+  "capability_ceiling": {
+    "customer_repo_read": true,
+    "customer_repo_write": true,
+    "command_execution": true,
+    "agent_runner_network": true,
+    "agent_runner_credential": true,
+    "model_request_disclosure": true,
+    "model_network": false,
+    "model_credential": false,
+    "package_registry_read": false,
+    "dependency_lifecycle_scripts": false,
+    "sandbox_request_disclosure": false,
+    "sandbox_network": false,
+    "sandbox_credential": false,
+    "github_branch_write": true,
+    "github_pr_write": true,
+    "provider_reporting": true,
+    "artifact_retention": true,
+    "artifact_deletion": true
+  },
+  "agent_execution_policy": {
+    "state": "configured",
+    "selection_authority_role": "consumer_maintainer",
+    "adapter_id": "codex",
+    "adapter_version": "1.2.3",
+    "agent_runner_vendor": "OpenAI",
+    "executable": {
+      "canonical_path": "/opt/lumyn/bin/codex",
+      "approved_source": "https://artifacts.openai.example/codex/1.2.3",
+      "digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "repository_path_shadowing_allowed": false
+    },
+    "conformance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+    "live_canary_qualified": true,
+    "auth_mode": "brokered_task_credential",
+    "entitlement_class": "noninteractive_campaign_execution",
+    "route_topology": "runner_mediated",
+    "execution_funding_mode": "provider_sponsored_lumyn_managed",
+    "credential_owner_role": "lumyn_operator",
+    "usage_billing_owner_role": "lumyn_operator",
+    "actual_model_route": {
+      "model_provider": "OpenAI",
+      "endpoint": "https://api.openai.example/v1/responses",
+      "model": "codex-enterprise",
+      "model_version": "2026-07-01",
+      "observable": true
+    },
+    "native_configuration": {
+      "mode": "disabled"
+    },
+    "clean_session_required": true,
+    "neutral_home_and_config_required": true,
+    "executable_extensions_allowed": false,
+    "silent_fallback_allowed": false
+  },
+  "model_data_policy": {
+    "permitted_context_classes": [
+      "source_selected_by_plan"
+    ],
+    "prohibited_context_classes": [
+      "secrets"
+    ],
+    "redaction_required": true,
+    "raw_prompts_persisted": false,
+    "raw_responses_persisted": false,
+    "provider_may_receive_context": false,
+    "retention_days": 7,
+    "region": "ca-central"
+  },
+  "budgets": {
+    "max_files": 12,
+    "max_changed_lines": 500,
+    "max_diff_bytes": 64000,
+    "max_turns": 20,
+    "max_tokens": 50000,
+    "max_cost_usd": 25,
+    "max_duration_seconds": 1800,
+    "max_attempts": 2
+  },
+  "github_token_issuance_policy": {
+    "enabled": true,
+    "broker_id": "broker.github_app.acme",
+    "short_lived": true,
+    "maximum_ttl_seconds": 600,
+    "non_default_branch_only": true,
+    "draft_pr_only": true,
+    "auto_merge_allowed": false,
+    "stored_token_allowed": false
+  },
+  "provider_reporting": {
+    "enabled": true,
+    "allowed_fields": [
+      "event_id",
+      "status"
+    ],
+    "raw_consumer_evidence_allowed": false,
+    "consent_required": true
+  },
+  "retention_and_deletion": {
+    "private_state_root_class": "external_consumer_private_root",
+    "checkout_storage_allowed": false,
+    "public_repository_storage_allowed": false,
+    "retention_days": 30,
+    "delete_on_revocation": true,
+    "deletion_receipt_required": true
+  },
+  "expires_at": "2027-02-28T23:59:59Z",
+  "revocation": {
+    "state": "active",
+    "revoked_at": null,
+    "revoked_by_role": null
+  },
+  "action_label_grants_side_effect": false,
+  "stores_reusable_agent_or_model_credential": false,
+  "stores_github_token": false,
+  "production_credentials_allowed": false,
+  "production_mutation_allowed": false,
+  "api_provider_access": {
+    "source": false,
+    "context": false,
+    "agent_session": false,
+    "credentials": false,
+    "agent_selection": false
+  }
+}

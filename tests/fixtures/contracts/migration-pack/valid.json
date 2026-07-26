@@ -1,0 +1,76 @@
+{
+  "object_type": "lumyn.migration_pack",
+  "schema_version": "1.0",
+  "migration_pack_id": "migration_pack.payments.2027-01",
+  "contract_version": 1,
+  "contract_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "api_provider_id": "api_provider.payments_co",
+  "api_or_sdk": {
+    "kind": "sdk",
+    "name": "Payments Node SDK",
+    "package": "@payments/sdk"
+  },
+  "source_version": "4.x",
+  "target_version": "5.x",
+  "audience": {
+    "audience_id": "audience.node_sdk_v4_users",
+    "package_version_selector": ">=4.0.0 <5.0.0"
+  },
+  "semantic_changes": [
+    {
+      "change_id": "change.payment_intent_confirm_options",
+      "kind": "request_shape_change",
+      "source_symbol": "paymentIntents.confirm(id, paymentMethod)",
+      "target_symbol": "paymentIntents.confirm(id, { payment_method })",
+      "intent": "Move the payment method identifier into the documented options object.",
+      "applicability": "Direct Payments Node SDK v4 calls using the positional payment-method argument.",
+      "mapping": {
+        "mode": "repository_specific_reasoning",
+        "declarative_steps": [
+          "Identify direct or statically resolvable wrapper calls to paymentIntents.confirm.",
+          "Preserve the existing payment-method expression as the payment_method field."
+        ]
+      }
+    }
+  ],
+  "ambiguities": [],
+  "unsupported_cases": [
+    {
+      "case_id": "unsupported.dynamic_dispatch",
+      "description": "The SDK method is selected through runtime-computed property access.",
+      "reason": "The target call cannot be bound to provider intent statically."
+    }
+  ],
+  "verification_guidance": {
+    "required_behaviors": [
+      "Existing payment-method identifiers are passed as payment_method without changing their values.",
+      "The consumer's approved typecheck and tests pass from the exact candidate head."
+    ],
+    "provider_commands_allowed": false
+  },
+  "provenance": {
+    "class": "provider_confirmed",
+    "source_urls": [
+      "https://updates.payments.example/sdk/node/v5-migration"
+    ],
+    "source_digests": [
+      "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+    ],
+    "normalized_at": "2026-07-25T15:00:00Z"
+  },
+  "provider_confirmation": {
+    "status": "provider_confirmed",
+    "provider_operator_id": "provider_operator.release_team",
+    "confirmed_contract_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "confirmed_at": "2026-07-25T16:00:00Z"
+  },
+  "lifecycle": {
+    "state": "active",
+    "superseded_by": null,
+    "withdrawal_reason": null
+  },
+  "non_executable": true,
+  "grants_consumer_authority": false,
+  "production_credentials_allowed": false,
+  "production_mutation_allowed": false
+}

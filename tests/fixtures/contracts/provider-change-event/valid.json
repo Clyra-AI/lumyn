@@ -1,0 +1,59 @@
+{
+  "object_type": "lumyn.provider_change_event",
+  "schema_version": "1.0",
+  "event_id": "event.payments.node_v5.0001",
+  "event_version": 1,
+  "event_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "api_provider_id": "api_provider.payments_co",
+  "issuer": {
+    "role": "provider_operator",
+    "provider_operator_id": "provider_operator.release_team"
+  },
+  "api_or_sdk": {
+    "kind": "sdk",
+    "name": "Payments Node SDK",
+    "package": "@payments/sdk"
+  },
+  "audience_id": "audience.node_sdk_v4_users",
+  "deadline": "2027-01-31T23:59:59Z",
+  "severity": "sunset_critical",
+  "sequence": 41,
+  "issued_at": "2026-07-25T17:00:00Z",
+  "expires_at": "2026-08-25T17:00:00Z",
+  "transport": {
+    "mode": "pinned_provider_https",
+    "manifest_url": "https://updates.payments.example/campaigns/node-v5/event.json",
+    "pinned_origin": "https://updates.payments.example",
+    "publisher_role": "provider_operator"
+  },
+  "authentication": {
+    "method": "detached_signature",
+    "key_id": "campaign_key.payments.node_v5",
+    "detached_signature": "ZXhhbXBsZS1kZXRhY2hlZC1zaWduYXR1cmUtZm9yLWZpeHR1cmU",
+    "signature_verified": true,
+    "origin_verified": true,
+    "audience_verified": true,
+    "freshness_verified": true,
+    "sequence_verified": true,
+    "replay_check": "unseen"
+  },
+  "contract_delivery": {
+    "mode": "exact_provider_https_url",
+    "migration_pack_id": "migration_pack.payments.2027-01",
+    "contract_version": 1,
+    "contract_url": "https://updates.payments.example/campaigns/node-v5/migration-pack.json",
+    "retrieved_bytes_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "digest_verified": true
+  },
+  "lifecycle": {
+    "state": "active",
+    "superseded_by": null,
+    "withdrawal_reason": null
+  },
+  "channel_delivery_qualified": true,
+  "installed_preauthorization_eligible": true,
+  "non_executable": true,
+  "grants_consumer_authority": false,
+  "production_credentials_allowed": false,
+  "production_mutation_allowed": false
+}

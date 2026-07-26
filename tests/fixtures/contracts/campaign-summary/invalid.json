@@ -1,0 +1,59 @@
+{
+  "object_type": "lumyn.campaign_summary",
+  "schema_version": "1.0",
+  "campaign_summary_id": "campaign-summary-unsafe",
+  "campaign_id": "stripe-sunset-2026",
+  "api_provider_id": "api-provider-stripe",
+  "provider_change_event_id": "evt-stripe-2026-07",
+  "provider_change_contract_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "audience_digest": "sha256:e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1",
+  "status_counts": {
+    "unknown": 1,
+    "received": 2,
+    "not_applicable": 1,
+    "affected": 4,
+    "needs_input": 1,
+    "candidate_ready": 1,
+    "verified": 1,
+    "draft_pr_open": 1,
+    "accepted": 0,
+    "merged": 0,
+    "retired": 0
+  },
+  "projection_refs": [
+    {
+      "projection_id": "projection-001",
+      "projection_digest": "sha256:e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2",
+      "status": "draft_pr_open",
+      "provenance": "observed"
+    }
+  ],
+  "provider_visible_fields": ["campaign_id", "status_counts", "generated_at"],
+  "consent": {
+    "consumer_consent_required": true,
+    "consent_set_digest": "sha256:e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3",
+    "all_included_projections_consented": true,
+    "revocation_checked_at": "2026-07-26T14:20:00Z"
+  },
+  "interpretation_rules": {
+    "silence": "unknown",
+    "merged_implies_retired": false,
+    "not_applicable_requires_evidence": true,
+    "unaffected_inferred": false
+  },
+  "privacy": {
+    "classification": "provider_consented_aggregate",
+    "redaction_policy_digest": "sha256:b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0",
+    "redaction_status": "passed",
+    "raw_consumer_code_included": true,
+    "raw_diff_included": false,
+    "raw_logs_included": false,
+    "raw_traces_included": false,
+    "raw_prompts_or_responses_included": false,
+    "agent_session_data_included": false,
+    "credentials_included": false,
+    "consumer_private_evidence_included": false
+  },
+  "generated_at": "2026-07-26T14:21:00Z",
+  "artifact_digest": "sha256:e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4"
+}

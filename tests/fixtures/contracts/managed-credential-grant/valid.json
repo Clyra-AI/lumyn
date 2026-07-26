@@ -1,0 +1,87 @@
+{
+  "object_type": "lumyn.managed_credential_grant",
+  "schema_version": "1.0",
+  "grant_id": "managed_credential.acme.payments_node_v5.attempt_0001",
+  "grant_digest": "sha256:1414141414141414141414141414141414141414141414141414141414141414",
+  "mode": "provider_sponsored_lumyn_managed",
+  "campaign_sponsor": {
+    "role": "api_provider",
+    "api_provider_id": "api_provider.payments_co",
+    "grants_execution_authority": false
+  },
+  "approved_broker": {
+    "issuer_id": "broker.lumyn.agent_credentials",
+    "issuer_role": "lumyn_operator",
+    "broker_version": "1.0.0",
+    "qualification_digest": "sha256:1515151515151515151515151515151515151515151515151515151515151515"
+  },
+  "credential_owner_role": "lumyn_operator",
+  "usage_billing_owner_role": "lumyn_operator",
+  "api_consumer_organization_id": "consumer_org.acme",
+  "consumer_consent_binding": {
+    "authorization_id": "authorization.acme.payments_node_v5.0001",
+    "authorization_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "consented_by_role": "consumer_maintainer",
+    "revocable": true
+  },
+  "audience": {
+    "installation_id": "installation.acme.payments_node",
+    "installation_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "event_id": "event.payments.node_v5.0001",
+    "event_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "plan_id": "migration_plan.acme.payments_node_v5.0001",
+    "plan_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "attempt_id": "agent_attempt.acme.payments_node_v5.0001",
+    "agent_runner_id": "agent_runner.codex.1-2-3",
+    "agent_runner_digest": "sha256:abababababababababababababababababababababababababababababababab",
+    "model_route_id": "model_route.openai.codex_enterprise.2026-07",
+    "model_route_digest": "sha256:abababababababababababababababababababababababababababababababab"
+  },
+  "issued_at": "2026-07-25T17:10:00Z",
+  "expires_at": "2026-07-25T18:00:00Z",
+  "ttl_seconds": 3000,
+  "redemption": {
+    "mode": "one_time_into_single_agent_attempt_session",
+    "one_time": true,
+    "creates_single_attempt_session": true,
+    "multiple_calls_within_attempt_allowed": true,
+    "refresh_allowed": false,
+    "post_attempt_replay_allowed": false,
+    "cross_attempt_reuse_allowed": false,
+    "state": "unredeemed",
+    "redeemed_at": null
+  },
+  "hard_quotas": {
+    "max_tokens": 50000,
+    "max_cost_usd": 25,
+    "max_calls": 32
+  },
+  "enforcement": {
+    "mode": "approved_budget_enforcing_proxy",
+    "enforcer_id": "proxy.lumyn.openai_budget_v1",
+    "enforcement_digest": "sha256:1616161616161616161616161616161616161616161616161616161616161616",
+    "fail_closed_if_unavailable": true
+  },
+  "revocation": {
+    "supported": true,
+    "revocation_handle_digest": "sha256:1717171717171717171717171717171717171717171717171717171717171717",
+    "revoke_on_attempt_end": true
+  },
+  "usage_reconciliation": {
+    "required": true,
+    "reconciliation_id": "reconciliation.acme.payments_node_v5.0001",
+    "records_secret_values": false
+  },
+  "reusable_source_credential_persisted": false,
+  "credential_material_persisted": false,
+  "api_provider_access": {
+    "credential": false,
+    "source": false,
+    "context": false,
+    "prompt": false,
+    "response": false,
+    "tool_trace": false,
+    "agent_session": false
+  },
+  "production_credential": false
+}

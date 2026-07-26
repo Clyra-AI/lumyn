@@ -1,0 +1,133 @@
+{
+  "object_type": "lumyn.event_authorization",
+  "schema_version": "1.0",
+  "authorization_id": "authorization.acme.payments_node_v5.0001",
+  "authorization_version": 1,
+  "authorization_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "api_consumer_organization_id": "consumer_org.acme",
+  "authorization_owner_role": "api_consumer_organization",
+  "installation_binding": {
+    "artifact_id": "installation.acme.payments_node",
+    "artifact_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "event_binding": {
+    "artifact_id": "event.payments.node_v5.0001",
+    "artifact_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "migration_pack_binding": {
+    "artifact_id": "migration_pack.payments.2027-01",
+    "artifact_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "repository_binding": {
+    "repository_id": "github.acme.checkout-service",
+    "package_root": ".",
+    "base_commit": "1234567890abcdef1234567890abcdef12345678"
+  },
+  "plan_binding": {
+    "artifact_id": "migration_plan.acme.payments_node_v5.0001",
+    "artifact_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+  },
+  "execution_manifest_binding": {
+    "artifact_id": "execution_manifest.acme.payments_node_v5.0001",
+    "artifact_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+  },
+  "authorization_mode": "installed_preauthorization",
+  "event_provenance": {
+    "transport_mode": "pinned_provider_https",
+    "authenticated": true,
+    "channel_delivery_qualified": true,
+    "audience_matched": true,
+    "fresh": true,
+    "sequence_accepted": true,
+    "lifecycle_active": true
+  },
+  "selected_action": "open_draft_pr",
+  "generation_mode": "agent_assisted",
+  "agent_execution_policy": {
+    "state": "configured",
+    "adapter_id": "codex",
+    "adapter_version": "1.2.3",
+    "executable_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "conformance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+    "agent_route_digest": "sha256:abababababababababababababababababababababababababababababababab",
+    "funding_mode": "provider_sponsored_lumyn_managed",
+    "credential_owner_role": "lumyn_operator",
+    "usage_billing_owner_role": "lumyn_operator"
+  },
+  "selected_capabilities": [
+    "customer_repo_read",
+    "customer_repo_write",
+    "command_execution",
+    "agent_runner_network",
+    "agent_runner_credential",
+    "model_request_disclosure",
+    "github_branch_write",
+    "github_pr_write",
+    "provider_reporting",
+    "artifact_retention",
+    "artifact_deletion"
+  ],
+  "scope": {
+    "readable_paths": [
+      ".",
+      "src",
+      "tests"
+    ],
+    "writable_paths": [
+      "src",
+      "tests",
+      "package.json",
+      "package-lock.json"
+    ],
+    "command_ids": [
+      "command.npm_test"
+    ],
+    "path_policy_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "command_policy_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+    "model_data_policy_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+    "budget_policy_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+    "github_policy_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+    "provider_reporting_policy_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  "derivation": {
+    "installation_policy_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "comparison_result": "in_policy",
+    "non_widening": true,
+    "provider_input_may_widen": false,
+    "route_selected_capability_union_frozen": true,
+    "aggregate_campaign_authority_granted": false
+  },
+  "approval": {
+    "mode": "installed_preauthorization",
+    "evaluated_by": "lumyn_policy_engine",
+    "event_in_policy": true,
+    "plan_in_policy": true,
+    "commands_in_policy": true,
+    "paths_in_policy": true,
+    "model_policy_in_policy": true,
+    "budgets_in_policy": true,
+    "verification_in_policy": true,
+    "credential_issuance_in_policy": true,
+    "evaluated_at": "2026-07-25T17:05:00Z"
+  },
+  "verification_requirement": {
+    "configuration_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+    "exact_candidate_head_required": true,
+    "independent_from_generation": true,
+    "agent_or_model_credentials_allowed": false,
+    "generation_evidence_write_handle_allowed": false
+  },
+  "credential_issuance": {
+    "policy_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+    "short_lived_only": true,
+    "reusable_credential_allowed": false,
+    "issued_at_runtime_only": true
+  },
+  "state": "active",
+  "issued_at": "2026-07-25T17:05:00Z",
+  "expires_at": "2026-07-25T18:05:00Z",
+  "action_label_alone_grants_side_effect": false,
+  "api_provider_may_approve": false,
+  "production_credentials_allowed": false,
+  "production_mutation_allowed": false
+}

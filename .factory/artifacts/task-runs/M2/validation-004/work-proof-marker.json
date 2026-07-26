@@ -1,0 +1,19 @@
+{
+  "command": "python3 scripts/validate_repo_pack.py",
+  "cwd": ".",
+  "execution_status": "pass",
+  "exit_code": 0,
+  "finished_at": "2026-07-26T15:35:35Z",
+  "generated_by": "trusted_runner",
+  "git_sha": "7609e5c49c0776c1028c1aeb3e2e2ee942b613b6",
+  "marker_id": "validation-004",
+  "raw_log_refs": [
+    ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.stdout.log",
+    ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.stderr.log"
+  ],
+  "runner_id": "factory-validation-gate-attended",
+  "started_at": "2026-07-26T15:35:35Z",
+  "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_digest": "sha256:c5c211a84ffced0f3c770ee5c32e969c2fcb4ce5de4715144495243303bcf2aa",
+  "workspace_ref": "codex/lumyn-m2-contracts"
+}

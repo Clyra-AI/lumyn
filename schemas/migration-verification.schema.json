@@ -1,0 +1,433 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.migration_verification.schema.json",
+  "title": "Migration Verification",
+  "description": "Independent, deterministic verification evidence bound to one exact migration candidate and frozen verification inputs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "object_type",
+    "schema_version",
+    "verification_id",
+    "provider_change_event_id",
+    "provider_change_contract_digest",
+    "consumer_installation_id",
+    "event_authorization_digest",
+    "migration_plan_digest",
+    "consumer_execution_manifest_binding",
+    "candidate_binding",
+    "generation_provenance",
+    "execution_binding",
+    "separation",
+    "frozen_inputs",
+    "baseline_results",
+    "candidate_results",
+    "verification_label",
+    "outcome",
+    "sandbox_entrypoint_profile_digest",
+    "observed_evidence_refs",
+    "redaction",
+    "cleanup",
+    "residual_risks",
+    "verified_at",
+    "artifact_digest"
+  ],
+  "properties": {
+    "object_type": { "const": "lumyn.migration_verification" },
+    "schema_version": { "const": "1.0" },
+    "verification_id": { "$ref": "#/$defs/identifier" },
+    "provider_change_event_id": { "$ref": "#/$defs/identifier" },
+    "provider_change_contract_digest": { "$ref": "#/$defs/digest" },
+    "consumer_installation_id": { "$ref": "#/$defs/identifier" },
+    "event_authorization_digest": { "$ref": "#/$defs/digest" },
+    "migration_plan_digest": { "$ref": "#/$defs/digest" },
+    "consumer_execution_manifest_binding": { "$ref": "#/$defs/artifactBinding" },
+    "candidate_binding": { "$ref": "#/$defs/candidateBinding" },
+    "generation_provenance": { "$ref": "#/$defs/generationProvenance" },
+    "execution_binding": { "$ref": "#/$defs/executionBinding" },
+    "separation": { "$ref": "#/$defs/separation" },
+    "frozen_inputs": { "$ref": "#/$defs/frozenInputs" },
+    "baseline_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/commandResult" }
+    },
+    "candidate_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/commandResult" }
+    },
+    "verification_label": {
+      "enum": [
+        "not_run",
+        "static_verified",
+        "repo_verified",
+        "workflow_contract_replay_passed",
+        "workflow_verified_replay",
+        "workflow_verified_mock",
+        "workflow_verified_sandbox",
+        "partial",
+        "failed",
+        "gap",
+        "stale"
+      ]
+    },
+    "outcome": { "enum": ["verified", "not_verified"] },
+    "sandbox_entrypoint_profile_digest": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/digest" }
+      ]
+    },
+    "observed_evidence_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidenceRef" },
+      "uniqueItems": true
+    },
+    "redaction": { "$ref": "#/$defs/redaction" },
+    "cleanup": { "$ref": "#/$defs/cleanup" },
+    "residual_risks": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 1024 }
+    },
+    "verified_at": { "type": "string", "format": "date-time" },
+    "artifact_digest": { "$ref": "#/$defs/digest" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "verification_label": {
+            "enum": [
+              "static_verified",
+              "repo_verified",
+              "workflow_contract_replay_passed",
+              "workflow_verified_replay",
+              "workflow_verified_mock",
+              "workflow_verified_sandbox"
+            ]
+          }
+        },
+        "required": ["verification_label"]
+      },
+      "then": {
+        "properties": {
+          "outcome": { "const": "verified" },
+          "observed_evidence_refs": { "minItems": 1 }
+        }
+      },
+      "else": {
+        "properties": { "outcome": { "const": "not_verified" } }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "verification_label": {
+            "enum": ["workflow_verified_replay", "workflow_verified_mock", "workflow_verified_sandbox"]
+          }
+        },
+        "required": ["verification_label"]
+      },
+      "then": {
+        "properties": {
+          "observed_evidence_refs": {
+            "contains": {
+              "type": "object",
+              "properties": { "evidence_kind": { "const": "exact_head_workflow_outcome" } },
+              "required": ["evidence_kind"]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "verification_label": { "const": "workflow_verified_sandbox" }
+        },
+        "required": ["verification_label"]
+      },
+      "then": {
+        "properties": {
+          "sandbox_entrypoint_profile_digest": { "$ref": "#/$defs/digest" },
+          "observed_evidence_refs": {
+            "allOf": [
+              {
+                "contains": {
+                  "type": "object",
+                  "properties": {
+                    "evidence_kind": { "const": "exact_head_workflow_outcome" },
+                    "sandbox_entrypoint_profile_digest": { "$ref": "#/$defs/digest" }
+                  },
+                  "required": ["evidence_kind", "sandbox_entrypoint_profile_digest"]
+                }
+              },
+              {
+                "contains": {
+                  "type": "object",
+                  "properties": {
+                    "evidence_kind": { "const": "sandbox_observation" },
+                    "sandbox_entrypoint_profile_digest": { "$ref": "#/$defs/digest" }
+                  },
+                  "required": ["evidence_kind", "sandbox_entrypoint_profile_digest"]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "sandbox_entrypoint_profile_digest": { "type": "null" },
+          "observed_evidence_refs": {
+            "not": {
+              "contains": {
+                "properties": { "evidence_kind": { "const": "sandbox_observation" } },
+                "required": ["evidence_kind"]
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "gitCommit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40,64}$"
+    },
+    "candidateBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository_binding_digest",
+        "repository_base_commit",
+        "candidate_head",
+        "candidate_manifest_digest",
+        "patch_digest"
+      ],
+      "properties": {
+        "repository_binding_digest": { "$ref": "#/$defs/digest" },
+        "repository_base_commit": { "$ref": "#/$defs/gitCommit" },
+        "candidate_head": { "$ref": "#/$defs/gitCommit" },
+        "candidate_manifest_digest": { "$ref": "#/$defs/digest" },
+        "patch_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "artifactBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "artifact_digest"],
+      "properties": {
+        "artifact_id": { "$ref": "#/$defs/identifier" },
+        "artifact_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "generationProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generation_mode", "generation_evidence_digest", "generation_result_is_verification"],
+      "properties": {
+        "generation_mode": { "enum": ["deterministic", "agent_assisted", "manual"] },
+        "generation_evidence_digest": { "$ref": "#/$defs/digest" },
+        "agent_attempt_id": { "$ref": "#/$defs/identifier" },
+        "agent_attempt_digest": { "$ref": "#/$defs/digest" },
+        "generation_result_is_verification": { "const": false }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "generation_mode": { "const": "agent_assisted" } },
+            "required": ["generation_mode"]
+          },
+          "then": { "required": ["agent_attempt_id", "agent_attempt_digest"] },
+          "else": {
+            "not": {
+              "anyOf": [
+                { "required": ["agent_attempt_id"] },
+                { "required": ["agent_attempt_digest"] }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "executionBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agent_execution_policy",
+        "route_digest",
+        "authorization_snapshot_digest",
+        "generation_mode"
+      ],
+      "properties": {
+        "agent_execution_policy": { "enum": ["disabled", "configured"] },
+        "route_digest": { "$ref": "#/$defs/digest" },
+        "authorization_snapshot_digest": { "$ref": "#/$defs/digest" },
+        "generation_mode": { "enum": ["deterministic", "agent_assisted", "manual"] },
+        "agent_runner_binding_digest": { "$ref": "#/$defs/digest" },
+        "model_route_binding_digest": { "$ref": "#/$defs/digest" },
+        "execution_funding_mode": { "enum": ["consumer_managed", "provider_sponsored_lumyn_managed"] },
+        "credential_owner": { "enum": ["api_consumer_organization", "lumyn_operator"] },
+        "usage_billing_owner": { "enum": ["api_consumer_organization", "lumyn_operator"] }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "agent_execution_policy": { "const": "configured" } },
+            "required": ["agent_execution_policy"]
+          },
+          "then": {
+            "required": [
+              "agent_runner_binding_digest",
+              "model_route_binding_digest",
+              "execution_funding_mode",
+              "credential_owner",
+              "usage_billing_owner"
+            ]
+          },
+          "else": {
+            "properties": { "generation_mode": { "enum": ["deterministic", "manual"] } },
+            "not": {
+              "anyOf": [
+                { "required": ["agent_runner_binding_digest"] },
+                { "required": ["model_route_binding_digest"] },
+                { "required": ["execution_funding_mode"] },
+                { "required": ["credential_owner"] },
+                { "required": ["usage_billing_owner"] }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "separation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verifier_role",
+        "fresh_process",
+        "fresh_verification_view",
+        "candidate_view_read_only",
+        "agent_runner_credentials_present",
+        "model_credentials_present",
+        "generation_evidence_write_handle_present",
+        "self_verification_allowed"
+      ],
+      "properties": {
+        "verifier_role": { "const": "independent_deterministic_verifier" },
+        "fresh_process": { "const": true },
+        "fresh_verification_view": { "const": true },
+        "candidate_view_read_only": { "const": true },
+        "agent_runner_credentials_present": { "const": false },
+        "model_credentials_present": { "const": false },
+        "generation_evidence_write_handle_present": { "const": false },
+        "self_verification_allowed": { "const": false }
+      }
+    },
+    "frozenInputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commands_digest",
+        "verification_config_digest",
+        "toolchain_digest",
+        "fixtures_digest",
+        "environment_digest",
+        "isolation_backend_id",
+        "isolation_backend_version",
+        "isolation_configuration_digest",
+        "isolation_qualification_digest",
+        "mounts_digest",
+        "resource_limits_digest",
+        "offline_by_default",
+        "lifecycle_scripts_allowed"
+      ],
+      "properties": {
+        "commands_digest": { "$ref": "#/$defs/digest" },
+        "verification_config_digest": { "$ref": "#/$defs/digest" },
+        "toolchain_digest": { "$ref": "#/$defs/digest" },
+        "fixtures_digest": { "$ref": "#/$defs/digest" },
+        "environment_digest": { "$ref": "#/$defs/digest" },
+        "isolation_backend_id": { "$ref": "#/$defs/identifier" },
+        "isolation_backend_version": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "isolation_configuration_digest": { "$ref": "#/$defs/digest" },
+        "isolation_qualification_digest": { "$ref": "#/$defs/digest" },
+        "mounts_digest": { "$ref": "#/$defs/digest" },
+        "resource_limits_digest": { "$ref": "#/$defs/digest" },
+        "offline_by_default": { "const": true },
+        "lifecycle_scripts_allowed": { "const": false }
+      }
+    },
+    "commandResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command_id", "command_digest", "exit_code", "result", "output_digest", "pre_existing_failure"],
+      "properties": {
+        "command_id": { "$ref": "#/$defs/identifier" },
+        "command_digest": { "$ref": "#/$defs/digest" },
+        "exit_code": { "type": "integer", "minimum": 0, "maximum": 255 },
+        "result": { "enum": ["passed", "failed", "not_run"] },
+        "output_digest": { "$ref": "#/$defs/digest" },
+        "pre_existing_failure": { "type": "boolean" }
+      }
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_kind", "evidence_digest", "candidate_head"],
+      "properties": {
+        "evidence_kind": {
+          "enum": ["static_analysis", "repository_commands", "contract_replay", "exact_head_workflow_outcome", "sandbox_observation"]
+        },
+        "evidence_digest": { "$ref": "#/$defs/digest" },
+        "candidate_head": { "$ref": "#/$defs/gitCommit" },
+        "sandbox_entrypoint_profile_digest": { "$ref": "#/$defs/digest" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "evidence_kind": { "const": "sandbox_observation" } },
+            "required": ["evidence_kind"]
+          },
+          "then": { "required": ["sandbox_entrypoint_profile_digest"] }
+        }
+      ]
+    },
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_digest", "status", "safe_to_persist", "safe_for_api_provider", "raw_logs_persisted", "credentials_persisted"],
+      "properties": {
+        "policy_digest": { "$ref": "#/$defs/digest" },
+        "status": { "const": "passed" },
+        "safe_to_persist": { "const": true },
+        "safe_for_api_provider": { "const": false },
+        "raw_logs_persisted": { "const": false },
+        "credentials_persisted": { "const": false }
+      }
+    },
+    "cleanup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["processes_terminated", "verification_view_removed", "mounts_removed", "orphaned_resources", "evidence_digest"],
+      "properties": {
+        "processes_terminated": { "const": true },
+        "verification_view_removed": { "const": true },
+        "mounts_removed": { "const": true },
+        "orphaned_resources": { "const": false },
+        "evidence_digest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

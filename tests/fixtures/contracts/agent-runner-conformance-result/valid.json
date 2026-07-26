@@ -1,0 +1,80 @@
+{
+  "object_type": "lumyn.agent_runner_conformance_result",
+  "schema_version": "1.0",
+  "result_id": "conformance-codex-1-2-3",
+  "result_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+  "created_at": "2026-07-26T12:25:00Z",
+  "valid_until": "2026-08-26T12:25:00Z",
+  "verified_by": "independent_lumyn_conformance_harness",
+  "runner_manifest_id": "runner-codex-1-2-3",
+  "runner_manifest_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+  "adapter": "codex",
+  "adapter_version": "1.2.3",
+  "agent_runner_vendor": "openai",
+  "executable": {
+    "canonical_path": "/opt/lumyn/runners/codex",
+    "source_type": "vendor_signed_release",
+    "source_uri": "https://downloads.example.test/codex/1.2.3/codex",
+    "digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+    "repository_path_shadowing_rejected": true
+  },
+  "suite": {
+    "suite_id": "lumyn.agent_runner_conformance",
+    "version": "1.0.0",
+    "digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+  },
+  "auth_and_entitlement": {
+    "auth_mode": "consumer_account",
+    "entitlement_class": "enterprise_noninteractive",
+    "noninteractive_automation_allowed": true,
+    "secret_or_account_value_recorded": false
+  },
+  "actual_model_route": {
+    "model_provider": "openai",
+    "endpoint": "https://api.openai.com/v1/responses",
+    "model_route": "openai:gpt-5-codex",
+    "model_version": "2026-07-01",
+    "opaque": false,
+    "mutable_mid_run": false
+  },
+  "native_configuration_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+  "host_isolation_qualification_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+  "control_results": {
+    "canonical_executable": true,
+    "clean_ephemeral_session": true,
+    "neutral_home_and_config": true,
+    "repository_path_shadowing_rejected": true,
+    "noninteractive_model_identity": true,
+    "structured_lifecycle": true,
+    "malformed_output_fail_closed": true,
+    "cancellation_fail_closed": true,
+    "native_configuration_disclosed": true,
+    "executable_extensions_prohibited": true,
+    "host_isolation_enforced": true,
+    "resource_exhaustion_fail_closed": true,
+    "silent_fallback_rejected": true,
+    "self_approval_rejected": true,
+    "self_verification_rejected": true,
+    "remote_delivery_rejected": true
+  },
+  "test_cases": [
+    {
+      "case_id": "case-agent-contract-gauntlet",
+      "status": "passed",
+      "evidence_digest": "sha256:9898989898989898989898989898989898989898989898989898989898989898"
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 0,
+    "blocked": 0
+  },
+  "live_canary": {
+    "approved": true,
+    "status": "passed",
+    "evidence_digest": "sha256:9797979797979797979797979797979797979797979797979797979797979797"
+  },
+  "qualification_status": "passed",
+  "launch_eligible": true,
+  "migration_verification_claim": "none"
+}

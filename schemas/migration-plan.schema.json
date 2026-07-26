@@ -1,0 +1,351 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.migration_plan.schema.json",
+  "title": "MigrationPlan",
+  "description": "A no-write, consumer-authorized migration plan with one explicit route per item.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "object_type",
+    "schema_version",
+    "plan_id",
+    "plan_digest",
+    "created_at",
+    "event_id",
+    "contract_digest",
+    "installation_id",
+    "authorization_snapshot_digest",
+    "repository_base",
+    "integration_graph_digest",
+    "impact_report_digest",
+    "planning_mode",
+    "mutation_observed",
+    "plan_status",
+    "items",
+    "verification",
+    "delivery",
+    "approval",
+    "residual_risks"
+  ],
+  "properties": {
+    "object_type": { "const": "lumyn.migration_plan" },
+    "schema_version": { "const": "1.0" },
+    "plan_id": { "$ref": "#/$defs/id" },
+    "plan_digest": { "$ref": "#/$defs/digest" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "event_id": { "$ref": "#/$defs/id" },
+    "contract_digest": { "$ref": "#/$defs/digest" },
+    "installation_id": { "$ref": "#/$defs/id" },
+    "authorization_snapshot_digest": { "$ref": "#/$defs/digest" },
+    "repository_base": { "$ref": "#/$defs/gitDigest" },
+    "integration_graph_digest": { "$ref": "#/$defs/digest" },
+    "impact_report_digest": { "$ref": "#/$defs/digest" },
+    "planning_mode": { "const": "read_only" },
+    "mutation_observed": { "const": false },
+    "plan_status": { "type": "string", "enum": ["ready", "needs_input", "blocked"] },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/item" }
+    },
+    "verification": { "$ref": "#/$defs/verification" },
+    "delivery": { "$ref": "#/$defs/delivery" },
+    "approval": { "$ref": "#/$defs/approval" },
+    "residual_risks": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "plan_status": { "const": "ready" } }, "required": ["plan_status"] },
+      "then": {
+        "properties": {
+          "items": { "items": { "properties": { "route": { "enum": ["deterministic", "agent_assisted", "manual"] } }, "required": ["route"] } },
+          "approval": { "properties": { "decision": { "const": "approved" } } }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "plan_status": { "const": "needs_input" } }, "required": ["plan_status"] },
+      "then": {
+        "properties": {
+          "items": { "contains": { "properties": { "route": { "const": "needs_input" } }, "required": ["route"] } },
+          "approval": { "properties": { "decision": { "const": "paused" } } }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "plan_status": { "const": "blocked" } }, "required": ["plan_status"] },
+      "then": {
+        "properties": {
+          "items": { "contains": { "properties": { "route": { "const": "blocked" } }, "required": ["route"] } },
+          "approval": { "properties": { "decision": { "enum": ["paused", "denied"] } } }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{2,127}$" },
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "gitDigest": { "type": "string", "pattern": "^[a-f0-9]{40,64}$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "anyOf": [
+          { "pattern": "^/" },
+          { "pattern": "(^|/)\\.\\.(/|$)" },
+          { "pattern": "[?*\\\\]" }
+        ]
+      }
+    },
+    "stringList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plan_item_id",
+        "change_item_id",
+        "impact_finding_id",
+        "graph_node_ids",
+        "route",
+        "route_authority",
+        "planned_files",
+        "dependency_intent",
+        "rationale",
+        "required_inputs"
+      ],
+      "properties": {
+        "plan_item_id": { "$ref": "#/$defs/id" },
+        "change_item_id": { "$ref": "#/$defs/id" },
+        "impact_finding_id": { "$ref": "#/$defs/id" },
+        "graph_node_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "route": { "type": "string", "enum": ["deterministic", "agent_assisted", "manual", "needs_input", "blocked"] },
+        "route_authority": { "const": "api_consumer_organization" },
+        "planned_files": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/relativePath" }
+        },
+        "dependency_intent": { "type": "string", "minLength": 1 },
+        "rationale": { "type": "string", "minLength": 1 },
+        "required_inputs": { "$ref": "#/$defs/stringList" },
+        "deterministic_recipe": { "$ref": "#/$defs/deterministicRecipe" },
+        "agent_route": { "$ref": "#/$defs/agentRoute" },
+        "manual_actor_role": { "const": "consumer_maintainer_or_lumyn_operator" },
+        "block_reason": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "route": { "const": "deterministic" } }, "required": ["route"] },
+          "then": { "required": ["deterministic_recipe"], "properties": { "planned_files": { "minItems": 1 }, "required_inputs": { "maxItems": 0 } } },
+          "else": { "not": { "required": ["deterministic_recipe"] } }
+        },
+        {
+          "if": { "properties": { "route": { "const": "agent_assisted" } }, "required": ["route"] },
+          "then": { "required": ["agent_route"], "properties": { "planned_files": { "minItems": 1 }, "required_inputs": { "maxItems": 0 } } },
+          "else": { "not": { "required": ["agent_route"] } }
+        },
+        {
+          "if": { "properties": { "route": { "const": "manual" } }, "required": ["route"] },
+          "then": { "required": ["manual_actor_role"], "properties": { "planned_files": { "minItems": 1 } } },
+          "else": { "not": { "required": ["manual_actor_role"] } }
+        },
+        {
+          "if": { "properties": { "route": { "const": "needs_input" } }, "required": ["route"] },
+          "then": { "properties": { "required_inputs": { "minItems": 1 }, "planned_files": { "maxItems": 0 } } }
+        },
+        {
+          "if": { "properties": { "route": { "const": "blocked" } }, "required": ["route"] },
+          "then": { "required": ["block_reason"], "properties": { "planned_files": { "maxItems": 0 } } },
+          "else": { "not": { "required": ["block_reason"] } }
+        }
+      ]
+    },
+    "deterministicRecipe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recipe_id", "recipe_version", "recipe_digest"],
+      "properties": {
+        "recipe_id": { "$ref": "#/$defs/id" },
+        "recipe_version": { "type": "string", "minLength": 1 },
+        "recipe_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "agentRoute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selected_by",
+        "runner_manifest_id",
+        "runner_manifest_digest",
+        "adapter",
+        "adapter_version",
+        "executable_digest",
+        "conformance_result_digest",
+        "qualification_status",
+        "agent_route_topology",
+        "execution_funding_mode",
+        "credential_owner",
+        "usage_billing_owner",
+        "model",
+        "native_configuration_digest",
+        "model_data_policy_digest",
+        "context_policy_digest",
+        "network_scopes",
+        "credential_scopes",
+        "allowed_tools",
+        "allowed_commands",
+        "budgets",
+        "no_silent_fallback"
+      ],
+      "properties": {
+        "selected_by": { "const": "api_consumer_organization" },
+        "runner_manifest_id": { "$ref": "#/$defs/id" },
+        "runner_manifest_digest": { "$ref": "#/$defs/digest" },
+        "adapter": { "type": "string", "enum": ["codex", "claude_code"] },
+        "adapter_version": { "type": "string", "minLength": 1 },
+        "executable_digest": { "$ref": "#/$defs/digest" },
+        "conformance_result_digest": { "$ref": "#/$defs/digest" },
+        "qualification_status": { "const": "qualified" },
+        "agent_route_topology": { "type": "string", "enum": ["local_runtime", "runner_mediated", "direct_model", "hybrid"] },
+        "execution_funding_mode": { "type": "string", "enum": ["consumer_managed", "provider_sponsored_lumyn_managed"] },
+        "credential_owner": { "type": "string", "enum": ["api_consumer_organization", "lumyn_operator"] },
+        "usage_billing_owner": { "type": "string", "enum": ["api_consumer_organization", "lumyn_operator"] },
+        "model": { "$ref": "#/$defs/model" },
+        "native_configuration_digest": { "$ref": "#/$defs/digest" },
+        "model_data_policy_digest": { "$ref": "#/$defs/digest" },
+        "context_policy_digest": { "$ref": "#/$defs/digest" },
+        "network_scopes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "enum": ["agent_runner_network", "model_network"] }
+        },
+        "credential_scopes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "enum": ["agent_runner_credential", "model_credential"] }
+        },
+        "allowed_tools": { "$ref": "#/$defs/stringList" },
+        "allowed_commands": { "$ref": "#/$defs/stringList" },
+        "budgets": { "$ref": "#/$defs/budgets" },
+        "no_silent_fallback": { "const": true }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "execution_funding_mode": { "const": "consumer_managed" } } },
+          "then": { "properties": { "credential_owner": { "const": "api_consumer_organization" }, "usage_billing_owner": { "const": "api_consumer_organization" } } },
+          "else": { "properties": { "credential_owner": { "const": "lumyn_operator" }, "usage_billing_owner": { "const": "lumyn_operator" } } }
+        },
+        {
+          "if": { "properties": { "agent_route_topology": { "const": "local_runtime" } } },
+          "then": { "properties": { "network_scopes": { "maxItems": 0 }, "credential_scopes": { "maxItems": 0 } } }
+        },
+        {
+          "if": { "properties": { "agent_route_topology": { "const": "runner_mediated" } } },
+          "then": {
+            "properties": {
+              "network_scopes": { "contains": { "const": "agent_runner_network" } },
+              "credential_scopes": { "contains": { "const": "agent_runner_credential" } }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "agent_route_topology": { "const": "direct_model" } } },
+          "then": {
+            "properties": {
+              "network_scopes": { "contains": { "const": "model_network" } },
+              "credential_scopes": { "contains": { "const": "model_credential" } }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "agent_route_topology": { "const": "hybrid" } } },
+          "then": {
+            "properties": {
+              "network_scopes": { "allOf": [{ "contains": { "const": "agent_runner_network" } }, { "contains": { "const": "model_network" } }] },
+              "credential_scopes": { "allOf": [{ "contains": { "const": "agent_runner_credential" } }, { "contains": { "const": "model_credential" } }] }
+            }
+          }
+        }
+      ]
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_provider", "endpoint", "model_route", "model_version", "opaque", "mutable_mid_run"],
+      "properties": {
+        "model_provider": { "type": "string", "minLength": 1 },
+        "endpoint": { "type": "string", "minLength": 1 },
+        "model_route": { "type": "string", "minLength": 1 },
+        "model_version": { "type": "string", "minLength": 1 },
+        "opaque": { "const": false },
+        "mutable_mid_run": { "const": false }
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_files", "max_lines", "max_diff_bytes", "max_turns", "max_tokens", "max_seconds", "max_attempts", "max_cost_usd"],
+      "properties": {
+        "max_files": { "type": "integer", "minimum": 1 },
+        "max_lines": { "type": "integer", "minimum": 1 },
+        "max_diff_bytes": { "type": "integer", "minimum": 1 },
+        "max_turns": { "type": "integer", "minimum": 1 },
+        "max_tokens": { "type": "integer", "minimum": 1 },
+        "max_seconds": { "type": "integer", "minimum": 1 },
+        "max_attempts": { "type": "integer", "minimum": 1, "maximum": 3 },
+        "max_cost_usd": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["performed_by", "generation_session_evidence_write_access", "commands", "stages", "required_level"],
+      "properties": {
+        "performed_by": { "const": "independent_lumyn_verifier" },
+        "generation_session_evidence_write_access": { "const": false },
+        "commands": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "stages": { "$ref": "#/$defs/stringList" },
+        "required_level": {
+          "type": "string",
+          "enum": ["static_verified", "repo_verified", "workflow_contract_replay_passed", "workflow_verified_replay", "workflow_verified_mock", "workflow_verified_sandbox"]
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "default_branch_write", "auto_merge"],
+      "properties": {
+        "mode": { "type": "string", "enum": ["patch", "local_branch", "pr_bundle", "remote_branch", "draft_pr"] },
+        "default_branch_write": { "const": false },
+        "auto_merge": { "const": false }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authorization_mode", "actor_role", "plan_digest", "decision", "decided_at"],
+      "properties": {
+        "authorization_mode": { "type": "string", "enum": ["per_event_approval", "installed_preauthorization"] },
+        "actor_role": { "const": "consumer_maintainer" },
+        "plan_digest": { "$ref": "#/$defs/digest" },
+        "decision": { "type": "string", "enum": ["approved", "paused", "denied"] },
+        "decided_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

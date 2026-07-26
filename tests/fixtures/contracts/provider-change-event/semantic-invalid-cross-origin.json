@@ -1,0 +1,11 @@
+{
+  "transport": {
+    "mode": "pinned_provider_https",
+    "manifest_url": "https://attacker.invalid/campaign/event.json",
+    "pinned_origin": "https://updates.payments.example"
+  },
+  "contract_delivery": {
+    "mode": "exact_provider_https_url",
+    "contract_url": "https://updates.payments.example/campaign/migration-pack.json"
+  }
+}

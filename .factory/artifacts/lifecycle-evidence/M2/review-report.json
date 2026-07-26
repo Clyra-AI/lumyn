@@ -1,0 +1,279 @@
+{
+  "artifact_type": "review_report",
+  "schema_version": "0.1",
+  "task_id": "M2",
+  "work_item_id": "lumyn-v3-m2",
+  "review_type": "security",
+  "review_scope": [
+    "schemas/",
+    "internal/agent/",
+    "internal/authorization/",
+    "internal/change/",
+    "internal/evidence/",
+    "internal/installation/",
+    "internal/redaction/",
+    "internal/status/",
+    "tests/fixtures/contracts/",
+    "docs/architecture/adr-0007-executable-v3-migration-contracts.md",
+    "docs/architecture/architecture_guides.md",
+    "docs/dev/cli-v3-contract.md",
+    "docs/dev/dev_guides.md",
+    ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+    ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.json"
+  ],
+  "reviewer_class": "security_reviewer",
+  "reviewer_id": "security-reviewer:m2-independent-final-5",
+  "producer": {
+    "worker": "code-review",
+    "producer_id": "security-reviewer:m2-independent-final-5",
+    "producer_class": "security_reviewer"
+  },
+  "current_work": {
+    "validation_run_id": "validation:2026-07-26T15:34:54Z:af085bbc5cd84b0a98c8388214ac6de5",
+    "candidate_digest": "sha256:44c3b0fe8a422324e6dd08bf24c6dbce2e477225b8783fa4ab5d4c1db97da8df",
+    "work_proof_markers": [
+      {
+        "ref": ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json",
+        "sha256": "sha256:8553a7c8917f4ec47eab2950f092c84e4bf8b6948db2aba5d8979d0e28f04d28"
+      },
+      {
+        "ref": ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.json",
+        "sha256": "sha256:69d51d5807e3f62427f9fd5a5ea056337196acf5e44eb7a13242d0ddd1cae6f7"
+      },
+      {
+        "ref": ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.json",
+        "sha256": "sha256:c82342a53b6e6784efaacd27528d9aa1584ee924cfeae47ed8abd3753e3847dc"
+      },
+      {
+        "ref": ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.json",
+        "sha256": "sha256:8772ffe9db05dbde8938f83d9b38241a3993ea973d9b787e70996beee081731f"
+      }
+    ]
+  },
+  "risk_class": "high",
+  "context_isolation": {
+    "allowed_sources": [
+      "execution_plan",
+      "task_packet",
+      "candidate_diff",
+      "repository_contracts",
+      "schemas",
+      "fixtures",
+      "tests",
+      "validation_run_summary",
+      "work_proof_markers",
+      "raw_validation_logs",
+      "reviewer_command_output"
+    ],
+    "disallowed_sources": [
+      "private_builder_notes",
+      "unpromoted_chat_reasoning"
+    ],
+    "builder_notes_authoritative": false
+  },
+  "findings": [
+    {
+      "id": "M2-SEC-001",
+      "severity": "P1",
+      "summary": "Bind provider manifest and contract fetches to the installed HTTPS origin.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": "internal/installation/channel.go:19; internal/change/event.go:66; internal/authorization/policy.go:162",
+      "failure_scenario": "A manifest or separately fetched migration contract names an origin different from the installed provider channel.",
+      "impact": "Cross-origin provider intent could otherwise inherit installed-preauthorization trust.",
+      "minimum_fix": "Implemented exact normalized HTTPS-origin checks for installation manifests and event manifest or contract URLs, with persisted cross-origin negative fixtures and semantic tests.",
+      "promotion_effect": "resolved_no_block",
+      "architecture_boundary": "provider channel and non-executable change-intent intake",
+      "evidence_refs": [
+        "internal/installation/channel.go",
+        "internal/installation/channel_test.go",
+        "internal/change/event.go",
+        "internal/change/event_test.go",
+        "tests/fixtures/contracts/consumer-installation/semantic-invalid-cross-origin.json",
+        "tests/fixtures/contracts/provider-change-event/semantic-invalid-cross-origin.json"
+      ]
+    },
+    {
+      "id": "M2-SEC-002",
+      "severity": "P1",
+      "summary": "Enforce each persisted installation action ceiling without latent authority.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": "schemas/consumer-installation.schema.json:923; internal/authorization/policy.go:445; schemas/m2_security_test.go:136",
+      "failure_scenario": "A lower action mode carries capabilities that its label does not authorize, including remote GitHub delivery below open_draft_pr.",
+      "impact": "A persisted installation could otherwise widen consumer-approved side effects.",
+      "minimum_fix": "Implemented mode-specific schema and semantic ceilings: notify_only grants no repository access or execution, scan_only remains read-only and external-route-free, and prepare_patch may use approved local patch authority but cannot carry GitHub branch, PR, or token issuance authority.",
+      "promotion_effect": "resolved_no_block",
+      "architecture_boundary": "Consumer Installation and event-specific non-widening authorization",
+      "evidence_refs": [
+        "schemas/consumer-installation.schema.json",
+        "schemas/m2_security_test.go",
+        "internal/authorization/policy.go",
+        "internal/authorization/policy_test.go"
+      ]
+    },
+    {
+      "id": "M2-SEC-003",
+      "severity": "P1",
+      "summary": "Derive Agent Runner qualification from an all-passed exact test set and approved canary.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": "schemas/agent-runner-conformance-result.schema.json:67; internal/agent/conformance.go:34; schemas/m2_security_test.go:129",
+      "failure_scenario": "A failed or blocked conformance case is hidden behind green summary counters, or a passing qualification has no approved canary evidence.",
+      "impact": "An unsafe Agent Runner adapter could otherwise become launch-eligible.",
+      "minimum_fix": "Implemented all-passed schema constraints and semantic derivation of unique cases and summary counts, plus an approved passing canary with evidence for launch eligibility.",
+      "promotion_effect": "resolved_no_block",
+      "architecture_boundary": "replaceable Agent Runner qualification and launch authority",
+      "evidence_refs": [
+        "schemas/agent-runner-conformance-result.schema.json",
+        "schemas/m2_security_test.go",
+        "internal/agent/conformance.go",
+        "internal/agent/conformance_test.go"
+      ]
+    },
+    {
+      "id": "M2-SEC-004",
+      "severity": "P1",
+      "summary": "Bind provider status to the exact migration chain and status-specific evidence.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": "schemas/provider-status-projection.schema.json:53; internal/evidence/binding.go:35; internal/status/projection.go:73",
+      "failure_scenario": "A projection substitutes another run or candidate, or reports retired using merge-only evidence.",
+      "impact": "Provider-visible rollout state could otherwise overstate or cross-contaminate consumer progress.",
+      "minimum_fix": "Implemented exact run, installation, authorization, plan, candidate, verification, and delivery binding rules with deterministic invalidation and a distinct retirement_confirmation requirement.",
+      "promotion_effect": "resolved_no_block",
+      "architecture_boundary": "consumer-consented provider status projection",
+      "evidence_refs": [
+        "schemas/provider-status-projection.schema.json",
+        "tests/fixtures/contracts/provider-status-projection/cross-run-substitution.json",
+        "tests/fixtures/contracts/provider-status-projection/invalid-retired-merge-only.json",
+        "internal/evidence/binding.go",
+        "internal/evidence/binding_test.go",
+        "internal/status/projection.go",
+        "internal/status/projection_test.go"
+      ]
+    },
+    {
+      "id": "M2-SEC-005",
+      "severity": "P1",
+      "summary": "Validate provider-visible payloads through a strict typed fail-closed vocabulary.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": "internal/redaction/provider_payload.go:129; internal/redaction/provider_payload_test.go:59",
+      "failure_scenario": "Raw consumer data or a credential is hidden under an innocuous arbitrary or nested field and sent to the API Provider.",
+      "impact": "Consumer-private source, prompts, traces, sessions, or credentials could otherwise cross the provider boundary.",
+      "minimum_fix": "Implemented strict typed decoding with unknown-field rejection, fixed consented vocabulary, nested structural validation, privacy constants, and adversarial secret or private-material tests.",
+      "promotion_effect": "resolved_no_block",
+      "architecture_boundary": "redaction before persistence and API Provider disclosure",
+      "evidence_refs": [
+        "internal/redaction/provider_payload.go",
+        "internal/redaction/provider_payload_test.go",
+        "schemas/provider-status-projection.schema.json"
+      ]
+    },
+    {
+      "id": "M2-SEC-006",
+      "severity": "P1",
+      "summary": "Bind trusted validation evidence to the canonical candidate and exact command outputs.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": ".factory/artifacts/task-runs/M2/validation-run-summary.json; .factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json",
+      "failure_scenario": "Free-text or stale validation claims are copied forward after candidate or command output changes.",
+      "impact": "High-risk promotion could otherwise become false-green without cryptographic reconciliation.",
+      "minimum_fix": "The trusted runner now emits one validation_run_id, the canonical base-plus-candidate binding, ordered command results, per-command runner identity and timestamps, and SHA-256-bound markers and stdout or stderr logs; this review independently recomputed every binding.",
+      "promotion_effect": "resolved_no_block",
+      "architecture_boundary": "Factory validation, review, and promotion evidence",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json",
+        ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.json",
+        ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.json",
+        ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.json"
+      ]
+    },
+    {
+      "id": "M2-SEC-007",
+      "severity": "P2",
+      "summary": "Complete sandbox isolation binding before later runtimes can consume the manifest.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": "internal/evidence/execution_boundary.go:269; internal/evidence/execution_boundary.go:306; internal/evidence/execution_boundary.go:314; internal/evidence/execution_boundary.go:343; schemas/consumer-execution-manifest.schema.json:1091; schemas/migration-verification.schema.json:123",
+      "failure_scenario": "A schema-valid sandbox profile can set its neutral home or temp root to the runtime-resolved host home or an OS credential-store path because only mount sources are compared with the host boundary. Its single sandbox credential grant may also carry extra scope IDs, and duplicate network or credential grant IDs remain ambiguous because uniqueness is checked only over complete JSON objects. The semantic boundary omits sandbox resource quotas, so profile and manifest isolation quotas can disagree. Separately, workflow_verified_replay or workflow_verified_mock returns before comparing exact-head outcome evidence with the candidate head; only workflow_verified_sandbox performs that comparison.",
+      "impact": "A later M7 or M8 runtime could accept a persisted contract that exposes host state, widens credential scope, resolves an ambiguous grant, weakens sandbox resource limits, or reports a stale workflow outcome as exact-head verified. These are fail-open gaps on the host-isolation and proof-integrity boundaries.",
+      "minimum_fix": "Implemented runtime-host-bound neutral-root overlap rejection, exact one-profile sandbox credential scope, globally unique network and credential grant IDs, positive semantic resource-quota validation, current-candidate binding for every observed verification item, exact-head outcome requirements for replay and mock verification, and rejection of sandbox-profile bindings on non-sandbox evidence.",
+      "promotion_effect": "resolved_no_block",
+      "architecture_boundary": "host-enforced command and credential-bearing sandbox isolation",
+      "evidence_refs": [
+        "schemas/consumer-execution-manifest.schema.json",
+        "schemas/migration-verification.schema.json",
+        "tests/fixtures/contracts/consumer-execution-manifest/valid-sandbox.json",
+        "internal/evidence/execution_boundary.go",
+        "internal/evidence/execution_boundary_test.go",
+        "schemas/migration-verification.schema.json"
+      ]
+    }
+  ],
+  "verdict": "approved",
+  "required_fixes": [],
+  "residual_risks": [
+    "M2 is contract-only; provider fetch, repository analysis, Agent Runner launch, credential issuance, verification, GitHub delivery, and provider reporting runtime behavior remain unproven until their later milestones produce direct evidence.",
+    "The repository-local compiled task still uses the generic code_security_or_architecture_by_task_risk review-type placeholder and factoryd remains explicitly unqualified; this attended security review grants no factoryd dispatch authority.",
+    "Remote CI and CodeQL, current-head passive Codex review, PR lifecycle evidence, merge, and post-main monitoring remain pending lifecycle gates and are not granted by this pre-PR security approval."
+  ],
+  "evidence_refs": [
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+    ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+    "schemas/m2_security_test.go",
+    "schemas/v3_contracts_test.go",
+    "internal/agent/conformance_test.go",
+    "internal/authorization/policy_test.go",
+    "internal/change/event_test.go",
+    "internal/evidence/binding_test.go",
+    "internal/installation/channel_test.go",
+    "internal/redaction/provider_payload_test.go",
+    "internal/status/projection_test.go",
+    "docs/architecture/adr-0007-executable-v3-migration-contracts.md"
+  ],
+  "work_proof_marker_refs": [
+    ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.json"
+  ],
+  "approval_effect": {
+    "promotion_decision": "ready_for_pr",
+    "approvals_granted": [
+      "security_review_passed"
+    ],
+    "blocks_promotion": false
+  },
+  "systems_questions": {
+    "state_impact": [
+      "M2 introduces persisted authority, Agent Runner qualification, evidence, verification, and provider-reporting contracts for later runtimes."
+    ],
+    "source_of_truth_changes": [
+      "The v3 schemas and semantic validators are the M2 contract source of truth for provider intake, consumer authorization, agent qualification, evidence, sandbox isolation, redaction, and provider status."
+    ],
+    "feedback_plan": [
+      "Future runtime milestones must exercise these contracts at the authoritative execution boundary and feed any rejected bypass or escaped false-green path back into adversarial fixtures and security review."
+    ],
+    "blast_radius": [
+      "The contracts affect every later provider-event, repository-command, Agent Runner, verification, live-sandbox, delivery, and provider-reporting milestone; those runtimes remain unimplemented and must not claim M2 contract evidence as direct runtime proof."
+    ],
+    "rollback_or_deletion_test": [
+      "The adversarial validator tests confirm that changing a protected neutral root, sandbox credential scope, grant identity, resource quota, candidate head, profile digest, endpoint or operation, or cleanup posture invalidates the manifest or dependent verification evidence."
+    ],
+    "system_model_summary": "All seven security findings are independently resolved. The current candidate is bound to trusted passing validation evidence, and the declarative contracts now fail closed across provider origin, consumer authority, Agent Runner qualification, provider-visible status, typed redaction, validation provenance, sandbox isolation, and exact-head verification boundaries."
+  },
+  "created_at": "2026-07-26T15:37:21Z"
+}

@@ -1,0 +1,446 @@
+{
+  "artifact_type": "validation_report",
+  "schema_version": "0.1",
+  "task_id": "M2",
+  "work_item_id": "lumyn-v3-m2",
+  "validation_run_id": "validation:2026-07-26T15:34:54Z:af085bbc5cd84b0a98c8388214ac6de5",
+  "candidate_digest": "sha256:44c3b0fe8a422324e6dd08bf24c6dbce2e477225b8783fa4ab5d4c1db97da8df",
+  "validation_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
+  "test_intent": [
+    {
+      "behavior": "Reject unauthenticated, replayed, stale, wrong-audience, cross-origin, superseded, or executable provider change input.",
+      "expected_signal": "Schema and semantic validators fail closed before consumer authority or mutation is considered."
+    },
+    {
+      "behavior": "Derive event authority without widening installation action, paths, commands, capabilities, disclosure, budgets, runner/model route, credentials, or delivery.",
+      "expected_signal": "Adversarial authorization and action-ceiling tests reject every widened or latent grant."
+    },
+    {
+      "behavior": "Qualify only complete all-pass Agent Runner results and keep consumer-private data out of provider-visible status.",
+      "expected_signal": "False-green conformance and untyped or secret-bearing projection payloads are rejected."
+    },
+    {
+      "behavior": "Bind command, sandbox, verification, delivery, and provider status evidence to exact current artifacts.",
+      "expected_signal": "Mount, executable-root, sandbox-profile, candidate-head, run, digest, and status-evidence substitutions fail."
+    }
+  ],
+  "red_evidence": [
+    {
+      "check": "independent M2 security review",
+      "summary": "The first independent pass exposed six P1 trust-boundary gaps; repair review exposed the under-enforced command/sandbox isolation P2 before promotion.",
+      "evidence_refs": [
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ]
+    },
+    {
+      "check": "red-first adversarial tests",
+      "summary": "Named negative tests and fixtures cover cross-origin substitution, action-ceiling authority, false-green conformance, cross-run status, typed disclosure, host-home mounts, executable-root escape, sandbox grant drift, and stale workflow evidence.",
+      "evidence_refs": [
+        "schemas/m2_security_test.go",
+        "internal/evidence/execution_boundary_test.go",
+        "tests/fixtures/contracts/"
+      ]
+    }
+  ],
+  "green_evidence": [
+    {
+      "check": "task-declared validation suite",
+      "summary": "All four exact M2 validation commands passed under the trusted Factory validation runner.",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json",
+        ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.json",
+        ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.json",
+        ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.json"
+      ]
+    },
+    {
+      "check": "independent security re-review",
+      "summary": "All seven findings were independently reverified as resolved on the exact current validation run and candidate digest.",
+      "evidence_refs": [
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ]
+    }
+  ],
+  "work_proof_marker_refs": [
+    ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.json"
+  ],
+  "test_scope": [
+    "schemas/",
+    "tests/fixtures/contracts/",
+    "internal/agent/",
+    "internal/authorization/",
+    "internal/change/",
+    "internal/evidence/",
+    "internal/installation/",
+    "internal/redaction/",
+    "internal/status/",
+    "docs/",
+    "CHANGELOG.md"
+  ],
+  "checks": [
+    {
+      "name": "make lint-fast",
+      "status": "pass"
+    },
+    {
+      "name": "make test-fast",
+      "status": "pass"
+    },
+    {
+      "name": "make test-coverage",
+      "status": "pass"
+    },
+    {
+      "name": "python3 scripts/validate_repo_pack.py",
+      "status": "pass"
+    }
+  ],
+  "validation_commands": [
+    {
+      "command": "make lint-fast",
+      "exit_code": 0,
+      "started_at": "2026-07-26T15:34:54Z",
+      "completed_at": "2026-07-26T15:34:59Z",
+      "output_sha256": "sha256:5d9d17065c132125cedf3cc83aeb2374e90e8b2c03dd65096c19240bb6aa3347",
+      "output_ref": ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.stdout.log",
+      "runner_identity": "factory-validation-gate-attended",
+      "repo_ref": "7609e5c49c0776c1028c1aeb3e2e2ee942b613b6"
+    },
+    {
+      "command": "make test-fast",
+      "exit_code": 0,
+      "started_at": "2026-07-26T15:34:59Z",
+      "completed_at": "2026-07-26T15:35:15Z",
+      "output_sha256": "sha256:d2be927ecb234b2ac20cbf542a550003a4b0def31e2d19fc44b2f7dfe18cf97b",
+      "output_ref": ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.stdout.log",
+      "runner_identity": "factory-validation-gate-attended",
+      "repo_ref": "7609e5c49c0776c1028c1aeb3e2e2ee942b613b6"
+    },
+    {
+      "command": "make test-coverage",
+      "exit_code": 0,
+      "started_at": "2026-07-26T15:35:15Z",
+      "completed_at": "2026-07-26T15:35:34Z",
+      "output_sha256": "sha256:6ce6ef1c2cbd0b864278604370f116404bf729bf3355e5fe30f638b83ae5826d",
+      "output_ref": ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.stdout.log",
+      "runner_identity": "factory-validation-gate-attended",
+      "repo_ref": "7609e5c49c0776c1028c1aeb3e2e2ee942b613b6"
+    },
+    {
+      "command": "python3 scripts/validate_repo_pack.py",
+      "exit_code": 0,
+      "started_at": "2026-07-26T15:35:35Z",
+      "completed_at": "2026-07-26T15:35:35Z",
+      "output_sha256": "sha256:c5c211a84ffced0f3c770ee5c32e969c2fcb4ce5de4715144495243303bcf2aa",
+      "output_ref": ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.stdout.log",
+      "runner_identity": "factory-validation-gate-attended",
+      "repo_ref": "7609e5c49c0776c1028c1aeb3e2e2ee942b613b6"
+    }
+  ],
+  "changed_paths": [
+    "CHANGELOG.md",
+    "docs/architecture/adr-0007-executable-v3-migration-contracts.md",
+    "docs/architecture/architecture_guides.md",
+    "docs/dev/cli-v3-contract.md",
+    "docs/dev/dev_guides.md",
+    "docs/factory/README.md",
+    "docs/product/plan.md",
+    "docs/product/prd.md",
+    "internal/agent/conformance.go",
+    "internal/agent/conformance_test.go",
+    "internal/authorization/policy.go",
+    "internal/authorization/policy_test.go",
+    "internal/change/event.go",
+    "internal/change/event_test.go",
+    "internal/evidence/binding.go",
+    "internal/evidence/binding_test.go",
+    "internal/evidence/execution_boundary.go",
+    "internal/evidence/execution_boundary_test.go",
+    "internal/evidence/private_root.go",
+    "internal/evidence/private_root_test.go",
+    "internal/installation/channel.go",
+    "internal/installation/channel_test.go",
+    "internal/redaction/provider_payload.go",
+    "internal/redaction/provider_payload_test.go",
+    "internal/status/projection.go",
+    "internal/status/projection_test.go",
+    "schemas/agent-attempt.schema.json",
+    "schemas/agent-runner-conformance-result.schema.json",
+    "schemas/agent-runner-manifest.schema.json",
+    "schemas/campaign-summary.schema.json",
+    "schemas/candidate-manifest.schema.json",
+    "schemas/consumer-execution-manifest.schema.json",
+    "schemas/consumer-installation.schema.json",
+    "schemas/event-authorization.schema.json",
+    "schemas/export-result.schema.json",
+    "schemas/impact-report.schema.json",
+    "schemas/integration-graph.schema.json",
+    "schemas/m2_security_test.go",
+    "schemas/managed-credential-grant.schema.json",
+    "schemas/migration-pack.schema.json",
+    "schemas/migration-plan.schema.json",
+    "schemas/migration-verification.schema.json",
+    "schemas/provider-change-event.schema.json",
+    "schemas/provider-status-projection.schema.json",
+    "schemas/remediation-outcome.schema.json",
+    "schemas/schema_test.go",
+    "schemas/v3_contracts_test.go",
+    "tests/fixtures/contracts/agent-attempt/invalid.json",
+    "tests/fixtures/contracts/agent-attempt/valid.json",
+    "tests/fixtures/contracts/agent-runner-conformance-result/invalid.json",
+    "tests/fixtures/contracts/agent-runner-conformance-result/valid-claude-code.json",
+    "tests/fixtures/contracts/agent-runner-conformance-result/valid-deterministic-fake.json",
+    "tests/fixtures/contracts/agent-runner-conformance-result/valid.json",
+    "tests/fixtures/contracts/agent-runner-manifest/invalid.json",
+    "tests/fixtures/contracts/agent-runner-manifest/valid-claude-code.json",
+    "tests/fixtures/contracts/agent-runner-manifest/valid-deterministic-fake.json",
+    "tests/fixtures/contracts/agent-runner-manifest/valid.json",
+    "tests/fixtures/contracts/campaign-summary/invalid.json",
+    "tests/fixtures/contracts/campaign-summary/valid.json",
+    "tests/fixtures/contracts/candidate-manifest/invalid.json",
+    "tests/fixtures/contracts/candidate-manifest/valid.json",
+    "tests/fixtures/contracts/consumer-execution-manifest/invalid-sandbox-extra-scope.json",
+    "tests/fixtures/contracts/consumer-execution-manifest/invalid.json",
+    "tests/fixtures/contracts/consumer-execution-manifest/semantic-invalid-executable-root.json",
+    "tests/fixtures/contracts/consumer-execution-manifest/semantic-invalid-host-home-source.json",
+    "tests/fixtures/contracts/consumer-execution-manifest/valid-sandbox.json",
+    "tests/fixtures/contracts/consumer-execution-manifest/valid.json",
+    "tests/fixtures/contracts/consumer-installation/invalid.json",
+    "tests/fixtures/contracts/consumer-installation/semantic-invalid-cross-origin.json",
+    "tests/fixtures/contracts/consumer-installation/valid.json",
+    "tests/fixtures/contracts/event-authorization/invalid.json",
+    "tests/fixtures/contracts/event-authorization/valid.json",
+    "tests/fixtures/contracts/export-result/invalid.json",
+    "tests/fixtures/contracts/export-result/valid.json",
+    "tests/fixtures/contracts/impact-report/invalid.json",
+    "tests/fixtures/contracts/impact-report/valid.json",
+    "tests/fixtures/contracts/integration-graph/invalid.json",
+    "tests/fixtures/contracts/integration-graph/valid.json",
+    "tests/fixtures/contracts/managed-credential-grant/invalid.json",
+    "tests/fixtures/contracts/managed-credential-grant/valid.json",
+    "tests/fixtures/contracts/migration-pack/invalid.json",
+    "tests/fixtures/contracts/migration-pack/valid.json",
+    "tests/fixtures/contracts/migration-plan/invalid.json",
+    "tests/fixtures/contracts/migration-plan/valid.json",
+    "tests/fixtures/contracts/migration-verification/invalid.json",
+    "tests/fixtures/contracts/migration-verification/valid.json",
+    "tests/fixtures/contracts/provider-change-event/invalid.json",
+    "tests/fixtures/contracts/provider-change-event/semantic-invalid-cross-origin.json",
+    "tests/fixtures/contracts/provider-change-event/valid.json",
+    "tests/fixtures/contracts/provider-status-projection/cross-run-substitution.json",
+    "tests/fixtures/contracts/provider-status-projection/invalid-retired-merge-only.json",
+    "tests/fixtures/contracts/provider-status-projection/invalid.json",
+    "tests/fixtures/contracts/provider-status-projection/valid-early-received.json",
+    "tests/fixtures/contracts/provider-status-projection/valid-retired.json",
+    "tests/fixtures/contracts/provider-status-projection/valid.json",
+    "tests/fixtures/contracts/remediation-outcome/invalid.json",
+    "tests/fixtures/contracts/remediation-outcome/valid.json"
+  ],
+  "changed_path_context": {
+    "changed_paths": [
+      "CHANGELOG.md",
+      "docs/architecture/adr-0007-executable-v3-migration-contracts.md",
+      "docs/architecture/architecture_guides.md",
+      "docs/dev/cli-v3-contract.md",
+      "docs/dev/dev_guides.md",
+      "docs/factory/README.md",
+      "docs/product/plan.md",
+      "docs/product/prd.md",
+      "internal/agent/conformance.go",
+      "internal/agent/conformance_test.go",
+      "internal/authorization/policy.go",
+      "internal/authorization/policy_test.go",
+      "internal/change/event.go",
+      "internal/change/event_test.go",
+      "internal/evidence/binding.go",
+      "internal/evidence/binding_test.go",
+      "internal/evidence/execution_boundary.go",
+      "internal/evidence/execution_boundary_test.go",
+      "internal/evidence/private_root.go",
+      "internal/evidence/private_root_test.go",
+      "internal/installation/channel.go",
+      "internal/installation/channel_test.go",
+      "internal/redaction/provider_payload.go",
+      "internal/redaction/provider_payload_test.go",
+      "internal/status/projection.go",
+      "internal/status/projection_test.go",
+      "schemas/agent-attempt.schema.json",
+      "schemas/agent-runner-conformance-result.schema.json",
+      "schemas/agent-runner-manifest.schema.json",
+      "schemas/campaign-summary.schema.json",
+      "schemas/candidate-manifest.schema.json",
+      "schemas/consumer-execution-manifest.schema.json",
+      "schemas/consumer-installation.schema.json",
+      "schemas/event-authorization.schema.json",
+      "schemas/export-result.schema.json",
+      "schemas/impact-report.schema.json",
+      "schemas/integration-graph.schema.json",
+      "schemas/m2_security_test.go",
+      "schemas/managed-credential-grant.schema.json",
+      "schemas/migration-pack.schema.json",
+      "schemas/migration-plan.schema.json",
+      "schemas/migration-verification.schema.json",
+      "schemas/provider-change-event.schema.json",
+      "schemas/provider-status-projection.schema.json",
+      "schemas/remediation-outcome.schema.json",
+      "schemas/schema_test.go",
+      "schemas/v3_contracts_test.go",
+      "tests/fixtures/contracts/agent-attempt/invalid.json",
+      "tests/fixtures/contracts/agent-attempt/valid.json",
+      "tests/fixtures/contracts/agent-runner-conformance-result/invalid.json",
+      "tests/fixtures/contracts/agent-runner-conformance-result/valid-claude-code.json",
+      "tests/fixtures/contracts/agent-runner-conformance-result/valid-deterministic-fake.json",
+      "tests/fixtures/contracts/agent-runner-conformance-result/valid.json",
+      "tests/fixtures/contracts/agent-runner-manifest/invalid.json",
+      "tests/fixtures/contracts/agent-runner-manifest/valid-claude-code.json",
+      "tests/fixtures/contracts/agent-runner-manifest/valid-deterministic-fake.json",
+      "tests/fixtures/contracts/agent-runner-manifest/valid.json",
+      "tests/fixtures/contracts/campaign-summary/invalid.json",
+      "tests/fixtures/contracts/campaign-summary/valid.json",
+      "tests/fixtures/contracts/candidate-manifest/invalid.json",
+      "tests/fixtures/contracts/candidate-manifest/valid.json",
+      "tests/fixtures/contracts/consumer-execution-manifest/invalid-sandbox-extra-scope.json",
+      "tests/fixtures/contracts/consumer-execution-manifest/invalid.json",
+      "tests/fixtures/contracts/consumer-execution-manifest/semantic-invalid-executable-root.json",
+      "tests/fixtures/contracts/consumer-execution-manifest/semantic-invalid-host-home-source.json",
+      "tests/fixtures/contracts/consumer-execution-manifest/valid-sandbox.json",
+      "tests/fixtures/contracts/consumer-execution-manifest/valid.json",
+      "tests/fixtures/contracts/consumer-installation/invalid.json",
+      "tests/fixtures/contracts/consumer-installation/semantic-invalid-cross-origin.json",
+      "tests/fixtures/contracts/consumer-installation/valid.json",
+      "tests/fixtures/contracts/event-authorization/invalid.json",
+      "tests/fixtures/contracts/event-authorization/valid.json",
+      "tests/fixtures/contracts/export-result/invalid.json",
+      "tests/fixtures/contracts/export-result/valid.json",
+      "tests/fixtures/contracts/impact-report/invalid.json",
+      "tests/fixtures/contracts/impact-report/valid.json",
+      "tests/fixtures/contracts/integration-graph/invalid.json",
+      "tests/fixtures/contracts/integration-graph/valid.json",
+      "tests/fixtures/contracts/managed-credential-grant/invalid.json",
+      "tests/fixtures/contracts/managed-credential-grant/valid.json",
+      "tests/fixtures/contracts/migration-pack/invalid.json",
+      "tests/fixtures/contracts/migration-pack/valid.json",
+      "tests/fixtures/contracts/migration-plan/invalid.json",
+      "tests/fixtures/contracts/migration-plan/valid.json",
+      "tests/fixtures/contracts/migration-verification/invalid.json",
+      "tests/fixtures/contracts/migration-verification/valid.json",
+      "tests/fixtures/contracts/provider-change-event/invalid.json",
+      "tests/fixtures/contracts/provider-change-event/semantic-invalid-cross-origin.json",
+      "tests/fixtures/contracts/provider-change-event/valid.json",
+      "tests/fixtures/contracts/provider-status-projection/cross-run-substitution.json",
+      "tests/fixtures/contracts/provider-status-projection/invalid-retired-merge-only.json",
+      "tests/fixtures/contracts/provider-status-projection/invalid.json",
+      "tests/fixtures/contracts/provider-status-projection/valid-early-received.json",
+      "tests/fixtures/contracts/provider-status-projection/valid-retired.json",
+      "tests/fixtures/contracts/provider-status-projection/valid.json",
+      "tests/fixtures/contracts/remediation-outcome/invalid.json",
+      "tests/fixtures/contracts/remediation-outcome/valid.json"
+    ],
+    "allowed_paths": [
+      "schemas/",
+      "internal/config/",
+      "internal/pack/",
+      "internal/authorization/",
+      "internal/agent/",
+      "internal/evidence/",
+      "internal/redaction/",
+      "examples/",
+      "tests/",
+      "docs/",
+      "CHANGELOG.md",
+      "internal/change/",
+      "internal/installation/",
+      "internal/status/"
+    ],
+    "forbidden_paths": [
+      ".git/",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/",
+      ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+      ".factory/artifacts/lifecycle-evidence/M2/",
+      ".factory/artifacts/pr-lifecycle/M2/"
+    ],
+    "path_violations": []
+  },
+  "result": "pass",
+  "introduced_failures": [],
+  "pre_existing_failures": [],
+  "independent_validation": {
+    "risk_class": "high",
+    "required_level": "independent_or_human",
+    "provided_levels": [
+      "validation_gate",
+      "adversarial",
+      "security_review"
+    ],
+    "status": "satisfied",
+    "evidence_refs": [
+      ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+      ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+    ],
+    "notes": "A security reviewer independent of the implementation runner approved the exact current run, candidate digest, marker set, and raw logs after seven findings were repaired."
+  },
+  "test_first_skipped_reason": {
+    "status": "not_skipped",
+    "reason": "Red-first fixtures, named adversarial tests, and independent changes-required reviews failed before the corresponding contract repairs passed."
+  },
+  "anti_fitting_notes": [
+    "Each artifact family includes positive and material negative fixtures; semantic validators cover relationships JSON Schema cannot compare.",
+    "The independent reviewer recomputed candidate, marker, and raw-log digests and re-ran focused tests instead of accepting builder summaries.",
+    "The trusted validation suite exactly matches the four task-declared commands and excludes task/lifecycle evidence from the candidate preimage."
+  ],
+  "residual_risks": [
+    "M2 proves executable contracts only; provider fetch, repository analysis, agent execution, verification execution, GitHub delivery, and provider reporting require later milestone evidence.",
+    "factoryd dispatch remains paused because the compiled generic review-type placeholder and runtime qualification are not reconciled; this attended review grants no daemon authority.",
+    "Remote CI, CodeQL, passive current-head Codex review, merge, and post-main monitoring remain commit-push lifecycle gates."
+  ],
+  "integrated_validation": {
+    "status": "task_only",
+    "scope_summary": "The exact M2 command suite and full local pre-push gate passed in the attended branch worktree; no fresh-checkout or release-readiness claim is made.",
+    "integrated_checks": [
+      {
+        "name": "make lint-fast",
+        "status": "pass",
+        "work_proof_marker_ref": ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json"
+      },
+      {
+        "name": "make test-fast",
+        "status": "pass",
+        "work_proof_marker_ref": ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.json"
+      },
+      {
+        "name": "make test-coverage",
+        "status": "pass",
+        "work_proof_marker_ref": ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.json"
+      },
+      {
+        "name": "python3 scripts/validate_repo_pack.py",
+        "status": "pass",
+        "work_proof_marker_ref": ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.json"
+      }
+    ],
+    "fresh_checkout": {
+      "required": false,
+      "status": "not_required",
+      "work_proof_marker_refs": [],
+      "notes": "M2 is a contract-only task; remote CI supplies an independent checkout after push."
+    },
+    "docs_schema_parity": {
+      "status": "pass",
+      "evidence_refs": [
+        "docs/architecture/adr-0007-executable-v3-migration-contracts.md",
+        "docs/dev/dev_guides.md",
+        "schemas/v3_contracts_test.go"
+      ]
+    },
+    "release_readiness": {
+      "claimed": false,
+      "status": "not_applicable",
+      "work_proof_marker_refs": [],
+      "notes": "No product runtime or release is introduced by M2."
+    }
+  },
+  "promotion_decision": "ready_for_pr"
+}

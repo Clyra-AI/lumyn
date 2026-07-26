@@ -77,9 +77,10 @@ Universal event distribution, elaborate provider PKI, hosted status,
 connection receipts, acknowledgements, and receipt-backed billing are deferred
 concepts, not active v3.1 prerequisites.
 
-This rebaseline is planning and control work only. It authorizes no product
-implementation, model endpoint, consumer repository, credential, command,
-network, sandbox, GitHub, or merge action.
+This compiled rebaseline is planning and control work only. M2 separately
+implements executable artifact and semantic-policy contracts, but neither the
+compiled controls nor those contracts authorize a model endpoint, consumer
+repository, credential, command, network, sandbox, GitHub, or merge action.
 
 ## Operator Flow
 

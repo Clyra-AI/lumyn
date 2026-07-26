@@ -1,0 +1,503 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.provider_change_event.schema.json",
+  "title": "Provider Change Event",
+  "description": "Authenticated provider-originated notification binding one immutable Provider Change Contract.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "event_id",
+    "event_version",
+    "event_digest",
+    "api_provider_id",
+    "issuer",
+    "api_or_sdk",
+    "audience_id",
+    "deadline",
+    "severity",
+    "sequence",
+    "issued_at",
+    "expires_at",
+    "transport",
+    "authentication",
+    "contract_delivery",
+    "lifecycle",
+    "channel_delivery_qualified",
+    "installed_preauthorization_eligible",
+    "non_executable",
+    "grants_consumer_authority",
+    "production_credentials_allowed",
+    "production_mutation_allowed"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.provider_change_event"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "event_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "event_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "event_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "api_provider_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "issuer": {
+      "type": "object",
+      "required": [
+        "role",
+        "provider_operator_id"
+      ],
+      "properties": {
+        "role": {
+          "const": "provider_operator"
+        },
+        "provider_operator_id": {
+          "$ref": "#/$defs/stableId"
+        }
+      },
+      "additionalProperties": false
+    },
+    "api_or_sdk": {
+      "type": "object",
+      "required": [
+        "kind",
+        "name",
+        "package"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "api",
+            "sdk"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "package": {
+          "type": "string",
+          "pattern": "^(?:@[a-z0-9._-]+/)?[a-z0-9._-]+$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "audience_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "deadline": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "severity": {
+      "enum": [
+        "informational",
+        "recommended",
+        "breaking",
+        "sunset_critical"
+      ]
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "transport": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "mode",
+            "manifest_url",
+            "pinned_origin",
+            "publisher_role"
+          ],
+          "properties": {
+            "mode": {
+              "const": "pinned_provider_https"
+            },
+            "manifest_url": {
+              "$ref": "#/$defs/httpsUrl"
+            },
+            "pinned_origin": {
+              "$ref": "#/$defs/httpsOrigin"
+            },
+            "publisher_role": {
+              "const": "provider_operator"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "mode",
+            "imported_by_role",
+            "recovery_reason"
+          ],
+          "properties": {
+            "mode": {
+              "const": "attended_import"
+            },
+            "imported_by_role": {
+              "const": "consumer_maintainer"
+            },
+            "recovery_reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "authentication": {
+      "type": "object",
+      "required": [
+        "method",
+        "key_id",
+        "detached_signature",
+        "signature_verified",
+        "origin_verified",
+        "audience_verified",
+        "freshness_verified",
+        "sequence_verified",
+        "replay_check"
+      ],
+      "properties": {
+        "method": {
+          "const": "detached_signature"
+        },
+        "key_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "detached_signature": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{32,512}$"
+        },
+        "signature_verified": {
+          "type": "boolean"
+        },
+        "origin_verified": {
+          "type": "boolean"
+        },
+        "audience_verified": {
+          "type": "boolean"
+        },
+        "freshness_verified": {
+          "type": "boolean"
+        },
+        "sequence_verified": {
+          "type": "boolean"
+        },
+        "replay_check": {
+          "enum": [
+            "unseen",
+            "duplicate",
+            "replayed",
+            "conflicting"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "contract_delivery": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "mode",
+            "migration_pack_id",
+            "contract_version",
+            "retrieved_bytes_digest",
+            "digest_verified"
+          ],
+          "properties": {
+            "mode": {
+              "const": "embedded"
+            },
+            "migration_pack_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "contract_version": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "retrieved_bytes_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "digest_verified": {
+              "const": true
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "mode",
+            "migration_pack_id",
+            "contract_version",
+            "contract_url",
+            "retrieved_bytes_digest",
+            "digest_verified"
+          ],
+          "properties": {
+            "mode": {
+              "const": "exact_provider_https_url"
+            },
+            "migration_pack_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "contract_version": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "contract_url": {
+              "$ref": "#/$defs/httpsUrl"
+            },
+            "retrieved_bytes_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "digest_verified": {
+              "const": true
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "lifecycle": {
+      "type": "object",
+      "required": [
+        "state",
+        "superseded_by",
+        "withdrawal_reason"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "active",
+            "superseded",
+            "withdrawn"
+          ]
+        },
+        "superseded_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+        },
+        "withdrawal_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1000
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "active"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "superseded_by": {
+                "type": "null"
+              },
+              "withdrawal_reason": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "superseded"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "superseded_by": {
+                "$ref": "#/$defs/stableId"
+              },
+              "withdrawal_reason": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "withdrawn"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "superseded_by": {
+                "type": "null"
+              },
+              "withdrawal_reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "channel_delivery_qualified": {
+      "type": "boolean"
+    },
+    "installed_preauthorization_eligible": {
+      "type": "boolean"
+    },
+    "non_executable": {
+      "const": true
+    },
+    "grants_consumer_authority": {
+      "const": false
+    },
+    "production_credentials_allowed": {
+      "const": false
+    },
+    "production_mutation_allowed": {
+      "const": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "transport": {
+            "properties": {
+              "mode": {
+                "const": "pinned_provider_https"
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "authentication": {
+            "properties": {
+              "signature_verified": {
+                "const": true
+              },
+              "origin_verified": {
+                "const": true
+              },
+              "audience_verified": {
+                "const": true
+              },
+              "freshness_verified": {
+                "const": true
+              },
+              "sequence_verified": {
+                "const": true
+              },
+              "replay_check": {
+                "const": "unseen"
+              }
+            }
+          },
+          "lifecycle": {
+            "properties": {
+              "state": {
+                "const": "active"
+              }
+            }
+          },
+          "channel_delivery_qualified": {
+            "const": true
+          },
+          "installed_preauthorization_eligible": {
+            "const": true
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "transport": {
+            "properties": {
+              "mode": {
+                "const": "attended_import"
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "channel_delivery_qualified": {
+            "const": false
+          },
+          "installed_preauthorization_eligible": {
+            "const": false
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "httpsUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "httpsOrigin": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://[^/]+$"
+    }
+  }
+}

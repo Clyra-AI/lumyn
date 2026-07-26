@@ -1,0 +1,47 @@
+{
+  "object_type": "lumyn.provider_status_projection",
+  "schema_version": "1.0",
+  "projection_id": "projection-unsafe",
+  "api_provider_id": "api-provider-stripe",
+  "provider_change_event_id": "evt-stripe-2026-07",
+  "provider_change_contract_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "consumer_installation_pseudonym": "consumer-pseudonym-001",
+  "status": "merged",
+  "provenance": "consumer_reported",
+  "evidence_refs": [
+    {
+      "evidence_kind": "merge_outcome",
+      "evidence_digest": "sha256:f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1",
+      "provenance": "consumer_reported"
+    }
+  ],
+  "consent": {
+    "consumer_consent_id": "consent-001",
+    "consumer_consent_digest": "sha256:f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2f2",
+    "event_bound": true,
+    "fields_enumerated": true,
+    "active": true,
+    "checked_at": "2026-07-26T14:30:00Z"
+  },
+  "provider_visible_fields": ["projection_id", "status", "provenance", "observed_at"],
+  "interpretation_rules": {
+    "silence": "unknown",
+    "merged_implies_retired": true,
+    "not_applicable_requires_explicit_evidence": true,
+    "unaffected_may_be_inferred": false
+  },
+  "privacy": {
+    "classification": "provider_consented_projection",
+    "redaction_policy_digest": "sha256:b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0",
+    "redaction_status": "passed",
+    "safe_to_share_with_api_provider": true,
+    "raw_consumer_code_included": false,
+    "raw_diff_included": false,
+    "raw_logs_or_traces_included": false,
+    "raw_prompts_or_responses_included": false,
+    "agent_session_data_included": false,
+    "credentials_included": false
+  },
+  "observed_at": "2026-07-26T14:31:00Z",
+  "artifact_digest": "sha256:f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3"
+}

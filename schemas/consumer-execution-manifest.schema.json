@@ -1,0 +1,1190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.consumer_execution_manifest.schema.json",
+  "title": "Consumer Execution Manifest",
+  "description": "Exact runtime boundary selected from one event authorization; capability fields are grants, not labels.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "execution_manifest_id",
+    "manifest_version",
+    "manifest_digest",
+    "api_consumer_organization_id",
+    "authorization_binding",
+    "installation_binding",
+    "event_binding",
+    "plan_binding",
+    "repository",
+    "execution_environment",
+    "private_state",
+    "mounts",
+    "executable_roots",
+    "paths",
+    "commands",
+    "dependency_policy",
+    "network_default",
+    "network_grants",
+    "credential_grants",
+    "capabilities",
+    "agent_execution_policy",
+    "model_data_policy_digest",
+    "budgets",
+    "isolation",
+    "sandbox_entrypoint_profile",
+    "verification_separation",
+    "aggregate_authority_granted",
+    "ambient_credentials_allowed",
+    "production_credentials_allowed",
+    "production_mutation_allowed",
+    "default_branch_write_allowed",
+    "auto_merge_allowed"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.consumer_execution_manifest"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "execution_manifest_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "manifest_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "manifest_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "api_consumer_organization_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "authorization_binding": {
+      "$ref": "#/$defs/artifactBinding"
+    },
+    "installation_binding": {
+      "$ref": "#/$defs/artifactBinding"
+    },
+    "event_binding": {
+      "$ref": "#/$defs/artifactBinding"
+    },
+    "plan_binding": {
+      "$ref": "#/$defs/artifactBinding"
+    },
+    "repository": {
+      "type": "object",
+      "required": [
+        "repository_id",
+        "package_root",
+        "base_commit",
+        "checkout_path",
+        "checkout_digest",
+        "candidate_workspace_id",
+        "candidate_workspace_path",
+        "candidate_workspace_digest",
+        "candidate_head"
+      ],
+      "properties": {
+        "repository_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "package_root": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "base_commit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40,64}$"
+        },
+        "checkout_path": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "checkout_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "candidate_workspace_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "candidate_workspace_path": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "candidate_workspace_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "candidate_head": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40,64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "execution_environment": {
+      "enum": [
+        "consumer_local",
+        "consumer_controlled_ci"
+      ]
+    },
+    "private_state": {
+      "type": "object",
+      "required": [
+        "root_class",
+        "private_state_id",
+        "source_path",
+        "source_digest",
+        "outside_checkout",
+        "public_repository_storage_allowed",
+        "provider_visible"
+      ],
+      "properties": {
+        "root_class": {
+          "const": "external_consumer_private_root"
+        },
+        "private_state_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "source_path": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "source_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "outside_checkout": {
+          "const": true
+        },
+        "public_repository_storage_allowed": {
+          "const": false
+        },
+        "provider_visible": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "mounts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": [
+          "mount_id",
+          "source_class",
+          "source_binding_id",
+          "source_path",
+          "source_digest",
+          "target_path",
+          "mode"
+        ],
+        "properties": {
+          "mount_id": {
+            "$ref": "#/$defs/stableId"
+          },
+          "source_class": {
+            "enum": [
+              "consumer_repository",
+              "candidate_workspace",
+              "toolchain_readonly",
+              "consumer_private_state"
+            ]
+          },
+          "source_binding_id": {
+            "$ref": "#/$defs/stableId"
+          },
+          "source_path": {
+            "$ref": "#/$defs/absolutePath"
+          },
+          "source_digest": {
+            "$ref": "#/$defs/sha256"
+          },
+          "target_path": {
+            "$ref": "#/$defs/absolutePath"
+          },
+          "mode": {
+            "enum": [
+              "read_only",
+              "read_write"
+            ]
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "source_class": {
+                  "enum": ["consumer_repository", "toolchain_readonly"]
+                }
+              },
+              "required": ["source_class"]
+            },
+            "then": {
+              "properties": {
+                "mode": { "const": "read_only" }
+              }
+            }
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "executable_roots": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": [
+          "executable_root_id",
+          "source_mount_id",
+          "source_path",
+          "source_digest",
+          "root_path",
+          "read_only"
+        ],
+        "properties": {
+          "executable_root_id": { "$ref": "#/$defs/stableId" },
+          "source_mount_id": { "$ref": "#/$defs/stableId" },
+          "source_path": { "$ref": "#/$defs/absolutePath" },
+          "source_digest": { "$ref": "#/$defs/sha256" },
+          "root_path": { "$ref": "#/$defs/absolutePath" },
+          "read_only": { "const": true }
+        },
+        "additionalProperties": false
+      }
+    },
+    "paths": {
+      "type": "object",
+      "required": [
+        "readable",
+        "writable",
+        "excluded",
+        "policy_digest"
+      ],
+      "properties": {
+        "readable": {
+          "$ref": "#/$defs/pathList"
+        },
+        "writable": {
+          "$ref": "#/$defs/pathList"
+        },
+        "excluded": {
+          "$ref": "#/$defs/pathList"
+        },
+        "policy_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "additionalProperties": false
+    },
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": [
+          "command_id",
+          "program",
+          "program_digest",
+          "executable_root_id",
+          "arguments",
+          "working_directory",
+          "timeout_seconds",
+          "network_mode",
+          "lifecycle_scripts_allowed"
+        ],
+        "properties": {
+          "command_id": {
+            "$ref": "#/$defs/stableId"
+          },
+          "program": {
+            "$ref": "#/$defs/absolutePath"
+          },
+          "program_digest": {
+            "$ref": "#/$defs/sha256"
+          },
+          "executable_root_id": {
+            "$ref": "#/$defs/stableId"
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            }
+          },
+          "working_directory": {
+            "$ref": "#/$defs/absolutePath"
+          },
+          "timeout_seconds": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3600
+          },
+          "network_mode": {
+            "const": "offline"
+          },
+          "lifecycle_scripts_allowed": {
+            "const": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "dependency_policy": {
+      "type": "object",
+      "required": [
+        "install_mode",
+        "registry_access_capability_selected",
+        "lockfile_integrity_required",
+        "lifecycle_scripts_allowed"
+      ],
+      "properties": {
+        "install_mode": {
+          "enum": [
+            "none",
+            "immutable_snapshot",
+            "exact_registry_read"
+          ]
+        },
+        "registry_access_capability_selected": {
+          "type": "boolean"
+        },
+        "lockfile_integrity_required": {
+          "const": true
+        },
+        "lifecycle_scripts_allowed": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "network_default": {
+      "const": "offline"
+    },
+    "network_grants": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": [
+          "grant_id",
+          "capability",
+          "endpoints",
+          "operations",
+          "host_enforced"
+        ],
+        "properties": {
+          "grant_id": {
+            "$ref": "#/$defs/stableId"
+          },
+          "capability": {
+            "enum": [
+              "agent_runner_network",
+              "model_network",
+              "package_registry_read",
+              "sandbox_network",
+              "github_branch_write",
+              "github_pr_write",
+              "provider_reporting"
+            ]
+          },
+          "endpoints": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/$defs/httpsEndpoint"
+            }
+          },
+          "operations": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9._:-]{0,127}$"
+            }
+          },
+          "host_enforced": {
+            "const": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "credential_grants": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": [
+          "grant_id",
+          "kind",
+          "owner_role",
+          "environment_variable",
+          "scope_ids",
+          "injection_boundary",
+          "expires_at",
+          "revocation_required",
+          "reusable",
+          "production"
+        ],
+        "properties": {
+          "grant_id": {
+            "$ref": "#/$defs/stableId"
+          },
+          "kind": {
+            "enum": [
+              "agent_runner_credential",
+              "model_credential",
+              "sandbox_credential",
+              "github_branch_token",
+              "github_pr_token"
+            ]
+          },
+          "owner_role": {
+            "enum": [
+              "api_consumer_organization",
+              "lumyn_operator"
+            ]
+          },
+          "environment_variable": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]{1,127}$"
+          },
+          "scope_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/$defs/stableId"
+            }
+          },
+          "injection_boundary": {
+            "enum": [
+              "agent_attempt",
+              "sandbox_verification",
+              "github_branch_action",
+              "github_pr_action"
+            ]
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revocation_required": {
+            "const": true
+          },
+          "reusable": {
+            "const": false
+          },
+          "production": {
+            "const": false
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "kind": { "const": "sandbox_credential" } },
+              "required": ["kind"]
+            },
+            "then": {
+              "properties": {
+                "scope_ids": { "maxItems": 1 },
+                "injection_boundary": { "const": "sandbox_verification" }
+              }
+            }
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "required": [
+        "customer_repo_read",
+        "customer_repo_write",
+        "command_execution",
+        "agent_runner_network",
+        "agent_runner_credential",
+        "model_request_disclosure",
+        "model_network",
+        "model_credential",
+        "package_registry_read",
+        "dependency_lifecycle_scripts",
+        "sandbox_request_disclosure",
+        "sandbox_network",
+        "sandbox_credential",
+        "github_branch_write",
+        "github_pr_write",
+        "provider_reporting",
+        "artifact_retention",
+        "artifact_deletion"
+      ],
+      "properties": {
+        "customer_repo_read": {
+          "type": "boolean"
+        },
+        "customer_repo_write": {
+          "type": "boolean"
+        },
+        "command_execution": {
+          "type": "boolean"
+        },
+        "agent_runner_network": {
+          "type": "boolean"
+        },
+        "agent_runner_credential": {
+          "type": "boolean"
+        },
+        "model_request_disclosure": {
+          "type": "boolean"
+        },
+        "model_network": {
+          "type": "boolean"
+        },
+        "model_credential": {
+          "type": "boolean"
+        },
+        "package_registry_read": {
+          "type": "boolean"
+        },
+        "dependency_lifecycle_scripts": {
+          "type": "boolean"
+        },
+        "sandbox_request_disclosure": {
+          "type": "boolean"
+        },
+        "sandbox_network": {
+          "type": "boolean"
+        },
+        "sandbox_credential": {
+          "type": "boolean"
+        },
+        "github_branch_write": {
+          "type": "boolean"
+        },
+        "github_pr_write": {
+          "type": "boolean"
+        },
+        "provider_reporting": {
+          "type": "boolean"
+        },
+        "artifact_retention": {
+          "type": "boolean"
+        },
+        "artifact_deletion": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "agent_execution_policy": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "state"
+          ],
+          "properties": {
+            "state": {
+              "const": "disabled"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "state",
+            "agent_runner_manifest_digest",
+            "adapter_id",
+            "adapter_version",
+            "executable_digest",
+            "conformance_digest",
+            "route_topology",
+            "actual_model_route_digest",
+            "funding_mode",
+            "credential_owner_role",
+            "usage_billing_owner_role",
+            "clean_session",
+            "native_configuration_digest",
+            "silent_fallback_allowed"
+          ],
+          "properties": {
+            "state": {
+              "const": "configured"
+            },
+            "agent_runner_manifest_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "adapter_id": {
+              "enum": [
+                "codex",
+                "claude_code"
+              ]
+            },
+            "adapter_version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "executable_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "conformance_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "route_topology": {
+              "enum": [
+                "local_runtime",
+                "runner_mediated",
+                "direct_model",
+                "hybrid"
+              ]
+            },
+            "actual_model_route_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "funding_mode": {
+              "enum": [
+                "consumer_managed",
+                "provider_sponsored_lumyn_managed"
+              ]
+            },
+            "credential_owner_role": {
+              "enum": [
+                "api_consumer_organization",
+                "lumyn_operator"
+              ]
+            },
+            "usage_billing_owner_role": {
+              "enum": [
+                "api_consumer_organization",
+                "lumyn_operator"
+              ]
+            },
+            "clean_session": {
+              "const": true
+            },
+            "native_configuration_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "silent_fallback_allowed": {
+              "const": false
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "model_data_policy_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "budgets": {
+      "type": "object",
+      "required": [
+        "max_files",
+        "max_changed_lines",
+        "max_diff_bytes",
+        "max_turns",
+        "max_tokens",
+        "max_cost_usd",
+        "max_duration_seconds",
+        "max_attempts"
+      ],
+      "properties": {
+        "max_files": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_changed_lines": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_diff_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_turns": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_cost_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_duration_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "isolation": {
+      "type": "object",
+      "required": [
+        "backend_id",
+        "backend_version",
+        "configuration_digest",
+        "qualification_digest",
+        "host_platform",
+        "host_home_mounted",
+        "os_credential_store_available",
+        "ambient_service_sockets_allowed",
+        "unrelated_inherited_descriptors_allowed",
+        "child_limits_inherited",
+        "host_enforced_egress",
+        "executable_plugins_allowed",
+        "mcp_servers_allowed",
+        "hooks_allowed",
+        "resource_quotas",
+        "cleanup_evidence_required"
+      ],
+      "properties": {
+        "backend_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "backend_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "configuration_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "qualification_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "host_platform": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "host_home_mounted": {
+          "const": false
+        },
+        "os_credential_store_available": {
+          "const": false
+        },
+        "ambient_service_sockets_allowed": {
+          "const": false
+        },
+        "unrelated_inherited_descriptors_allowed": {
+          "const": false
+        },
+        "child_limits_inherited": {
+          "const": true
+        },
+        "host_enforced_egress": {
+          "const": true
+        },
+        "executable_plugins_allowed": {
+          "const": false
+        },
+        "mcp_servers_allowed": {
+          "const": false
+        },
+        "hooks_allowed": {
+          "const": false
+        },
+        "resource_quotas": {
+          "type": "object",
+          "required": [
+            "cpu_seconds",
+            "memory_bytes",
+            "max_pids",
+            "max_process_tree_depth",
+            "disk_bytes",
+            "max_open_files"
+          ],
+          "properties": {
+            "cpu_seconds": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "memory_bytes": {
+              "type": "integer",
+              "minimum": 1048576
+            },
+            "max_pids": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "max_process_tree_depth": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "disk_bytes": {
+              "type": "integer",
+              "minimum": 1048576
+            },
+            "max_open_files": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "cleanup_evidence_required": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "sandbox_entrypoint_profile": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "$ref": "#/$defs/sandboxEntrypointProfile"
+        }
+      ]
+    },
+    "verification_separation": {
+      "type": "object",
+      "required": [
+        "fresh_process_and_view",
+        "exact_candidate_head_required",
+        "agent_or_model_credentials_available",
+        "generation_evidence_handle_available"
+      ],
+      "properties": {
+        "fresh_process_and_view": {
+          "const": true
+        },
+        "exact_candidate_head_required": {
+          "const": true
+        },
+        "agent_or_model_credentials_available": {
+          "const": false
+        },
+        "generation_evidence_handle_available": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "aggregate_authority_granted": {
+      "const": false
+    },
+    "ambient_credentials_allowed": {
+      "const": false
+    },
+    "production_credentials_allowed": {
+      "const": false
+    },
+    "production_mutation_allowed": {
+      "const": false
+    },
+    "default_branch_write_allowed": {
+      "const": false
+    },
+    "auto_merge_allowed": {
+      "const": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "agent_execution_policy": {
+            "properties": {
+              "state": {
+                "const": "disabled"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "agent_runner_network": {
+                "const": false
+              },
+              "agent_runner_credential": {
+                "const": false
+              },
+              "model_request_disclosure": {
+                "const": false
+              },
+              "model_network": {
+                "const": false
+              },
+              "model_credential": {
+                "const": false
+              }
+            }
+          },
+          "network_grants": {
+            "not": {
+              "contains": {
+                "properties": {
+                  "capability": {
+                    "enum": [
+                      "agent_runner_network",
+                      "model_network"
+                    ]
+                  }
+                },
+                "required": [
+                  "capability"
+                ]
+              }
+            }
+          },
+          "credential_grants": {
+            "not": {
+              "contains": {
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "agent_runner_credential",
+                      "model_credential"
+                    ]
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "anyOf": [
+              { "properties": { "sandbox_request_disclosure": { "const": true } }, "required": ["sandbox_request_disclosure"] },
+              { "properties": { "sandbox_network": { "const": true } }, "required": ["sandbox_network"] },
+              { "properties": { "sandbox_credential": { "const": true } }, "required": ["sandbox_credential"] }
+            ]
+          }
+        },
+        "required": ["capabilities"]
+      },
+      "then": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "sandbox_request_disclosure": { "const": true },
+              "sandbox_network": { "const": true },
+              "sandbox_credential": { "const": true }
+            }
+          },
+          "sandbox_entrypoint_profile": { "$ref": "#/$defs/sandboxEntrypointProfile" },
+          "network_grants": {
+            "contains": {
+              "properties": { "capability": { "const": "sandbox_network" } },
+              "required": ["capability"]
+            }
+          },
+          "credential_grants": {
+            "contains": {
+              "properties": {
+                "kind": { "const": "sandbox_credential" },
+                "injection_boundary": { "const": "sandbox_verification" }
+              },
+              "required": ["kind", "injection_boundary"]
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "sandbox_request_disclosure": { "const": false },
+              "sandbox_network": { "const": false },
+              "sandbox_credential": { "const": false }
+            }
+          },
+          "sandbox_entrypoint_profile": { "type": "null" },
+          "network_grants": {
+            "not": {
+              "contains": {
+                "properties": { "capability": { "const": "sandbox_network" } },
+                "required": ["capability"]
+              }
+            }
+          },
+          "credential_grants": {
+            "not": {
+              "contains": {
+                "properties": { "kind": { "const": "sandbox_credential" } },
+                "required": ["kind"]
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "absolutePath": {
+      "type": "string",
+      "pattern": "^/(?:[A-Za-z0-9._@+-]+/)*[A-Za-z0-9._@+-]+$"
+    },
+    "relativePath": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._@+-]+(?:/[A-Za-z0-9._@+-]+)*$"
+    },
+    "pathList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/relativePath"
+      }
+    },
+    "httpsEndpoint": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://[^*?\\[\\]]+$"
+    },
+    "artifactBinding": {
+      "type": "object",
+      "required": [
+        "artifact_id",
+        "artifact_digest"
+      ],
+      "properties": {
+        "artifact_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "artifact_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "additionalProperties": false
+    },
+    "resourceQuotas": {
+      "type": "object",
+      "required": [
+        "cpu_seconds",
+        "memory_bytes",
+        "max_pids",
+        "max_process_tree_depth",
+        "disk_bytes",
+        "max_open_files"
+      ],
+      "properties": {
+        "cpu_seconds": { "type": "integer", "minimum": 1 },
+        "memory_bytes": { "type": "integer", "minimum": 1048576 },
+        "max_pids": { "type": "integer", "minimum": 1 },
+        "max_process_tree_depth": { "type": "integer", "minimum": 1 },
+        "disk_bytes": { "type": "integer", "minimum": 1048576 },
+        "max_open_files": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "sandboxEntrypointProfile": {
+      "type": "object",
+      "required": [
+        "profile_id",
+        "profile_digest",
+        "candidate_head",
+        "candidate_mount_id",
+        "candidate_mount_target",
+        "entrypoint_path",
+        "entrypoint_digest",
+        "program",
+        "program_digest",
+        "executable_root_id",
+        "working_directory",
+        "neutral_home_root",
+        "neutral_temp_root",
+        "sanitized_environment",
+        "host_home_mounted",
+        "os_credential_store_available",
+        "ambient_service_sockets_allowed",
+        "unrelated_inherited_descriptors_allowed",
+        "sandbox_credential_grant_id",
+        "credential_environment_variable",
+        "credential_injection_boundary",
+        "sandbox_network_grant_id",
+        "network_endpoints",
+        "network_operations",
+        "network_default",
+        "child_process_limits_inherited",
+        "resource_quotas",
+        "teardown"
+      ],
+      "properties": {
+        "profile_id": { "$ref": "#/$defs/stableId" },
+        "profile_digest": { "$ref": "#/$defs/sha256" },
+        "candidate_head": { "type": "string", "pattern": "^[a-f0-9]{40,64}$" },
+        "candidate_mount_id": { "$ref": "#/$defs/stableId" },
+        "candidate_mount_target": { "$ref": "#/$defs/absolutePath" },
+        "entrypoint_path": { "$ref": "#/$defs/absolutePath" },
+        "entrypoint_digest": { "$ref": "#/$defs/sha256" },
+        "program": { "$ref": "#/$defs/absolutePath" },
+        "program_digest": { "$ref": "#/$defs/sha256" },
+        "executable_root_id": { "$ref": "#/$defs/stableId" },
+        "working_directory": { "$ref": "#/$defs/absolutePath" },
+        "neutral_home_root": { "$ref": "#/$defs/absolutePath" },
+        "neutral_temp_root": { "$ref": "#/$defs/absolutePath" },
+        "sanitized_environment": { "const": true },
+        "host_home_mounted": { "const": false },
+        "os_credential_store_available": { "const": false },
+        "ambient_service_sockets_allowed": { "const": false },
+        "unrelated_inherited_descriptors_allowed": { "const": false },
+        "sandbox_credential_grant_id": { "$ref": "#/$defs/stableId" },
+        "credential_environment_variable": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,127}$" },
+        "credential_injection_boundary": { "const": "sandbox_verification" },
+        "sandbox_network_grant_id": { "$ref": "#/$defs/stableId" },
+        "network_endpoints": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/httpsEndpoint" }
+        },
+        "network_operations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9._:-]{0,127}$" }
+        },
+        "network_default": { "const": "offline" },
+        "child_process_limits_inherited": { "const": true },
+        "resource_quotas": { "$ref": "#/$defs/resourceQuotas" },
+        "teardown": {
+          "type": "object",
+          "required": ["teardown_required", "cleanup_required", "orphan_check_required", "evidence_policy_digest"],
+          "properties": {
+            "teardown_required": { "const": true },
+            "cleanup_required": { "const": true },
+            "orphan_check_required": { "const": true },
+            "evidence_policy_digest": { "$ref": "#/$defs/sha256" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

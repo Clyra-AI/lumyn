@@ -1,0 +1,38 @@
+{
+  "object_type": "lumyn.impact_report",
+  "schema_version": "1.0",
+  "report_id": "impact-stripe-2026-01",
+  "report_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "generated_at": "2026-07-26T14:01:00Z",
+  "event_id": "evt-stripe-2026-01",
+  "contract_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "installation_id": "install-consumer-001",
+  "authorization_snapshot_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "repository_base": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "integration_graph_id": "graph-stripe-2026-01",
+  "integration_graph_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "analysis_mode": "read_only",
+  "mutation_observed": false,
+  "overall_status": "affected_supported",
+  "findings": [
+    {
+      "finding_id": "finding-create-charge",
+      "graph_node_ids": ["node-create-charge-call"],
+      "change_item_id": "change-item-payment-intent",
+      "status": "affected_supported",
+      "path": "apps/api/src/payments.ts",
+      "reason": "The pinned change contract replaces this supported charge creation call.",
+      "evidence_refs": ["repo:apps/api/src/payments.ts:42", "contract:item:change-item-payment-intent"],
+      "uncertainty_refs": []
+    }
+  ],
+  "coverage": {
+    "claim": "authorized_scope_only",
+    "analyzed_paths": ["apps/api/src", "apps/api/test", "apps/api/package.json"],
+    "excluded_paths": ["apps/api/generated"],
+    "unsupported_scope": [],
+    "uncertainty_refs": [],
+    "limitations": ["Only the installed package root and approved readable paths were analyzed."]
+  },
+  "residual_risks": []
+}
