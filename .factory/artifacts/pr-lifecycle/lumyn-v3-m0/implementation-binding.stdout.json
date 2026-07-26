@@ -1,0 +1,13 @@
+{
+  "candidate_digest": "sha256:855f554ae6c8ff1b957c496d4d2983739caee3cdf4abcbb9b8227b66fc3694d9",
+  "changed_path_count": 24,
+  "declared_candidate_matches": true,
+  "landed_changed_paths_match_original_pr_head": true,
+  "landed_main_head": "4c383c724f68a6aa5fe6ab2c59d830c64797abfe",
+  "original_pr_head": "0cd5f5e6da626cedb294fa02b9d99b3a17cbbae5",
+  "review_marker_binding_matches": true,
+  "status": "pass",
+  "task_id": "M0",
+  "work_item_id": "lumyn-v3-m0",
+  "work_proof_marker_sha256": "sha256:0e37ba2322482e018b08f1cc51470cb270590cc670a21d5d6536327b283fa449"
+}

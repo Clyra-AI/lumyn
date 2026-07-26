@@ -1,0 +1,119 @@
+{
+  "artifact_type": "pr_lifecycle_report",
+  "schema_version": "0.1",
+  "task_id": "M0",
+  "work_item_id": "lumyn-v3-m0",
+  "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/70",
+  "branch_name": "codex/lumyn-m0-command-foundations",
+  "commit_set": [
+    "ba2c48aad09c069e3604a58af9c514d8b3173ae7",
+    "0cd5f5e6da626cedb294fa02b9d99b3a17cbbae5"
+  ],
+  "local_validation": {
+    "status": "pass",
+    "commands": [
+      "make prepush-full"
+    ],
+    "validation_report_ref": ".factory/artifacts/task-runs/M0/validation-report.json"
+  },
+  "local_acceptance_review": {
+    "required": true,
+    "status": "pass",
+    "reason": "M0 item-level product evidence is present; the skipped downstream review gate is separately classified as delivery debt.",
+    "scope_closure_map_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json",
+    "validation_report_ref": ".factory/artifacts/task-runs/M0/validation-report.json",
+    "acceptance_item_ids": [
+      "BASE-001",
+      "BASE-002",
+      "BASE-003",
+      "BASE-004",
+      "BASE-005"
+    ],
+    "missing_acceptance_item_ids": [],
+    "evidence_refs": [
+      ".factory/artifacts/task-runs/M0/validation-report.json",
+      ".factory/artifacts/task-runs/M0/proof-of-behavior-scorecard.json",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json"
+    ]
+  },
+  "ci_checks": [
+    {
+      "name": "validate",
+      "status": "pass",
+      "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30170828304/job/89711548804"
+    },
+    {
+      "name": "CodeQL analyze",
+      "status": "pass",
+      "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30170828357/job/89711548868"
+    }
+  ],
+  "code_review": {
+    "required": true,
+    "status": "approved",
+    "review_report_ref": ".factory/artifacts/lifecycle-evidence/M0/review-report.json"
+  },
+  "codex_review": {
+    "enabled": true,
+    "status": "blocked",
+    "head_sha": "0cd5f5e6da626cedb294fa02b9d99b3a17cbbae5",
+    "reviewer_identity": "chatgpt-codex-connector",
+    "settle_evidence_ref": "https://github.com/Clyra-AI/lumyn/pull/70#pullrequestreview-4779958283",
+    "review_request_refs": [],
+    "automated_review_identities": [
+      "chatgpt-codex-connector"
+    ],
+    "automated_review_blockers": [],
+    "unresolved_actionable_comments": 0,
+    "late_review_after_merge": false,
+    "notes": "The initial head received one P1, which was fixed and resolved. The final head received no terminal approval or thumbs-up before manual merge; stale carry-forward evidence is not merge permission."
+  },
+  "ship_pr": {
+    "status": "shipped",
+    "ship_packet_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/ship-packet.json"
+  },
+  "merge": {
+    "status": "merged",
+    "method": "rebase",
+    "merged_commit": "4c383c724f68a6aa5fe6ab2c59d830c64797abfe",
+    "merged_at": "2026-07-25T19:33:40Z",
+    "merged_by": "davidahmann",
+    "authority": {
+      "mode": "task_scoped_grant",
+      "capability": "merge_authority",
+      "task_id": "M0",
+      "approved": true,
+      "expires_at": "2026-07-26T00:00:00Z",
+      "evidence_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/process-exception-handoff.json"
+    }
+  },
+  "post_merge": {
+    "status": "healthy",
+    "post_merge_report_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-report.json"
+  },
+  "work_proof_marker_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge/work-proof-marker.json"
+  ],
+  "evidence_refs": [
+    ".factory/artifacts/task-runs/M0/validation-report.json",
+    ".factory/artifacts/task-runs/M0/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M0/proof-of-behavior-scorecard.json",
+    ".factory/artifacts/lifecycle-evidence/M0/review-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/delivery-debt-record.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/process-exception-handoff.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/ship-packet.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge/work-proof-marker.json"
+  ],
+  "skipped_gates": [
+    {
+      "gate": "codex_review",
+      "reason": "The final PR head had no terminal latest-head Codex approval or thumbs-up before the repository owner merged it. The exception records the process escape and permits downstream work without treating the gate as satisfied.",
+      "approved_exception_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/process-exception-handoff.json"
+    }
+  ],
+  "status": "partial"
+}

@@ -1,0 +1,125 @@
+{
+  "artifact_type": "scope_closure_report",
+  "schema_version": "0.1",
+  "task_id": "M0",
+  "work_item_id": "lumyn-v3-m0",
+  "mission_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+  "intent_source_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+  "intent_source_locator": "task:M0",
+  "event_log_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/mission-event-log.json",
+  "work_proof_marker_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge/work-proof-marker.json"
+  ],
+  "validation_report_refs": [
+    ".factory/artifacts/task-runs/M0/validation-report.json"
+  ],
+  "closure_items": [
+    {
+      "intent_item_id": "BASE-001",
+      "intent_statement": "The Go CLI, configuration, stable result envelope, exit codes, lumyn init, and lumyn check remain functional.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "cmd/lumyn/main.go",
+        "internal/result/result.go",
+        "internal/exitcode/"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/task-runs/M0/proof-of-behavior-scorecard.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": []
+    },
+    {
+      "intent_item_id": "BASE-002",
+      "intent_statement": "Existing workflow, evidence, cassette, trace, proof, boundary, redaction, and command-result schemas remain executable and versioned.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "schemas/",
+        "docs/architecture/adr-0006-command-result-v1-provider-terminology.md"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/lifecycle-evidence/M0/review-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": []
+    },
+    {
+      "intent_item_id": "BASE-003",
+      "intent_statement": "CI, coverage, CodeQL, CODEOWNERS, required checks, review, shipping, and post-merge governance remain enforced.",
+      "classification": "implemented_with_debt",
+      "implementation_refs": [
+        ".github/workflows/validate.yml",
+        ".github/workflows/codeql.yml",
+        ".github/CODEOWNERS"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/lifecycle-evidence/M0/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/process-exception-handoff.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": [],
+      "delivery_debt_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/delivery-debt-record.json"
+    },
+    {
+      "intent_item_id": "BASE-004",
+      "intent_statement": "Existing OpenAPI and local-doc intake continues to produce structured refs, fingerprints, deprecation findings, and concrete source locations.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "internal/source/",
+        "internal/source/markdownlinks/"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M0/validation-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": []
+    },
+    {
+      "intent_item_id": "BASE-005",
+      "intent_statement": "Unimplemented commands return typed nonzero results, and API Provider, Agent Runner Vendor, and Model Provider terminology is unambiguous.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "cmd/lumyn/main.go",
+        "internal/result/result.go",
+        "schemas/",
+        "docs/architecture/adr-0006-command-result-v1-provider-terminology.md"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/task-runs/M0/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M0/review-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": []
+    }
+  ],
+  "delivery_debt_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/delivery-debt-record.json"
+  ],
+  "approved_deferral_refs": [],
+  "blocker_refs": [],
+  "overall_status": "closed_with_debt",
+  "rerun_required": false,
+  "generated_at": "2026-07-26T12:59:00Z"
+}
