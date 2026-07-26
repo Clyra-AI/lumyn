@@ -6,25 +6,25 @@
   "git_sha": "f89bc82490ffb6df908df6f8572054ee051ed6c6",
   "exit_code": 0,
   "execution_status": "pass",
-  "stdout_digest": "sha256:b1fc6761de786723fb1439ea6118ac27c27821fbfc6a2f369cfb6d30d81d4837",
+  "stdout_digest": "sha256:c1388919a6777f9401fe40c8a050566180ebfe66124e417c803df9821a734991",
   "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "raw_log_refs": [
     ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/verify-binding.stdout.log",
     ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/verify-binding.stderr.log"
   ],
-  "started_at": "2026-07-26T17:52:45Z",
-  "finished_at": "2026-07-26T17:52:49Z",
+  "started_at": "2026-07-26T18:00:41Z",
+  "finished_at": "2026-07-26T18:00:42Z",
   "runner_id": "factory-reference-shipping-runner:attended-codex-harness",
   "generated_by": "trusted_runner",
   "landed_binding_proof": {
     "base_head": "7609e5c49c0776c1028c1aeb3e2e2ee942b613b6",
     "original_pr_head": "9345f3392ec98eb0e10345fe7941fd9d1450e55b",
     "retained_bundle_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/pr72-original-head.bundle",
-    "retained_bundle_sha256": "sha256:1052339f87c09336ef87c890f3e6f7cd20184ec3dd27bb9ea62d7d3ab1dec2e6",
+    "retained_bundle_sha256": "sha256:6c7b50404c06f09aa9956cf860f8b021ee64577fcf4cb18d43f1e53d14e03bbc",
     "landed_main_head": "f89bc82490ffb6df908df6f8572054ee051ed6c6",
     "validation_run_id": "validation:2026-07-26T16:32:25Z:50773146792248c5907105189e125e8a",
     "candidate_digest": "sha256:8509fbe0980c17d6e6ad3d9cd2b8f04e122d9d6699cb7162b33492198e040324",
     "changed_path_count": 105,
-    "verifier_sha256": "sha256:807d23ee64926c0aec9e2b3ec9d27e1ed41f50138031f67368c3b737b960401e"
+    "verifier_sha256": "sha256:922dd487252f9c34c3de3538aea435c4d8dd09898730942b7d7aea119eb7ac4a"
   }
 }
