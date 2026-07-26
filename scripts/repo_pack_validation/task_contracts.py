@@ -369,6 +369,55 @@ IMPLEMENTED_PROOF = {
             ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json",
         },
     ),
+    "TRUST-001": (
+        {"M2"},
+        {
+            ".factory/artifacts/task-runs/M2/validation-report.json",
+            ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+            ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+            ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json",
+        },
+    ),
+    "TRUST-002": (
+        {"M2"},
+        {
+            ".factory/artifacts/task-runs/M2/validation-report.json",
+            ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+            ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+            ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+        },
+    ),
+    "TRUST-003": (
+        {"M2"},
+        {
+            ".factory/artifacts/task-runs/M2/validation-report.json",
+            ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+            ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+            ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+        },
+    ),
+    "TRUST-004": (
+        {"M2"},
+        {
+            ".factory/artifacts/task-runs/M2/validation-report.json",
+            ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+            ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+            ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+        },
+    ),
 }
 
 
@@ -402,7 +451,7 @@ def _validate_sandbox_entrypoint_isolation(
 def validate_implemented_proof(
     ledger_by_id: dict[str, dict[str, Any]],
 ) -> None:
-    """Require exact evidence whose task semantics prove each completed M0 item."""
+    """Require exact evidence whose task semantics prove each completed item."""
 
     for item_id, (task_refs, evidence_refs) in IMPLEMENTED_PROOF.items():
         item = ledger_by_id[item_id]

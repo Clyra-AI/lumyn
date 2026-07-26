@@ -382,11 +382,11 @@
     "provider code access, production credential, default-branch write, or auto-merge is requested",
     "commercial evidence or generic-agent comparison is not direct, frozen, fair, and independently attested"
   ],
-  "generated_by": "prd-to-plan+execution-compiler",
-  "generated_at": "2026-07-26T16:32:45Z",
+  "generated_by": "prd-to-plan+execution-compiler+post-merge-monitor",
+  "generated_at": "2026-07-26T17:04:17Z",
   "m2_contract_implementation": {
-    "state": "implementation_and_local_validation_complete_lifecycle_pending",
-    "acceptance_closure_claimed": false,
+    "state": "closed_with_recorded_evidence_and_process_debt",
+    "acceptance_closure_claimed": true,
     "schema_version": "1.0",
     "schema_families": [
       "agent-attempt",
@@ -423,20 +423,18 @@
       "make test-coverage",
       "python3 scripts/validate_repo_pack.py"
     ],
-    "progress_evidence_refs": [
+    "closure_evidence_refs": [
       ".factory/artifacts/task-runs/M2/validation-report.json",
       ".factory/artifacts/task-runs/M2/validation-run-summary.json",
       ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-      ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/pr-lifecycle-report.json",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
     ],
-    "pending_gates": [
-      "GitHub Actions validate",
-      "GitHub Actions CodeQL analyze",
-      "passive latest-head Codex review settle",
-      "merge",
-      "post-merge monitoring",
-      "task-bound PR lifecycle and scope-closure evidence"
-    ],
+    "process_exception_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/process-exception-handoff.json",
+    "pending_gates": [],
     "runtime_claimed": false,
     "factoryd_authority_granted": false
   }

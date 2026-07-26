@@ -133,7 +133,27 @@ EXPECTED_IMPLEMENTED_ITEMS = {
     "BASE-003",
     "BASE-004",
     "BASE-005",
+    "TRUST-001",
+    "TRUST-002",
+    "TRUST-003",
+    "TRUST-004",
 }
+EXPECTED_COMPLETED_TASK_REFS = ["M0", "M2"]
+EXPECTED_PARTIAL_IMPLEMENTED_TASK_REFS = {
+    "EVENT-001": ["M2"],
+    "EVENT-002": ["M2"],
+    "INSTALL-001": ["M2"],
+    "INSTALL-002": ["M2"],
+}
+M2_SCOPE_CLOSURE_REF = (
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
+)
+M2_PROCESS_EXCEPTION_REF = (
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/process-exception-handoff.json"
+)
+M2_DELIVERY_DEBT_REF = (
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
+)
 
 EXPECTED_CAPABILITIES = {
     "M2.5": {"approval"},
@@ -930,6 +950,15 @@ def validate_risk(risk: dict[str, Any]) -> None:
         "paid campaign",
     ):
         require(token in serialized, f"risk classification missing {token}")
+    current = risk.get("current_contract_state", {})
+    require(
+        current.get("M0") == "closed_with_recorded_evidence_and_process_debt"
+        and current.get("M2") == "closed_with_recorded_evidence_and_process_debt"
+        and current.get("factory_profile") == "aligned_lumyn_v3_1"
+        and current.get("factoryd_runtime")
+        == "blocked_factoryd_v3_1_qualification_required",
+        "risk classification current contract state must preserve M0/M2 closure and factoryd pause",
+    )
 
 
 def validate_ledger(
@@ -1015,7 +1044,7 @@ def validate_ledger(
     }
     require(
         actual_implemented == EXPECTED_IMPLEMENTED_ITEMS,
-        "implemented status must match directly evidenced completed M0 items",
+        "implemented status must match directly evidenced completed M0 and M2 items",
     )
     validate_implemented_proof(by_id)
     return by_id
@@ -1086,6 +1115,30 @@ def validate_mapping(mapping: dict[str, Any], required_ids: set[str]) -> None:
         set(mapped) == required_ids and len(mapped) == len(required_ids),
         "mapping must cover the exact PRD acceptance set once",
     )
+    by_group = {str(group["group_id"]): group for group in groups}
+    for group_id, runtime_task in (
+        ("provider_change_event", "M3"),
+        ("consumer_installation", "M5"),
+    ):
+        progress = by_group[group_id].get("implementation_progress", {})
+        require(
+            progress.get("completed_prerequisite_task_refs") == ["M2"]
+            and progress.get("runtime_closure_task_ref") == runtime_task
+            and progress.get("acceptance_status") == "planned"
+            and M2_SCOPE_CLOSURE_REF in progress.get("progress_evidence_refs", []),
+            f"mapping {group_id} must preserve closed M2 prerequisite and later runtime closure",
+        )
+    trust_progress = by_group["trust_and_privacy"].get(
+        "implementation_progress", {}
+    )
+    require(
+        trust_progress.get("implementation_complete_task_refs") == ["M2"]
+        and trust_progress.get("lifecycle_pending_task_refs") == []
+        and trust_progress.get("acceptance_status") == "implemented"
+        and trust_progress.get("process_debt_ref") == M2_DELIVERY_DEBT_REF
+        and M2_SCOPE_CLOSURE_REF in trust_progress.get("evidence_refs", []),
+        "mapping trust group must bind terminal M2 evidence and non-reusable process debt",
+    )
     validate_slices(mapping.get("delivery_slices"), required_ids, "mapping.slices")
 
 
@@ -1117,12 +1170,12 @@ def validate_plan(plan: dict[str, Any], required_ids: set[str]) -> None:
         "execution implementation must remain blocked",
     )
     require(
-        alignment.get("completed_task_refs") == ["M0"]
+        alignment.get("completed_task_refs") == EXPECTED_COMPLETED_TASK_REFS
         and alignment.get("implementation_complete_pending_lifecycle_task_refs")
-        == ["M2"]
+        == []
         and alignment.get("blocked_tasks")
         == [task_id for task_id in EXPECTED_TASK_IDS if task_id not in {"M0", "M2"}],
-        "execution alignment must preserve M0 completion, M2 lifecycle-pending state, and block later tasks",
+        "execution alignment must preserve M0 and M2 closure and block later tasks by generation",
     )
     validate_pause_contract(plan.get("factoryd_runtime"), "execution factoryd runtime")
     compatibility = plan.get("factory_compatibility", {})
@@ -1156,9 +1209,11 @@ def validate_plan(plan: dict[str, Any], required_ids: set[str]) -> None:
         and rebaseline.get("runtime_behavior_changed") is False
         and rebaseline.get("m0_completion_claimed") is True
         and rebaseline.get("m2_contract_implementation_status")
-        == "implementation_and_local_validation_complete_lifecycle_pending"
-        and rebaseline.get("m2_acceptance_closure_claimed") is False,
-        "execution planning rebaseline must record M0 completion, M2 lifecycle-pending progress, and no runtime or acceptance-closure claim",
+        == "closed_with_recorded_evidence_and_process_debt"
+        and rebaseline.get("m2_acceptance_closure_claimed") is True
+        and rebaseline.get("m2_scope_closure_ref") == M2_SCOPE_CLOSURE_REF
+        and rebaseline.get("m2_process_exception_ref") == M2_PROCESS_EXCEPTION_REF,
+        "execution planning rebaseline must record direct M2 closure and its non-reusable process exception",
     )
     coverage = plan.get("acceptance_ledger_coverage", {})
     require(
@@ -1479,6 +1534,27 @@ def validate_packets(
     )
     require(covered == required_ids, "active tasks do not cover exact acceptance set")
     validate_migration_task_contracts(tasks)
+    m2_state = tasks["M2"].get("execution_state", {})
+    require(
+        m2_state.get("state")
+        == "closed_with_recorded_evidence_and_process_debt"
+        and m2_state.get("acceptance_closure_claimed") is True
+        and m2_state.get("scope_closure_ref") == M2_SCOPE_CLOSURE_REF
+        and m2_state.get("process_exception_ref") == M2_PROCESS_EXCEPTION_REF
+        and m2_state.get("pending_gates") == []
+        and M2_DELIVERY_DEBT_REF in m2_state.get("closure_evidence_refs", []),
+        "M2 task packet must bind closed lifecycle evidence and its non-reusable process exception",
+    )
+    execution_state = packets.get("execution_state", {})
+    require(
+        execution_state.get("completed_task_refs") == EXPECTED_COMPLETED_TASK_REFS
+        and execution_state.get("implementation_complete_pending_lifecycle_task_refs")
+        == []
+        and execution_state.get("acceptance_open_task_refs")
+        == [task_id for task_id in EXPECTED_TASK_IDS if task_id not in {"M0", "M2"}]
+        and execution_state.get("factoryd_dispatch_enabled") is False,
+        "task packet set must preserve M0/M2 closure, later acceptance, and factoryd pause",
+    )
     validate_slices(
         packets.get("delivery_slices"),
         required_ids,
@@ -1713,6 +1789,18 @@ def validate_contract(contract: dict[str, Any], required_ids: set[str]) -> None:
         contract.get("factoryd_runtime_requirements"),
         "validation contract factoryd runtime",
     )
+    m2 = contract.get("m2_contract_implementation", {})
+    require(
+        m2.get("state") == "closed_with_recorded_evidence_and_process_debt"
+        and m2.get("acceptance_closure_claimed") is True
+        and m2.get("process_exception_ref") == M2_PROCESS_EXCEPTION_REF
+        and m2.get("pending_gates") == []
+        and M2_SCOPE_CLOSURE_REF in m2.get("closure_evidence_refs", [])
+        and M2_DELIVERY_DEBT_REF in m2.get("closure_evidence_refs", [])
+        and m2.get("runtime_claimed") is False
+        and m2.get("factoryd_authority_granted") is False,
+        "validation contract must bind closed M2 contract evidence without claiming runtime or factoryd authority",
+    )
     validate_slices(
         contract.get("delivery_slices"),
         required_ids,
@@ -1761,27 +1849,36 @@ def validate_closure(
             f"{item_id} closure must be item-granular",
         )
         if expected == "implemented":
+            expected_task_ref = "M2" if item_id.startswith("TRUST-") else "M0"
             require(
-                item.get("implemented_task_refs") == ["M0"],
-                f"{item_id} implemented closure must bind to M0",
+                item.get("implemented_task_refs") == [expected_task_ref],
+                f"{item_id} implemented closure must bind to {expected_task_ref}",
             )
             require(
                 item.get("remaining_task_refs") == [],
-                f"{item_id} implemented closure cannot retain M0 as remaining scope",
+                f"{item_id} implemented closure cannot retain completed task scope",
             )
             require(
                 item.get("evidence_refs") == ledger_item.get("evidence_refs"),
                 f"{item_id} closure evidence differs from ledger",
             )
         else:
+            expected_partial = EXPECTED_PARTIAL_IMPLEMENTED_TASK_REFS.get(
+                item_id, []
+            )
+            expected_remaining = [
+                task_id
+                for task_id in item.get("task_refs", [])
+                if task_id not in expected_partial
+            ]
             require(
-                item.get("implemented_task_refs") == [],
-                f"{item_id} cannot claim an unexecuted v3 task",
+                item.get("implemented_task_refs") == expected_partial,
+                f"{item_id} implemented prerequisite task refs are stale",
             )
             require(
                 list_of_strings(item.get("remaining_task_refs"))
-                and item.get("remaining_task_refs") == item.get("task_refs"),
-                f"{item_id} must retain every active v3 task as remaining scope",
+                and item.get("remaining_task_refs") == expected_remaining,
+                f"{item_id} must retain every unclosed active v3 task as remaining scope",
             )
     slices = validate_slices(
         closure.get("delivery_slices"),

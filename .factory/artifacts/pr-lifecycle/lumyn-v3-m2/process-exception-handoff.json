@@ -1,0 +1,101 @@
+{
+  "artifact_type": "handoff_record",
+  "schema_version": "0.1",
+  "work_item_id": "lumyn-v3-m2",
+  "current_state": "exception_approved",
+  "workspace_ref": ".",
+  "branch_ref": "codex/lumyn-m2-contracts",
+  "decisions": [
+    "M2 product changes landed through PR #72 and passed required PR and exact-main validate and CodeQL checks.",
+    "The repaired PR head had no terminal latest-head Codex approval or thumbs-up before the repository owner merged it; all three earlier-head P1 threads were resolved and no late actionable finding appeared.",
+    "On 2026-07-26 the repository owner instructed Codex that PR #72 was merged and to continue with the next task. This approves truthful task-specific closed-with-debt recording and continuation, but does not retroactively satisfy the skipped review gate."
+  ],
+  "blockers": [],
+  "blocked_reason": "",
+  "validation_status": {
+    "status": "green_with_approved_process_exception",
+    "completed_checks": [
+      "M2 trusted local validation run validation:2026-07-26T16:32:25Z:50773146792248c5907105189e125e8a",
+      "M2 independent security review",
+      "PR #72 validate",
+      "PR #72 CodeQL analyze",
+      "main validate at f89bc82490ffb6df908df6f8572054ee051ed6c6",
+      "main codeql at f89bc82490ffb6df908df6f8572054ee051ed6c6",
+      "post-merge late Codex inventory with zero actionable current-head findings"
+    ],
+    "pending_checks": []
+  },
+  "residual_risks": [
+    "M2 has no terminal latest-head Codex settle evidence for commit 9345f3392ec98eb0e10345fe7941fd9d1450e55b.",
+    "The exception is historical and task-specific; it grants no carry-forward review or merge permission to M1 or any later task.",
+    "M2 is contract-only; provider intake, repository analysis, generation, verification, delivery, and provider reporting still require later milestone evidence."
+  ],
+  "next_actions": [
+    "Persist the M2 lifecycle report, post-merge proof, ship packet, scope closure, and delivery debt.",
+    "Synchronize the active compiled controls without closing shared event or installation runtime acceptance.",
+    "Run M1 attended with its declared benchmark, walking-skeleton, holdout, review, shipping, and post-merge gates."
+  ],
+  "owner_needed": "none",
+  "promised_followups": [
+    "Do not reuse this exception as review evidence.",
+    "Keep factoryd paused until the compiled controls and runtime are qualified."
+  ],
+  "checkpoint_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/pr-lifecycle-report.json",
+  "resume_artifact_refs": [
+    ".factory/artifacts/task-runs/M2/validation-report.json",
+    ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+    ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+  ],
+  "artifact_refs": [
+    ".factory/artifacts/task-runs/M2/validation-report.json",
+    ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+    ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+    ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
+  ],
+  "human_intervention_count": 2,
+  "human_review_minutes": 0,
+  "blocked_wait_time": "PT19M23S",
+  "attention_reason": "manual_merge_after_nonterminal_codex_review",
+  "avoidable_interruption": true,
+  "automation_candidate": "Reliably re-run Codex review and emit a terminal signal after a fix push so manual intervention is unnecessary.",
+  "merge_authority_grant": {
+    "capability": "merge_authority",
+    "task_id": "M2",
+    "approved": true,
+    "approved_by": "davidahmann",
+    "approval_source": "The repository owner approved implementation and Factory commit-push land mode in this task before PR #72, then confirmed the merge and instructed continuation.",
+    "approved_on": "2026-07-26",
+    "expires_at": "2026-07-27T00:00:00Z"
+  },
+  "approval_card": {
+    "decision_needed": "Approve M2 closed-with-debt lifecycle recording and permit M1 to proceed without treating the skipped latest-head Codex settle as satisfied.",
+    "risk_summary": "PR #72 merged with green PR and main checks after all three P1 findings were repaired, but the final head lacked terminal Codex review evidence.",
+    "owner": "davidahmann",
+    "timeout": "2026-07-26T18:04:15Z",
+    "evidence_refs": [
+      ".factory/artifacts/task-runs/M2/validation-report.json",
+      ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json"
+    ],
+    "decision_options": [
+      "approve",
+      "reject",
+      "defer"
+    ],
+    "decision_status": "approved",
+    "followup_artifact_refs": [
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
+    ],
+    "routing_targets": [
+      {
+        "surface_kind": "chat_card",
+        "adapter_hint": "codex",
+        "payload_summary": "Repository owner stated that PR #72 was merged and instructed Codex to continue with the next task."
+      }
+    ]
+  }
+}

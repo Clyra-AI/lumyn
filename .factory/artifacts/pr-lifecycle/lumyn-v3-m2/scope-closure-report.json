@@ -1,0 +1,198 @@
+{
+  "artifact_type": "scope_closure_report",
+  "schema_version": "0.1",
+  "task_id": "M2",
+  "work_item_id": "lumyn-v3-m2",
+  "mission_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+  "intent_source_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+  "intent_source_locator": "task:M2",
+  "event_log_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/mission-event-log.json",
+  "work_proof_marker_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-work-proof/work-proof-marker.json"
+  ],
+  "validation_report_refs": [
+    ".factory/artifacts/task-runs/M2/validation-report.json"
+  ],
+  "closure_items": [
+    {
+      "intent_item_id": "EVENT-001",
+      "intent_statement": "Define executable authenticated Provider Change Event and non-executable Provider Change Contract validation with exact origin, identity, digest, audience, freshness, lifecycle, supersession, and withdrawal fields.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "schemas/provider-change-event.schema.json",
+        "schemas/migration-pack.schema.json",
+        "internal/change/event.go",
+        "internal/installation/channel.go"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": []
+    },
+    {
+      "intent_item_id": "EVENT-002",
+      "intent_statement": "Define fail-closed duplicate, replay, stale, conflicting, expired, superseded, withdrawn, wrong-audience, unauthenticated, and attended-recovery semantics.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "schemas/provider-change-event.schema.json",
+        "internal/change/event.go",
+        "internal/change/event_test.go",
+        "tests/fixtures/contracts/provider-change-event/"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": []
+    },
+    {
+      "intent_item_id": "INSTALL-001",
+      "intent_statement": "Define a revocable persisted Consumer Installation that binds repository, channel, action, path, command, agent, model, funding, delivery, reporting, retention, expiry, and revocation authority without reusable credentials.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "schemas/consumer-installation.schema.json",
+        "schemas/consumer_installation.go",
+        "internal/authorization/persisted_installation.go",
+        "internal/installation/channel.go"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": []
+    },
+    {
+      "intent_item_id": "INSTALL-002",
+      "intent_statement": "Define immutable event-specific authorization as a canonical persisted non-widening derivation of the installation, exact event, plan, route, commands, paths, budgets, verification, and credential issuance.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "schemas/event-authorization.schema.json",
+        "internal/authorization/persisted_event_authorization.go",
+        "internal/authorization/policy.go",
+        "internal/authorization/persisted_event_authorization_test.go"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": []
+    },
+    {
+      "intent_item_id": "TRUST-001",
+      "intent_statement": "Bind all configured consumer authority and derive every event authorization without widening the installed policy.",
+      "classification": "implemented_with_debt",
+      "implementation_refs": [
+        "schemas/consumer-installation.schema.json",
+        "schemas/event-authorization.schema.json",
+        "schemas/consumer-execution-manifest.schema.json",
+        "internal/authorization/"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/process-exception-handoff.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-work-proof/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": [],
+      "delivery_debt_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
+    },
+    {
+      "intent_item_id": "TRUST-002",
+      "intent_statement": "Keep provider contracts, events, and artifacts non-executable while prohibiting production credentials and production mutation.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "schemas/provider-change-event.schema.json",
+        "schemas/migration-pack.schema.json",
+        "internal/change/event.go",
+        "schemas/m2_security_test.go"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": []
+    },
+    {
+      "intent_item_id": "TRUST-003",
+      "intent_statement": "Make Agent Runner, model route, funding, credential and billing ownership, disclosure, retention, redaction, and provider non-access explicit and fail closed.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "schemas/agent-runner-manifest.schema.json",
+        "schemas/agent-runner-conformance-result.schema.json",
+        "schemas/agent-attempt.schema.json",
+        "internal/agent/conformance.go",
+        "internal/redaction/provider_payload.go"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": []
+    },
+    {
+      "intent_item_id": "TRUST-004",
+      "intent_statement": "Keep consumer-private artifacts outside the checkout and provider visibility, including source, runner/model context, sessions, credentials, and non-consented status fields.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "internal/evidence/private_root.go",
+        "internal/redaction/provider_payload.go",
+        "internal/status/projection.go",
+        "schemas/provider-status-projection.schema.json"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": []
+    }
+  ],
+  "delivery_debt_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
+  ],
+  "approved_deferral_refs": [],
+  "blocker_refs": [],
+  "overall_status": "closed_with_debt",
+  "rerun_required": false,
+  "generated_at": "2026-07-26T17:04:16Z"
+}

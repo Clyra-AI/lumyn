@@ -99,11 +99,10 @@
     "status": "factoryd_blocked_attended_execution_requires_explicit_approval",
     "implementation_may_start": false,
     "completed_task_refs": [
-      "M0"
-    ],
-    "implementation_complete_pending_lifecycle_task_refs": [
+      "M0",
       "M2"
     ],
+    "implementation_complete_pending_lifecycle_task_refs": [],
     "blocked_tasks": [
       "M1",
       "M2.5",
@@ -116,10 +115,9 @@
       "M9",
       "M10"
     ],
-    "reason": "This generation grants no later task authority; M2 is locally complete but awaits current-head PR lifecycle and item-level closure, and factoryd remains unqualified and paused.",
+    "reason": "M2 is closed with task-specific process debt. This generation grants no later task authority, and factoryd remains unqualified and paused; attended M1 requires explicit task approval outside this generation.",
     "unblock_dependencies": [
-      "Complete M2 current-head CI, CodeQL, passive Codex review, merge, post-merge monitoring, PR lifecycle evidence, and item-level scope closure.",
-      "For attended execution after M2 closure, explicitly approve one exact task packet and its required Factory and Lumyn product grants.",
+      "For attended execution, explicitly approve one exact task packet and its required Factory and Lumyn product grants.",
       "For factoryd execution, qualify the bundle/runtime against this exact v3.1 generation and explicitly unpause one bounded task with positive budgets and complete grants."
     ]
   },
@@ -355,9 +353,11 @@
     "completed_by_this_generation": true,
     "runtime_behavior_changed": false,
     "m0_completion_claimed": true,
-    "m2_contract_implementation_status": "implementation_and_local_validation_complete_lifecycle_pending",
-    "m2_acceptance_closure_claimed": false,
-    "rule": "Generated controls may record current implementation and validation progress, but acceptance remains open until task-bound current-head PR lifecycle and post-merge evidence close it."
+    "m2_contract_implementation_status": "closed_with_recorded_evidence_and_process_debt",
+    "m2_acceptance_closure_claimed": true,
+    "m2_scope_closure_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+    "m2_process_exception_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/process-exception-handoff.json",
+    "rule": "M2 task scope is closed with direct evidence and an approved non-reusable review-gate exception. Shared event and installation acceptance remains open for its later runtime task refs."
   },
   "stop_conditions": [
     "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
@@ -368,6 +368,6 @@
     "provider code access, production credential, default-branch write, or auto-merge is requested",
     "commercial evidence or generic-agent comparison is not direct, frozen, fair, and independently attested"
   ],
-  "generated_by": "prd-to-plan+execution-compiler",
-  "generated_at": "2026-07-26T16:32:45Z"
+  "generated_by": "prd-to-plan+execution-compiler+post-merge-monitor",
+  "generated_at": "2026-07-26T17:04:17Z"
 }

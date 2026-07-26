@@ -5,7 +5,7 @@
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
   "acceptance_mapping_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
   "acceptance_item_count": 53,
-  "last_updated_at": "2026-07-26T16:32:45Z",
+  "last_updated_at": "2026-07-26T17:04:17Z",
   "closure_status": "partial",
   "full_mvp_closure_rule": "Every acceptance item must have direct terminal evidence or an approved item-specific disposition. Milestones and delivery slices cannot close items.",
   "delivery_slices": [
@@ -65,19 +65,14 @@
         "IMPACT-005",
         "PLAN-001",
         "PLAN-002",
-        "PLAN-003",
-        "TRUST-001",
-        "TRUST-002",
-        "TRUST-003",
-        "TRUST-004"
+        "PLAN-003"
       ],
       "status": "partial",
       "completed_task_refs": [
-        "M0"
-      ],
-      "implementation_complete_pending_lifecycle_task_refs": [
+        "M0",
         "M2"
-      ]
+      ],
+      "implementation_complete_pending_lifecycle_task_refs": []
     },
     {
       "slice_id": "hybrid_migration_engine",
@@ -455,10 +450,11 @@
         "M2",
         "M3"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M2"
+      ],
       "remaining_task_refs": [
         "M1",
-        "M2",
         "M3"
       ],
       "status": "missing",
@@ -470,7 +466,7 @@
         }
       ],
       "notes": [
-        "M2 contract prerequisite is implemented and locally validated; M3 runtime evidence and M2 terminal lifecycle evidence are still required."
+        "M2 contract prerequisite is task-closed with direct lifecycle evidence; M1 benchmark and M3 runtime evidence remain required."
       ],
       "completed_prerequisite_task_refs": [
         "M2"
@@ -479,7 +475,8 @@
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
       ]
     },
     {
@@ -494,10 +491,11 @@
         "M2",
         "M3"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M2"
+      ],
       "remaining_task_refs": [
         "M1",
-        "M2",
         "M3"
       ],
       "status": "missing",
@@ -509,7 +507,7 @@
         }
       ],
       "notes": [
-        "M2 contract prerequisite is implemented and locally validated; M3 runtime evidence and M2 terminal lifecycle evidence are still required."
+        "M2 contract prerequisite is task-closed with direct lifecycle evidence; M1 benchmark and M3 runtime evidence remain required."
       ],
       "completed_prerequisite_task_refs": [
         "M2"
@@ -518,7 +516,8 @@
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
       ]
     },
     {
@@ -533,10 +532,11 @@
         "M2",
         "M5"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M2"
+      ],
       "remaining_task_refs": [
         "M1",
-        "M2",
         "M5"
       ],
       "status": "missing",
@@ -548,7 +548,7 @@
         }
       ],
       "notes": [
-        "M2 contract prerequisite is implemented and locally validated; M5 runtime evidence and M2 terminal lifecycle evidence are still required."
+        "M2 contract prerequisite is task-closed with direct lifecycle evidence; M1 benchmark and M5 runtime evidence remain required."
       ],
       "completed_prerequisite_task_refs": [
         "M2"
@@ -557,7 +557,8 @@
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
       ]
     },
     {
@@ -572,10 +573,11 @@
         "M2",
         "M5"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M2"
+      ],
       "remaining_task_refs": [
         "M1",
-        "M2",
         "M5"
       ],
       "status": "missing",
@@ -587,7 +589,7 @@
         }
       ],
       "notes": [
-        "M2 contract prerequisite is implemented and locally validated; M5 runtime evidence and M2 terminal lifecycle evidence are still required."
+        "M2 contract prerequisite is task-closed with direct lifecycle evidence; M1 benchmark and M5 runtime evidence remain required."
       ],
       "completed_prerequisite_task_refs": [
         "M2"
@@ -596,7 +598,8 @@
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
       ]
     },
     {
@@ -1283,29 +1286,33 @@
       "task_refs": [
         "M2"
       ],
-      "implemented_task_refs": [],
-      "remaining_task_refs": [
+      "implemented_task_refs": [
         "M2"
       ],
-      "status": "missing",
+      "remaining_task_refs": [],
+      "status": "implemented",
       "closure_rule": "direct item-level evidence; milestones and delivery slices are coverage lenses only",
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "TRUST-001",
-          "status": "missing"
+          "status": "implemented"
         }
       ],
       "notes": [
-        "M2 implementation and local validation are complete, but item closure remains missing until current-head PR lifecycle and post-merge evidence exist."
+        "M2 closed this trust contract with direct product and lifecycle evidence. The task-specific missing latest-head Codex terminal signal is recorded as non-reusable governance debt, not a known behavior gap."
       ],
-      "implementation_complete_task_refs": [
-        "M2"
-      ],
-      "progress_evidence_refs": [
+      "evidence_refs": [
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
+      ],
+      "delivery_debt_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
       ]
     },
     {
@@ -1318,29 +1325,29 @@
       "task_refs": [
         "M2"
       ],
-      "implemented_task_refs": [],
-      "remaining_task_refs": [
+      "implemented_task_refs": [
         "M2"
       ],
-      "status": "missing",
+      "remaining_task_refs": [],
+      "status": "implemented",
       "closure_rule": "direct item-level evidence; milestones and delivery slices are coverage lenses only",
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "TRUST-002",
-          "status": "missing"
+          "status": "implemented"
         }
       ],
       "notes": [
-        "M2 implementation and local validation are complete, but item closure remains missing until current-head PR lifecycle and post-merge evidence exist."
+        "M2 closed this non-executable provider-artifact contract with direct product and lifecycle evidence."
       ],
-      "implementation_complete_task_refs": [
-        "M2"
-      ],
-      "progress_evidence_refs": [
+      "evidence_refs": [
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
       ]
     },
     {
@@ -1353,29 +1360,29 @@
       "task_refs": [
         "M2"
       ],
-      "implemented_task_refs": [],
-      "remaining_task_refs": [
+      "implemented_task_refs": [
         "M2"
       ],
-      "status": "missing",
+      "remaining_task_refs": [],
+      "status": "implemented",
       "closure_rule": "direct item-level evidence; milestones and delivery slices are coverage lenses only",
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "TRUST-003",
-          "status": "missing"
+          "status": "implemented"
         }
       ],
       "notes": [
-        "M2 implementation and local validation are complete, but item closure remains missing until current-head PR lifecycle and post-merge evidence exist."
+        "M2 closed the explicit runner/model/funding/disclosure and redaction contract with direct product and lifecycle evidence."
       ],
-      "implementation_complete_task_refs": [
-        "M2"
-      ],
-      "progress_evidence_refs": [
+      "evidence_refs": [
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
       ]
     },
     {
@@ -1388,29 +1395,29 @@
       "task_refs": [
         "M2"
       ],
-      "implemented_task_refs": [],
-      "remaining_task_refs": [
+      "implemented_task_refs": [
         "M2"
       ],
-      "status": "missing",
+      "remaining_task_refs": [],
+      "status": "implemented",
       "closure_rule": "direct item-level evidence; milestones and delivery slices are coverage lenses only",
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "TRUST-004",
-          "status": "missing"
+          "status": "implemented"
         }
       ],
       "notes": [
-        "M2 implementation and local validation are complete, but item closure remains missing until current-head PR lifecycle and post-merge evidence exist."
+        "M2 closed the consumer-private artifact and exact provider-payload projection contract with direct product and lifecycle evidence."
       ],
-      "implementation_complete_task_refs": [
-        "M2"
-      ],
-      "progress_evidence_refs": [
+      "evidence_refs": [
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
       ]
     },
     {
@@ -1702,10 +1709,10 @@
       ]
     }
   ],
-  "generated_by": "prd-to-plan+execution-compiler",
-  "generated_at": "2026-07-26T16:32:45Z",
+  "generated_by": "prd-to-plan+execution-compiler+post-merge-monitor",
+  "generated_at": "2026-07-26T17:04:17Z",
   "generation_state": {
     "M0": "closed_preserved",
-    "M2": "implementation_and_local_validation_complete_lifecycle_and_acceptance_pending"
+    "M2": "closed_with_recorded_evidence_and_process_debt"
   }
 }

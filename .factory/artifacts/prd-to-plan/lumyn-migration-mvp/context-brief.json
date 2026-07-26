@@ -9,7 +9,7 @@
   "system_model_summary": "The provider change plane supplies one confirmed non-executable contract and event. A revocable Consumer Installation owns event-specific repository, Agent Runner/model-data, command, credential, delivery, and disclosure authority. A consumer-selected qualified Agent Runner operates through a clean bounded session and cannot self-approve or self-verify; the status projection cannot infer consumer state.",
   "proven_findings": [
     "M0 closed the retained CLI, result, command, schema, intake, and repository-governance foundation with its recorded evidence and explicit process debt.",
-    "M2 implements the executable v3 artifact schemas, fixtures, and fail-closed semantic validators; its local validation and independent security review are current, while PR lifecycle and item-level acceptance closure remain pending.",
+    "M2 closed its executable v3 artifact-schema, fixture, and fail-closed semantic-validator task scope with direct local validation, independent security review, landed-content binding, healthy exact-main checks, and explicit non-reusable process debt for the skipped latest-head Codex terminal signal.",
     "The external Factory profile profiles/lumyn.yaml is aligned to the Lumyn v3.1 provider update-delivery contract and keeps dispatch disabled.",
     "The provider-event, Consumer Installation, migration engine, verification, export, draft-PR, status-projection, and paid-campaign product runtimes remain assigned to M3 and later milestones.",
     "factoryd has not been qualified against the active v3.1 mission, bundle, Agent Runner/model, product-action, evidence, or closure semantics."
@@ -33,7 +33,7 @@
     ],
     "blocking": [
       "this generated control set grants no later implementation task authority",
-      "M2 acceptance and lifecycle closure remain pending until the current PR completes every remote and post-merge gate",
+      "M2's skipped latest-head Codex terminal signal is recorded as task-specific process debt and cannot be reused by a later task",
       "factoryd v3 runtime and bundle qualification are absent"
     ]
   },
@@ -48,7 +48,7 @@
   "open_questions": [],
   "constraints": [
     "This regeneration changes planning controls only and grants no product runtime or live campaign authority.",
-    "M2 implementation and local validation do not close acceptance before current-head CI, review, merge, post-merge, and task-bound closure evidence exist.",
+    "M2 task closure does not close shared provider-event or Consumer Installation runtime acceptance assigned to M3 and M5.",
     "No provider code access, production credentials, default-branch write, or auto-merge."
   ],
   "factory_compatibility": {
@@ -146,6 +146,6 @@
     "commit-push",
     "post-merge-monitor"
   ],
-  "generated_by": "prd-to-plan+execution-compiler",
-  "generated_at": "2026-07-26T16:32:45Z"
+  "generated_by": "prd-to-plan+execution-compiler+post-merge-monitor",
+  "generated_at": "2026-07-26T17:04:17Z"
 }
