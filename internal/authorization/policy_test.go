@@ -1,10 +1,86 @@
 package authorization
 
 import (
+	"encoding/json"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
 )
+
+func TestDecodeAndValidateInstallationAcceptsCanonicalPersistedContract(t *testing.T) {
+	now := time.Date(2026, 7, 26, 14, 0, 0, 0, time.UTC)
+	data := readCanonicalInstallationFixture(t)
+
+	installation, err := DecodeAndValidateInstallation(data, now)
+	if err != nil {
+		t.Fatalf("canonical persisted installation rejected: %v", err)
+	}
+	if installation.Repository != "github.com/acme/checkout-service" {
+		t.Fatalf("repository = %q, want canonical repository identity", installation.Repository)
+	}
+	if installation.ProviderChannelOrigin != "https://updates.payments.example" ||
+		installation.ProviderManifestURL != "https://updates.payments.example/campaigns/node-v5/event.json" {
+		t.Fatalf("provider channel was not preserved: %#v", installation)
+	}
+	if installation.AgentPolicy.Runner == nil || installation.AgentPolicy.Runner.AdapterID != "codex" {
+		t.Fatalf("configured runner policy was not preserved: %#v", installation.AgentPolicy)
+	}
+	if len(installation.Scope.Commands) != 1 || installation.Scope.Commands[0] != "command.npm_test" {
+		t.Fatalf("command identity ceiling was not preserved: %#v", installation.Scope.Commands)
+	}
+	if installation.Budgets.MaxDiffBytes != 64000 || installation.Budgets.MaxTurns != 20 || installation.Budgets.MaxCostCents != 2500 {
+		t.Fatalf("persisted budgets were not preserved: %#v", installation.Budgets)
+	}
+
+}
+
+func TestDecodeAndValidateInstallationRejectsPersistedShapeDrift(t *testing.T) {
+	now := time.Date(2026, 7, 26, 14, 0, 0, 0, time.UTC)
+	var value map[string]any
+	if err := json.Unmarshal(readCanonicalInstallationFixture(t), &value); err != nil {
+		t.Fatalf("decode canonical fixture: %v", err)
+	}
+
+	// This is the flattened/bespoke representation that originally decoded
+	// into Installation while being incompatible with the persisted schema.
+	value["repository"] = "github.com/acme/checkout-service"
+	value["provider_channel_origin"] = "https://updates.payments.example"
+	data, err := json.Marshal(value)
+	if err != nil {
+		t.Fatalf("encode drifted installation: %v", err)
+	}
+	if _, err := DecodeAndValidateInstallation(data, now); err == nil {
+		t.Fatal("flattened persisted installation shape must fail closed")
+	}
+}
+
+func TestDecodeAndValidateInstallationRejectsSchemaValidAuthorityMismatch(t *testing.T) {
+	now := time.Date(2026, 7, 26, 14, 0, 0, 0, time.UTC)
+	var value map[string]any
+	if err := json.Unmarshal(readCanonicalInstallationFixture(t), &value); err != nil {
+		t.Fatalf("decode canonical fixture: %v", err)
+	}
+	value["capability_ceiling"].(map[string]any)["customer_repo_read"] = false
+	data, err := json.Marshal(value)
+	if err != nil {
+		t.Fatalf("encode inconsistent installation: %v", err)
+	}
+	if _, err := DecodeAndValidateInstallation(data, now); err == nil || !strings.Contains(err.Error(), "readable paths require customer_repo_read") {
+		t.Fatalf("schema-valid authority mismatch error = %v", err)
+	}
+}
+
+func readCanonicalInstallationFixture(t *testing.T) []byte {
+	t.Helper()
+	path := filepath.Join("..", "..", "tests", "fixtures", "contracts", "consumer-installation", "valid.json")
+	data, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read canonical installation fixture: %v", err)
+	}
+	return data
+}
 
 func TestValidateInstallationAcceptsBoundedDisabledPolicy(t *testing.T) {
 	now := time.Date(2026, 7, 26, 14, 0, 0, 0, time.UTC)
@@ -88,7 +164,7 @@ func TestValidateSnapshotRejectsEveryWideningPath(t *testing.T) {
 	now := time.Date(2026, 7, 26, 14, 0, 0, 0, time.UTC)
 	installation := boundedInstallation(now)
 	snapshot := boundedSnapshot()
-	if err := ValidateSnapshot(installation, snapshot, now); err != nil {
+	if err := validateSnapshot(installation, snapshot, now); err != nil {
 		t.Fatalf("bounded snapshot rejected: %v", err)
 	}
 
@@ -108,7 +184,7 @@ func TestValidateSnapshotRejectsEveryWideningPath(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			value := boundedSnapshot()
 			mutate(&value)
-			if err := ValidateSnapshot(installation, value, now); err == nil {
+			if err := validateSnapshot(installation, value, now); err == nil {
 				t.Fatal("expected widening snapshot rejection")
 			}
 		})
@@ -121,7 +197,7 @@ func TestValidateSnapshotDistinguishesApprovalModesAndChannelProof(t *testing.T)
 	snapshot := boundedSnapshot()
 
 	snapshot.ExactPlanApproved = false
-	if err := ValidateSnapshot(installation, snapshot, now); err == nil {
+	if err := validateSnapshot(installation, snapshot, now); err == nil {
 		t.Fatal("per-event approval without exact-plan approval must fail")
 	}
 
@@ -129,12 +205,12 @@ func TestValidateSnapshotDistinguishesApprovalModesAndChannelProof(t *testing.T)
 	snapshot.ExactPlanApproved = false
 	snapshot.InstalledPolicySatisfied = true
 	snapshot.ProviderChannelDeliveryProven = false
-	if err := ValidateSnapshot(installation, snapshot, now); err == nil {
+	if err := validateSnapshot(installation, snapshot, now); err == nil {
 		t.Fatal("installed preauthorization from attended import must fail")
 	}
 
 	snapshot.ProviderChannelDeliveryProven = true
-	if err := ValidateSnapshot(installation, snapshot, now); err != nil {
+	if err := validateSnapshot(installation, snapshot, now); err != nil {
 		t.Fatalf("bounded installed preauthorization rejected: %v", err)
 	}
 }
@@ -144,7 +220,7 @@ func TestValidateSnapshotRequiresConfiguredAgentRoute(t *testing.T) {
 	installation := boundedInstallation(now)
 	snapshot := boundedSnapshot()
 	snapshot.Route = AgentAssisted
-	if err := ValidateSnapshot(installation, snapshot, now); err == nil {
+	if err := validateSnapshot(installation, snapshot, now); err == nil {
 		t.Fatal("disabled policy must reject agent-assisted route")
 	}
 }

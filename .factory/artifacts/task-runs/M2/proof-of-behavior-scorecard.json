@@ -3,8 +3,8 @@
   "task_id": "M2",
   "work_item_id": "lumyn-v3-m2",
   "required_proof_level": "workflow_behavior",
-  "validation_run_id": "validation:2026-07-26T15:34:54Z:af085bbc5cd84b0a98c8388214ac6de5",
-  "candidate_digest": "sha256:44c3b0fe8a422324e6dd08bf24c6dbce2e477225b8783fa4ab5d4c1db97da8df",
+  "validation_run_id": "validation:2026-07-26T16:32:25Z:50773146792248c5907105189e125e8a",
+  "candidate_digest": "sha256:8509fbe0980c17d6e6ad3d9cd2b8f04e122d9d6699cb7162b33492198e040324",
   "levels": [
     {
       "level": "syntax",

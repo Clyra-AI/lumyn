@@ -50,5 +50,13 @@
     "provider event is unauthenticated, stale, conflicting, wrong-audience, superseded, or withdrawn",
     "event-specific authority widens the Consumer Installation or provider status is inferred from silence",
     "manual-only delivery is proposed as automated draft-PR proof"
-  ]
+  ],
+  "generated_by": "prd-to-plan+execution-compiler",
+  "generated_at": "2026-07-26T16:32:45Z",
+  "current_contract_state": {
+    "M0": "closed_with_recorded_evidence_and_process_debt",
+    "M2": "implementation_and_local_validation_complete_lifecycle_and_acceptance_pending",
+    "factory_profile": "aligned_lumyn_v3_1",
+    "factoryd_runtime": "blocked_factoryd_v3_1_qualification_required"
+  }
 }

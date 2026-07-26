@@ -38,7 +38,20 @@
       "acceptance_item_ids": [
         "EVENT-001",
         "EVENT-002"
-      ]
+      ],
+      "implementation_progress": {
+        "completed_prerequisite_task_refs": [
+          "M2"
+        ],
+        "runtime_closure_task_ref": "M3",
+        "acceptance_status": "planned",
+        "progress_evidence_refs": [
+          ".factory/artifacts/task-runs/M2/validation-report.json",
+          ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+          ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+          ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ]
+      }
     },
     {
       "group_id": "consumer_installation",
@@ -48,7 +61,20 @@
       "acceptance_item_ids": [
         "INSTALL-001",
         "INSTALL-002"
-      ]
+      ],
+      "implementation_progress": {
+        "completed_prerequisite_task_refs": [
+          "M2"
+        ],
+        "runtime_closure_task_ref": "M5",
+        "acceptance_status": "planned",
+        "progress_evidence_refs": [
+          ".factory/artifacts/task-runs/M2/validation-report.json",
+          ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+          ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+          ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ]
+      }
     },
     {
       "group_id": "impact_and_integration_graph",
@@ -125,7 +151,22 @@
         "TRUST-002",
         "TRUST-003",
         "TRUST-004"
-      ]
+      ],
+      "implementation_progress": {
+        "implementation_complete_task_refs": [
+          "M2"
+        ],
+        "lifecycle_pending_task_refs": [
+          "M2"
+        ],
+        "acceptance_status": "planned",
+        "progress_evidence_refs": [
+          ".factory/artifacts/task-runs/M2/validation-report.json",
+          ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+          ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+          ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ]
+      }
     },
     {
       "group_id": "design_partner_qualification",
@@ -195,6 +236,12 @@
         "TRUST-002",
         "TRUST-003",
         "TRUST-004"
+      ],
+      "completed_task_refs": [
+        "M0"
+      ],
+      "implementation_complete_pending_lifecycle_task_refs": [
+        "M2"
       ]
     },
     {
@@ -249,5 +296,7 @@
         "PILOT-008"
       ]
     }
-  ]
+  ],
+  "generated_by": "prd-to-plan+execution-compiler",
+  "generated_at": "2026-07-26T16:32:45Z"
 }

@@ -1,17 +1,17 @@
 go test ./... -count=1
-ok  	github.com/Clyra-AI/lumyn/cmd/lumyn	5.667s
-ok  	github.com/Clyra-AI/lumyn/internal/agent	1.522s
-ok  	github.com/Clyra-AI/lumyn/internal/authorization	1.887s
-ok  	github.com/Clyra-AI/lumyn/internal/change	1.328s
-ok  	github.com/Clyra-AI/lumyn/internal/config	1.140s
-ok  	github.com/Clyra-AI/lumyn/internal/evidence	2.220s
-ok  	github.com/Clyra-AI/lumyn/internal/exitcode	1.720s
-ok  	github.com/Clyra-AI/lumyn/internal/installation	0.340s
-ok  	github.com/Clyra-AI/lumyn/internal/redaction	0.770s
-ok  	github.com/Clyra-AI/lumyn/internal/result	0.929s
-ok  	github.com/Clyra-AI/lumyn/internal/source	10.424s
-ok  	github.com/Clyra-AI/lumyn/internal/source/markdownlinks	2.300s
-ok  	github.com/Clyra-AI/lumyn/internal/status	1.759s
+ok  	github.com/Clyra-AI/lumyn/cmd/lumyn	4.524s
+ok  	github.com/Clyra-AI/lumyn/internal/agent	0.511s
+ok  	github.com/Clyra-AI/lumyn/internal/authorization	0.697s
+ok  	github.com/Clyra-AI/lumyn/internal/change	1.325s
+ok  	github.com/Clyra-AI/lumyn/internal/config	1.865s
+ok  	github.com/Clyra-AI/lumyn/internal/evidence	0.880s
+ok  	github.com/Clyra-AI/lumyn/internal/exitcode	1.090s
+ok  	github.com/Clyra-AI/lumyn/internal/installation	1.504s
+ok  	github.com/Clyra-AI/lumyn/internal/redaction	2.053s
+ok  	github.com/Clyra-AI/lumyn/internal/result	1.689s
+ok  	github.com/Clyra-AI/lumyn/internal/source	2.498s
+ok  	github.com/Clyra-AI/lumyn/internal/source/markdownlinks	2.199s
+ok  	github.com/Clyra-AI/lumyn/internal/status	2.554s
 ?   	github.com/Clyra-AI/lumyn/internal/version	[no test files]
-ok  	github.com/Clyra-AI/lumyn/schemas	2.327s
-ok  	github.com/Clyra-AI/lumyn/tests	2.473s
+ok  	github.com/Clyra-AI/lumyn/schemas	2.923s
+ok  	github.com/Clyra-AI/lumyn/tests	2.422s

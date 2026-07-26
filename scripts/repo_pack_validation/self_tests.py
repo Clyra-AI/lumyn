@@ -889,6 +889,38 @@ def run_repo_pack_self_tests(
             "dispatch must be disabled",
         ),
         (
+            lambda value: _task(value, "M2")[
+                "validation_contract_inheritance"
+            ]["required_review"].__setitem__("review_type", "code"),
+            "M2 review type must remain security",
+        ),
+        (
+            lambda value: _task(value, "M2").__setitem__(
+                "risk_class", "medium"
+            ),
+            "M2 risk class must remain high",
+        ),
+        (
+            lambda value: _task(value, "M2")[
+                "validation_contract_inheritance"
+            ]["required_review"].__setitem__(
+                "reviewer_class", "validation_gate_or_review"
+            ),
+            "M2 reviewer class must remain independent_or_human",
+        ),
+        (
+            lambda value: value["contract"]["required_review"].__setitem__(
+                "review_type", "code"
+            ),
+            "validation contract must require the security review lens",
+        ),
+        (
+            lambda value: value["contract"]["required_review"].__setitem__(
+                "reviewer_class", "validation_gate_or_review"
+            ),
+            "validation contract reviewer class must remain independent_or_human",
+        ),
+        (
             lambda value: value["plan"]["alignment_gate"].__setitem__(
                 "implementation_may_start", True
             ),

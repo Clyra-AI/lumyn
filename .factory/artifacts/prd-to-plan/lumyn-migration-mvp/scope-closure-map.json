@@ -5,7 +5,7 @@
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
   "acceptance_mapping_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
   "acceptance_item_count": 53,
-  "last_updated_at": "2026-07-26T13:10:20Z",
+  "last_updated_at": "2026-07-26T16:32:45Z",
   "closure_status": "partial",
   "full_mvp_closure_rule": "Every acceptance item must have direct terminal evidence or an approved item-specific disposition. Milestones and delivery slices cannot close items.",
   "delivery_slices": [
@@ -71,7 +71,13 @@
         "TRUST-003",
         "TRUST-004"
       ],
-      "status": "partial"
+      "status": "partial",
+      "completed_task_refs": [
+        "M0"
+      ],
+      "implementation_complete_pending_lifecycle_task_refs": [
+        "M2"
+      ]
     },
     {
       "slice_id": "hybrid_migration_engine",
@@ -464,7 +470,16 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "M2 contract prerequisite is implemented and locally validated; M3 runtime evidence and M2 terminal lifecycle evidence are still required."
+      ],
+      "completed_prerequisite_task_refs": [
+        "M2"
+      ],
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
       ]
     },
     {
@@ -494,7 +509,16 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "M2 contract prerequisite is implemented and locally validated; M3 runtime evidence and M2 terminal lifecycle evidence are still required."
+      ],
+      "completed_prerequisite_task_refs": [
+        "M2"
+      ],
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
       ]
     },
     {
@@ -524,7 +548,16 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "M2 contract prerequisite is implemented and locally validated; M5 runtime evidence and M2 terminal lifecycle evidence are still required."
+      ],
+      "completed_prerequisite_task_refs": [
+        "M2"
+      ],
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
       ]
     },
     {
@@ -554,7 +587,16 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "M2 contract prerequisite is implemented and locally validated; M5 runtime evidence and M2 terminal lifecycle evidence are still required."
+      ],
+      "completed_prerequisite_task_refs": [
+        "M2"
+      ],
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
       ]
     },
     {
@@ -1254,7 +1296,16 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "M2 implementation and local validation are complete, but item closure remains missing until current-head PR lifecycle and post-merge evidence exist."
+      ],
+      "implementation_complete_task_refs": [
+        "M2"
+      ],
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
       ]
     },
     {
@@ -1280,7 +1331,16 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "M2 implementation and local validation are complete, but item closure remains missing until current-head PR lifecycle and post-merge evidence exist."
+      ],
+      "implementation_complete_task_refs": [
+        "M2"
+      ],
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
       ]
     },
     {
@@ -1306,7 +1366,16 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "M2 implementation and local validation are complete, but item closure remains missing until current-head PR lifecycle and post-merge evidence exist."
+      ],
+      "implementation_complete_task_refs": [
+        "M2"
+      ],
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
       ]
     },
     {
@@ -1332,7 +1401,16 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "M2 implementation and local validation are complete, but item closure remains missing until current-head PR lifecycle and post-merge evidence exist."
+      ],
+      "implementation_complete_task_refs": [
+        "M2"
+      ],
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
       ]
     },
     {
@@ -1623,5 +1701,11 @@
         "No v3 implementation task has been approved or executed."
       ]
     }
-  ]
+  ],
+  "generated_by": "prd-to-plan+execution-compiler",
+  "generated_at": "2026-07-26T16:32:45Z",
+  "generation_state": {
+    "M0": "closed_preserved",
+    "M2": "implementation_and_local_validation_complete_lifecycle_and_acceptance_pending"
+  }
 }
