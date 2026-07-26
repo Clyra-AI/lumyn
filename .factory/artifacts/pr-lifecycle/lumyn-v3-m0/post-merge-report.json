@@ -11,26 +11,20 @@
   "checks_observed": [
     {
       "name": "validate",
-      "workflowName": "validate",
-      "databaseId": 30171847144,
-      "url": "https://github.com/Clyra-AI/lumyn/actions/runs/30171847144",
-      "status": "completed",
-      "conclusion": "success"
+      "status": "pass",
+      "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30171847144"
     },
     {
       "name": "codeql",
-      "workflowName": "codeql",
-      "databaseId": 30171847136,
-      "url": "https://github.com/Clyra-AI/lumyn/actions/runs/30171847136",
-      "status": "completed",
-      "conclusion": "success"
+      "status": "pass",
+      "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30171847136"
     }
   ],
   "status": "healthy",
   "regressions_detected": [],
   "hotfix_triggered": false,
   "work_proof_marker_refs": [
-    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge/work-proof-marker.json"
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-work-proof/work-proof-marker.json"
   ],
   "scope_closure_report_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json",
   "operator_notes": "Both required workflows passed on the exact landed commit. The pre-merge Codex settle process escape is recorded separately and did not produce a post-main regression.",

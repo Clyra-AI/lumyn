@@ -7,22 +7,22 @@
     {
       "event_id": "evt-001",
       "sequence": 1,
-      "timestamp": "2026-07-26T12:59:01Z",
+      "timestamp": "2026-07-26T13:10:21Z",
       "event_type": "post_merge_recorded",
       "actor": "post-merge-monitor",
       "summary": "Observed successful validate and CodeQL workflows on the exact landed M0 main commit.",
       "artifact_refs": [
         ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-report.json",
-        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge/work-proof-marker.json"
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-work-proof/work-proof-marker.json"
       ],
       "payload_redaction": "artifact_ref_only",
       "previous_digest": "",
-      "event_digest": "sha256:63bc7fcce16ac538d12104f8b087254ce36a4bf6d5e3cb3c8587033f4b8e5486"
+      "event_digest": "sha256:65f256c6375926e506342095585385fd00e89edf668e7a219f8be1d28a0aa28c"
     },
     {
       "event_id": "evt-002",
       "sequence": 2,
-      "timestamp": "2026-07-26T12:59:02Z",
+      "timestamp": "2026-07-26T13:10:22Z",
       "event_type": "approval_decided",
       "actor": "human:davidahmann",
       "summary": "Approved truthful M0 closure with the missing latest-head Codex terminal signal recorded as non-reusable delivery debt, and approved proceeding to M2.",
@@ -31,13 +31,13 @@
         ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/delivery-debt-record.json"
       ],
       "payload_redaction": "redacted_summary",
-      "previous_digest": "sha256:63bc7fcce16ac538d12104f8b087254ce36a4bf6d5e3cb3c8587033f4b8e5486",
-      "event_digest": "sha256:75279e0f19d6f0df0ffc392bfa56b73e32cf04b45f512a8c7f55d3d169c0761a"
+      "previous_digest": "sha256:65f256c6375926e506342095585385fd00e89edf668e7a219f8be1d28a0aa28c",
+      "event_digest": "sha256:d86dda4decf4066aa4a76390565c2afd00ea4532b22927d3a66935d881e755f7"
     },
     {
       "event_id": "evt-003",
       "sequence": 3,
-      "timestamp": "2026-07-26T12:59:03Z",
+      "timestamp": "2026-07-26T13:10:23Z",
       "event_type": "scope_closed",
       "actor": "post-merge-monitor",
       "summary": "Classified M0 acceptance as closed with governance debt; no product behavior or compiled planning control was changed.",
@@ -46,8 +46,8 @@
         ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/pr-lifecycle-report.json"
       ],
       "payload_redaction": "artifact_ref_only",
-      "previous_digest": "sha256:75279e0f19d6f0df0ffc392bfa56b73e32cf04b45f512a8c7f55d3d169c0761a",
-      "event_digest": "sha256:ca598ed4bedf032e3425a345154ebba3450fa0fff5093c34e7a1a6999c2980e5"
+      "previous_digest": "sha256:d86dda4decf4066aa4a76390565c2afd00ea4532b22927d3a66935d881e755f7",
+      "event_digest": "sha256:0358b8ddb40ef06fb1ec333d74c0ac1f70071648a7846753dd3c1c002f13b1f2"
     }
   ]
 }

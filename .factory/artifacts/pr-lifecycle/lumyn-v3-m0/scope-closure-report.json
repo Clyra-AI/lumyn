@@ -9,7 +9,7 @@
   "event_log_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/mission-event-log.json",
   "work_proof_marker_refs": [
     ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
-    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge/work-proof-marker.json"
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-work-proof/work-proof-marker.json"
   ],
   "validation_report_refs": [
     ".factory/artifacts/task-runs/M0/validation-report.json"
@@ -69,7 +69,7 @@
       ],
       "work_proof_marker_refs": [
         ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
-        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge/work-proof-marker.json"
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-work-proof/work-proof-marker.json"
       ],
       "repair_task_packet_refs": [],
       "repair_report_refs": [],
@@ -121,5 +121,5 @@
   "blocker_refs": [],
   "overall_status": "closed_with_debt",
   "rerun_required": false,
-  "generated_at": "2026-07-26T12:59:00Z"
+  "generated_at": "2026-07-26T13:10:20Z"
 }
