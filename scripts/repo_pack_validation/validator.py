@@ -3,8 +3,10 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -19,6 +21,8 @@ from repo_pack_validation.markdown_refs import validate_markdown_fragment_refs
 from repo_pack_validation.runtime_pins import validate_runtime_pins
 from repo_pack_validation.self_tests import run_repo_pack_self_tests
 from repo_pack_validation.task_contracts import (
+    M2_CLOSURE_JSON_REFS,
+    M2_IMPLEMENTATION_MARKER_REF,
     TASK_DEPENDENCIES,
     validate_implemented_proof,
     validate_migration_task_contracts,
@@ -154,6 +158,10 @@ M2_PROCESS_EXCEPTION_REF = (
 M2_DELIVERY_DEBT_REF = (
     ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
 )
+M2_BINDING_VERIFIER_REF = (
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/verify_binding.py"
+)
+_M2_EVIDENCE_CACHE: dict[str, dict[str, Any]] | None = None
 
 EXPECTED_CAPABILITIES = {
     "M2.5": {"approval"},
@@ -737,6 +745,88 @@ def load_json(path: Path) -> dict[str, Any]:
     return payload
 
 
+def sha256_bytes(value: bytes) -> str:
+    return f"sha256:{hashlib.sha256(value).hexdigest()}"
+
+
+def load_m2_closure_evidence() -> dict[str, dict[str, Any]]:
+    global _M2_EVIDENCE_CACHE
+    if _M2_EVIDENCE_CACHE is not None:
+        return _M2_EVIDENCE_CACHE
+
+    payloads = {
+        ref: load_json(ROOT / ref)
+        for ref in M2_CLOSURE_JSON_REFS
+    }
+    marker = payloads[M2_IMPLEMENTATION_MARKER_REF]
+    proof = marker.get("landed_binding_proof", {})
+    bundle_ref = proof.get("retained_bundle_ref")
+    require_repo_ref(bundle_ref, "M2 retained PR-head bundle")
+    bundle_path = ROOT / str(bundle_ref)
+    require(
+        sha256_bytes(bundle_path.read_bytes())
+        == proof.get("retained_bundle_sha256"),
+        "M2 retained PR-head bundle digest differs from its work-proof marker",
+    )
+
+    verifier_path = ROOT / M2_BINDING_VERIFIER_REF
+    require(
+        verifier_path.exists(),
+        "M2 landed-binding verifier is missing",
+    )
+    require(
+        sha256_bytes(verifier_path.read_bytes()) == proof.get("verifier_sha256"),
+        "M2 landed-binding verifier digest differs from its work-proof marker",
+    )
+    result = subprocess.run(
+        [sys.executable, str(verifier_path)],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+    )
+    require(
+        result.returncode == 0,
+        "M2 retained candidate-to-landed binding verification failed",
+    )
+    try:
+        verifier_result = json.loads(result.stdout)
+    except Exception as exc:
+        fail(f"M2 landed-binding verifier returned invalid JSON: {exc}")
+    require(
+        isinstance(verifier_result, dict)
+        and verifier_result.get("status") == "pass"
+        and verifier_result.get("task_id") == "M2"
+        and verifier_result.get("original_pr_head")
+        == proof.get("original_pr_head")
+        and verifier_result.get("landed_main_head")
+        == proof.get("landed_main_head")
+        and verifier_result.get("candidate_digest")
+        == proof.get("candidate_digest")
+        and verifier_result.get("retained_bundle_sha256")
+        == proof.get("retained_bundle_sha256"),
+        "M2 landed-binding verifier output is incomplete or stale",
+    )
+
+    logs = marker.get("raw_log_refs", [])
+    require(
+        isinstance(logs, list) and len(logs) == 2,
+        "M2 landed-binding marker must bind stdout and stderr logs",
+    )
+    for ref in logs:
+        require_repo_ref(ref, "M2 landed-binding raw log")
+    stdout_bytes = (ROOT / logs[0]).read_bytes()
+    stderr_bytes = (ROOT / logs[1]).read_bytes()
+    require(
+        sha256_bytes(stdout_bytes) == marker.get("stdout_digest")
+        and sha256_bytes(stderr_bytes) == marker.get("stderr_digest")
+        and stdout_bytes == result.stdout
+        and stderr_bytes == result.stderr,
+        "M2 landed-binding logs do not reproduce the committed passing marker",
+    )
+    _M2_EVIDENCE_CACHE = payloads
+    return payloads
+
+
 def nonempty_string(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
@@ -964,6 +1054,7 @@ def validate_risk(risk: dict[str, Any]) -> None:
 def validate_ledger(
     ledger: dict[str, Any],
     required_ids: set[str],
+    evidence_payloads: dict[str, dict[str, Any]],
 ) -> dict[str, dict[str, Any]]:
     require(
         ledger.get("artifact_type") == "acceptance_ledger",
@@ -1046,7 +1137,7 @@ def validate_ledger(
         actual_implemented == EXPECTED_IMPLEMENTED_ITEMS,
         "implemented status must match directly evidenced completed M0 and M2 items",
     )
-    validate_implemented_proof(by_id)
+    validate_implemented_proof(by_id, evidence_payloads)
     return by_id
 
 
@@ -1945,6 +2036,7 @@ def validate_loaded(
     data: dict[str, dict[str, Any]],
     *,
     validate_configs: bool = True,
+    evidence_payloads: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, dict[str, Any]]:
     required_ids = expected_acceptance_ids()
     validate_acceptance_text(PRD.read_text(), data["ledger"])
@@ -1968,7 +2060,13 @@ def validate_loaded(
         validate_markdown_fragment_refs(ROOT, payload, name)
     validate_context(data["context"])
     validate_risk(data["risk"])
-    ledger_by_id = validate_ledger(data["ledger"], required_ids)
+    if evidence_payloads is None:
+        evidence_payloads = load_m2_closure_evidence()
+    ledger_by_id = validate_ledger(
+        data["ledger"],
+        required_ids,
+        evidence_payloads,
+    )
     validate_mapping(data["mapping"], required_ids)
     validate_plan(data["plan"], required_ids)
     tasks = validate_packets(data["packets"], required_ids, ledger_by_id)
@@ -2015,6 +2113,7 @@ def load_all() -> dict[str, dict[str, Any]]:
 def run_self_test() -> None:
     run_repo_pack_self_tests(
         load_all(),
+        evidence_payloads=load_m2_closure_evidence(),
         validate_loaded=validate_loaded,
         validate_config_payload=validate_config_payload,
         validate_active_config=validate_active_config,
