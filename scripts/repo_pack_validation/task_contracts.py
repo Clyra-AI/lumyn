@@ -420,6 +420,64 @@ IMPLEMENTED_PROOF = {
     ),
 }
 
+M2_VALIDATION_REPORT_REF = ".factory/artifacts/task-runs/M2/validation-report.json"
+M2_VALIDATION_SUMMARY_REF = (
+    ".factory/artifacts/task-runs/M2/validation-run-summary.json"
+)
+M2_SCORECARD_REF = ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json"
+M2_REVIEW_REF = ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+M2_IMPLEMENTATION_MARKER_REF = (
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/"
+    "work-proof-marker.json"
+)
+M2_PR_LIFECYCLE_REF = (
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/pr-lifecycle-report.json"
+)
+M2_POST_MERGE_REF = (
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json"
+)
+M2_SCOPE_CLOSURE_REF = (
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
+)
+M2_DEBT_REF = (
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
+)
+M2_EXCEPTION_REF = (
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/process-exception-handoff.json"
+)
+M2_RETAINED_BUNDLE_REF = (
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/"
+    "pr72-original-head.bundle"
+)
+M2_EXPECTED_VALIDATION_RUN = (
+    "validation:2026-07-26T16:32:25Z:50773146792248c5907105189e125e8a"
+)
+M2_EXPECTED_CANDIDATE = (
+    "sha256:8509fbe0980c17d6e6ad3d9cd2b8f04e122d9d6699cb7162b33492198e040324"
+)
+M2_EXPECTED_BASE = "7609e5c49c0776c1028c1aeb3e2e2ee942b613b6"
+M2_EXPECTED_PR_HEAD = "9345f3392ec98eb0e10345fe7941fd9d1450e55b"
+M2_EXPECTED_LANDED_HEAD = "f89bc82490ffb6df908df6f8572054ee051ed6c6"
+M2_EXPECTED_TRUST_ITEMS = {f"TRUST-{number:03d}" for number in range(1, 5)}
+M2_EXPECTED_SCOPE_ITEMS = M2_EXPECTED_TRUST_ITEMS | {
+    "EVENT-001",
+    "EVENT-002",
+    "INSTALL-001",
+    "INSTALL-002",
+}
+M2_CLOSURE_JSON_REFS = (
+    M2_VALIDATION_REPORT_REF,
+    M2_VALIDATION_SUMMARY_REF,
+    M2_SCORECARD_REF,
+    M2_REVIEW_REF,
+    M2_IMPLEMENTATION_MARKER_REF,
+    M2_PR_LIFECYCLE_REF,
+    M2_POST_MERGE_REF,
+    M2_SCOPE_CLOSURE_REF,
+    M2_DEBT_REF,
+    M2_EXCEPTION_REF,
+)
+
 
 def _require(condition: bool, message: str) -> None:
     if not condition:
@@ -448,8 +506,205 @@ def _validate_sandbox_entrypoint_isolation(
     )
 
 
+def _m2_evidence(
+    evidence_payloads: dict[str, dict[str, Any]],
+    ref: str,
+) -> dict[str, Any]:
+    payload = evidence_payloads.get(ref)
+    _require(isinstance(payload, dict), f"M2 closure evidence is missing {ref}")
+    return payload
+
+
+def _require_m2_identity(payload: dict[str, Any], label: str) -> None:
+    _require(payload.get("task_id") == "M2", f"{label} must bind task M2")
+    _require(
+        payload.get("work_item_id") == "lumyn-v3-m2",
+        f"{label} must bind work item lumyn-v3-m2",
+    )
+
+
+def _validate_m2_closure_evidence(
+    evidence_payloads: dict[str, dict[str, Any]],
+) -> None:
+    validation = _m2_evidence(evidence_payloads, M2_VALIDATION_REPORT_REF)
+    summary = _m2_evidence(evidence_payloads, M2_VALIDATION_SUMMARY_REF)
+    scorecard = _m2_evidence(evidence_payloads, M2_SCORECARD_REF)
+    review = _m2_evidence(evidence_payloads, M2_REVIEW_REF)
+    marker = _m2_evidence(evidence_payloads, M2_IMPLEMENTATION_MARKER_REF)
+    lifecycle = _m2_evidence(evidence_payloads, M2_PR_LIFECYCLE_REF)
+    post_merge = _m2_evidence(evidence_payloads, M2_POST_MERGE_REF)
+    closure = _m2_evidence(evidence_payloads, M2_SCOPE_CLOSURE_REF)
+    debt = _m2_evidence(evidence_payloads, M2_DEBT_REF)
+    exception = _m2_evidence(evidence_payloads, M2_EXCEPTION_REF)
+
+    for label, payload in (
+        ("M2 validation report", validation),
+        ("M2 validation summary", summary),
+        ("M2 proof scorecard", scorecard),
+        ("M2 review report", review),
+        ("M2 PR lifecycle report", lifecycle),
+        ("M2 post-merge report", post_merge),
+        ("M2 scope-closure report", closure),
+        ("M2 delivery-debt record", debt),
+    ):
+        _require_m2_identity(payload, label)
+
+    for label, payload in (
+        ("M2 validation report", validation),
+        ("M2 validation summary", summary),
+        ("M2 proof scorecard", scorecard),
+    ):
+        _require(
+            payload.get("validation_run_id") == M2_EXPECTED_VALIDATION_RUN,
+            f"{label} validation run binding drifted",
+        )
+        _require(
+            payload.get("candidate_digest") == M2_EXPECTED_CANDIDATE,
+            f"{label} candidate binding drifted",
+        )
+
+    _require(
+        validation.get("result") == "pass"
+        and validation.get("promotion_decision") == "ready_for_pr"
+        and validation.get("checks")
+        and all(check.get("status") == "pass" for check in validation["checks"]),
+        "M2 validation report must be a passing ready-for-PR result",
+    )
+    binding = summary.get("candidate_binding", {})
+    _require(
+        summary.get("status") == "pass"
+        and binding.get("base_git_sha") == M2_EXPECTED_BASE
+        and binding.get("candidate_digest") == M2_EXPECTED_CANDIDATE
+        and len(binding.get("changed_paths", [])) == 105,
+        "M2 validation summary binding or passing status drifted",
+    )
+    levels = {
+        level.get("level"): level.get("status")
+        for level in scorecard.get("levels", [])
+        if isinstance(level, dict)
+    }
+    _require(
+        scorecard.get("overall_status") == "pass"
+        and scorecard.get("required_proof_level") == "workflow_behavior"
+        and levels.get("workflow_behavior") == "pass",
+        "M2 proof scorecard is not passing at its required proof level",
+    )
+
+    current_work = review.get("current_work", {})
+    _require(
+        review.get("verdict") == "approved"
+        and review.get("review_type") == "security"
+        and current_work.get("validation_run_id") == M2_EXPECTED_VALIDATION_RUN
+        and current_work.get("candidate_digest") == M2_EXPECTED_CANDIDATE
+        and review.get("findings")
+        and all(
+            finding.get("status") == "resolved"
+            for finding in review.get("findings", [])
+        ),
+        "M2 independent review is not approved, resolved, and current-work bound",
+    )
+
+    landed_proof = marker.get("landed_binding_proof", {})
+    _require(
+        marker.get("execution_status") == "pass"
+        and marker.get("exit_code") == 0
+        and marker.get("git_sha") == M2_EXPECTED_LANDED_HEAD
+        and landed_proof.get("base_head") == M2_EXPECTED_BASE
+        and landed_proof.get("original_pr_head") == M2_EXPECTED_PR_HEAD
+        and landed_proof.get("landed_main_head") == M2_EXPECTED_LANDED_HEAD
+        and landed_proof.get("validation_run_id") == M2_EXPECTED_VALIDATION_RUN
+        and landed_proof.get("candidate_digest") == M2_EXPECTED_CANDIDATE
+        and landed_proof.get("changed_path_count") == 105
+        and landed_proof.get("retained_bundle_ref") == M2_RETAINED_BUNDLE_REF
+        and str(landed_proof.get("retained_bundle_sha256", "")).startswith(
+            "sha256:"
+        ),
+        "M2 landed work-proof marker is not passing or fully bound",
+    )
+
+    local_validation = lifecycle.get("local_validation", {})
+    codex_review = lifecycle.get("codex_review", {})
+    merge = lifecycle.get("merge", {})
+    _require(
+        lifecycle.get("status") == "complete"
+        and local_validation.get("status") == "pass"
+        and local_validation.get("validation_run_id") == M2_EXPECTED_VALIDATION_RUN
+        and local_validation.get("candidate_digest") == M2_EXPECTED_CANDIDATE
+        and lifecycle.get("code_review", {}).get("status") == "approved"
+        and codex_review.get("configured_enabled") is True
+        and codex_review.get("enabled") is False
+        and codex_review.get("status") == "disabled"
+        and codex_review.get("unresolved_actionable_comments") == 0
+        and codex_review.get("late_review_after_merge") is False
+        and merge.get("status") == "merged"
+        and merge.get("merged_commit") == M2_EXPECTED_LANDED_HEAD
+        and lifecycle.get("post_merge", {}).get("status") == "healthy"
+        and any(
+            gate.get("gate") == "codex_review"
+            and gate.get("approved_exception_ref") == M2_EXCEPTION_REF
+            for gate in lifecycle.get("skipped_gates", [])
+        ),
+        "M2 PR lifecycle report is incomplete or misstates its review exception",
+    )
+
+    _require(
+        post_merge.get("status") == "healthy"
+        and post_merge.get("merge_reference") == M2_EXPECTED_LANDED_HEAD
+        and post_merge.get("merge_performed") is True
+        and post_merge.get("default_branch_checked") is True
+        and post_merge.get("checks_observed")
+        and all(
+            check.get("status") == "pass"
+            for check in post_merge.get("checks_observed", [])
+        )
+        and post_merge.get("regressions_detected") == []
+        and post_merge.get("late_codex_review", {}).get(
+            "late_review_after_merge"
+        )
+        is False,
+        "M2 post-merge report is not healthy on the landed commit",
+    )
+
+    closure_items = {
+        item.get("intent_item_id"): item
+        for item in closure.get("closure_items", [])
+        if isinstance(item, dict)
+    }
+    _require(
+        closure.get("overall_status") == "closed_with_debt"
+        and closure.get("rerun_required") is False
+        and closure.get("blocker_refs") == []
+        and set(closure_items) == M2_EXPECTED_SCOPE_ITEMS
+        and closure_items.get("TRUST-001", {}).get("classification")
+        == "implemented_with_debt"
+        and all(
+            closure_items[item_id].get("classification") == "implemented"
+            for item_id in M2_EXPECTED_TRUST_ITEMS - {"TRUST-001"}
+        )
+        and closure.get("delivery_debt_refs") == [M2_DEBT_REF],
+        "M2 scope-closure report is incomplete or overstates debt-free closure",
+    )
+    _require(
+        debt.get("debt_type") == "skipped_required_latest_head_codex_review"
+        and debt.get("severity") == "high"
+        and debt.get("follow_up_action")
+        == "retain_as_non_reusable_process_exception_and_require_clean_m1_lifecycle",
+        "M2 delivery debt does not preserve the skipped review gate",
+    )
+    _require(
+        exception.get("artifact_type") == "handoff_record"
+        and exception.get("work_item_id") == "lumyn-v3-m2"
+        and exception.get("current_state") == "exception_approved"
+        and exception.get("blockers") == []
+        and exception.get("approval_card", {}).get("decision_status") == "approved"
+        and exception.get("merge_authority_grant", {}).get("task_id") == "M2",
+        "M2 process exception is missing, blocked, or not task scoped",
+    )
+
+
 def validate_implemented_proof(
     ledger_by_id: dict[str, dict[str, Any]],
+    evidence_payloads: dict[str, dict[str, Any]],
 ) -> None:
     """Require exact evidence whose task semantics prove each completed item."""
 
@@ -463,6 +718,7 @@ def validate_implemented_proof(
             set(item.get("evidence_refs", [])) == evidence_refs,
             f"{item_id} implemented evidence is semantically incomplete",
         )
+    _validate_m2_closure_evidence(evidence_payloads)
 
 
 def _policy_digest(policy: dict[str, Any]) -> str:

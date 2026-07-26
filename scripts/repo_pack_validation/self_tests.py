@@ -14,6 +14,13 @@ from repo_pack_validation.authority import (
 from repo_pack_validation.acceptance_text import validate_acceptance_text
 from repo_pack_validation.markdown_refs import _markdown_anchors
 from repo_pack_validation.task_contracts import (
+    M2_IMPLEMENTATION_MARKER_REF,
+    M2_PR_LIFECYCLE_REF,
+    M2_REVIEW_REF,
+    M2_SCORECARD_REF,
+    M2_SCOPE_CLOSURE_REF,
+    M2_VALIDATION_REPORT_REF,
+    M2_VALIDATION_SUMMARY_REF,
     QUALIFYING_SAME_RUN_EVIDENCE_FIELDS,
     _policy_digest,
     validate_delegated_route_refs,
@@ -46,6 +53,30 @@ def _expect_failure(
         )
         return
     raise AssertionError(f"self-test mutation did not fail: {expected}")
+
+
+def _expect_evidence_failure(
+    base: Payload,
+    evidence_payloads: dict[str, dict[str, Any]],
+    mutate: Callable[[dict[str, dict[str, Any]]], Any],
+    expected: str,
+    validate_loaded: ValidateLoaded,
+) -> None:
+    candidate = copy.deepcopy(evidence_payloads)
+    mutate(candidate)
+    try:
+        validate_loaded(
+            copy.deepcopy(base),
+            validate_configs=False,
+            evidence_payloads=candidate,
+        )
+    except AssertionError as exc:
+        _require(
+            expected.lower() in str(exc).lower(),
+            f"evidence self-test expected {expected!r}, got {exc!r}",
+        )
+        return
+    raise AssertionError(f"evidence self-test mutation did not fail: {expected}")
 
 
 def _task(payload: Payload, task_id: str) -> dict[str, Any]:
@@ -167,6 +198,7 @@ def _conditional_grants(
 def run_repo_pack_self_tests(
     base: Payload,
     *,
+    evidence_payloads: dict[str, dict[str, Any]],
     validate_loaded: ValidateLoaded,
     validate_config_payload: Callable[..., None],
     validate_active_config: Callable[[dict[str, Any], dict[str, dict[str, Any]]], None],
@@ -175,7 +207,11 @@ def run_repo_pack_self_tests(
 ) -> None:
     """Prove drift cannot enable dispatch, authority, false closure, or weak proof."""
 
-    tasks = validate_loaded(base, validate_configs=False)
+    tasks = validate_loaded(
+        base,
+        validate_configs=False,
+        evidence_payloads=evidence_payloads,
+    )
     _require(
         _markdown_anchors(
             "# API [Trust](https://example.com)\n"
@@ -1013,6 +1049,57 @@ def run_repo_pack_self_tests(
     )
     for mutate, expected in mutations:
         _expect_failure(base, mutate, expected, validate_loaded)
+
+    evidence_mutations = [
+        (
+            lambda value: value[M2_SCORECARD_REF].__setitem__("task_id", "M1"),
+            "proof scorecard must bind task M2",
+        ),
+        (
+            lambda value: value[M2_IMPLEMENTATION_MARKER_REF].__setitem__(
+                "execution_status", "fail"
+            ),
+            "work-proof marker is not passing",
+        ),
+        (
+            lambda value: value[M2_VALIDATION_REPORT_REF].__setitem__(
+                "candidate_digest", "sha256:" + "0" * 64
+            ),
+            "validation report candidate binding drifted",
+        ),
+        (
+            lambda value: value[M2_VALIDATION_SUMMARY_REF].__setitem__(
+                "status", "fail"
+            ),
+            "validation summary binding or passing status drifted",
+        ),
+        (
+            lambda value: value[M2_REVIEW_REF]["current_work"].__setitem__(
+                "validation_run_id", "validation:wrong-run"
+            ),
+            "independent review is not approved, resolved, and current-work bound",
+        ),
+        (
+            lambda value: value[M2_PR_LIFECYCLE_REF].__setitem__(
+                "status", "incomplete"
+            ),
+            "PR lifecycle report is incomplete",
+        ),
+        (
+            lambda value: value[M2_SCOPE_CLOSURE_REF].__setitem__(
+                "overall_status", "closed"
+            ),
+            "scope-closure report is incomplete",
+        ),
+    ]
+    for mutate, expected in evidence_mutations:
+        _expect_evidence_failure(
+            base,
+            evidence_payloads,
+            mutate,
+            expected,
+            validate_loaded,
+        )
 
     historical_config = copy.deepcopy(base["config"])
     historical_config["repos"]["lumyn"][
