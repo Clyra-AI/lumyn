@@ -3,7 +3,7 @@
   "schema_version": "1.0",
   "generated_by": "prd-to-plan+execution-compiler",
   "generated_at": "2026-07-25T00:00:00Z",
-  "last_updated_at": "2026-07-25T00:00:00Z",
+  "last_updated_at": "2026-07-26T13:10:20Z",
   "source_prd_ref": "docs/product/prd.md",
   "source_ref": "docs/product/prd.md",
   "acceptance_item_count": 53,
@@ -35,16 +35,20 @@
       "status": "implemented",
       "risk_class": "low",
       "notes": [
-        "Carry-forward is limited to the cited historical evidence; the active v3 task remains responsible for preserving this behavior."
+        "M0 preserved this retained behavior and closed the item with direct task, review, and lifecycle evidence."
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T1/validation-report.json",
         ".factory/artifacts/task-runs/T1/work-proof-marker.json",
         ".factory/artifacts/task-runs/T3/validation-report.json",
-        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/task-runs/M0/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json"
       ],
-      "recorded_by": "lumyn-v3-control-compiler",
-      "recorded_at": "2026-07-24T00:00:00Z"
+      "recorded_by": "post-merge-monitor:codex-harness",
+      "recorded_at": "2026-07-26T13:10:20Z"
     },
     {
       "acceptance_item_id": "BASE-002",
@@ -67,14 +71,18 @@
       "status": "implemented",
       "risk_class": "low",
       "notes": [
-        "Carry-forward is limited to the cited historical evidence; the active v3 task remains responsible for preserving this behavior."
+        "M0 preserved and clarified these executable contracts and closed the item with direct task, independent-review, and lifecycle evidence."
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T2/validation-report.json",
-        ".factory/artifacts/task-runs/T2.7/validation-report.json"
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/lifecycle-evidence/M0/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json"
       ],
-      "recorded_by": "lumyn-v3-control-compiler",
-      "recorded_at": "2026-07-24T00:00:00Z"
+      "recorded_by": "post-merge-monitor:codex-harness",
+      "recorded_at": "2026-07-26T13:10:20Z"
     },
     {
       "acceptance_item_id": "BASE-003",
@@ -92,11 +100,21 @@
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M0/acceptance_checks"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "medium",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
-      ]
+        "M0 closed this item with approved, explicit, non-reusable governance debt because PR #70 lacked a terminal latest-head Codex review signal before manual merge; the current repository gate remains fail-closed for later tasks."
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/lifecycle-evidence/M0/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/process-exception-handoff.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/delivery-debt-record.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json"
+      ],
+      "recorded_by": "post-merge-monitor:codex-harness",
+      "recorded_at": "2026-07-26T13:10:20Z"
     },
     {
       "acceptance_item_id": "BASE-004",
@@ -118,14 +136,17 @@
       "status": "implemented",
       "risk_class": "low",
       "notes": [
-        "Carry-forward is limited to the cited historical evidence; the active v3 task remains responsible for preserving this behavior."
+        "M0 preserved this retained intake behavior and closed the item with direct task and lifecycle evidence."
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T3/validation-report.json",
-        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json"
       ],
-      "recorded_by": "lumyn-v3-control-compiler",
-      "recorded_at": "2026-07-24T00:00:00Z"
+      "recorded_by": "post-merge-monitor:codex-harness",
+      "recorded_at": "2026-07-26T13:10:20Z"
     },
     {
       "acceptance_item_id": "BASE-005",
@@ -143,11 +164,20 @@
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M0/acceptance_checks"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "medium",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
-      ]
+        "M0 implemented typed nonzero results and unambiguous provider-role terminology and closed the item with direct task, independent-review, and lifecycle evidence."
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/task-runs/M0/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M0/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json"
+      ],
+      "recorded_by": "post-merge-monitor:codex-harness",
+      "recorded_at": "2026-07-26T13:10:20Z"
     },
     {
       "acceptance_item_id": "PACK-001",

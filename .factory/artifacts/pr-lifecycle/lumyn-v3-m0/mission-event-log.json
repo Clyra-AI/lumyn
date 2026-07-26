@@ -48,6 +48,34 @@
       "payload_redaction": "artifact_ref_only",
       "previous_digest": "sha256:d86dda4decf4066aa4a76390565c2afd00ea4532b22927d3a66935d881e755f7",
       "event_digest": "sha256:0358b8ddb40ef06fb1ec333d74c0ac1f70071648a7846753dd3c1c002f13b1f2"
+    },
+    {
+      "event_id": "evt-004",
+      "sequence": 4,
+      "timestamp": "2026-07-26T13:22:11Z",
+      "event_type": "state_transition",
+      "actor": "repair-feedback:codex-harness",
+      "summary": "Synchronized the active acceptance ledger, closure map, README, and enforcing repo-pack validators with the already-recorded M0 closed-with-debt disposition.",
+      "artifact_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/README.md",
+        "scripts/repo_pack_validation/validator.py",
+        "scripts/repo_pack_validation/task_contracts.py",
+        "scripts/repo_pack_validation/self_tests.py"
+      ],
+      "payload_redaction": "artifact_ref_only",
+      "previous_digest": "sha256:0358b8ddb40ef06fb1ec333d74c0ac1f70071648a7846753dd3c1c002f13b1f2",
+      "event_digest": "sha256:4d910fae90c6da87121a90b9a99aef27f1dabdf12c034b65fb4b2ddb1d393f6f",
+      "state_transition": {
+        "from": "m0_closed_sidecar_only",
+        "to": "m0_closed_active_controls_synchronized",
+        "evidence_refs": [
+          ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+          ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json"
+        ]
+      }
     }
   ]
 }

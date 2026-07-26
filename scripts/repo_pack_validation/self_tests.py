@@ -229,7 +229,7 @@ def run_repo_pack_self_tests(
             ].remove(
                 ".factory/artifacts/task-runs/T3/validation-report.json"
             ),
-            "carry-forward evidence is semantically incomplete",
+            "implemented evidence is semantically incomplete",
         ),
         (
             lambda value: _task(value, "M8")["required_worker_chain"].__setitem__(
@@ -333,8 +333,8 @@ def run_repo_pack_self_tests(
         (
             lambda value: _closure_item(value, "BASE-001")[
                 "remaining_task_refs"
-            ].clear(),
-            "retain every active v3 task",
+            ].append("M0"),
+            "cannot retain M0 as remaining scope",
         ),
         (
             lambda value: _task(value, "M2.5")["gated_acceptance_items"][0].__setitem__(

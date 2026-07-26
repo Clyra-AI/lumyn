@@ -313,7 +313,7 @@ SANDBOX_ENTRYPOINT_ISOLATION_CONTRACT = {
     "fork_bomb_and_resource_exhaustion_negative_tests_required": True,
 }
 
-CARRY_FORWARD_PROOF = {
+IMPLEMENTED_PROOF = {
     "BASE-001": (
         {"T1", "T3", "M0"},
         {
@@ -321,6 +321,10 @@ CARRY_FORWARD_PROOF = {
             ".factory/artifacts/task-runs/T1/work-proof-marker.json",
             ".factory/artifacts/task-runs/T3/validation-report.json",
             ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+            ".factory/artifacts/task-runs/M0/validation-report.json",
+            ".factory/artifacts/task-runs/M0/proof-of-behavior-scorecard.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json",
         },
     ),
     "BASE-002": (
@@ -328,6 +332,21 @@ CARRY_FORWARD_PROOF = {
         {
             ".factory/artifacts/task-runs/T2/validation-report.json",
             ".factory/artifacts/task-runs/T2.7/validation-report.json",
+            ".factory/artifacts/task-runs/M0/validation-report.json",
+            ".factory/artifacts/lifecycle-evidence/M0/review-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json",
+        },
+    ),
+    "BASE-003": (
+        {"M0"},
+        {
+            ".factory/artifacts/task-runs/M0/validation-report.json",
+            ".factory/artifacts/lifecycle-evidence/M0/review-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/process-exception-handoff.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/delivery-debt-record.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json",
         },
     ),
     "BASE-004": (
@@ -335,6 +354,19 @@ CARRY_FORWARD_PROOF = {
         {
             ".factory/artifacts/task-runs/T3/validation-report.json",
             ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+            ".factory/artifacts/task-runs/M0/validation-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json",
+        },
+    ),
+    "BASE-005": (
+        {"M0"},
+        {
+            ".factory/artifacts/task-runs/M0/validation-report.json",
+            ".factory/artifacts/task-runs/M0/proof-of-behavior-scorecard.json",
+            ".factory/artifacts/lifecycle-evidence/M0/review-report.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+            ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json",
         },
     ),
 }
@@ -367,20 +399,20 @@ def _validate_sandbox_entrypoint_isolation(
     )
 
 
-def validate_carry_forward_proof(
+def validate_implemented_proof(
     ledger_by_id: dict[str, dict[str, Any]],
 ) -> None:
-    """Require evidence whose task semantics prove each retained v3 claim."""
+    """Require exact evidence whose task semantics prove each completed M0 item."""
 
-    for item_id, (task_refs, evidence_refs) in CARRY_FORWARD_PROOF.items():
+    for item_id, (task_refs, evidence_refs) in IMPLEMENTED_PROOF.items():
         item = ledger_by_id[item_id]
         _require(
             set(item.get("task_refs", [])) == task_refs,
-            f"{item_id} carry-forward task refs differ from its proof set",
+            f"{item_id} implemented task refs differ from its proof set",
         )
         _require(
             set(item.get("evidence_refs", [])) == evidence_refs,
-            f"{item_id} carry-forward evidence is semantically incomplete",
+            f"{item_id} implemented evidence is semantically incomplete",
         )
 
 
