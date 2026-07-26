@@ -365,6 +365,13 @@ These inputs cannot execute code or grant consumer authority.
 - verification boundary;
 - merge/close outcome when consented.
 
+The complete provider-status artifact is consumer-private control state. Only
+the serialized output of the provider-payload projector may be transmitted;
+it contains exactly the artifact's declared provider-visible fields narrowed
+by any current external consent ceiling. Artifact type/version, consent,
+field-policy, interpretation, privacy, and integrity metadata do not cross the
+boundary merely because they were validated.
+
 Raw source, diffs, prompts, responses, agent sessions, tool traces, logs, and
 credentials are never API-provider-visible.
 

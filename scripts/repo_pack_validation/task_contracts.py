@@ -439,8 +439,8 @@ def _validate_paused_runtime(task: dict[str, Any]) -> None:
     _require(runtime.get("fail_closed") is True, f"{task_id} runtime must fail closed")
     _require(
         runtime.get("profile_compatibility_status")
-        == "blocked_v3_1_profile_update_required",
-        f"{task_id} must record the incompatible v2 Factory profile",
+        == "aligned_lumyn_v3_1",
+        f"{task_id} must bind the aligned Lumyn v3.1 profile",
     )
     _require(
         runtime.get("runtime_qualification_status")

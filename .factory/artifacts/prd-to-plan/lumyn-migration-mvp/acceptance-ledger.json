@@ -2,8 +2,8 @@
   "artifact_type": "acceptance_ledger",
   "schema_version": "1.0",
   "generated_by": "prd-to-plan+execution-compiler",
-  "generated_at": "2026-07-25T00:00:00Z",
-  "last_updated_at": "2026-07-26T13:10:20Z",
+  "generated_at": "2026-07-26T16:32:45Z",
+  "last_updated_at": "2026-07-26T16:32:45Z",
   "source_prd_ref": "docs/product/prd.md",
   "source_ref": "docs/product/prd.md",
   "acceptance_item_count": 53,
@@ -288,9 +288,15 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M2 executable event and trust contracts are implemented and locally validated; M3 still owns runtime closure and M2 remains lifecycle-open."
       ],
-      "source_text": "Lumyn accepts a Provider Change Event only when its immutable identity and version, provider-controlled pinned transport or attended-recovery provenance, issuer and authentication, monotonic sequence and freshness, embedded or exact-URL contract delivery and retrieved-byte digest, API or SDK, audience, deadline, severity, and supersession or withdrawal state validate; the event and Provider Change Contract remain non-executable."
+      "source_text": "Lumyn accepts a Provider Change Event only when its immutable identity and version, provider-controlled pinned transport or attended-recovery provenance, issuer and authentication, monotonic sequence and freshness, embedded or exact-URL contract delivery and retrieved-byte digest, API or SDK, audience, deadline, severity, and supersession or withdrawal state validate; the event and Provider Change Contract remain non-executable.",
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ]
     },
     {
       "acceptance_item_id": "EVENT-002",
@@ -312,9 +318,15 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M2 executable event and trust contracts are implemented and locally validated; M3 still owns runtime closure and M2 remains lifecycle-open."
       ],
-      "source_text": "Duplicate, replayed, stale, conflicting, expired, superseded, withdrawn, wrong-audience, or unauthenticated events fail closed; an attended import cannot count as provider-channel delivery or authorize an installed-preauthorization write."
+      "source_text": "Duplicate, replayed, stale, conflicting, expired, superseded, withdrawn, wrong-audience, or unauthenticated events fail closed; an attended import cannot count as provider-channel delivery or authorize an installed-preauthorization write.",
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ]
     },
     {
       "acceptance_item_id": "INSTALL-001",
@@ -336,9 +348,15 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M2 executable installation and non-widening authorization contracts are implemented and locally validated; M5 still owns runtime closure and M2 remains lifecycle-open."
       ],
-      "source_text": "A revocable Consumer Installation binds the exact provider-controlled channel and authentication key, repository and package root, audience or version selectors, action ceiling, authorization mode, paths, commands, `agent_execution_policy` (`disabled` or `configured`), model-data policy and budgets, GitHub token-issuance policy, provider-reporting fields, retention and deletion, expiry, and revocation. A configured policy additionally binds the exact Agent Runner adapter/version/executable qualification and auth/entitlement policy, execution-funding mode, credential and usage-billing ownership, and native agent-configuration policy without storing a reusable Agent Runner, model, or GitHub credential; a disabled policy grants none of those capabilities."
+      "source_text": "A revocable Consumer Installation binds the exact provider-controlled channel and authentication key, repository and package root, audience or version selectors, action ceiling, authorization mode, paths, commands, `agent_execution_policy` (`disabled` or `configured`), model-data policy and budgets, GitHub token-issuance policy, provider-reporting fields, retention and deletion, expiry, and revocation. A configured policy additionally binds the exact Agent Runner adapter/version/executable qualification and auth/entitlement policy, execution-funding mode, credential and usage-billing ownership, and native agent-configuration policy without storing a reusable Agent Runner, model, or GitHub credential; a disabled policy grants none of those capabilities.",
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ]
     },
     {
       "acceptance_item_id": "INSTALL-002",
@@ -360,9 +378,15 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M2 executable installation and non-widening authorization contracts are implemented and locally validated; M5 still owns runtime closure and M2 remains lifecycle-open."
       ],
-      "source_text": "Every event-specific authorization is an immutable, non-widening derivation of the installation; `per_event_approval` binds the exact plan, while `installed_preauthorization` permits side effects only when event, plan, commands, paths, model policy, budgets, verification, and short-lived credential issuance all satisfy the installed policy. An action-mode label alone grants no side effect, and an `agent_assisted` route pauses unless the installation explicitly configures and authorizes it."
+      "source_text": "Every event-specific authorization is an immutable, non-widening derivation of the installation; `per_event_approval` binds the exact plan, while `installed_preauthorization` permits side effects only when event, plan, commands, paths, model policy, budgets, verification, and short-lived credential issuance all satisfy the installed policy. An action-mode label alone grants no side effect, and an `agent_assisted` route pauses unless the installation explicitly configures and authorizes it.",
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+      ]
     },
     {
       "acceptance_item_id": "IMPACT-001",
@@ -945,7 +969,13 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M2 implementation, local validation, and independent security review are complete; terminal acceptance remains planned until the current PR head passes CI/review, merge, post-merge monitoring, and task-bound lifecycle closure."
+      ],
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
       ]
     },
     {
@@ -967,7 +997,13 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M2 implementation, local validation, and independent security review are complete; terminal acceptance remains planned until the current PR head passes CI/review, merge, post-merge monitoring, and task-bound lifecycle closure."
+      ],
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
       ]
     },
     {
@@ -989,7 +1025,13 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M2 implementation, local validation, and independent security review are complete; terminal acceptance remains planned until the current PR head passes CI/review, merge, post-merge monitoring, and task-bound lifecycle closure."
+      ],
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
       ]
     },
     {
@@ -1011,7 +1053,13 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M2 implementation, local validation, and independent security review are complete; terminal acceptance remains planned until the current PR head passes CI/review, merge, post-merge monitoring, and task-bound lifecycle closure."
+      ],
+      "progress_evidence_refs": [
+        ".factory/artifacts/task-runs/M2/validation-report.json",
+        ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+        ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
       ]
     },
     {
@@ -1257,5 +1305,9 @@
         "No v3 closure is claimed; direct item-level evidence is required."
       ]
     }
-  ]
+  ],
+  "generation_state": {
+    "M0": "closed_preserved",
+    "M2": "implementation_and_local_validation_complete_lifecycle_and_acceptance_pending"
+  }
 }

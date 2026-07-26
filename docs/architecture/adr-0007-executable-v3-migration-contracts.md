@@ -101,11 +101,16 @@ vendor-native bound credential or approved enforcing proxy are mandatory.
 Consumer-private artifacts resolve through symlinks to an operator-approved
 private directory outside the checkout. The initial validator also requires
 that directory to deny group and other permissions. Provider-visible payloads
-use a strict typed status-projection vocabulary with no arbitrary extension or
-free-text surface; unknown nested fields, contradictory status claims, and
-secret-shaped values fail closed. Raw source, diffs, patches, prompts,
-responses, tool traces, logs, sessions, and credentials are never valid
-API-provider projection fields.
+are built from a strict typed status-projection vocabulary with no arbitrary
+extension or free-text surface; unknown nested fields, contradictory status
+claims, and secret-shaped values fail closed. The complete status artifact
+remains consumer-private control state. Only the projector's serialized output
+may cross the API-provider boundary, and that output contains exactly the
+declared provider-visible fields narrowed by any external consent ceiling.
+Structural, consent, interpretation, privacy, and artifact-integrity metadata
+never ride along implicitly. Raw source, diffs, patches, prompts, responses,
+tool traces, logs, sessions, and credentials are never valid API-provider
+projection fields.
 
 The v3 CLI grammar and typed error map are frozen in
 `docs/dev/cli-v3-contract.md`. M2 defines artifact and error compatibility; it

@@ -18,6 +18,11 @@
     "docs/architecture/architecture_guides.md",
     "docs/dev/cli-v3-contract.md",
     "docs/dev/dev_guides.md",
+    "scripts/repo_pack_validation/runtime_pins.py",
+    "scripts/repo_pack_validation/self_tests.py",
+    "scripts/repo_pack_validation/task_contracts.py",
+    "scripts/repo_pack_validation/validator.py",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/",
     ".factory/artifacts/task-runs/M2/validation-run-summary.json",
     ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json",
     ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.json",
@@ -25,31 +30,31 @@
     ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.json"
   ],
   "reviewer_class": "security_reviewer",
-  "reviewer_id": "security-reviewer:m2-independent-final-5",
+  "reviewer_id": "security-reviewer:m2-independent-final-7",
   "producer": {
     "worker": "code-review",
-    "producer_id": "security-reviewer:m2-independent-final-5",
+    "producer_id": "security-reviewer:m2-independent-final-7",
     "producer_class": "security_reviewer"
   },
   "current_work": {
-    "validation_run_id": "validation:2026-07-26T15:34:54Z:af085bbc5cd84b0a98c8388214ac6de5",
-    "candidate_digest": "sha256:44c3b0fe8a422324e6dd08bf24c6dbce2e477225b8783fa4ab5d4c1db97da8df",
+    "validation_run_id": "validation:2026-07-26T16:32:25Z:50773146792248c5907105189e125e8a",
+    "candidate_digest": "sha256:8509fbe0980c17d6e6ad3d9cd2b8f04e122d9d6699cb7162b33492198e040324",
     "work_proof_markers": [
       {
         "ref": ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json",
-        "sha256": "sha256:8553a7c8917f4ec47eab2950f092c84e4bf8b6948db2aba5d8979d0e28f04d28"
+        "sha256": "sha256:7605a554352fdc6b1abd8e523916bedefcc468067b6c5064aacfb662c34006dc"
       },
       {
         "ref": ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.json",
-        "sha256": "sha256:69d51d5807e3f62427f9fd5a5ea056337196acf5e44eb7a13242d0ddd1cae6f7"
+        "sha256": "sha256:c4d30505c686940995d58abc7ebb6d2c1ecc9ff3e42ae92370fcdd58fc2d4331"
       },
       {
         "ref": ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.json",
-        "sha256": "sha256:c82342a53b6e6784efaacd27528d9aa1584ee924cfeae47ed8abd3753e3847dc"
+        "sha256": "sha256:845df89efb744c6978b9e55b12703b5f48ea3a8cfae22f13451262850d50e1ca"
       },
       {
         "ref": ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.json",
-        "sha256": "sha256:8772ffe9db05dbde8938f83d9b38241a3993ea973d9b787e70996beee081731f"
+        "sha256": "sha256:a011989ecd5fdb0f3178897faef8913ed08a481151a9ea1f9ec685f3fd1454c7"
       }
     ]
   },
@@ -221,27 +226,119 @@
         "internal/evidence/execution_boundary_test.go",
         "schemas/migration-verification.schema.json"
       ]
+    },
+    {
+      "id": "M2-SEC-008",
+      "severity": "P1",
+      "summary": "Route persisted Consumer Installation and Event Authorization authority through canonical schemas and one production non-widening entry point.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": "internal/authorization/persisted_installation.go:193; internal/authorization/persisted_event_authorization.go:169; internal/authorization/policy.go:243; schemas/consumer_installation.go:28",
+      "failure_scenario": "A runtime decodes a flattened bespoke Installation or AuthorizationSnapshot, or invokes snapshot validation directly, without validating the canonical persisted schemas and independently expected artifact and policy bindings.",
+      "impact": "Schema-valid consumer authority, event identity, repository scope, policy digests, budgets, or provider-reporting consent could otherwise be substituted or widened before a side-effecting runtime consumes them.",
+      "minimum_fix": "Implemented embedded canonical schema validation, strict typed decoding with unknown-field and trailing-JSON rejection, non-widening conversion, independently supplied expected bindings, and one exported persisted-artifact snapshot entry point while keeping direct snapshot validation package-private.",
+      "promotion_effect": "resolved_no_block",
+      "architecture_boundary": "persisted Consumer Installation and event-specific execution authority",
+      "evidence_refs": [
+        "schemas/consumer_installation.go",
+        "schemas/consumer-installation.schema.json",
+        "schemas/event-authorization.schema.json",
+        "internal/authorization/persisted_installation.go",
+        "internal/authorization/persisted_event_authorization.go",
+        "internal/authorization/persisted_event_authorization_test.go",
+        "internal/authorization/policy_test.go"
+      ]
+    },
+    {
+      "id": "M2-SEC-009",
+      "severity": "P1",
+      "summary": "Emit only the declared and consented provider projection instead of returning the complete control artifact.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": "internal/redaction/provider_payload.go:133; internal/redaction/provider_payload_test.go:59",
+      "failure_scenario": "A validation-only API succeeds and a caller serializes the original complete provider-status artifact, including consumer-private consent, privacy, interpretation, and integrity-control metadata or fields outside the external consent ceiling.",
+      "impact": "The API Provider could receive more data than the exact event-bound field declaration and consumer consent allow.",
+      "minimum_fix": "Replaced the validation-only return with BuildProviderPayload, which validates the complete typed artifact, intersects declared fields with any external consent ceiling, serializes a new exact-field ProviderPayload, and rejects structural/control metadata, unknown fields, duplicate or widening consent, and private material.",
+      "promotion_effect": "resolved_no_block",
+      "architecture_boundary": "consumer-consented API Provider disclosure",
+      "evidence_refs": [
+        "internal/redaction/provider_payload.go",
+        "internal/redaction/provider_payload_test.go",
+        "schemas/provider-status-projection.schema.json"
+      ]
+    },
+    {
+      "id": "M2-SEC-010",
+      "severity": "P1",
+      "summary": "Regenerate the complete active controls with the aligned Lumyn profile, exact M2 security review, and lifecycle-pending state.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/; scripts/repo_pack_validation/runtime_pins.py; scripts/repo_pack_validation/task_contracts.py; scripts/repo_pack_validation/validator.py",
+      "failure_scenario": "Stale compiled controls retain the superseded profile incompatibility or a generic review lens, or overstate M2 acceptance closure despite pending CI, latest-head review, merge, post-merge, and item-level lifecycle evidence.",
+      "impact": "Planning, review, dispatch, or closure could follow a different contract from the current product and Factory profile.",
+      "minimum_fix": "Regenerated all active compiled artifacts to the exact aligned profile version, preserved factoryd pause and release freeze, set M2 review_type to security with independent-or-human review, and kept M2 implementation locally complete but lifecycle and acceptance closure pending.",
+      "promotion_effect": "resolved_no_block",
+      "architecture_boundary": "compiled Factory planning, review routing, runtime authority, and acceptance closure",
+      "evidence_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/context-brief.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/risk-classification.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json",
+        "scripts/repo_pack_validation/validator.py"
+      ]
+    },
+    {
+      "id": "M2-SEC-011",
+      "severity": "P1",
+      "summary": "Make repo-pack validation reject M2 risk-class and security-review routing drift.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": "scripts/repo_pack_validation/validator.py:59; scripts/repo_pack_validation/validator.py:74; scripts/repo_pack_validation/validator.py:1222; scripts/repo_pack_validation/validator.py:1262; scripts/repo_pack_validation/validator.py:1505; scripts/repo_pack_validation/self_tests.py:891",
+      "failure_scenario": "Before repair, an in-memory mutation could downgrade M2 risk_class from high to medium, change either the M2 inherited or global required review_type from security to code, or change the declared reviewer class while validate_loaded still returned success.",
+      "impact": "A later edit can silently weaken the required high-risk security review while make test-contracts and the repo-pack gate remain false-green, allowing commit-push to accept a less stringent review declaration.",
+      "minimum_fix": "Implemented exact risk-class enforcement for all 12 tasks, exact per-task review-type enforcement, independent-or-human reviewer enforcement, the global security review and exact task-lens source checks, and negative self-tests for M2 risk, review-type, and reviewer-class downgrades plus global routing downgrades.",
+      "promotion_effect": "resolved_no_block",
+      "architecture_boundary": "executable Factory risk classification and security-review routing",
+      "evidence_refs": [
+        "scripts/repo_pack_validation/validator.py",
+        "scripts/repo_pack_validation/self_tests.py",
+        "scripts/repo_pack_validation/task_contracts.py",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json"
+      ]
     }
   ],
   "verdict": "approved",
   "required_fixes": [],
   "residual_risks": [
     "M2 is contract-only; provider fetch, repository analysis, Agent Runner launch, credential issuance, verification, GitHub delivery, and provider reporting runtime behavior remain unproven until their later milestones produce direct evidence.",
-    "The repository-local compiled task still uses the generic code_security_or_architecture_by_task_risk review-type placeholder and factoryd remains explicitly unqualified; this attended security review grants no factoryd dispatch authority.",
-    "Remote CI and CodeQL, current-head passive Codex review, PR lifecycle evidence, merge, and post-main monitoring remain pending lifecycle gates and are not granted by this pre-PR security approval."
+    "The current compiled artifacts and repo-pack validator enforce the exact task risk classes, task-specific review lenses, independent-or-human reviewer class, global security lens, and aligned profile; factoryd remains explicitly unqualified and paused.",
+    "Remote CI and CodeQL, current-head passive Codex review, PR lifecycle evidence, merge, and post-main monitoring remain pending lifecycle gates and are not granted by this review."
   ],
   "evidence_refs": [
     ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
     ".factory/artifacts/task-runs/M2/validation-run-summary.json",
     "schemas/m2_security_test.go",
     "schemas/v3_contracts_test.go",
     "internal/agent/conformance_test.go",
+    "internal/authorization/persisted_event_authorization_test.go",
     "internal/authorization/policy_test.go",
     "internal/change/event_test.go",
     "internal/evidence/binding_test.go",
     "internal/installation/channel_test.go",
     "internal/redaction/provider_payload_test.go",
     "internal/status/projection_test.go",
+    "scripts/repo_pack_validation/validator.py",
+    "scripts/repo_pack_validation/self_tests.py",
     "docs/architecture/adr-0007-executable-v3-migration-contracts.md"
   ],
   "work_proof_marker_refs": [
@@ -259,21 +356,21 @@
   },
   "systems_questions": {
     "state_impact": [
-      "M2 introduces persisted authority, Agent Runner qualification, evidence, verification, and provider-reporting contracts for later runtimes."
+      "M2 introduces persisted authority, Agent Runner qualification, evidence, verification, provider-reporting, and compiled review-routing contracts for later runtimes; the executable repo-pack gate now binds the exact task risk and review policy."
     ],
     "source_of_truth_changes": [
-      "The v3 schemas and semantic validators are the M2 contract source of truth for provider intake, consumer authorization, agent qualification, evidence, sandbox isolation, redaction, and provider status."
+      "The v3 schemas and semantic validators are the M2 product-contract source of truth, while the active compiled control set plus repo-pack validator are the review-routing and lifecycle source of truth."
     ],
     "feedback_plan": [
-      "Future runtime milestones must exercise these contracts at the authoritative execution boundary and feed any rejected bypass or escaped false-green path back into adversarial fixtures and security review."
+      "Keep the risk and review-route downgrade mutations in the repo-pack self-test, and keep future runtime milestones exercising product contracts at the authoritative boundary and feeding escaped false-green paths back into adversarial fixtures and security review."
     ],
     "blast_radius": [
-      "The contracts affect every later provider-event, repository-command, Agent Runner, verification, live-sandbox, delivery, and provider-reporting milestone; those runtimes remain unimplemented and must not claim M2 contract evidence as direct runtime proof."
+      "The contracts affect every later provider-event, repository-command, Agent Runner, verification, live-sandbox, delivery, and provider-reporting milestone; exact per-task risk and review checks now prevent those later tasks from silently inheriting weaker review policy, while their product runtimes remain unimplemented."
     ],
     "rollback_or_deletion_test": [
-      "The adversarial validator tests confirm that changing a protected neutral root, sandbox credential scope, grant identity, resource quota, candidate head, profile digest, endpoint or operation, or cleanup posture invalidates the manifest or dependent verification evidence."
+      "Isolation mutations remain rejected; independent in-memory mutations of all 12 task risk classes, M2 and M2.5 review lenses, reviewer classes, the global security lens, and the lens source are rejected; and candidate, marker, and raw-log digests reconcile exactly."
     ],
-    "system_model_summary": "All seven security findings are independently resolved. The current candidate is bound to trusted passing validation evidence, and the declarative contracts now fail closed across provider origin, consumer authority, Agent Runner qualification, provider-visible status, typed redaction, validation provenance, sandbox isolation, and exact-head verification boundaries."
+    "system_model_summary": "All 11 findings are independently resolved. The exact 105-path candidate, four markers, and every raw log bind to the trusted passing validation run; focused product-security tests and 18 adversarial risk or review-route downgrades pass fail-closed verification. Security review is approved and ready for PR, while remote CI, current-head passive review, merge, post-merge monitoring, and later runtime proof remain pending lifecycle work."
   },
-  "created_at": "2026-07-26T15:37:21Z"
+  "created_at": "2026-07-26T16:33:53Z"
 }

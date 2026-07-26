@@ -11,7 +11,7 @@ import (
 
 func TestValidateProviderPayloadAcceptsTypedProjection(t *testing.T) {
 	payload := validProviderPayload()
-	if err := ValidateProviderPayload(payload, nil); err != nil {
+	if _, err := BuildProviderPayload(payload, nil); err != nil {
 		t.Fatalf("typed provider projection rejected: %v", err)
 	}
 }
@@ -27,7 +27,7 @@ func TestValidateProviderPayloadMatchesContractFixtures(t *testing.T) {
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 			payload := readProviderProjectionFixture(t, test.fixture)
-			err := ValidateProviderPayload(payload, nil)
+			_, err := BuildProviderPayload(payload, nil)
 			if test.valid && err != nil {
 				t.Fatalf("valid contract fixture rejected: %v", err)
 			}
@@ -52,14 +52,88 @@ func TestValidateProviderPayloadAcceptsFixedExternalConsentCeiling(t *testing.T)
 		"evidence_refs",
 		"observed_at",
 	}
-	if err := ValidateProviderPayload(payload, consentedFields); err != nil {
+	if _, err := BuildProviderPayload(payload, consentedFields); err != nil {
 		t.Fatalf("fixed consent ceiling rejected: %v", err)
+	}
+}
+
+func TestBuildProviderPayloadEmitsOnlyDeclaredProviderFields(t *testing.T) {
+	emitted, err := BuildProviderPayload(validProviderPayload(), nil)
+	if err != nil {
+		t.Fatalf("build provider payload: %v", err)
+	}
+	fields := decodeProviderPayloadFields(t, emitted)
+	for _, field := range []string{
+		"object_type", "schema_version", "consent", "provider_visible_fields",
+		"interpretation_rules", "privacy", "artifact_digest",
+	} {
+		if _, present := fields[field]; present {
+			t.Fatalf("consumer-private structural/control field %q crossed provider boundary", field)
+		}
+	}
+	declared := validProviderPayload()["provider_visible_fields"].([]any)
+	if len(fields) != len(declared) {
+		t.Fatalf("emitted %d fields, want %d declared fields", len(fields), len(declared))
+	}
+	for _, rawField := range declared {
+		field := rawField.(string)
+		if _, present := fields[field]; !present {
+			t.Fatalf("declared provider-visible field %q was not emitted", field)
+		}
+	}
+}
+
+func TestBuildProviderPayloadNarrowsToExternalConsentSubset(t *testing.T) {
+	emitted, err := BuildProviderPayload(validProviderPayload(), []string{"status", "observed_at"})
+	if err != nil {
+		t.Fatalf("build narrowed provider payload: %v", err)
+	}
+	fields := decodeProviderPayloadFields(t, emitted)
+	if len(fields) != 2 {
+		t.Fatalf("emitted %d fields, want exact two-field consent subset", len(fields))
+	}
+	if string(fields["status"]) != `"merged"` || string(fields["observed_at"]) != `"2026-07-26T14:31:00Z"` {
+		t.Fatalf("narrowed provider payload has unexpected values: %s", emitted)
+	}
+}
+
+func TestBuildProviderPayloadRejectsExternalConsentWidening(t *testing.T) {
+	payload := validProviderPayload()
+	payload["provider_visible_fields"] = []any{"status"}
+	if _, err := BuildProviderPayload(payload, []string{"status", "observed_at"}); err == nil {
+		t.Fatal("expected external consent that widens declared provider fields to fail closed")
+	}
+}
+
+func TestBuildProviderPayloadRejectsStructuralOrControlMetadataConsent(t *testing.T) {
+	for _, field := range []string{
+		"object_type", "schema_version", "consent", "provider_visible_fields",
+		"interpretation_rules", "privacy", "artifact_digest",
+	} {
+		t.Run(field, func(t *testing.T) {
+			if _, err := BuildProviderPayload(validProviderPayload(), []string{"status", field}); err == nil {
+				t.Fatalf("expected consent attempt for consumer-private field %q to fail closed", field)
+			}
+		})
+	}
+}
+
+func TestBuildProviderPayloadRejectsEmptyOrDuplicateExternalConsent(t *testing.T) {
+	for name, consent := range map[string][]string{
+		"empty":     {},
+		"duplicate": {"status", "status"},
+	} {
+		t.Run(name, func(t *testing.T) {
+			if _, err := BuildProviderPayload(validProviderPayload(), consent); err == nil {
+				t.Fatal("expected invalid external consent to fail closed")
+			}
+		})
 	}
 }
 
 func TestValidateProviderPayloadRejectsArbitraryConsentedExtension(t *testing.T) {
 	payload := cloneWith(validProviderPayload(), "notes", "const apiKey = process.env.SECRET")
-	if err := ValidateProviderPayload(payload, []string{"notes"}); err == nil {
+	if _, err := BuildProviderPayload(payload, []string{"notes"}); err == nil {
 		t.Fatal("expected arbitrary consented extension to fail closed")
 	}
 }
@@ -72,7 +146,7 @@ func TestValidateProviderPayloadRejectsUnknownNestedExtension(t *testing.T) {
 		"provenance":      "consumer_reported",
 		"details":         "raw consumer implementation",
 	}}
-	if err := ValidateProviderPayload(payload, nil); err == nil {
+	if _, err := BuildProviderPayload(payload, nil); err == nil {
 		t.Fatal("expected unknown nested extension to fail closed")
 	}
 }
@@ -101,7 +175,7 @@ func TestValidateProviderPayloadRejectsMalformedNestedShapes(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			payload := validProviderPayload()
 			mutate(payload)
-			if err := ValidateProviderPayload(payload, nil); err == nil {
+			if _, err := BuildProviderPayload(payload, nil); err == nil {
 				t.Fatal("expected malformed typed projection to fail closed")
 			}
 		})
@@ -127,7 +201,7 @@ func TestValidateProviderPayloadRejectsPrivateMaterialRecursively(t *testing.T) 
 		t.Run(name, func(t *testing.T) {
 			payload := validProviderPayload()
 			mutate(payload)
-			if err := ValidateProviderPayload(payload, nil); err == nil {
+			if _, err := BuildProviderPayload(payload, nil); err == nil {
 				t.Fatal("expected consumer-private material to fail closed")
 			}
 		})
@@ -146,7 +220,7 @@ func TestValidateProviderPayloadRejectsCommonSecretPatternsInAllowedFields(t *te
 		t.Run(name, func(t *testing.T) {
 			payload := validProviderPayload()
 			payload["projection_id"] = secret
-			if err := ValidateProviderPayload(payload, nil); err == nil {
+			if _, err := BuildProviderPayload(payload, nil); err == nil {
 				t.Fatal("expected common secret pattern to fail closed")
 			}
 		})
@@ -175,17 +249,10 @@ func TestValidateProviderPayloadRejectsStatusEvidenceContradictions(t *testing.T
 		t.Run(name, func(t *testing.T) {
 			payload := validProviderPayload()
 			mutate(payload)
-			if err := ValidateProviderPayload(payload, nil); err == nil {
+			if _, err := BuildProviderPayload(payload, nil); err == nil {
 				t.Fatal("expected contradictory status projection to fail closed")
 			}
 		})
-	}
-}
-
-func TestValidateProviderPayloadRejectsExternalConsentMismatch(t *testing.T) {
-	payload := validProviderPayload()
-	if err := ValidateProviderPayload(payload, []string{"status"}); err == nil {
-		t.Fatal("expected external consent ceiling that omits visible fields to fail closed")
 	}
 }
 
@@ -227,6 +294,15 @@ func validProviderPayload() map[string]any {
 		},
 		"observed_at": "2026-07-26T14:31:00Z", "artifact_digest": testDigest("f"),
 	}
+}
+
+func decodeProviderPayloadFields(t *testing.T, payload ProviderPayload) map[string]json.RawMessage {
+	t.Helper()
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal(payload, &fields); err != nil {
+		t.Fatalf("decode emitted provider payload: %v", err)
+	}
+	return fields
 }
 
 func readProviderProjectionFixture(t *testing.T, name string) map[string]any {

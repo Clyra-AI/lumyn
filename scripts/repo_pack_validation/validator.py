@@ -51,6 +51,40 @@ ARTIFACT_REFS = {
 }
 
 EXPECTED_TASK_IDS = tuple(TASK_DEPENDENCIES)
+EXPECTED_PROFILE_CONTRACT_VERSION = (
+    "lumyn-provider-update-delivery-v3.1-2026-07-25"
+)
+EXPECTED_FACTORY_COMPATIBILITY_STATUS = "profile_aligned_runtime_unqualified"
+EXPECTED_FACTORYD_PROFILE_STATUS = "aligned_lumyn_v3_1"
+EXPECTED_REVIEW_TYPES = {
+    "M0": "code",
+    "M1": "code",
+    "M2": "security",
+    "M2.5": "architecture",
+    "M3": "security",
+    "M4": "security",
+    "M5": "security",
+    "M6": "security",
+    "M7": "security",
+    "M8": "security",
+    "M9": "security",
+    "M10": "security",
+}
+EXPECTED_REVIEWER_CLASS = "independent_or_human"
+EXPECTED_RISK_CLASSES = {
+    "M0": "medium",
+    "M1": "medium",
+    "M2": "high",
+    "M2.5": "high",
+    "M3": "medium",
+    "M4": "high",
+    "M5": "high",
+    "M6": "high",
+    "M7": "high",
+    "M8": "high",
+    "M9": "high",
+    "M10": "high",
+}
 MILESTONE_REFS = {
     "M0": "docs/product/plan.md#m0-correct-command-and-result-foundations",
     "M1": "docs/product/plan.md#m1-build-deterministic-agent-assisted-blocked-and-generic-agent-benchmarks",
@@ -790,8 +824,8 @@ def validate_pause_contract(value: Any, label: str) -> None:
     require(value.get("fail_closed") is True, f"{label} must fail closed")
     require(
         value.get("profile_compatibility_status")
-        == "blocked_v3_1_profile_update_required",
-        f"{label} must record the v2 Factory profile incompatibility",
+        == EXPECTED_FACTORYD_PROFILE_STATUS,
+        f"{label} must bind the aligned Lumyn v3.1 profile",
     )
     require(
         value.get("runtime_qualification_status")
@@ -801,9 +835,10 @@ def validate_pause_contract(value: Any, label: str) -> None:
     dependencies = value.get("unblock_dependencies")
     require(
         isinstance(dependencies, list)
-        and any("profiles/lumyn.yaml" in str(item) for item in dependencies)
-        and any("factoryd" in str(item).lower() for item in dependencies),
-        f"{label} must name exact profile and factoryd unblock dependencies",
+        and any("factoryd" in str(item).lower() and "qualif" in str(item).lower() for item in dependencies)
+        and any("evidence" in str(item).lower() for item in dependencies)
+        and any("repo-pack" in str(item).lower() for item in dependencies),
+        f"{label} must name factoryd qualification, evidence, and repo-pack unblock dependencies",
     )
 
 
@@ -817,7 +852,11 @@ def validate_context(context: dict[str, Any]) -> None:
         "context must cite the canonical PRD",
     )
     alignment = context.get("alignment_decisions", {})
-    require(alignment.get("status") == "blocked", "context alignment must be blocked")
+    require(
+        alignment.get("status")
+        == "factoryd_blocked_attended_execution_requires_explicit_approval",
+        "context alignment must keep factoryd blocked and attended execution explicit",
+    )
     require(
         alignment.get("implementation_may_start") is False,
         "context implementation must remain blocked",
@@ -840,10 +879,11 @@ def validate_context(context: dict[str, Any]) -> None:
         require(token in resolved, f"context decisions missing {token}")
     baseline = json.dumps(context.get("proven_findings", [])).lower()
     for token in (
-        "openapi",
-        "not implemented",
-        "generic pass",
-        "v2 factory profile",
+        "m0",
+        "m2",
+        "local validation",
+        "profile",
+        "runtimes remain",
         "factoryd",
     ):
         require(token in baseline, f"context baseline missing {token}")
@@ -853,8 +893,11 @@ def validate_context(context: dict[str, Any]) -> None:
         "context Factory profile ref is stale",
     )
     require(
-        compatibility.get("status") == "blocked_profile_and_runtime_unqualified",
-        "context must block incompatible Factory dispatch",
+        compatibility.get("profile_contract_version")
+        == EXPECTED_PROFILE_CONTRACT_VERSION
+        and compatibility.get("status")
+        == EXPECTED_FACTORY_COMPATIBILITY_STATUS,
+        "context must bind the aligned profile while keeping runtime unqualified",
     )
     validate_pause_contract(context.get("factoryd_runtime"), "context.factoryd_runtime")
     validate_runtime_pins(context.get("runtime_pins"), "context")
@@ -1064,16 +1107,33 @@ def validate_plan(plan: dict[str, Any], required_ids: set[str]) -> None:
     require(plan.get("risk_class") == "high", "execution plan risk must be high")
     validate_runtime_pins(plan.get("runtime_pins"), "execution plan")
     alignment = plan.get("alignment_gate", {})
-    require(alignment.get("status") == "blocked", "execution alignment must be blocked")
+    require(
+        alignment.get("status")
+        == "factoryd_blocked_attended_execution_requires_explicit_approval",
+        "execution alignment must keep factoryd blocked and attended execution explicit",
+    )
     require(
         alignment.get("implementation_may_start") is False,
         "execution implementation must remain blocked",
     )
     require(
-        alignment.get("blocked_tasks") == list(EXPECTED_TASK_IDS),
-        "execution alignment must block every v3 task",
+        alignment.get("completed_task_refs") == ["M0"]
+        and alignment.get("implementation_complete_pending_lifecycle_task_refs")
+        == ["M2"]
+        and alignment.get("blocked_tasks")
+        == [task_id for task_id in EXPECTED_TASK_IDS if task_id not in {"M0", "M2"}],
+        "execution alignment must preserve M0 completion, M2 lifecycle-pending state, and block later tasks",
     )
     validate_pause_contract(plan.get("factoryd_runtime"), "execution factoryd runtime")
+    compatibility = plan.get("factory_compatibility", {})
+    require(
+        compatibility.get("profile_ref") == "profiles/lumyn.yaml"
+        and compatibility.get("profile_contract_version")
+        == EXPECTED_PROFILE_CONTRACT_VERSION
+        and compatibility.get("status")
+        == EXPECTED_FACTORY_COMPATIBILITY_STATUS,
+        "execution plan must bind the aligned profile while keeping runtime unqualified",
+    )
     require(
         plan.get("dependency_graph") == TASK_DEPENDENCIES,
         "execution dependency graph differs from M0-M10",
@@ -1087,6 +1147,18 @@ def validate_plan(plan: dict[str, Any], required_ids: set[str]) -> None:
         retained.get("historical_plan_ref") == f"{HISTORICAL_PLAN_REL}/"
         and retained.get("status") == "immutable_non_active",
         "historical plan must remain immutable and non-active",
+    )
+    rebaseline = plan.get("planning_rebaseline", {})
+    require(
+        rebaseline.get("status")
+        == "repo_local_controls_regenerated_factoryd_dispatch_paused"
+        and rebaseline.get("completed_by_this_generation") is True
+        and rebaseline.get("runtime_behavior_changed") is False
+        and rebaseline.get("m0_completion_claimed") is True
+        and rebaseline.get("m2_contract_implementation_status")
+        == "implementation_and_local_validation_complete_lifecycle_pending"
+        and rebaseline.get("m2_acceptance_closure_claimed") is False,
+        "execution planning rebaseline must record M0 completion, M2 lifecycle-pending progress, and no runtime or acceptance-closure claim",
     )
     coverage = plan.get("acceptance_ledger_coverage", {})
     require(
@@ -1147,6 +1219,10 @@ def validate_task(
         f"{task_id} milestone ref is stale",
     )
     require(
+        task.get("risk_class") == EXPECTED_RISK_CLASSES[task_id],
+        f"{task_id} risk class must remain {EXPECTED_RISK_CLASSES[task_id]}",
+    )
+    require(
         task.get("dispatch_status")
         == "attended_task_requires_explicit_approval_factoryd_paused",
         f"{task_id} must require attended approval while factoryd is paused",
@@ -1174,8 +1250,23 @@ def validate_task(
     factory = task.get("factory_compatibility", {})
     require(
         factory.get("profile_ref") == "profiles/lumyn.yaml"
-        and factory.get("status") == "blocked_profile_and_runtime_unqualified",
-        f"{task_id} Factory compatibility must remain blocked",
+        and factory.get("profile_contract_version")
+        == EXPECTED_PROFILE_CONTRACT_VERSION
+        and factory.get("status") == EXPECTED_FACTORY_COMPATIBILITY_STATUS,
+        f"{task_id} Factory compatibility must bind the aligned profile and unqualified runtime",
+    )
+    validate_pause_contract(task.get("factoryd_runtime"), f"{task_id}.factoryd_runtime")
+    inherited_review = task.get("validation_contract_inheritance", {}).get(
+        "required_review", {}
+    )
+    require(
+        inherited_review.get("required") is True
+        and inherited_review.get("review_type") == EXPECTED_REVIEW_TYPES[task_id],
+        f"{task_id} review type must remain {EXPECTED_REVIEW_TYPES[task_id]}",
+    )
+    require(
+        inherited_review.get("reviewer_class") == EXPECTED_REVIEWER_CLASS,
+        f"{task_id} reviewer class must remain {EXPECTED_REVIEWER_CLASS}",
     )
     required_capabilities = set(task.get("requires_capabilities", []))
     require(
@@ -1411,6 +1502,20 @@ def validate_contract(contract: dict[str, Any], required_ids: set[str]) -> None:
         "validation contract acceptance count is stale",
     )
     validate_runtime_pins(contract.get("runtime_pins"), "validation contract")
+    required_review = contract.get("required_review", {})
+    require(
+        required_review.get("required") is True
+        and required_review.get("review_type") == "security",
+        "validation contract must require the security review lens",
+    )
+    require(
+        required_review.get("reviewer_class") == EXPECTED_REVIEWER_CLASS,
+        "validation contract reviewer class must remain independent_or_human",
+    )
+    require(
+        required_review.get("task_specific_lens_source") == ARTIFACT_REFS["packets"],
+        "validation contract task-specific review lens source is stale",
+    )
     criteria = contract.get("acceptance_criteria")
     require(
         isinstance(criteria, list) and len(criteria) == len(required_ids),

@@ -126,37 +126,69 @@ type providerPrivacy struct {
 	CredentialsIncluded           *bool  `json:"credentials_included"`
 }
 
-// ValidateProviderPayload accepts only the fixed, typed
-// lumyn.provider_status_projection vocabulary. consentedFields is an optional
-// external ceiling over provider_visible_fields; it cannot add extension
-// fields. The secret scan recognizes common high-signal credential formats but
-// is not a general content classifier. The typed vocabulary deliberately has
-// no provider-visible free-text field in which raw consumer material can hide.
-func ValidateProviderPayload(payload map[string]any, consentedFields []string) error {
+// ProviderPayload is the serialized, exact-field projection that may cross the
+// API-provider disclosure boundary. The complete status artifact, including
+// its consent, privacy, interpretation, and integrity metadata, is
+// consumer-private control state and is never returned as ProviderPayload.
+type ProviderPayload []byte
+
+// BuildProviderPayload validates the complete
+// lumyn.provider_status_projection vocabulary, narrows its declared
+// provider_visible_fields by an optional external consent ceiling, and returns
+// only the resulting fields as ready-to-share JSON. consentedFields cannot add
+// a field that the projection did not declare provider-visible. The secret
+// scan recognizes common high-signal credential formats but is not a general
+// content classifier. The typed vocabulary deliberately has no
+// provider-visible free-text field in which raw consumer material can hide.
+func BuildProviderPayload(payload map[string]any, consentedFields []string) (ProviderPayload, error) {
 	if payload == nil {
-		return fmt.Errorf("provider projection is required")
+		return nil, fmt.Errorf("provider projection is required")
 	}
 	if err := inspectProviderValue(payload, "projection"); err != nil {
-		return err
+		return nil, err
 	}
 
 	serialized, err := json.Marshal(payload)
 	if err != nil {
-		return fmt.Errorf("serialize provider projection: %w", err)
+		return nil, fmt.Errorf("serialize provider projection: %w", err)
 	}
 	decoder := json.NewDecoder(bytes.NewReader(serialized))
 	decoder.DisallowUnknownFields()
 	var projection providerStatusProjection
 	if err := decoder.Decode(&projection); err != nil {
-		return fmt.Errorf("decode typed provider projection: %w", err)
+		return nil, fmt.Errorf("decode typed provider projection: %w", err)
 	}
 	if err := ensureJSONEOF(decoder); err != nil {
-		return err
+		return nil, err
 	}
 	if err := validateProviderProjection(projection); err != nil {
-		return err
+		return nil, err
 	}
-	return validateExternalConsent(projection.ProviderVisibleFields, consentedFields)
+	selectedFields, err := selectProviderFields(projection.ProviderVisibleFields, consentedFields)
+	if err != nil {
+		return nil, err
+	}
+
+	var complete map[string]json.RawMessage
+	if err := json.Unmarshal(serialized, &complete); err != nil {
+		return nil, fmt.Errorf("decode validated provider projection: %w", err)
+	}
+	emitted := make(map[string]json.RawMessage, len(selectedFields))
+	for _, field := range selectedFields {
+		value, present := complete[field]
+		if !present {
+			return nil, fmt.Errorf("provider-visible field %q is absent from validated projection", field)
+		}
+		emitted[field] = value
+	}
+	serializedEmission, err := json.Marshal(emitted)
+	if err != nil {
+		return nil, fmt.Errorf("serialize provider payload: %w", err)
+	}
+	if err := validateEmittedProviderFields(serializedEmission, selectedFields); err != nil {
+		return nil, err
+	}
+	return ProviderPayload(serializedEmission), nil
 }
 
 func inspectProviderValue(value any, path string) error {
@@ -426,26 +458,44 @@ func validatePrivacy(privacy *providerPrivacy) error {
 	return nil
 }
 
-func validateExternalConsent(visibleFields, consentedFields []string) error {
+func selectProviderFields(visibleFields, consentedFields []string) ([]string, error) {
 	if consentedFields == nil {
-		return nil
+		return append([]string(nil), visibleFields...), nil
+	}
+	if len(consentedFields) == 0 {
+		return nil, fmt.Errorf("external consent must contain at least one provider-visible field")
+	}
+	visible := make(map[string]struct{}, len(visibleFields))
+	for _, field := range visibleFields {
+		visible[field] = struct{}{}
 	}
 	consented := make(map[string]struct{}, len(consentedFields))
 	for _, field := range consentedFields {
 		if _, allowed := providerVisibleFields[field]; !allowed {
-			return fmt.Errorf("external consent contains unsupported field %q", field)
+			return nil, fmt.Errorf("external consent contains unsupported field %q", field)
+		}
+		if _, declared := visible[field]; !declared {
+			return nil, fmt.Errorf("external consent field %q is absent from provider_visible_fields", field)
 		}
 		if _, duplicate := consented[field]; duplicate {
-			return fmt.Errorf("external consent contains duplicate field %q", field)
+			return nil, fmt.Errorf("external consent contains duplicate field %q", field)
 		}
 		consented[field] = struct{}{}
 	}
-	if len(consented) != len(visibleFields) {
-		return fmt.Errorf("external consent does not exactly match provider_visible_fields")
+	return append([]string(nil), consentedFields...), nil
+}
+
+func validateEmittedProviderFields(payload []byte, consentedFields []string) error {
+	var emitted map[string]json.RawMessage
+	if err := json.Unmarshal(payload, &emitted); err != nil {
+		return fmt.Errorf("decode emitted provider payload: %w", err)
 	}
-	for _, field := range visibleFields {
-		if _, ok := consented[field]; !ok {
-			return fmt.Errorf("provider-visible field %q is absent from external consent", field)
+	if len(emitted) != len(consentedFields) {
+		return fmt.Errorf("emitted provider payload does not exactly match the consent ceiling")
+	}
+	for _, field := range consentedFields {
+		if _, present := emitted[field]; !present {
+			return fmt.Errorf("consented provider-visible field %q is absent from emitted payload", field)
 		}
 	}
 	return nil

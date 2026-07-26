@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.lumyn.local/lumyn.provider_status_projection.schema.json",
   "title": "Provider Status Projection",
-  "description": "One event-bound, consumer-consented, redacted status projection visible to the API Provider.",
+  "description": "Consumer-private control artifact for one event-bound, consented, redacted provider status. Only its enumerated provider_visible_fields, optionally narrowed by an external consent ceiling, are emitted to the API Provider.",
   "type": "object",
   "additionalProperties": false,
   "required": [

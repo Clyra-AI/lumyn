@@ -96,12 +96,16 @@
     ]
   ],
   "alignment_gate": {
-    "status": "blocked",
+    "status": "factoryd_blocked_attended_execution_requires_explicit_approval",
     "implementation_may_start": false,
+    "completed_task_refs": [
+      "M0"
+    ],
+    "implementation_complete_pending_lifecycle_task_refs": [
+      "M2"
+    ],
     "blocked_tasks": [
-      "M0",
       "M1",
-      "M2",
       "M2.5",
       "M3",
       "M4",
@@ -112,11 +116,11 @@
       "M9",
       "M10"
     ],
-    "reason": "no implementation task has been separately approved; factoryd additionally remains blocked on the external Factory profile and v3.1 runtime qualification",
+    "reason": "This generation grants no later task authority; M2 is locally complete but awaits current-head PR lifecycle and item-level closure, and factoryd remains unqualified and paused.",
     "unblock_dependencies": [
-      "For attended execution, explicitly approve one exact task packet and its required Factory and Lumyn product grants.",
-      "For factoryd execution, update external Factory profiles/lumyn.yaml and qualify factoryd against this exact v3.1 generation.",
-      "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after the selected execution path is authorized."
+      "Complete M2 current-head CI, CodeQL, passive Codex review, merge, post-merge monitoring, PR lifecycle evidence, and item-level scope closure.",
+      "For attended execution after M2 closure, explicitly approve one exact task packet and its required Factory and Lumyn product grants.",
+      "For factoryd execution, qualify the bundle/runtime against this exact v3.1 generation and explicitly unpause one bounded task with positive budgets and complete grants."
     ]
   },
   "factoryd_runtime": {
@@ -127,12 +131,12 @@
     "worker_command": "",
     "dispatch_enabled": false,
     "fail_closed": true,
-    "profile_compatibility_status": "blocked_v3_1_profile_update_required",
+    "profile_compatibility_status": "aligned_lumyn_v3_1",
     "runtime_qualification_status": "blocked_factoryd_v3_1_qualification_required",
     "unblock_dependencies": [
-      "Update external Factory profiles/lumyn.yaml to the approved v3.1 provider-originated update-delivery contract.",
       "Qualify factoryd against this exact v3.1 task, installation, authority, Agent Runner/model, delivery, status, evidence, and closure generation.",
-      "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate after both external dependencies are recorded."
+      "Record reviewed factoryd bundle/runtime qualification evidence against the exact active mission and schemas.",
+      "Re-run repo-pack self-test, repo-pack validation, and the full repository pre-push gate before explicitly unpausing one bounded task."
     ],
     "approval_posture": "Factory approval never substitutes for exact private Lumyn product action authorization or human merge.",
     "credential_posture": "no ambient consumer, API Provider, Agent Runner, model, sandbox, or GitHub secrets",
@@ -149,7 +153,7 @@
       "max_write_scope_paths": [],
       "release_freeze": {
         "enabled": true,
-        "reason": "Lumyn v3.1 Factory profile and factoryd runtime are not qualified.",
+        "reason": "Lumyn v3.1 Factory profile is aligned, but factoryd runtime and bundle qualification are absent.",
         "exception_ref": ""
       },
       "launch_request": {
@@ -157,7 +161,7 @@
         "requested_write_paths": [],
         "requested_adapter": "codex_cli",
         "expected_decision": "deny",
-        "reason_code": "factory_profile_and_runtime_v3_1_unqualified"
+        "reason_code": "factoryd_runtime_v3_1_unqualified"
       },
       "conflict_behavior": "fail_closed"
     },
@@ -165,11 +169,11 @@
   },
   "factory_compatibility": {
     "factory_contract_version": "1.0",
-    "profile_contract_version": "v2_incompatible_with_lumyn_v3_1",
+    "profile_contract_version": "lumyn-provider-update-delivery-v3.1-2026-07-25",
     "profile_ref": "profiles/lumyn.yaml",
-    "status": "blocked_profile_and_runtime_unqualified",
+    "status": "profile_aligned_runtime_unqualified",
     "generated_by": "prd-to-plan+execution-compiler",
-    "generated_at": "2026-07-25T00:00:00Z",
+    "generated_at": "2026-07-26T16:32:45Z",
     "deprecated_worker_policy": "block_active_aliases",
     "deprecated_worker_aliases": [
       {
@@ -178,7 +182,9 @@
         "status": "deprecated"
       }
     ],
-    "unblock_rule": "No factoryd task dispatch until the external profile is updated and factoryd is qualified against the exact v3.1 control generation."
+    "unblock_rule": "No factoryd task dispatch until factoryd is qualified against this exact v3.1 control generation and one bounded task is explicitly unpaused with positive budgets and complete grants.",
+    "skill_vocabulary_version": "2026-06-09",
+    "skill_inventory_ref": "skills/README.md"
   },
   "runtime_pins": {
     "language": "go_with_parser_backed_typescript_analysis",
@@ -193,7 +199,7 @@
     "delivery_policy": "complete local evidence plus patch, optional local branch, and PR-ready bundle is the fallback; at least one tested draft PR requires separate atomic short-lived non-default-branch-push and draft-PR actions, evidence-bound idempotency, and no auto-merge; generation, verification, branch, and PR routes never become one aggregate authority; manual delivery cannot close automated-delivery acceptance; first-campaign product proof requires one same qualifying run from authenticated event and installed preauthorization through an organically agent-assisted item on a consumer-selected qualified runner, independent exact-head verification, Lumyn-opened draft PR, and provider-received consented status projection; deterministic rerouting cannot manufacture agent proof, and status is event-bound, provenance-labeled, and never inferred from silence",
     "artifact_namespace": ".factory/artifacts contains source-safe Factory controls and separately consented aggregate or digest evidence only; consumer-private code, prompts, responses, agent sessions, patches, traces, credentials, and identifiable campaign evidence use an approved external private root and are never API-provider-visible",
     "live_work_policy": "Factory worker capabilities are only approval, credentials, and network and never substitute for Lumyn product action scopes; consumer installation, event-specific authorization, Agent Runner network, Agent Runner credential, model disclosure, model network, model credential, repository, command, registry, sandbox, GitHub, reporting, retention, and deletion actions are separate, expiring, revocable, fail-closed product grants whose exact route-selected union is frozen before action",
-    "dispatch_policy": "factoryd dispatch is paused and fail-closed until the external profiles/lumyn.yaml contract is updated for v3.1 and factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation"
+    "dispatch_policy": "factoryd dispatch is paused and fail-closed until factoryd is qualified against this regenerated task, authority, model, evidence, and closure generation and one bounded task is explicitly unpaused with positive budgets and complete grants"
   },
   "locked_decisions": [
     "Provider-originated update delivery is the product; a provider-paid, services-assisted sunset campaign is the initial commercial motion.",
@@ -228,7 +234,9 @@
     "required_item_count": 53,
     "status": "mapped_partial",
     "implemented_carry_forward_count": 3,
-    "group_only_refs_allowed": false
+    "group_only_refs_allowed": false,
+    "m2_acceptance_closure_count": 0,
+    "implemented_item_count": 5
   },
   "delivery_slices": [
     {
@@ -333,14 +341,23 @@
       "BASE-002",
       "BASE-004"
     ],
-    "rule": "Carry forward only direct evidence whose recorded semantics exactly prove the retained v3 item."
+    "rule": "Carry forward only direct evidence whose recorded semantics exactly prove the retained v3 item.",
+    "implemented_acceptance_item_ids": [
+      "BASE-001",
+      "BASE-002",
+      "BASE-003",
+      "BASE-004",
+      "BASE-005"
+    ]
   },
   "planning_rebaseline": {
-    "status": "repo_local_complete_factoryd_dispatch_paused",
+    "status": "repo_local_controls_regenerated_factoryd_dispatch_paused",
     "completed_by_this_generation": true,
     "runtime_behavior_changed": false,
-    "m0_completion_claimed": false,
-    "rule": "The planning rebaseline is a dispatch precondition and is not work hidden inside M0."
+    "m0_completion_claimed": true,
+    "m2_contract_implementation_status": "implementation_and_local_validation_complete_lifecycle_pending",
+    "m2_acceptance_closure_claimed": false,
+    "rule": "Generated controls may record current implementation and validation progress, but acceptance remains open until task-bound current-head PR lifecycle and post-merge evidence close it."
   },
   "stop_conditions": [
     "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
@@ -350,5 +367,7 @@
     "generation self-verifies or verification does not bind the exact candidate head",
     "provider code access, production credential, default-branch write, or auto-merge is requested",
     "commercial evidence or generic-agent comparison is not direct, frozen, fair, and independently attested"
-  ]
+  ],
+  "generated_by": "prd-to-plan+execution-compiler",
+  "generated_at": "2026-07-26T16:32:45Z"
 }

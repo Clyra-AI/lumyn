@@ -121,10 +121,10 @@ EXPECTED_RUNTIME_PINS = {
         "grants whose exact route-selected union is frozen before action"
     ),
     "dispatch_policy": (
-        "factoryd dispatch is paused and fail-closed until the external "
-        "profiles/lumyn.yaml contract is updated for v3.1 and factoryd is "
+        "factoryd dispatch is paused and fail-closed until factoryd is "
         "qualified against this regenerated task, authority, model, evidence, "
-        "and closure generation"
+        "and closure generation and one bounded task is explicitly unpaused "
+        "with positive budgets and complete grants"
     ),
 }
 

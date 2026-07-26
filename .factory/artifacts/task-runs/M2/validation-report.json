@@ -3,8 +3,8 @@
   "schema_version": "0.1",
   "task_id": "M2",
   "work_item_id": "lumyn-v3-m2",
-  "validation_run_id": "validation:2026-07-26T15:34:54Z:af085bbc5cd84b0a98c8388214ac6de5",
-  "candidate_digest": "sha256:44c3b0fe8a422324e6dd08bf24c6dbce2e477225b8783fa4ab5d4c1db97da8df",
+  "validation_run_id": "validation:2026-07-26T16:32:25Z:50773146792248c5907105189e125e8a",
+  "candidate_digest": "sha256:8509fbe0980c17d6e6ad3d9cd2b8f04e122d9d6699cb7162b33492198e040324",
   "validation_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
   "test_intent": [
     {
@@ -55,7 +55,7 @@
     },
     {
       "check": "independent security re-review",
-      "summary": "All seven findings were independently reverified as resolved on the exact current validation run and candidate digest.",
+      "summary": "All 11 findings were independently reverified as resolved on the exact current validation run and candidate digest; 18 risk and review-routing downgrade mutations were rejected.",
       "evidence_refs": [
         ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
       ]
@@ -78,7 +78,8 @@
     "internal/redaction/",
     "internal/status/",
     "docs/",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "scripts/repo_pack_validation/"
   ],
   "checks": [
     {
@@ -102,8 +103,8 @@
     {
       "command": "make lint-fast",
       "exit_code": 0,
-      "started_at": "2026-07-26T15:34:54Z",
-      "completed_at": "2026-07-26T15:34:59Z",
+      "started_at": "2026-07-26T16:32:25Z",
+      "completed_at": "2026-07-26T16:32:26Z",
       "output_sha256": "sha256:5d9d17065c132125cedf3cc83aeb2374e90e8b2c03dd65096c19240bb6aa3347",
       "output_ref": ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.stdout.log",
       "runner_identity": "factory-validation-gate-attended",
@@ -112,9 +113,9 @@
     {
       "command": "make test-fast",
       "exit_code": 0,
-      "started_at": "2026-07-26T15:34:59Z",
-      "completed_at": "2026-07-26T15:35:15Z",
-      "output_sha256": "sha256:d2be927ecb234b2ac20cbf542a550003a4b0def31e2d19fc44b2f7dfe18cf97b",
+      "started_at": "2026-07-26T16:32:26Z",
+      "completed_at": "2026-07-26T16:32:31Z",
+      "output_sha256": "sha256:953324c8bd5a2b8ce23918ac016be2c8ad82ff0b9a4cf4ebf486808e4fabd6e7",
       "output_ref": ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.stdout.log",
       "runner_identity": "factory-validation-gate-attended",
       "repo_ref": "7609e5c49c0776c1028c1aeb3e2e2ee942b613b6"
@@ -122,9 +123,9 @@
     {
       "command": "make test-coverage",
       "exit_code": 0,
-      "started_at": "2026-07-26T15:35:15Z",
-      "completed_at": "2026-07-26T15:35:34Z",
-      "output_sha256": "sha256:6ce6ef1c2cbd0b864278604370f116404bf729bf3355e5fe30f638b83ae5826d",
+      "started_at": "2026-07-26T16:32:31Z",
+      "completed_at": "2026-07-26T16:32:36Z",
+      "output_sha256": "sha256:fe4e0fe475a074e6dceeec93a09687776d88ab1214f03aede7f063e314141b1d",
       "output_ref": ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.stdout.log",
       "runner_identity": "factory-validation-gate-attended",
       "repo_ref": "7609e5c49c0776c1028c1aeb3e2e2ee942b613b6"
@@ -132,8 +133,8 @@
     {
       "command": "python3 scripts/validate_repo_pack.py",
       "exit_code": 0,
-      "started_at": "2026-07-26T15:35:35Z",
-      "completed_at": "2026-07-26T15:35:35Z",
+      "started_at": "2026-07-26T16:32:36Z",
+      "completed_at": "2026-07-26T16:32:36Z",
       "output_sha256": "sha256:c5c211a84ffced0f3c770ee5c32e969c2fcb4ce5de4715144495243303bcf2aa",
       "output_ref": ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.stdout.log",
       "runner_identity": "factory-validation-gate-attended",
@@ -151,6 +152,9 @@
     "docs/product/prd.md",
     "internal/agent/conformance.go",
     "internal/agent/conformance_test.go",
+    "internal/authorization/persisted_event_authorization.go",
+    "internal/authorization/persisted_event_authorization_test.go",
+    "internal/authorization/persisted_installation.go",
     "internal/authorization/policy.go",
     "internal/authorization/policy_test.go",
     "internal/change/event.go",
@@ -174,6 +178,7 @@
     "schemas/candidate-manifest.schema.json",
     "schemas/consumer-execution-manifest.schema.json",
     "schemas/consumer-installation.schema.json",
+    "schemas/consumer_installation.go",
     "schemas/event-authorization.schema.json",
     "schemas/export-result.schema.json",
     "schemas/impact-report.schema.json",
@@ -188,6 +193,10 @@
     "schemas/remediation-outcome.schema.json",
     "schemas/schema_test.go",
     "schemas/v3_contracts_test.go",
+    "scripts/repo_pack_validation/runtime_pins.py",
+    "scripts/repo_pack_validation/self_tests.py",
+    "scripts/repo_pack_validation/task_contracts.py",
+    "scripts/repo_pack_validation/validator.py",
     "tests/fixtures/contracts/agent-attempt/invalid.json",
     "tests/fixtures/contracts/agent-attempt/valid.json",
     "tests/fixtures/contracts/agent-runner-conformance-result/invalid.json",
@@ -251,6 +260,9 @@
       "docs/product/prd.md",
       "internal/agent/conformance.go",
       "internal/agent/conformance_test.go",
+      "internal/authorization/persisted_event_authorization.go",
+      "internal/authorization/persisted_event_authorization_test.go",
+      "internal/authorization/persisted_installation.go",
       "internal/authorization/policy.go",
       "internal/authorization/policy_test.go",
       "internal/change/event.go",
@@ -274,6 +286,7 @@
       "schemas/candidate-manifest.schema.json",
       "schemas/consumer-execution-manifest.schema.json",
       "schemas/consumer-installation.schema.json",
+      "schemas/consumer_installation.go",
       "schemas/event-authorization.schema.json",
       "schemas/export-result.schema.json",
       "schemas/impact-report.schema.json",
@@ -288,6 +301,10 @@
       "schemas/remediation-outcome.schema.json",
       "schemas/schema_test.go",
       "schemas/v3_contracts_test.go",
+      "scripts/repo_pack_validation/runtime_pins.py",
+      "scripts/repo_pack_validation/self_tests.py",
+      "scripts/repo_pack_validation/task_contracts.py",
+      "scripts/repo_pack_validation/validator.py",
       "tests/fixtures/contracts/agent-attempt/invalid.json",
       "tests/fixtures/contracts/agent-attempt/valid.json",
       "tests/fixtures/contracts/agent-runner-conformance-result/invalid.json",
@@ -353,7 +370,8 @@
       "CHANGELOG.md",
       "internal/change/",
       "internal/installation/",
-      "internal/status/"
+      "internal/status/",
+      "scripts/repo_pack_validation/"
     ],
     "forbidden_paths": [
       ".git/",
@@ -380,7 +398,7 @@
       ".factory/artifacts/task-runs/M2/validation-run-summary.json",
       ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
     ],
-    "notes": "A security reviewer independent of the implementation runner approved the exact current run, candidate digest, marker set, and raw logs after seven findings were repaired."
+    "notes": "An independent security reviewer approved the exact current run, 105-path candidate digest, marker set, and raw logs after all 11 findings were repaired; 18 direct risk and review-routing downgrade mutations fail closed."
   },
   "test_first_skipped_reason": {
     "status": "not_skipped",
@@ -393,7 +411,7 @@
   ],
   "residual_risks": [
     "M2 proves executable contracts only; provider fetch, repository analysis, agent execution, verification execution, GitHub delivery, and provider reporting require later milestone evidence.",
-    "factoryd dispatch remains paused because the compiled generic review-type placeholder and runtime qualification are not reconciled; this attended review grants no daemon authority.",
+    "factoryd dispatch remains paused because its v3.1 runtime and bundle qualification are absent; this attended validation grants no daemon authority.",
     "Remote CI, CodeQL, passive current-head Codex review, merge, and post-main monitoring remain commit-push lifecycle gates."
   ],
   "integrated_validation": {

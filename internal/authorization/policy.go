@@ -52,29 +52,35 @@ const (
 )
 
 type Scope struct {
-	ReadPaths              []string `json:"read_paths"`
-	WritePaths             []string `json:"write_paths"`
-	Commands               []string `json:"commands"`
-	AgentRunnerNetwork     bool     `json:"agent_runner_network"`
-	AgentRunnerCredential  bool     `json:"agent_runner_credential"`
-	ModelRequestDisclosure bool     `json:"model_request_disclosure"`
-	ModelNetwork           bool     `json:"model_network"`
-	ModelCredential        bool     `json:"model_credential"`
-	Registry               bool     `json:"registry"`
-	LifecycleScripts       bool     `json:"lifecycle_scripts"`
-	SandboxRequestData     bool     `json:"sandbox_request_data"`
-	SandboxNetwork         bool     `json:"sandbox_network"`
-	SandboxCredentials     bool     `json:"sandbox_credentials"`
-	RemoteBranch           bool     `json:"remote_branch"`
-	DraftPR                bool     `json:"draft_pr"`
-	ProviderReporting      bool     `json:"provider_reporting"`
-	Retention              bool     `json:"retention"`
-	Deletion               bool     `json:"deletion"`
+	ReadPaths     []string `json:"read_paths"`
+	WritePaths    []string `json:"write_paths"`
+	ExcludedPaths []string `json:"excluded_paths"`
+	// Commands contains canonical command IDs. Exact program/argument policy is
+	// separately bound by CommandPolicyDigest on persisted event authority.
+	Commands                []string `json:"commands"`
+	AgentRunnerNetwork      bool     `json:"agent_runner_network"`
+	AgentRunnerCredential   bool     `json:"agent_runner_credential"`
+	ModelRequestDisclosure  bool     `json:"model_request_disclosure"`
+	ModelNetwork            bool     `json:"model_network"`
+	ModelCredential         bool     `json:"model_credential"`
+	Registry                bool     `json:"registry"`
+	LifecycleScripts        bool     `json:"lifecycle_scripts"`
+	SandboxRequestData      bool     `json:"sandbox_request_data"`
+	SandboxNetwork          bool     `json:"sandbox_network"`
+	SandboxCredentials      bool     `json:"sandbox_credentials"`
+	RemoteBranch            bool     `json:"remote_branch"`
+	DraftPR                 bool     `json:"draft_pr"`
+	ProviderReporting       bool     `json:"provider_reporting"`
+	ProviderReportingFields []string `json:"provider_reporting_fields"`
+	Retention               bool     `json:"retention"`
+	Deletion                bool     `json:"deletion"`
 }
 
 type Budgets struct {
 	MaxChangedFiles    int `json:"max_changed_files"`
 	MaxDiffLines       int `json:"max_diff_lines"`
+	MaxDiffBytes       int `json:"max_diff_bytes"`
+	MaxTurns           int `json:"max_turns"`
 	MaxAttempts        int `json:"max_attempts"`
 	MaxTokens          int `json:"max_tokens"`
 	MaxCostCents       int `json:"max_cost_cents"`
@@ -125,7 +131,11 @@ type AgentExecutionPolicy struct {
 
 type Installation struct {
 	InstallationID                string               `json:"installation_id"`
+	InstallationDigest            string               `json:"installation_digest"`
+	APIConsumerOrganizationID     string               `json:"api_consumer_organization_id"`
+	ConsumerMaintainerID          string               `json:"consumer_maintainer_id"`
 	Repository                    string               `json:"repository"`
+	RepositoryID                  string               `json:"repository_id"`
 	PackageRoot                   string               `json:"package_root"`
 	ProviderChannelOrigin         string               `json:"provider_channel_origin"`
 	ProviderManifestURL           string               `json:"provider_manifest_url"`
@@ -145,10 +155,30 @@ type Installation struct {
 
 type AuthorizationSnapshot struct {
 	AuthorizationID                     string     `json:"authorization_id"`
+	AuthorizationDigest                 string     `json:"authorization_digest"`
+	APIConsumerOrganizationID           string     `json:"api_consumer_organization_id"`
 	InstallationID                      string     `json:"installation_id"`
+	InstallationDigest                  string     `json:"installation_digest"`
 	EventID                             string     `json:"event_id"`
 	EventDigest                         string     `json:"event_digest"`
+	MigrationPackID                     string     `json:"migration_pack_id"`
+	MigrationPackDigest                 string     `json:"migration_pack_digest"`
+	RepositoryID                        string     `json:"repository_id"`
+	PackageRoot                         string     `json:"package_root"`
+	BaseCommit                          string     `json:"base_commit"`
+	PlanID                              string     `json:"plan_id"`
 	PlanDigest                          string     `json:"plan_digest"`
+	ExecutionManifestID                 string     `json:"execution_manifest_id"`
+	ExecutionManifestDigest             string     `json:"execution_manifest_digest"`
+	PathPolicyDigest                    string     `json:"path_policy_digest"`
+	CommandPolicyDigest                 string     `json:"command_policy_digest"`
+	ModelDataPolicyDigest               string     `json:"model_data_policy_digest"`
+	BudgetPolicyDigest                  string     `json:"budget_policy_digest"`
+	GitHubPolicyDigest                  string     `json:"github_policy_digest"`
+	ProviderReportingPolicyDigest       string     `json:"provider_reporting_policy_digest"`
+	VerificationConfigurationDigest     string     `json:"verification_configuration_digest"`
+	CredentialIssuancePolicyDigest      string     `json:"credential_issuance_policy_digest"`
+	AgentRouteDigest                    string     `json:"agent_route_digest,omitempty"`
 	ActionMode                          ActionMode `json:"action_mode"`
 	Route                               Route      `json:"route"`
 	ExactPlanApproved                   bool       `json:"exact_plan_approved"`
@@ -157,6 +187,8 @@ type AuthorizationSnapshot struct {
 	ShortLivedCredentialPolicySatisfied bool       `json:"short_lived_credential_policy_satisfied"`
 	Scope                               Scope      `json:"scope"`
 	Budgets                             Budgets    `json:"budgets"`
+	IssuedAt                            time.Time  `json:"issued_at"`
+	ExpiresAt                           time.Time  `json:"expires_at"`
 }
 
 func ValidateInstallation(value Installation, now time.Time) error {
@@ -208,7 +240,7 @@ func ValidateInstallation(value Installation, now time.Time) error {
 	return validateAgentPolicy(value.AgentPolicy, value.Scope)
 }
 
-func ValidateSnapshot(installation Installation, snapshot AuthorizationSnapshot, now time.Time) error {
+func validateSnapshot(installation Installation, snapshot AuthorizationSnapshot, now time.Time) error {
 	if err := ValidateInstallation(installation, now); err != nil {
 		return fmt.Errorf("installation: %w", err)
 	}
@@ -218,6 +250,9 @@ func ValidateSnapshot(installation Installation, snapshot AuthorizationSnapshot,
 	}
 	if snapshot.InstallationID != installation.InstallationID {
 		return errors.New("authorization binds a different installation")
+	}
+	if snapshot.InstallationDigest != "" && snapshot.InstallationDigest != installation.InstallationDigest {
+		return errors.New("authorization binds a different installation digest")
 	}
 	if _, ok := actionRanks[snapshot.ActionMode]; !ok {
 		return fmt.Errorf("unknown authorization action mode %q", snapshot.ActionMode)
@@ -333,8 +368,14 @@ func validateAgentPolicy(value AgentExecutionPolicy, scope Scope) error {
 		if runner.CredentialOwner != "lumyn_operator" || runner.UsageBillingOwner != "lumyn_operator" {
 			return errors.New("Lumyn-managed funding requires Lumyn credential and usage-billing ownership")
 		}
-		if err := validateManagedCredential(runner.ManagedCredential); err != nil {
-			return err
+		// The durable Consumer Installation selects funding and ownership but
+		// stores no reusable credential. If a broker ceiling is attached by an
+		// attended caller, validate it here; the attempt-scoped executable grant
+		// remains a separate managed-credential artifact.
+		if runner.ManagedCredential != nil {
+			if err := validateManagedCredential(runner.ManagedCredential); err != nil {
+				return err
+			}
 		}
 	default:
 		return fmt.Errorf("unknown execution funding mode %q", runner.FundingMode)
@@ -387,8 +428,35 @@ func validateScope(value Scope) error {
 			return fmt.Errorf("%s: %w", label, err)
 		}
 	}
+	if err := validateUniqueStrings(value.ExcludedPaths, validateExcludedPath); err != nil {
+		return fmt.Errorf("excluded path: %w", err)
+	}
 	if err := validateUniqueStrings(value.Commands, validateCommand); err != nil {
 		return fmt.Errorf("command: %w", err)
+	}
+	if err := validateUniqueStrings(value.ProviderReportingFields, validatePolicyIdentifier); err != nil {
+		return fmt.Errorf("provider reporting field: %w", err)
+	}
+	if !value.ProviderReporting && len(value.ProviderReportingFields) > 0 {
+		return errors.New("provider reporting fields require provider_reporting capability")
+	}
+	return nil
+}
+
+func validatePolicyIdentifier(value string) error {
+	if strings.TrimSpace(value) == "" || strings.ContainsAny(value, "\x00\r\n") {
+		return fmt.Errorf("unsafe identifier %q", value)
+	}
+	return nil
+}
+
+func validateExcludedPath(value string) error {
+	if value == "" || strings.ContainsAny(value, "\x00\\*") || filepath.IsAbs(value) {
+		return fmt.Errorf("unsafe path %q", value)
+	}
+	cleaned := filepath.Clean(value)
+	if cleaned == ".." || strings.HasPrefix(cleaned, ".."+string(filepath.Separator)) {
+		return fmt.Errorf("unsafe path %q", value)
 	}
 	return nil
 }
@@ -435,7 +503,7 @@ func validatePinnedHTTPSOrigin(value string) error {
 }
 
 func validateBudgets(value Budgets) error {
-	if value.MaxChangedFiles < 0 || value.MaxDiffLines < 0 || value.MaxAttempts < 0 ||
+	if value.MaxChangedFiles < 0 || value.MaxDiffLines < 0 || value.MaxDiffBytes < 0 || value.MaxTurns < 0 || value.MaxAttempts < 0 ||
 		value.MaxTokens < 0 || value.MaxCostCents < 0 || value.MaxDurationSeconds < 0 {
 		return errors.New("budgets cannot be negative")
 	}
@@ -466,6 +534,7 @@ func scopeHasMutation(value Scope) bool {
 func scopeIsSubset(child, parent Scope) bool {
 	return stringSubset(child.ReadPaths, parent.ReadPaths) &&
 		stringSubset(child.WritePaths, parent.WritePaths) &&
+		stringSubset(parent.ExcludedPaths, child.ExcludedPaths) &&
 		stringSubset(child.Commands, parent.Commands) &&
 		(!child.AgentRunnerNetwork || parent.AgentRunnerNetwork) &&
 		(!child.AgentRunnerCredential || parent.AgentRunnerCredential) &&
@@ -480,6 +549,7 @@ func scopeIsSubset(child, parent Scope) bool {
 		(!child.RemoteBranch || parent.RemoteBranch) &&
 		(!child.DraftPR || parent.DraftPR) &&
 		(!child.ProviderReporting || parent.ProviderReporting) &&
+		stringSubset(child.ProviderReportingFields, parent.ProviderReportingFields) &&
 		(!child.Retention || parent.Retention) &&
 		(!child.Deletion || parent.Deletion)
 }
@@ -499,6 +569,7 @@ func stringSubset(child, parent []string) bool {
 
 func budgetsWithin(child, parent Budgets) bool {
 	return child.MaxChangedFiles <= parent.MaxChangedFiles && child.MaxDiffLines <= parent.MaxDiffLines &&
+		child.MaxDiffBytes <= parent.MaxDiffBytes && child.MaxTurns <= parent.MaxTurns &&
 		child.MaxAttempts <= parent.MaxAttempts && child.MaxTokens <= parent.MaxTokens &&
 		child.MaxCostCents <= parent.MaxCostCents && child.MaxDurationSeconds <= parent.MaxDurationSeconds
 }

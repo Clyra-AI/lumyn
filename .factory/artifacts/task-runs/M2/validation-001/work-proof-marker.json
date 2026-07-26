@@ -3,7 +3,7 @@
   "cwd": ".",
   "execution_status": "pass",
   "exit_code": 0,
-  "finished_at": "2026-07-26T15:34:59Z",
+  "finished_at": "2026-07-26T16:32:26Z",
   "generated_by": "trusted_runner",
   "git_sha": "7609e5c49c0776c1028c1aeb3e2e2ee942b613b6",
   "marker_id": "validation-001",
@@ -12,8 +12,12 @@
     ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.stderr.log"
   ],
   "runner_id": "factory-validation-gate-attended",
-  "started_at": "2026-07-26T15:34:54Z",
+  "started_at": "2026-07-26T16:32:25Z",
   "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "stdout_digest": "sha256:5d9d17065c132125cedf3cc83aeb2374e90e8b2c03dd65096c19240bb6aa3347",
-  "workspace_ref": "codex/lumyn-m2-contracts"
+  "workspace_proof": {
+    "candidate_source": "origin/main plus exact local PR patch",
+    "isolation": "detached_worktree"
+  },
+  "workspace_ref": "detached-worktree:origin/main+candidate"
 }
