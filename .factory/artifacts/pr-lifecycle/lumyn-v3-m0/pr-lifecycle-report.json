@@ -93,7 +93,7 @@
   },
   "work_proof_marker_refs": [
     ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
-    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge/work-proof-marker.json"
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-work-proof/work-proof-marker.json"
   ],
   "evidence_refs": [
     ".factory/artifacts/task-runs/M0/validation-report.json",
@@ -106,7 +106,7 @@
     ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json",
     ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/ship-packet.json",
     ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-report.json",
-    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge/work-proof-marker.json"
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-work-proof/work-proof-marker.json"
   ],
   "skipped_gates": [
     {
