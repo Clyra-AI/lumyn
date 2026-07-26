@@ -5,7 +5,7 @@
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
   "acceptance_mapping_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
   "acceptance_item_count": 53,
-  "last_updated_at": "2026-07-25T00:00:00Z",
+  "last_updated_at": "2026-07-26T13:10:20Z",
   "closure_status": "partial",
   "full_mvp_closure_rule": "Every acceptance item must have direct terminal evidence or an approved item-specific disposition. Milestones and delivery slices cannot close items.",
   "delivery_slices": [
@@ -50,8 +50,6 @@
         "TRUST-004"
       ],
       "remaining_acceptance_item_ids": [
-        "BASE-003",
-        "BASE-005",
         "PACK-001",
         "PACK-002",
         "PACK-003",
@@ -173,26 +171,30 @@
       "task_refs": [
         "M0"
       ],
-      "implemented_task_refs": [],
-      "remaining_task_refs": [
+      "implemented_task_refs": [
         "M0"
       ],
-      "status": "carried_forward",
+      "remaining_task_refs": [],
+      "status": "implemented",
       "closure_rule": "direct item-level evidence; milestones and delivery slices are coverage lenses only",
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "BASE-001",
-          "status": "carried_forward"
+          "status": "implemented"
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "M0 preserved this retained behavior and closed the item with direct task and lifecycle evidence."
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T1/validation-report.json",
         ".factory/artifacts/task-runs/T1/work-proof-marker.json",
         ".factory/artifacts/task-runs/T3/validation-report.json",
-        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/task-runs/M0/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json"
       ]
     },
     {
@@ -205,24 +207,28 @@
       "task_refs": [
         "M0"
       ],
-      "implemented_task_refs": [],
-      "remaining_task_refs": [
+      "implemented_task_refs": [
         "M0"
       ],
-      "status": "carried_forward",
+      "remaining_task_refs": [],
+      "status": "implemented",
       "closure_rule": "direct item-level evidence; milestones and delivery slices are coverage lenses only",
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "BASE-002",
-          "status": "carried_forward"
+          "status": "implemented"
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "M0 preserved and clarified these executable contracts and closed the item with direct task, independent-review, and lifecycle evidence."
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T2/validation-report.json",
-        ".factory/artifacts/task-runs/T2.7/validation-report.json"
+        ".factory/artifacts/task-runs/T2.7/validation-report.json",
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/lifecycle-evidence/M0/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json"
       ]
     },
     {
@@ -235,20 +241,28 @@
       "task_refs": [
         "M0"
       ],
-      "implemented_task_refs": [],
-      "remaining_task_refs": [
+      "implemented_task_refs": [
         "M0"
       ],
-      "status": "missing",
+      "remaining_task_refs": [],
+      "status": "implemented",
       "closure_rule": "direct item-level evidence; milestones and delivery slices are coverage lenses only",
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "BASE-003",
-          "status": "missing"
+          "status": "implemented"
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "M0 closed this item with approved, explicit, non-reusable governance debt for the skipped latest-head Codex terminal signal; later tasks must satisfy the complete gate."
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/lifecycle-evidence/M0/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/process-exception-handoff.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/delivery-debt-record.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json"
       ]
     },
     {
@@ -261,24 +275,27 @@
       "task_refs": [
         "M0"
       ],
-      "implemented_task_refs": [],
-      "remaining_task_refs": [
+      "implemented_task_refs": [
         "M0"
       ],
-      "status": "carried_forward",
+      "remaining_task_refs": [],
+      "status": "implemented",
       "closure_rule": "direct item-level evidence; milestones and delivery slices are coverage lenses only",
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "BASE-004",
-          "status": "carried_forward"
+          "status": "implemented"
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "M0 preserved this retained intake behavior and closed the item with direct task and lifecycle evidence."
       ],
       "evidence_refs": [
         ".factory/artifacts/task-runs/T3/validation-report.json",
-        ".factory/artifacts/task-runs/T3/work-proof-marker.json"
+        ".factory/artifacts/task-runs/T3/work-proof-marker.json",
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json"
       ]
     },
     {
@@ -291,20 +308,27 @@
       "task_refs": [
         "M0"
       ],
-      "implemented_task_refs": [],
-      "remaining_task_refs": [
+      "implemented_task_refs": [
         "M0"
       ],
-      "status": "missing",
+      "remaining_task_refs": [],
+      "status": "implemented",
       "closure_rule": "direct item-level evidence; milestones and delivery slices are coverage lenses only",
       "acceptance_item_statuses": [
         {
           "acceptance_item_id": "BASE-005",
-          "status": "missing"
+          "status": "implemented"
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "M0 implemented typed nonzero results and unambiguous provider-role terminology and closed the item with direct task, independent-review, and lifecycle evidence."
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M0/validation-report.json",
+        ".factory/artifacts/task-runs/M0/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M0/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json"
       ]
     },
     {

@@ -33,24 +33,31 @@ projection. It also binds paid qualification and a fair generic-agent
 baseline. Verification runs from a fresh exact-head view in a separate process
 without runner/model credentials or a generation-owned evidence writer.
 
-Execution status: **no task approved; factoryd paused and fail closed**.
+Execution status: **M0 closed with explicit process debt; M2 approved for
+attended execution; factoryd paused and fail closed**.
 
-The repo-local v3.1 planning rebaseline is complete, but the external Factory
-`profiles/lumyn.yaml` contract still represents v2 and `factoryd` has not been
-qualified against this exact v3.1 task, installation, authority, model,
-delivery, status, evidence, and closure
-generation. A separately approved attended task may use this packet and the
-full lifecycle gates without claiming factoryd readiness. No task, including
-M0, is approved by this generation. factoryd may not dispatch until both
-external dependencies are updated, evidenced, and the full repo gate passes.
-The planning rebaseline is a pre-dispatch control update; it is not M0
-execution or M0 closure.
+The external Factory source profile at `profiles/lumyn.yaml` is aligned to the
+v3.1 product contract, keeps dispatch disabled, and still requires factoryd
+runtime qualification. This repo's active compiled generation predates that
+alignment and therefore still records the former v2 incompatibility; factoryd
+also has not been qualified against this exact v3.1 task, installation,
+authority, model, delivery, status, evidence, and closure generation. The
+generation itself grants no execution authority. Separate human instructions
+approved attended M0, which is now closed with the missing latest-head Codex
+terminal signal recorded as approved, non-reusable process debt, and approved
+attended M2. Neither approval claims factoryd readiness. factoryd may not
+dispatch until the complete repo-local control generation is regenerated and
+revalidated against the aligned source profile, runtime qualification is
+evidenced, and the full repo gate passes.
 
 The historical `.factory/artifacts/prd-to-plan/lumyn-mvp/` package remains
 immutable and non-active.
 
-Current closure: 3 of 53 items have direct carry-forward evidence
-(`BASE-001`, `BASE-002`, and `BASE-004`). Every other item remains planned.
+Current closure: 5 of 53 items have direct terminal evidence or an approved
+item-specific disposition. `BASE-001`, `BASE-002`, `BASE-004`, and `BASE-005`
+are implemented; `BASE-003` is implemented with explicit, non-reusable
+governance debt recorded by the M0 lifecycle package. Every other item remains
+planned.
 Conditional items require explicit disposition evidence. `EXP-003` is not
 conditional: it closes only with tested automated draft-PR evidence. Manual
 patch, branch, or PR-bundle fallback cannot close it or prove automated

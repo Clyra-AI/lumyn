@@ -20,7 +20,7 @@ from repo_pack_validation.runtime_pins import validate_runtime_pins
 from repo_pack_validation.self_tests import run_repo_pack_self_tests
 from repo_pack_validation.task_contracts import (
     TASK_DEPENDENCIES,
-    validate_carry_forward_proof,
+    validate_implemented_proof,
     validate_migration_task_contracts,
 )
 
@@ -93,7 +93,13 @@ ALLOWED_ITEM_STATUSES = {
     "out_of_scope",
 }
 TERMINAL_EVIDENCE_STATUSES = {"implemented", "deferred_with_approval"}
-EXPECTED_CARRY_FORWARD = {"BASE-001", "BASE-002", "BASE-004"}
+EXPECTED_IMPLEMENTED_ITEMS = {
+    "BASE-001",
+    "BASE-002",
+    "BASE-003",
+    "BASE-004",
+    "BASE-005",
+}
 
 EXPECTED_CAPABILITIES = {
     "M2.5": {"approval"},
@@ -959,16 +965,16 @@ def validate_ledger(
             )
             for index, ref in enumerate(item["evidence_refs"]):
                 require_repo_ref(ref, f"{item_id}.evidence_refs[{index}]")
-    actual_carry = {
+    actual_implemented = {
         item_id
         for item_id, item in by_id.items()
         if item["status"] == "implemented"
     }
     require(
-        actual_carry == EXPECTED_CARRY_FORWARD,
-        "carry-forward status must be limited to directly evidenced retained behavior",
+        actual_implemented == EXPECTED_IMPLEMENTED_ITEMS,
+        "implemented status must match directly evidenced completed M0 items",
     )
-    validate_carry_forward_proof(by_id)
+    validate_implemented_proof(by_id)
     return by_id
 
 
@@ -1640,11 +1646,7 @@ def validate_closure(
     )
     for item_id, item in by_id.items():
         ledger_item = ledger_by_id[item_id]
-        expected = (
-            "carried_forward"
-            if ledger_item["status"] == "implemented"
-            else "missing"
-        )
+        expected = "implemented" if ledger_item["status"] == "implemented" else "missing"
         require(
             item.get("status") == expected,
             f"{item_id} closure status differs from ledger",
@@ -1653,19 +1655,28 @@ def validate_closure(
             item.get("acceptance_item_ids") == [item_id],
             f"{item_id} closure must be item-granular",
         )
-        require(
-            item.get("implemented_task_refs") == [],
-            f"{item_id} cannot claim an unexecuted v3 task",
-        )
-        require(
-            list_of_strings(item.get("remaining_task_refs"))
-            and item.get("remaining_task_refs") == item.get("task_refs"),
-            f"{item_id} must retain every active v3 task as remaining scope",
-        )
-        if expected == "carried_forward":
+        if expected == "implemented":
+            require(
+                item.get("implemented_task_refs") == ["M0"],
+                f"{item_id} implemented closure must bind to M0",
+            )
+            require(
+                item.get("remaining_task_refs") == [],
+                f"{item_id} implemented closure cannot retain M0 as remaining scope",
+            )
             require(
                 item.get("evidence_refs") == ledger_item.get("evidence_refs"),
                 f"{item_id} closure evidence differs from ledger",
+            )
+        else:
+            require(
+                item.get("implemented_task_refs") == [],
+                f"{item_id} cannot claim an unexecuted v3 task",
+            )
+            require(
+                list_of_strings(item.get("remaining_task_refs"))
+                and item.get("remaining_task_refs") == item.get("task_refs"),
+                f"{item_id} must retain every active v3 task as remaining scope",
             )
     slices = validate_slices(
         closure.get("delivery_slices"),
@@ -1673,7 +1684,7 @@ def validate_closure(
         "scope_closure_map.delivery_slices",
     )
     for item in slices.values():
-        expected_remaining = set(item["acceptance_item_ids"]) - EXPECTED_CARRY_FORWARD
+        expected_remaining = set(item["acceptance_item_ids"]) - EXPECTED_IMPLEMENTED_ITEMS
         require(
             set(item.get("remaining_acceptance_item_ids", []))
             == expected_remaining,
