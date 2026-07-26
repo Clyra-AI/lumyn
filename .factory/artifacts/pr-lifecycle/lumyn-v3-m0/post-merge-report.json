@@ -1,0 +1,47 @@
+{
+  "artifact_type": "post_merge_report",
+  "schema_version": "0.1",
+  "task_id": "M0",
+  "work_item_id": "lumyn-v3-m0",
+  "merge_reference": "4c383c724f68a6aa5fe6ab2c59d830c64797abfe",
+  "merge_performed": true,
+  "default_branch_checked": true,
+  "default_branch_ref": "origin/main@4c383c724f68a6aa5fe6ab2c59d830c64797abfe",
+  "post_merge_evidence_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30171847144",
+  "checks_observed": [
+    {
+      "name": "validate",
+      "workflowName": "validate",
+      "databaseId": 30171847144,
+      "url": "https://github.com/Clyra-AI/lumyn/actions/runs/30171847144",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "codeql",
+      "workflowName": "codeql",
+      "databaseId": 30171847136,
+      "url": "https://github.com/Clyra-AI/lumyn/actions/runs/30171847136",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "status": "healthy",
+  "regressions_detected": [],
+  "hotfix_triggered": false,
+  "work_proof_marker_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge/work-proof-marker.json"
+  ],
+  "scope_closure_report_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json",
+  "operator_notes": "Both required workflows passed on the exact landed commit. The pre-merge Codex settle process escape is recorded separately and did not produce a post-main regression.",
+  "human_intervention_count": 2,
+  "human_review_minutes": 0,
+  "blocked_wait_time": "PT25M",
+  "attention_reason": "manual_merge_after_nonterminal_codex_review",
+  "avoidable_interruption": true,
+  "automation_candidate": "Reliably re-run Codex review and emit a terminal signal after a fix push so manual intervention is unnecessary.",
+  "evidence_refs": [
+    "https://github.com/Clyra-AI/lumyn/actions/runs/30171847144",
+    "https://github.com/Clyra-AI/lumyn/actions/runs/30171847136"
+  ]
+}

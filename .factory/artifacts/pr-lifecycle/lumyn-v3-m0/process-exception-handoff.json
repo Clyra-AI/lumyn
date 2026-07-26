@@ -1,0 +1,95 @@
+{
+  "artifact_type": "handoff_record",
+  "schema_version": "0.1",
+  "work_item_id": "lumyn-v3-m0",
+  "current_state": "exception_approved",
+  "workspace_ref": ".",
+  "branch_ref": "codex/lumyn-m0-command-foundations",
+  "decisions": [
+    "M0 product changes landed through PR #70 and passed required PR and post-main checks.",
+    "The final PR head had no terminal latest-head Codex approval or thumbs-up before the repository owner merged it.",
+    "On 2026-07-26 the repository owner approved truthful closed-with-debt lifecycle recording and proceeding to M2; this does not retroactively satisfy the skipped review gate."
+  ],
+  "blockers": [],
+  "blocked_reason": "",
+  "validation_status": {
+    "status": "green_with_approved_process_exception",
+    "completed_checks": [
+      "M0 make prepush-full",
+      "PR #70 validate",
+      "PR #70 CodeQL analyze",
+      "main validate at 4c383c724f68a6aa5fe6ab2c59d830c64797abfe",
+      "main codeql at 4c383c724f68a6aa5fe6ab2c59d830c64797abfe"
+    ],
+    "pending_checks": []
+  },
+  "residual_risks": [
+    "M0 has no terminal latest-head Codex settle evidence for commit 0cd5f5e6da626cedb294fa02b9d99b3a17cbbae5.",
+    "The exception is historical and task-specific; it grants no carry-forward review or merge permission to M2 or any later task."
+  ],
+  "next_actions": [
+    "Persist the M0 lifecycle report, post-merge proof, ship packet, scope closure, and delivery debt.",
+    "Run M2 attended with its full high-risk validation, security review, latest-head Codex review, and post-merge gates."
+  ],
+  "owner_needed": "none",
+  "promised_followups": [
+    "Do not reuse this exception as review evidence.",
+    "Keep factoryd paused until the compiled controls and runtime are qualified."
+  ],
+  "checkpoint_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/pr-lifecycle-report.json",
+  "resume_artifact_refs": [
+    ".factory/artifacts/task-runs/M0/validation-report.json",
+    ".factory/artifacts/task-runs/M0/work-proof-marker.json",
+    ".factory/artifacts/lifecycle-evidence/M0/review-report.json"
+  ],
+  "artifact_refs": [
+    ".factory/artifacts/task-runs/M0/validation-report.json",
+    ".factory/artifacts/task-runs/M0/work-proof-marker.json",
+    ".factory/artifacts/lifecycle-evidence/M0/review-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/delivery-debt-record.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json"
+  ],
+  "human_intervention_count": 2,
+  "human_review_minutes": 0,
+  "blocked_wait_time": "PT25M",
+  "attention_reason": "manual_merge_after_nonterminal_codex_review",
+  "avoidable_interruption": true,
+  "automation_candidate": "Make automatic Codex review reliably re-run and emit a terminal signal after a reviewed fix push.",
+  "merge_authority_grant": {
+    "capability": "merge_authority",
+    "task_id": "M0",
+    "approved": true,
+    "approved_by": "davidahmann",
+    "approval_source": "Explicit pre-implementation instruction that M0 was approved and should be shipped using commit-push land mode.",
+    "approved_on": "2026-07-25",
+    "expires_at": "2026-07-26T00:00:00Z"
+  },
+  "approval_card": {
+    "decision_needed": "Approve M0 closed-with-debt lifecycle recording and permit M2 to proceed without treating the skipped latest-head Codex settle as satisfied.",
+    "risk_summary": "PR #70 merged with green PR and main checks after its P1 was fixed, but the final head lacked terminal Codex review evidence.",
+    "owner": "davidahmann",
+    "timeout": "2026-07-26T13:40:34Z",
+    "evidence_refs": [
+      ".factory/artifacts/task-runs/M0/validation-report.json",
+      ".factory/artifacts/lifecycle-evidence/M0/review-report.json",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/post-merge-report.json"
+    ],
+    "decision_options": [
+      "approve",
+      "reject",
+      "defer"
+    ],
+    "decision_status": "approved",
+    "followup_artifact_refs": [
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/delivery-debt-record.json"
+    ],
+    "routing_targets": [
+      {
+        "surface_kind": "chat_card",
+        "adapter_hint": "codex",
+        "payload_summary": "Repository owner instructed Codex to complete M0 closure and proceed to M2 after the process exception was disclosed."
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "artifact_type": "ship_packet",
+  "schema_version": "0.1",
+  "task_id": "M0",
+  "work_item_id": "lumyn-v3-m0",
+  "branch_name": "codex/lumyn-m0-command-foundations",
+  "commit_set": [
+    "ba2c48aad09c069e3604a58af9c514d8b3173ae7",
+    "0cd5f5e6da626cedb294fa02b9d99b3a17cbbae5"
+  ],
+  "pr_summary": "Establish fail-closed M0 command and result foundations while preserving v1.0 evidence compatibility.",
+  "validation_reference": ".factory/artifacts/task-runs/M0/validation-report.json",
+  "work_proof_marker_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/implementation/work-proof-marker.json"
+  ],
+  "scope_closure_report_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/scope-closure-report.json",
+  "review_policy": "Medium-risk M0 required independent architecture review, green validate and CodeQL, terminal latest-head Codex review, governed merge, and post-main monitoring.",
+  "merge_readiness": "landed_with_approved_non_reusable_process_exception",
+  "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/70",
+  "merge_ref": "4c383c724f68a6aa5fe6ab2c59d830c64797abfe",
+  "gate_status": {
+    "local_validation": "pass",
+    "ci": "pass",
+    "independent_code_review": "approved",
+    "codex_review": "blocked_no_latest_head_terminal_signal",
+    "merge": "merged_by_repository_owner",
+    "post_merge": "healthy",
+    "closure": "closed_with_debt"
+  },
+  "process_exception_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m0/process-exception-handoff.json"
+}
