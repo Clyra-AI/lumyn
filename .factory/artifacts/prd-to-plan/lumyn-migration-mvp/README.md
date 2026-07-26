@@ -34,9 +34,9 @@ projection. It also binds paid qualification and a fair generic-agent
 baseline. Verification runs from a fresh exact-head view in a separate process
 without runner/model credentials or a generation-owned evidence writer.
 
-Execution status: **M0 closed with explicit process debt; M2 implementation
-and local validation complete with PR lifecycle and acceptance closure pending;
-factoryd paused and fail closed**.
+Execution status: **M0 and M2 closed with explicit, task-specific process debt;
+M1 is next in the dependency graph but requires attended approval and its full
+holdout/review lifecycle; factoryd remains paused and fail closed**.
 
 The external Factory source profile at `profiles/lumyn.yaml` is aligned to the
 v3.1 product contract and this complete generated control set records that exact
@@ -44,23 +44,24 @@ profile version. factoryd remains unqualified against this active mission,
 bundle, schemas, task, installation, authority, Agent Runner/model, delivery,
 status, evidence, and closure generation. The generation itself grants no
 execution authority. M0 remains closed with its approved, non-reusable process
-debt. M2 has current local validation and independent security-review evidence,
-but its acceptance items remain planned until the current PR head passes CI,
-latest-head review, merge, post-merge monitoring, and task-bound lifecycle
-closure. factoryd may not dispatch until runtime qualification is evidenced and
-one bounded task is explicitly unpaused with positive budgets and complete
-grants.
+debt. M2 is task-closed with direct validation, independent security review,
+landed-content binding, healthy exact-main checks, and explicit non-reusable
+debt for the missing latest-head Codex terminal signal. Shared event and
+installation acceptance remains planned for M3 and M5 runtime proof. factoryd
+may not dispatch until runtime qualification is evidenced and one bounded task
+is explicitly unpaused with positive budgets and complete grants.
 
 The historical `.factory/artifacts/prd-to-plan/lumyn-mvp/` package remains
 immutable and non-active.
 
-Current closure: 5 of 53 items have direct terminal evidence or an approved
+Current closure: 9 of 53 items have direct terminal evidence or an approved
 item-specific disposition. `BASE-001`, `BASE-002`, `BASE-004`, and `BASE-005`
 are implemented; `BASE-003` is implemented with explicit, non-reusable
-governance debt recorded by the M0 lifecycle package. M2 implementation and
-local validation are complete, but its four trust items and supported event and
-installation items remain planned until exact PR lifecycle, runtime-owner, and
-item-level evidence closes them.
+governance debt recorded by the M0 lifecycle package. `TRUST-002` through
+`TRUST-004` are implemented; `TRUST-001` is implemented with the M2 lifecycle
+process debt attached. M2's contract contribution to event and installation
+acceptance is complete, but those shared items remain planned until M3 and M5
+produce runtime-owner evidence.
 Conditional items require explicit disposition evidence. `EXP-003` is not
 conditional: it closes only with tested automated draft-PR evidence. Manual
 patch, branch, or PR-bundle fallback cannot close it or prove automated

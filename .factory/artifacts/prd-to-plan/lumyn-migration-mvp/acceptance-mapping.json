@@ -49,7 +49,8 @@
           ".factory/artifacts/task-runs/M2/validation-report.json",
           ".factory/artifacts/task-runs/M2/validation-run-summary.json",
           ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-          ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+          ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
         ]
       }
     },
@@ -72,7 +73,8 @@
           ".factory/artifacts/task-runs/M2/validation-report.json",
           ".factory/artifacts/task-runs/M2/validation-run-summary.json",
           ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-          ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+          ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
         ]
       }
     },
@@ -156,15 +158,16 @@
         "implementation_complete_task_refs": [
           "M2"
         ],
-        "lifecycle_pending_task_refs": [
-          "M2"
-        ],
-        "acceptance_status": "planned",
-        "progress_evidence_refs": [
+        "lifecycle_pending_task_refs": [],
+        "acceptance_status": "implemented",
+        "process_debt_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json",
+        "evidence_refs": [
           ".factory/artifacts/task-runs/M2/validation-report.json",
           ".factory/artifacts/task-runs/M2/validation-run-summary.json",
           ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-          ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+          ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
         ]
       }
     },
@@ -238,11 +241,10 @@
         "TRUST-004"
       ],
       "completed_task_refs": [
-        "M0"
-      ],
-      "implementation_complete_pending_lifecycle_task_refs": [
+        "M0",
         "M2"
-      ]
+      ],
+      "implementation_complete_pending_lifecycle_task_refs": []
     },
     {
       "slice_id": "hybrid_migration_engine",
@@ -297,6 +299,6 @@
       ]
     }
   ],
-  "generated_by": "prd-to-plan+execution-compiler",
-  "generated_at": "2026-07-26T16:32:45Z"
+  "generated_by": "prd-to-plan+execution-compiler+post-merge-monitor",
+  "generated_at": "2026-07-26T17:04:17Z"
 }

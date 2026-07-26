@@ -1,9 +1,9 @@
 {
   "artifact_type": "acceptance_ledger",
   "schema_version": "1.0",
-  "generated_by": "prd-to-plan+execution-compiler",
-  "generated_at": "2026-07-26T16:32:45Z",
-  "last_updated_at": "2026-07-26T16:32:45Z",
+  "generated_by": "prd-to-plan+execution-compiler+post-merge-monitor",
+  "generated_at": "2026-07-26T17:04:17Z",
+  "last_updated_at": "2026-07-26T17:04:17Z",
   "source_prd_ref": "docs/product/prd.md",
   "source_ref": "docs/product/prd.md",
   "acceptance_item_count": 53,
@@ -288,14 +288,15 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "M2 executable event and trust contracts are implemented and locally validated; M3 still owns runtime closure and M2 remains lifecycle-open."
+        "M2's executable event-contract prerequisite is task-closed with direct lifecycle evidence; M3 still owns runtime closure for this shared item."
       ],
       "source_text": "Lumyn accepts a Provider Change Event only when its immutable identity and version, provider-controlled pinned transport or attended-recovery provenance, issuer and authentication, monotonic sequence and freshness, embedded or exact-URL contract delivery and retrieved-byte digest, API or SDK, audience, deadline, severity, and supersession or withdrawal state validate; the event and Provider Change Contract remain non-executable.",
       "progress_evidence_refs": [
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
       ]
     },
     {
@@ -318,14 +319,15 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "M2 executable event and trust contracts are implemented and locally validated; M3 still owns runtime closure and M2 remains lifecycle-open."
+        "M2's executable event-contract prerequisite is task-closed with direct lifecycle evidence; M3 still owns runtime closure for this shared item."
       ],
       "source_text": "Duplicate, replayed, stale, conflicting, expired, superseded, withdrawn, wrong-audience, or unauthenticated events fail closed; an attended import cannot count as provider-channel delivery or authorize an installed-preauthorization write.",
       "progress_evidence_refs": [
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
       ]
     },
     {
@@ -348,14 +350,15 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "M2 executable installation and non-widening authorization contracts are implemented and locally validated; M5 still owns runtime closure and M2 remains lifecycle-open."
+        "M2's executable installation and non-widening-authorization prerequisite is task-closed with direct lifecycle evidence; M5 still owns runtime closure for this shared item."
       ],
       "source_text": "A revocable Consumer Installation binds the exact provider-controlled channel and authentication key, repository and package root, audience or version selectors, action ceiling, authorization mode, paths, commands, `agent_execution_policy` (`disabled` or `configured`), model-data policy and budgets, GitHub token-issuance policy, provider-reporting fields, retention and deletion, expiry, and revocation. A configured policy additionally binds the exact Agent Runner adapter/version/executable qualification and auth/entitlement policy, execution-funding mode, credential and usage-billing ownership, and native agent-configuration policy without storing a reusable Agent Runner, model, or GitHub credential; a disabled policy grants none of those capabilities.",
       "progress_evidence_refs": [
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
       ]
     },
     {
@@ -378,14 +381,15 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "M2 executable installation and non-widening authorization contracts are implemented and locally validated; M5 still owns runtime closure and M2 remains lifecycle-open."
+        "M2's executable installation and non-widening-authorization prerequisite is task-closed with direct lifecycle evidence; M5 still owns runtime closure for this shared item."
       ],
       "source_text": "Every event-specific authorization is an immutable, non-widening derivation of the installation; `per_event_approval` binds the exact plan, while `installed_preauthorization` permits side effects only when event, plan, commands, paths, model policy, budgets, verification, and short-lived credential issuance all satisfy the installed policy. An action-mode label alone grants no side effect, and an `agent_assisted` route pauses unless the installation explicitly configures and authorizes it.",
       "progress_evidence_refs": [
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
       ]
     },
     {
@@ -966,17 +970,23 @@
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M2/acceptance_checks"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "high",
       "notes": [
-        "M2 implementation, local validation, and independent security review are complete; terminal acceptance remains planned until the current PR head passes CI/review, merge, post-merge monitoring, and task-bound lifecycle closure."
+        "M2 closed this trust contract with direct validation, independent security review, landed-content binding, and healthy exact-main checks. The task-specific skipped latest-head Codex terminal signal is recorded as non-reusable governance debt and does not indicate a known product-behavior gap."
       ],
-      "progress_evidence_refs": [
+      "evidence_refs": [
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
-      ]
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
+      ],
+      "recorded_by": "post-merge-monitor:codex-harness",
+      "recorded_at": "2026-07-26T17:04:17Z"
     },
     {
       "acceptance_item_id": "TRUST-002",
@@ -994,17 +1004,22 @@
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M2/acceptance_checks"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "high",
       "notes": [
-        "M2 implementation, local validation, and independent security review are complete; terminal acceptance remains planned until the current PR head passes CI/review, merge, post-merge monitoring, and task-bound lifecycle closure."
+        "M2 closed this non-executable-provider-artifact contract with direct validation, independent security review, landed-content binding, and healthy exact-main checks."
       ],
-      "progress_evidence_refs": [
+      "evidence_refs": [
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
-      ]
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
+      ],
+      "recorded_by": "post-merge-monitor:codex-harness",
+      "recorded_at": "2026-07-26T17:04:17Z"
     },
     {
       "acceptance_item_id": "TRUST-003",
@@ -1022,17 +1037,22 @@
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M2/acceptance_checks"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "high",
       "notes": [
-        "M2 implementation, local validation, and independent security review are complete; terminal acceptance remains planned until the current PR head passes CI/review, merge, post-merge monitoring, and task-bound lifecycle closure."
+        "M2 closed the explicit runner/model/funding/disclosure and redaction contract with direct validation, independent security review, landed-content binding, and healthy exact-main checks."
       ],
-      "progress_evidence_refs": [
+      "evidence_refs": [
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
-      ]
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
+      ],
+      "recorded_by": "post-merge-monitor:codex-harness",
+      "recorded_at": "2026-07-26T17:04:17Z"
     },
     {
       "acceptance_item_id": "TRUST-004",
@@ -1050,17 +1070,22 @@
       "validation_refs": [
         ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json#task:M2/acceptance_checks"
       ],
-      "status": "planned",
+      "status": "implemented",
       "risk_class": "high",
       "notes": [
-        "M2 implementation, local validation, and independent security review are complete; terminal acceptance remains planned until the current PR head passes CI/review, merge, post-merge monitoring, and task-bound lifecycle closure."
+        "M2 closed the consumer-private artifact and exact provider-payload projection contract with direct validation, independent security review, landed-content binding, and healthy exact-main checks."
       ],
-      "progress_evidence_refs": [
+      "evidence_refs": [
         ".factory/artifacts/task-runs/M2/validation-report.json",
         ".factory/artifacts/task-runs/M2/validation-run-summary.json",
         ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-        ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
-      ]
+        ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
+      ],
+      "recorded_by": "post-merge-monitor:codex-harness",
+      "recorded_at": "2026-07-26T17:04:17Z"
     },
     {
       "acceptance_item_id": "DISC-001",
@@ -1308,6 +1333,6 @@
   ],
   "generation_state": {
     "M0": "closed_preserved",
-    "M2": "implementation_and_local_validation_complete_lifecycle_and_acceptance_pending"
+    "M2": "closed_with_recorded_evidence_and_process_debt"
   }
 }

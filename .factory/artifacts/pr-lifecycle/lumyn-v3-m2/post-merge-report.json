@@ -1,0 +1,53 @@
+{
+  "artifact_type": "post_merge_report",
+  "schema_version": "0.1",
+  "task_id": "M2",
+  "work_item_id": "lumyn-v3-m2",
+  "merge_reference": "f89bc82490ffb6df908df6f8572054ee051ed6c6",
+  "merge_performed": true,
+  "default_branch_checked": true,
+  "default_branch_ref": "origin/main@f89bc82490ffb6df908df6f8572054ee051ed6c6",
+  "post_merge_evidence_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30211527240",
+  "checks_observed": [
+    {
+      "name": "validate",
+      "status": "pass",
+      "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30211527240"
+    },
+    {
+      "name": "codeql",
+      "status": "pass",
+      "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30211527249"
+    }
+  ],
+  "status": "healthy",
+  "regressions_detected": [],
+  "hotfix_triggered": false,
+  "work_proof_marker_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-work-proof/work-proof-marker.json"
+  ],
+  "scope_closure_report_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+  "late_codex_review": {
+    "merged_head_sha": "9345f3392ec98eb0e10345fe7941fd9d1450e55b",
+    "reviewer_identity": "chatgpt-codex-connector",
+    "activation_marker": "2026-07-26T16:37:08Z",
+    "actionable_findings": 0,
+    "unresolved_blocking_threads": 0,
+    "late_review_after_merge": false,
+    "settle_status": "carry_forward_candidate",
+    "terminal": false,
+    "evidence_ref": "https://github.com/Clyra-AI/lumyn/pull/72#pullrequestreview-4782079835"
+  },
+  "operator_notes": "Both required workflows passed on the exact landed commit and the post-merge Codex inventory found no late actionable item. The pre-merge terminal-settle process escape is recorded separately and did not produce a post-main regression.",
+  "human_intervention_count": 2,
+  "human_review_minutes": 0,
+  "blocked_wait_time": "PT19M23S",
+  "attention_reason": "manual_merge_after_nonterminal_codex_review",
+  "avoidable_interruption": true,
+  "automation_candidate": "Reliably re-run Codex review and emit a terminal signal after a reviewed fix push.",
+  "evidence_refs": [
+    "https://github.com/Clyra-AI/lumyn/actions/runs/30211527240",
+    "https://github.com/Clyra-AI/lumyn/actions/runs/30211527249",
+    "https://github.com/Clyra-AI/lumyn/pull/72"
+  ]
+}

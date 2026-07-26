@@ -1,0 +1,141 @@
+{
+  "artifact_type": "pr_lifecycle_report",
+  "schema_version": "0.1",
+  "task_id": "M2",
+  "work_item_id": "lumyn-v3-m2",
+  "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/72",
+  "branch_name": "codex/lumyn-m2-contracts",
+  "commit_set": [
+    "534efcd08b4068a7980feb50f2a20a4a6bcd1e6a",
+    "9345f3392ec98eb0e10345fe7941fd9d1450e55b"
+  ],
+  "local_validation": {
+    "status": "pass",
+    "commands": [
+      "make lint-fast",
+      "make test-fast",
+      "make test-coverage",
+      "python3 scripts/validate_repo_pack.py",
+      "make prepush-full"
+    ],
+    "validation_run_id": "validation:2026-07-26T16:32:25Z:50773146792248c5907105189e125e8a",
+    "candidate_digest": "sha256:8509fbe0980c17d6e6ad3d9cd2b8f04e122d9d6699cb7162b33492198e040324",
+    "validation_report_ref": ".factory/artifacts/task-runs/M2/validation-report.json"
+  },
+  "local_acceptance_review": {
+    "required": true,
+    "status": "pass",
+    "reason": "M2's executable contract and trust scope has direct validation, independent security review, landed-content binding, and item-level closure evidence. Shared event and installation outcomes remain open for their later runtime tasks.",
+    "scope_closure_map_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json",
+    "validation_report_ref": ".factory/artifacts/task-runs/M2/validation-report.json",
+    "acceptance_item_ids": [
+      "EVENT-001",
+      "EVENT-002",
+      "INSTALL-001",
+      "INSTALL-002",
+      "TRUST-001",
+      "TRUST-002",
+      "TRUST-003",
+      "TRUST-004"
+    ],
+    "missing_acceptance_item_ids": [],
+    "evidence_refs": [
+      ".factory/artifacts/task-runs/M2/validation-report.json",
+      ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+      ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+      ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
+    ]
+  },
+  "ci_checks": [
+    {
+      "name": "validate",
+      "status": "pass",
+      "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30210838392/job/89816662771"
+    },
+    {
+      "name": "CodeQL analyze",
+      "status": "pass",
+      "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30210838356/job/89816662766"
+    }
+  ],
+  "code_review": {
+    "required": true,
+    "status": "approved",
+    "review_type": "security",
+    "reviewer_id": "security-reviewer:m2-independent-final-7",
+    "review_report_ref": ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+  },
+  "codex_review": {
+    "enabled": false,
+    "configured_enabled": true,
+    "status": "disabled",
+    "observed_settle_status": "carry_forward_candidate",
+    "head_sha": "9345f3392ec98eb0e10345fe7941fd9d1450e55b",
+    "head_activation_marker": "2026-07-26T16:37:08Z",
+    "reviewer_identity": "chatgpt-codex-connector",
+    "settle_evidence_ref": "https://github.com/Clyra-AI/lumyn/pull/72#pullrequestreview-4782079835",
+    "review_request_refs": [],
+    "automated_review_identities": [
+      "chatgpt-codex-connector"
+    ],
+    "automated_review_blockers": [],
+    "resolved_earlier_head_comment_refs": [
+      "https://github.com/Clyra-AI/lumyn/pull/72#discussion_r3652849694",
+      "https://github.com/Clyra-AI/lumyn/pull/72#discussion_r3652849697",
+      "https://github.com/Clyra-AI/lumyn/pull/72#discussion_r3652849700"
+    ],
+    "unresolved_actionable_comments": 0,
+    "late_review_after_merge": false,
+    "notes": "The earlier head received three P1 findings, all fixed and resolved. The repaired final head received no terminal approval or thumbs-up before manual merge. The approved exception disables only this task's missing terminal gate for closure; it does not convert stale evidence into a pass or grant carry-forward permission."
+  },
+  "ship_pr": {
+    "status": "shipped",
+    "ship_packet_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/ship-packet.json"
+  },
+  "merge": {
+    "status": "merged",
+    "method": "rebase",
+    "merged_commit": "f89bc82490ffb6df908df6f8572054ee051ed6c6",
+    "merged_at": "2026-07-26T16:56:31Z",
+    "merged_by": "davidahmann",
+    "authority": {
+      "mode": "task_scoped_grant",
+      "capability": "merge_authority",
+      "task_id": "M2",
+      "approved": true,
+      "expires_at": "2026-07-27T00:00:00Z",
+      "evidence_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/process-exception-handoff.json"
+    }
+  },
+  "post_merge": {
+    "status": "healthy",
+    "post_merge_report_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json"
+  },
+  "work_proof_marker_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-work-proof/work-proof-marker.json"
+  ],
+  "evidence_refs": [
+    ".factory/artifacts/task-runs/M2/validation-report.json",
+    ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+    ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
+    ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/process-exception-handoff.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/ship-packet.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-work-proof/work-proof-marker.json"
+  ],
+  "skipped_gates": [
+    {
+      "gate": "codex_review",
+      "reason": "The final PR head had no terminal latest-head Codex approval or thumbs-up before the repository owner merged it. The task-specific exception records the process escape and permits downstream work without treating the gate as satisfied.",
+      "approved_exception_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/process-exception-handoff.json"
+    }
+  ],
+  "status": "complete"
+}

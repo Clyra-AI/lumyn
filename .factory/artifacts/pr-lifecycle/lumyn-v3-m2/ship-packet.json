@@ -1,0 +1,31 @@
+{
+  "artifact_type": "ship_packet",
+  "schema_version": "0.1",
+  "task_id": "M2",
+  "work_item_id": "lumyn-v3-m2",
+  "branch_name": "codex/lumyn-m2-contracts",
+  "commit_set": [
+    "534efcd08b4068a7980feb50f2a20a4a6bcd1e6a",
+    "9345f3392ec98eb0e10345fe7941fd9d1450e55b"
+  ],
+  "pr_summary": "Define executable Lumyn v3 provider-event, consumer-authority, agent, verification, privacy, delivery, and status contracts with fail-closed semantic validation.",
+  "validation_reference": ".factory/artifacts/task-runs/M2/validation-report.json",
+  "work_proof_marker_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/work-proof-marker.json"
+  ],
+  "scope_closure_report_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+  "review_policy": "High-risk M2 required independent security review, green validate and CodeQL, terminal latest-head Codex review, governed merge, and post-main monitoring.",
+  "merge_readiness": "landed_with_approved_non_reusable_process_exception",
+  "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/72",
+  "merge_ref": "f89bc82490ffb6df908df6f8572054ee051ed6c6",
+  "gate_status": {
+    "local_validation": "pass",
+    "ci": "pass",
+    "independent_code_review": "approved",
+    "codex_review": "disabled_by_approved_task_specific_exception_after_nonterminal_latest_head",
+    "merge": "merged_by_repository_owner",
+    "post_merge": "healthy",
+    "closure": "closed_with_debt"
+  },
+  "process_exception_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/process-exception-handoff.json"
+}

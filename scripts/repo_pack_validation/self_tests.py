@@ -334,7 +334,7 @@ def run_repo_pack_self_tests(
             lambda value: _closure_item(value, "BASE-001")[
                 "remaining_task_refs"
             ].append("M0"),
-            "cannot retain M0 as remaining scope",
+            "cannot retain completed task scope",
         ),
         (
             lambda value: _task(value, "M2.5")["gated_acceptance_items"][0].__setitem__(
@@ -925,6 +925,62 @@ def run_repo_pack_self_tests(
                 "implementation_may_start", True
             ),
             "implementation must remain blocked",
+        ),
+        (
+            lambda value: value["plan"]["alignment_gate"][
+                "completed_task_refs"
+            ].remove("M2"),
+            "preserve M0 and M2 closure",
+        ),
+        (
+            lambda value: value["risk"]["current_contract_state"].__setitem__(
+                "M2", "implementation_and_local_validation_complete_lifecycle_pending"
+            ),
+            "preserve M0/M2 closure",
+        ),
+        (
+            lambda value: _ledger_item(value, "TRUST-001")[
+                "evidence_refs"
+            ].remove(
+                ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
+            ),
+            "implemented evidence is semantically incomplete",
+        ),
+        (
+            lambda value: next(
+                group
+                for group in value["mapping"]["groups"]
+                if group.get("group_id") == "trust_and_privacy"
+            )["implementation_progress"]["lifecycle_pending_task_refs"].append(
+                "M2"
+            ),
+            "trust group must bind terminal M2 evidence",
+        ),
+        (
+            lambda value: _task(value, "M2")["execution_state"].__setitem__(
+                "state",
+                "implementation_and_local_validation_complete_lifecycle_pending",
+            ),
+            "M2 task packet must bind closed lifecycle evidence",
+        ),
+        (
+            lambda value: value["contract"]["m2_contract_implementation"].__setitem__(
+                "state",
+                "implementation_and_local_validation_complete_lifecycle_pending",
+            ),
+            "validation contract must bind closed M2 contract evidence",
+        ),
+        (
+            lambda value: _closure_item(value, "TRUST-002").__setitem__(
+                "implemented_task_refs", ["M0"]
+            ),
+            "TRUST-002 implemented closure must bind to M2",
+        ),
+        (
+            lambda value: _closure_item(value, "EVENT-001")[
+                "remaining_task_refs"
+            ].append("M2"),
+            "retain every unclosed active v3 task",
         ),
         (
             lambda value: value["context"]["alignment_decisions"]["resolved"][

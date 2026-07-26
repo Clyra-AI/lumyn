@@ -992,24 +992,23 @@
         "api_provider_credential_access": false
       },
       "execution_state": {
-        "state": "implementation_and_local_validation_complete_lifecycle_pending",
-        "acceptance_closure_claimed": false,
+        "state": "closed_with_recorded_evidence_and_process_debt",
+        "acceptance_closure_claimed": true,
         "validation_run_id": "validation:2026-07-26T16:32:25Z:50773146792248c5907105189e125e8a",
         "candidate_digest": "sha256:8509fbe0980c17d6e6ad3d9cd2b8f04e122d9d6699cb7162b33492198e040324",
-        "progress_evidence_refs": [
+        "closure_evidence_refs": [
           ".factory/artifacts/task-runs/M2/validation-report.json",
           ".factory/artifacts/task-runs/M2/validation-run-summary.json",
           ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
-          ".factory/artifacts/lifecycle-evidence/M2/review-report.json"
+          ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/pr-lifecycle-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/post-merge-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
         ],
-        "pending_gates": [
-          "GitHub Actions validate",
-          "GitHub Actions CodeQL analyze",
-          "passive latest-head Codex review settle",
-          "merge",
-          "post-merge monitoring",
-          "task-bound PR lifecycle and scope-closure evidence"
-        ]
+        "scope_closure_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+        "process_exception_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/process-exception-handoff.json",
+        "pending_gates": []
       }
     },
     {
@@ -4769,18 +4768,16 @@
       }
     }
   ],
-  "generated_by": "prd-to-plan+execution-compiler",
-  "generated_at": "2026-07-26T16:32:45Z",
+  "generated_by": "prd-to-plan+execution-compiler+post-merge-monitor",
+  "generated_at": "2026-07-26T17:04:17Z",
   "execution_state": {
     "completed_task_refs": [
-      "M0"
-    ],
-    "implementation_complete_pending_lifecycle_task_refs": [
+      "M0",
       "M2"
     ],
+    "implementation_complete_pending_lifecycle_task_refs": [],
     "acceptance_open_task_refs": [
       "M1",
-      "M2",
       "M2.5",
       "M3",
       "M4",
