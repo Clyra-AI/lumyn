@@ -11,12 +11,13 @@ BASE = "7609e5c49c0776c1028c1aeb3e2e2ee942b613b6"
 ORIGINAL_HEAD = "9345f3392ec98eb0e10345fe7941fd9d1450e55b"
 LANDED_HEAD = "f89bc82490ffb6df908df6f8572054ee051ed6c6"
 BUNDLE_REF = "refs/heads/codex/lumyn-m2-contracts"
+BUNDLE_LANDED_REF = "refs/remotes/origin/main"
 BUNDLE_PATH = (
     ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/implementation/"
     "pr72-original-head.bundle"
 )
 EXPECTED_BUNDLE = (
-    "sha256:1052339f87c09336ef87c890f3e6f7cd20184ec3dd27bb9ea62d7d3ab1dec2e6"
+    "sha256:6c7b50404c06f09aa9956cf860f8b021ee64577fcf4cb18d43f1e53d14e03bbc"
 )
 EXPECTED_VALIDATION_RUN = (
     "validation:2026-07-26T16:32:25Z:50773146792248c5907105189e125e8a"
@@ -51,12 +52,14 @@ def populate_retained_repository(repo: Path, bundle: Path, archive: Path) -> Non
         cwd=repo,
     )
     subprocess.run(
-        ["git", "fetch", "--quiet", str(repo), LANDED_HEAD],
-        check=True,
-        cwd=archive,
-    )
-    subprocess.run(
-        ["git", "fetch", "--quiet", str(bundle), f"{BUNDLE_REF}:refs/evidence/original"],
+        [
+            "git",
+            "fetch",
+            "--quiet",
+            str(bundle),
+            f"{BUNDLE_REF}:refs/evidence/original",
+            f"{BUNDLE_LANDED_REF}:refs/evidence/landed",
+        ],
         check=True,
         cwd=archive,
     )
@@ -104,10 +107,15 @@ def main() -> None:
                 cwd=archive,
                 text=True,
             ).strip() == ORIGINAL_HEAD,
+            "retained_bundle_landed_head_matches": subprocess.check_output(
+                ["git", "rev-parse", "refs/evidence/landed"],
+                cwd=archive,
+                text=True,
+            ).strip() == LANDED_HEAD,
         }
         path_matches = {
             path: git_bytes(archive, ORIGINAL_HEAD, path)
-            == git_bytes(repo, LANDED_HEAD, path)
+            == git_bytes(archive, LANDED_HEAD, path)
             for path in binding["changed_paths"]
         }
     assertions["landed_paths_match_original_head"] = all(path_matches.values())
