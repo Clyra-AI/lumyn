@@ -1,0 +1,91 @@
+{
+  "object_type": "lumyn.migration_plan",
+  "schema_version": "1.0",
+  "plan_id": "plan-stripe-2026-01",
+  "plan_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "created_at": "2026-07-26T14:02:00Z",
+  "event_id": "evt-stripe-2026-01",
+  "contract_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "installation_id": "install-consumer-001",
+  "authorization_snapshot_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "repository_base": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "integration_graph_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "impact_report_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "planning_mode": "read_only",
+  "mutation_observed": false,
+  "plan_status": "ready",
+  "items": [
+    {
+      "plan_item_id": "plan-item-create-payment-intent",
+      "change_item_id": "change-item-payment-intent",
+      "impact_finding_id": "finding-create-charge",
+      "graph_node_ids": ["node-create-charge-call"],
+      "route": "agent_assisted",
+      "route_authority": "api_consumer_organization",
+      "planned_files": ["apps/api/src/payments.ts", "apps/api/test/payments.test.ts"],
+      "dependency_intent": "Keep the pinned SDK version; migrate the supported call shape only.",
+      "rationale": "The wrapper requires repository-specific reasoning inside the approved files.",
+      "required_inputs": [],
+      "agent_route": {
+        "selected_by": "api_consumer_organization",
+        "runner_manifest_id": "runner-codex-1-2-3",
+        "runner_manifest_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "adapter": "codex",
+        "adapter_version": "1.2.3",
+        "executable_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+        "conformance_result_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+        "qualification_status": "qualified",
+        "agent_route_topology": "runner_mediated",
+        "execution_funding_mode": "consumer_managed",
+        "credential_owner": "api_consumer_organization",
+        "usage_billing_owner": "api_consumer_organization",
+        "model": {
+          "model_provider": "openai",
+          "endpoint": "https://api.openai.com/v1/responses",
+          "model_route": "openai:gpt-5-codex",
+          "model_version": "2026-07-01",
+          "opaque": false,
+          "mutable_mid_run": false
+        },
+        "native_configuration_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+        "model_data_policy_digest": "sha256:abababababababababababababababababababababababababababababababab",
+        "context_policy_digest": "sha256:cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+        "network_scopes": ["agent_runner_network"],
+        "credential_scopes": ["agent_runner_credential"],
+        "allowed_tools": ["read_file", "apply_patch"],
+        "allowed_commands": ["npm test -- --runInBand"],
+        "budgets": {
+          "max_files": 2,
+          "max_lines": 120,
+          "max_diff_bytes": 20000,
+          "max_turns": 12,
+          "max_tokens": 50000,
+          "max_seconds": 900,
+          "max_attempts": 3,
+          "max_cost_usd": 15
+        },
+        "no_silent_fallback": true
+      }
+    }
+  ],
+  "verification": {
+    "performed_by": "independent_lumyn_verifier",
+    "generation_session_evidence_write_access": false,
+    "commands": ["npm test -- --runInBand", "npm run typecheck"],
+    "stages": ["baseline", "typecheck", "tests"],
+    "required_level": "repo_verified"
+  },
+  "delivery": {
+    "mode": "draft_pr",
+    "default_branch_write": false,
+    "auto_merge": false
+  },
+  "approval": {
+    "authorization_mode": "per_event_approval",
+    "actor_role": "consumer_maintainer",
+    "plan_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "decision": "approved",
+    "decided_at": "2026-07-26T14:03:00Z"
+  },
+  "residual_risks": ["Human review remains required before merge."]
+}

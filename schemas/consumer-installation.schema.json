@@ -1,0 +1,1182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.consumer_installation.schema.json",
+  "title": "Consumer Installation",
+  "description": "Revocable consumer-owned ceiling from which event-specific authority is derived.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "installation_id",
+    "installation_version",
+    "installation_digest",
+    "api_provider_id",
+    "api_consumer_organization_id",
+    "consumer_maintainer_id",
+    "authority_owner_role",
+    "provider_channel",
+    "repository",
+    "selectors",
+    "action_ceiling",
+    "authorization_mode",
+    "path_policy",
+    "commands",
+    "capability_ceiling",
+    "agent_execution_policy",
+    "model_data_policy",
+    "budgets",
+    "github_token_issuance_policy",
+    "provider_reporting",
+    "retention_and_deletion",
+    "expires_at",
+    "revocation",
+    "action_label_grants_side_effect",
+    "stores_reusable_agent_or_model_credential",
+    "stores_github_token",
+    "production_credentials_allowed",
+    "production_mutation_allowed",
+    "api_provider_access"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.consumer_installation"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "installation_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "installation_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "installation_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "api_provider_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "api_consumer_organization_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "consumer_maintainer_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "authority_owner_role": {
+      "const": "api_consumer_organization"
+    },
+    "provider_channel": {
+      "type": "object",
+      "required": [
+        "transport_id",
+        "manifest_url",
+        "pinned_origin",
+        "campaign_key_id",
+        "campaign_public_key",
+        "authentication_method"
+      ],
+      "properties": {
+        "transport_id": {
+          "const": "pinned_provider_https_signed_manifest_v1"
+        },
+        "manifest_url": {
+          "$ref": "#/$defs/httpsUrl"
+        },
+        "pinned_origin": {
+          "$ref": "#/$defs/httpsOrigin"
+        },
+        "campaign_key_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "campaign_public_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{32,512}$"
+        },
+        "authentication_method": {
+          "const": "detached_signature"
+        }
+      },
+      "additionalProperties": false
+    },
+    "repository": {
+      "type": "object",
+      "required": [
+        "host",
+        "owner",
+        "name",
+        "package_root",
+        "default_branch"
+      ],
+      "properties": {
+        "host": {
+          "const": "github.com"
+        },
+        "owner": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+$"
+        },
+        "package_root": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "default_branch": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._/-]+$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "selectors": {
+      "type": "object",
+      "required": [
+        "audience_ids",
+        "package",
+        "package_version_selectors"
+      ],
+      "properties": {
+        "audience_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/stableId"
+          }
+        },
+        "package": {
+          "type": "string",
+          "pattern": "^(?:@[a-z0-9._-]+/)?[a-z0-9._-]+$"
+        },
+        "package_version_selectors": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "action_ceiling": {
+      "enum": [
+        "notify_only",
+        "scan_only",
+        "prepare_patch",
+        "open_draft_pr"
+      ]
+    },
+    "authorization_mode": {
+      "enum": [
+        "per_event_approval",
+        "installed_preauthorization"
+      ]
+    },
+    "path_policy": {
+      "type": "object",
+      "required": [
+        "readable_paths",
+        "writable_paths",
+        "excluded_paths"
+      ],
+      "properties": {
+        "readable_paths": {
+          "$ref": "#/$defs/pathList"
+        },
+        "writable_paths": {
+          "$ref": "#/$defs/pathList"
+        },
+        "excluded_paths": {
+          "$ref": "#/$defs/pathList"
+        }
+      },
+      "additionalProperties": false
+    },
+    "commands": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/command"
+      }
+    },
+    "capability_ceiling": {
+      "type": "object",
+      "required": [
+        "customer_repo_read",
+        "customer_repo_write",
+        "command_execution",
+        "agent_runner_network",
+        "agent_runner_credential",
+        "model_request_disclosure",
+        "model_network",
+        "model_credential",
+        "package_registry_read",
+        "dependency_lifecycle_scripts",
+        "sandbox_request_disclosure",
+        "sandbox_network",
+        "sandbox_credential",
+        "github_branch_write",
+        "github_pr_write",
+        "provider_reporting",
+        "artifact_retention",
+        "artifact_deletion"
+      ],
+      "properties": {
+        "customer_repo_read": {
+          "type": "boolean"
+        },
+        "customer_repo_write": {
+          "type": "boolean"
+        },
+        "command_execution": {
+          "type": "boolean"
+        },
+        "agent_runner_network": {
+          "type": "boolean"
+        },
+        "agent_runner_credential": {
+          "type": "boolean"
+        },
+        "model_request_disclosure": {
+          "type": "boolean"
+        },
+        "model_network": {
+          "type": "boolean"
+        },
+        "model_credential": {
+          "type": "boolean"
+        },
+        "package_registry_read": {
+          "type": "boolean"
+        },
+        "dependency_lifecycle_scripts": {
+          "type": "boolean"
+        },
+        "sandbox_request_disclosure": {
+          "type": "boolean"
+        },
+        "sandbox_network": {
+          "type": "boolean"
+        },
+        "sandbox_credential": {
+          "type": "boolean"
+        },
+        "github_branch_write": {
+          "type": "boolean"
+        },
+        "github_pr_write": {
+          "type": "boolean"
+        },
+        "provider_reporting": {
+          "type": "boolean"
+        },
+        "artifact_retention": {
+          "type": "boolean"
+        },
+        "artifact_deletion": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "agent_execution_policy": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "state"
+          ],
+          "properties": {
+            "state": {
+              "const": "disabled"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "state",
+            "selection_authority_role",
+            "adapter_id",
+            "adapter_version",
+            "agent_runner_vendor",
+            "executable",
+            "conformance_digest",
+            "live_canary_qualified",
+            "auth_mode",
+            "entitlement_class",
+            "route_topology",
+            "execution_funding_mode",
+            "credential_owner_role",
+            "usage_billing_owner_role",
+            "actual_model_route",
+            "native_configuration",
+            "clean_session_required",
+            "neutral_home_and_config_required",
+            "executable_extensions_allowed",
+            "silent_fallback_allowed"
+          ],
+          "properties": {
+            "state": {
+              "const": "configured"
+            },
+            "selection_authority_role": {
+              "const": "consumer_maintainer"
+            },
+            "adapter_id": {
+              "enum": [
+                "codex",
+                "claude_code"
+              ]
+            },
+            "adapter_version": {
+              "type": "string",
+              "pattern": "^[0-9]+(?:\\.[0-9]+){1,3}(?:[-+][A-Za-z0-9.-]+)?$"
+            },
+            "agent_runner_vendor": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "executable": {
+              "type": "object",
+              "required": [
+                "canonical_path",
+                "approved_source",
+                "digest",
+                "repository_path_shadowing_allowed"
+              ],
+              "properties": {
+                "canonical_path": {
+                  "type": "string",
+                  "pattern": "^/[A-Za-z0-9._@+:/-]+$"
+                },
+                "approved_source": {
+                  "$ref": "#/$defs/httpsUrl"
+                },
+                "digest": {
+                  "$ref": "#/$defs/sha256"
+                },
+                "repository_path_shadowing_allowed": {
+                  "const": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "conformance_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "live_canary_qualified": {
+              "const": true
+            },
+            "auth_mode": {
+              "enum": [
+                "enterprise_subscription",
+                "api_key",
+                "oauth_device_grant",
+                "local_runtime",
+                "brokered_task_credential"
+              ]
+            },
+            "entitlement_class": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "route_topology": {
+              "enum": [
+                "local_runtime",
+                "runner_mediated",
+                "direct_model",
+                "hybrid"
+              ]
+            },
+            "execution_funding_mode": {
+              "enum": [
+                "consumer_managed",
+                "provider_sponsored_lumyn_managed"
+              ]
+            },
+            "credential_owner_role": {
+              "enum": [
+                "api_consumer_organization",
+                "lumyn_operator"
+              ]
+            },
+            "usage_billing_owner_role": {
+              "enum": [
+                "api_consumer_organization",
+                "lumyn_operator"
+              ]
+            },
+            "actual_model_route": {
+              "type": "object",
+              "required": [
+                "model_provider",
+                "endpoint",
+                "model",
+                "model_version",
+                "observable"
+              ],
+              "properties": {
+                "model_provider": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "endpoint": {
+                  "type": "string",
+                  "format": "uri",
+                  "pattern": "^(?:https://|local://)"
+                },
+                "model": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "model_version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "observable": {
+                  "const": true
+                }
+              },
+              "additionalProperties": false
+            },
+            "native_configuration": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "mode"
+                  ],
+                  "properties": {
+                    "mode": {
+                      "const": "disabled"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "mode",
+                    "digest",
+                    "treated_as_untrusted_context"
+                  ],
+                  "properties": {
+                    "mode": {
+                      "const": "selected_static"
+                    },
+                    "digest": {
+                      "$ref": "#/$defs/sha256"
+                    },
+                    "treated_as_untrusted_context": {
+                      "const": true
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "clean_session_required": {
+              "const": true
+            },
+            "neutral_home_and_config_required": {
+              "const": true
+            },
+            "executable_extensions_allowed": {
+              "const": false
+            },
+            "silent_fallback_allowed": {
+              "const": false
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "execution_funding_mode": {
+                    "const": "consumer_managed"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "credential_owner_role": {
+                    "const": "api_consumer_organization"
+                  },
+                  "usage_billing_owner_role": {
+                    "const": "api_consumer_organization"
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "execution_funding_mode": {
+                    "const": "provider_sponsored_lumyn_managed"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "credential_owner_role": {
+                    "const": "lumyn_operator"
+                  },
+                  "usage_billing_owner_role": {
+                    "const": "lumyn_operator"
+                  },
+                  "auth_mode": {
+                    "const": "brokered_task_credential"
+                  }
+                }
+              }
+            }
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "model_data_policy": {
+      "type": "object",
+      "required": [
+        "permitted_context_classes",
+        "prohibited_context_classes",
+        "redaction_required",
+        "raw_prompts_persisted",
+        "raw_responses_persisted",
+        "provider_may_receive_context",
+        "retention_days",
+        "region"
+      ],
+      "properties": {
+        "permitted_context_classes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "source_selected_by_plan",
+              "tests_selected_by_plan",
+              "public_provider_contract",
+              "sanitized_build_diagnostics"
+            ]
+          }
+        },
+        "prohibited_context_classes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "secrets",
+              "credentials",
+              "production_data",
+              "unselected_repository_content",
+              "personal_agent_history"
+            ]
+          }
+        },
+        "redaction_required": {
+          "const": true
+        },
+        "raw_prompts_persisted": {
+          "const": false
+        },
+        "raw_responses_persisted": {
+          "const": false
+        },
+        "provider_may_receive_context": {
+          "const": false
+        },
+        "retention_days": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 30
+        },
+        "region": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      },
+      "additionalProperties": false
+    },
+    "budgets": {
+      "$ref": "#/$defs/budgets"
+    },
+    "github_token_issuance_policy": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "broker_id",
+        "short_lived",
+        "maximum_ttl_seconds",
+        "non_default_branch_only",
+        "draft_pr_only",
+        "auto_merge_allowed",
+        "stored_token_allowed"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "broker_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+        },
+        "short_lived": {
+          "const": true
+        },
+        "maximum_ttl_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600
+        },
+        "non_default_branch_only": {
+          "const": true
+        },
+        "draft_pr_only": {
+          "const": true
+        },
+        "auto_merge_allowed": {
+          "const": false
+        },
+        "stored_token_allowed": {
+          "const": false
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "enabled": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "broker_id": {
+                "$ref": "#/$defs/stableId"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "broker_id": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "provider_reporting": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "allowed_fields",
+        "raw_consumer_evidence_allowed",
+        "consent_required"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "allowed_fields": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "event_id",
+              "status",
+              "status_provenance",
+              "updated_at",
+              "verification_label",
+              "draft_pr_open",
+              "accepted",
+              "merged",
+              "retired"
+            ]
+          }
+        },
+        "raw_consumer_evidence_allowed": {
+          "const": false
+        },
+        "consent_required": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "retention_and_deletion": {
+      "type": "object",
+      "required": [
+        "private_state_root_class",
+        "checkout_storage_allowed",
+        "public_repository_storage_allowed",
+        "retention_days",
+        "delete_on_revocation",
+        "deletion_receipt_required"
+      ],
+      "properties": {
+        "private_state_root_class": {
+          "const": "external_consumer_private_root"
+        },
+        "checkout_storage_allowed": {
+          "const": false
+        },
+        "public_repository_storage_allowed": {
+          "const": false
+        },
+        "retention_days": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 90
+        },
+        "delete_on_revocation": {
+          "const": true
+        },
+        "deletion_receipt_required": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "revocation": {
+      "type": "object",
+      "required": [
+        "state",
+        "revoked_at",
+        "revoked_by_role"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "active",
+            "revoked"
+          ]
+        },
+        "revoked_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "revoked_by_role": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "consumer_maintainer",
+            null
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "revoked"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "revoked_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "revoked_by_role": {
+                "const": "consumer_maintainer"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "active"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "revoked_at": {
+                "type": "null"
+              },
+              "revoked_by_role": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "action_label_grants_side_effect": {
+      "const": false
+    },
+    "stores_reusable_agent_or_model_credential": {
+      "const": false
+    },
+    "stores_github_token": {
+      "const": false
+    },
+    "production_credentials_allowed": {
+      "const": false
+    },
+    "production_mutation_allowed": {
+      "const": false
+    },
+    "api_provider_access": {
+      "type": "object",
+      "required": [
+        "source",
+        "context",
+        "agent_session",
+        "credentials",
+        "agent_selection"
+      ],
+      "properties": {
+        "source": {
+          "const": false
+        },
+        "context": {
+          "const": false
+        },
+        "agent_session": {
+          "const": false
+        },
+        "credentials": {
+          "const": false
+        },
+        "agent_selection": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "agent_execution_policy": {
+            "properties": {
+              "state": {
+                "const": "disabled"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "capability_ceiling": {
+            "properties": {
+              "agent_runner_network": {
+                "const": false
+              },
+              "agent_runner_credential": {
+                "const": false
+              },
+              "model_request_disclosure": {
+                "const": false
+              },
+              "model_network": {
+                "const": false
+              },
+              "model_credential": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action_ceiling": {
+            "enum": [
+              "notify_only",
+              "scan_only"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "path_policy": {
+            "properties": {
+              "writable_paths": {
+                "maxItems": 0
+              }
+            }
+          },
+          "commands": {
+            "maxItems": 0
+          },
+          "capability_ceiling": {
+            "properties": {
+              "customer_repo_write": {
+                "const": false
+              },
+              "command_execution": {
+                "const": false
+              },
+              "agent_runner_network": {
+                "const": false
+              },
+              "agent_runner_credential": {
+                "const": false
+              },
+              "model_request_disclosure": {
+                "const": false
+              },
+              "model_network": {
+                "const": false
+              },
+              "model_credential": {
+                "const": false
+              },
+              "package_registry_read": {
+                "const": false
+              },
+              "dependency_lifecycle_scripts": {
+                "const": false
+              },
+              "sandbox_request_disclosure": {
+                "const": false
+              },
+              "sandbox_network": {
+                "const": false
+              },
+              "sandbox_credential": {
+                "const": false
+              },
+              "github_branch_write": {
+                "const": false
+              },
+              "github_pr_write": {
+                "const": false
+              }
+            }
+          },
+          "github_token_issuance_policy": {
+            "properties": {
+              "enabled": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action_ceiling": {
+            "const": "notify_only"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "path_policy": {
+            "properties": {
+              "readable_paths": {
+                "maxItems": 0
+              }
+            }
+          },
+          "capability_ceiling": {
+            "properties": {
+              "customer_repo_read": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action_ceiling": {
+            "enum": [
+              "notify_only",
+              "scan_only",
+              "prepare_patch"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "capability_ceiling": {
+            "properties": {
+              "github_branch_write": {
+                "const": false
+              },
+              "github_pr_write": {
+                "const": false
+              }
+            }
+          },
+          "github_token_issuance_policy": {
+            "properties": {
+              "enabled": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "httpsUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "httpsOrigin": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://[^/]+$"
+    },
+    "relativePath": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._@+-]+(?:/[A-Za-z0-9._@+-]+)*$"
+    },
+    "pathList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/relativePath"
+      }
+    },
+    "command": {
+      "type": "object",
+      "required": [
+        "command_id",
+        "program",
+        "arguments",
+        "working_directory",
+        "network_mode",
+        "lifecycle_scripts_allowed"
+      ],
+      "properties": {
+        "command_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "program": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._/+:-]+$"
+        },
+        "arguments": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "working_directory": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "network_mode": {
+          "const": "offline"
+        },
+        "lifecycle_scripts_allowed": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "budgets": {
+      "type": "object",
+      "required": [
+        "max_files",
+        "max_changed_lines",
+        "max_diff_bytes",
+        "max_turns",
+        "max_tokens",
+        "max_cost_usd",
+        "max_duration_seconds",
+        "max_attempts"
+      ],
+      "properties": {
+        "max_files": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_changed_lines": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_diff_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_turns": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_cost_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_duration_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

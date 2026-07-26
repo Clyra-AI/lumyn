@@ -1068,6 +1068,10 @@ campaign status or aggregate fields.
 The command grammar may be implemented incrementally. Unimplemented commands
 return a typed nonzero result and never a generic successful envelope.
 
+The normative M2 invocation grammar and typed error-to-exit compatibility are
+defined in `docs/dev/cli-v3-contract.md`. That contract does not advertise an
+unimplemented command as available.
+
 Stable exit codes `0` through `9` remain reserved according to the existing
 compatibility contract. Exit code `6` remains reserved. API Provider identity
 uses `api_provider_id` or `change_authority`; Agent Runner Vendor metadata uses
@@ -1083,6 +1087,9 @@ The MVP introduces only:
 - `provider-change-event`
 - `migration-pack`
 - `consumer-installation`
+- `event-authorization`
+- `consumer-execution-manifest`
+- `managed-credential-grant`
 - `integration-graph`
 - `impact-report`
 - `migration-plan`
@@ -1924,10 +1931,19 @@ Implemented today:
 - OpenAPI and local-doc parsing, refs, fingerprints, and findings.
 - Executable workflow, evidence, cassette, proof, boundary, redaction, and
   command-result schemas.
+- Executable v3 provider-change-event, migration-pack, consumer-installation,
+  event-authorization, consumer-execution-manifest, impact-report,
+  migration-plan, candidate-manifest, Agent Runner, migration-verification,
+  export-result, campaign-summary, provider-status-projection,
+  remediation-outcome, managed-credential, and privacy contracts with positive
+  and negative fixtures.
+- Semantic fail-closed validation for installation and event-authorization
+  non-widening, configured Agent Runner policy, managed credentials, and the
+  consumer-private state root.
 - CI, coverage, CodeQL, branch policy, review, Factory planning, shipping, and
   post-merge governance.
 
-Designed, schema-backed, or planned but not implemented as the v3 runtime:
+Contracted but not implemented as the v3 runtime:
 
 - Provider Change Contract and event normalization;
 - consumer installation and event-specific authorization;

@@ -1,0 +1,34 @@
+{
+  "object_type": "lumyn.integration_graph",
+  "schema_version": "1.0",
+  "graph_id": "graph-stripe-2026-01",
+  "graph_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "generated_at": "2026-07-26T14:00:00Z",
+  "event_id": "evt-stripe-2026-01",
+  "contract_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "installation_id": "install-consumer-001",
+  "authorization_snapshot_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "repository_base": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "package_root": "apps/api",
+  "analysis_mode": "read_only",
+  "mutation_observed": true,
+  "coverage": {
+    "claim": "authorized_scope_only",
+    "analyzed_paths": ["apps/api/src"],
+    "excluded_paths": [],
+    "generated_or_vendored_paths": [],
+    "unsupported_patterns": [],
+    "uncertainties": []
+  },
+  "nodes": [
+    {
+      "node_id": "node-create-charge-call",
+      "kind": "call_site",
+      "path": "apps/api/src/payments.ts",
+      "symbol": "stripe.charges.create",
+      "analysis_status": "affected",
+      "evidence_refs": ["repo:apps/api/src/payments.ts:42"]
+    }
+  ],
+  "edges": []
+}

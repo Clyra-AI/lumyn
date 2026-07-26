@@ -1,0 +1,749 @@
+{
+  "artifact_type": "validation_run_summary",
+  "candidate_binding": {
+    "base_git_sha": "7609e5c49c0776c1028c1aeb3e2e2ee942b613b6",
+    "candidate_digest": "sha256:44c3b0fe8a422324e6dd08bf24c6dbce2e477225b8783fa4ab5d4c1db97da8df",
+    "changed_paths": [
+      "CHANGELOG.md",
+      "docs/architecture/adr-0007-executable-v3-migration-contracts.md",
+      "docs/architecture/architecture_guides.md",
+      "docs/dev/cli-v3-contract.md",
+      "docs/dev/dev_guides.md",
+      "docs/factory/README.md",
+      "docs/product/plan.md",
+      "docs/product/prd.md",
+      "internal/agent/conformance.go",
+      "internal/agent/conformance_test.go",
+      "internal/authorization/policy.go",
+      "internal/authorization/policy_test.go",
+      "internal/change/event.go",
+      "internal/change/event_test.go",
+      "internal/evidence/binding.go",
+      "internal/evidence/binding_test.go",
+      "internal/evidence/execution_boundary.go",
+      "internal/evidence/execution_boundary_test.go",
+      "internal/evidence/private_root.go",
+      "internal/evidence/private_root_test.go",
+      "internal/installation/channel.go",
+      "internal/installation/channel_test.go",
+      "internal/redaction/provider_payload.go",
+      "internal/redaction/provider_payload_test.go",
+      "internal/status/projection.go",
+      "internal/status/projection_test.go",
+      "schemas/agent-attempt.schema.json",
+      "schemas/agent-runner-conformance-result.schema.json",
+      "schemas/agent-runner-manifest.schema.json",
+      "schemas/campaign-summary.schema.json",
+      "schemas/candidate-manifest.schema.json",
+      "schemas/consumer-execution-manifest.schema.json",
+      "schemas/consumer-installation.schema.json",
+      "schemas/event-authorization.schema.json",
+      "schemas/export-result.schema.json",
+      "schemas/impact-report.schema.json",
+      "schemas/integration-graph.schema.json",
+      "schemas/m2_security_test.go",
+      "schemas/managed-credential-grant.schema.json",
+      "schemas/migration-pack.schema.json",
+      "schemas/migration-plan.schema.json",
+      "schemas/migration-verification.schema.json",
+      "schemas/provider-change-event.schema.json",
+      "schemas/provider-status-projection.schema.json",
+      "schemas/remediation-outcome.schema.json",
+      "schemas/schema_test.go",
+      "schemas/v3_contracts_test.go",
+      "tests/fixtures/contracts/agent-attempt/invalid.json",
+      "tests/fixtures/contracts/agent-attempt/valid.json",
+      "tests/fixtures/contracts/agent-runner-conformance-result/invalid.json",
+      "tests/fixtures/contracts/agent-runner-conformance-result/valid-claude-code.json",
+      "tests/fixtures/contracts/agent-runner-conformance-result/valid-deterministic-fake.json",
+      "tests/fixtures/contracts/agent-runner-conformance-result/valid.json",
+      "tests/fixtures/contracts/agent-runner-manifest/invalid.json",
+      "tests/fixtures/contracts/agent-runner-manifest/valid-claude-code.json",
+      "tests/fixtures/contracts/agent-runner-manifest/valid-deterministic-fake.json",
+      "tests/fixtures/contracts/agent-runner-manifest/valid.json",
+      "tests/fixtures/contracts/campaign-summary/invalid.json",
+      "tests/fixtures/contracts/campaign-summary/valid.json",
+      "tests/fixtures/contracts/candidate-manifest/invalid.json",
+      "tests/fixtures/contracts/candidate-manifest/valid.json",
+      "tests/fixtures/contracts/consumer-execution-manifest/invalid-sandbox-extra-scope.json",
+      "tests/fixtures/contracts/consumer-execution-manifest/invalid.json",
+      "tests/fixtures/contracts/consumer-execution-manifest/semantic-invalid-executable-root.json",
+      "tests/fixtures/contracts/consumer-execution-manifest/semantic-invalid-host-home-source.json",
+      "tests/fixtures/contracts/consumer-execution-manifest/valid-sandbox.json",
+      "tests/fixtures/contracts/consumer-execution-manifest/valid.json",
+      "tests/fixtures/contracts/consumer-installation/invalid.json",
+      "tests/fixtures/contracts/consumer-installation/semantic-invalid-cross-origin.json",
+      "tests/fixtures/contracts/consumer-installation/valid.json",
+      "tests/fixtures/contracts/event-authorization/invalid.json",
+      "tests/fixtures/contracts/event-authorization/valid.json",
+      "tests/fixtures/contracts/export-result/invalid.json",
+      "tests/fixtures/contracts/export-result/valid.json",
+      "tests/fixtures/contracts/impact-report/invalid.json",
+      "tests/fixtures/contracts/impact-report/valid.json",
+      "tests/fixtures/contracts/integration-graph/invalid.json",
+      "tests/fixtures/contracts/integration-graph/valid.json",
+      "tests/fixtures/contracts/managed-credential-grant/invalid.json",
+      "tests/fixtures/contracts/managed-credential-grant/valid.json",
+      "tests/fixtures/contracts/migration-pack/invalid.json",
+      "tests/fixtures/contracts/migration-pack/valid.json",
+      "tests/fixtures/contracts/migration-plan/invalid.json",
+      "tests/fixtures/contracts/migration-plan/valid.json",
+      "tests/fixtures/contracts/migration-verification/invalid.json",
+      "tests/fixtures/contracts/migration-verification/valid.json",
+      "tests/fixtures/contracts/provider-change-event/invalid.json",
+      "tests/fixtures/contracts/provider-change-event/semantic-invalid-cross-origin.json",
+      "tests/fixtures/contracts/provider-change-event/valid.json",
+      "tests/fixtures/contracts/provider-status-projection/cross-run-substitution.json",
+      "tests/fixtures/contracts/provider-status-projection/invalid-retired-merge-only.json",
+      "tests/fixtures/contracts/provider-status-projection/invalid.json",
+      "tests/fixtures/contracts/provider-status-projection/valid-early-received.json",
+      "tests/fixtures/contracts/provider-status-projection/valid-retired.json",
+      "tests/fixtures/contracts/provider-status-projection/valid.json",
+      "tests/fixtures/contracts/remediation-outcome/invalid.json",
+      "tests/fixtures/contracts/remediation-outcome/valid.json"
+    ],
+    "entries": [
+      {
+        "digest": "sha256:0c038f4068065285c7cd10e301506ebf7dd66d6e94e7981b564e12481a4b5229",
+        "kind": "file",
+        "mode": "100644",
+        "path": "CHANGELOG.md"
+      },
+      {
+        "digest": "sha256:4d0b806eb95240b13f12b5321bcfd3af55129ed8eb417da998af3a4e94ddc44e",
+        "kind": "file",
+        "mode": "100644",
+        "path": "docs/architecture/adr-0007-executable-v3-migration-contracts.md"
+      },
+      {
+        "digest": "sha256:8b9f7d420f3a5ed2582b0d8a10dbbe08ae068fc289587f6a7b86e0726b0c2158",
+        "kind": "file",
+        "mode": "100644",
+        "path": "docs/architecture/architecture_guides.md"
+      },
+      {
+        "digest": "sha256:e8686acbef7fd7a9c19a3f12b862da3bdfe0f9873e2f518e8f7f4d358109f1dd",
+        "kind": "file",
+        "mode": "100644",
+        "path": "docs/dev/cli-v3-contract.md"
+      },
+      {
+        "digest": "sha256:834ac1547205fe8290ad6aa84191c120699cf4a7114997e9f951701e6e06dd84",
+        "kind": "file",
+        "mode": "100644",
+        "path": "docs/dev/dev_guides.md"
+      },
+      {
+        "digest": "sha256:177d0ee264dbdeb7ed133d3d2a976a7af0a1e2ff95e8615b5c01dc5125d0b3b1",
+        "kind": "file",
+        "mode": "100644",
+        "path": "docs/factory/README.md"
+      },
+      {
+        "digest": "sha256:83e64f95fd6e5558cfedddf639d84075e50ada92cb4b27330d5364bb953b3f92",
+        "kind": "file",
+        "mode": "100644",
+        "path": "docs/product/plan.md"
+      },
+      {
+        "digest": "sha256:80828aad95524270f704ddb0e5e701334a9dd936ee6402406e39fe2dd5abdec1",
+        "kind": "file",
+        "mode": "100644",
+        "path": "docs/product/prd.md"
+      },
+      {
+        "digest": "sha256:adf8746592c184c82553e0ca6287b762f04bf8a37f1bf0ee5b502817de834fba",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/agent/conformance.go"
+      },
+      {
+        "digest": "sha256:681f98606424df77d6206e2cf171385345a8107706ac617ed729a162e913d59c",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/agent/conformance_test.go"
+      },
+      {
+        "digest": "sha256:3311f8430eb42bd35511ef170b74480b684964b89a374bc1afb09cb43a098340",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/authorization/policy.go"
+      },
+      {
+        "digest": "sha256:58b770380acb88b9593f2addc9a0775750112c29d5193731d0bfe910f3511f83",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/authorization/policy_test.go"
+      },
+      {
+        "digest": "sha256:9533dbe090cdd41c82a2587ff6cf655ea0f235c7a4ac3515ab60f67a2c09cbb8",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/change/event.go"
+      },
+      {
+        "digest": "sha256:6b37231279aa48c1f7a8445acd195360a85b74fb2df0cc73281ad11d8c13f9d0",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/change/event_test.go"
+      },
+      {
+        "digest": "sha256:a73d1e77a342b3b1488c61e0a3a59aa2e6b9a0bbb08f79be35acef8d3bd92c20",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/evidence/binding.go"
+      },
+      {
+        "digest": "sha256:ba4c26ac1f7f2a86b6489c78ebdd89f1ce7b935d21a46ba91bed0a7e20e5a1f4",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/evidence/binding_test.go"
+      },
+      {
+        "digest": "sha256:9444ba5aea31c6986c4b5830e1f1eefb3441bb494ade78d03d98c984358df850",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/evidence/execution_boundary.go"
+      },
+      {
+        "digest": "sha256:ef79593fc1db0be5622a35384d85f80d4ed03280c4643205f177159ec3c906eb",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/evidence/execution_boundary_test.go"
+      },
+      {
+        "digest": "sha256:96c584948d8acdbc3210c9f0115d6b1cf720037f4efdb518d7b66d14ec1a6654",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/evidence/private_root.go"
+      },
+      {
+        "digest": "sha256:780d2a0ee681fcdb96c6ed0af9760ab3ece0602b66962e5a95390288a517ab25",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/evidence/private_root_test.go"
+      },
+      {
+        "digest": "sha256:e6819cce175fdc7f30dc53cbba8531b0a49267d679bab3415d115935803dac06",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/installation/channel.go"
+      },
+      {
+        "digest": "sha256:412ca8088569226311a91e14dc0d42b36ee4d19067302bdbdb2eeb5f379f159b",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/installation/channel_test.go"
+      },
+      {
+        "digest": "sha256:676f3ea177be6bd75ce04ad3a72c0df7a8e226783c8e4a904e2b71896196bf8c",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/redaction/provider_payload.go"
+      },
+      {
+        "digest": "sha256:f07d7832b4de291fc60e4ebd98f68becae0b9d7569ce280d12778464b4201947",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/redaction/provider_payload_test.go"
+      },
+      {
+        "digest": "sha256:80e34fd5a17cc72f3dec39e195425fb97f64a0602063804e7d318f8e41a48c25",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/status/projection.go"
+      },
+      {
+        "digest": "sha256:23d487a3e1e61337cf5ccc81ddd81da09a3c5742ee2f678165136dbd569472a8",
+        "kind": "file",
+        "mode": "100644",
+        "path": "internal/status/projection_test.go"
+      },
+      {
+        "digest": "sha256:2e47b912b3536877cd37c92a08fb75e637f61f92687c99e4cda856d20a697ffc",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/agent-attempt.schema.json"
+      },
+      {
+        "digest": "sha256:d0c7273b02eb311f3661a68aee2e5474651c28664bc96220a65c6fc2076be58d",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/agent-runner-conformance-result.schema.json"
+      },
+      {
+        "digest": "sha256:8bac32b60f84eca6f5d305e324fc93018e67335cde8ed325be2a8134909b5bdd",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/agent-runner-manifest.schema.json"
+      },
+      {
+        "digest": "sha256:18a7228065718bd38fe45b1114a99f6b3704c1613cf387dbcfdc7cf20b347f58",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/campaign-summary.schema.json"
+      },
+      {
+        "digest": "sha256:1332def17809f2cc83cac349e1b4153d8f444f243499b5c09e5f6661b3af7d73",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/candidate-manifest.schema.json"
+      },
+      {
+        "digest": "sha256:b29c1f2fad05e008f285c5ee22262b5e7882da98beb93ac0d76beb05e89c2bfd",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/consumer-execution-manifest.schema.json"
+      },
+      {
+        "digest": "sha256:02cd62c179b555d13caa1b63fd8f13438671f75c19213fc0e8a267ebc0f3fe13",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/consumer-installation.schema.json"
+      },
+      {
+        "digest": "sha256:237d824e05607a2c285e73660d3457d1345bbe27acf1adbb20aa0cf2257d96e7",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/event-authorization.schema.json"
+      },
+      {
+        "digest": "sha256:4ba06c42aabedd7297d5659f3d7e331deb9bdd221ea371ac7771aec57335c58f",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/export-result.schema.json"
+      },
+      {
+        "digest": "sha256:e0cad200901d5af82b9fd88ef46c97fd099c6aa5c5501b56f7e831cd77e9b355",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/impact-report.schema.json"
+      },
+      {
+        "digest": "sha256:a4504c2ef1cc21304e03f5e3358290b680ccb35fe612971fae43c0a36a033534",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/integration-graph.schema.json"
+      },
+      {
+        "digest": "sha256:1a1792116f0e64f33f4241f3c279bf910aae0b60ce9bea9b23c2d08b4550c5bd",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/m2_security_test.go"
+      },
+      {
+        "digest": "sha256:192fae059b9b6431e26e1b3e1ac3ffc7aad5875ba58b6e4fe5b2c15a630670f7",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/managed-credential-grant.schema.json"
+      },
+      {
+        "digest": "sha256:4bde2fee304faa9c4263944e1288daddf93548b23a76e2b3f67cc0c02f8a5c7b",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/migration-pack.schema.json"
+      },
+      {
+        "digest": "sha256:e4872bd505c46990a7f943969055dda5c29697f3aa7d6002eecfb84d62a58ab2",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/migration-plan.schema.json"
+      },
+      {
+        "digest": "sha256:18a22b0805a44e95910b9433060799e6c312c1debe17dcbf34548fa561b20210",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/migration-verification.schema.json"
+      },
+      {
+        "digest": "sha256:247e42ba62d05dd39839c9290a89bed79bb29222220eed475382db97a2f44c1b",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/provider-change-event.schema.json"
+      },
+      {
+        "digest": "sha256:e72eab3746c3021fd9ff6a1497f71832ba09b824c4b5e02eb66e8dbaae99ffe6",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/provider-status-projection.schema.json"
+      },
+      {
+        "digest": "sha256:e44a4cdfe8a5f689c7e380b1cb317359a0aa2c5a71c79527595230abf83db80e",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/remediation-outcome.schema.json"
+      },
+      {
+        "digest": "sha256:10f720850a33a1e59b113ffbb061b9e8b70839ce4f480e90bbd7a7b6880a7444",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/schema_test.go"
+      },
+      {
+        "digest": "sha256:622460b7ef3ffdc46a3b428a43169d837ace5e8b593b2dd35228169750ed50b3",
+        "kind": "file",
+        "mode": "100644",
+        "path": "schemas/v3_contracts_test.go"
+      },
+      {
+        "digest": "sha256:282ced84cbaa5581a6b3bef0e2198bf28902a72801569725a2fc4b8dfd30ed17",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/agent-attempt/invalid.json"
+      },
+      {
+        "digest": "sha256:f56e9386d03f091ceaf1d2f09bcfcad64465b63351a4e052c4a091919d1067a1",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/agent-attempt/valid.json"
+      },
+      {
+        "digest": "sha256:8109e9a1cc53925f038c02ae684120fb33bb0aae3799c988bd920589dafb4e51",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/agent-runner-conformance-result/invalid.json"
+      },
+      {
+        "digest": "sha256:e05327958e28aabf72e48d24c1dc10c9ceffbcfabcaee31e7dee979b8a0be0ac",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/agent-runner-conformance-result/valid-claude-code.json"
+      },
+      {
+        "digest": "sha256:d3965bfc1ebb8b74c38c58e2d85fcd676113224635a69a0a3fd49ebe780ce468",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/agent-runner-conformance-result/valid-deterministic-fake.json"
+      },
+      {
+        "digest": "sha256:68a4a594882699443944a1d81019f4e18db6fd2911b6961f1d08243dde031ae5",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/agent-runner-conformance-result/valid.json"
+      },
+      {
+        "digest": "sha256:7d284e4959ffcd67bf1b4400943ce7468cf70b7317f2689e94085ab844e8b555",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/agent-runner-manifest/invalid.json"
+      },
+      {
+        "digest": "sha256:ac3db3df6cbe946135f72d089d84e6d8f221bd31d0653df318d49e2e08815d6c",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/agent-runner-manifest/valid-claude-code.json"
+      },
+      {
+        "digest": "sha256:941a7c839c0775c20a34595d10ea7b8e820132aad15f3975013817b83aa3bb90",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/agent-runner-manifest/valid-deterministic-fake.json"
+      },
+      {
+        "digest": "sha256:19114b4967ef0cffa48ce2e0ac7f8d779cbae96be541ab160d1c500a0d9e4a11",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/agent-runner-manifest/valid.json"
+      },
+      {
+        "digest": "sha256:80f823545df451fd4e958d9ce9c39097c185017ef5f07f7158e90be33b382136",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/campaign-summary/invalid.json"
+      },
+      {
+        "digest": "sha256:cdf2290b162060cddefec29be859f2bc6c5a1e243cb3b200cd2335c2d6b27163",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/campaign-summary/valid.json"
+      },
+      {
+        "digest": "sha256:ab974f0467fd99acf2c3f9079ed56d5c72b5ddf8290e20e46e7d94404ea2662f",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/candidate-manifest/invalid.json"
+      },
+      {
+        "digest": "sha256:c7ed47532836c0babdf9eb8b8d0dcc16a087591cfc9845e0411db4e72b03345e",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/candidate-manifest/valid.json"
+      },
+      {
+        "digest": "sha256:0bb98af0a13eda771300f3ae471010da378691d352ccce3ac0ab34f80972b1e2",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/consumer-execution-manifest/invalid-sandbox-extra-scope.json"
+      },
+      {
+        "digest": "sha256:2cc043918313b005b79283475891db50c9284cfee2f00ce61a2e3ef139d74d7e",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/consumer-execution-manifest/invalid.json"
+      },
+      {
+        "digest": "sha256:ae9422d69eb2a71df82a87781a1973a2f13bde1d1fb9b7f1e6a6639b907a6971",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/consumer-execution-manifest/semantic-invalid-executable-root.json"
+      },
+      {
+        "digest": "sha256:37b74c3db525cd9996c34407a6e5442ea98e0a82e502b6e544f68293372d165a",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/consumer-execution-manifest/semantic-invalid-host-home-source.json"
+      },
+      {
+        "digest": "sha256:a09db0897b34d22d494070ec1cf09423010d3ea51547948a72b0dd6cd5912aa5",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/consumer-execution-manifest/valid-sandbox.json"
+      },
+      {
+        "digest": "sha256:1ceb757a531fc2b07f0643d5fa73abd1c3cb2008bd980aa1dd117b300b20382d",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/consumer-execution-manifest/valid.json"
+      },
+      {
+        "digest": "sha256:3a3f52bb52af19d6d17f2e76654d1df4724b45e746518ed6a54db22944ae65f2",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/consumer-installation/invalid.json"
+      },
+      {
+        "digest": "sha256:85676f99e3d4c08f859d8c01d3e9b77ab852b37b44d497d02e71b6398c8a9317",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/consumer-installation/semantic-invalid-cross-origin.json"
+      },
+      {
+        "digest": "sha256:e13a5b2423303536124618b7b610845e98fa52873a88b71e9cf3fb293b296eeb",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/consumer-installation/valid.json"
+      },
+      {
+        "digest": "sha256:f9ca04a16d71cd6d11e73aac57e04a31f981b84a0fc0da7fdf99050c8cf1ab5a",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/event-authorization/invalid.json"
+      },
+      {
+        "digest": "sha256:46f9d985392073e31f235a3ab0576c6a619160e33d4655cbc982804b5bbea3f2",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/event-authorization/valid.json"
+      },
+      {
+        "digest": "sha256:fd7fd849ebb11e97cd07399165af326ee72191f52524fe909a7205e923e49f0f",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/export-result/invalid.json"
+      },
+      {
+        "digest": "sha256:53bd8be77cf072b1ccd3b725f103534ab1d116f9768d535806893ad59a1acaf4",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/export-result/valid.json"
+      },
+      {
+        "digest": "sha256:8712dbb3b062172a9754efdfcb981c6f7ce08a92c4bd6eb8eaf58c7027b5b39b",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/impact-report/invalid.json"
+      },
+      {
+        "digest": "sha256:8b9c030407851ac598d2e8cf66e544e2e8093f3baa7d104e32cb9242b3b37e9a",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/impact-report/valid.json"
+      },
+      {
+        "digest": "sha256:bc113b98e46356b7b63f995d18882744440606ce6bdd24b3503805f49f791bbd",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/integration-graph/invalid.json"
+      },
+      {
+        "digest": "sha256:f823388615fc0f254b5c3875040e6501eb8e3d1ad6dbd60f88b3d2c1485deedb",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/integration-graph/valid.json"
+      },
+      {
+        "digest": "sha256:79bb91a86355bd9b7df8314c3da97eb3e4c4f34305d3d05bbe3febca35488548",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/managed-credential-grant/invalid.json"
+      },
+      {
+        "digest": "sha256:e0f9cea4e2257c6f0c41b2a18489d342279878b769c7c335b3d014a5997d52e9",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/managed-credential-grant/valid.json"
+      },
+      {
+        "digest": "sha256:fcb7e885b9fc74b61cfff140d5b4c666758c9c5c1a789a4f792e859bc7e7cec9",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/migration-pack/invalid.json"
+      },
+      {
+        "digest": "sha256:eab0e93f7c7ea7a48ff64313732e8ac140b3b305c05ce865504b75968738945c",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/migration-pack/valid.json"
+      },
+      {
+        "digest": "sha256:57af3d789f5db73bf00e16ec456f3830ce78442a54204f04aac6a6dd08110361",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/migration-plan/invalid.json"
+      },
+      {
+        "digest": "sha256:08d15235037b70cd84485c52a7dd1c9efc475d8d799c29a09c011c0c1c14e54c",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/migration-plan/valid.json"
+      },
+      {
+        "digest": "sha256:2a8a6f0e3aceedffe40456265b19ac09871dceb6649b211fce2860be914a1534",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/migration-verification/invalid.json"
+      },
+      {
+        "digest": "sha256:0722eb55f66e02197238e33f2904971d02336db788dca920f5628db29a26fa21",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/migration-verification/valid.json"
+      },
+      {
+        "digest": "sha256:22e3049e3a9adbfdd1c26ecc617cf7bc35e04ec132807b0b78ac955788d33e28",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/provider-change-event/invalid.json"
+      },
+      {
+        "digest": "sha256:a50aeba73b5926b1b890dd7ff2c98633ef393a6dd49f2369993f83735201dafd",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/provider-change-event/semantic-invalid-cross-origin.json"
+      },
+      {
+        "digest": "sha256:5af0c44cc530dce24d6fc6b834dd1bb4974618cfc1211584e033a8afde162521",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/provider-change-event/valid.json"
+      },
+      {
+        "digest": "sha256:8980997113ae18cf6360a1e25c2674818353a3b224c64387e475b3b16e97cc2a",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/provider-status-projection/cross-run-substitution.json"
+      },
+      {
+        "digest": "sha256:1bf16c0d30438400c932fe77c21124c93b867e42cbeede83f13a2851bb8201a5",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/provider-status-projection/invalid-retired-merge-only.json"
+      },
+      {
+        "digest": "sha256:1fdb3164a597fe977f42ca27c82bac944e5ab64897bff524dd8417443099be02",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/provider-status-projection/invalid.json"
+      },
+      {
+        "digest": "sha256:e16d4f416d9afa5d118b1aed9cc7138ec99c73c8b2e21e24f5ad951d7455a7b3",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/provider-status-projection/valid-early-received.json"
+      },
+      {
+        "digest": "sha256:b71450b85b796e4c7a8f198ba074627352a847ba231ce8df654857f815e4d521",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/provider-status-projection/valid-retired.json"
+      },
+      {
+        "digest": "sha256:cb0acd48111f8ab8b7d5b257fb27650ebda13607c1bb7113d7072e1fe87dc088",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/provider-status-projection/valid.json"
+      },
+      {
+        "digest": "sha256:dd4913d938e8654ee636ee271943d90d09449f4cdeb660c916fd4ee368f346df",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/remediation-outcome/invalid.json"
+      },
+      {
+        "digest": "sha256:93359f9aa43f99a6de5e8a5af0ce2353c4dbe4903390728ffcb2a01ab1d7bfea",
+        "kind": "file",
+        "mode": "100644",
+        "path": "tests/fixtures/contracts/remediation-outcome/valid.json"
+      }
+    ]
+  },
+  "candidate_digest": "sha256:44c3b0fe8a422324e6dd08bf24c6dbce2e477225b8783fa4ab5d4c1db97da8df",
+  "command_results": [
+    {
+      "command": "make lint-fast",
+      "execution_status": "pass",
+      "exit_code": 0,
+      "marker_ref": ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json"
+    },
+    {
+      "command": "make test-fast",
+      "execution_status": "pass",
+      "exit_code": 0,
+      "marker_ref": ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.json"
+    },
+    {
+      "command": "make test-coverage",
+      "execution_status": "pass",
+      "exit_code": 0,
+      "marker_ref": ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.json"
+    },
+    {
+      "command": "python3 scripts/validate_repo_pack.py",
+      "execution_status": "pass",
+      "exit_code": 0,
+      "marker_ref": ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.json"
+    }
+  ],
+  "generated_at": "2026-07-26T15:35:35Z",
+  "generated_by": "reference_runtime_shipping_adapter",
+  "reason_code": "ok",
+  "schema_version": "0.1",
+  "status": "pass",
+  "task_id": "M2",
+  "validation_run_id": "validation:2026-07-26T15:34:54Z:af085bbc5cd84b0a98c8388214ac6de5",
+  "work_item_id": "lumyn-v3-m2",
+  "work_proof_marker_refs": [
+    ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.json"
+  ],
+  "work_proof_markers": [
+    {
+      "ref": ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json",
+      "sha256": "sha256:8553a7c8917f4ec47eab2950f092c84e4bf8b6948db2aba5d8979d0e28f04d28"
+    },
+    {
+      "ref": ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.json",
+      "sha256": "sha256:69d51d5807e3f62427f9fd5a5ea056337196acf5e44eb7a13242d0ddd1cae6f7"
+    },
+    {
+      "ref": ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.json",
+      "sha256": "sha256:c82342a53b6e6784efaacd27528d9aa1584ee924cfeae47ed8abd3753e3847dc"
+    },
+    {
+      "ref": ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.json",
+      "sha256": "sha256:8772ffe9db05dbde8938f83d9b38241a3993ea973d9b787e70996beee081731f"
+    }
+  ]
+}

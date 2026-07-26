@@ -1,0 +1,77 @@
+{
+  "object_type": "lumyn.remediation_outcome",
+  "schema_version": "1.0",
+  "remediation_id": "remediation-001",
+  "provider_change_event_id": "evt-stripe-2026-07",
+  "provider_change_contract_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "consumer_installation_id": "install-consumer-001",
+  "event_authorization_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "migration_plan_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "failed_candidate": {
+    "repository_binding_digest": "sha256:c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1",
+    "repository_base_commit": "0000000000000000000000000000000000000000",
+    "candidate_head": "1111111111111111111111111111111111111111",
+    "candidate_manifest_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "patch_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+  },
+  "failure_evidence_digest": "sha256:a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+  "failure_class": "diagnostic_actionable",
+  "previous_generation_mode": "agent_assisted",
+  "authorization": {
+    "repair_authorization_digest": "sha256:a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2",
+    "consumer_maintainer_approved": true,
+    "failed_candidate_bound": true,
+    "failure_evidence_bound": true,
+    "exact_repair_intent_digest": "sha256:a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3",
+    "route_decision": "reuse_failed_agent_route",
+    "remaining_budgets_digest": "sha256:a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4",
+    "expires_at": "2026-07-26T15:30:00Z"
+  },
+  "repair_attempt": {
+    "agent_attempt_id": "attempt-002",
+    "agent_attempt_digest": "sha256:a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "attempt_number": 2,
+    "generation_mode": "agent_assisted",
+    "within_approved_attempt_limit": true,
+    "route_digest": "sha256:a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6"
+  },
+  "new_candidate": {
+    "repository_binding_digest": "sha256:c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1",
+    "repository_base_commit": "0000000000000000000000000000000000000000",
+    "candidate_head": "2222222222222222222222222222222222222222",
+    "candidate_manifest_digest": "sha256:a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7",
+    "patch_digest": "sha256:a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8"
+  },
+  "scope_comparison": {
+    "approved_scope_digest": "sha256:a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9",
+    "repair_scope_digest": "sha256:a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9",
+    "non_widening": true,
+    "semantic_scope_expanded": false,
+    "added_paths": [],
+    "added_commands": [],
+    "added_tools": [],
+    "added_network_endpoints": [],
+    "added_credentials": [],
+    "added_disclosure_classes": [],
+    "added_capabilities": [],
+    "budget_increased": false
+  },
+  "verification_transition": {
+    "prior_verification_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "prior_evidence_invalidated": true,
+    "fresh_verification_required": true,
+    "new_candidate_verification_status": "not_run"
+  },
+  "redaction": {
+    "policy_digest": "sha256:b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0",
+    "status": "passed",
+    "safe_to_persist": true,
+    "safe_for_api_provider": false,
+    "raw_prompt_persisted": false,
+    "raw_response_persisted": false,
+    "credentials_persisted": false
+  },
+  "status": "candidate_generated",
+  "completed_at": "2026-07-26T14:40:00Z",
+  "artifact_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}

@@ -4,6 +4,17 @@
 
 ### Added
 
+- Added the executable M2 v3 contract layer for provider events,
+  `migration-pack`, Consumer Installation and event authorization, consumer
+  execution, impact and planning, Agent Runner qualification and attempts,
+  verification, delivery, status, remediation, and managed credentials.
+- Added positive and material negative fixtures for every M2 artifact family,
+  plus semantic non-widening authorization and consumer-private-root
+  validators where JSON Schema cannot compare runtime relationships.
+- Added ADR-0007 to freeze schema, compatibility, role-separation, status-axis,
+  credential, privacy, and no-runtime-claim decisions for the contract layer.
+- Added the normative v3 command grammar and typed error-to-exit compatibility
+  map without advertising any later runtime command as implemented.
 - Added ADR-0004 and a v3.1 product/engineering planning contract for
   provider-originated API update delivery launched through services-assisted,
   provider-paid API and SDK sunset campaigns.
@@ -151,6 +162,22 @@
 
 ### Security
 
+- Made installation action modes enforceable ceilings and rejected wildcard or
+  traversal paths, stored credentials, provider-selected runners, provider
+  access to consumer data, disabled-policy agent routes, scope or budget
+  widening, attended-import preauthorization, and unsafe private-state roots.
+- Pinned manifest and Provider Change Contract retrieval to the exact installed
+  HTTPS origin; denied latent remote-delivery and credential authority below
+  the corresponding action ceiling; required complete, canary-backed Agent
+  Runner conformance; and bound every provider status to its exact run and
+  artifact chain with status-specific evidence.
+- Replaced free-form provider projection filtering with a closed typed payload
+  validator and made M2 promotion evidence reproducible through canonical
+  candidate-tree bindings, trusted per-command markers, and hashed raw logs.
+- Made command and sandbox isolation machine-enforceable with exact mount-source
+  bindings, canonical program-to-executable-root checks, and a dedicated
+  exact-head sandbox-entrypoint profile for sole-credential injection, egress,
+  resource, teardown, cleanup, and orphan evidence.
 - Separated API-provider disclosure from model-provider disclosure and
   required exact consumer authorization for model endpoint, model/version,
   credentials, network, logging/training/retention, tools, paths, and resource

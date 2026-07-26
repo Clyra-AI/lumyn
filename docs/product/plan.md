@@ -617,6 +617,8 @@ deep implementation.
 **Blocked by:** M0
 **Primary acceptance IDs:** `TRUST-001`–`TRUST-004`
 **Supports:** `EVENT-001`–`EVENT-002`, `INSTALL-001`–`INSTALL-002`
+**Implementation status:** Executable contract layer implemented; runtime
+acceptance remains owned by M3 and later milestones.
 
 #### Goal
 

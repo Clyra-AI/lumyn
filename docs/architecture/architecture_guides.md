@@ -1,6 +1,6 @@
 # Lumyn Architecture Guide
 
-Status: v3.1 planning architecture; product runtime not implemented
+Status: v3.1 executable contract architecture; product runtime not implemented
 
 ## Architecture Objective
 
@@ -28,9 +28,11 @@ The architecture optimizes for:
 - event-bound, consented provider status with no inference from silence;
 - proof-honest evidence and human merge authority.
 
-This guide defines planned boundaries. The compiled v3.1 control set is
-repo-local planning and validation authority; it does not implement the v3.1
-runtime or authorize a live product action.
+This guide defines the active boundaries. M2 implements their executable
+artifact and semantic-policy contracts, while later milestones still own the
+v3.1 runtime. The compiled v3.1 control set is repo-local planning and
+validation authority; neither it nor the M2 contracts authorize a live product
+action.
 
 A v3.1 source update has landed in the external Factory
 `profiles/lumyn.yaml` profile, but the active compiled generation still records
@@ -593,9 +595,11 @@ Require an ADR or decision update for:
 - major performance, cost, or reliability tradeoffs.
 
 ADR-0004 governs provider-originated API update delivery. ADR-0005 governs
-customer-selected Agent Runners. ADR-0003 governs the remaining bounded-agent
-execution and trust substrate. ADR-0002 remains historical context for the v2
-provider-sponsored deterministic-first rebaseline.
+customer-selected Agent Runners. ADR-0007 governs their executable M2 artifact,
+authorization, privacy, and compatibility contracts. ADR-0003 governs the
+remaining bounded-agent execution and trust substrate. ADR-0002 remains
+historical context for the v2 provider-sponsored deterministic-first
+rebaseline.
 
 ## Performance And Cost Triggers
 

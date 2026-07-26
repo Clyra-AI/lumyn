@@ -1,0 +1,251 @@
+{
+  "object_type": "lumyn.consumer_execution_manifest",
+  "schema_version": "1.0",
+  "execution_manifest_id": "execution_manifest.acme.payments_node_v5.0001",
+  "manifest_version": 1,
+  "manifest_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "api_consumer_organization_id": "consumer_org.acme",
+  "authorization_binding": {
+    "artifact_id": "authorization.acme.payments_node_v5.0001",
+    "artifact_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+  },
+  "installation_binding": {
+    "artifact_id": "installation.acme.payments_node",
+    "artifact_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "event_binding": {
+    "artifact_id": "event.payments.node_v5.0001",
+    "artifact_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "plan_binding": {
+    "artifact_id": "migration_plan.acme.payments_node_v5.0001",
+    "artifact_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+  },
+  "repository": {
+    "repository_id": "github.acme.checkout-service",
+    "package_root": ".",
+    "base_commit": "1234567890abcdef1234567890abcdef12345678",
+    "checkout_path": "/checkout/acme/checkout-service",
+    "checkout_digest": "sha256:1414141414141414141414141414141414141414141414141414141414141414",
+    "candidate_workspace_id": "workspace.acme.payments_node_v5.0001",
+    "candidate_workspace_path": "/var/lib/lumyn/workspaces/acme/payments-node-v5-0001",
+    "candidate_workspace_digest": "sha256:1515151515151515151515151515151515151515151515151515151515151515",
+    "candidate_head": "234567890abcdef1234567890abcdef123456789"
+  },
+  "execution_environment": "consumer_controlled_ci",
+  "private_state": {
+    "root_class": "external_consumer_private_root",
+    "private_state_id": "private_state.acme.payments_node_v5.0001",
+    "source_path": "/var/lib/lumyn/private/acme/payments-node-v5-0001",
+    "source_digest": "sha256:1616161616161616161616161616161616161616161616161616161616161616",
+    "outside_checkout": true,
+    "public_repository_storage_allowed": false,
+    "provider_visible": false
+  },
+  "mounts": [
+    {
+      "mount_id": "mount.repository",
+      "source_class": "consumer_repository",
+      "source_binding_id": "github.acme.checkout-service",
+      "source_path": "/checkout/acme/checkout-service",
+      "source_digest": "sha256:1414141414141414141414141414141414141414141414141414141414141414",
+      "target_path": "/workspace/repository",
+      "mode": "read_only"
+    },
+    {
+      "mount_id": "mount.candidate",
+      "source_class": "candidate_workspace",
+      "source_binding_id": "workspace.acme.payments_node_v5.0001",
+      "source_path": "/var/lib/lumyn/workspaces/acme/payments-node-v5-0001",
+      "source_digest": "sha256:1515151515151515151515151515151515151515151515151515151515151515",
+      "target_path": "/workspace/candidate",
+      "mode": "read_write"
+    },
+    {
+      "mount_id": "mount.toolchain",
+      "source_class": "toolchain_readonly",
+      "source_binding_id": "toolchain.node20.npm10",
+      "source_path": "/opt/lumyn/toolchain",
+      "source_digest": "sha256:1717171717171717171717171717171717171717171717171717171717171717",
+      "target_path": "/opt/lumyn/toolchain",
+      "mode": "read_only"
+    },
+    {
+      "mount_id": "mount.private_state",
+      "source_class": "consumer_private_state",
+      "source_binding_id": "private_state.acme.payments_node_v5.0001",
+      "source_path": "/var/lib/lumyn/private/acme/payments-node-v5-0001",
+      "source_digest": "sha256:1616161616161616161616161616161616161616161616161616161616161616",
+      "target_path": "/state/lumyn",
+      "mode": "read_write"
+    }
+  ],
+  "executable_roots": [
+    {
+      "executable_root_id": "executable_root.node20.npm10",
+      "source_mount_id": "mount.toolchain",
+      "source_path": "/opt/lumyn/toolchain/bin",
+      "source_digest": "sha256:1818181818181818181818181818181818181818181818181818181818181818",
+      "root_path": "/opt/lumyn/toolchain/bin",
+      "read_only": true
+    }
+  ],
+  "paths": {
+    "readable": [
+      ".",
+      "src",
+      "tests"
+    ],
+    "writable": [
+      "src",
+      "tests",
+      "package.json",
+      "package-lock.json"
+    ],
+    "excluded": [
+      ".git",
+      "node_modules"
+    ],
+    "policy_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "commands": [
+    {
+      "command_id": "command.npm_test",
+      "program": "/opt/lumyn/toolchain/bin/npm",
+      "program_digest": "sha256:1919191919191919191919191919191919191919191919191919191919191919",
+      "executable_root_id": "executable_root.node20.npm10",
+      "arguments": [
+        "test",
+        "--",
+        "--runInBand"
+      ],
+      "working_directory": "/workspace/candidate",
+      "timeout_seconds": 900,
+      "network_mode": "offline",
+      "lifecycle_scripts_allowed": false
+    }
+  ],
+  "dependency_policy": {
+    "install_mode": "none",
+    "registry_access_capability_selected": false,
+    "lockfile_integrity_required": true,
+    "lifecycle_scripts_allowed": false
+  },
+  "network_default": "offline",
+  "network_grants": [
+    {
+      "grant_id": "network.agent_runner.openai",
+      "capability": "agent_runner_network",
+      "endpoints": [
+        "https://agent.openai.example/v1"
+      ],
+      "operations": [
+        "agent.run",
+        "agent.cancel"
+      ],
+      "host_enforced": true
+    }
+  ],
+  "credential_grants": [
+    {
+      "grant_id": "credential.agent_attempt.0001",
+      "kind": "agent_runner_credential",
+      "owner_role": "lumyn_operator",
+      "environment_variable": "LUMYN_AGENT_RUNNER_TOKEN",
+      "scope_ids": [
+        "agent.run",
+        "agent.cancel"
+      ],
+      "injection_boundary": "agent_attempt",
+      "expires_at": "2026-07-25T18:00:00Z",
+      "revocation_required": true,
+      "reusable": false,
+      "production": false
+    }
+  ],
+  "capabilities": {
+    "customer_repo_read": true,
+    "customer_repo_write": true,
+    "command_execution": true,
+    "agent_runner_network": true,
+    "agent_runner_credential": true,
+    "model_request_disclosure": true,
+    "model_network": false,
+    "model_credential": false,
+    "package_registry_read": false,
+    "dependency_lifecycle_scripts": false,
+    "sandbox_request_disclosure": false,
+    "sandbox_network": false,
+    "sandbox_credential": false,
+    "github_branch_write": false,
+    "github_pr_write": false,
+    "provider_reporting": false,
+    "artifact_retention": true,
+    "artifact_deletion": true
+  },
+  "agent_execution_policy": {
+    "state": "configured",
+    "agent_runner_manifest_digest": "sha256:abababababababababababababababababababababababababababababababab",
+    "adapter_id": "codex",
+    "adapter_version": "1.2.3",
+    "executable_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "conformance_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+    "route_topology": "runner_mediated",
+    "actual_model_route_digest": "sha256:abababababababababababababababababababababababababababababababab",
+    "funding_mode": "provider_sponsored_lumyn_managed",
+    "credential_owner_role": "lumyn_operator",
+    "usage_billing_owner_role": "lumyn_operator",
+    "clean_session": true,
+    "native_configuration_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "silent_fallback_allowed": false
+  },
+  "model_data_policy_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+  "budgets": {
+    "max_files": 12,
+    "max_changed_lines": 500,
+    "max_diff_bytes": 64000,
+    "max_turns": 20,
+    "max_tokens": 50000,
+    "max_cost_usd": 25,
+    "max_duration_seconds": 1800,
+    "max_attempts": 2
+  },
+  "isolation": {
+    "backend_id": "isolation.consumer_ci_container",
+    "backend_version": "1.0.0",
+    "configuration_digest": "sha256:1212121212121212121212121212121212121212121212121212121212121212",
+    "qualification_digest": "sha256:1313131313131313131313131313131313131313131313131313131313131313",
+    "host_platform": "linux-amd64",
+    "host_home_mounted": false,
+    "os_credential_store_available": false,
+    "ambient_service_sockets_allowed": false,
+    "unrelated_inherited_descriptors_allowed": false,
+    "child_limits_inherited": true,
+    "host_enforced_egress": true,
+    "executable_plugins_allowed": false,
+    "mcp_servers_allowed": false,
+    "hooks_allowed": false,
+    "resource_quotas": {
+      "cpu_seconds": 1800,
+      "memory_bytes": 4294967296,
+      "max_pids": 128,
+      "max_process_tree_depth": 8,
+      "disk_bytes": 10737418240,
+      "max_open_files": 1024
+    },
+    "cleanup_evidence_required": true
+  },
+  "sandbox_entrypoint_profile": null,
+  "verification_separation": {
+    "fresh_process_and_view": true,
+    "exact_candidate_head_required": true,
+    "agent_or_model_credentials_available": false,
+    "generation_evidence_handle_available": false
+  },
+  "aggregate_authority_granted": false,
+  "ambient_credentials_allowed": false,
+  "production_credentials_allowed": false,
+  "production_mutation_allowed": false,
+  "default_branch_write_allowed": false,
+  "auto_merge_allowed": false
+}

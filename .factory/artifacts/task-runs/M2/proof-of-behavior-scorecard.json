@@ -1,0 +1,71 @@
+{
+  "scorecard_id": "lumyn-v3-m2-proof-20260726",
+  "task_id": "M2",
+  "work_item_id": "lumyn-v3-m2",
+  "required_proof_level": "workflow_behavior",
+  "validation_run_id": "validation:2026-07-26T15:34:54Z:af085bbc5cd84b0a98c8388214ac6de5",
+  "candidate_digest": "sha256:44c3b0fe8a422324e6dd08bf24c6dbce2e477225b8783fa4ab5d4c1db97da8df",
+  "levels": [
+    {
+      "level": "syntax",
+      "status": "pass",
+      "summary": "All 18 Draft 2020-12 schemas compile; positive fixtures validate and material invalid fixtures fail.",
+      "evidence_refs": [
+        "schemas/v3_contracts_test.go",
+        "tests/fixtures/contracts/"
+      ]
+    },
+    {
+      "level": "source_evidence",
+      "status": "pass",
+      "summary": "PRD, plan, architecture, developer guidance, schemas, validators, and fixtures use one v3 authority and evidence vocabulary.",
+      "evidence_refs": [
+        "docs/product/prd.md",
+        "docs/product/plan.md",
+        "docs/architecture/adr-0007-executable-v3-migration-contracts.md"
+      ]
+    },
+    {
+      "level": "workflow_behavior",
+      "status": "pass",
+      "summary": "Adversarial validators reject provider-origin substitution, authority widening, false-green runner qualification, status or evidence substitution, private-data disclosure, unsafe command/sandbox isolation, and stale exact-head evidence.",
+      "evidence_refs": [
+        "schemas/m2_security_test.go",
+        "internal/authorization/",
+        "internal/change/",
+        "internal/evidence/",
+        "internal/redaction/",
+        "internal/status/"
+      ]
+    },
+    {
+      "level": "user_visible_behavior",
+      "status": "not_applicable",
+      "summary": "M2 intentionally performs no provider, consumer repository, Agent Runner, model, credential, command, GitHub, or reporting action.",
+      "evidence_refs": [
+        "docs/architecture/adr-0007-executable-v3-migration-contracts.md"
+      ]
+    }
+  ],
+  "overall_status": "pass",
+  "evidence_refs": [
+    ".factory/artifacts/task-runs/M2/validation-report.json",
+    ".factory/artifacts/task-runs/M2/validation-run-summary.json",
+    ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
+    ".factory/artifacts/task-runs/M2/validation-001/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-002/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M2/validation-004/work-proof-marker.json"
+  ],
+  "redaction_posture": {
+    "classification": "internal",
+    "customer_safe": false,
+    "redaction_notes": "Only source-safe schemas, synthetic fixtures, policy code, digests, and validation metadata are committed; no consumer code, live campaign data, prompt/response, session, credential, or identifiable customer evidence."
+  },
+  "gap_summary": [
+    "Runtime acceptance for EVENT and INSTALL remains assigned to later milestones.",
+    "factoryd remains paused and unqualified for the v3.1 compiled control generation.",
+    "Remote PR lifecycle gates are not yet complete."
+  ],
+  "recommended_next_action": "Enter Factory commit-push land mode for current-head CI, CodeQL, passive Codex review, merge, and post-main monitoring."
+}

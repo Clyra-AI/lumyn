@@ -1,6 +1,6 @@
 # Lumyn Developer Guide
 
-Status: v3.1 engineering planning contract; product runtime not implemented
+Status: v3.1 executable contract engineering; product runtime not implemented
 
 Engineering work targets provider-originated API update delivery launched
 through services-assisted, provider-paid sunset campaigns while execution and
@@ -31,6 +31,58 @@ New dependencies are pinned, justified, scanner-covered, and exercised by a
 failing test or fixture before implementation.
 
 No model SDK or endpoint is implicitly approved by this planning rebaseline.
+
+## V3 Contract Development
+
+M2 contract families live in `schemas/` with representative positive and
+material negative fixtures under `tests/fixtures/contracts/<family>/`. A new
+artifact is not executable merely because its JSON parses: its schema must
+compile, its valid fixture must pass, its invalid trust-boundary fixture must
+fail, and relationship invariants that JSON Schema cannot compare must have a
+Go semantic validator and negative unit test.
+
+Keep provider input, consumer authority, Agent Runner/model processing,
+verification, delivery, and provider reporting as distinct objects. Reject
+unknown top-level control fields. Bind freshness-sensitive references by
+digest. Do not reuse schema metadata as permission, or a status label as proof
+of another status axis.
+
+Authorization tests must cover action, path, command, capability, disclosure,
+and budget widening, including latent authority persisted below an action-mode
+ceiling. Provider-channel tests compare normalized HTTPS origins across the
+installation, manifest, and contract fetch rather than trusting URL shape
+alone. Agent Runner qualification tests derive summary counts from unique test
+cases, require all cases to pass, and require evidence for an approved live
+canary. Privacy tests resolve symlinks before proving that the consumer-private
+root is outside the checkout. Provider projection tests decode a closed typed
+payload, enforce exact cross-artifact bindings and status-specific evidence,
+and reject unknown fields, contradictory states, raw code, diff, patch, prompt,
+response, tool, log, trace, session, credential, and secret-shaped material
+before persistence or sharing.
+
+Task validation evidence must come from the trusted Factory validation runner.
+Every declared command receives its own work-proof marker and hashed raw logs,
+all bound to the current base Git SHA, validation run, canonical candidate tree
+digest, exact command and working directory, timestamps, exit status, and
+runner identity. Hand-written summaries or a digest of `git diff` are not
+promotion evidence.
+
+Execution-manifest tests must prove that every mount carries its exact source
+binding and that every canonical command program resolves within its referenced
+read-only executable root. A manifest selecting any sandbox disclosure,
+network, or credential capability must select all three and carry a separate
+sandbox-entrypoint profile. Tests must bind that profile to the exact candidate
+head and read-only mount, entrypoint and working directory, one sandbox-only
+credential grant, one exact endpoint/operation network grant, neutral roots,
+host-home and OS-credential denial, child/resource constraints, and cleanup and
+orphan evidence. Include negative cases for a host-home source disguised by an
+allowed class, a program outside its executable root, a writable candidate
+mount, and mismatched credential or network references.
+
+The schemas and validators are not runtime evidence. Provider fetching,
+repository access, agent/model calls, verification commands, GitHub actions,
+and provider transmission remain unavailable until their owning milestones
+ship direct acceptance evidence.
 
 ## Validation Matrix
 
@@ -253,6 +305,10 @@ State-returning commands:
 
 Help and docs must not advertise v3 commands as working before their end-to-end
 acceptance passes.
+
+`docs/dev/cli-v3-contract.md` is the normative M2 grammar and typed-error map.
+Runtime implementations must add the matching command tests before changing a
+grammar entry from unavailable to implemented.
 
 ## Migration Corpus Policy
 

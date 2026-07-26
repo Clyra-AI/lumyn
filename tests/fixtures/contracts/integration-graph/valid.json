@@ -1,0 +1,51 @@
+{
+  "object_type": "lumyn.integration_graph",
+  "schema_version": "1.0",
+  "graph_id": "graph-stripe-2026-01",
+  "graph_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "generated_at": "2026-07-26T14:00:00Z",
+  "event_id": "evt-stripe-2026-01",
+  "contract_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "installation_id": "install-consumer-001",
+  "authorization_snapshot_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "repository_base": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "package_root": "apps/api",
+  "analysis_mode": "read_only",
+  "mutation_observed": false,
+  "coverage": {
+    "claim": "authorized_scope_only",
+    "analyzed_paths": ["apps/api/src", "apps/api/test", "apps/api/package.json"],
+    "excluded_paths": ["apps/api/generated"],
+    "generated_or_vendored_paths": ["apps/api/generated"],
+    "unsupported_patterns": [],
+    "uncertainties": []
+  },
+  "nodes": [
+    {
+      "node_id": "node-sdk-dependency",
+      "kind": "sdk_dependency",
+      "path": "apps/api/package.json",
+      "symbol": "stripe",
+      "analysis_status": "resolved",
+      "evidence_refs": ["repo:apps/api/package.json#dependencies.stripe"]
+    },
+    {
+      "node_id": "node-create-charge-call",
+      "kind": "call_site",
+      "path": "apps/api/src/payments.ts",
+      "symbol": "stripe.charges.create",
+      "analysis_status": "affected",
+      "evidence_refs": ["repo:apps/api/src/payments.ts:42"]
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "edge-sdk-to-call",
+      "from_node_id": "node-sdk-dependency",
+      "to_node_id": "node-create-charge-call",
+      "kind": "calls",
+      "confidence": "high",
+      "evidence_refs": ["analysis:typescript-symbol-resolution"]
+    }
+  ]
+}

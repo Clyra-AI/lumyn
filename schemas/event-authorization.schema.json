@@ -1,0 +1,647 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.event_authorization.schema.json",
+  "title": "Event-Specific Authorization",
+  "description": "Immutable, non-widening consumer authorization snapshot for one event and one exact plan.",
+  "type": "object",
+  "required": [
+    "object_type",
+    "schema_version",
+    "authorization_id",
+    "authorization_version",
+    "authorization_digest",
+    "api_consumer_organization_id",
+    "authorization_owner_role",
+    "installation_binding",
+    "event_binding",
+    "migration_pack_binding",
+    "repository_binding",
+    "plan_binding",
+    "execution_manifest_binding",
+    "authorization_mode",
+    "event_provenance",
+    "selected_action",
+    "generation_mode",
+    "agent_execution_policy",
+    "selected_capabilities",
+    "scope",
+    "derivation",
+    "approval",
+    "verification_requirement",
+    "credential_issuance",
+    "state",
+    "issued_at",
+    "expires_at",
+    "action_label_alone_grants_side_effect",
+    "api_provider_may_approve",
+    "production_credentials_allowed",
+    "production_mutation_allowed"
+  ],
+  "properties": {
+    "object_type": {
+      "const": "lumyn.event_authorization"
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "authorization_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "authorization_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "authorization_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "api_consumer_organization_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "authorization_owner_role": {
+      "const": "api_consumer_organization"
+    },
+    "installation_binding": {
+      "$ref": "#/$defs/artifactBinding"
+    },
+    "event_binding": {
+      "$ref": "#/$defs/artifactBinding"
+    },
+    "migration_pack_binding": {
+      "$ref": "#/$defs/artifactBinding"
+    },
+    "repository_binding": {
+      "type": "object",
+      "required": [
+        "repository_id",
+        "package_root",
+        "base_commit"
+      ],
+      "properties": {
+        "repository_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "package_root": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "base_commit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40,64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "plan_binding": {
+      "$ref": "#/$defs/artifactBinding"
+    },
+    "execution_manifest_binding": {
+      "$ref": "#/$defs/artifactBinding"
+    },
+    "authorization_mode": {
+      "enum": [
+        "per_event_approval",
+        "installed_preauthorization"
+      ]
+    },
+    "event_provenance": {
+      "type": "object",
+      "required": [
+        "transport_mode",
+        "authenticated",
+        "channel_delivery_qualified",
+        "audience_matched",
+        "fresh",
+        "sequence_accepted",
+        "lifecycle_active"
+      ],
+      "properties": {
+        "transport_mode": {
+          "enum": [
+            "pinned_provider_https",
+            "attended_import"
+          ]
+        },
+        "authenticated": {
+          "type": "boolean"
+        },
+        "channel_delivery_qualified": {
+          "type": "boolean"
+        },
+        "audience_matched": {
+          "const": true
+        },
+        "fresh": {
+          "const": true
+        },
+        "sequence_accepted": {
+          "const": true
+        },
+        "lifecycle_active": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "selected_action": {
+      "enum": [
+        "notify_only",
+        "scan_only",
+        "prepare_patch",
+        "open_draft_pr"
+      ]
+    },
+    "generation_mode": {
+      "enum": [
+        "none",
+        "deterministic",
+        "agent_assisted"
+      ]
+    },
+    "agent_execution_policy": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "state"
+          ],
+          "properties": {
+            "state": {
+              "const": "disabled"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "state",
+            "adapter_id",
+            "adapter_version",
+            "executable_digest",
+            "conformance_digest",
+            "agent_route_digest",
+            "funding_mode",
+            "credential_owner_role",
+            "usage_billing_owner_role"
+          ],
+          "properties": {
+            "state": {
+              "const": "configured"
+            },
+            "adapter_id": {
+              "enum": [
+                "codex",
+                "claude_code"
+              ]
+            },
+            "adapter_version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "executable_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "conformance_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "agent_route_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "funding_mode": {
+              "enum": [
+                "consumer_managed",
+                "provider_sponsored_lumyn_managed"
+              ]
+            },
+            "credential_owner_role": {
+              "enum": [
+                "api_consumer_organization",
+                "lumyn_operator"
+              ]
+            },
+            "usage_billing_owner_role": {
+              "enum": [
+                "api_consumer_organization",
+                "lumyn_operator"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "selected_capabilities": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "customer_repo_read",
+          "customer_repo_write",
+          "command_execution",
+          "agent_runner_network",
+          "agent_runner_credential",
+          "model_request_disclosure",
+          "model_network",
+          "model_credential",
+          "package_registry_read",
+          "dependency_lifecycle_scripts",
+          "sandbox_request_disclosure",
+          "sandbox_network",
+          "sandbox_credential",
+          "github_branch_write",
+          "github_pr_write",
+          "provider_reporting",
+          "artifact_retention",
+          "artifact_deletion"
+        ]
+      }
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "readable_paths",
+        "writable_paths",
+        "command_ids",
+        "path_policy_digest",
+        "command_policy_digest",
+        "model_data_policy_digest",
+        "budget_policy_digest",
+        "github_policy_digest",
+        "provider_reporting_policy_digest"
+      ],
+      "properties": {
+        "readable_paths": {
+          "$ref": "#/$defs/pathList"
+        },
+        "writable_paths": {
+          "$ref": "#/$defs/pathList"
+        },
+        "command_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/stableId"
+          }
+        },
+        "path_policy_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "command_policy_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "model_data_policy_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "budget_policy_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "github_policy_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "provider_reporting_policy_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "additionalProperties": false
+    },
+    "derivation": {
+      "type": "object",
+      "required": [
+        "installation_policy_digest",
+        "comparison_result",
+        "non_widening",
+        "provider_input_may_widen",
+        "route_selected_capability_union_frozen",
+        "aggregate_campaign_authority_granted"
+      ],
+      "properties": {
+        "installation_policy_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "comparison_result": {
+          "const": "in_policy"
+        },
+        "non_widening": {
+          "const": true
+        },
+        "provider_input_may_widen": {
+          "const": false
+        },
+        "route_selected_capability_union_frozen": {
+          "const": true
+        },
+        "aggregate_campaign_authority_granted": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "approval": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "mode",
+            "approved_by_role",
+            "consumer_maintainer_id",
+            "approved_plan_digest",
+            "approved_at"
+          ],
+          "properties": {
+            "mode": {
+              "const": "per_event_approval"
+            },
+            "approved_by_role": {
+              "const": "consumer_maintainer"
+            },
+            "consumer_maintainer_id": {
+              "$ref": "#/$defs/stableId"
+            },
+            "approved_plan_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "approved_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "mode",
+            "evaluated_by",
+            "event_in_policy",
+            "plan_in_policy",
+            "commands_in_policy",
+            "paths_in_policy",
+            "model_policy_in_policy",
+            "budgets_in_policy",
+            "verification_in_policy",
+            "credential_issuance_in_policy",
+            "evaluated_at"
+          ],
+          "properties": {
+            "mode": {
+              "const": "installed_preauthorization"
+            },
+            "evaluated_by": {
+              "const": "lumyn_policy_engine"
+            },
+            "event_in_policy": {
+              "const": true
+            },
+            "plan_in_policy": {
+              "const": true
+            },
+            "commands_in_policy": {
+              "const": true
+            },
+            "paths_in_policy": {
+              "const": true
+            },
+            "model_policy_in_policy": {
+              "const": true
+            },
+            "budgets_in_policy": {
+              "const": true
+            },
+            "verification_in_policy": {
+              "const": true
+            },
+            "credential_issuance_in_policy": {
+              "const": true
+            },
+            "evaluated_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "verification_requirement": {
+      "type": "object",
+      "required": [
+        "configuration_digest",
+        "exact_candidate_head_required",
+        "independent_from_generation",
+        "agent_or_model_credentials_allowed",
+        "generation_evidence_write_handle_allowed"
+      ],
+      "properties": {
+        "configuration_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "exact_candidate_head_required": {
+          "const": true
+        },
+        "independent_from_generation": {
+          "const": true
+        },
+        "agent_or_model_credentials_allowed": {
+          "const": false
+        },
+        "generation_evidence_write_handle_allowed": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "credential_issuance": {
+      "type": "object",
+      "required": [
+        "policy_digest",
+        "short_lived_only",
+        "reusable_credential_allowed",
+        "issued_at_runtime_only"
+      ],
+      "properties": {
+        "policy_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "short_lived_only": {
+          "const": true
+        },
+        "reusable_credential_allowed": {
+          "const": false
+        },
+        "issued_at_runtime_only": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "state": {
+      "const": "active"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "action_label_alone_grants_side_effect": {
+      "const": false
+    },
+    "api_provider_may_approve": {
+      "const": false
+    },
+    "production_credentials_allowed": {
+      "const": false
+    },
+    "production_mutation_allowed": {
+      "const": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "authorization_mode": {
+            "const": "per_event_approval"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "approval": {
+            "properties": {
+              "mode": {
+                "const": "per_event_approval"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "authorization_mode": {
+            "const": "installed_preauthorization"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "event_provenance": {
+            "properties": {
+              "transport_mode": {
+                "const": "pinned_provider_https"
+              },
+              "authenticated": {
+                "const": true
+              },
+              "channel_delivery_qualified": {
+                "const": true
+              }
+            }
+          },
+          "approval": {
+            "properties": {
+              "mode": {
+                "const": "installed_preauthorization"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "generation_mode": {
+            "const": "agent_assisted"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "agent_execution_policy": {
+            "properties": {
+              "state": {
+                "const": "configured"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "agent_execution_policy": {
+            "properties": {
+              "state": {
+                "const": "disabled"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "selected_capabilities": {
+            "not": {
+              "contains": {
+                "enum": [
+                  "agent_runner_network",
+                  "agent_runner_credential",
+                  "model_request_disclosure",
+                  "model_network",
+                  "model_credential"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._@+-]+(?:/[A-Za-z0-9._@+-]+)*$"
+    },
+    "pathList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/relativePath"
+      }
+    },
+    "artifactBinding": {
+      "type": "object",
+      "required": [
+        "artifact_id",
+        "artifact_digest"
+      ],
+      "properties": {
+        "artifact_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "artifact_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

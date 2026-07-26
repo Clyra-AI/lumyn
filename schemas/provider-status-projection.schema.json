@@ -1,0 +1,505 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.provider_status_projection.schema.json",
+  "title": "Provider Status Projection",
+  "description": "One event-bound, consumer-consented, redacted status projection visible to the API Provider.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "object_type",
+    "schema_version",
+    "projection_id",
+    "api_provider_id",
+    "provider_change_event_id",
+    "provider_change_contract_digest",
+    "consumer_installation_pseudonym",
+    "bindings",
+    "status",
+    "provenance",
+    "evidence_refs",
+    "consent",
+    "provider_visible_fields",
+    "interpretation_rules",
+    "privacy",
+    "observed_at",
+    "artifact_digest"
+  ],
+  "properties": {
+    "object_type": { "const": "lumyn.provider_status_projection" },
+    "schema_version": { "const": "1.0" },
+    "projection_id": { "$ref": "#/$defs/identifier" },
+    "api_provider_id": { "$ref": "#/$defs/identifier" },
+    "provider_change_event_id": { "$ref": "#/$defs/identifier" },
+    "provider_change_contract_digest": { "$ref": "#/$defs/digest" },
+    "consumer_installation_pseudonym": { "$ref": "#/$defs/identifier" },
+    "bindings": { "$ref": "#/$defs/bindings" },
+    "status": {
+      "enum": ["unknown", "received", "not_applicable", "affected", "needs_input", "candidate_ready", "verified", "draft_pr_open", "accepted", "merged", "retired"]
+    },
+    "provenance": { "enum": ["observed", "consumer_reported", "unknown"] },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidenceRef" },
+      "uniqueItems": true
+    },
+    "consent": { "$ref": "#/$defs/consent" },
+    "provider_visible_fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "projection_id",
+          "api_provider_id",
+          "provider_change_event_id",
+          "provider_change_contract_digest",
+          "consumer_installation_pseudonym",
+          "bindings",
+          "status",
+          "provenance",
+          "evidence_refs",
+          "observed_at"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "interpretation_rules": { "$ref": "#/$defs/interpretationRules" },
+    "privacy": { "$ref": "#/$defs/privacy" },
+    "observed_at": { "type": "string", "format": "date-time" },
+    "artifact_digest": { "$ref": "#/$defs/digest" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "unknown" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "provenance": { "const": "unknown" },
+          "evidence_refs": { "maxItems": 0 },
+          "bindings": { "$ref": "#/$defs/earlyBindings" }
+        }
+      },
+      "else": {
+        "properties": {
+          "provenance": { "enum": ["observed", "consumer_reported"] },
+          "evidence_refs": { "minItems": 1 }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "enum": ["received", "not_applicable", "affected"] } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": { "bindings": { "$ref": "#/$defs/earlyBindings" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "received" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": { "evidence_refs": { "$ref": "#/$defs/eventReceiptEvidence" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "not_applicable" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "evidence_refs": {
+            "contains": {
+              "type": "object",
+              "properties": { "evidence_kind": { "const": "explicit_not_applicable" } },
+              "required": ["evidence_kind"]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "affected" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": { "evidence_refs": { "$ref": "#/$defs/impactEvidence" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "needs_input" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": { "evidence_refs": { "$ref": "#/$defs/inputEvidence" } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "candidate_ready" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "evidence_refs": { "$ref": "#/$defs/candidateEvidence" },
+          "bindings": { "$ref": "#/$defs/candidateBindings" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "verified" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "evidence_refs": { "$ref": "#/$defs/verificationEvidence" },
+          "bindings": { "$ref": "#/$defs/verificationBindings" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "draft_pr_open" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "evidence_refs": { "$ref": "#/$defs/draftPREvidence" },
+          "bindings": { "$ref": "#/$defs/completeBindings" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "accepted" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "evidence_refs": { "$ref": "#/$defs/acceptanceEvidence" },
+          "bindings": { "$ref": "#/$defs/completeBindings" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "merged" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "evidence_refs": { "$ref": "#/$defs/mergeEvidence" },
+          "bindings": { "$ref": "#/$defs/completeBindings" },
+          "interpretation_rules": {
+            "type": "object",
+            "properties": { "merged_implies_retired": { "const": false } },
+            "required": ["merged_implies_retired"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "retired" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "evidence_refs": { "$ref": "#/$defs/retirementEvidence" },
+          "bindings": { "$ref": "#/$defs/completeBindings" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "bindings": {
+            "type": "object",
+            "properties": { "candidate_digest": { "type": "string" } },
+            "required": ["candidate_digest"]
+          }
+        },
+        "required": ["bindings"]
+      },
+      "then": {
+        "properties": { "bindings": { "$ref": "#/$defs/candidateDependencyBindings" } }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "bindings": {
+            "type": "object",
+            "properties": { "verification_digest": { "type": "string" } },
+            "required": ["verification_digest"]
+          }
+        },
+        "required": ["bindings"]
+      },
+      "then": {
+        "properties": { "bindings": { "$ref": "#/$defs/verificationDependencyBindings" } }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "bindings": {
+            "type": "object",
+            "properties": { "delivery_digest": { "type": "string" } },
+            "required": ["delivery_digest"]
+          }
+        },
+        "required": ["bindings"]
+      },
+      "then": {
+        "properties": { "bindings": { "$ref": "#/$defs/completeBindings" } }
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "nullableDigest": {
+      "oneOf": [
+        { "$ref": "#/$defs/digest" },
+        { "type": "null" }
+      ]
+    },
+    "bindings": {
+      "description": "Opaque exact bindings for one consumer-authorized run. Nullable later-artifact digests mean that artifact did not yet exist; they do not claim runtime completion.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "consumer_installation_digest",
+        "event_authorization_digest",
+        "migration_plan_digest",
+        "candidate_digest",
+        "verification_digest",
+        "delivery_digest"
+      ],
+      "properties": {
+        "run_id": { "$ref": "#/$defs/identifier" },
+        "consumer_installation_digest": { "$ref": "#/$defs/digest" },
+        "event_authorization_digest": { "$ref": "#/$defs/digest" },
+        "migration_plan_digest": { "$ref": "#/$defs/nullableDigest" },
+        "candidate_digest": { "$ref": "#/$defs/nullableDigest" },
+        "verification_digest": { "$ref": "#/$defs/nullableDigest" },
+        "delivery_digest": { "$ref": "#/$defs/nullableDigest" }
+      }
+    },
+    "earlyBindings": {
+      "type": "object",
+      "properties": {
+        "migration_plan_digest": { "type": "null" },
+        "candidate_digest": { "type": "null" },
+        "verification_digest": { "type": "null" },
+        "delivery_digest": { "type": "null" }
+      },
+      "required": ["migration_plan_digest", "candidate_digest", "verification_digest", "delivery_digest"]
+    },
+    "candidateDependencyBindings": {
+      "type": "object",
+      "properties": { "migration_plan_digest": { "$ref": "#/$defs/digest" } },
+      "required": ["migration_plan_digest"]
+    },
+    "verificationDependencyBindings": {
+      "type": "object",
+      "properties": {
+        "migration_plan_digest": { "$ref": "#/$defs/digest" },
+        "candidate_digest": { "$ref": "#/$defs/digest" }
+      },
+      "required": ["migration_plan_digest", "candidate_digest"]
+    },
+    "candidateBindings": {
+      "type": "object",
+      "properties": {
+        "migration_plan_digest": { "$ref": "#/$defs/digest" },
+        "candidate_digest": { "$ref": "#/$defs/digest" },
+        "verification_digest": { "type": "null" },
+        "delivery_digest": { "type": "null" }
+      },
+      "required": ["migration_plan_digest", "candidate_digest", "verification_digest", "delivery_digest"]
+    },
+    "verificationBindings": {
+      "type": "object",
+      "properties": {
+        "migration_plan_digest": { "$ref": "#/$defs/digest" },
+        "candidate_digest": { "$ref": "#/$defs/digest" },
+        "verification_digest": { "$ref": "#/$defs/digest" },
+        "delivery_digest": { "type": "null" }
+      },
+      "required": ["migration_plan_digest", "candidate_digest", "verification_digest", "delivery_digest"]
+    },
+    "completeBindings": {
+      "type": "object",
+      "properties": {
+        "migration_plan_digest": { "$ref": "#/$defs/digest" },
+        "candidate_digest": { "$ref": "#/$defs/digest" },
+        "verification_digest": { "$ref": "#/$defs/digest" },
+        "delivery_digest": { "$ref": "#/$defs/digest" }
+      },
+      "required": ["migration_plan_digest", "candidate_digest", "verification_digest", "delivery_digest"]
+    },
+    "eventReceiptEvidence": {
+      "type": "array",
+      "contains": {
+        "type": "object",
+        "properties": { "evidence_kind": { "const": "event_receipt" } },
+        "required": ["evidence_kind"]
+      }
+    },
+    "impactEvidence": {
+      "type": "array",
+      "contains": {
+        "type": "object",
+        "properties": { "evidence_kind": { "const": "impact_outcome" } },
+        "required": ["evidence_kind"]
+      }
+    },
+    "inputEvidence": {
+      "type": "array",
+      "contains": {
+        "type": "object",
+        "properties": { "evidence_kind": { "const": "consumer_input_request" } },
+        "required": ["evidence_kind"]
+      }
+    },
+    "candidateEvidence": {
+      "type": "array",
+      "contains": {
+        "type": "object",
+        "properties": { "evidence_kind": { "const": "candidate_outcome" } },
+        "required": ["evidence_kind"]
+      }
+    },
+    "verificationEvidence": {
+      "type": "array",
+      "contains": {
+        "type": "object",
+        "properties": { "evidence_kind": { "const": "verification_outcome" } },
+        "required": ["evidence_kind"]
+      }
+    },
+    "draftPREvidence": {
+      "type": "array",
+      "contains": {
+        "type": "object",
+        "properties": { "evidence_kind": { "const": "draft_pr_outcome" } },
+        "required": ["evidence_kind"]
+      }
+    },
+    "acceptanceEvidence": {
+      "type": "array",
+      "contains": {
+        "type": "object",
+        "properties": { "evidence_kind": { "const": "consumer_acceptance" } },
+        "required": ["evidence_kind"]
+      }
+    },
+    "mergeEvidence": {
+      "type": "array",
+      "contains": {
+        "type": "object",
+        "properties": { "evidence_kind": { "const": "merge_outcome" } },
+        "required": ["evidence_kind"]
+      }
+    },
+    "retirementEvidence": {
+      "type": "array",
+      "contains": {
+        "type": "object",
+        "properties": { "evidence_kind": { "const": "retirement_confirmation" } },
+        "required": ["evidence_kind"]
+      }
+    },
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_kind", "evidence_digest", "provenance"],
+      "properties": {
+        "evidence_kind": {
+          "enum": [
+            "event_receipt",
+            "explicit_not_applicable",
+            "impact_outcome",
+            "consumer_input_request",
+            "candidate_outcome",
+            "verification_outcome",
+            "draft_pr_outcome",
+            "consumer_acceptance",
+            "merge_outcome",
+            "retirement_confirmation"
+          ]
+        },
+        "evidence_digest": { "$ref": "#/$defs/digest" },
+        "provenance": { "enum": ["observed", "consumer_reported"] }
+      }
+    },
+    "consent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["consumer_consent_id", "consumer_consent_digest", "event_bound", "fields_enumerated", "active", "checked_at"],
+      "properties": {
+        "consumer_consent_id": { "$ref": "#/$defs/identifier" },
+        "consumer_consent_digest": { "$ref": "#/$defs/digest" },
+        "event_bound": { "const": true },
+        "fields_enumerated": { "const": true },
+        "active": { "const": true },
+        "checked_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "interpretationRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["silence", "merged_implies_retired", "not_applicable_requires_explicit_evidence", "unaffected_may_be_inferred"],
+      "properties": {
+        "silence": { "const": "unknown" },
+        "merged_implies_retired": { "const": false },
+        "not_applicable_requires_explicit_evidence": { "const": true },
+        "unaffected_may_be_inferred": { "const": false }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "redaction_policy_digest",
+        "redaction_status",
+        "safe_to_share_with_api_provider",
+        "raw_consumer_code_included",
+        "raw_diff_included",
+        "raw_logs_or_traces_included",
+        "raw_prompts_or_responses_included",
+        "agent_session_data_included",
+        "credentials_included"
+      ],
+      "properties": {
+        "classification": { "const": "provider_consented_projection" },
+        "redaction_policy_digest": { "$ref": "#/$defs/digest" },
+        "redaction_status": { "const": "passed" },
+        "safe_to_share_with_api_provider": { "const": true },
+        "raw_consumer_code_included": { "const": false },
+        "raw_diff_included": { "const": false },
+        "raw_logs_or_traces_included": { "const": false },
+        "raw_prompts_or_responses_included": { "const": false },
+        "agent_session_data_included": { "const": false },
+        "credentials_included": { "const": false }
+      }
+    }
+  }
+}

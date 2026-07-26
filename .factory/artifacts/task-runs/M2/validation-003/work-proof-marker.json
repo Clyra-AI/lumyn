@@ -1,0 +1,19 @@
+{
+  "command": "make test-coverage",
+  "cwd": ".",
+  "execution_status": "pass",
+  "exit_code": 0,
+  "finished_at": "2026-07-26T15:35:34Z",
+  "generated_by": "trusted_runner",
+  "git_sha": "7609e5c49c0776c1028c1aeb3e2e2ee942b613b6",
+  "marker_id": "validation-003",
+  "raw_log_refs": [
+    ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.stdout.log",
+    ".factory/artifacts/task-runs/M2/validation-003/work-proof-marker.stderr.log"
+  ],
+  "runner_id": "factory-validation-gate-attended",
+  "started_at": "2026-07-26T15:35:15Z",
+  "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_digest": "sha256:6ce6ef1c2cbd0b864278604370f116404bf729bf3355e5fe30f638b83ae5826d",
+  "workspace_ref": "codex/lumyn-m2-contracts"
+}

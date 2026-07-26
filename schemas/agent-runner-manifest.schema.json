@@ -1,0 +1,289 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.agent_runner_manifest.schema.json",
+  "title": "AgentRunnerManifest",
+  "description": "The pinned, consumer-selectable Agent Runner executable and isolation qualification contract.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "object_type",
+    "schema_version",
+    "manifest_id",
+    "manifest_digest",
+    "created_at",
+    "adapter",
+    "adapter_version",
+    "agent_runner_vendor",
+    "selection_authority",
+    "executable",
+    "qualification",
+    "auth_and_entitlement",
+    "actual_model_route",
+    "native_configuration",
+    "session_isolation",
+    "host_isolation",
+    "lifecycle_contract",
+    "authority_denials"
+  ],
+  "properties": {
+    "object_type": { "const": "lumyn.agent_runner_manifest" },
+    "schema_version": { "const": "1.0" },
+    "manifest_id": { "$ref": "#/$defs/id" },
+    "manifest_digest": { "$ref": "#/$defs/digest" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "adapter": { "type": "string", "enum": ["codex", "claude_code", "deterministic_fake", "cursor"] },
+    "adapter_version": { "type": "string", "minLength": 1 },
+    "agent_runner_vendor": { "type": "string", "minLength": 1 },
+    "selection_authority": { "const": "api_consumer_organization" },
+    "executable": { "$ref": "#/$defs/executable" },
+    "qualification": { "$ref": "#/$defs/qualification" },
+    "auth_and_entitlement": { "$ref": "#/$defs/auth" },
+    "actual_model_route": { "$ref": "#/$defs/model" },
+    "native_configuration": { "$ref": "#/$defs/nativeConfiguration" },
+    "session_isolation": { "$ref": "#/$defs/sessionIsolation" },
+    "host_isolation": { "$ref": "#/$defs/hostIsolation" },
+    "lifecycle_contract": { "$ref": "#/$defs/lifecycle" },
+    "authority_denials": { "$ref": "#/$defs/authorityDenials" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "adapter": { "const": "cursor" } }, "required": ["adapter"] },
+      "then": {
+        "properties": {
+          "qualification": {
+            "properties": {
+              "status": { "const": "deferred" },
+              "launch_eligible": { "const": false },
+              "live_canary_status": { "enum": ["not_run", "deferred"] },
+              "conformance_result_digest": { "type": "null" },
+              "valid_until": { "type": "null" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "adapter": { "enum": ["codex", "claude_code"] },
+          "qualification": { "properties": { "status": { "const": "qualified" } }, "required": ["status"] }
+        },
+        "required": ["adapter", "qualification"]
+      },
+      "then": {
+        "properties": {
+          "qualification": {
+            "properties": {
+              "launch_eligible": { "const": true },
+              "live_canary_status": { "const": "passed" },
+              "conformance_result_digest": { "$ref": "#/$defs/digest" },
+              "valid_until": { "type": "string", "format": "date-time" }
+            }
+          },
+          "auth_and_entitlement": { "properties": { "noninteractive_automation_allowed": { "const": true } } }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "qualification": { "properties": { "status": { "enum": ["deferred", "failed", "stale"] } }, "required": ["status"] } }, "required": ["qualification"] },
+      "then": { "properties": { "qualification": { "properties": { "launch_eligible": { "const": false } } } } }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{2,127}$" },
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "absolutePath": {
+      "type": "string",
+      "pattern": "^/.+$",
+      "not": { "pattern": "^/(repo|workspace)(/|$)|/(node_modules|vendor)/" }
+    },
+    "executable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_path", "source_type", "source_uri", "digest", "repository_path_shadowing_rejected"],
+      "properties": {
+        "canonical_path": { "$ref": "#/$defs/absolutePath" },
+        "source_type": { "type": "string", "enum": ["vendor_signed_release", "pinned_package", "lumyn_test_fixture"] },
+        "source_uri": { "type": "string", "minLength": 1 },
+        "digest": { "$ref": "#/$defs/digest" },
+        "repository_path_shadowing_rejected": { "const": true }
+      }
+    },
+    "qualification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "suite_version", "suite_digest", "conformance_result_digest", "live_canary_status", "launch_eligible", "qualified_at", "valid_until"],
+      "properties": {
+        "status": { "type": "string", "enum": ["qualified", "deferred", "failed", "stale"] },
+        "suite_version": { "type": "string", "minLength": 1 },
+        "suite_digest": { "$ref": "#/$defs/digest" },
+        "conformance_result_digest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "live_canary_status": { "type": "string", "enum": ["passed", "failed", "not_run", "deferred"] },
+        "launch_eligible": { "type": "boolean" },
+        "qualified_at": { "oneOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] },
+        "valid_until": { "oneOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] }
+      }
+    },
+    "auth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["auth_mode", "entitlement_class", "noninteractive_automation_allowed", "credential_value_recorded", "reusable_credential_stored"],
+      "properties": {
+        "auth_mode": { "type": "string", "enum": ["consumer_account", "consumer_api_key", "local_runtime", "task_scoped_broker"] },
+        "entitlement_class": { "type": "string", "minLength": 1 },
+        "noninteractive_automation_allowed": { "type": "boolean" },
+        "credential_value_recorded": { "const": false },
+        "reusable_credential_stored": { "const": false }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_provider", "endpoint", "model_route", "model_version", "opaque", "mutable_mid_run"],
+      "properties": {
+        "model_provider": { "type": "string", "minLength": 1 },
+        "endpoint": { "type": "string", "minLength": 1 },
+        "model_route": { "type": "string", "minLength": 1 },
+        "model_version": { "type": "string", "minLength": 1 },
+        "opaque": { "const": false },
+        "mutable_mid_run": { "const": false }
+      }
+    },
+    "nativeConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy", "policy_digest", "selected_static_rules", "executable_plugins_allowed", "mcp_servers_allowed", "hooks_allowed"],
+      "properties": {
+        "policy": { "type": "string", "enum": ["ignored", "selected_static"] },
+        "policy_digest": { "$ref": "#/$defs/digest" },
+        "selected_static_rules": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["rule_id", "digest", "treated_as_untrusted_context"],
+            "properties": {
+              "rule_id": { "$ref": "#/$defs/id" },
+              "digest": { "$ref": "#/$defs/digest" },
+              "treated_as_untrusted_context": { "const": true }
+            }
+          }
+        },
+        "executable_plugins_allowed": { "const": false },
+        "mcp_servers_allowed": { "const": false },
+        "hooks_allowed": { "const": false }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "policy": { "const": "ignored" } }, "required": ["policy"] },
+          "then": { "properties": { "selected_static_rules": { "maxItems": 0 } } },
+          "else": { "properties": { "selected_static_rules": { "minItems": 1 } } }
+        }
+      ]
+    },
+    "sessionIsolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["clean_ephemeral_session", "neutral_home_root", "neutral_config_root", "personal_session_resume_allowed", "prior_migration_session_resume_allowed"],
+      "properties": {
+        "clean_ephemeral_session": { "const": true },
+        "neutral_home_root": { "$ref": "#/$defs/absolutePath" },
+        "neutral_config_root": { "$ref": "#/$defs/absolutePath" },
+        "personal_session_resume_allowed": { "const": false },
+        "prior_migration_session_resume_allowed": { "const": false }
+      }
+    },
+    "hostIsolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "backend_id",
+        "backend_version",
+        "configuration_digest",
+        "qualification_digest",
+        "host_platform",
+        "read_only_mounts_explicit",
+        "writable_mounts_explicit",
+        "host_home_mounted",
+        "os_credential_store_mounted",
+        "ambient_service_sockets_allowed",
+        "unrelated_descriptors_inherited",
+        "child_process_limits_inherited",
+        "egress_policy",
+        "quotas",
+        "cleanup"
+      ],
+      "properties": {
+        "backend_id": { "$ref": "#/$defs/id" },
+        "backend_version": { "type": "string", "minLength": 1 },
+        "configuration_digest": { "$ref": "#/$defs/digest" },
+        "qualification_digest": { "$ref": "#/$defs/digest" },
+        "host_platform": { "type": "string", "minLength": 1 },
+        "read_only_mounts_explicit": { "const": true },
+        "writable_mounts_explicit": { "const": true },
+        "host_home_mounted": { "const": false },
+        "os_credential_store_mounted": { "const": false },
+        "ambient_service_sockets_allowed": { "const": false },
+        "unrelated_descriptors_inherited": { "const": false },
+        "child_process_limits_inherited": { "const": true },
+        "egress_policy": { "type": "string", "enum": ["host_enforced_allowlist", "deny_all"] },
+        "quotas": { "$ref": "#/$defs/quotas" },
+        "cleanup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fail_closed", "evidence_required", "orphan_check_required"],
+          "properties": {
+            "fail_closed": { "const": true },
+            "evidence_required": { "const": true },
+            "orphan_check_required": { "const": true }
+          }
+        }
+      }
+    },
+    "quotas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cpu_millis", "memory_bytes", "max_pids", "max_process_tree_depth", "disk_bytes", "max_open_files"],
+      "properties": {
+        "cpu_millis": { "type": "integer", "minimum": 1 },
+        "memory_bytes": { "type": "integer", "minimum": 1 },
+        "max_pids": { "type": "integer", "minimum": 1 },
+        "max_process_tree_depth": { "type": "integer", "minimum": 1 },
+        "disk_bytes": { "type": "integer", "minimum": 1 },
+        "max_open_files": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startup", "structured_output", "tool_calls", "file_edits", "usage", "errors", "cancellation", "exit", "fail_closed_malformed_output"],
+      "properties": {
+        "startup": { "const": true },
+        "structured_output": { "const": true },
+        "tool_calls": { "const": true },
+        "file_edits": { "const": true },
+        "usage": { "const": true },
+        "errors": { "const": true },
+        "cancellation": { "const": true },
+        "exit": { "const": true },
+        "fail_closed_malformed_output": { "const": true }
+      }
+    },
+    "authorityDenials": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider_may_select_runner", "self_approve", "self_verify", "push_remote_branch", "create_pr", "merge", "share_provider_status", "silent_fallback"],
+      "properties": {
+        "provider_may_select_runner": { "const": false },
+        "self_approve": { "const": false },
+        "self_verify": { "const": false },
+        "push_remote_branch": { "const": false },
+        "create_pr": { "const": false },
+        "merge": { "const": false },
+        "share_provider_status": { "const": false },
+        "silent_fallback": { "const": false }
+      }
+    }
+  }
+}

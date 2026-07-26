@@ -1,0 +1,12 @@
+{
+  "description": "Resolved provider-projection evidence from another run must fail semantic binding validation even when every artifact digest is otherwise coherent.",
+  "projection_bindings": {
+    "run_id": "run-other",
+    "consumer_installation_digest": "sha256:installation",
+    "event_authorization_digest": "sha256:authorization",
+    "migration_plan_digest": "sha256:plan",
+    "candidate_digest": "sha256:candidate",
+    "verification_digest": "sha256:verification",
+    "delivery_digest": "sha256:delivery"
+  }
+}

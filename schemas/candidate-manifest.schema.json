@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.candidate_manifest.schema.json",
+  "title": "CandidateManifest",
+  "description": "A generated patch candidate bound to its exact plan, base, routes, and independent-verification boundary.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "object_type",
+    "schema_version",
+    "candidate_id",
+    "candidate_digest",
+    "created_at",
+    "event_id",
+    "contract_digest",
+    "installation_id",
+    "authorization_snapshot_digest",
+    "plan_id",
+    "plan_digest",
+    "repository_base",
+    "candidate_head",
+    "patch_digest",
+    "candidate_status",
+    "route_authority",
+    "generation_records",
+    "changes",
+    "independent_verification",
+    "residual_risks"
+  ],
+  "properties": {
+    "object_type": { "const": "lumyn.candidate_manifest" },
+    "schema_version": { "const": "1.0" },
+    "candidate_id": { "$ref": "#/$defs/id" },
+    "candidate_digest": { "$ref": "#/$defs/digest" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "event_id": { "$ref": "#/$defs/id" },
+    "contract_digest": { "$ref": "#/$defs/digest" },
+    "installation_id": { "$ref": "#/$defs/id" },
+    "authorization_snapshot_digest": { "$ref": "#/$defs/digest" },
+    "plan_id": { "$ref": "#/$defs/id" },
+    "plan_digest": { "$ref": "#/$defs/digest" },
+    "repository_base": { "$ref": "#/$defs/gitDigest" },
+    "candidate_head": { "$ref": "#/$defs/gitDigest" },
+    "patch_digest": { "$ref": "#/$defs/digest" },
+    "candidate_status": { "type": "string", "enum": ["candidate_generated", "needs_input", "failed", "stale"] },
+    "route_authority": { "const": "api_consumer_organization" },
+    "generation_records": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/generationRecord" }
+    },
+    "changes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/change" }
+    },
+    "independent_verification": { "$ref": "#/$defs/independentVerification" },
+    "residual_risks": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "candidate_status": { "const": "candidate_generated" } }, "required": ["candidate_status"] },
+      "then": {
+        "properties": {
+          "changes": { "minItems": 1 },
+          "generation_records": { "items": { "properties": { "status": { "const": "succeeded" } }, "required": ["status"] } }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{2,127}$" },
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "gitDigest": { "type": "string", "pattern": "^[a-f0-9]{40,64}$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "anyOf": [
+          { "pattern": "^/" },
+          { "pattern": "(^|/)\\.\\.(/|$)" },
+          { "pattern": "[?*\\\\]" }
+        ]
+      }
+    },
+    "generationRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_id", "plan_item_id", "route", "status", "started_at", "finished_at"],
+      "properties": {
+        "record_id": { "$ref": "#/$defs/id" },
+        "plan_item_id": { "$ref": "#/$defs/id" },
+        "route": { "type": "string", "enum": ["deterministic", "agent_assisted", "manual"] },
+        "status": { "type": "string", "enum": ["succeeded", "needs_input", "failed"] },
+        "started_at": { "type": "string", "format": "date-time" },
+        "finished_at": { "type": "string", "format": "date-time" },
+        "recipe": { "$ref": "#/$defs/recipe" },
+        "agent": { "$ref": "#/$defs/agent" },
+        "manual": { "$ref": "#/$defs/manual" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "route": { "const": "deterministic" } }, "required": ["route"] },
+          "then": { "required": ["recipe"] },
+          "else": { "not": { "required": ["recipe"] } }
+        },
+        {
+          "if": { "properties": { "route": { "const": "agent_assisted" } }, "required": ["route"] },
+          "then": { "required": ["agent"] },
+          "else": { "not": { "required": ["agent"] } }
+        },
+        {
+          "if": { "properties": { "route": { "const": "manual" } }, "required": ["route"] },
+          "then": { "required": ["manual"] },
+          "else": { "not": { "required": ["manual"] } }
+        }
+      ]
+    },
+    "recipe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recipe_id", "recipe_version", "recipe_digest"],
+      "properties": {
+        "recipe_id": { "$ref": "#/$defs/id" },
+        "recipe_version": { "type": "string", "minLength": 1 },
+        "recipe_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempt_id",
+        "attempt_digest",
+        "runner_manifest_id",
+        "runner_manifest_digest",
+        "conformance_result_digest",
+        "adapter",
+        "adapter_version",
+        "executable_digest",
+        "model_provider",
+        "model_route",
+        "model_version",
+        "prompt_digest",
+        "tool_definition_digest",
+        "context_digest",
+        "native_configuration_digest",
+        "agent_reported_test_status",
+        "self_verification_claim",
+        "remote_delivery_authority"
+      ],
+      "properties": {
+        "attempt_id": { "$ref": "#/$defs/id" },
+        "attempt_digest": { "$ref": "#/$defs/digest" },
+        "runner_manifest_id": { "$ref": "#/$defs/id" },
+        "runner_manifest_digest": { "$ref": "#/$defs/digest" },
+        "conformance_result_digest": { "$ref": "#/$defs/digest" },
+        "adapter": { "type": "string", "enum": ["codex", "claude_code"] },
+        "adapter_version": { "type": "string", "minLength": 1 },
+        "executable_digest": { "$ref": "#/$defs/digest" },
+        "model_provider": { "type": "string", "minLength": 1 },
+        "model_route": { "type": "string", "minLength": 1 },
+        "model_version": { "type": "string", "minLength": 1 },
+        "prompt_digest": { "$ref": "#/$defs/digest" },
+        "tool_definition_digest": { "$ref": "#/$defs/digest" },
+        "context_digest": { "$ref": "#/$defs/digest" },
+        "native_configuration_digest": { "$ref": "#/$defs/digest" },
+        "agent_reported_test_status": { "const": "generation_evidence_only" },
+        "self_verification_claim": { "const": false },
+        "remote_delivery_authority": { "const": false }
+      }
+    },
+    "manual": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actor_role", "actor_id", "import_evidence_digest"],
+      "properties": {
+        "actor_role": { "type": "string", "enum": ["consumer_maintainer", "lumyn_operator"] },
+        "actor_id": { "$ref": "#/$defs/id" },
+        "import_evidence_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["change_id", "path", "edit_digest", "plan_item_id", "change_item_id", "impact_finding_id", "graph_node_ids", "generation_record_id", "route", "rationale"],
+      "properties": {
+        "change_id": { "$ref": "#/$defs/id" },
+        "path": { "$ref": "#/$defs/relativePath" },
+        "edit_digest": { "$ref": "#/$defs/digest" },
+        "plan_item_id": { "$ref": "#/$defs/id" },
+        "change_item_id": { "$ref": "#/$defs/id" },
+        "impact_finding_id": { "$ref": "#/$defs/id" },
+        "graph_node_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+        "generation_record_id": { "$ref": "#/$defs/id" },
+        "route": { "type": "string", "enum": ["deterministic", "agent_assisted", "manual"] },
+        "rationale": { "type": "string", "minLength": 1 }
+      }
+    },
+    "independentVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "required_actor", "candidate_head", "generation_session_may_write_evidence", "agent_credentials_available", "verification_evidence_digest"],
+      "properties": {
+        "status": { "const": "not_run" },
+        "required_actor": { "const": "independent_lumyn_verifier" },
+        "candidate_head": { "$ref": "#/$defs/gitDigest" },
+        "generation_session_may_write_evidence": { "const": false },
+        "agent_credentials_available": { "const": false },
+        "verification_evidence_digest": { "type": "null" }
+      }
+    }
+  }
+}

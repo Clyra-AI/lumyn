@@ -1,0 +1,112 @@
+{
+  "object_type": "lumyn.migration_verification",
+  "schema_version": "1.0",
+  "verification_id": "verification-001",
+  "provider_change_event_id": "evt-stripe-2026-07",
+  "provider_change_contract_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "consumer_installation_id": "install-consumer-001",
+  "event_authorization_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "migration_plan_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "consumer_execution_manifest_binding": {
+    "artifact_id": "execution_manifest.acme.payments_node_v5.0001",
+    "artifact_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+  },
+  "candidate_binding": {
+    "repository_binding_digest": "sha256:c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1",
+    "repository_base_commit": "0000000000000000000000000000000000000000",
+    "candidate_head": "1111111111111111111111111111111111111111",
+    "candidate_manifest_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "patch_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+  },
+  "generation_provenance": {
+    "generation_mode": "agent_assisted",
+    "generation_evidence_digest": "sha256:c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2",
+    "agent_attempt_id": "attempt-001",
+    "agent_attempt_digest": "sha256:b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5",
+    "generation_result_is_verification": false
+  },
+  "execution_binding": {
+    "agent_execution_policy": "configured",
+    "route_digest": "sha256:b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6",
+    "authorization_snapshot_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "generation_mode": "agent_assisted",
+    "agent_runner_binding_digest": "sha256:b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7",
+    "model_route_binding_digest": "sha256:b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8",
+    "execution_funding_mode": "consumer_managed",
+    "credential_owner": "api_consumer_organization",
+    "usage_billing_owner": "api_consumer_organization"
+  },
+  "separation": {
+    "verifier_role": "independent_deterministic_verifier",
+    "fresh_process": true,
+    "fresh_verification_view": true,
+    "candidate_view_read_only": true,
+    "agent_runner_credentials_present": false,
+    "model_credentials_present": false,
+    "generation_evidence_write_handle_present": false,
+    "self_verification_allowed": false
+  },
+  "frozen_inputs": {
+    "commands_digest": "sha256:c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+    "verification_config_digest": "sha256:c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4",
+    "toolchain_digest": "sha256:c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5",
+    "fixtures_digest": "sha256:c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6",
+    "environment_digest": "sha256:c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7c7",
+    "isolation_backend_id": "verifier-sandbox-v1",
+    "isolation_backend_version": "1.0.0",
+    "isolation_configuration_digest": "sha256:c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8",
+    "isolation_qualification_digest": "sha256:c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9",
+    "mounts_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "resource_limits_digest": "sha256:abababababababababababababababababababababababababababababababab",
+    "offline_by_default": true,
+    "lifecycle_scripts_allowed": false
+  },
+  "baseline_results": [
+    {
+      "command_id": "npm-test",
+      "command_digest": "sha256:acacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacac",
+      "exit_code": 0,
+      "result": "passed",
+      "output_digest": "sha256:adadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadad",
+      "pre_existing_failure": false
+    }
+  ],
+  "candidate_results": [
+    {
+      "command_id": "npm-test",
+      "command_digest": "sha256:acacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacac",
+      "exit_code": 0,
+      "result": "passed",
+      "output_digest": "sha256:aeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeae",
+      "pre_existing_failure": false
+    }
+  ],
+  "verification_label": "repo_verified",
+  "outcome": "verified",
+  "sandbox_entrypoint_profile_digest": null,
+  "observed_evidence_refs": [
+    {
+      "evidence_kind": "repository_commands",
+      "evidence_digest": "sha256:afafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafaf",
+      "candidate_head": "1111111111111111111111111111111111111111"
+    }
+  ],
+  "redaction": {
+    "policy_digest": "sha256:b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0",
+    "status": "passed",
+    "safe_to_persist": true,
+    "safe_for_api_provider": false,
+    "raw_logs_persisted": false,
+    "credentials_persisted": false
+  },
+  "cleanup": {
+    "processes_terminated": true,
+    "verification_view_removed": true,
+    "mounts_removed": true,
+    "orphaned_resources": false,
+    "evidence_digest": "sha256:b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1"
+  },
+  "residual_risks": ["Provider sandbox verification was not selected."],
+  "verified_at": "2026-07-26T14:10:00Z",
+  "artifact_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+}

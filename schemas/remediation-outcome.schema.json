@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.lumyn.local/lumyn.remediation_outcome.schema.json",
+  "title": "Remediation Outcome",
+  "description": "A separately authorized, scope-non-widening repair outcome that creates a new candidate and invalidates prior verification evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "object_type",
+    "schema_version",
+    "remediation_id",
+    "provider_change_event_id",
+    "provider_change_contract_digest",
+    "consumer_installation_id",
+    "event_authorization_digest",
+    "migration_plan_digest",
+    "failed_candidate",
+    "failure_evidence_digest",
+    "failure_class",
+    "previous_generation_mode",
+    "authorization",
+    "repair_attempt",
+    "new_candidate",
+    "scope_comparison",
+    "verification_transition",
+    "redaction",
+    "status",
+    "completed_at",
+    "artifact_digest"
+  ],
+  "properties": {
+    "object_type": { "const": "lumyn.remediation_outcome" },
+    "schema_version": { "const": "1.0" },
+    "remediation_id": { "$ref": "#/$defs/identifier" },
+    "provider_change_event_id": { "$ref": "#/$defs/identifier" },
+    "provider_change_contract_digest": { "$ref": "#/$defs/digest" },
+    "consumer_installation_id": { "$ref": "#/$defs/identifier" },
+    "event_authorization_digest": { "$ref": "#/$defs/digest" },
+    "migration_plan_digest": { "$ref": "#/$defs/digest" },
+    "failed_candidate": { "$ref": "#/$defs/candidateBinding" },
+    "failure_evidence_digest": { "$ref": "#/$defs/digest" },
+    "failure_class": { "enum": ["diagnostic_actionable", "needs_input", "non_diagnostic", "budget_exhausted", "boundary_violation"] },
+    "previous_generation_mode": { "enum": ["deterministic", "agent_assisted", "manual"] },
+    "authorization": { "$ref": "#/$defs/authorization" },
+    "repair_attempt": { "$ref": "#/$defs/repairAttempt" },
+    "new_candidate": { "$ref": "#/$defs/candidateBinding" },
+    "scope_comparison": { "$ref": "#/$defs/scopeComparison" },
+    "verification_transition": { "$ref": "#/$defs/verificationTransition" },
+    "redaction": { "$ref": "#/$defs/redaction" },
+    "status": { "enum": ["candidate_generated", "needs_input", "blocked", "failed"] },
+    "completed_at": { "type": "string", "format": "date-time" },
+    "artifact_digest": { "$ref": "#/$defs/digest" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "failure_class": { "const": "diagnostic_actionable" } },
+        "required": ["failure_class"]
+      },
+      "then": {},
+      "else": {
+        "properties": { "status": { "enum": ["needs_input", "blocked", "failed"] } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "previous_generation_mode": { "enum": ["deterministic", "manual"] } },
+        "required": ["previous_generation_mode"]
+      },
+      "then": {
+        "properties": {
+          "authorization": {
+            "type": "object",
+            "properties": { "route_decision": { "const": "new_explicit_route" } },
+            "required": ["route_decision", "new_agent_route_authorization_digest"]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "gitCommit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40,64}$"
+    },
+    "candidateBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository_binding_digest", "repository_base_commit", "candidate_head", "candidate_manifest_digest", "patch_digest"],
+      "properties": {
+        "repository_binding_digest": { "$ref": "#/$defs/digest" },
+        "repository_base_commit": { "$ref": "#/$defs/gitCommit" },
+        "candidate_head": { "$ref": "#/$defs/gitCommit" },
+        "candidate_manifest_digest": { "$ref": "#/$defs/digest" },
+        "patch_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repair_authorization_digest",
+        "consumer_maintainer_approved",
+        "failed_candidate_bound",
+        "failure_evidence_bound",
+        "exact_repair_intent_digest",
+        "route_decision",
+        "remaining_budgets_digest",
+        "expires_at"
+      ],
+      "properties": {
+        "repair_authorization_digest": { "$ref": "#/$defs/digest" },
+        "consumer_maintainer_approved": { "const": true },
+        "failed_candidate_bound": { "const": true },
+        "failure_evidence_bound": { "const": true },
+        "exact_repair_intent_digest": { "$ref": "#/$defs/digest" },
+        "route_decision": { "enum": ["reuse_failed_agent_route", "new_explicit_route"] },
+        "new_agent_route_authorization_digest": { "$ref": "#/$defs/digest" },
+        "remaining_budgets_digest": { "$ref": "#/$defs/digest" },
+        "expires_at": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "route_decision": { "const": "new_explicit_route" } },
+            "required": ["route_decision"]
+          },
+          "then": { "required": ["new_agent_route_authorization_digest"] },
+          "else": { "not": { "required": ["new_agent_route_authorization_digest"] } }
+        }
+      ]
+    },
+    "repairAttempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent_attempt_id", "agent_attempt_digest", "attempt_number", "generation_mode", "within_approved_attempt_limit", "route_digest"],
+      "properties": {
+        "agent_attempt_id": { "$ref": "#/$defs/identifier" },
+        "agent_attempt_digest": { "$ref": "#/$defs/digest" },
+        "attempt_number": { "type": "integer", "minimum": 2, "maximum": 3 },
+        "generation_mode": { "const": "agent_assisted" },
+        "within_approved_attempt_limit": { "const": true },
+        "route_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "scopeComparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approved_scope_digest",
+        "repair_scope_digest",
+        "non_widening",
+        "semantic_scope_expanded",
+        "added_paths",
+        "added_commands",
+        "added_tools",
+        "added_network_endpoints",
+        "added_credentials",
+        "added_disclosure_classes",
+        "added_capabilities",
+        "budget_increased"
+      ],
+      "properties": {
+        "approved_scope_digest": { "$ref": "#/$defs/digest" },
+        "repair_scope_digest": { "$ref": "#/$defs/digest" },
+        "non_widening": { "const": true },
+        "semantic_scope_expanded": { "const": false },
+        "added_paths": { "$ref": "#/$defs/emptyArray" },
+        "added_commands": { "$ref": "#/$defs/emptyArray" },
+        "added_tools": { "$ref": "#/$defs/emptyArray" },
+        "added_network_endpoints": { "$ref": "#/$defs/emptyArray" },
+        "added_credentials": { "$ref": "#/$defs/emptyArray" },
+        "added_disclosure_classes": { "$ref": "#/$defs/emptyArray" },
+        "added_capabilities": { "$ref": "#/$defs/emptyArray" },
+        "budget_increased": { "const": false }
+      }
+    },
+    "emptyArray": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "verificationTransition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prior_verification_digest", "prior_evidence_invalidated", "fresh_verification_required", "new_candidate_verification_status"],
+      "properties": {
+        "prior_verification_digest": { "$ref": "#/$defs/digest" },
+        "prior_evidence_invalidated": { "const": true },
+        "fresh_verification_required": { "const": true },
+        "new_candidate_verification_status": { "const": "not_run" }
+      }
+    },
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_digest", "status", "safe_to_persist", "safe_for_api_provider", "raw_prompt_persisted", "raw_response_persisted", "credentials_persisted"],
+      "properties": {
+        "policy_digest": { "$ref": "#/$defs/digest" },
+        "status": { "const": "passed" },
+        "safe_to_persist": { "const": true },
+        "safe_for_api_provider": { "const": false },
+        "raw_prompt_persisted": { "const": false },
+        "raw_response_persisted": { "const": false },
+        "credentials_persisted": { "const": false }
+      }
+    }
+  }
+}

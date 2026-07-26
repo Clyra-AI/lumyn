@@ -1,0 +1,65 @@
+{
+  "object_type": "lumyn.export_result",
+  "schema_version": "1.0",
+  "export_id": "export-unsafe",
+  "provider_change_event_id": "evt-stripe-2026-07",
+  "provider_change_contract_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "consumer_installation_id": "install-consumer-001",
+  "event_authorization_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "migration_plan_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "candidate_binding": {
+    "repository_binding_digest": "sha256:c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1",
+    "repository_base_commit": "0000000000000000000000000000000000000000",
+    "candidate_head": "1111111111111111111111111111111111111111",
+    "candidate_manifest_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "patch_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+  },
+  "verification_binding": {
+    "verification_id": "verification-001",
+    "verification_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "candidate_head": "1111111111111111111111111111111111111111",
+    "candidate_manifest_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "patch_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "verification_label": "repo_verified",
+    "fresh": true
+  },
+  "delivery": {
+    "mode": "draft_pr",
+    "state": "draft_pr_open",
+    "artifact_ref": "consumer-private://exports/export-unsafe",
+    "source_branch": "main",
+    "base_branch": "main",
+    "source_branch_is_default": false,
+    "default_branch_write": true,
+    "auto_merge": false,
+    "github_actions": ["github_branch_write", "github_pr_write"],
+    "delivery_authority": "lumyn_automated_delivery",
+    "counts_as_automated_pr_delivery": true,
+    "github_authorization": {
+      "authorization_digest": "sha256:d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1",
+      "repository_binding_digest": "sha256:c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1",
+      "source_branch": "main",
+      "base_branch": "main",
+      "base_commit": "0000000000000000000000000000000000000000",
+      "idempotency_key": "export-unsafe-draft-pr",
+      "issued_at": "2026-07-26T14:11:00Z",
+      "expires_at": "2026-07-26T14:41:00Z",
+      "short_lived": true,
+      "stored_in_installation": false
+    },
+    "draft": true,
+    "human_merge_required": true
+  },
+  "evidence_bundle_digest": "sha256:d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2",
+  "redaction": {
+    "policy_digest": "sha256:b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0",
+    "status": "passed",
+    "safe_to_persist": true,
+    "safe_for_api_provider": false,
+    "contains_raw_source": false,
+    "contains_raw_diff": false,
+    "contains_credentials": false
+  },
+  "exported_at": "2026-07-26T14:12:00Z",
+  "artifact_digest": "sha256:d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3"
+}

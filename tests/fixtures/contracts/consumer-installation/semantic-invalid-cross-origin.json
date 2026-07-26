@@ -1,0 +1,4 @@
+{
+  "pinned_origin": "https://updates.payments.example",
+  "manifest_url": "https://attacker.invalid/campaign/event.json"
+}
