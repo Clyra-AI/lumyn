@@ -1,8 +1,8 @@
 {
   "artifact_type": "acceptance_ledger",
   "schema_version": "1.0",
-  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair",
-  "generated_at": "2026-07-28T16:56:45Z",
+  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair+post-merge-monitor",
+  "generated_at": "2026-07-28T20:36:00Z",
   "last_updated_at": "2026-07-28T16:56:45Z",
   "source_prd_ref": "docs/product/prd.md",
   "source_ref": "docs/product/prd.md",
@@ -199,7 +199,7 @@
       "status": "planned",
       "risk_class": "medium",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's public/synthetic benchmark prerequisite is task-closed with direct lifecycle evidence; M3 still owns runtime closure for this item."
       ]
     },
     {
@@ -288,7 +288,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "M2's executable event-contract prerequisite is task-closed with direct lifecycle evidence; M3 still owns runtime closure for this shared item."
+        "M1's public/synthetic walking-skeleton and M2's executable event-contract prerequisites are task-closed with direct lifecycle evidence; M3 still owns runtime closure for this shared item."
       ],
       "source_text": "Lumyn accepts a Provider Change Event only when its immutable identity and version, provider-controlled pinned transport or attended-recovery provenance, issuer and authentication, monotonic sequence and freshness, embedded or exact-URL contract delivery and retrieved-byte digest, API or SDK, audience, deadline, severity, and supersession or withdrawal state validate; the event and Provider Change Contract remain non-executable.",
       "progress_evidence_refs": [
@@ -319,7 +319,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "M2's executable event-contract prerequisite is task-closed with direct lifecycle evidence; M3 still owns runtime closure for this shared item."
+        "M1's public/synthetic walking-skeleton and M2's executable event-contract prerequisites are task-closed with direct lifecycle evidence; M3 still owns runtime closure for this shared item."
       ],
       "source_text": "Duplicate, replayed, stale, conflicting, expired, superseded, withdrawn, wrong-audience, or unauthenticated events fail closed; an attended import cannot count as provider-channel delivery or authorize an installed-preauthorization write.",
       "progress_evidence_refs": [
@@ -350,7 +350,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "M2's executable installation and non-widening-authorization prerequisite is task-closed with direct lifecycle evidence; M5 still owns runtime closure for this shared item."
+        "M1's public/synthetic walking-skeleton and M2's executable installation and non-widening-authorization prerequisites are task-closed with direct lifecycle evidence; M5 still owns runtime closure for this shared item."
       ],
       "source_text": "A revocable Consumer Installation binds the exact provider-controlled channel and authentication key, repository and package root, audience or version selectors, action ceiling, authorization mode, paths, commands, `agent_execution_policy` (`disabled` or `configured`), model-data policy and budgets, GitHub token-issuance policy, provider-reporting fields, retention and deletion, expiry, and revocation. A configured policy additionally binds the exact Agent Runner adapter/version/executable qualification and auth/entitlement policy, execution-funding mode, credential and usage-billing ownership, and native agent-configuration policy without storing a reusable Agent Runner, model, or GitHub credential; a disabled policy grants none of those capabilities.",
       "progress_evidence_refs": [
@@ -381,7 +381,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "M2's executable installation and non-widening-authorization prerequisite is task-closed with direct lifecycle evidence; M5 still owns runtime closure for this shared item."
+        "M1's public/synthetic walking-skeleton and M2's executable installation and non-widening-authorization prerequisites are task-closed with direct lifecycle evidence; M5 still owns runtime closure for this shared item."
       ],
       "source_text": "Every event-specific authorization is an immutable, non-widening derivation of the installation; `per_event_approval` binds the exact plan, while `installed_preauthorization` permits side effects only when event, plan, commands, paths, model policy, budgets, verification, and short-lived credential issuance all satisfy the installed policy. An action-mode label alone grants no side effect, and an `agent_assisted` route pauses unless the installation explicitly configures and authorizes it.",
       "progress_evidence_refs": [
@@ -411,7 +411,7 @@
       "status": "planned",
       "risk_class": "medium",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's benchmark-corpus prerequisite is task-closed with direct lifecycle evidence; M4 still owns runtime closure for this item."
       ]
     },
     {
@@ -433,7 +433,7 @@
       "status": "planned",
       "risk_class": "medium",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's agent-free walking-skeleton prerequisite is task-closed with direct lifecycle evidence; M6 still owns runtime closure for this item."
       ]
     },
     {
@@ -455,7 +455,7 @@
       "status": "planned",
       "risk_class": "medium",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's public/synthetic agent-route benchmark prerequisite is task-closed without live Agent Runner proof; M6 still owns runtime closure for this item."
       ]
     },
     {
@@ -477,7 +477,7 @@
       "status": "planned",
       "risk_class": "medium",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's public/synthetic agent-route benchmark prerequisite is task-closed without live Agent Runner proof; M6 still owns runtime closure for this item."
       ]
     },
     {
@@ -500,7 +500,7 @@
       "status": "planned",
       "risk_class": "medium",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's benchmark-corpus prerequisite is task-closed with direct lifecycle evidence; M4 still owns runtime closure for this item."
       ]
     },
     {
@@ -522,7 +522,7 @@
       "status": "planned",
       "risk_class": "medium",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's public/synthetic agent-route benchmark prerequisite is task-closed without live Agent Runner proof; M6 still owns runtime closure for this item."
       ]
     },
     {
@@ -544,7 +544,7 @@
       "status": "planned",
       "risk_class": "medium",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's public/synthetic agent-route benchmark prerequisite is task-closed without live Agent Runner proof; M6 still owns runtime closure for this item."
       ]
     },
     {
@@ -566,7 +566,7 @@
       "status": "planned",
       "risk_class": "medium",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's public/synthetic agent-route benchmark prerequisite is task-closed without live Agent Runner proof; M6 still owns runtime closure for this item."
       ]
     },
     {
@@ -589,7 +589,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's agent-free walking-skeleton prerequisite is task-closed with direct lifecycle evidence; M6 still owns runtime closure for this item."
       ]
     },
     {
@@ -612,7 +612,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's public/synthetic agent-route benchmark prerequisite is task-closed without live Agent Runner proof; M6 still owns runtime closure for this item."
       ]
     },
     {
@@ -635,7 +635,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's public/synthetic agent-route benchmark prerequisite is task-closed without live Agent Runner proof; M6 still owns runtime closure for this item."
       ]
     },
     {
@@ -658,7 +658,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's public/synthetic agent-route benchmark prerequisite is task-closed without live Agent Runner proof; M6 still owns runtime closure for this item."
       ]
     },
     {
@@ -681,7 +681,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's public/synthetic agent-route benchmark prerequisite is task-closed without live Agent Runner proof; M6 still owns runtime closure for this item."
       ]
     },
     {
@@ -704,7 +704,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's public/synthetic agent-route benchmark prerequisite is task-closed without live Agent Runner proof; M6 still owns runtime closure for this item."
       ]
     },
     {
@@ -727,7 +727,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's public/synthetic agent-route benchmark prerequisite is task-closed without live Agent Runner proof; M6 still owns runtime closure for this item."
       ]
     },
     {
@@ -863,7 +863,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's static_verified walking-skeleton prerequisite is task-closed; M7 still owns repository/workflow verification closure for this item."
       ]
     },
     {
@@ -1261,7 +1261,7 @@
       "status": "planned",
       "risk_class": "high",
       "notes": [
-        "No v3 closure is claimed; direct item-level evidence is required."
+        "M1's matched public/synthetic benchmark prerequisite is task-closed without commercial or real-repository proof; M10 still owns pilot closure for this item."
       ]
     },
     {

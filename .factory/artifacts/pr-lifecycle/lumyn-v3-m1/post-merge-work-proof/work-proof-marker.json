@@ -1,0 +1,34 @@
+{
+  "marker_id": "m1-post-merge-monitor",
+  "command": "gh run list --repo Clyra-AI/lumyn --branch main --commit 702b5be8d53b46a8c2a394f0b00770f626a8bbdd --limit 10 --json databaseId,headSha,status,conclusion,workflowName,url,createdAt,updatedAt",
+  "cwd": ".",
+  "workspace_ref": ".",
+  "git_sha": "702b5be8d53b46a8c2a394f0b00770f626a8bbdd",
+  "exit_code": 0,
+  "execution_status": "pass",
+  "stdout_digest": "sha256:e9d9fea44e6c239bb7486cf94bca0e480595ced0b00baa47ce040b21761a81c7",
+  "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "raw_log_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-work-proof/post-merge-checks.stdout.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-work-proof/post-merge-checks.stderr.log"
+  ],
+  "started_at": "2026-07-28T20:35:52Z",
+  "finished_at": "2026-07-28T20:35:53Z",
+  "runner_id": "factory-reference-shipping-runner:attended-codex-harness",
+  "generated_by": "trusted_runner",
+  "post_merge_check_proof": {
+    "merge_commit": "702b5be8d53b46a8c2a394f0b00770f626a8bbdd",
+    "checks_observed": [
+      {
+        "name": "validate",
+        "status": "pass",
+        "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30384709497"
+      },
+      {
+        "name": "codeql",
+        "status": "pass",
+        "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30384710766"
+      }
+    ]
+  }
+}

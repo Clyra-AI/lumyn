@@ -70,6 +70,7 @@
       "status": "partial",
       "completed_task_refs": [
         "M0",
+        "M1",
         "M2"
       ],
       "implementation_complete_pending_lifecycle_task_refs": []
@@ -343,9 +344,10 @@
         "M1",
         "M3"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M1"
+      ],
       "remaining_task_refs": [
-        "M1",
         "M3"
       ],
       "status": "missing",
@@ -451,10 +453,10 @@
         "M3"
       ],
       "implemented_task_refs": [
+        "M1",
         "M2"
       ],
       "remaining_task_refs": [
-        "M1",
         "M3"
       ],
       "status": "missing",
@@ -492,10 +494,10 @@
         "M3"
       ],
       "implemented_task_refs": [
+        "M1",
         "M2"
       ],
       "remaining_task_refs": [
-        "M1",
         "M3"
       ],
       "status": "missing",
@@ -533,10 +535,10 @@
         "M5"
       ],
       "implemented_task_refs": [
+        "M1",
         "M2"
       ],
       "remaining_task_refs": [
-        "M1",
         "M5"
       ],
       "status": "missing",
@@ -574,10 +576,10 @@
         "M5"
       ],
       "implemented_task_refs": [
+        "M1",
         "M2"
       ],
       "remaining_task_refs": [
-        "M1",
         "M5"
       ],
       "status": "missing",
@@ -717,9 +719,10 @@
         "M1",
         "M4"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M1"
+      ],
       "remaining_task_refs": [
-        "M1",
         "M4"
       ],
       "status": "missing",
@@ -823,9 +826,10 @@
         "M1",
         "M6"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M1"
+      ],
       "remaining_task_refs": [
-        "M1",
         "M6"
       ],
       "status": "missing",
@@ -851,9 +855,10 @@
         "M1",
         "M6"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M1"
+      ],
       "remaining_task_refs": [
-        "M1",
         "M6"
       ],
       "status": "missing",
@@ -879,9 +884,10 @@
         "M1",
         "M6"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M1"
+      ],
       "remaining_task_refs": [
-        "M1",
         "M6"
       ],
       "status": "missing",
@@ -907,9 +913,10 @@
         "M1",
         "M6"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M1"
+      ],
       "remaining_task_refs": [
-        "M1",
         "M6"
       ],
       "status": "missing",
@@ -935,9 +942,10 @@
         "M1",
         "M6"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M1"
+      ],
       "remaining_task_refs": [
-        "M1",
         "M6"
       ],
       "status": "missing",
@@ -963,9 +971,10 @@
         "M1",
         "M6"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M1"
+      ],
       "remaining_task_refs": [
-        "M1",
         "M6"
       ],
       "status": "missing",
@@ -991,9 +1000,10 @@
         "M1",
         "M6"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M1"
+      ],
       "remaining_task_refs": [
-        "M1",
         "M6"
       ],
       "status": "missing",
@@ -1155,9 +1165,10 @@
         "M1",
         "M7"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M1"
+      ],
       "remaining_task_refs": [
-        "M1",
         "M7"
       ],
       "status": "missing",
@@ -1613,9 +1624,10 @@
         "M1",
         "M10"
       ],
-      "implemented_task_refs": [],
+      "implemented_task_refs": [
+        "M1"
+      ],
       "remaining_task_refs": [
-        "M1",
         "M10"
       ],
       "status": "missing",
@@ -1709,8 +1721,8 @@
       ]
     }
   ],
-  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair",
-  "generated_at": "2026-07-28T16:56:45Z",
+  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair+post-merge-monitor",
+  "generated_at": "2026-07-28T20:36:00Z",
   "generation_state": {
     "M0": "closed_preserved",
     "M2": "closed_with_recorded_evidence_and_process_debt",

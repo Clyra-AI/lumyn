@@ -91,10 +91,12 @@ Independent lifecycle workers run after implementation validation and before
 shipping. They emit task-bound, current-work-proof, passing artifacts in the
 trusted Factory evidence root. The implementation worker cannot self-review,
 self-grade, self-attest, or write PR-lifecycle evidence.
-For M1 the exact order is validation, independent `code-review`, then independent
-holdout provisioning. Each report is schema- and candidate-bound; review cannot
-cite the later holdout result, and `make lifecycle-evidence` rejects missing,
-replayed, widened, self-produced, out-of-order, or non-promoting evidence.
+For historical M1 the exact completed order was validation, independent
+`code-review`, then independent holdout provisioning. Each report remains
+schema- and candidate-bound; review cannot cite the later holdout result, and
+`make lifecycle-evidence` rejects missing, replayed, widened, self-produced,
+out-of-order, non-promoting, or later-workspace-reinterpreted evidence. The
+consumed M1 authorization and task-specific review exception cannot be reused.
 
 Acceptance item IDs remain the closure source. Tasks, waves, and delivery slices
 are sequencing and coverage lenses only.
@@ -454,17 +456,18 @@ Historical evidence is immutable and proves only its recorded semantics.
 - Coverage: `make test-coverage`
 - Contract: `make test-contracts`
 - Full: `make prepush-full`
-- Lifecycle evidence after immutable M1 markers, task reports, and required
-  independent holdout/review reports: `make lifecycle-evidence`
+- Historical lifecycle evidence for immutable M1 markers, reports, retained
+  original-head bundle, landed-content proof, and exact-main monitoring:
+  `make lifecycle-evidence`
 - Risk: GitHub Actions `CodeQL analyze`
 - Acceptance: item-level ledger and closure map
 - Cross-system: separately approved model, sandbox, or GitHub integration
 
 ## PR Lifecycle Baseline
 
-- Local gates: `make prepush-full`, then `make lifecycle-evidence` after M1
-  markers, task reports, and required independent lifecycle reports are
-  immutable.
+- Local gates: `make prepush-full`, then `make lifecycle-evidence` to verify
+  M1's immutable historical candidate, lifecycle, exact-main, and non-reusable
+  exception bindings without comparing later work to M1's frozen diff.
 - GitHub validation: `validate`.
 - Security scanner: `CodeQL analyze`.
 - Owner review: `.github/CODEOWNERS`.

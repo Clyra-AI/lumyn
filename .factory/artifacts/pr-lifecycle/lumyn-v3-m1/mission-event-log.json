@@ -1,0 +1,80 @@
+{
+  "run_id": "lumyn-v3-m1-pr74-closure",
+  "mission_id": "mission-lumyn-v3-m1-closure",
+  "append_only": true,
+  "immutability_posture": "append_only_no_mutation",
+  "events": [
+    {
+      "event_id": "evt-001",
+      "sequence": 1,
+      "timestamp": "2026-07-28T20:35:54Z",
+      "event_type": "post_merge_recorded",
+      "actor": "post-merge-monitor",
+      "summary": "Observed successful validate and CodeQL workflows on the exact landed M1 main commit and no current-head or late actionable Codex findings.",
+      "artifact_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-work-proof/work-proof-marker.json"
+      ],
+      "payload_redaction": "artifact_ref_only",
+      "previous_digest": "",
+      "event_digest": "sha256:58f5d67fa5d8c1f33d3ff002bf8dfa95e98527c242bea019781b5d49e10b1640"
+    },
+    {
+      "event_id": "evt-002",
+      "sequence": 2,
+      "timestamp": "2026-07-28T20:35:55Z",
+      "event_type": "approval_decided",
+      "actor": "human:davidahmann",
+      "summary": "Approved truthful M1 closure with the missing latest-head Codex terminal signal recorded as a non-reusable task exception, and instructed continuation in the same manner.",
+      "artifact_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/process-exception-handoff.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/delivery-debt-record.json"
+      ],
+      "payload_redaction": "redacted_summary",
+      "previous_digest": "sha256:58f5d67fa5d8c1f33d3ff002bf8dfa95e98527c242bea019781b5d49e10b1640",
+      "event_digest": "sha256:ea0b4b67022f3e616049682e8d02b577319aed77645763c365909f678bb02133"
+    },
+    {
+      "event_id": "evt-003",
+      "sequence": 3,
+      "timestamp": "2026-07-28T20:35:59Z",
+      "event_type": "scope_closed",
+      "actor": "post-merge-monitor",
+      "summary": "Classified the M1 benchmark and lifecycle task scope as closed with governance debt while retaining every linked product acceptance item as nonterminal.",
+      "artifact_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/pr-lifecycle-report.json"
+      ],
+      "payload_redaction": "artifact_ref_only",
+      "previous_digest": "sha256:ea0b4b67022f3e616049682e8d02b577319aed77645763c365909f678bb02133",
+      "event_digest": "sha256:ed4b7ee4738e95ceafb9bcc1d9e19dc6befbd757bc5c432f050db1e07e43809d"
+    },
+    {
+      "event_id": "evt-004",
+      "sequence": 4,
+      "timestamp": "2026-07-28T20:36:00Z",
+      "event_type": "state_transition",
+      "actor": "repair-feedback:codex-harness",
+      "summary": "Synchronized the active plan, task state, acceptance progress, validation contract, and historical M1 implementation boundary with the recorded lifecycle disposition.",
+      "artifact_refs": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json"
+      ],
+      "payload_redaction": "artifact_ref_only",
+      "state_transition": {
+        "from": "m1_attended_implementation_complete_lifecycle_pending",
+        "to": "m1_closed_with_recorded_evidence_and_process_debt_acceptance_nonterminal",
+        "evidence_refs": [
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/pr-lifecycle-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json"
+        ]
+      },
+      "previous_digest": "sha256:ed4b7ee4738e95ceafb9bcc1d9e19dc6befbd757bc5c432f050db1e07e43809d",
+      "event_digest": "sha256:054018ae1fcd2f2e8e6edf60141225a832cade086db8e0b458d78a32c6d156d8"
+    }
+  ]
+}

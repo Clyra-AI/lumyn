@@ -7,6 +7,7 @@ import json
 from typing import Any
 
 from repo_pack_validation.authority import manual_preflight_scope_digest
+from repo_pack_validation.m1_closure import validate_m1_closure_evidence
 
 
 TASK_DEPENDENCIES = {
@@ -718,6 +719,7 @@ def validate_implemented_proof(
             set(item.get("evidence_refs", [])) == evidence_refs,
             f"{item_id} implemented evidence is semantically incomplete",
         )
+    validate_m1_closure_evidence(evidence_payloads)
     _validate_m2_closure_evidence(evidence_payloads)
 
 

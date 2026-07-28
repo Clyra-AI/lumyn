@@ -1,0 +1,175 @@
+{
+  "artifact_type": "pr_lifecycle_report",
+  "schema_version": "0.1",
+  "task_id": "M1",
+  "work_item_id": "lumyn-v3-m1",
+  "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/74",
+  "branch_name": "codex/lumyn-m1-runner-contract",
+  "commit_set": [
+    "bc17b58f128bc15c4e715aba15c505c20b224e35",
+    "656c1f0bbb61cd558500c2f1b91a5a8f084f4f29"
+  ],
+  "local_validation": {
+    "status": "pass",
+    "commands": [
+      "go test ./tests -run '^TestM1' -count=1",
+      "make lint-fast",
+      "make test-fast",
+      "make test-coverage",
+      "python3 scripts/validate_repo_pack.py",
+      "make prepush-full"
+    ],
+    "validation_run_id": "validation:2026-07-28T17:05:04Z:lumyn-m1-implementation-r2",
+    "candidate_digest": "sha256:971af9dd40e66ea47b220bcb4a817c62705e9764926eeb84ab4787564b8b2ed4",
+    "validation_report_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json"
+  },
+  "local_acceptance_review": {
+    "required": true,
+    "status": "pass_nonterminal",
+    "reason": "M1's benchmark, walking-skeleton, private holdout provisioning, and lifecycle task scope has direct validation, independent review, landed-content binding, and exact-main evidence. Every M1-linked product acceptance item remains partial and retains its later owning task.",
+    "scope_closure_map_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json",
+    "validation_report_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+    "acceptance_item_ids": [
+      "PACK-001",
+      "EVENT-001",
+      "EVENT-002",
+      "INSTALL-001",
+      "INSTALL-002",
+      "IMPACT-005",
+      "AGENT-001",
+      "AGENT-002",
+      "AGENT-003",
+      "AGENT-004",
+      "AGENT-005",
+      "AGENT-006",
+      "AGENT-007",
+      "VER-006",
+      "PILOT-005"
+    ],
+    "terminal_acceptance_item_ids": [],
+    "nonterminal_acceptance_item_ids": [
+      "PACK-001",
+      "EVENT-001",
+      "EVENT-002",
+      "INSTALL-001",
+      "INSTALL-002",
+      "IMPACT-005",
+      "AGENT-001",
+      "AGENT-002",
+      "AGENT-003",
+      "AGENT-004",
+      "AGENT-005",
+      "AGENT-006",
+      "AGENT-007",
+      "VER-006",
+      "PILOT-005"
+    ],
+    "evidence_refs": [
+      ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+      ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+      ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+      ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/implementation/work-proof-marker.json",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json"
+    ]
+  },
+  "holdout": {
+    "required": true,
+    "mode": "provision",
+    "status": "pass",
+    "cases_run": 6,
+    "failing_cases": [],
+    "result_ref": ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
+    "evaluation_claimed": false
+  },
+  "ci_checks": [
+    {
+      "name": "validate",
+      "status": "pass",
+      "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30382633360/job/90353987554"
+    },
+    {
+      "name": "CodeQL analyze",
+      "status": "pass",
+      "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30382631331/job/90353981683"
+    }
+  ],
+  "code_review": {
+    "required": true,
+    "status": "approved",
+    "review_type": "code",
+    "reviewer_id": "peer-agent:m1-independent-final-review",
+    "review_report_ref": ".factory/artifacts/lifecycle-evidence/M1/review-report.json"
+  },
+  "codex_review": {
+    "enabled": false,
+    "configured_enabled": true,
+    "status": "disabled",
+    "observed_settle_status": "carry_forward_candidate",
+    "head_sha": "656c1f0bbb61cd558500c2f1b91a5a8f084f4f29",
+    "head_observed_at": "2026-07-28T17:23:07Z",
+    "reviewer_identity": "chatgpt-codex-connector",
+    "settle_evidence_ref": "https://github.com/Clyra-AI/lumyn/pull/74#pullrequestreview-4799560687",
+    "review_request_refs": [],
+    "automated_review_identities": [
+      "chatgpt-codex-connector"
+    ],
+    "automated_review_blockers": [],
+    "resolved_earlier_head_comment_refs": [
+      "https://github.com/Clyra-AI/lumyn/pull/74#discussion_r3667334472",
+      "https://github.com/Clyra-AI/lumyn/pull/74#discussion_r3667334483"
+    ],
+    "unresolved_actionable_comments": 0,
+    "late_review_after_merge": false,
+    "notes": "The first head received one P1 and one P2 finding; both were fixed and their threads resolved. The repaired final head received no terminal approval or thumbs-up before manual merge. The approved exception disables only this task's missing terminal gate for closure; it does not convert stale evidence into a pass or grant carry-forward permission."
+  },
+  "ship_pr": {
+    "status": "shipped",
+    "worker": "commit-push",
+    "ship_packet_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/ship-packet.json"
+  },
+  "merge": {
+    "status": "merged",
+    "method": "rebase",
+    "merged_commit": "702b5be8d53b46a8c2a394f0b00770f626a8bbdd",
+    "merged_at": "2026-07-28T17:50:17Z",
+    "merged_by": "davidahmann",
+    "authority": {
+      "mode": "task_scoped_grant",
+      "capability": "merge_authority",
+      "task_id": "M1",
+      "approved": true,
+      "expires_at": "2026-07-29T13:46:58Z",
+      "evidence_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/lifecycle-authorization.json"
+    }
+  },
+  "post_merge": {
+    "status": "healthy",
+    "post_merge_report_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-report.json"
+  },
+  "work_proof_marker_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/implementation/work-proof-marker.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-work-proof/work-proof-marker.json"
+  ],
+  "evidence_refs": [
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+    ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+    ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/implementation/work-proof-marker.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/delivery-debt-record.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/process-exception-handoff.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/ship-packet.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-work-proof/work-proof-marker.json"
+  ],
+  "skipped_gates": [
+    {
+      "gate": "codex_review",
+      "reason": "The final PR head had no terminal latest-head Codex approval or thumbs-up before the repository owner merged it. The task-specific exception records the process escape and permits truthful M1 closure without treating the gate as satisfied.",
+      "approved_exception_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/process-exception-handoff.json"
+    }
+  ],
+  "status": "complete"
+}

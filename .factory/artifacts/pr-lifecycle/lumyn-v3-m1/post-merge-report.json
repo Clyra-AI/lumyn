@@ -1,0 +1,53 @@
+{
+  "artifact_type": "post_merge_report",
+  "schema_version": "0.1",
+  "task_id": "M1",
+  "work_item_id": "lumyn-v3-m1",
+  "merge_reference": "702b5be8d53b46a8c2a394f0b00770f626a8bbdd",
+  "merge_performed": true,
+  "default_branch_checked": true,
+  "default_branch_ref": "origin/main@702b5be8d53b46a8c2a394f0b00770f626a8bbdd",
+  "post_merge_evidence_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30384709497",
+  "checks_observed": [
+    {
+      "name": "validate",
+      "status": "pass",
+      "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30384709497/job/90360969295"
+    },
+    {
+      "name": "codeql",
+      "status": "pass",
+      "details_ref": "https://github.com/Clyra-AI/lumyn/actions/runs/30384710766/job/90360974611"
+    }
+  ],
+  "status": "healthy",
+  "regressions_detected": [],
+  "hotfix_triggered": false,
+  "work_proof_marker_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-work-proof/work-proof-marker.json"
+  ],
+  "scope_closure_report_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json",
+  "late_codex_review": {
+    "merged_head_sha": "656c1f0bbb61cd558500c2f1b91a5a8f084f4f29",
+    "reviewer_identity": "chatgpt-codex-connector",
+    "head_observed_at": "2026-07-28T17:23:07Z",
+    "actionable_findings": 0,
+    "unresolved_blocking_threads": 0,
+    "late_review_after_merge": false,
+    "settle_status": "carry_forward_candidate",
+    "terminal": false,
+    "evidence_ref": "https://github.com/Clyra-AI/lumyn/pull/74#pullrequestreview-4799560687"
+  },
+  "operator_notes": "Both required workflows passed on the exact landed commit. Factory's canonical post-merge Codex inventory found no current-head or late actionable finding. The missing pre-merge terminal signal remains a separately recorded process escape and did not produce a post-main regression.",
+  "human_intervention_count": 2,
+  "human_review_minutes": 0,
+  "blocked_wait_time": "PT27M10S",
+  "attention_reason": "manual_merge_after_nonterminal_codex_review",
+  "avoidable_interruption": true,
+  "automation_candidate": "Reliably trigger or complete latest-head Codex review and emit a terminal signal after reviewed fix pushes.",
+  "evidence_refs": [
+    "https://github.com/Clyra-AI/lumyn/actions/runs/30384709497",
+    "https://github.com/Clyra-AI/lumyn/actions/runs/30384710766",
+    "https://github.com/Clyra-AI/lumyn/pull/74"
+  ]
+}

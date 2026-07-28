@@ -948,12 +948,26 @@
         "unmatched_engine_comparison_is_causal": false
       },
       "execution_state": {
-        "state": "attended_implementation_phase_approved_full_lifecycle_blocked_factoryd_paused",
+        "state": "closed_with_recorded_evidence_and_process_debt_acceptance_nonterminal",
         "acceptance_closure_claimed": false,
+        "scope_closure_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json",
+        "process_exception_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/process-exception-handoff.json",
+        "historical_attended_implementation_packet_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/m1-attended-implementation-task-packet.json",
+        "closure_evidence_refs": [
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+          ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+          ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/pr-lifecycle-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/delivery-debt-record.json"
+        ],
+        "pending_gates": [],
         "runner_readiness": {
           "attended": false,
           "factoryd": false,
-          "reason": "This parent M1 packet preserves the full review, holdout, shipping, and post-merge obligations but has no merge authority. Only the separately compiled attended implementation packet is executable, and it cannot close M1 or perform lifecycle work."
+          "reason": "M1 is task-closed. Its separately compiled attended implementation packet and evidence are immutable historical records and are no longer dispatchable; factoryd remains paused and unqualified."
         }
       }
     },
@@ -5102,19 +5116,20 @@
       }
     }
   ],
-  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair",
-  "generated_at": "2026-07-28T16:56:45Z",
+  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair+post-merge-monitor",
+  "generated_at": "2026-07-28T20:36:00Z",
   "execution_state": {
     "completed_task_refs": [
       "M0",
+      "M1",
       "M2"
     ],
     "implementation_complete_pending_lifecycle_task_refs": [],
-    "attended_implementation_task_refs": [
+    "attended_implementation_task_refs": [],
+    "historical_attended_implementation_task_refs": [
       "M1-IMPLEMENTATION"
     ],
     "acceptance_open_task_refs": [
-      "M1",
       "M2.5",
       "M3",
       "M4",

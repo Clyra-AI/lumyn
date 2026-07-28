@@ -96,19 +96,19 @@
     ]
   ],
   "alignment_gate": {
-    "status": "attended_m1_authorized_factoryd_blocked",
-    "implementation_may_start": true,
-    "authorized_attended_task_refs": [
+    "status": "m1_closed_factoryd_blocked",
+    "implementation_may_start": false,
+    "authorized_attended_task_refs": [],
+    "historical_attended_task_refs": [
       "M1-IMPLEMENTATION"
     ],
-    "parent_milestone_ref": "M1",
     "completed_task_refs": [
       "M0",
+      "M1",
       "M2"
     ],
     "implementation_complete_pending_lifecycle_task_refs": [],
     "blocked_tasks": [
-      "M1",
       "M2.5",
       "M3",
       "M4",
@@ -119,10 +119,9 @@
       "M9",
       "M10"
     ],
-    "reason": "M2 is closed with task-specific process debt. M1 is approved only for attended, offline, agent-free deterministic walking-skeleton implementation, local validation, and exact CI/toolchain configuration from its separate implementation packet; a deterministic fake may separately test adapter conformance, while its private holdout and shipping lifecycle, every later task, and all factoryd dispatch remain blocked.",
+    "reason": "M1 and M2 are task-closed with separate non-reusable process debt. M1's linked product acceptance remains nonterminal. This generation grants no M2.5 or later task authority, and factoryd remains unqualified and paused.",
     "unblock_dependencies": [
-      "For attended M1 implementation, preserve the exact implementation packet, offline boundary, path limits, nonterminal acceptance boundary, and prohibition on private holdout and lifecycle actions.",
-      "Before M1 independent review, remote CI execution or monitoring, holdout provisioning, commit, push, PR, merge, post-merge monitoring, or closure, obtain explicit authority and compile a separate Factory-valid lifecycle packet without weakening the parent M1 obligations.",
+      "Before M2.5 external evidence collection, obtain its exact private-evidence preflight approval, participant consent, retention/deletion controls, and evidence-attestor route without fabricating payment, buyer, consumer, or runner-feasibility evidence.",
       "For factoryd execution, qualify the bundle/runtime against this exact v3.1 generation and explicitly unpause one bounded task with positive budgets and complete grants."
     ]
   },
@@ -133,8 +132,8 @@
       "factory://skills/execution-compiler"
     ],
     "validated_rules": [
-      "M1's separate implementation child packet is runner-ready for attended local execution only and carries explicit baseline_commands, red_first_commands, validation_commands, final_validation_commands, semantic_invariants, evidence ownership, retry limits, guide propagation, and plan-drift refs without item-level closure or lifecycle authority.",
-      "factoryd remains paused and is not made runner-ready or daemon-authorized by the attended M1 approval."
+      "M1's separate implementation child packet is immutable historical task evidence for attended local execution only and retains its baseline_commands, red_first_commands, validation_commands, final_validation_commands, semantic_invariants, evidence ownership, retry limits, guide propagation, and plan-drift refs without item-level closure or lifecycle authority.",
+      "The retained implementation packet is no longer dispatchable, every M1-linked acceptance item remains nonterminal, and factoryd remains paused and unqualified."
     ]
   },
   "plan_drift_policy": {
@@ -394,7 +393,11 @@
     "m2_acceptance_closure_claimed": true,
     "m2_scope_closure_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
     "m2_process_exception_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/process-exception-handoff.json",
-    "rule": "M2 task scope is closed with direct evidence and an approved non-reusable review-gate exception. Shared event and installation acceptance remains open for its later runtime task refs."
+    "m1_benchmark_implementation_status": "closed_with_recorded_evidence_and_process_debt_acceptance_nonterminal",
+    "m1_acceptance_closure_claimed": false,
+    "m1_scope_closure_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json",
+    "m1_process_exception_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/process-exception-handoff.json",
+    "rule": "M1 and M2 task scopes are closed with direct evidence and separate approved non-reusable review-gate exceptions. Every M1-linked product acceptance item and shared M2 event/installation outcome remains open for its later runtime or pilot task refs."
   },
   "stop_conditions": [
     "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
@@ -405,6 +408,6 @@
     "provider code access, production credential, default-branch write, or auto-merge is requested",
     "commercial evidence or generic-agent comparison is not direct, frozen, fair, and independently attested"
   ],
-  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair",
-  "generated_at": "2026-07-28T16:56:45Z"
+  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair+post-merge-monitor",
+  "generated_at": "2026-07-28T20:36:00Z"
 }

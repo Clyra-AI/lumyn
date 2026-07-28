@@ -533,10 +533,13 @@ remain blocked until a later milestone provides the pinned qualified backend.
 A separate fake uses the
 adapter-shaped request/result boundary, honors cancellation, and rejects live
 fallback.
-Private holdout provisioning, independent review, remote CI execution or
-monitoring, GitHub delivery, merge, post-merge monitoring, and M1
-acceptance closure remain blocked behind a separately authorized lifecycle
-packet.
+Independent private-holdout provisioning, code review, PR `validate` and
+CodeQL, repository delivery, rebase merge, landed-content binding, and
+exact-main monitoring are complete. The repaired PR head received no terminal
+latest-head Codex signal before the repository owner merged it; that process
+escape is recorded as non-reusable M1 delivery debt. M1's benchmark and
+lifecycle task scope is closed. None of its 15 linked product acceptance items
+is terminal: later runtime and pilot milestones still own those outcomes.
 
 #### Goal
 
@@ -692,6 +695,10 @@ repo validation cannot accept a packet the bound Factory schema rejects.
   shipping, exact-main monitoring, and lifecycle evidence complete before M1
   implementation is promoted; parent acceptance remains partial, missing, or
   blocked according to the item-level ledger.
+- The retained attended implementation packet and its candidate-scope checks
+  become immutable historical evidence after closure; later milestones must
+  not be measured against M1's frozen candidate diff or reuse its lifecycle
+  authorization or process exception.
 
 #### Stop conditions
 

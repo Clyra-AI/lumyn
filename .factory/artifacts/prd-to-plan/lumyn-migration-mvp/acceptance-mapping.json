@@ -28,7 +28,23 @@
         "PACK-002",
         "PACK-003",
         "PACK-004"
-      ]
+      ],
+      "implementation_progress": {
+        "completed_prerequisite_task_refs": [
+          "M1"
+        ],
+        "runtime_closure_task_ref": "M3",
+        "acceptance_status": "planned",
+        "nonterminal_progress_item_ids": [
+          "PACK-001"
+        ],
+        "progress_evidence_refs": [
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+          ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json"
+        ]
+      }
     },
     {
       "group_id": "provider_change_event",
@@ -41,6 +57,7 @@
       ],
       "implementation_progress": {
         "completed_prerequisite_task_refs": [
+          "M1",
           "M2"
         ],
         "runtime_closure_task_ref": "M3",
@@ -50,7 +67,11 @@
           ".factory/artifacts/task-runs/M2/validation-run-summary.json",
           ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
           ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
-          ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+          ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json"
         ]
       }
     },
@@ -65,6 +86,7 @@
       ],
       "implementation_progress": {
         "completed_prerequisite_task_refs": [
+          "M1",
           "M2"
         ],
         "runtime_closure_task_ref": "M5",
@@ -74,7 +96,11 @@
           ".factory/artifacts/task-runs/M2/validation-run-summary.json",
           ".factory/artifacts/task-runs/M2/proof-of-behavior-scorecard.json",
           ".factory/artifacts/lifecycle-evidence/M2/review-report.json",
-          ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json"
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/scope-closure-report.json",
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+          ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json"
         ]
       }
     },
@@ -89,7 +115,23 @@
         "IMPACT-003",
         "IMPACT-004",
         "IMPACT-005"
-      ]
+      ],
+      "implementation_progress": {
+        "completed_prerequisite_task_refs": [
+          "M1"
+        ],
+        "runtime_closure_task_ref": "M4",
+        "acceptance_status": "planned",
+        "nonterminal_progress_item_ids": [
+          "IMPACT-005"
+        ],
+        "progress_evidence_refs": [
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+          ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json"
+        ]
+      }
     },
     {
       "group_id": "plan_and_routing",
@@ -115,7 +157,29 @@
         "AGENT-005",
         "AGENT-006",
         "AGENT-007"
-      ]
+      ],
+      "implementation_progress": {
+        "completed_prerequisite_task_refs": [
+          "M1"
+        ],
+        "runtime_closure_task_ref": "M6",
+        "acceptance_status": "planned",
+        "nonterminal_progress_item_ids": [
+          "AGENT-001",
+          "AGENT-002",
+          "AGENT-003",
+          "AGENT-004",
+          "AGENT-005",
+          "AGENT-006",
+          "AGENT-007"
+        ],
+        "progress_evidence_refs": [
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+          ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json"
+        ]
+      }
     },
     {
       "group_id": "verification",
@@ -129,7 +193,23 @@
         "VER-004",
         "VER-005",
         "VER-006"
-      ]
+      ],
+      "implementation_progress": {
+        "completed_prerequisite_task_refs": [
+          "M1"
+        ],
+        "runtime_closure_task_ref": "M7",
+        "acceptance_status": "planned",
+        "nonterminal_progress_item_ids": [
+          "VER-006"
+        ],
+        "progress_evidence_refs": [
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+          ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json"
+        ]
+      }
     },
     {
       "group_id": "export_and_delivery",
@@ -196,7 +276,23 @@
         "PILOT-006",
         "PILOT-007",
         "PILOT-008"
-      ]
+      ],
+      "implementation_progress": {
+        "completed_prerequisite_task_refs": [
+          "M1"
+        ],
+        "runtime_closure_task_ref": "M10",
+        "acceptance_status": "planned",
+        "nonterminal_progress_item_ids": [
+          "PILOT-005"
+        ],
+        "progress_evidence_refs": [
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+          ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+          ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+          ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json"
+        ]
+      }
     }
   ],
   "delivery_slices": [
@@ -242,6 +338,7 @@
       ],
       "completed_task_refs": [
         "M0",
+        "M1",
         "M2"
       ],
       "implementation_complete_pending_lifecycle_task_refs": []
@@ -299,6 +396,6 @@
       ]
     }
   ],
-  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair",
-  "generated_at": "2026-07-28T16:56:45Z"
+  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair+post-merge-monitor",
+  "generated_at": "2026-07-28T20:36:00Z"
 }

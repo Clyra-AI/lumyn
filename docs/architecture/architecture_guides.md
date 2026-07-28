@@ -708,8 +708,13 @@ cross-lifecycle identity.
 Lifecycle-owned remote CI may perform the pinned action, toolchain, and
 dependency bootstrap required by the declared workflows; fixture and
 product-command execution stays offline.
-Only M1 has this exact runnable compilation; later milestone holdout declarations
-remain non-runnable planning overlays until recompiled while factoryd is paused.
+Only M1 has this exact runnable compilation, and its packet is now immutable
+historical evidence rather than dispatch authority. Historical closure binds
+the validation candidate to the original PR head retained in a verified bundle,
+then compares those frozen paths with the rebased landed main commit. This
+avoids both false failure from later repository changes and false promotion
+from stale current-work evidence. Later milestone holdout declarations remain
+non-runnable planning overlays until recompiled while factoryd is paused.
 Every walking-skeleton artifact digest covers the complete normalized semantic
 artifact; explicit self-digests and the authorization's later plan reference are
 the only normalized cycle breakers, and populated relationships are checked
