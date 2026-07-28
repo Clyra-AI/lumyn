@@ -197,9 +197,9 @@ type IntakeResult struct {
 // VerifyPublishKit validates exact bytes and detached signature. The observed
 // intake mode is external evidence: copied bytes are recovery input even when
 // their signed manifest names a provider channel.
-func VerifyPublishKit(kit PublishKit, publicKey ed25519.PublicKey, context EventContext, observation IntakeObservation) (IntakeResult, error) {
-	if len(publicKey) != ed25519.PublicKeySize {
-		return IntakeResult{}, errors.New("provider event Ed25519 public key is invalid")
+func VerifyPublishKit(kit PublishKit, context EventContext, observation IntakeObservation) (IntakeResult, error) {
+	if len(context.ExpectedPublicKey) != ed25519.PublicKeySize {
+		return IntakeResult{}, errors.New("enrolled provider event Ed25519 public key is invalid")
 	}
 	var event EventArtifact
 	if err := json.Unmarshal(kit.EventBytes, &event); err != nil {
@@ -213,7 +213,7 @@ func VerifyPublishKit(kit PublishKit, publicKey ed25519.PublicKey, context Event
 		return IntakeResult{}, errors.New("provider event detached signature is not base64url")
 	}
 	unsigned, _ := eventSignatureBytes(event)
-	if !ed25519.Verify(publicKey, unsigned, signature) {
+	if !ed25519.Verify(context.ExpectedPublicKey, unsigned, signature) {
 		return IntakeResult{}, errors.New("provider event detached signature is invalid")
 	}
 	if event.EventDigest != computeEventDigest(event) {

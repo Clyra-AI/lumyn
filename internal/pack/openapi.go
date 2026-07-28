@@ -74,6 +74,16 @@ func DeriveOpenAPIChanges(
 			})
 			continue
 		}
+		if !mapped && (before.HasRequestSchema || before.HasResponseSchema ||
+			after.HasRequestSchema || after.HasResponseSchema) {
+			ambiguities = append(ambiguities, Ambiguity{
+				AmbiguityID:        "ambiguity.openapi_schema." + stableFragment(operationID),
+				Description:        "Operation " + operationID + " carries request or response schemas whose property, required-field, and type semantics are outside the current snapshot.",
+				RequiredResolution: "provider_clarification",
+				AffectedChangeIDs:  []string{},
+			})
+			continue
+		}
 		if !mapped && reflect.DeepEqual(before, after) {
 			continue
 		}

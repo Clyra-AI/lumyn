@@ -3,6 +3,7 @@
 package change
 
 import (
+	"crypto/ed25519"
 	"errors"
 	"fmt"
 	"slices"
@@ -40,12 +41,14 @@ type ProviderEvent struct {
 }
 
 type EventContext struct {
-	PinnedOrigin string
-	Audience     string
-	LastSequence uint64
-	SeenEvents   map[string]string
-	Now          time.Time
-	MaximumAge   time.Duration
+	PinnedOrigin      string
+	Audience          string
+	ExpectedKeyID     string
+	ExpectedPublicKey ed25519.PublicKey
+	LastSequence      uint64
+	SeenEvents        map[string]string
+	Now               time.Time
+	MaximumAge        time.Duration
 }
 
 // ProviderEventNetworkBindings is the decoded network-bearing subset of a
@@ -101,6 +104,11 @@ func ValidateProviderEvent(event ProviderEvent, context EventContext) error {
 	}
 	if context.Now.IsZero() {
 		return errors.New("validation time is required")
+	}
+	if strings.TrimSpace(context.ExpectedKeyID) == "" ||
+		len(context.ExpectedPublicKey) != ed25519.PublicKeySize ||
+		event.SignatureProvenance != context.ExpectedKeyID {
+		return errors.New("provider event signing key does not match the enrolled campaign key")
 	}
 	if !event.Deadline.After(context.Now) {
 		return errors.New("provider event deadline has passed")

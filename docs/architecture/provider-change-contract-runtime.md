@@ -29,7 +29,10 @@ The internal/source SnapshotOpenAPI function emits the same sorted semantic
 view for the supported JSON and YAML OpenAPI subset. The internal/pack
 DeriveOpenAPIChanges function compares stable operation identities. A removed
 or renamed operation remains ambiguous until an accountable reviewer supplies
-an explicit source-to-target mapping.
+an explicit source-to-target mapping. The current bounded snapshot does not
+flatten request or response schema properties, required fields, or types, so
+every unreviewed schema-bearing operation also fails closed as ambiguous
+rather than being reported unchanged.
 
 The internal/pack Normalize function accepts only pinned artifacts and typed
 declarations. Every semantic change cites at least one source-side and one
@@ -72,6 +75,8 @@ never serialized.
 The internal/change VerifyPublishKit function independently checks:
 
 - event digest and detached Ed25519 signature;
+- exact enrolled campaign key identity and public key from the Consumer
+  Installation boundary;
 - exact contract-byte digest and semantic contract digest;
 - provider, API or SDK, audience, contract identity, and version bindings;
 - pinned origin and manifest and contract URLs;

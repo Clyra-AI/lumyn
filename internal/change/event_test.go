@@ -1,6 +1,7 @@
 package change
 
 import (
+	"crypto/ed25519"
 	"encoding/json"
 	"os"
 	"path/filepath"
@@ -32,11 +33,13 @@ func TestValidateProviderEventAcceptsFreshAuthenticatedPinnedEvent(t *testing.T)
 	now := time.Date(2026, 7, 26, 14, 0, 0, 0, time.UTC)
 	event := validProviderEvent(now)
 	if err := ValidateProviderEvent(event, EventContext{
-		PinnedOrigin: "https://updates.example.com",
-		Audience:     "sdk:stripe-go:v80",
-		LastSequence: 41,
-		SeenEvents:   map[string]string{},
-		Now:          now,
+		PinnedOrigin:      "https://updates.example.com",
+		Audience:          "sdk:stripe-go:v80",
+		ExpectedKeyID:     "campaign_key:stripe-2026",
+		ExpectedPublicKey: make(ed25519.PublicKey, ed25519.PublicKeySize),
+		LastSequence:      41,
+		SeenEvents:        map[string]string{},
+		Now:               now,
 	}); err != nil {
 		t.Fatalf("valid event rejected: %v", err)
 	}
@@ -66,6 +69,9 @@ func TestValidateProviderEventRejectsReplayConflictLifecycleAndRecoveryProof(t *
 			event.ContractURL = "https://mirror.invalid/migration-pack.json"
 		},
 		"unauthenticated": func(event *ProviderEvent, _ *EventContext) { event.Authenticated = false },
+		"wrong campaign key": func(event *ProviderEvent, _ *EventContext) {
+			event.SignatureProvenance = "campaign_key:attacker"
+		},
 		"digest mismatch": func(event *ProviderEvent, _ *EventContext) { event.RetrievedContractDigest = "sha256:other" },
 		"withdrawn":       func(event *ProviderEvent, _ *EventContext) { event.Lifecycle = "withdrawn" },
 		"executable":      func(event *ProviderEvent, _ *EventContext) { event.Executable = true },
@@ -79,8 +85,10 @@ func TestValidateProviderEventRejectsReplayConflictLifecycleAndRecoveryProof(t *
 			event := validProviderEvent(now)
 			context := EventContext{
 				PinnedOrigin: "https://updates.example.com",
-				Audience:     "sdk:stripe-go:v80", LastSequence: 41,
-				SeenEvents: map[string]string{}, Now: now,
+				Audience:     "sdk:stripe-go:v80", ExpectedKeyID: "campaign_key:stripe-2026",
+				ExpectedPublicKey: make(ed25519.PublicKey, ed25519.PublicKeySize),
+				LastSequence:      41,
+				SeenEvents:        map[string]string{}, Now: now,
 			}
 			mutate(&event, &context)
 			if err := ValidateProviderEvent(event, context); err == nil {

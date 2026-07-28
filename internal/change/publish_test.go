@@ -15,8 +15,8 @@ import (
 )
 
 func TestPublishKitVerifiesPinnedChannelAndLabelsAttendedRecovery(t *testing.T) {
-	kit, publicKey, context := validPublishKit(t)
-	result, err := VerifyPublishKit(kit, publicKey, context, IntakeObservation{
+	kit, context := validPublishKit(t)
+	result, err := VerifyPublishKit(kit, context, IntakeObservation{
 		Mode: "pinned_provider_https", ObservedManifestURL: "https://updates.payments.example/events/v5.json",
 	})
 	if err != nil {
@@ -26,7 +26,7 @@ func TestPublishKitVerifiesPinnedChannelAndLabelsAttendedRecovery(t *testing.T) 
 		t.Fatalf("pinned provider delivery lost qualification: %#v", result)
 	}
 
-	recovery, err := VerifyPublishKit(kit, publicKey, context, IntakeObservation{Mode: "attended_import"})
+	recovery, err := VerifyPublishKit(kit, context, IntakeObservation{Mode: "attended_import"})
 	if err != nil {
 		t.Fatalf("verify attended recovery: %v", err)
 	}
@@ -36,7 +36,7 @@ func TestPublishKitVerifiesPinnedChannelAndLabelsAttendedRecovery(t *testing.T) 
 }
 
 func TestPublishKitRejectsTamperReplayAndWrongAudience(t *testing.T) {
-	kit, publicKey, context := validPublishKit(t)
+	kit, context := validPublishKit(t)
 	var authorityWidened EventArtifact
 	if err := json.Unmarshal(kit.EventBytes, &authorityWidened); err != nil {
 		t.Fatalf("decode event: %v", err)
@@ -49,7 +49,7 @@ func TestPublishKitRejectsTamperReplayAndWrongAudience(t *testing.T) {
 	tampered := kit
 	tampered.ContractBytes = append([]byte(nil), kit.ContractBytes...)
 	tampered.ContractBytes[len(tampered.ContractBytes)-2] ^= 1
-	if _, err := VerifyPublishKit(tampered, publicKey, context, IntakeObservation{
+	if _, err := VerifyPublishKit(tampered, context, IntakeObservation{
 		Mode: "pinned_provider_https", ObservedManifestURL: "https://updates.payments.example/events/v5.json",
 	}); err == nil {
 		t.Fatal("tampered contract bytes must fail")
@@ -57,7 +57,7 @@ func TestPublishKitRejectsTamperReplayAndWrongAudience(t *testing.T) {
 
 	replay := context
 	replay.LastSequence = 41
-	if _, err := VerifyPublishKit(kit, publicKey, replay, IntakeObservation{
+	if _, err := VerifyPublishKit(kit, replay, IntakeObservation{
 		Mode: "pinned_provider_https", ObservedManifestURL: "https://updates.payments.example/events/v5.json",
 	}); err == nil {
 		t.Fatal("replayed sequence must fail")
@@ -65,23 +65,35 @@ func TestPublishKitRejectsTamperReplayAndWrongAudience(t *testing.T) {
 
 	wrongAudience := context
 	wrongAudience.Audience = "audience.other"
-	if _, err := VerifyPublishKit(kit, publicKey, wrongAudience, IntakeObservation{
+	if _, err := VerifyPublishKit(kit, wrongAudience, IntakeObservation{
 		Mode: "pinned_provider_https", ObservedManifestURL: "https://updates.payments.example/events/v5.json",
 	}); err == nil {
 		t.Fatal("wrong audience must fail")
 	}
 
+	wrongKey := context
+	wrongPublicKey, _, err := ed25519.GenerateKey(rand.Reader)
+	if err != nil {
+		t.Fatalf("generate wrong key: %v", err)
+	}
+	wrongKey.ExpectedPublicKey = wrongPublicKey
+	if _, err := VerifyPublishKit(kit, wrongKey, IntakeObservation{
+		Mode: "pinned_provider_https", ObservedManifestURL: "https://updates.payments.example/events/v5.json",
+	}); err == nil {
+		t.Fatal("event signed by a non-enrolled campaign key must fail")
+	}
+
 	tamperedEvent := kit
 	tamperedEvent.EventBytes = append([]byte(nil), kit.EventBytes...)
 	tamperedEvent.EventBytes[len(tamperedEvent.EventBytes)/2] ^= 1
-	if _, err := VerifyPublishKit(tamperedEvent, publicKey, context, IntakeObservation{
+	if _, err := VerifyPublishKit(tamperedEvent, context, IntakeObservation{
 		Mode: "pinned_provider_https", ObservedManifestURL: "https://updates.payments.example/events/v5.json",
 	}); err == nil {
 		t.Fatal("tampered event must fail")
 	}
 }
 
-func validPublishKit(t *testing.T) (PublishKit, ed25519.PublicKey, EventContext) {
+func validPublishKit(t *testing.T) (PublishKit, EventContext) {
 	t.Helper()
 	now := time.Date(2026, 7, 28, 12, 0, 0, 0, time.UTC)
 	target := "paymentIntents.confirm(id, { payment_method })"
@@ -136,9 +148,11 @@ func validPublishKit(t *testing.T) (PublishKit, ed25519.PublicKey, EventContext)
 	}
 	validateGeneratedArtifact(t, "migration-pack.schema.json", kit.ContractBytes)
 	validateGeneratedArtifact(t, "provider-change-event.schema.json", kit.EventBytes)
-	return kit, publicKey, EventContext{
+	return kit, EventContext{
 		PinnedOrigin: "https://updates.payments.example", Audience: "audience.node_v4",
-		LastSequence: 40, SeenEvents: map[string]string{}, Now: now, MaximumAge: 24 * time.Hour,
+		ExpectedKeyID:     "campaign_key.payments.v5",
+		ExpectedPublicKey: publicKey,
+		LastSequence:      40, SeenEvents: map[string]string{}, Now: now, MaximumAge: 24 * time.Hour,
 	}
 }
 
