@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import copy
+import hashlib
+import json
 from collections.abc import Callable
 from typing import Any
 
@@ -113,6 +115,23 @@ def _closure_item(payload: Payload, item_id: str) -> dict[str, Any]:
         for item in payload["closure"]["items"]
         if item.get("scope_item_id") == item_id
     )
+
+
+def _rewrite_m1_event_chain(
+    evidence_payloads: dict[str, dict[str, Any]],
+) -> None:
+    events = evidence_payloads[M1_EVENT_LOG_REF]["events"]
+    events[1]["actor"] = "task-executor"
+    previous_digest = ""
+    for event in events:
+        event["previous_digest"] = previous_digest
+        canonical = json.dumps(
+            {key: value for key, value in event.items() if key != "event_digest"},
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode()
+        previous_digest = f"sha256:{hashlib.sha256(canonical).hexdigest()}"
+        event["event_digest"] = previous_digest
 
 
 def _remove_task_acceptance(
@@ -1140,6 +1159,30 @@ def run_repo_pack_self_tests(
             "independent review is not approved, resolved, and current-work bound",
         ),
         (
+            lambda value: (
+                value[M1_REVIEW_REF].__setitem__(
+                    "reviewer_id",
+                    value[M1_VALIDATION_REPORT_REF]["implementation_producer"][
+                        "producer_id"
+                    ],
+                ),
+                value[M1_REVIEW_REF]["producer"].__setitem__(
+                    "producer_id",
+                    value[M1_VALIDATION_REPORT_REF]["implementation_producer"][
+                        "producer_id"
+                    ],
+                ),
+            ),
+            "producer independence drifted",
+        ),
+        (
+            lambda value: value[M1_HOLDOUT_REF]["producer"].__setitem__(
+                "producer_id",
+                value[M1_REVIEW_REF]["producer"]["producer_id"],
+            ),
+            "producer independence drifted",
+        ),
+        (
             lambda value: value[M1_HOLDOUT_REF].__setitem__(
                 "promotion_decision", "blocked"
             ),
@@ -1170,10 +1213,8 @@ def run_repo_pack_self_tests(
             "lifecycle authorization must be consumed",
         ),
         (
-            lambda value: value[M1_EVENT_LOG_REF]["events"][1].__setitem__(
-                "previous_digest", "sha256:" + "0" * 64
-            ),
-            "event-log sequence or previous digest drifted",
+            _rewrite_m1_event_chain,
+            "terminal digest is not independently anchored",
         ),
         (
             lambda value: value[M1_POST_MERGE_MARKER_REF].__setitem__(
