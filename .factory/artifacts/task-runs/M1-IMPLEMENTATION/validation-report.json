@@ -1,0 +1,497 @@
+{
+  "artifact_type": "validation_report",
+  "schema_version": "1.0",
+  "task_id": "M1-IMPLEMENTATION",
+  "work_item_id": "lumyn-v3-m1-attended-implementation",
+  "worker": "validation-gate",
+  "validation_run_id": "validation:2026-07-28T16:01:47Z:lumyn-m1-implementation-r2",
+  "generated_at": "2026-07-28T16:02:30Z",
+  "validation_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/m1-attended-implementation-task-packet.json#/validation_contract_inheritance",
+  "task_packet_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/m1-attended-implementation-task-packet.json",
+  "candidate_binding": {
+    "base_git_sha": "d7ae311c391775a2517d56add6d57148d5891ef3",
+    "candidate_digest": "sha256:ebc26f496732a729d714508c3cfd7908f735beee8afa158fc793fd9f24edab6f",
+    "method": "Factory release-candidate binding over implementation and prerequisite control, contract, schema, and validator paths; only generated task-run and lifecycle outputs are excluded",
+    "excluded_roots": [
+      ".factory/artifacts/task-runs/M1-IMPLEMENTATION/",
+      ".factory/artifacts/lifecycle-evidence/M1/",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/"
+    ]
+  },
+  "test_intent": [
+    {
+      "behavior": "The visible corpus contains at least three deterministic and three coordinated multi-file agent-assisted TypeScript migration scenarios across direct and wrapper-heavy integration shapes.",
+      "expected_signal": "Manifest, provenance, ground truth, concrete cross-file site-ID chains, executable local imports/calls, source, and primary/supporting before/expected checks pass for all six digest-bound scenarios."
+    },
+    {
+      "behavior": "Every required ambiguity or unsafe condition fails closed.",
+      "expected_signal": "Seven distinct blocked classes return blocked or needs_input and never permit a speculative patch."
+    },
+    {
+      "behavior": "The generic-agent comparison isolates Lumyn orchestration as the treatment.",
+      "expected_signal": "The protocol freezes all 21 declared control variables, the primary metric, guardrails, and the non-causal status of unmatched-engine comparisons."
+    },
+    {
+      "behavior": "The M2 contracts compose into an offline event-to-PR-bundle walking skeleton.",
+      "expected_signal": "Repeated agent-free deterministic runs produce identical candidate bytes, write those exact bytes into a fresh read-only view, execute separate expected-failing baseline and passing-candidate npm test --silent processes with an allowlisted environment in a local-import-only capability-restricted VM, bind the package, runner, generated candidate, fixture, command, output, toolchain, and verified cleanup digests into canonical verification, validate every M2 artifact and authorization boundary without provider reporting, and stop at a manual local PR bundle."
+    },
+    {
+      "behavior": "The attended implementation cannot expose private holdout answers or acquire live execution authority.",
+      "expected_signal": "Holdout shape and live-route negative tests reject answer material, credentials, network, live agents, consumer repositories, and external writes."
+    }
+  ],
+  "red_evidence": [
+    {
+      "check": "LUMYN_M1_VERIFICATION_TARGET=baseline npm --prefix examples/consumer-repos/det-operation-rename test --silent",
+      "summary": "The complete representative fixture and verifier rejected the pre-fix baseline with the typed det-operation-rename target-contract mismatch; missing, parse, link, and top-level failures are not accepted as red evidence.",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/red-first/work-proof-marker.json",
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/red-first/work-proof-marker.stdout.log",
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/red-first/work-proof-marker.stderr.log",
+        "examples/verification/run.mjs",
+        "examples/consumer-repos/det-operation-rename/package.json"
+      ]
+    }
+  ],
+  "green_evidence": [
+    {
+      "check": "go test ./tests -run '^TestM1' -count=1",
+      "summary": "All real cross-file corpus, graph-chain, exact-generated-candidate substitution, separate red/green process, verified-cleanup, capability-restricted pinned TypeScript/npm, ambient-authority rejection, blocked-suite, comparison, holdout-isolation, observed-evidence walking-skeleton, exact command authorization, mutation, replay, fake-adapter, and no-live-route tests passed.",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json",
+        "tests/m1_benchmark_test.go"
+      ]
+    },
+    {
+      "check": "make test-coverage",
+      "summary": "Overall first-party Go coverage was 79.9%; stable-package coverage was 95.7%.",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-004/work-proof-marker.json"
+      ]
+    },
+    {
+      "check": "python3 scripts/validate_repo_pack.py",
+      "summary": "The repo pack, child authorization packet, vendored Factory schemas, and semantic invariants validated.",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json"
+      ]
+    },
+    {
+      "check": "make prepush-full",
+      "summary": "The consolidated local formatting, lint, test, coverage, contract, repo-pack, policy, evidence, and build gate passed.",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json"
+      ]
+    }
+  ],
+  "work_proof_marker_refs": [
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-002/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-003/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-004/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json"
+  ],
+  "work_proof_markers": [
+    {
+      "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json",
+      "sha256": "sha256:5df52f3dabdab404bdcf83ee29f92d8956f8c5a809634e7adf16231a22096bb6"
+    },
+    {
+      "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-002/work-proof-marker.json",
+      "sha256": "sha256:cdc3eeddce707f75fda88d2f8ca40f86a2831e586d08eba6637e46087e677fe0"
+    },
+    {
+      "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-003/work-proof-marker.json",
+      "sha256": "sha256:aa16a197fad3b5a7bc7c0785dd965261c69e749a11d6be4596c039351b5efa7e"
+    },
+    {
+      "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-004/work-proof-marker.json",
+      "sha256": "sha256:4135f4de8f307140ccf8ca9a3467dea8ee27e6b1781e720d715c3bd8bfd453c1"
+    },
+    {
+      "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json",
+      "sha256": "sha256:4d8bd4caf9bdbcd84cc2d9f5f7c4f845befa7bc5387f1eeb4c40d4a694e88ccc"
+    },
+    {
+      "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json",
+      "sha256": "sha256:2674de06f7c80757daabc0d38817fc510ea998b4e8531042d96376d26265ba0e"
+    }
+  ],
+  "test_scope": [
+    "examples/migration-packs/",
+    "examples/consumer-repos/",
+    "examples/integration-graphs/",
+    "examples/candidates/",
+    "examples/negative/",
+    "examples/verification/",
+    "examples/holdout-manifest.json",
+    "tests/m1_benchmark_test.go",
+    "docs/product/plan.md",
+    "docs/dev/dev_guides.md",
+    "docs/architecture/architecture_guides.md",
+    "CHANGELOG.md"
+  ],
+  "checks": [
+    {
+      "name": "go test ./tests -run '^TestM1' -count=1",
+      "status": "pass"
+    },
+    {
+      "name": "make lint-fast",
+      "status": "pass"
+    },
+    {
+      "name": "make test-fast",
+      "status": "pass"
+    },
+    {
+      "name": "make test-coverage",
+      "status": "pass"
+    },
+    {
+      "name": "python3 scripts/validate_repo_pack.py",
+      "status": "pass"
+    },
+    {
+      "name": "make prepush-full",
+      "status": "pass"
+    }
+  ],
+  "validation_commands": [
+    {
+      "command": "go test ./tests -run '^TestM1' -count=1",
+      "exit_code": 0,
+      "started_at": "2026-07-28T16:01:47Z",
+      "completed_at": "2026-07-28T16:01:51Z",
+      "output_sha256": "sha256:5f66fa0fd9812ad842b8348fdd42389474cbde6543f7bead40f583b1715b52a4",
+      "output_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.stdout.log",
+      "runner_identity": "trusted-runner:factory-reference-validation",
+      "repo_ref": "d7ae311c391775a2517d56add6d57148d5891ef3"
+    },
+    {
+      "command": "make lint-fast",
+      "exit_code": 0,
+      "started_at": "2026-07-28T16:01:51Z",
+      "completed_at": "2026-07-28T16:01:52Z",
+      "output_sha256": "sha256:26a2568da1d66c528999665445172acaa610b1ca5a9595500a94a11fd602a83c",
+      "output_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-002/work-proof-marker.stdout.log",
+      "runner_identity": "trusted-runner:factory-reference-validation",
+      "repo_ref": "d7ae311c391775a2517d56add6d57148d5891ef3"
+    },
+    {
+      "command": "make test-fast",
+      "exit_code": 0,
+      "started_at": "2026-07-28T16:01:52Z",
+      "completed_at": "2026-07-28T16:01:58Z",
+      "output_sha256": "sha256:0fbde7ec92c55266190ef6d4799c77cea3fa880ce0d02a6457b0052e51df3881",
+      "output_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-003/work-proof-marker.stdout.log",
+      "runner_identity": "trusted-runner:factory-reference-validation",
+      "repo_ref": "d7ae311c391775a2517d56add6d57148d5891ef3"
+    },
+    {
+      "command": "make test-coverage",
+      "exit_code": 0,
+      "started_at": "2026-07-28T16:01:58Z",
+      "completed_at": "2026-07-28T16:02:03Z",
+      "output_sha256": "sha256:d51001909c06f9e8bfcff68ed5a0e909cbeb3287ec3508886f4c2966c49acaf7",
+      "output_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-004/work-proof-marker.stdout.log",
+      "runner_identity": "trusted-runner:factory-reference-validation",
+      "repo_ref": "d7ae311c391775a2517d56add6d57148d5891ef3"
+    },
+    {
+      "command": "python3 scripts/validate_repo_pack.py",
+      "exit_code": 0,
+      "started_at": "2026-07-28T16:02:03Z",
+      "completed_at": "2026-07-28T16:02:05Z",
+      "output_sha256": "sha256:c5c211a84ffced0f3c770ee5c32e969c2fcb4ce5de4715144495243303bcf2aa",
+      "output_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.stdout.log",
+      "runner_identity": "trusted-runner:factory-reference-validation",
+      "repo_ref": "d7ae311c391775a2517d56add6d57148d5891ef3"
+    },
+    {
+      "command": "make prepush-full",
+      "exit_code": 0,
+      "started_at": "2026-07-28T16:02:05Z",
+      "completed_at": "2026-07-28T16:02:30Z",
+      "output_sha256": "sha256:9487e60628a4cd04bfaca28b511cd046d508d0bd4a068520aef8ffd1820f48e7",
+      "output_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.stdout.log",
+      "runner_identity": "trusted-runner:factory-reference-validation",
+      "repo_ref": "d7ae311c391775a2517d56add6d57148d5891ef3"
+    }
+  ],
+  "changed_paths": [
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/README.md",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/context-brief.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/m1-attended-implementation-task-packet.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/risk-classification.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
+    ".factory/contracts/factory/runtime-control.schema.json",
+    ".factory/contracts/factory/task-packet.schema.json",
+    ".github/action-ref-exceptions.yaml",
+    ".github/workflows/validate.yml",
+    ".tool-versions",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "Makefile",
+    "WORKFLOW.md",
+    "docs/architecture/architecture_guides.md",
+    "docs/dev/dev_guides.md",
+    "docs/product/plan.md",
+    "docs/product/prd.md",
+    "examples/candidates/agent-related-test-repair/src/client.ts",
+    "examples/candidates/agent-related-test-repair/src/invoices.ts",
+    "examples/candidates/agent-signature-type-adaptation/src/adapter.ts",
+    "examples/candidates/agent-signature-type-adaptation/src/client.ts",
+    "examples/candidates/agent-wrapper-adaptation/src/client.ts",
+    "examples/candidates/agent-wrapper-adaptation/src/gateway.ts",
+    "examples/candidates/det-operation-rename/src/client.ts",
+    "examples/candidates/det-request-property-relocation/src/client.ts",
+    "examples/candidates/det-response-property-relocation/src/client.ts",
+    "examples/consumer-repos/agent-related-test-repair/package.json",
+    "examples/consumer-repos/agent-related-test-repair/src/client.ts",
+    "examples/consumer-repos/agent-related-test-repair/src/invoices.ts",
+    "examples/consumer-repos/agent-signature-type-adaptation/package.json",
+    "examples/consumer-repos/agent-signature-type-adaptation/src/adapter.ts",
+    "examples/consumer-repos/agent-signature-type-adaptation/src/client.ts",
+    "examples/consumer-repos/agent-wrapper-adaptation/package.json",
+    "examples/consumer-repos/agent-wrapper-adaptation/src/client.ts",
+    "examples/consumer-repos/agent-wrapper-adaptation/src/gateway.ts",
+    "examples/consumer-repos/det-operation-rename/package.json",
+    "examples/consumer-repos/det-operation-rename/src/client.ts",
+    "examples/consumer-repos/det-request-property-relocation/package.json",
+    "examples/consumer-repos/det-request-property-relocation/src/client.ts",
+    "examples/consumer-repos/det-response-property-relocation/package.json",
+    "examples/consumer-repos/det-response-property-relocation/src/client.ts",
+    "examples/holdout-manifest.json",
+    "examples/integration-graphs/agent-related-test-repair.json",
+    "examples/integration-graphs/agent-signature-type-adaptation.json",
+    "examples/integration-graphs/agent-wrapper-adaptation.json",
+    "examples/integration-graphs/det-operation-rename.json",
+    "examples/integration-graphs/det-request-property-relocation.json",
+    "examples/integration-graphs/det-response-property-relocation.json",
+    "examples/migration-packs/agent-related-test-repair/pack.json",
+    "examples/migration-packs/agent-related-test-repair/source.md",
+    "examples/migration-packs/agent-signature-type-adaptation/pack.json",
+    "examples/migration-packs/agent-signature-type-adaptation/source.md",
+    "examples/migration-packs/agent-wrapper-adaptation/pack.json",
+    "examples/migration-packs/agent-wrapper-adaptation/source.md",
+    "examples/migration-packs/benchmark-manifest.json",
+    "examples/migration-packs/det-operation-rename/pack.json",
+    "examples/migration-packs/det-operation-rename/source.md",
+    "examples/migration-packs/det-request-property-relocation/pack.json",
+    "examples/migration-packs/det-request-property-relocation/source.md",
+    "examples/migration-packs/det-response-property-relocation/pack.json",
+    "examples/migration-packs/det-response-property-relocation/source.md",
+    "examples/migration-packs/generic-agent-baseline-v1.json",
+    "examples/negative/blocked-scenarios.json",
+    "examples/verification/run.mjs",
+    "scripts/repo_pack_ci.py",
+    "scripts/repo_pack_validation/factory_schema_core.py",
+    "scripts/repo_pack_validation/m1_evidence.py",
+    "scripts/repo_pack_validation/m1_packet.py",
+    "scripts/repo_pack_validation/runtime_pins.py",
+    "scripts/repo_pack_validation/self_tests.py",
+    "scripts/repo_pack_validation/task_contracts.py",
+    "scripts/repo_pack_validation/validator.py",
+    "tests/m1_benchmark_test.go"
+  ],
+  "changed_path_context": {
+    "changed_paths": [
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/README.md",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/context-brief.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/m1-attended-implementation-task-packet.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/risk-classification.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
+      ".factory/contracts/factory/runtime-control.schema.json",
+      ".factory/contracts/factory/task-packet.schema.json",
+      ".github/action-ref-exceptions.yaml",
+      ".github/workflows/validate.yml",
+      ".tool-versions",
+      "AGENTS.md",
+      "CHANGELOG.md",
+      "Makefile",
+      "WORKFLOW.md",
+      "docs/architecture/architecture_guides.md",
+      "docs/dev/dev_guides.md",
+      "docs/product/plan.md",
+      "docs/product/prd.md",
+      "examples/candidates/agent-related-test-repair/src/client.ts",
+      "examples/candidates/agent-related-test-repair/src/invoices.ts",
+      "examples/candidates/agent-signature-type-adaptation/src/adapter.ts",
+      "examples/candidates/agent-signature-type-adaptation/src/client.ts",
+      "examples/candidates/agent-wrapper-adaptation/src/client.ts",
+      "examples/candidates/agent-wrapper-adaptation/src/gateway.ts",
+      "examples/candidates/det-operation-rename/src/client.ts",
+      "examples/candidates/det-request-property-relocation/src/client.ts",
+      "examples/candidates/det-response-property-relocation/src/client.ts",
+      "examples/consumer-repos/agent-related-test-repair/package.json",
+      "examples/consumer-repos/agent-related-test-repair/src/client.ts",
+      "examples/consumer-repos/agent-related-test-repair/src/invoices.ts",
+      "examples/consumer-repos/agent-signature-type-adaptation/package.json",
+      "examples/consumer-repos/agent-signature-type-adaptation/src/adapter.ts",
+      "examples/consumer-repos/agent-signature-type-adaptation/src/client.ts",
+      "examples/consumer-repos/agent-wrapper-adaptation/package.json",
+      "examples/consumer-repos/agent-wrapper-adaptation/src/client.ts",
+      "examples/consumer-repos/agent-wrapper-adaptation/src/gateway.ts",
+      "examples/consumer-repos/det-operation-rename/package.json",
+      "examples/consumer-repos/det-operation-rename/src/client.ts",
+      "examples/consumer-repos/det-request-property-relocation/package.json",
+      "examples/consumer-repos/det-request-property-relocation/src/client.ts",
+      "examples/consumer-repos/det-response-property-relocation/package.json",
+      "examples/consumer-repos/det-response-property-relocation/src/client.ts",
+      "examples/holdout-manifest.json",
+      "examples/integration-graphs/agent-related-test-repair.json",
+      "examples/integration-graphs/agent-signature-type-adaptation.json",
+      "examples/integration-graphs/agent-wrapper-adaptation.json",
+      "examples/integration-graphs/det-operation-rename.json",
+      "examples/integration-graphs/det-request-property-relocation.json",
+      "examples/integration-graphs/det-response-property-relocation.json",
+      "examples/migration-packs/agent-related-test-repair/pack.json",
+      "examples/migration-packs/agent-related-test-repair/source.md",
+      "examples/migration-packs/agent-signature-type-adaptation/pack.json",
+      "examples/migration-packs/agent-signature-type-adaptation/source.md",
+      "examples/migration-packs/agent-wrapper-adaptation/pack.json",
+      "examples/migration-packs/agent-wrapper-adaptation/source.md",
+      "examples/migration-packs/benchmark-manifest.json",
+      "examples/migration-packs/det-operation-rename/pack.json",
+      "examples/migration-packs/det-operation-rename/source.md",
+      "examples/migration-packs/det-request-property-relocation/pack.json",
+      "examples/migration-packs/det-request-property-relocation/source.md",
+      "examples/migration-packs/det-response-property-relocation/pack.json",
+      "examples/migration-packs/det-response-property-relocation/source.md",
+      "examples/migration-packs/generic-agent-baseline-v1.json",
+      "examples/negative/blocked-scenarios.json",
+      "examples/verification/run.mjs",
+      "scripts/repo_pack_ci.py",
+      "scripts/repo_pack_validation/factory_schema_core.py",
+      "scripts/repo_pack_validation/m1_evidence.py",
+      "scripts/repo_pack_validation/m1_packet.py",
+      "scripts/repo_pack_validation/runtime_pins.py",
+      "scripts/repo_pack_validation/self_tests.py",
+      "scripts/repo_pack_validation/task_contracts.py",
+      "scripts/repo_pack_validation/validator.py",
+      "tests/m1_benchmark_test.go"
+    ],
+    "allowed_paths": [
+      "examples/migration-packs/",
+      "examples/consumer-repos/",
+      "examples/integration-graphs/",
+      "examples/candidates/",
+      "examples/negative/",
+      "examples/verification/",
+      "examples/holdout-manifest.json",
+      ".factory/contracts/",
+      ".github/action-ref-exceptions.yaml",
+      ".github/workflows/validate.yml",
+      ".tool-versions",
+      "Makefile",
+      "scripts/repo_pack_ci.py",
+      "scripts/repo_pack_validation/",
+      "tests/",
+      "docs/dev/dev_guides.md",
+      "docs/architecture/architecture_guides.md",
+      "CHANGELOG.md"
+    ],
+    "forbidden_paths": [
+      ".git/",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/",
+      ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+      ".factory/artifacts/lifecycle-evidence/M1/",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/"
+    ],
+    "path_violations": [],
+    "prerequisite_control_repairs_included_in_release_candidate": [
+      "AGENTS.md",
+      "WORKFLOW.md",
+      "docs/product/prd.md",
+      "docs/product/plan.md",
+      ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/"
+    ]
+  },
+  "result": "pass",
+  "introduced_failures": [],
+  "pre_existing_failures": [],
+  "independent_validation": {
+    "risk_class": "medium",
+    "required_level": "validation_gate_or_review",
+    "provided_levels": [
+      "validation_gate"
+    ],
+    "status": "satisfied",
+    "evidence_refs": [
+      ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json",
+      ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json"
+    ],
+    "notes": "Factory reference-runner markers bind each visible command. Parent M1 holdout, independent review, remote CI execution or monitoring, and lifecycle evidence remain outside this child task and use the separately authorized lifecycle chain."
+  },
+  "test_first_skipped_reason": {
+    "status": "not_skipped",
+    "reason": "The focused M1 test was recorded failing on the missing corpus before the fixtures and skeleton were added."
+  },
+  "anti_fitting_notes": [
+    "The manifest independently binds every pack, primary/supporting before and expected file, and integration graph.",
+    "Every visible agent route uses executable relative imports and calls across consumer-side fixture files; site-ID chains and the primary behavior test prove the cross-file composition instead of accepting disconnected-file declarations.",
+    "Fixture subprocesses receive an allowlisted environment and isolated npm roots; stripped candidate modules execute without host globals in a code-generation-disabled VM whose linker accepts only relative in-root modules and whose guard rejects ambient process, dynamic-code, and network entry points.",
+    "Tests cover counts, route classes, repository shapes, provenance, exact transforms, substitution rejection for the generated candidate, separate baseline and candidate processes, fresh-read-only-view static fixture verification and cleanup, negative outcomes, comparison controls, holdout prohibitions, replay rejection, and live-route rejection rather than one self-declared success flag.",
+    "The generic-agent baseline explicitly marks unmatched-engine comparisons non-causal."
+  ],
+  "residual_risks": [
+    "The six visible scenarios are a public/synthetic starter corpus, not private-holdout evaluation or real-consumer proof.",
+    "The walking skeleton earns only static_verified in an unqualified developer process; it does not prove qualified host-isolated product repository execution or repo_verified.",
+    "The agent-free deterministic route and separate test-only fake adapter do not prove live Codex, Claude Code, Cursor, GitHub product delivery, API Provider integration, or consumer-repository integration.",
+    "The complete release candidate includes plan-verify-repair-owned planning prerequisites outside task-executor write authority; parent acceptance and the remaining lifecycle claims require their own current evidence."
+  ],
+  "integrated_validation": {
+    "status": "task_only",
+    "scope_summary": "The complete local repository gate passed in the attended working tree, but no clean-checkout, CI, release, or parent-M1 lifecycle readiness is claimed.",
+    "integrated_checks": [
+      {
+        "name": "make prepush-full",
+        "status": "pass",
+        "work_proof_marker_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json"
+      }
+    ],
+    "fresh_checkout": {
+      "required": false,
+      "status": "not_required",
+      "work_proof_marker_refs": [],
+      "notes": "Fresh-checkout and CI evidence belong to the separately authorized parent M1 lifecycle."
+    },
+    "docs_schema_parity": {
+      "status": "pass",
+      "evidence_refs": [
+        "docs/product/plan.md",
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json"
+      ]
+    },
+    "release_readiness": {
+      "claimed": false,
+      "status": "not_applicable",
+      "work_proof_marker_refs": [],
+      "notes": "This packet prohibits release, commit, push, PR, merge, and post-merge claims."
+    }
+  },
+  "authorization_result": {
+    "sovereignty_mode": "local_only",
+    "network_used": false,
+    "credentials_used": false,
+    "live_agent_or_model_used": false,
+    "external_writes_performed": false,
+    "github_actions_performed": false,
+    "acceptance_closure_claimed": false
+  },
+  "promotion_decision": "blocked"
+}

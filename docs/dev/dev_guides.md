@@ -11,6 +11,8 @@ authority remain consumer-local.
 | Tool | Version |
 |---|---:|
 | Go | `1.26.5` |
+| Node.js | `22.16.0` |
+| npm | `11.4.1` |
 
 Module path: `github.com/Clyra-AI/lumyn`.
 
@@ -19,8 +21,10 @@ planning, agent orchestration, patch, verification, and delivery contracts.
 Any TypeScript parser, model client, tool subprocess, or SDK requires a pinned
 dependency, bounded interface, license/security review, and task evidence.
 
-Exact Node/npm, registry or immutable snapshot, package-integrity, and
-toolchain pins are required before `package-lock.json` mutation.
+`.tool-versions` pins Go and Node.js. The M1 packages pin npm through
+`packageManager`, and CI installs and verifies npm `11.4.1` before the full
+gate. Exact registry or immutable snapshot, package-integrity, and toolchain
+pins are required before `package-lock.json` mutation.
 
 ## Dependency Pins
 
@@ -92,6 +96,8 @@ ship direct acceptance evidence.
 - `make test-contracts`: Go tests, schema tests, active-plan validation,
   historical evidence validation, and repo-pack self-tests.
 - `make prepush-full`: full local gate before PR or merge.
+- `make lifecycle-evidence`: strict M1 marker/report binding and mutation gate,
+  run only after the validation-gate evidence bundle is immutable.
 - `make audit-remote-protection`: networked GitHub protection audit.
 
 The checked-in compiled set is regenerated from the approved v3.1 PRD and plan
@@ -106,6 +112,8 @@ bundle/runtime qualification, and an explicit bounded-task unpause.
 
 - Fast: `make lint-fast`, `make test-fast`.
 - Core: `make test-contracts`, `make prepush-full`.
+- Lifecycle evidence: `make lifecycle-evidence` after immutable M1 markers and
+  report; CI runs it after the core lane so no marker validates itself.
 - Acceptance: item-level active ledger and closure map.
 - Cross-platform: reserved until supported packaging.
 - Risk: `CodeQL analyze` plus targeted security/architecture review for
@@ -336,6 +344,95 @@ verification, provenance completeness, budget compliance, and human correction.
 Do not require byte-identical agent output.
 
 Public fixtures demonstrate engineering behavior only.
+
+The frozen M1 public corpus lives under `examples/migration-packs/`,
+`examples/consumer-repos/`, `examples/integration-graphs/`,
+`examples/candidates/`, and `examples/negative/`. Run its focused gate with:
+
+```sh
+go test ./tests -run '^TestM1' -count=1
+```
+
+The recorded red-first probe is self-contained and runs from the repository
+root with:
+
+```sh
+LUMYN_M1_VERIFICATION_TARGET=baseline npm --prefix examples/consumer-repos/det-operation-rename test --silent
+```
+
+It is valid only when the complete representative fixture returns exit `1`
+and exactly `det-operation-rename: baseline target contract rejected`; missing,
+parse, link, top-level, or other generic command failures do not satisfy TDD
+evidence.
+
+`benchmark-manifest.json` binds each pack, primary and supporting before
+snapshot, expected candidate, and integration graph by SHA-256. Each pack
+separately binds its synthetic source evidence. A content change must update
+the affected digest and must continue to pass mutation, replay, provenance,
+route, graph-resolution, and exact-output checks. Agent-route fixtures cross
+at least two consumer-side fixture files through real relative imports and calls;
+their graph `via` chains name concrete site IDs and must resolve across that
+file boundary. The primary behavior check executes through the imported
+consumer wrapper or adapter, every expected edit is declared, the replacements
+are context-dependent, and no deterministic recipe is exposed.
+Every visible fixture is a dependency-free ESM package pinned to Node 22.16.0
+and npm 11.4.1. The Go gate rejects any other ambient runtime. Its offline
+`npm test` receives an allowlisted environment with isolated home, temporary,
+cache, and empty npm-config roots plus an invalid registry. Pinned Node native
+TypeScript stripping—never regex transpilation—feeds a code-generation-disabled
+VM context with no host globals or host-realm values. Assertions, `expect`,
+SDK mocks, and callbacks are created inside that same context; its linker
+permits only relative modules inside the fixture source root, and a capability
+guard rejects ambient process, dynamic-code, or network entry points. A
+computed-constructor regression proves candidate code cannot recover host
+`process`. This is a trusted synthetic-fixture developer harness; Node `vm`,
+environment clearing, and file modes are defense in depth, not a qualified
+host-isolation boundary and not authorization to execute product repository
+commands. The check must create a real deterministic Git baseline commit, copy
+the exact generated candidate bytes into the same repository, create and verify
+a distinct candidate commit, and run an expected-failing baseline process
+separately from the passing exact-head candidate process. A checked-in expected
+file must never substitute for the generated artifact. Its fixture commitment
+includes `package.json`, the verification runner, the generated candidate, and
+every declared primary and supporting fixture. The check must prove the old snapshots fail the target
+behavior with a typed target-contract mismatch—never a missing, parse, link, or
+top-level failure—while all generated candidate files pass. The deterministic
+walking-skeleton route invokes no agent. A separate deterministic fake exercises the common adapter
+shape, emits normalized output from a clean ephemeral session, honors
+cancellation, and rejects live runner names, credentials, network, external
+writes, and silent fallback. The walking skeleton runs the exactly authorized
+`npm test --silent` command in fresh read-only verification views and separate
+processes, with provider reporting disabled. It binds the separate baseline and
+candidate command and output digests, complete fixture, toolchain, exact
+generated candidate, and verified removal of each verification view and
+isolated npm root into the canonical `static_verified` artifact, validates
+every canonical artifact against its M2 schema, passes the production authorization validator,
+and checks the exact digest chain through `MigrationBindings`.
+Complete normalized artifact digests cover every semantic field; only explicit
+self-digest fields and the authorization's later plan binding are normalized,
+with the populated cross-artifact bindings checked separately. `repo_verified`
+and product repository-command execution remain blocked until a later milestone
+uses the pinned qualified host-isolation backend required by the Lumyn profile.
+
+`examples/holdout-manifest.json` is deliberately unprovisioned and contains no
+case IDs, inputs, answer keys, expected patches, raw traces, repository URLs,
+or plaintext content digests. Only an independently authorized
+`holdout-evaluator` lifecycle packet may create the HMAC-bound private suite.
+The attended implementation packet cannot produce independent review, remote
+CI execution or monitoring, PR, merge, or post-merge evidence and cannot close
+parent M1 acceptance. CI configuration and exact toolchain-pin changes may be
+implementation paths; lifecycle-owned remote CI may perform the pinned action,
+toolchain, and dependency bootstrap required by the declared workflows, while
+fixture and product commands remain offline. Task-executor writes and
+validation-gate evidence are disjoint: the executor cannot write its
+`M1-IMPLEMENTATION` task-run namespace, while the trusted validation runner
+cannot mutate candidate paths.
+The final release-candidate binding covers the implementation plus the
+plan-verify-repair-owned `AGENTS.md`, PRD, plan, active controls, vendored
+Factory contracts, schemas, and repo validators shipped in the same change.
+Those planning prerequisites are outside task-executor write scope. Only
+generated task-run and lifecycle outputs are excluded to avoid circular
+self-hashing.
 
 ## Provider Change Contract And Event Policy
 

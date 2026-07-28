@@ -134,6 +134,19 @@ def _move_task_acceptance(
     target["acceptance_checks"].append(
         f"{acceptance_item_id}: {source_text}"
     )
+    if target_task_id == "M1":
+        target["validation_contract_inheritance"][
+            "acceptance_item_ids"
+        ].append(acceptance_item_id)
+        target["acceptance_result_requirements"].append(
+            {
+                "acceptance_item_id": acceptance_item_id,
+                "allowed_statuses": ["partial", "missing", "blocked"],
+                "evidence_mode": "automated",
+                "closure_evidence": "validation_ref",
+                "evidence_required": ["validation_report"],
+            }
+        )
 
 
 def _remove_holdout_prohibition(payload: Payload, field: str) -> None:
@@ -255,6 +268,56 @@ def run_repo_pack_self_tests(
         raise AssertionError("stale copied M10 route remained valid")
 
     mutations: list[tuple[Callable[[Payload], Any], str]] = [
+        (
+            lambda value: _task(value, "M1").pop("baseline_commands"),
+            "M1 parent control",
+        ),
+        (
+            lambda value: _task(value, "M1")[
+                "acceptance_result_requirements"
+            ][0]["allowed_statuses"].append("implemented"),
+            "must not claim terminal acceptance closure",
+        ),
+        (
+            lambda value: value["m1_implementation"].pop(
+                "mission_contract_ref"
+            ),
+            "M1 attended implementation packet missing",
+        ),
+        (
+            lambda value: value["m1_implementation"]["lifecycle_gates"].__setitem__(
+                "commit_push_required", True
+            ),
+            "authorize local validation only",
+        ),
+        (
+            lambda value: value["m1_implementation"].__setitem__(
+                "lifecycle_evidence_required", ["ship_packet"]
+            ),
+            "must not select lifecycle or holdout work",
+        ),
+        (
+            lambda value: value["m1_implementation"]["factory_contract_binding"].__setitem__(
+                "task_packet_schema_digest", "sha256:" + "0" * 64
+            ),
+            "Factory schema or semantic binding drifted",
+        ),
+        (
+            lambda value: value["plan"]["alignment_gate"].__setitem__(
+                "authorized_attended_task_refs", []
+            ),
+            "authorize only attended M1",
+        ),
+        (
+            lambda value: value["m1_implementation"]["validation_contract_inheritance"][
+                "acceptance_criteria"
+            ].__setitem__(0, {}),
+            "inheritance must be complete and local-only",
+        ),
+        (
+            lambda value: value["m1_implementation"].pop("blocked_by"),
+            "M1 attended implementation packet missing",
+        ),
         (
             lambda value: value["ledger"]["items"].pop(),
             "compiled acceptance text differs from PRD",
@@ -958,15 +1021,21 @@ def run_repo_pack_self_tests(
         ),
         (
             lambda value: value["plan"]["alignment_gate"].__setitem__(
-                "implementation_may_start", True
+                "implementation_may_start", False
             ),
-            "implementation must remain blocked",
+            "authorize only attended M1",
+        ),
+        (
+            lambda value: value["mapping"].__setitem__(
+                "generated_at", "2026-07-28T15:13:04Z"
+            ),
+            "exact regenerated M1 control set",
         ),
         (
             lambda value: value["plan"]["alignment_gate"][
                 "completed_task_refs"
             ].remove("M2"),
-            "preserve M0 and M2 closure",
+            "preserve M0/M2 closure",
         ),
         (
             lambda value: value["risk"]["current_contract_state"].__setitem__(

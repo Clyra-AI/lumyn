@@ -1,0 +1,44 @@
+{
+  "schema_version": "lumyn.m1.migration-pack/v1",
+  "scenario_id": "det-request-property-relocation",
+  "title": "Direct request-property relocation",
+  "route": "deterministic",
+  "change_class": "request_property_relocation",
+  "operation": {
+    "kind": "replace_exact_once",
+    "from": "request.source = token",
+    "to": "request.payment_method = token"
+  },
+  "provenance": {
+    "source_kind": "synthetic",
+    "source_id": "lumyn-synthetic://m1/det-request-property-relocation/v1",
+    "source_path": "examples/migration-packs/det-request-property-relocation/source.md",
+    "source_digest": "sha256:2dabafbd7bc492bb858fdd98251c7ba728d76a505ed642358247b2247689e3ef",
+    "license": "CC0-1.0",
+    "attribution": "Lumyn synthetic M1 benchmark",
+    "redistribution_allowed": true,
+    "provider_endorsement": false,
+    "customer_proof": false
+  },
+  "ground_truth": {
+    "affected": [
+      "src/client.ts:3"
+    ],
+    "unaffected": [
+      "src/client.ts:8"
+    ],
+    "uncertain": [],
+    "unsupported": [],
+    "expected_route": "deterministic",
+    "expected_edits": [
+      "src/client.ts"
+    ],
+    "expected_commands": [
+      "npm test --silent"
+    ],
+    "expected_verification": [
+      "candidate_matches_expected",
+      "unaffected_content_stable"
+    ]
+  }
+}

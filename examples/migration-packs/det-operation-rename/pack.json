@@ -1,0 +1,44 @@
+{
+  "schema_version": "lumyn.m1.migration-pack/v1",
+  "scenario_id": "det-operation-rename",
+  "title": "Direct operation rename",
+  "route": "deterministic",
+  "change_class": "operation_rename",
+  "operation": {
+    "kind": "replace_exact_once",
+    "from": "client.charges.create",
+    "to": "client.paymentIntents.create"
+  },
+  "provenance": {
+    "source_kind": "synthetic",
+    "source_id": "lumyn-synthetic://m1/det-operation-rename/v1",
+    "source_path": "examples/migration-packs/det-operation-rename/source.md",
+    "source_digest": "sha256:33f94b3691398fccc87c62bbfc1a8ace80d8cffa3735f287f3c9e605b6e009ba",
+    "license": "CC0-1.0",
+    "attribution": "Lumyn synthetic M1 benchmark",
+    "redistribution_allowed": true,
+    "provider_endorsement": false,
+    "customer_proof": false
+  },
+  "ground_truth": {
+    "affected": [
+      "src/client.ts:3"
+    ],
+    "unaffected": [
+      "src/client.ts:7"
+    ],
+    "uncertain": [],
+    "unsupported": [],
+    "expected_route": "deterministic",
+    "expected_edits": [
+      "src/client.ts"
+    ],
+    "expected_commands": [
+      "npm test --silent"
+    ],
+    "expected_verification": [
+      "candidate_matches_expected",
+      "unaffected_content_stable"
+    ]
+  }
+}

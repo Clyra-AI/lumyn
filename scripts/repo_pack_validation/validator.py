@@ -13,6 +13,11 @@ from typing import Any
 
 from repo_pack_architecture import validate_architecture_budget_policy
 from repo_pack_validation.acceptance_text import validate_acceptance_text
+from repo_pack_validation import m1_evidence
+from repo_pack_validation.m1_packet import (
+    M1_IMPLEMENTATION_REQUIRED_FIELDS,
+    validate_m1_implementation_packet as validate_m1_packet,
+)
 from repo_pack_validation.authority import (
     validate_active_repo_safety,
     validate_authority_grants,
@@ -38,6 +43,8 @@ PLAN = ROOT / "docs/product/plan.md"
 CONFIG = ROOT / ".factory/factoryd.example.json"
 AUTOSHIP_CONFIG = ROOT / ".factory/factoryd.autoship.example.json"
 ACTIVE_CONFIG = ROOT / ".factory/factoryd.json"
+M1_IMPLEMENTATION_PACKET_REF = f"{PLAN_REL}/m1-attended-implementation-task-packet.json"
+M1_IMPLEMENTATION_PACKET = ROOT / M1_IMPLEMENTATION_PACKET_REF
 
 ARTIFACT_PATHS = {
     "context": PLAN_DIR / "context-brief.json",
@@ -53,6 +60,7 @@ ARTIFACT_REFS = {
     name: path.relative_to(ROOT).as_posix()
     for name, path in ARTIFACT_PATHS.items()
 }
+EXPECTED_CONTROL_GENERATION_AT = "2026-07-28T16:00:48Z"
 
 EXPECTED_TASK_IDS = tuple(TASK_DEPENDENCIES)
 EXPECTED_PROFILE_CONTRACT_VERSION = (
@@ -964,12 +972,14 @@ def validate_context(context: dict[str, Any]) -> None:
     alignment = context.get("alignment_decisions", {})
     require(
         alignment.get("status")
-        == "factoryd_blocked_attended_execution_requires_explicit_approval",
-        "context alignment must keep factoryd blocked and attended execution explicit",
+        == "attended_m1_authorized_factoryd_blocked",
+        "context alignment must authorize attended M1 while keeping factoryd blocked",
     )
     require(
-        alignment.get("implementation_may_start") is False,
-        "context implementation must remain blocked",
+        alignment.get("implementation_may_start") is True
+        and alignment.get("authorized_attended_task_refs") == ["M1-IMPLEMENTATION"]
+        and alignment.get("parent_milestone_ref") == "M1",
+        "context must authorize only attended M1 implementation",
     )
     resolved = json.dumps(alignment.get("resolved", [])).lower()
     for token in (
@@ -1253,12 +1263,14 @@ def validate_plan(plan: dict[str, Any], required_ids: set[str]) -> None:
     alignment = plan.get("alignment_gate", {})
     require(
         alignment.get("status")
-        == "factoryd_blocked_attended_execution_requires_explicit_approval",
-        "execution alignment must keep factoryd blocked and attended execution explicit",
+        == "attended_m1_authorized_factoryd_blocked",
+        "execution alignment must authorize attended M1 while keeping factoryd blocked",
     )
     require(
-        alignment.get("implementation_may_start") is False,
-        "execution implementation must remain blocked",
+        alignment.get("implementation_may_start") is True
+        and alignment.get("authorized_attended_task_refs") == ["M1-IMPLEMENTATION"]
+        and alignment.get("parent_milestone_ref") == "M1",
+        "execution plan must authorize only attended M1 implementation",
     )
     require(
         alignment.get("completed_task_refs") == EXPECTED_COMPLETED_TASK_REFS
@@ -1266,7 +1278,35 @@ def validate_plan(plan: dict[str, Any], required_ids: set[str]) -> None:
         == []
         and alignment.get("blocked_tasks")
         == [task_id for task_id in EXPECTED_TASK_IDS if task_id not in {"M0", "M2"}],
-        "execution alignment must preserve M0 and M2 closure and block later tasks by generation",
+        "execution alignment must preserve M0/M2 closure, authorize only the M1 child, and block the parent/later tasks",
+    )
+    planning_alignment = plan.get("planning_skill_alignment", {})
+    require(
+        planning_alignment.get("status") == "aligned"
+        and set(planning_alignment.get("source_refs", []))
+        == {"factory://skills/prd-to-plan", "factory://skills/execution-compiler"}
+        and any(
+            "implementation child packet is runner-ready" in str(rule).lower()
+            and "semantic_invariants" in str(rule)
+            and "without item-level closure or lifecycle authority" in str(rule).lower()
+            for rule in planning_alignment.get("validated_rules", [])
+        ),
+        "execution plan must preserve execution-compiler runner-ready alignment",
+    )
+    drift = plan.get("plan_drift_policy", {})
+    require(
+        drift.get("continuation_behavior") == "block_until_control_set_regenerated"
+        and {
+            "context_brief",
+            "execution_plan",
+            "task_packets",
+            "validation_contract",
+            "factory_compatibility",
+            "acceptance_ledger",
+            "acceptance_mapping",
+            "scope_closure_map",
+        }.issubset(set(drift.get("required_updates", []))),
+        "execution plan drift policy must require coherent control-set regeneration",
     )
     validate_pause_contract(plan.get("factoryd_runtime"), "execution factoryd runtime")
     compatibility = plan.get("factory_compatibility", {})
@@ -1570,18 +1610,150 @@ def validate_task(
         all(not Path(path).is_absolute() and ".." not in Path(path).parts for path in task["allowed_paths"]),
         f"{task_id} allowed paths must be repo-relative",
     )
+    pr_lifecycle_forbidden = (
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/"
+        if task_id == "M1"
+        else f".factory/artifacts/pr-lifecycle/{task_id}/"
+    )
     require(
-        f".factory/artifacts/pr-lifecycle/{task_id}/" in task["forbidden_paths"],
+        pr_lifecycle_forbidden in task["forbidden_paths"],
         f"{task_id} must forbid PR-lifecycle evidence writes",
     )
     require(
         "python3 scripts/validate_repo_pack.py" in task.get("validation_commands", []),
         f"{task_id} must run repo-pack validation",
     )
+    if task_id == "M1":
+        parent_allowed = set(task.get("allowed_paths", []))
+        require(
+            {
+                "examples/migration-packs/",
+                "examples/consumer-repos/",
+                "examples/integration-graphs/",
+                "examples/candidates/",
+                "examples/negative/",
+                "examples/verification/",
+                "examples/holdout-manifest.json",
+                ".factory/contracts/",
+                ".github/action-ref-exceptions.yaml",
+                ".github/workflows/validate.yml",
+                ".tool-versions",
+                "Makefile",
+                "scripts/repo_pack_ci.py",
+                "scripts/repo_pack_validation/",
+                "tests/",
+                "docs/dev/dev_guides.md",
+                "docs/architecture/architecture_guides.md",
+                "CHANGELOG.md",
+            }.issubset(parent_allowed)
+            and "docs/" not in parent_allowed
+            and "docs/product/prd.md" not in parent_allowed
+            and "docs/product/plan.md" not in parent_allowed,
+            "M1 parent implementation paths or planning-truth separation drifted",
+        )
+        require(
+            task.get("planning_prerequisite_paths")
+            == [
+                "AGENTS.md",
+                "WORKFLOW.md",
+                "docs/product/prd.md",
+                "docs/product/plan.md",
+                f"{PLAN_REL}/",
+            ]
+            and task.get("planning_prerequisite_owner") == "plan-verify-repair"
+            and "task-executor cannot write them"
+            in task.get("planning_prerequisite_rule", ""),
+            "M1 parent planning prerequisites or ownership drifted",
+        )
+        lifecycle_lane = next(
+            (
+                lane
+                for lane in task.get("ci_lane_refs", [])
+                if lane.get("lane") == "lifecycle-evidence"
+            ),
+            None,
+        )
+        require(
+            lifecycle_lane is not None
+            and lifecycle_lane.get("command_refs")
+            == ["python3 scripts/validate_repo_pack.py --lifecycle-evidence"],
+            "M1 parent lifecycle-evidence lane drifted",
+        )
+        require(
+            task.get("attended_implementation_packet_ref")
+            == M1_IMPLEMENTATION_PACKET_REF,
+            "M1 must reference the attended implementation-only packet",
+        )
+        require(
+            "worker_type" not in task
+            and task.get("slice_type") == "validation"
+            and task.get("baseline_commands") == ["make lint-fast", "make test-fast"]
+            and task.get("red_first_commands")
+            == [
+                "LUMYN_M1_VERIFICATION_TARGET=baseline npm --prefix "
+                "examples/consumer-repos/det-operation-rename test --silent"
+            ]
+            and task.get("final_validation_commands") == ["make prepush-full"],
+            "M1 parent control must remain descriptive and point execution to its child packet",
+        )
+        require(
+            task.get("alignment_gate_ref")
+            == f"{ARTIFACT_REFS['plan']}#/alignment_gate"
+            and task.get("plan_drift_policy_ref")
+            == f"{ARTIFACT_REFS['plan']}#/plan_drift_policy"
+            and task.get("max_iterations") == 2
+            and task.get("retry_budget") == 1,
+            "M1 parent alignment or retry contract drifted",
+        )
+        inherited = task.get("validation_contract_inheritance", {})
+        require(
+            inherited.get("acceptance_ledger_ref") == ARTIFACT_REFS["ledger"]
+            and inherited.get("acceptance_item_ids") == task.get("acceptance_item_ids"),
+            "M1 parent acceptance inheritance drifted",
+        )
+        results = task.get("acceptance_result_requirements", [])
+        require(
+            isinstance(results, list)
+            and {row.get("acceptance_item_id") for row in results}
+            == set(task.get("acceptance_item_ids", []))
+            and len(results) == len(task.get("acceptance_item_ids", [])),
+            "M1 parent acceptance results must cover every exact item once",
+        )
+        for row in results:
+            statuses = set(row.get("allowed_statuses", []))
+            require(
+                bool(statuses)
+                and statuses.issubset({"partial", "missing", "blocked"})
+                and "implemented" not in statuses
+                and "deferred_with_approval" not in statuses,
+                "M1 benchmark support must not claim terminal acceptance closure",
+            )
+        require(
+            set(task.get("delivery_slice_refs", [])) == EXPECTED_SLICE_IDS
+            and task.get("required_proof_level") == "workflow_behavior"
+            and task.get("proof_scorecard_required") is True,
+            "M1 parent slice or proof contract drifted",
+        )
+        gates = task.get("lifecycle_gates", {})
+        require(
+            gates.get("holdout_provisioning_required") is True
+            and gates.get("holdout_evaluation_required") is False,
+            "M1 parent lifecycle must preserve holdout provisioning before later evaluation",
+        )
+        state = task.get("execution_state", {})
+        readiness = state.get("runner_readiness", {})
+        require(
+            state.get("state")
+            == "attended_implementation_phase_approved_full_lifecycle_blocked_factoryd_paused"
+            and readiness.get("attended") is False
+            and readiness.get("factoryd") is False,
+            "M1 parent must keep its full lifecycle and factoryd execution blocked",
+        )
     require(
         not contains_machine_local_path(task),
         f"{task_id} contains a machine-local path",
     )
+
 
 
 def validate_packets(
@@ -1682,6 +1854,21 @@ def validate_contract(contract: dict[str, Any], required_ids: set[str]) -> None:
     require(
         required_review.get("task_specific_lens_source") == ARTIFACT_REFS["packets"],
         "validation contract task-specific review lens source is stale",
+    )
+    attended = contract.get("attended_runner_requirements", {})
+    require(
+        attended.get("authorized_task_refs") == ["M1-IMPLEMENTATION"]
+        and attended.get("parent_task_ref") == "M1"
+        and attended.get("task_packet_ref") == M1_IMPLEMENTATION_PACKET_REF
+        and attended.get("factoryd_dispatch_enabled") is False
+        and attended.get("lifecycle_actions_authorized") is False
+        and M1_IMPLEMENTATION_REQUIRED_FIELDS.issubset(
+            set(attended.get("required_task_fields", []))
+        )
+        and "cannot close" in str(attended.get("acceptance_result_policy", "")).lower()
+        and "cannot provision or evaluate" in str(attended.get("holdout_policy", "")).lower()
+        and "no live agent runner/model" in str(attended.get("offline_policy", "")).lower(),
+        "validation contract must enforce the attended M1 implementation-only boundary",
     )
     criteria = contract.get("acceptance_criteria")
     require(
@@ -2039,6 +2226,22 @@ def validate_loaded(
     evidence_payloads: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, dict[str, Any]]:
     required_ids = expected_acceptance_ids()
+    for name in (
+        "context",
+        "risk",
+        "plan",
+        "packets",
+        "contract",
+        "ledger",
+        "mapping",
+        "closure",
+    ):
+        require(
+            data[name].get("generated_at") == EXPECTED_CONTROL_GENERATION_AT
+            and data[name].get("generated_by")
+            == "prd-to-plan+execution-compiler+plan-verify-repair",
+            f"{name} is not part of the exact regenerated M1 control set",
+        )
     validate_acceptance_text(PRD.read_text(), data["ledger"])
     for name, payload in data.items():
         require(
@@ -2070,6 +2273,19 @@ def validate_loaded(
     validate_mapping(data["mapping"], required_ids)
     validate_plan(data["plan"], required_ids)
     tasks = validate_packets(data["packets"], required_ids, ledger_by_id)
+    validate_m1_packet(
+        data["m1_implementation"],
+        root=ROOT,
+        plan_rel=PLAN_REL,
+        artifact_refs=ARTIFACT_REFS,
+        expected_generation_at=EXPECTED_CONTROL_GENERATION_AT,
+        require=require,
+        fail=fail,
+        load_json=load_json,
+        list_of_strings=list_of_strings,
+        contains_machine_local_path=contains_machine_local_path,
+    )
+    m1_evidence.validate_candidate_scope(ROOT, data["m1_implementation"])
     validate_contract(data["contract"], required_ids)
     validate_closure(data["closure"], ledger_by_id, required_ids)
     plan_slices = {
@@ -2105,6 +2321,7 @@ def validate_active_config(
 
 def load_all() -> dict[str, dict[str, Any]]:
     data = {name: load_json(path) for name, path in ARTIFACT_PATHS.items()}
+    data["m1_implementation"] = load_json(M1_IMPLEMENTATION_PACKET)
     data["config"] = load_json(CONFIG)
     data["autoship"] = load_json(AUTOSHIP_CONFIG)
     return data
@@ -2122,7 +2339,21 @@ def run_self_test() -> None:
     )
 
 
+def run_lifecycle_evidence_validation() -> None:
+    packet = load_all()["m1_implementation"]
+    m1_evidence.validate_m1_evidence(ROOT, packet)
+    m1_evidence.run_self_tests(ROOT, packet)
+
+
 def main() -> int:
+    if sys.argv[1:] == ["--lifecycle-evidence"]:
+        try:
+            run_lifecycle_evidence_validation()
+        except AssertionError as exc:
+            print(f"repo-pack lifecycle-evidence validation failed: {exc}", file=sys.stderr)
+            return 2
+        print("repo-pack lifecycle-evidence validation passed")
+        return 0
     if sys.argv[1:] == ["--self-test"]:
         try:
             run_self_test()
@@ -2132,7 +2363,10 @@ def main() -> int:
         print("repo-pack validator self-test passed")
         return 0
     if sys.argv[1:]:
-        print("usage: validate_repo_pack.py [--self-test]", file=sys.stderr)
+        print(
+            "usage: validate_repo_pack.py [--self-test|--lifecycle-evidence]",
+            file=sys.stderr,
+        )
         return 2
     try:
         validate_docs()

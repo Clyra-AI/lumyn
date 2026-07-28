@@ -4,7 +4,7 @@ COVERAGE_MIN ?= 75
 STABLE_COVERAGE_MIN ?= 85
 STABLE_COVERAGE_PACKAGES := cmd/lumyn internal/config internal/exitcode internal/result
 
-.PHONY: fmt lint-fast test-fast test-coverage test-contracts build audit-remote-protection prepush-full
+.PHONY: fmt lint-fast test-fast test-coverage test-contracts lifecycle-evidence build audit-remote-protection prepush-full
 
 lint-fast:
 	test -f AGENTS.md
@@ -29,20 +29,27 @@ lint-fast:
 	test -d scripts
 	! grep -RIn "TODO\\|TBD\\|FIXME" AGENTS.md WORKFLOW.md README.md docs cmd internal schemas tests
 	grep -q '^golang 1.26.5$$' .tool-versions
+	grep -q '^nodejs 22.16.0$$' .tool-versions
 	grep -q '^go 1.26.5$$' go.mod
 	grep -q 'go-version-file: go.mod' .github/workflows/validate.yml
 	grep -q 'check-latest: false' .github/workflows/validate.yml
 	grep -q 'actions/checkout@v6.0.2' .github/workflows/validate.yml
 	grep -q 'actions/setup-go@v6.3.0' .github/workflows/validate.yml
+	grep -q 'actions/setup-node@v7.0.0' .github/workflows/validate.yml
+	grep -q 'node-version: 22.16.0' .github/workflows/validate.yml
+	grep -q 'npm@11.4.1' .github/workflows/validate.yml
+	grep -q 'fetch-depth: 0' .github/workflows/validate.yml
 	grep -q 'permissions:' .github/workflows/validate.yml
 	grep -q 'concurrency:' .github/workflows/validate.yml
 	grep -q 'timeout-minutes:' .github/workflows/validate.yml
 	grep -q 'make prepush-full' .github/workflows/validate.yml
+	grep -q 'python3 scripts/validate_repo_pack.py --lifecycle-evidence' .github/workflows/validate.yml
 	grep -q '"validate"' .github/required-checks.json
 	grep -q '"CodeQL analyze"' .github/required-checks.json
 	grep -Fq '/.github/** @davidahmann' .github/CODEOWNERS
 	grep -q 'actions/checkout@v6.0.2' .github/action-ref-exceptions.yaml
 	grep -q 'actions/setup-go@v6.3.0' .github/action-ref-exceptions.yaml
+	grep -q 'actions/setup-node@v7.0.0' .github/action-ref-exceptions.yaml
 	grep -q 'github/codeql-action/init@v4' .github/action-ref-exceptions.yaml
 	grep -q 'permissions:' .github/workflows/codeql.yml
 	grep -q 'concurrency:' .github/workflows/codeql.yml
@@ -121,6 +128,9 @@ test-contracts:
 build:
 	mkdir -p .factory/tmp
 	$(GO) build -o .factory/tmp/lumyn ./cmd/lumyn
+
+lifecycle-evidence:
+	python3 scripts/validate_repo_pack.py --lifecycle-evidence
 
 audit-remote-protection:
 	python3 scripts/audit_branch_protection.py

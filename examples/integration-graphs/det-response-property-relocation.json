@@ -1,0 +1,26 @@
+{
+  "schema_version": "lumyn.m1.integration-graph/v1",
+  "scenario_id": "det-response-property-relocation",
+  "nodes": [
+    {
+      "site_id": "response-customer-email",
+      "path": "src/client.ts",
+      "line": 2,
+      "classification": "affected",
+      "symbol": "response.customer_email",
+      "via": [
+        "direct"
+      ]
+    },
+    {
+      "site_id": "response-id",
+      "path": "src/client.ts",
+      "line": 3,
+      "classification": "unaffected",
+      "symbol": "response.id",
+      "via": [
+        "direct"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "artifact_type": "lifecycle_authorization",
+  "schema_version": "0.1",
+  "task_id": "M1",
+  "work_item_id": "lumyn-v3-m1",
+  "branch_name": "codex/lumyn-m1-runner-contract",
+  "candidate_digest": "sha256:ebc26f496732a729d714508c3cfd7908f735beee8afa158fc793fd9f24edab6f",
+  "authority": {
+    "class": "repository_owner",
+    "identity": "davidahmann",
+    "source": "explicit_user_instruction",
+    "instruction": "do it all i approve"
+  },
+  "approved_transitions": [
+    "planning_control_regeneration_for_exact_m1_scope",
+    "holdout_provisioning",
+    "independent_code_review",
+    "commit",
+    "push",
+    "pull_request_creation",
+    "ci_and_codeql_monitoring",
+    "passive_codex_review_settle",
+    "repository_merge",
+    "post_merge_monitoring",
+    "lifecycle_closure"
+  ],
+  "constraints": [
+    "Factoryd dispatch remains paused.",
+    "No live Agent Runner, model, consumer repository, provider, or product GitHub delivery is authorized.",
+    "Private holdout inputs, answers, keys, traces, and resolving digests remain outside every repository.",
+    "The implementation candidate, lifecycle evidence, and PR lifecycle evidence remain separately bound.",
+    "No parent acceptance item may be overstated beyond the M1 benchmark and provisioning boundary."
+  ],
+  "approved_at": "2026-07-28T13:46:58Z",
+  "expires_at": "2026-07-29T13:46:58Z",
+  "status": "active"
+}

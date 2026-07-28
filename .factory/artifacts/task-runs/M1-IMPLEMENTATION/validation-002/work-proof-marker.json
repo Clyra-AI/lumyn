@@ -1,0 +1,21 @@
+{
+  "command": "make lint-fast",
+  "cwd": ".",
+  "execution_status": "pass",
+  "exit_code": 0,
+  "finished_at": "2026-07-28T16:01:52Z",
+  "generated_by": "trusted_runner",
+  "git_sha": "d7ae311c391775a2517d56add6d57148d5891ef3",
+  "marker_id": "validation-002",
+  "raw_log_refs": [
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-002/work-proof-marker.stdout.log",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-002/work-proof-marker.stderr.log"
+  ],
+  "runner_id": "trusted-runner:factory-reference-validation",
+  "started_at": "2026-07-28T16:01:51Z",
+  "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_digest": "sha256:26a2568da1d66c528999665445172acaa610b1ca5a9595500a94a11fd602a83c",
+  "workspace_ref": "branch:codex/lumyn-m1-runner-contract",
+  "validation_run_id": "validation:2026-07-28T16:01:47Z:lumyn-m1-implementation-r2",
+  "candidate_digest": "sha256:ebc26f496732a729d714508c3cfd7908f735beee8afa158fc793fd9f24edab6f"
+}

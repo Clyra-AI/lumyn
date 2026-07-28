@@ -8,8 +8,10 @@ from typing import Any
 EXPECTED_RUNTIME_PINS = {
     "language": "go_with_parser_backed_typescript_analysis",
     "toolchain_version": (
-        "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, "
-        "and toolchain pins before package-lock mutation"
+        "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture "
+        "packages use Node native --experimental-strip-types with lifecycle "
+        "scripts disabled; future package-lock mutation requires exact "
+        "registry-or-snapshot and package-integrity pins"
     ),
     "module_or_package_path": "github.com/Clyra-AI/lumyn",
     "dependency_policy": (

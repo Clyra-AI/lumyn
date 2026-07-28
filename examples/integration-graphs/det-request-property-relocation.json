@@ -1,0 +1,26 @@
+{
+  "schema_version": "lumyn.m1.integration-graph/v1",
+  "scenario_id": "det-request-property-relocation",
+  "nodes": [
+    {
+      "site_id": "request-source-field",
+      "path": "src/client.ts",
+      "line": 3,
+      "classification": "affected",
+      "symbol": "request.source",
+      "via": [
+        "direct"
+      ]
+    },
+    {
+      "site_id": "payments-list-operation",
+      "path": "src/client.ts",
+      "line": 8,
+      "classification": "unaffected",
+      "symbol": "client.payments.list",
+      "via": [
+        "direct"
+      ]
+    }
+  ]
+}

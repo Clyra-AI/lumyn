@@ -5,7 +5,7 @@
   "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
   "acceptance_mapping_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
   "acceptance_item_count": 53,
-  "last_updated_at": "2026-07-26T17:04:17Z",
+  "last_updated_at": "2026-07-28T16:00:48Z",
   "closure_status": "partial",
   "full_mvp_closure_rule": "Every acceptance item must have direct terminal evidence or an approved item-specific disposition. Milestones and delivery slices cannot close items.",
   "delivery_slices": [
@@ -357,7 +357,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -383,7 +383,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -409,7 +409,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -435,7 +435,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -625,7 +625,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -651,7 +651,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -677,7 +677,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -703,7 +703,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -731,7 +731,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -757,7 +757,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -783,7 +783,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -809,7 +809,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -837,7 +837,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -865,7 +865,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -893,7 +893,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -921,7 +921,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -949,7 +949,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -977,7 +977,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1005,7 +1005,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1031,7 +1031,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1057,7 +1057,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1085,7 +1085,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1113,7 +1113,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1141,7 +1141,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1169,7 +1169,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1195,7 +1195,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1221,7 +1221,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1247,7 +1247,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1273,7 +1273,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1443,7 +1443,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1469,7 +1469,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1495,7 +1495,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1521,7 +1521,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1547,7 +1547,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1573,7 +1573,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1599,7 +1599,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1627,7 +1627,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1653,7 +1653,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1679,7 +1679,7 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     },
     {
@@ -1705,14 +1705,15 @@
         }
       ],
       "notes": [
-        "No v3 implementation task has been approved or executed."
+        "No terminal v3 acceptance closure is claimed; direct item-level evidence is required."
       ]
     }
   ],
-  "generated_by": "prd-to-plan+execution-compiler+post-merge-monitor",
-  "generated_at": "2026-07-26T17:04:17Z",
+  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair",
+  "generated_at": "2026-07-28T16:00:48Z",
   "generation_state": {
     "M0": "closed_preserved",
-    "M2": "closed_with_recorded_evidence_and_process_debt"
+    "M2": "closed_with_recorded_evidence_and_process_debt",
+    "M1": "attended_implementation_active_nonterminal"
   }
 }

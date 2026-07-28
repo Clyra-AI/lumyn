@@ -459,9 +459,15 @@ demand, a reachable cohort, or repository-specific value. Lumyn may not claim
 customer-specific value until it runs in at least one real, consenting
 consumer repository.
 
-Public fixtures may prove a complete local walking skeleton before a provider
-signs only through the deterministic Agent Runner fake. A live generic-agent
-public-fixture canary follows M6 implementation and qualification. Live cohort
+Before any API Provider signs on, public fixtures may prove a complete local
+walking skeleton through an agent-free deterministic route that stops at a
+manual local PR bundle. A separate deterministic fake exercises the common
+Agent Runner contract but does not generate, verify, or deliver the
+walking-skeleton candidate. This trusted developer harness earns only
+`static_verified`; product
+repository execution and `repo_verified` require the later qualified
+host-isolation backend. A live generic-agent public-fixture canary follows M6
+implementation and qualification. Live cohort
 onboarding, provider distribution, consumer repository access, automated
 GitHub delivery, and provider status projection remain gated by a qualified
 paid campaign and the relevant consumer authority. A consumer-paid sprint may

@@ -1,0 +1,46 @@
+{
+  "schema_version": "lumyn.m1.migration-pack/v1",
+  "scenario_id": "agent-signature-type-adaptation",
+  "title": "Adapter signature and type adaptation",
+  "route": "agent_assisted",
+  "route_rationale": "The target accepts a structured identifier, but repository context must coordinate the consumer-facing adapter call and its SDK-facing wrapper signature while preserving list behavior; no provider-authored repository edit recipe is available.",
+  "change_class": "signature_type_adaptation",
+  "operation": {
+    "kind": "agent_required"
+  },
+  "provenance": {
+    "source_kind": "synthetic",
+    "source_id": "lumyn-synthetic://m1/agent-signature-type-adaptation/v1",
+    "source_path": "examples/migration-packs/agent-signature-type-adaptation/source.md",
+    "source_digest": "sha256:42e163d37bc71de5170676a58e47844a083b5e9bbd332c3105eec255db07a85f",
+    "license": "CC0-1.0",
+    "attribution": "Lumyn synthetic M1 benchmark",
+    "redistribution_allowed": true,
+    "provider_endorsement": false,
+    "customer_proof": false
+  },
+  "ground_truth": {
+    "affected": [
+      "src/client.ts:8",
+      "src/adapter.ts:2"
+    ],
+    "unaffected": [
+      "src/client.ts:4",
+      "src/adapter.ts:6"
+    ],
+    "uncertain": [],
+    "unsupported": [],
+    "expected_route": "agent_assisted",
+    "expected_edits": [
+      "src/client.ts",
+      "src/adapter.ts"
+    ],
+    "expected_commands": [
+      "npm test --silent"
+    ],
+    "expected_verification": [
+      "candidate_matches_expected",
+      "unaffected_content_stable"
+    ]
+  }
+}

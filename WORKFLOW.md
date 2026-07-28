@@ -450,13 +450,15 @@ Historical evidence is immutable and proves only its recorded semantics.
 - Coverage: `make test-coverage`
 - Contract: `make test-contracts`
 - Full: `make prepush-full`
+- Lifecycle evidence after immutable M1 markers/report: `make lifecycle-evidence`
 - Risk: GitHub Actions `CodeQL analyze`
 - Acceptance: item-level ledger and closure map
 - Cross-system: separately approved model, sandbox, or GitHub integration
 
 ## PR Lifecycle Baseline
 
-- Local gate: `make prepush-full`.
+- Local gates: `make prepush-full`, then `make lifecycle-evidence` after M1
+  markers and reports are immutable.
 - GitHub validation: `validate`.
 - Security scanner: `CodeQL analyze`.
 - Owner review: `.github/CODEOWNERS`.

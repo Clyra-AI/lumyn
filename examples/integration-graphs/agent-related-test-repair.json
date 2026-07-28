@@ -1,0 +1,50 @@
+{
+  "schema_version": "lumyn.m1.integration-graph/v1",
+  "scenario_id": "agent-related-test-repair",
+  "nodes": [
+    {
+      "site_id": "invoice-normalizer",
+      "path": "src/invoices.ts",
+      "line": 2,
+      "classification": "affected",
+      "symbol": "return result",
+      "via": [
+        "invoice-normalizer",
+        "invoice-status-assertion"
+      ]
+    },
+    {
+      "site_id": "invoice-status-assertion",
+      "path": "src/client.ts",
+      "line": 6,
+      "classification": "affected",
+      "symbol": "expect(invoice",
+      "via": [
+        "invoice-normalizer",
+        "invoice-status-assertion"
+      ]
+    },
+    {
+      "site_id": "invoice-health-wrapper",
+      "path": "src/invoices.ts",
+      "line": 6,
+      "classification": "unaffected",
+      "symbol": "client.health",
+      "via": [
+        "invoice-health-wrapper",
+        "health-assertion"
+      ]
+    },
+    {
+      "site_id": "health-assertion",
+      "path": "src/client.ts",
+      "line": 10,
+      "classification": "unaffected",
+      "symbol": "invoiceHealth",
+      "via": [
+        "invoice-health-wrapper",
+        "health-assertion"
+      ]
+    }
+  ]
+}
