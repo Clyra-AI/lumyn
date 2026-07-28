@@ -8,7 +8,7 @@
   "acceptance_item_count": 53,
   "runtime_pins": {
     "language": "go_with_parser_backed_typescript_analysis",
-    "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+    "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
     "module_or_package_path": "github.com/Clyra-AI/lumyn",
     "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
     "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -120,6 +120,12 @@
   "tasks": [
     {
       "task_id": "M0",
+      "validation_commands": [
+        "make lint-fast",
+        "make test-fast",
+        "make test-coverage",
+        "python3 scripts/validate_repo_pack.py"
+      ],
       "task_order": 1,
       "work_item_id": "lumyn-v3-m0",
       "milestone_ref": "docs/product/plan.md#m0-correct-command-and-result-foundations",
@@ -211,7 +217,7 @@
       "requires_network": false,
       "runtime_pins": {
         "language": "go_with_parser_backed_typescript_analysis",
-        "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+        "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -287,12 +293,6 @@
         },
         "capability_grants": []
       },
-      "validation_commands": [
-        "make lint-fast",
-        "make test-fast",
-        "make test-coverage",
-        "python3 scripts/validate_repo_pack.py"
-      ],
       "stop_conditions": [
         "factoryd dispatch is requested while the Factory profile or runtime remains unqualified",
         "acceptance item is absent, unmapped, or closed only by milestone or slice",
@@ -314,29 +314,197 @@
       "task_order": 2,
       "work_item_id": "lumyn-v3-m1",
       "milestone_ref": "docs/product/plan.md#m1-build-deterministic-agent-assisted-blocked-and-generic-agent-benchmarks",
-      "objective": "Freeze provenance-backed deterministic, agent-assisted, blocked, and negative benchmarks plus a fair generic-agent baseline, and prove a public-fixture event-to-PR-bundle walking skeleton with deterministic external-write fakes.",
+      "objective": "Freeze provenance-backed deterministic, agent-assisted, blocked, and negative benchmarks plus a fair generic-agent baseline, and prove an agent-free deterministic public-fixture event-to-manual-PR-bundle walking skeleton with a separate deterministic-fake adapter conformance test and no external write.",
       "risk_class": "medium",
       "dispatch_status": "attended_task_requires_explicit_approval_factoryd_paused",
       "blocked_by": [
         "M0",
         "M2"
       ],
+      "attended_implementation_packet_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/m1-attended-implementation-task-packet.json",
+      "input_artifacts": [
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/context-brief.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json"
+      ],
+      "commands": ["make lint-fast", "make test-fast", "make test-coverage", "python3 scripts/validate_repo_pack.py"],
+      "baseline_commands": ["make lint-fast", "make test-fast"],
+      "red_first_commands": ["LUMYN_M1_VERIFICATION_TARGET=baseline npm --prefix examples/consumer-repos/det-operation-rename test --silent"],
+      "final_validation_commands": ["make prepush-full"],
+      "planning_skill_refs": ["factory://skills/prd-to-plan", "factory://skills/execution-compiler"],
+      "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json#/alignment_gate",
+      "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json#/plan_drift_policy",
+      "max_iterations": 2,
+      "retry_budget": 1,
+      "evidence_required": ["validation_report", "work_proof_marker", "proof-of-behavior-scorecard"],
+      "test_matrix_refs": [
+        {"tier": "Tier 1 Unit", "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix", "command_refs": ["make test-fast"]},
+        {"tier": "Tier 2 Integration", "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix", "command_refs": ["go test ./tests -run '^TestM1' -count=1"]},
+        {"tier": "Tier 3 End-to-End", "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix", "command_refs": ["go test ./tests -run '^TestM1WalkingSkeleton' -count=1"]},
+        {"tier": "Tier 5 Hardening", "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix", "command_refs": ["go test ./tests -run '^TestM1.*(Reject|Mutation|Isolation|NoLive)' -count=1"]},
+        {"tier": "Tier 9 Contract", "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix", "command_refs": ["python3 scripts/validate_repo_pack.py"]},
+        {"tier": "Tier 11 Scenario", "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix", "command_refs": ["go test ./tests -run '^TestM1.*(Corpus|Holdout|Baseline)' -count=1"]}
+      ],
+      "ci_lane_refs": [
+        {"lane": "fast", "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping", "command_refs": ["make lint-fast", "make test-fast"]},
+        {"lane": "core", "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping", "command_refs": ["make test-contracts", "make prepush-full"]},
+        {"lane": "acceptance", "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping", "command_refs": ["python3 scripts/validate_repo_pack.py"]},
+        {"lane": "lifecycle-evidence", "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping", "command_refs": ["python3 scripts/validate_repo_pack.py --lifecycle-evidence"]},
+        {"lane": "risk", "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping", "status_check_refs": ["CodeQL analyze"]}
+      ],
+      "ci_control_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+        "required_check_manifest_ref": ".github/required-checks.json",
+        "required_check_refs": ["validate", "CodeQL analyze"],
+        "workflow_refs": [".github/workflows/validate.yml", ".github/workflows/codeql.yml"],
+        "owner_review_ref": ".github/CODEOWNERS",
+        "action_ref_policy_ref": ".github/action-ref-exceptions.yaml",
+        "branch_protection_ref": ".github/required-checks.json",
+        "controls": {
+          "least_privilege_permissions": true,
+          "concurrency": true,
+          "timeouts": true,
+          "toolchain_pin_source": "go.mod+.tool-versions+fixture-packageManager+workflow-exact-npm-bootstrap",
+          "coverage_in_full_gate": true,
+          "scanner_lane": true
+        }
+      },
+      "coverage_policy_refs": {
+        "required": true,
+        "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+        "minimums": [
+          {"scope": "go_first_party_packages_overall", "threshold": 75, "command_refs": ["make test-coverage"]},
+          {"scope": "go_stable_command_or_core_packages", "threshold": 85, "command_refs": ["make test-coverage"]}
+        ],
+        "command_refs": ["make test-coverage", "make prepush-full"],
+        "exception_policy": "coverage misses block promotion without an approved scoped exception and compensating evidence"
+      },
+      "security_scanner_gates": {
+        "required": true,
+        "scanner": "CodeQL",
+        "workflow_ref": ".github/workflows/codeql.yml",
+        "status_check": "CodeQL analyze",
+        "exception_policy": "approved_exception_required"
+      },
+      "engineering_policy_refs": [
+        {"policy": "docs_parity", "source_ref": "docs/dev/dev_guides.md#docs-parity", "rule": "Fixture, manifest, baseline, route, and walking-skeleton behavior stays synchronized with task-readable docs."},
+        {"policy": "output_contracts", "source_ref": "docs/dev/dev_guides.md#result-and-evidence-compatibility", "rule": "Benchmark and skeleton artifacts are versioned, deterministic, provenance-bound contracts."},
+        {"policy": "release_integrity", "source_ref": "docs/dev/dev_guides.md#release-integrity", "rule": "M1 cannot imply supported distribution or live execution."},
+        {"policy": "provenance_evidence", "source_ref": "docs/dev/dev_guides.md#provenance-evidence", "rule": "Evidence uses canonical repo-relative refs without committing private holdout material."}
+      ],
+      "architecture_guidance_refs": [
+        {"source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map", "rule": "Freeze source truth, consumers, feedback, blast radius, and rollback before downstream scoring."},
+        {"source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations", "rule": "Add the smallest failing M1 fixture or test before supporting behavior."},
+        {"source_ref": "docs/architecture/architecture_guides.md#adr-and-decision-triggers", "rule": "No ADR unless M1 changes the approved holdout, trust, authority, or public-contract boundary."},
+        {"source_ref": "docs/architecture/architecture_guides.md#reliability-and-recovery-triggers", "rule": "Replay, mutation, cancellation, manual-bundle-boundary, fake-adapter, and fallback failures are deterministic and fail closed."},
+        {"source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture", "rule": "M1 remains public/synthetic, offline, credential-free, network-free, and agent-free for walking-skeleton generation; a deterministic fake is confined to separate adapter conformance."}
+      ],
+      "structured_parser_policy_refs": ["docs/dev/dev_guides.md#structured-data-policy"],
+      "agent_native_cli_checks": [
+        "Command-facing test output is stable and machine-readable.",
+        "Non-interactive failures preserve typed status and evidence refs.",
+        "No fake adapter silently falls back to a live executable, model, credential, or network route."
+      ],
+      "artifact_budget_refs": ["docs/dev/dev_guides.md#redaction-and-evidence-budgets"],
+      "redaction_posture": {
+        "classification": "public_or_synthetic_source_safe",
+        "customer_safe": true,
+        "redaction_notes": "Committed material is licensed public-derived or synthetic; private holdout inputs, answers, traces, repository URLs, and plaintext content digests are prohibited.",
+        "recursive_policy": "reject credentials, secrets, machine-local paths, private repository identity, raw holdout content, and resolving answer material"
+      },
+      "required_proof_level": "workflow_behavior",
+      "proof_scorecard_required": true,
+      "proof_scorecard_artifact": "proof-of-behavior-scorecard",
+      "semantic_invariants": [
+        "Identical pinned inputs produce byte-stable deterministic candidates and manifests.",
+        "Committed artifacts contain no private holdout inputs, answers, expected patches, expected labels, raw traces, repository URLs, or plaintext content digests.",
+        "The comparator receives the same frozen snapshot, evidence, engine route, budgets, tools, commands, engineer role, and verification opportunity except for Lumyn's treatment.",
+        "M1 launches no live Agent Runner or model, accepts no Agent Runner/model credential, and performs no product-command network or GitHub write; the agent-free deterministic walking-skeleton route stays offline, the deterministic fake is confined to separate adapter conformance, and lifecycle-owned remote CI may perform the pinned action, toolchain, and dependency bootstrap required by the declared workflows.",
+        "The walking skeleton proves contract composition only and cannot close runtime, automated-delivery, real-repository, or commercial acceptance.",
+        "M1 acceptance results remain partial, missing, or blocked; later owning milestones retain terminal closure."
+      ],
+      "changelog_intent": {
+        "impact": "required",
+        "section": "Added",
+        "draft_entry": "Added the frozen M1 API-migration benchmark corpus, matched baseline protocol, holdout commitment, agent-free deterministic walking skeleton, and separate fake-adapter conformance test.",
+        "semver_marker": "[semver:minor]"
+      },
+      "versioning_impact": "Pre-1.0 additive benchmark and test-harness contract with explicit fixture and manifest schema versions.",
+      "migration_impact": "No existing consumer migration; downstream M3, M4, M6, M7, and M10 consume the frozen corpus and scoring protocol.",
+      "docs_sync_refs": [
+        {"path": "docs/product/prd.md", "reason": "M1 product boundary, proof claims, and implementation form"},
+        {"path": "docs/product/plan.md", "reason": "M1 source scope and completion boundary"},
+        {"path": "docs/dev/dev_guides.md", "reason": "corpus, test, evidence, and lifecycle rules"},
+        {"path": "docs/architecture/architecture_guides.md", "reason": "holdout, trust, boundary, and failure semantics"},
+        {"path": "CHANGELOG.md", "reason": "required M1 additive benchmark entry"}
+      ],
+      "adr_required": false,
+      "adr_trigger_reason": "No ADR while M1 preserves the approved public/synthetic fixture and private holdout boundary; boundary drift stops execution.",
+      "tdd_first_failing_tests": [
+        "Add the smallest TestM1 fixture, mutation, isolation, or walking-skeleton check before supporting behavior.",
+        "Record the red command and failure signal before implementation makes it pass."
+      ],
+      "cost_perf_impact": {
+        "level": "low_to_medium",
+        "measurement_expectation": "Record local deterministic runtime and fixture counts; no model, network, or external-service cost is permitted.",
+        "budget_trigger": "Split or stop if the corpus cannot remain within local deterministic pre-push and artifact budgets."
+      },
+      "slice_type": "validation",
+      "slice_rationale": {
+        "why_non_vertical": "M1 freezes a reusable benchmark, holdout boundary, matched baseline, and thin contract-composition skeleton before the runtime slices consume them; it deliberately does not implement live provider, consumer-repository, Agent Runner/model, GitHub, or commercial behavior.",
+        "dependency_impact": "M3, M4, M6, M7, and M10 must consume the frozen corpus and scoring protocol instead of changing ground truth after seeing results.",
+        "validation_rationale": "The slice succeeds through provenance, mutation, isolation, reproducibility, fake-conformance, and walking-skeleton proof rather than production deployment."
+      },
       "allowed_paths": [
         "examples/migration-packs/",
         "examples/consumer-repos/",
         "examples/integration-graphs/",
         "examples/candidates/",
         "examples/negative/",
+        "examples/verification/",
         "examples/holdout-manifest.json",
+        ".factory/contracts/",
+        ".github/action-ref-exceptions.yaml",
+        ".github/workflows/validate.yml",
+        ".tool-versions",
+        "Makefile",
+        "scripts/repo_pack_ci.py",
+        "scripts/repo_pack_validation/",
         "tests/",
-        "docs/"
+        "docs/dev/dev_guides.md",
+        "docs/architecture/architecture_guides.md",
+        "CHANGELOG.md"
       ],
+      "planning_prerequisite_paths": [
+        "AGENTS.md",
+        "WORKFLOW.md",
+        "docs/product/prd.md",
+        "docs/product/plan.md",
+        ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/"
+      ],
+      "planning_prerequisite_owner": "plan-verify-repair",
+      "planning_prerequisite_rule": "The planning verifier must regenerate and validate these planning-truth paths before candidate validation; task-executor cannot write them, and validation binds them into the same release candidate.",
+      "architecture_target_paths": [
+        "examples/migration-packs/",
+        "examples/consumer-repos/",
+        "examples/integration-graphs/",
+        "examples/candidates/",
+        "examples/negative/",
+        "examples/verification/",
+        "scripts/repo_pack_validation/",
+        "tests/"
+      ],
+      "path_planning_method": "authored_m1_expected_repo_areas_v1",
       "forbidden_paths": [
         ".git/",
         ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/",
         ".factory/artifacts/prd-to-plan/lumyn-mvp/",
         ".factory/artifacts/lifecycle-evidence/M1/",
-        ".factory/artifacts/pr-lifecycle/M1/"
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/"
       ],
       "scope_exclusions": [
         "production credentials or production mutation",
@@ -379,14 +547,165 @@
         "PILOT-005: Against the frozen guide/codemod plus generic-agent baseline using the same repository snapshot, authoritative migration evidence, selected Agent Runner adapter/version/executable, actual Model Provider and model version, auth/entitlement and execution-funding route, credential and usage-billing owners, context-access ceiling, tools, commands, and attempt, token, time, and cost budgets, Lumyn reduces median Consumer Maintainer hands-on time by at least 30% without a worse substantive-correction, revert, or false-verification rate, or clears another equally material threshold frozen before execution. Unmatched engine comparisons are descriptive, not causal proof of Lumyn's advantage."
       ],
       "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+      "delivery_slice_refs": [
+        "migration_foundation",
+        "hybrid_migration_engine",
+        "provider_campaign"
+      ],
       "validation_contract_inheritance": {
         "source_validation_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
+        "acceptance_ledger_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+        "acceptance_item_ids": [
+          "PACK-001",
+          "EVENT-001",
+          "EVENT-002",
+          "INSTALL-001",
+          "INSTALL-002",
+          "IMPACT-005",
+          "AGENT-001",
+          "AGENT-002",
+          "AGENT-003",
+          "AGENT-004",
+          "AGENT-005",
+          "AGENT-006",
+          "AGENT-007",
+          "VER-006",
+          "PILOT-005"
+        ],
+        "required_checks": [
+          "make lint-fast",
+          "make test-fast",
+          "make test-coverage",
+          "python3 scripts/validate_repo_pack.py",
+          "make prepush-full",
+          "python3 scripts/validate_repo_pack.py --lifecycle-evidence"
+        ],
         "required_review": {
           "required": true,
           "review_type": "code",
           "reviewer_class": "independent_or_human"
-        }
+        },
+        "evidence_required": [
+          "validation_report",
+          "work_proof_marker",
+          "proof-of-behavior-scorecard"
+        ],
+        "stop_conditions": [
+          "runner-ready contract is incomplete or drifts",
+          "a changed path falls outside the M1 packet",
+          "a required deterministic command fails",
+          "holdout answers become visible to the implementation worker",
+          "live Agent Runner/model, credentials, network, or external writes are requested"
+        ]
       },
+      "acceptance_result_requirements": [
+        {
+          "acceptance_item_id": "PACK-001",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "EVENT-001",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "EVENT-002",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "INSTALL-001",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "INSTALL-002",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "IMPACT-005",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "AGENT-001",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "AGENT-002",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "AGENT-003",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "AGENT-004",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "AGENT-005",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "AGENT-006",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "AGENT-007",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "VER-006",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "automated",
+          "closure_evidence": "validation_ref",
+          "evidence_required": ["validation_report"]
+        },
+        {
+          "acceptance_item_id": "PILOT-005",
+          "allowed_statuses": ["partial", "missing", "blocked"],
+          "evidence_mode": "external",
+          "closure_evidence": "acceptance_evidence_record",
+          "evidence_required": ["acceptance_evidence_record"],
+          "lifecycle_evidence_required": ["holdout_result"]
+        }
+      ],
       "required_worker_chain": [
         "task-executor",
         "validation-gate",
@@ -400,7 +719,8 @@
         "ci_required": true,
         "code_review_required": true,
         "codex_review_required": true,
-        "holdout_evaluation_required": true,
+        "holdout_provisioning_required": true,
+        "holdout_evaluation_required": false,
         "trace_grading_required": false,
         "evidence_attestation_required": false,
         "commit_push_required": true,
@@ -417,8 +737,13 @@
         "pr_lifecycle_report",
         "post_merge_report",
         "scope_closure_report",
+        "review_report",
         "holdout_result"
       ],
+      "lifecycle_evidence_refs": {
+        "review_report": ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+        "holdout_result": ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json"
+      },
       "requires_capabilities": [],
       "conditional_factory_capabilities": [],
       "product_authority_requirements": [],
@@ -428,7 +753,7 @@
       "requires_network": false,
       "runtime_pins": {
         "language": "go_with_parser_backed_typescript_analysis",
-        "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+        "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -531,8 +856,8 @@
           "verification",
           "pr_bundle"
         ],
-        "generic_agent_harness": "common_agent_runner_contract_with_deterministic_fake",
-        "external_write_mode": "deterministic_fakes_only",
+        "generic_agent_harness": "separate_common_agent_runner_contract_conformance_with_deterministic_fake",
+        "external_write_mode": "manual_pr_bundle_only_no_external_write",
         "cannot_close_acceptance_items": [
           "EVENT-001",
           "EVENT-002",
@@ -546,7 +871,7 @@
           "PILOT-004"
         ],
         "proof_boundary": "contract_composition_not_product_or_commercial_proof",
-        "no_grant_fallback": "same_adapter_contract_with_deterministic_fake",
+        "no_grant_fallback": "agent_route_disabled_no_adapter_invocation",
         "live_agent_execution_allowed": false,
         "live_agent_execution_deferred_to": [
           "M6",
@@ -619,8 +944,13 @@
         "unmatched_engine_comparison_is_causal": false
       },
       "execution_state": {
-        "state": "planned_not_authorized_by_generation",
-        "acceptance_closure_claimed": false
+        "state": "attended_implementation_phase_approved_full_lifecycle_blocked_factoryd_paused",
+        "acceptance_closure_claimed": false,
+        "runner_readiness": {
+          "attended": false,
+          "factoryd": false,
+          "reason": "This parent M1 packet preserves the full review, holdout, shipping, and post-merge obligations but has no merge authority. Only the separately compiled attended implementation packet is executable, and it cannot close M1 or perform lifecycle work."
+        }
       }
     },
     {
@@ -731,7 +1061,7 @@
       "requires_network": false,
       "runtime_pins": {
         "language": "go_with_parser_backed_typescript_analysis",
-        "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+        "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -1099,7 +1429,7 @@
       "requires_network": false,
       "runtime_pins": {
         "language": "go_with_parser_backed_typescript_analysis",
-        "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+        "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -1428,7 +1758,7 @@
       "requires_network": false,
       "runtime_pins": {
         "language": "go_with_parser_backed_typescript_analysis",
-        "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+        "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -1626,7 +1956,7 @@
       "requires_network": false,
       "runtime_pins": {
         "language": "go_with_parser_backed_typescript_analysis",
-        "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+        "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -1841,7 +2171,7 @@
       "requires_network": false,
       "runtime_pins": {
         "language": "go_with_parser_backed_typescript_analysis",
-        "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+        "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -2072,7 +2402,7 @@
       "requires_network": false,
       "runtime_pins": {
         "language": "go_with_parser_backed_typescript_analysis",
-        "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+        "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -2603,7 +2933,7 @@
       "requires_network": false,
       "runtime_pins": {
         "language": "go_with_parser_backed_typescript_analysis",
-        "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+        "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -3157,7 +3487,7 @@
       "requires_network": true,
       "runtime_pins": {
         "language": "go_with_parser_backed_typescript_analysis",
-        "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+        "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -3489,7 +3819,7 @@
       "requires_network": true,
       "runtime_pins": {
         "language": "go_with_parser_backed_typescript_analysis",
-        "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+        "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -3984,7 +4314,7 @@
       "requires_network": true,
       "runtime_pins": {
         "language": "go_with_parser_backed_typescript_analysis",
-        "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+        "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
         "module_or_package_path": "github.com/Clyra-AI/lumyn",
         "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
         "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -4768,14 +5098,17 @@
       }
     }
   ],
-  "generated_by": "prd-to-plan+execution-compiler+post-merge-monitor",
-  "generated_at": "2026-07-26T17:04:17Z",
+  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair",
+  "generated_at": "2026-07-28T16:00:48Z",
   "execution_state": {
     "completed_task_refs": [
       "M0",
       "M2"
     ],
     "implementation_complete_pending_lifecycle_task_refs": [],
+    "attended_implementation_task_refs": [
+      "M1-IMPLEMENTATION"
+    ],
     "acceptance_open_task_refs": [
       "M1",
       "M2.5",

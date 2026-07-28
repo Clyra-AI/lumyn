@@ -1,0 +1,68 @@
+test -f AGENTS.md
+test -f WORKFLOW.md
+test -f README.md
+test -f docs/product/prd.md
+test -f docs/product/plan.md
+test -f .tool-versions
+test -f go.mod
+test -f scripts/audit_branch_protection.py
+test -f scripts/check_go_coverage.py
+test -f scripts/validate_repo_pack.py
+test -f .github/required-checks.json
+test -f .github/CODEOWNERS
+test -f .github/action-ref-exceptions.yaml
+test -f .github/workflows/validate.yml
+test -f .github/workflows/codeql.yml
+test -d .factory/artifacts
+test -d cmd/lumyn
+test -d internal
+test -d tests
+test -d scripts
+! grep -RIn "TODO\\|TBD\\|FIXME" AGENTS.md WORKFLOW.md README.md docs cmd internal schemas tests
+grep -q '^golang 1.26.5$' .tool-versions
+grep -q '^nodejs 22.16.0$' .tool-versions
+grep -q '^go 1.26.5$' go.mod
+grep -q 'go-version-file: go.mod' .github/workflows/validate.yml
+grep -q 'check-latest: false' .github/workflows/validate.yml
+grep -q 'actions/checkout@v6.0.2' .github/workflows/validate.yml
+grep -q 'actions/setup-go@v6.3.0' .github/workflows/validate.yml
+grep -q 'actions/setup-node@v7.0.0' .github/workflows/validate.yml
+grep -q 'node-version: 22.16.0' .github/workflows/validate.yml
+grep -q 'npm@11.4.1' .github/workflows/validate.yml
+grep -q 'fetch-depth: 0' .github/workflows/validate.yml
+grep -q 'permissions:' .github/workflows/validate.yml
+grep -q 'concurrency:' .github/workflows/validate.yml
+grep -q 'timeout-minutes:' .github/workflows/validate.yml
+grep -q 'make prepush-full' .github/workflows/validate.yml
+grep -q 'python3 scripts/validate_repo_pack.py --lifecycle-evidence' .github/workflows/validate.yml
+grep -q '"validate"' .github/required-checks.json
+grep -q '"CodeQL analyze"' .github/required-checks.json
+grep -Fq '/.github/** @davidahmann' .github/CODEOWNERS
+grep -q 'actions/checkout@v6.0.2' .github/action-ref-exceptions.yaml
+grep -q 'actions/setup-go@v6.3.0' .github/action-ref-exceptions.yaml
+grep -q 'actions/setup-node@v7.0.0' .github/action-ref-exceptions.yaml
+grep -q 'github/codeql-action/init@v4' .github/action-ref-exceptions.yaml
+grep -q 'permissions:' .github/workflows/codeql.yml
+grep -q 'concurrency:' .github/workflows/codeql.yml
+grep -q 'timeout-minutes:' .github/workflows/codeql.yml
+grep -q 'actions/checkout@v6.0.2' .github/workflows/codeql.yml
+grep -q 'actions/setup-go@v6.3.0' .github/workflows/codeql.yml
+grep -q 'go-version-file: go.mod' .github/workflows/codeql.yml
+grep -q 'check-latest: false' .github/workflows/codeql.yml
+grep -q 'github/codeql-action/init@v4' .github/workflows/codeql.yml
+grep -q 'github/codeql-action/autobuild@v4' .github/workflows/codeql.yml
+grep -q 'github/codeql-action/analyze@v4' .github/workflows/codeql.yml
+grep -q 'languages: go' .github/workflows/codeql.yml
+grep -q 'Passive Codex review settle is required before merge' AGENTS.md
+grep -q 'Green CI alone is not merge-ready' WORKFLOW.md
+grep -q 'Do not merge manually through `gh pr merge`' docs/dev/dev_guides.md
+grep -q 'process escape' WORKFLOW.md
+grep -q 'process escape' docs/dev/dev_guides.md
+grep -q 'make test-coverage' docs/dev/dev_guides.md
+grep -q 'pr-lifecycle/<work_item_id>/pr-lifecycle-report.json' AGENTS.md
+grep -q 'pr-lifecycle/<work_item_id>/pr-lifecycle-report.json' WORKFLOW.md
+grep -q 'pr-lifecycle/<work_item_id>/pr-lifecycle-report.json' docs/dev/dev_guides.md
+grep -q 'protect-main-from-direct-push' AGENTS.md
+grep -q 'audit-remote-protection' WORKFLOW.md
+grep -q 'audit-remote-protection' docs/dev/dev_guides.md
+go vet ./cmd/... ./internal/... ./schemas/...

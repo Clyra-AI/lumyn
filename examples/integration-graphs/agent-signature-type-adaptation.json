@@ -1,0 +1,50 @@
+{
+  "schema_version": "lumyn.m1.integration-graph/v1",
+  "scenario_id": "agent-signature-type-adaptation",
+  "nodes": [
+    {
+      "site_id": "sdk-retrieve-user",
+      "path": "src/adapter.ts",
+      "line": 2,
+      "classification": "affected",
+      "symbol": "sdk.users.retrieve",
+      "via": [
+        "sdk-retrieve-user",
+        "adapter-fetch-user"
+      ]
+    },
+    {
+      "site_id": "adapter-fetch-user",
+      "path": "src/client.ts",
+      "line": 8,
+      "classification": "affected",
+      "symbol": "retrieveUser",
+      "via": [
+        "sdk-retrieve-user",
+        "adapter-fetch-user"
+      ]
+    },
+    {
+      "site_id": "sdk-list-users",
+      "path": "src/adapter.ts",
+      "line": 6,
+      "classification": "unaffected",
+      "symbol": "sdk.users.list",
+      "via": [
+        "sdk-list-users",
+        "adapter-list-users"
+      ]
+    },
+    {
+      "site_id": "adapter-list-users",
+      "path": "src/client.ts",
+      "line": 4,
+      "classification": "unaffected",
+      "symbol": "listThroughSDK",
+      "via": [
+        "sdk-list-users",
+        "adapter-list-users"
+      ]
+    }
+  ]
+}

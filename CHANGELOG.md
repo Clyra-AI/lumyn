@@ -4,6 +4,23 @@
 
 ### Added
 
+- Added the M1 public/synthetic migration benchmark: three deterministic and
+  three coordinated multi-file wrapper-heavy agent-assisted TypeScript
+  scenarios, seven fail-closed blocked classes, provenance and
+  integration-graph bindings, a fair generic-agent comparison protocol, a
+  source-safe holdout provisioning manifest, and pinned dependency-free native
+  TypeScript offline fixture verification with real cross-file composition,
+  isolated environment/config roots, host-object-free capability-restricted VM
+  execution, and computed-constructor escape regression coverage,
+  plus an agent-free deterministic event-to-local-PR-bundle skeleton with
+  observed synthetic-fixture command evidence, canonical M2 schema, exact
+  authorization-contract, digest-binding, and separate fake-adapter
+  cancellation/no-fallback checks.
+- Added a separate attended M1 implementation packet with exact Go, Node, npm,
+  CI-configuration, planning-prerequisite ownership, and Factory task-packet
+  schema controls while preserving private holdout, independent review, remote
+  CI execution or monitoring, GitHub, merge, and post-merge work as
+  lifecycle-owned obligations.
 - Added the executable M2 v3 contract layer for provider events,
   `migration-pack`, Consumer Installation and event authorization, consumer
   execution, impact and planning, Agent Runner qualification and attempts,

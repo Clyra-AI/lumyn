@@ -1,0 +1,26 @@
+{
+  "schema_version": "lumyn.m1.integration-graph/v1",
+  "scenario_id": "det-operation-rename",
+  "nodes": [
+    {
+      "site_id": "operation-create-charge",
+      "path": "src/client.ts",
+      "line": 3,
+      "classification": "affected",
+      "symbol": "client.charges.create",
+      "via": [
+        "direct"
+      ]
+    },
+    {
+      "site_id": "operation-health-check",
+      "path": "src/client.ts",
+      "line": 7,
+      "classification": "unaffected",
+      "symbol": "client.health.check",
+      "via": [
+        "direct"
+      ]
+    }
+  ]
+}

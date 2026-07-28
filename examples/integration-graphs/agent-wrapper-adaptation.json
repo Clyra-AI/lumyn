@@ -1,0 +1,50 @@
+{
+  "schema_version": "lumyn.m1.integration-graph/v1",
+  "scenario_id": "agent-wrapper-adaptation",
+  "nodes": [
+    {
+      "site_id": "sdk-payment-operation",
+      "path": "src/gateway.ts",
+      "line": 2,
+      "classification": "affected",
+      "symbol": "sdk.charges.create",
+      "via": [
+        "sdk-payment-operation",
+        "wrapper-payment-call"
+      ]
+    },
+    {
+      "site_id": "wrapper-payment-call",
+      "path": "src/client.ts",
+      "line": 8,
+      "classification": "affected",
+      "symbol": "chargeThroughSDK",
+      "via": [
+        "sdk-payment-operation",
+        "wrapper-payment-call"
+      ]
+    },
+    {
+      "site_id": "sdk-health-call",
+      "path": "src/gateway.ts",
+      "line": 6,
+      "classification": "unaffected",
+      "symbol": "sdk.health.check",
+      "via": [
+        "sdk-health-call",
+        "wrapper-health-call"
+      ]
+    },
+    {
+      "site_id": "wrapper-health-call",
+      "path": "src/client.ts",
+      "line": 4,
+      "classification": "unaffected",
+      "symbol": "gatewayHealth",
+      "via": [
+        "sdk-health-call",
+        "wrapper-health-call"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "lumyn.m1.generic-agent-baseline/v1",
+  "frozen_at": "2026-07-27T00:00:00Z",
+  "comparator": "same_capable_engine_without_lumyn_orchestration",
+  "lumyn_treatment": "orchestration_impact_routing_boundary_enforcement_independent_verification_delivery_and_status",
+  "control_variables": [
+    "actual_model_provider",
+    "actual_model_version",
+    "agent_runner_adapter",
+    "agent_runner_executable_digest",
+    "agent_runner_version",
+    "attempt_budget",
+    "auth_mode",
+    "authoritative_migration_evidence",
+    "commands",
+    "context_access_ceiling",
+    "cost_budget",
+    "credential_owner",
+    "engineer_role",
+    "entitlement_class",
+    "execution_funding_mode",
+    "repository_snapshot",
+    "time_budget",
+    "token_budget",
+    "tools",
+    "usage_billing_owner",
+    "verification_commands_and_time"
+  ],
+  "control_binding": {
+    "timing": "before_each_matched_trial",
+    "value_record": "immutable_trial_manifest",
+    "equality_rule": "exact_match_between_arms",
+    "missing_value_policy": "block_trial"
+  },
+  "primary_metric": {
+    "name": "consumer_maintainer_hands_on_time",
+    "improvement_threshold_percent": 30
+  },
+  "guardrails": [
+    "no_worse_substantive_correction_rate",
+    "no_worse_revert_rate",
+    "zero_false_verification_regression"
+  ],
+  "unmatched_engine_comparison_is_causal": false,
+  "live_execution_allowed": false
+}

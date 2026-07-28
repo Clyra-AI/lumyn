@@ -1,0 +1,61 @@
+{
+  "schema_version": "lumyn.m1.blocked-suite/v1",
+  "cases": [
+    {
+      "id": "blocked-missing-business-value",
+      "category": "missing_business_value",
+      "input_summary": "The replacement endpoint requires a merchant-defined settlement strategy that is absent from repository and provider evidence.",
+      "expected_status": "needs_input",
+      "reason_code": "business_value_required",
+      "speculative_patch_allowed": false
+    },
+    {
+      "id": "blocked-auth-redesign",
+      "category": "auth_redesign",
+      "input_summary": "The new API requires a different authorization grant and credential lifecycle.",
+      "expected_status": "blocked",
+      "reason_code": "authorization_architecture_change",
+      "speculative_patch_allowed": false
+    },
+    {
+      "id": "blocked-event-semantics",
+      "category": "event_semantics",
+      "input_summary": "Two provider events disagree about which migration contract supersedes the other.",
+      "expected_status": "blocked",
+      "reason_code": "provider_event_conflict",
+      "speculative_patch_allowed": false
+    },
+    {
+      "id": "blocked-ambiguous-evidence",
+      "category": "ambiguous_evidence",
+      "input_summary": "The migration guide and pinned API description disagree about the replacement property.",
+      "expected_status": "needs_input",
+      "reason_code": "authoritative_evidence_ambiguous",
+      "speculative_patch_allowed": false
+    },
+    {
+      "id": "blocked-production-only",
+      "category": "production_only",
+      "input_summary": "The behavior can only be verified against a production tenant with real customer data.",
+      "expected_status": "blocked",
+      "reason_code": "production_only_verification_forbidden",
+      "speculative_patch_allowed": false
+    },
+    {
+      "id": "blocked-scope-escape",
+      "category": "scope_escape",
+      "input_summary": "The proposed edit reaches a billing module outside the approved migration paths.",
+      "expected_status": "blocked",
+      "reason_code": "path_scope_escape",
+      "speculative_patch_allowed": false
+    },
+    {
+      "id": "blocked-inadequate-verification",
+      "category": "inadequate_verification",
+      "input_summary": "No deterministic command or assertion can distinguish the old and new response behavior.",
+      "expected_status": "blocked",
+      "reason_code": "verification_signal_missing",
+      "speculative_patch_allowed": false
+    }
+  ]
+}

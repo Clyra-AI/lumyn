@@ -1,0 +1,11 @@
+{
+  "name": "lumyn-m1-det-response-property-relocation",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": { "node": "22.16.0", "npm": "11.4.1" },
+  "packageManager": "npm@11.4.1",
+  "scripts": {
+    "test": "node --no-warnings --experimental-strip-types --experimental-vm-modules ../../verification/run.mjs det-response-property-relocation ../../candidates/det-response-property-relocation/src/client.ts"
+  }
+}

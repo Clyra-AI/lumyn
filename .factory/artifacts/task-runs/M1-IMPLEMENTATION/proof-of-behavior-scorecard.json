@@ -1,0 +1,80 @@
+{
+  "scorecard_id": "lumyn-v3-m1-attended-implementation-proof-20260727",
+  "task_id": "M1-IMPLEMENTATION",
+  "work_item_id": "lumyn-v3-m1-attended-implementation",
+  "required_proof_level": "workflow_behavior",
+  "candidate_digest": "sha256:ebc26f496732a729d714508c3cfd7908f735beee8afa158fc793fd9f24edab6f",
+  "levels": [
+    {
+      "level": "syntax",
+      "status": "pass",
+      "summary": "All JSON artifacts parse; primary/supporting TypeScript bytes are digest-bound; dependency-free pinned Node/npm packages execute through native stripping in a cleared-environment, local-import-only restricted VM; Go tests compile; and the vendored Factory task-packet schema validates the child packet.",
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-002/work-proof-marker.json",
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json"
+      ]
+    },
+    {
+      "level": "source_evidence",
+      "status": "pass",
+      "summary": "Six synthetic CC0 source records, migration packs, primary and supporting before snapshots, expected candidates, and cross-file integration graphs are bound by the benchmark manifest without provider endorsement or customer-proof claims.",
+      "evidence_refs": [
+        "examples/migration-packs/benchmark-manifest.json",
+        "examples/migration-packs/",
+        "examples/consumer-repos/",
+        "examples/candidates/",
+        "examples/integration-graphs/"
+      ]
+    },
+    {
+      "level": "workflow_behavior",
+      "status": "pass",
+      "summary": "The offline skeleton composes the canonical contract chain and validates the exact authorization for npm test --silent with provider reporting disabled; real cross-file imports/calls and site-ID chains prove coordinated agent fixtures; a fresh read-only view executes the exact generated candidate in a process separate from the expected-failing baseline with cleared ambient state inside a capability-restricted VM; package, runner, candidate, fixture, command, output, toolchain, and verified cleanup evidence are digest-bound; and negative tests reject candidate substitution, unsafe classes, ambient authority, mutation, replay, and every live route.",
+      "evidence_refs": [
+        "tests/m1_benchmark_test.go",
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json",
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json"
+      ]
+    },
+    {
+      "level": "user_visible_behavior",
+      "status": "not_applicable",
+      "summary": "This attended phase creates a benchmark and offline contract-composition harness; it does not expose a supported product workflow or make a release claim.",
+      "evidence_refs": []
+    }
+  ],
+  "overall_status": "pass",
+  "evidence_refs": [
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-004/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json"
+  ],
+  "redaction_posture": {
+    "classification": "customer_safe",
+    "customer_safe": true,
+    "redaction_notes": "Evidence contains only public or synthetic fixture data, repository-relative paths, local command output, and digests; no credentials, consumer-private material, holdout answers, repository URLs, or plaintext holdout content digests are present."
+  },
+  "gap_summary": [
+    "The private M1 holdout is independently provisioned and frozen; this child task neither evaluates it nor accesses answer material.",
+    "No live Agent Runner, real consumer repository, GitHub product delivery, API Provider reporting, or commercial outcome has been exercised.",
+    "Independent review, remote CI and CodeQL, commit-push, merge, and post-merge proof are lifecycle-owned and are not established by this child scorecard.",
+    "This scorecard proves only M1-IMPLEMENTATION workflow behavior and does not close any parent M1 acceptance item."
+  ],
+  "coverage_boundary": {
+    "parent_milestone": "M1",
+    "parent_acceptance_closure_claimed": false,
+    "lifecycle_authorized": false,
+    "factoryd_authorized": false,
+    "private_holdout_accessed": false,
+    "live_execution_used": false
+  },
+  "recommended_next_action": "Continue the separately authorized parent M1 lifecycle chain: confirm holdout provisioning evidence, complete independent review, run remote CI and CodeQL, ship the exact candidate, settle latest-head Codex review, merge, and monitor exact main.",
+  "residual_risks": [
+    "The six visible scenarios are a public/synthetic starter corpus, not private-holdout evaluation or real-consumer proof.",
+    "The walking skeleton earns only static_verified in an unqualified developer process; it does not prove qualified host-isolated product repository execution or repo_verified.",
+    "The agent-free deterministic route and separate test-only fake adapter do not prove live Codex, Claude Code, Cursor, GitHub product delivery, API Provider integration, or consumer-repository integration.",
+    "The complete release candidate includes plan-verify-repair-owned planning prerequisites outside task-executor write authority; parent acceptance and the remaining lifecycle claims require their own current evidence."
+  ]
+}

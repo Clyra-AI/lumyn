@@ -1,0 +1,173 @@
+{
+  "artifact_type": "review_report",
+  "schema_version": "0.1",
+  "task_id": "M1",
+  "work_item_id": "lumyn-v3-m1",
+  "review_type": "code",
+  "review_scope": [
+    "git diff d7ae311c391775a2517d56add6d57148d5891ef3",
+    "docs/product/prd.md",
+    "docs/product/plan.md",
+    "AGENTS.md",
+    "WORKFLOW.md",
+    "docs/dev/dev_guides.md",
+    "docs/architecture/architecture_guides.md",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/",
+    ".factory/contracts/",
+    "examples/migration-packs/",
+    "examples/consumer-repos/",
+    "examples/integration-graphs/",
+    "examples/candidates/",
+    "examples/negative/",
+    "examples/verification/",
+    "examples/holdout-manifest.json",
+    "tests/m1_benchmark_test.go",
+    "scripts/repo_pack_validation/",
+    "scripts/repo_pack_ci.py",
+    "Makefile",
+    ".github/workflows/validate.yml",
+    ".github/action-ref-exceptions.yaml",
+    ".tool-versions",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/",
+    ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/lifecycle-authorization.json"
+  ],
+  "reviewer_class": "peer_agent",
+  "reviewer_id": "peer-agent:m1-independent-final-review",
+  "producer": {
+    "worker": "code-review",
+    "producer_id": "peer-agent:m1-independent-final-review",
+    "producer_class": "peer_agent"
+  },
+  "current_work": {
+    "validation_run_id": "validation:2026-07-28T16:01:47Z:lumyn-m1-implementation-r2",
+    "candidate_digest": "sha256:ebc26f496732a729d714508c3cfd7908f735beee8afa158fc793fd9f24edab6f",
+    "work_proof_markers": [
+      {
+        "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json",
+        "sha256": "sha256:5df52f3dabdab404bdcf83ee29f92d8956f8c5a809634e7adf16231a22096bb6"
+      },
+      {
+        "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-002/work-proof-marker.json",
+        "sha256": "sha256:cdc3eeddce707f75fda88d2f8ca40f86a2831e586d08eba6637e46087e677fe0"
+      },
+      {
+        "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-003/work-proof-marker.json",
+        "sha256": "sha256:aa16a197fad3b5a7bc7c0785dd965261c69e749a11d6be4596c039351b5efa7e"
+      },
+      {
+        "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-004/work-proof-marker.json",
+        "sha256": "sha256:4135f4de8f307140ccf8ca9a3467dea8ee27e6b1781e720d715c3bd8bfd453c1"
+      },
+      {
+        "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json",
+        "sha256": "sha256:4d8bd4caf9bdbcd84cc2d9f5f7c4f845befa7bc5387f1eeb4c40d4a694e88ccc"
+      },
+      {
+        "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json",
+        "sha256": "sha256:2674de06f7c80757daabc0d38817fc510ea998b4e8531042d96376d26265ba0e"
+      }
+    ]
+  },
+  "risk_class": "medium",
+  "context_isolation": {
+    "allowed_sources": [
+      "prd",
+      "execution_plan",
+      "task_packet",
+      "candidate_diff",
+      "repository_contracts",
+      "schemas",
+      "fixtures",
+      "tests",
+      "validation_report",
+      "work_proof_markers",
+      "raw_validation_logs",
+      "holdout_provision_result",
+      "reviewer_command_output",
+      "independent_clean_clone_audit"
+    ],
+    "disallowed_sources": [
+      "private_builder_notes",
+      "unpromoted_chat_reasoning",
+      "private_holdout_inputs",
+      "private_holdout_answers"
+    ],
+    "builder_notes_authoritative": false
+  },
+  "findings": [],
+  "verdict": "approved",
+  "required_fixes": [],
+  "residual_risks": [
+    "M1 proves a public or synthetic benchmark and an offline developer harness with static_verified evidence only; it does not prove a qualified host-isolation backend, repo_verified product execution, a live Agent Runner or model, a real consumer repository, automated product GitHub delivery, provider integration, or commercial value.",
+    "The private M1 holdout is source-safely provisioned and commitment-bound but is not evaluated in this phase; parent acceptance items remain partial, missing, or blocked until their owning milestones and lifecycle evidence close them.",
+    "Remote GitHub validate and CodeQL, passive latest-head Codex review, pull-request lifecycle evidence, merge, exact-main monitoring, and post-merge closure remain required after this review.",
+    "The active M1 candidate-scope and lifecycle validators are intentionally bound to the immutable M1 base. After exact-main post-merge closure, they must transition or archive as historical evidence before unrelated milestone paths are introduced; otherwise later valid work will fail the active M1 scope gate.",
+    "Factoryd remains paused and unqualified for this Lumyn generation; this review grants no factoryd dispatch, product credential, network, consumer-repository, provider-reporting, merge, or external-write authority."
+  ],
+  "evidence_refs": [
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/m1-attended-implementation-task-packet.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/red-first/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-002/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-003/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-004/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json",
+    ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
+    "tests/m1_benchmark_test.go",
+    "scripts/repo_pack_validation/m1_evidence.py",
+    "scripts/repo_pack_validation/m1_packet.py",
+    "scripts/repo_pack_validation/validator.py"
+  ],
+  "work_proof_marker_refs": [
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-002/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-003/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-004/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json"
+  ],
+  "approval_effect": {
+    "promotion_decision": "ready_for_pr",
+    "approvals_granted": [
+      "code_review_passed",
+      "medium_risk_structured_review_passed",
+      "independent_candidate_binding_verified"
+    ],
+    "blocks_promotion": false
+  },
+  "systems_questions": {
+    "state_impact": [
+      "The candidate adds a source-safe public or synthetic migration benchmark, a deterministic offline event-to-manual-PR-bundle developer harness, exact toolchain and CI configuration, and local validation contracts; it creates no live provider, consumer, model, credential, network, GitHub product-delivery, or merge state.",
+      "Lifecycle state gains exact task-run validation evidence, an independently provisioned private-suite commitment, and this independent review, while parent M1 acceptance closure and product runtime authority remain blocked."
+    ],
+    "source_of_truth_changes": [
+      "docs/product/prd.md and docs/product/plan.md remain the product truth, and the complete active lumyn-migration-mvp compiled set shares one generation identity and separates parent M1 lifecycle obligations from the attended M1-IMPLEMENTATION child packet.",
+      "The M2 schemas and production authorization boundary remain authoritative for canonical migration artifacts; the M1 harness consumes them without introducing a second product contract or claiming runtime qualification.",
+      "scripts/repo_pack_validation/m1_evidence.py is the active exact-candidate and lifecycle-evidence binding until post-merge closure transitions that M1 evidence to historical status."
+    ],
+    "feedback_plan": [
+      "Keep the typed red-before probe, focused M1 suite, coverage, repo-pack self-tests, full pre-push gate, strict lifecycle-evidence gate, remote validate, CodeQL, latest-head review settle, and exact-main monitoring in the promotion loop.",
+      "Use later M6, M7, M9, and M10 evidence plus a consenting real consumer and paid provider campaign to test qualified Agent Runner execution, repository verification, draft-PR delivery, provider reporting, and the commercial time-saved hypothesis.",
+      "After exact-main closure, land the explicit active-to-historical M1 validation transition before starting work whose paths are outside the M1 candidate scope."
+    ],
+    "blast_radius": [
+      "CI now requires full Git history and exact Go 1.26.5, Node.js 22.16.0, and npm 11.4.1 setup; drift in those controls, fixture bytes, graph bindings, candidate bytes, or evidence markers fails closed.",
+      "The fixed M1 base and exact 79-path candidate binding intentionally reject later unrelated paths until the post-merge transition occurs.",
+      "Changes to the benchmark corpus affect downstream scoring and comparison milestones, so provenance, ground truth, and digest updates must move together."
+    ],
+    "rollback_or_deletion_test": [
+      "Before merge, rollback must remove or revert the M1 corpus, harness, CI/toolchain controls, validators, docs, active compiled controls, and generated evidence coherently, then rerun the normal and strict gates; partial deletion must fail candidate, manifest, schema, or evidence validation.",
+      "After merge, historical validation, holdout-provisioning, review, PR, and post-merge artifacts must not be rewritten. A rollback or superseding change must preserve them as historical evidence and publish a new provenance-linked transition or closure artifact.",
+      "No live external product state was created by this candidate, so there is no consumer branch, provider status, model session, credential, or automated PR to revoke."
+    ],
+    "system_model_summary": "M1 establishes a bounded, source-safe proof layer between provider-authored migration intent and future consumer-repository execution: a deterministic route proves canonical contract composition to a manual PR bundle, a separate fake proves only adapter shape, and the public corpus measures deterministic versus agent-eligible cases without launching an agent. Exact candidate, marker, chronology, schema, toolchain, and task-scope bindings make the attended result reviewable while factoryd, live execution, real-customer proof, automated delivery, acceptance closure, and later milestone work remain governed by separate authorities and lifecycle transitions."
+  },
+  "created_at": "2026-07-28T16:09:11Z"
+}

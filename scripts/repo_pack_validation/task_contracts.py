@@ -804,18 +804,32 @@ def _validate_worker_chain(task: dict[str, Any]) -> None:
         _require(gates.get(field) is True, f"{task_id}.{field} must be true")
     for worker, gate in (
         ("code-review", "code_review_required"),
+        ("holdout-evaluator", "holdout_provisioning_required"),
         ("holdout-evaluator", "holdout_evaluation_required"),
         ("trace-grader", "trace_grading_required"),
         ("evidence-attestor", "evidence_attestation_required"),
     ):
         if gates.get(gate) is True:
             _require(worker in chain, f"{task_id} must include {worker}")
+    _require(
+        not (
+            gates.get("holdout_provisioning_required") is True
+            and gates.get("holdout_evaluation_required") is True
+        ),
+        f"{task_id} cannot provision and evaluate a holdout in one task packet",
+    )
 
 
 def _validate_holdout_contracts(tasks: dict[str, dict[str, Any]]) -> None:
     provision = tasks["M1"].get("holdout_policy")
     _require(isinstance(provision, dict), "M1 holdout policy is required")
     _require(provision.get("mode") == "provision", "M1 must provision the holdout")
+    m1_gates = tasks["M1"].get("lifecycle_gates", {})
+    _require(
+        m1_gates.get("holdout_provisioning_required") is True
+        and m1_gates.get("holdout_evaluation_required") is False,
+        "M1 must provision, not evaluate, the hidden holdout",
+    )
     _require(
         provision.get("task_executor_access") == "forbidden",
         "M1 holdout answers must be hidden from task-executor",
@@ -1049,10 +1063,10 @@ def _validate_update_delivery_contracts(
     _require(isinstance(skeleton, dict), "M1 walking skeleton contract is required")
     _require(
         skeleton.get("input_mode") == "public_or_synthetic_only"
-        and skeleton.get("external_write_mode") == "deterministic_fakes_only"
+        and skeleton.get("external_write_mode") == "manual_pr_bundle_only_no_external_write"
         and skeleton.get("generic_agent_harness")
-        == "common_agent_runner_contract_with_deterministic_fake",
-        "M1 walking skeleton must be public-fixture, fake-write, and adapter-based",
+        == "separate_common_agent_runner_contract_conformance_with_deterministic_fake",
+        "M1 walking skeleton must be public-fixture, agent-free, no-write, and separate from fake-adapter conformance",
     )
     _require(
         skeleton.get("stages")
@@ -1079,7 +1093,7 @@ def _validate_update_delivery_contracts(
         skeleton.get("live_agent_execution_allowed") is False
         and skeleton.get("live_agent_execution_deferred_to") == ["M6", "M10"]
         and skeleton.get("no_grant_fallback")
-        == "same_adapter_contract_with_deterministic_fake",
+        == "agent_route_disabled_no_adapter_invocation",
         "M1 must remain offline and defer live Agent Runner execution",
     )
     _require(

@@ -1,0 +1,132 @@
+{
+  "schema_version": "lumyn.m1.benchmark-manifest/v1",
+  "frozen_at": "2026-07-27T00:00:00Z",
+  "scenarios": [
+    {
+      "id": "det-operation-rename",
+      "route": "deterministic",
+      "change_class": "operation_rename",
+      "repository_shape": "direct",
+      "pack_path": "examples/migration-packs/det-operation-rename/pack.json",
+      "before_path": "examples/consumer-repos/det-operation-rename/src/client.ts",
+      "expected_path": "examples/candidates/det-operation-rename/src/client.ts",
+      "integration_graph_path": "examples/integration-graphs/det-operation-rename.json",
+      "digests": {
+        "pack": "sha256:2a15ab37e628c30c555830278b1cf879bd5c9ff3c386d0874f4768e259d19604",
+        "before": "sha256:5f84fb50bfa296b1ef3b5cf478e4f47fc762ab8a30257082fa94490f8fc2fcfa",
+        "expected": "sha256:1e4aeba95836cfec0e3222a745a23ab6bd87e4cb480223042952a75f2acf725e",
+        "integration_graph": "sha256:ef250ab12f9d5980761ea20ae0228b3533c46030ce9a61c765fa3c6b73f507ee"
+      }
+    },
+    {
+      "id": "det-request-property-relocation",
+      "route": "deterministic",
+      "change_class": "request_property_relocation",
+      "repository_shape": "direct",
+      "pack_path": "examples/migration-packs/det-request-property-relocation/pack.json",
+      "before_path": "examples/consumer-repos/det-request-property-relocation/src/client.ts",
+      "expected_path": "examples/candidates/det-request-property-relocation/src/client.ts",
+      "integration_graph_path": "examples/integration-graphs/det-request-property-relocation.json",
+      "digests": {
+        "pack": "sha256:daa07ddf0290b10da2f762c6ca1891f7dab70290661d68585efe0bb339ac84b6",
+        "before": "sha256:589a265479f0387d8f708becefe4a3e89c61994d8079e2ec0db231a23d651c94",
+        "expected": "sha256:2c9aa21c7171332e8e253e3bee8fafd17200d10b5ad7ca42c1d7eaaba9537d64",
+        "integration_graph": "sha256:cf7c7634f61dcab829e483e329f682e52471802041c586ad33bcc80259601a34"
+      }
+    },
+    {
+      "id": "det-response-property-relocation",
+      "route": "deterministic",
+      "change_class": "response_property_relocation",
+      "repository_shape": "direct",
+      "pack_path": "examples/migration-packs/det-response-property-relocation/pack.json",
+      "before_path": "examples/consumer-repos/det-response-property-relocation/src/client.ts",
+      "expected_path": "examples/candidates/det-response-property-relocation/src/client.ts",
+      "integration_graph_path": "examples/integration-graphs/det-response-property-relocation.json",
+      "digests": {
+        "pack": "sha256:d514136f7a42a561e31d1c2f093d84e1d5898397a744cf5fbd6851fcb82767aa",
+        "before": "sha256:79940d7d7236ca03f5cc13014415ecc1b3e20e758d9b94ea8af8238d39a57f79",
+        "expected": "sha256:8a3f87026a4d27f279fcec3ed29b52cb0b3c69ac1bcff4a75728ad62e8052af0",
+        "integration_graph": "sha256:340543a20435b55435b26d2a974c81f077dec55e174c3681bf21e6e532b07ef7"
+      }
+    },
+    {
+      "id": "agent-wrapper-adaptation",
+      "route": "agent_assisted",
+      "change_class": "wrapper_adaptation",
+      "repository_shape": "wrapper_heavy",
+      "pack_path": "examples/migration-packs/agent-wrapper-adaptation/pack.json",
+      "before_path": "examples/consumer-repos/agent-wrapper-adaptation/src/client.ts",
+      "expected_path": "examples/candidates/agent-wrapper-adaptation/src/client.ts",
+      "integration_graph_path": "examples/integration-graphs/agent-wrapper-adaptation.json",
+      "digests": {
+        "pack": "sha256:378942d3a2e4cb1c4cd02ea2ecdbec94656b49b3a431e7f2299731423c069c82",
+        "before": "sha256:60a9e3b3cfb4a4bb73841165450f2e58671a657148c94acb455f35f35c3a9011",
+        "expected": "sha256:4780bb28eda63fa8c33c8605a55576c7db2e22dd872b72cf30f98ac00b8cfaae",
+        "integration_graph": "sha256:c9ab4ad3f1763f36da118d4349e95fe9c451e2c3815b38fc027e86c2294a13f3"
+      },
+      "supporting_files": [
+        {
+          "before_path": "examples/consumer-repos/agent-wrapper-adaptation/src/gateway.ts",
+          "expected_path": "examples/candidates/agent-wrapper-adaptation/src/gateway.ts",
+          "before_digest": "sha256:0e9043a9f6535293b6b06613ff1e4b8021816c47df1b7a65d1659f4aa6670c5e",
+          "expected_digest": "sha256:fd0df0f348340c1038730478a278843bd7cd5ac3cd4a11c7f34e2c1f7ef5b2b2"
+        }
+      ]
+    },
+    {
+      "id": "agent-signature-type-adaptation",
+      "route": "agent_assisted",
+      "change_class": "signature_type_adaptation",
+      "repository_shape": "wrapper_heavy",
+      "pack_path": "examples/migration-packs/agent-signature-type-adaptation/pack.json",
+      "before_path": "examples/consumer-repos/agent-signature-type-adaptation/src/client.ts",
+      "expected_path": "examples/candidates/agent-signature-type-adaptation/src/client.ts",
+      "integration_graph_path": "examples/integration-graphs/agent-signature-type-adaptation.json",
+      "digests": {
+        "pack": "sha256:dfa6a11fda9cad158218901c088a388d79c9f1f73e8bd32fbb788d769bd8fe9c",
+        "before": "sha256:b3b0107e50dc86602c56b7c9cdb339edffcfa657063eb916c8b48d36d584cd5d",
+        "expected": "sha256:e0878e80475f9ea02233403f3733d0c7cabe74fc92debfae2e10cbd11daa0f9c",
+        "integration_graph": "sha256:92df922e896844a52c4001c31a573b1aa4049622bc5d5226ce9c1c80ab8c3d2b"
+      },
+      "supporting_files": [
+        {
+          "before_path": "examples/consumer-repos/agent-signature-type-adaptation/src/adapter.ts",
+          "expected_path": "examples/candidates/agent-signature-type-adaptation/src/adapter.ts",
+          "before_digest": "sha256:c108b9e7457956593feedade266da6d78d3a63819374f7d118a28a6bec5b974e",
+          "expected_digest": "sha256:b92103f87c0e0044135314406e0af24ea56573c5decf45f1f270e2da90ae41b1"
+        }
+      ]
+    },
+    {
+      "id": "agent-related-test-repair",
+      "route": "agent_assisted",
+      "change_class": "related_test_repair",
+      "repository_shape": "wrapper_heavy",
+      "pack_path": "examples/migration-packs/agent-related-test-repair/pack.json",
+      "before_path": "examples/consumer-repos/agent-related-test-repair/src/client.ts",
+      "expected_path": "examples/candidates/agent-related-test-repair/src/client.ts",
+      "integration_graph_path": "examples/integration-graphs/agent-related-test-repair.json",
+      "digests": {
+        "pack": "sha256:b0fdfce09f6de0ce2acb9f386f54c69b1fdfb00bff824e593312b500787241b4",
+        "before": "sha256:f2e8b6cf16467f20b719bbfe8392ae0d9877e43ce6b22a4b97473876119e9a7b",
+        "expected": "sha256:3cc06842ae074d6f4f14b7ce515a58cd4fac4da7f781e176507bb5879d4756fc",
+        "integration_graph": "sha256:8264a03715d490a27c628540cf5eca1516a5c9a8674a4b7e9e9e2f858f8a49c1"
+      },
+      "supporting_files": [
+        {
+          "before_path": "examples/consumer-repos/agent-related-test-repair/src/invoices.ts",
+          "expected_path": "examples/candidates/agent-related-test-repair/src/invoices.ts",
+          "before_digest": "sha256:1967163bebdb3ac0b5d1ddcef030d5a23753aad455c4ddb22bacaaa6b367d0cb",
+          "expected_digest": "sha256:faa57faf93f08be8edc0f346096e87164ad31cabf0022112b313c6c9d351b572"
+        }
+      ]
+    }
+  ],
+  "minimums": {
+    "deterministic": 3,
+    "agent_assisted": 3,
+    "visible_repositories": 6,
+    "blocked_classes": 7
+  }
+}

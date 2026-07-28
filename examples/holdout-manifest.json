@@ -1,0 +1,22 @@
+{
+  "schema_version": "lumyn.m1.holdout-manifest/v1",
+  "status": "provisioning_required",
+  "suite_namespace": "private://lumyn/m1/v1",
+  "commitment_algorithm": "hmac-sha256",
+  "provisioning_result_ref": ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
+  "committed_fields": [
+    "opaque_case_count",
+    "license_posture",
+    "frozen_suite_commitment",
+    "encrypted_or_hmac_artifact_commitments"
+  ],
+  "prohibited_fields": [
+    "answer_key",
+    "expected_labels",
+    "expected_patches",
+    "inputs",
+    "plaintext_content_digest",
+    "raw_traces",
+    "repository_url"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "lumyn.m1.migration-pack/v1",
+  "scenario_id": "agent-wrapper-adaptation",
+  "title": "Wrapper call adaptation",
+  "route": "agent_assisted",
+  "route_rationale": "The provider intent names a target request shape, but repository context must coordinate the consumer-owned gateway API and its SDK-facing implementation while preserving local amount, currency, and health semantics; no provider-authored repository edit recipe exists.",
+  "change_class": "wrapper_adaptation",
+  "operation": {
+    "kind": "agent_required"
+  },
+  "provenance": {
+    "source_kind": "synthetic",
+    "source_id": "lumyn-synthetic://m1/agent-wrapper-adaptation/v1",
+    "source_path": "examples/migration-packs/agent-wrapper-adaptation/source.md",
+    "source_digest": "sha256:33a1ca6b8f329f37f3c0347956354cc9ee375ce83acc62ed8fae8abca63fb430",
+    "license": "CC0-1.0",
+    "attribution": "Lumyn synthetic M1 benchmark",
+    "redistribution_allowed": true,
+    "provider_endorsement": false,
+    "customer_proof": false
+  },
+  "ground_truth": {
+    "affected": [
+      "src/client.ts:8",
+      "src/gateway.ts:2"
+    ],
+    "unaffected": [
+      "src/client.ts:4",
+      "src/gateway.ts:6"
+    ],
+    "uncertain": [],
+    "unsupported": [],
+    "expected_route": "agent_assisted",
+    "expected_edits": [
+      "src/client.ts",
+      "src/gateway.ts"
+    ],
+    "expected_commands": [
+      "npm test --silent"
+    ],
+    "expected_verification": [
+      "candidate_matches_expected",
+      "unaffected_content_stable"
+    ]
+  }
+}

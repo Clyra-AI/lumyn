@@ -109,11 +109,17 @@ def validate_ci_control_set(
         "cancel-in-progress: true",
         "timeout-minutes:",
         "actions/checkout@v6.0.2",
+        "fetch-depth: 0",
         "actions/setup-go@v6.3.0",
         "go-version-file: go.mod",
         "check-latest: false",
         "cache: true",
+        "actions/setup-node@v7.0.0",
+        "node-version: 22.16.0",
+        "check-latest: false",
+        "npm@11.4.1",
         "make prepush-full",
+        "python3 scripts/validate_repo_pack.py --lifecycle-evidence",
     ]
     for token in validate_tokens:
         if token not in validate_workflow:

@@ -13,6 +13,13 @@ exceptions:
     scope: validate workflow Go setup only
     expires: 2026-09-30
     review_command: python3 scripts/validate_repo_pack.py
+  - workflow: .github/workflows/validate.yml
+    action: actions/setup-node@v7.0.0
+    owner: delivery-infra
+    reason: audited Node24-runtime action pins the exact M1 Node toolchain until SHA pin refresh automation lands
+    scope: validate workflow Node setup only
+    expires: 2026-09-30
+    review_command: python3 scripts/validate_repo_pack.py
   - workflow: .github/workflows/codeql.yml
     action: actions/checkout@v6.0.2
     owner: delivery-infra

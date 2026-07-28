@@ -22,8 +22,9 @@ Scope: This repository only.
 - Keep factoryd dispatch paused. The external Factory
   `profiles/lumyn.yaml` profile and the factoryd bundle/runtime have not been
   requalified against this v3.1 generation.
-- Treat this rebaseline as planning and control work only. It authorizes no
-  product runtime implementation or live product action.
+- Treat this rebaseline as planning and control work plus the explicitly
+  approved attended M1 public/synthetic corpus and developer-harness task. It
+  authorizes no Lumyn product runtime implementation or live product action.
 - Keep `.factory/artifacts/prd-to-plan/lumyn-mvp/` and its task, pilot, and
   lifecycle artifacts immutable as historical evidence.
 - Keep Factory run evidence under `.factory/artifacts/`, scratch under
@@ -361,6 +362,12 @@ For normal changes, run:
 Before PR or merge, run:
 
 - `make prepush-full`
+- `make lifecycle-evidence`
+
+`make prepush-full` validates source, planning, candidate controls, tests, and
+build without requiring its own not-yet-written work-proof marker. After all
+M1 markers and reports are immutable, `make lifecycle-evidence` strictly
+validates their bindings and mutation self-tests. CI runs both phases.
 
 If any command is skipped, record the exact reason in validation evidence.
 
@@ -425,8 +432,10 @@ factoryd dispatch remains paused until a separate, reviewed change:
 3. reconciles the checked-in paused configs with that qualified runtime; and
 4. explicitly authorizes the selected task and positive runtime budgets.
 
-The current rebaseline authorizes no product implementation, model credential,
-consumer repository access, command execution, GitHub write, or merge.
+The current rebaseline authorizes only the separately packeted attended M1
+public/synthetic corpus and developer-harness implementation. It authorizes no
+Lumyn product runtime, live Agent Runner/model, consumer repository access,
+product command execution, GitHub write, or merge.
 
 Runner-ready packets include exact acceptance item IDs, dependencies, paths,
 commands, risk, lifecycle gates, evidence, proof level, runtime pins,

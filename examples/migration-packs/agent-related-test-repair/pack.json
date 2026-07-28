@@ -1,0 +1,46 @@
+{
+  "schema_version": "lumyn.m1.migration-pack/v1",
+  "scenario_id": "agent-related-test-repair",
+  "title": "Related test repair after return-type change",
+  "route": "agent_assisted",
+  "route_rationale": "The provider return shape changes, but repository context must coordinate a consumer-owned normalization wrapper and its local test assertion while preserving the health path; no provider-authored wrapper or test edit exists.",
+  "change_class": "related_test_repair",
+  "operation": {
+    "kind": "agent_required"
+  },
+  "provenance": {
+    "source_kind": "synthetic",
+    "source_id": "lumyn-synthetic://m1/agent-related-test-repair/v1",
+    "source_path": "examples/migration-packs/agent-related-test-repair/source.md",
+    "source_digest": "sha256:4fe558be20f705f79654ac585eec58749a84c3cddafb5c519e1fb89cc598d208",
+    "license": "CC0-1.0",
+    "attribution": "Lumyn synthetic M1 benchmark",
+    "redistribution_allowed": true,
+    "provider_endorsement": false,
+    "customer_proof": false
+  },
+  "ground_truth": {
+    "affected": [
+      "src/client.ts:6",
+      "src/invoices.ts:2"
+    ],
+    "unaffected": [
+      "src/client.ts:10",
+      "src/invoices.ts:6"
+    ],
+    "uncertain": [],
+    "unsupported": [],
+    "expected_route": "agent_assisted",
+    "expected_edits": [
+      "src/client.ts",
+      "src/invoices.ts"
+    ],
+    "expected_commands": [
+      "npm test --silent"
+    ],
+    "expected_verification": [
+      "candidate_matches_expected",
+      "unaffected_content_stable"
+    ]
+  }
+}

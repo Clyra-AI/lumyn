@@ -15,8 +15,12 @@
     "factoryd has not been qualified against the active v3.1 mission, bundle, Agent Runner/model, product-action, evidence, or closure semantics."
   ],
   "alignment_decisions": {
-    "status": "factoryd_blocked_attended_execution_requires_explicit_approval",
-    "implementation_may_start": false,
+    "status": "attended_m1_authorized_factoryd_blocked",
+    "implementation_may_start": true,
+    "authorized_attended_task_refs": [
+      "M1-IMPLEMENTATION"
+    ],
+    "parent_milestone_ref": "M1",
     "resolved": [
       {
         "decision": "Use a provider-paid update channel with services-assisted onboarding, a revocable Consumer Installation whose agent_execution_policy defaults to disabled, deterministic transforms, and—only when explicitly configured—a customer-selected qualified bounded Agent Runner whose executable, auth mode, entitlement, and actual model route are verified; launch Codex and Claude Code behind common conformance and keep Cursor deferred.",
@@ -29,10 +33,14 @@
       {
         "decision": "Use deterministic verification independent from generation, preserve local fallback export, require a short-lived tested draft PR, and project only event-bound consumer-consented rollout status.",
         "evidence_ref": "docs/product/prd.md#mvp-product-flow"
+      },
+      {
+        "decision": "M1 is approved only for attended, offline, agent-free deterministic walking-skeleton implementation, local validation, and exact CI/toolchain configuration from its separate implementation packet; a deterministic fake may separately test the Agent Runner adapter contract, while private holdout provisioning and every independent review, remote CI execution or monitoring, GitHub, merge, and post-merge lifecycle action remain blocked until separately authorized and recompiled.",
+        "evidence_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/m1-attended-implementation-task-packet.json"
       }
     ],
     "blocking": [
-      "this generated control set grants no later implementation task authority",
+      "parent M1 lifecycle and tasks after M1 remain unauthorized by this generated control set",
       "M2's skipped latest-head Codex terminal signal is recorded as task-specific process debt and cannot be reused by a later task",
       "factoryd v3 runtime and bundle qualification are absent"
     ]
@@ -116,7 +124,7 @@
   },
   "runtime_pins": {
     "language": "go_with_parser_backed_typescript_analysis",
-    "toolchain_version": "go1.26.5; exact Node, npm, registry-or-snapshot, package-integrity, and toolchain pins before package-lock mutation",
+    "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM M1 fixture packages use Node native --experimental-strip-types with lifecycle scripts disabled; future package-lock mutation requires exact registry-or-snapshot and package-integrity pins",
     "module_or_package_path": "github.com/Clyra-AI/lumyn",
     "dependency_policy": "standard library first; pinned Go modules, parser runtime, model adapter, or tool dependency only with task evidence and license review",
     "distribution_target": "explicitly licensed and integrity-signed design-partner binary or source package for consumer-local or consumer-controlled CI execution; public OSS, self-serve, and Homebrew require a separate approved gate",
@@ -137,6 +145,16 @@
       "Agent Runner, model, funding, credential, billing, or product authority",
       "verification or delivery",
       "Factory profile or runtime qualification"
+    ],
+    "required_updates": [
+      "context_brief",
+      "execution_plan",
+      "task_packets",
+      "validation_contract",
+      "factory_compatibility",
+      "acceptance_ledger",
+      "acceptance_mapping",
+      "scope_closure_map"
     ]
   },
   "recommended_worker_chain": [
@@ -146,6 +164,6 @@
     "commit-push",
     "post-merge-monitor"
   ],
-  "generated_by": "prd-to-plan+execution-compiler+post-merge-monitor",
-  "generated_at": "2026-07-26T17:04:17Z"
+  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair",
+  "generated_at": "2026-07-28T16:00:48Z"
 }

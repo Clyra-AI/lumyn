@@ -1,0 +1,164 @@
+gofmt -w $(find cmd internal tests -name '*.go' -type f)
+test -f AGENTS.md
+test -f WORKFLOW.md
+test -f README.md
+test -f docs/product/prd.md
+test -f docs/product/plan.md
+test -f .tool-versions
+test -f go.mod
+test -f scripts/audit_branch_protection.py
+test -f scripts/check_go_coverage.py
+test -f scripts/validate_repo_pack.py
+test -f .github/required-checks.json
+test -f .github/CODEOWNERS
+test -f .github/action-ref-exceptions.yaml
+test -f .github/workflows/validate.yml
+test -f .github/workflows/codeql.yml
+test -d .factory/artifacts
+test -d cmd/lumyn
+test -d internal
+test -d tests
+test -d scripts
+! grep -RIn "TODO\\|TBD\\|FIXME" AGENTS.md WORKFLOW.md README.md docs cmd internal schemas tests
+grep -q '^golang 1.26.5$' .tool-versions
+grep -q '^nodejs 22.16.0$' .tool-versions
+grep -q '^go 1.26.5$' go.mod
+grep -q 'go-version-file: go.mod' .github/workflows/validate.yml
+grep -q 'check-latest: false' .github/workflows/validate.yml
+grep -q 'actions/checkout@v6.0.2' .github/workflows/validate.yml
+grep -q 'actions/setup-go@v6.3.0' .github/workflows/validate.yml
+grep -q 'actions/setup-node@v7.0.0' .github/workflows/validate.yml
+grep -q 'node-version: 22.16.0' .github/workflows/validate.yml
+grep -q 'npm@11.4.1' .github/workflows/validate.yml
+grep -q 'fetch-depth: 0' .github/workflows/validate.yml
+grep -q 'permissions:' .github/workflows/validate.yml
+grep -q 'concurrency:' .github/workflows/validate.yml
+grep -q 'timeout-minutes:' .github/workflows/validate.yml
+grep -q 'make prepush-full' .github/workflows/validate.yml
+grep -q 'python3 scripts/validate_repo_pack.py --lifecycle-evidence' .github/workflows/validate.yml
+grep -q '"validate"' .github/required-checks.json
+grep -q '"CodeQL analyze"' .github/required-checks.json
+grep -Fq '/.github/** @davidahmann' .github/CODEOWNERS
+grep -q 'actions/checkout@v6.0.2' .github/action-ref-exceptions.yaml
+grep -q 'actions/setup-go@v6.3.0' .github/action-ref-exceptions.yaml
+grep -q 'actions/setup-node@v7.0.0' .github/action-ref-exceptions.yaml
+grep -q 'github/codeql-action/init@v4' .github/action-ref-exceptions.yaml
+grep -q 'permissions:' .github/workflows/codeql.yml
+grep -q 'concurrency:' .github/workflows/codeql.yml
+grep -q 'timeout-minutes:' .github/workflows/codeql.yml
+grep -q 'actions/checkout@v6.0.2' .github/workflows/codeql.yml
+grep -q 'actions/setup-go@v6.3.0' .github/workflows/codeql.yml
+grep -q 'go-version-file: go.mod' .github/workflows/codeql.yml
+grep -q 'check-latest: false' .github/workflows/codeql.yml
+grep -q 'github/codeql-action/init@v4' .github/workflows/codeql.yml
+grep -q 'github/codeql-action/autobuild@v4' .github/workflows/codeql.yml
+grep -q 'github/codeql-action/analyze@v4' .github/workflows/codeql.yml
+grep -q 'languages: go' .github/workflows/codeql.yml
+grep -q 'Passive Codex review settle is required before merge' AGENTS.md
+grep -q 'Green CI alone is not merge-ready' WORKFLOW.md
+grep -q 'Do not merge manually through `gh pr merge`' docs/dev/dev_guides.md
+grep -q 'process escape' WORKFLOW.md
+grep -q 'process escape' docs/dev/dev_guides.md
+grep -q 'make test-coverage' docs/dev/dev_guides.md
+grep -q 'pr-lifecycle/<work_item_id>/pr-lifecycle-report.json' AGENTS.md
+grep -q 'pr-lifecycle/<work_item_id>/pr-lifecycle-report.json' WORKFLOW.md
+grep -q 'pr-lifecycle/<work_item_id>/pr-lifecycle-report.json' docs/dev/dev_guides.md
+grep -q 'protect-main-from-direct-push' AGENTS.md
+grep -q 'audit-remote-protection' WORKFLOW.md
+grep -q 'audit-remote-protection' docs/dev/dev_guides.md
+go vet ./cmd/... ./internal/... ./schemas/...
+go test ./... -count=1
+ok  	github.com/Clyra-AI/lumyn/cmd/lumyn	4.370s
+ok  	github.com/Clyra-AI/lumyn/internal/agent	0.349s
+ok  	github.com/Clyra-AI/lumyn/internal/authorization	0.540s
+ok  	github.com/Clyra-AI/lumyn/internal/change	0.833s
+ok  	github.com/Clyra-AI/lumyn/internal/config	0.987s
+ok  	github.com/Clyra-AI/lumyn/internal/evidence	0.675s
+ok  	github.com/Clyra-AI/lumyn/internal/exitcode	1.957s
+ok  	github.com/Clyra-AI/lumyn/internal/installation	1.796s
+ok  	github.com/Clyra-AI/lumyn/internal/redaction	2.125s
+ok  	github.com/Clyra-AI/lumyn/internal/result	1.147s
+ok  	github.com/Clyra-AI/lumyn/internal/source	1.566s
+ok  	github.com/Clyra-AI/lumyn/internal/source/markdownlinks	1.304s
+ok  	github.com/Clyra-AI/lumyn/internal/status	1.621s
+?   	github.com/Clyra-AI/lumyn/internal/version	[no test files]
+ok  	github.com/Clyra-AI/lumyn/schemas	2.473s
+ok  	github.com/Clyra-AI/lumyn/tests	5.790s
+mkdir -p .factory/tmp
+go test ./cmd/... ./internal/... ./schemas/... -count=1 -covermode=atomic -coverprofile=.factory/tmp/coverage.out
+ok  	github.com/Clyra-AI/lumyn/cmd/lumyn	4.194s	coverage: 95.7% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/agent	0.251s	coverage: 61.5% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/authorization	1.931s	coverage: 70.3% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/change	0.405s	coverage: 80.0% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/config	0.574s	coverage: 100.0% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/evidence	1.068s	coverage: 77.4% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/exitcode	1.736s	coverage: [no statements]
+ok  	github.com/Clyra-AI/lumyn/internal/installation	1.412s	coverage: 73.1% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/redaction	1.233s	coverage: 74.4% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/result	0.896s	coverage: [no statements]
+ok  	github.com/Clyra-AI/lumyn/internal/source	2.168s	coverage: 83.6% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/source/markdownlinks	1.565s	coverage: 76.7% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/status	2.229s	coverage: 83.8% of statements
+?   	github.com/Clyra-AI/lumyn/internal/version	[no test files]
+ok  	github.com/Clyra-AI/lumyn/schemas	2.592s	coverage: 0.0% of statements
+python3 scripts/check_go_coverage.py .factory/tmp/coverage.out 75 \
+		--stable-minimum 85 \
+		--stable-package cmd/lumyn --stable-package internal/config --stable-package internal/exitcode --stable-package internal/result
+go coverage total: 79.9% (minimum 75.0%)
+go stable-package coverage: 95.7% across 117 statements (minimum 85.0%)
+go test ./... -count=1
+ok  	github.com/Clyra-AI/lumyn/cmd/lumyn	4.243s
+ok  	github.com/Clyra-AI/lumyn/internal/agent	0.524s
+ok  	github.com/Clyra-AI/lumyn/internal/authorization	0.217s
+ok  	github.com/Clyra-AI/lumyn/internal/change	1.491s
+ok  	github.com/Clyra-AI/lumyn/internal/config	0.352s
+ok  	github.com/Clyra-AI/lumyn/internal/evidence	1.007s
+ok  	github.com/Clyra-AI/lumyn/internal/exitcode	1.654s
+ok  	github.com/Clyra-AI/lumyn/internal/installation	0.843s
+ok  	github.com/Clyra-AI/lumyn/internal/redaction	1.975s
+ok  	github.com/Clyra-AI/lumyn/internal/result	1.324s
+ok  	github.com/Clyra-AI/lumyn/internal/source	1.908s
+ok  	github.com/Clyra-AI/lumyn/internal/source/markdownlinks	1.161s
+ok  	github.com/Clyra-AI/lumyn/internal/status	2.129s
+?   	github.com/Clyra-AI/lumyn/internal/version	[no test files]
+ok  	github.com/Clyra-AI/lumyn/schemas	2.466s
+ok  	github.com/Clyra-AI/lumyn/tests	5.780s
+python3 scripts/audit_branch_protection.py --self-test
+{"self_test": "branch_protection_audit", "status": "pass"}
+python3 scripts/validate_factory_pilot_evidence.py
+{"pilot_evidence": "lumyn-mvp-slice", "status": "pass"}
+python3 scripts/validate_repo_pack.py --self-test
+repo-pack validator self-test passed
+python3 scripts/validate_repo_pack.py
+repo-pack validation passed
+test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/context-brief.json
+test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json
+test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json
+test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json
+test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json
+test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json
+test -f .factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json
+test -f .factory/artifacts/task-runs/T2.5/validation-report.json
+test -f .factory/artifacts/task-runs/T2.5/work-proof-marker.json
+test -f .factory/artifacts/task-runs/T2.6/validation-report.json
+test -f .factory/artifacts/task-runs/T2.6/work-proof-marker.json
+test -f .factory/artifacts/pr-lifecycle/T2.5-pr5/pr-lifecycle-report.json
+python3 -m json.tool .factory/artifacts/pr-lifecycle/T2.5-pr5/pr-lifecycle-report.json >/dev/null
+test -f .factory/artifacts/repo-controls/main-branch-protection.json
+python3 -m json.tool .factory/artifacts/repo-controls/main-branch-protection.json >/dev/null
+test -f schemas/workflow-contract.schema.json
+test -f schemas/expected-outcome.schema.json
+test -f schemas/validator.schema.json
+test -f schemas/action-boundary.schema.json
+test -f schemas/human-annotation.schema.json
+test -f schemas/required-context.schema.json
+test -f schemas/state-binding.schema.json
+test -f schemas/canonical-trace.schema.json
+test -f schemas/evidence-event.schema.json
+test -f schemas/cassette.schema.json
+test -f schemas/result-axes.schema.json
+test -f schemas/proof-strength.schema.json
+test -f schemas/command-result.schema.json
+test -f schemas/redaction-config.schema.json
+mkdir -p .factory/tmp
+go build -o .factory/tmp/lumyn ./cmd/lumyn

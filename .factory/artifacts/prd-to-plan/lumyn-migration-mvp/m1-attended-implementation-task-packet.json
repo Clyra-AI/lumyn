@@ -1,0 +1,476 @@
+{
+  "artifact_type": "task_packet",
+  "artifact_version": "1.0",
+  "task_id": "M1-IMPLEMENTATION",
+  "work_item_id": "lumyn-v3-m1-attended-implementation",
+  "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair",
+  "generated_at": "2026-07-28T16:00:48Z",
+  "blocked_by": ["M0", "M2"],
+  "objective": "Implement and locally validate the public/synthetic M1 benchmark corpus, matched-comparison protocol, executable offline fixture checks, canonical event-to-manual-PR-bundle walking skeleton, and the exact local/CI toolchain controls needed to reproduce them, without provisioning the private holdout or performing review, remote CI execution or monitoring, GitHub, merge, or post-merge lifecycle actions.",
+  "mission_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
+  "shared_constraints_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
+  "validation_contract_inheritance": {
+    "source_validation_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
+    "acceptance_criteria": [
+      "At least three deterministic, three agent-assisted, and the required blocked scenario classes are represented by licensed public-derived or synthetic fixtures with stable provenance and ground truth.",
+      "At least six visible TypeScript consumer fixtures cover direct and wrapper-heavy integration shapes.",
+      "The matched generic-agent comparison protocol freezes every control variable and isolates Lumyn orchestration as the treatment.",
+      "The offline walking skeleton composes schema-valid M2 contracts from provider event through a manual PR bundle; the deterministic route is agent-free, creates and verifies real deterministic Git baseline and candidate commits, executes the exact candidate head separately from an expected-failing baseline using the authorized npm test --silent command with provider reporting disabled, earns only static_verified, and exercises the fake adapter only in a separate conformance test.",
+      "No private holdout content, credential, network request, live Agent Runner/model invocation, GitHub action, or terminal M1 acceptance claim is produced."
+    ],
+    "required_checks": [
+      "make lint-fast",
+      "make test-fast",
+      "make test-coverage",
+      "python3 scripts/validate_repo_pack.py",
+      "make prepush-full"
+    ],
+    "required_review": {
+      "required": false,
+      "review_type": "code",
+      "reviewer_class": "none"
+    },
+    "evidence_required": [
+      "validation_report",
+      "work_proof_marker",
+      "proof-of-behavior-scorecard"
+    ],
+    "stop_conditions": [
+      "the parent M1 contract or attended implementation packet is incomplete or drifts",
+      "a changed path falls outside this implementation packet",
+      "a required deterministic command fails",
+      "private holdout inputs, answers, expected patches, expected labels, raw traces, repository URLs, or plaintext content digests would become visible",
+      "review, remote CI execution or monitoring, commit, push, PR, merge, post-merge, live Agent Runner/model, credential, product-command network, consumer-repository, or external-write authority is requested"
+    ]
+  },
+  "allowed_paths": [
+    "examples/migration-packs/",
+    "examples/consumer-repos/",
+    "examples/integration-graphs/",
+    "examples/candidates/",
+    "examples/negative/",
+    "examples/verification/",
+    "examples/holdout-manifest.json",
+    ".factory/contracts/",
+    ".github/action-ref-exceptions.yaml",
+    ".github/workflows/validate.yml",
+    ".tool-versions",
+    "Makefile",
+    "scripts/repo_pack_ci.py",
+    "scripts/repo_pack_validation/",
+    "tests/",
+    "docs/dev/dev_guides.md",
+    "docs/architecture/architecture_guides.md",
+    "CHANGELOG.md"
+  ],
+  "planning_prerequisite_paths": [
+    "AGENTS.md",
+    "WORKFLOW.md",
+    "docs/product/prd.md",
+    "docs/product/plan.md",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/"
+  ],
+  "planning_prerequisite_owner": "plan-verify-repair",
+  "planning_prerequisite_rule": "The planning verifier must regenerate and validate these planning-truth paths before candidate validation; task-executor cannot write them, and validation binds them into the same release candidate.",
+  "architecture_target_paths": [
+    "examples/migration-packs/",
+    "examples/consumer-repos/",
+    "examples/integration-graphs/",
+    "examples/candidates/",
+    "examples/negative/",
+    "examples/verification/",
+    "scripts/repo_pack_validation/",
+    "tests/"
+  ],
+  "path_planning_method": "m1_plan_expected_repo_areas_narrowed_to_attended_implementation_v1",
+  "forbidden_paths": [
+    ".git/",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/",
+    ".factory/artifacts/prd-to-plan/lumyn-mvp/",
+    ".factory/artifacts/lifecycle-evidence/M1/",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/"
+  ],
+  "evidence_ownership": {
+    "task-executor": {
+      "allowed_paths_ref": "#/allowed_paths",
+      "forbidden_paths": [
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/"
+      ],
+      "rule": "The implementation worker cannot create, edit, or attest its validation-gate evidence."
+    },
+    "validation-gate": {
+      "allowed_paths": [
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/"
+      ],
+      "forbidden_paths_ref": "#/allowed_paths",
+      "rule": "The trusted validation runner may write only task-run markers, raw logs, reports, and scorecards and cannot mutate the candidate under validation."
+    }
+  },
+  "scope_exclusions": [
+    "private holdout provisioning or evaluation",
+    "independent review, remote CI execution or monitoring, Codex review, commit, push, PR, merge, or post-merge lifecycle work",
+    "production credentials, network access, consumer repository access, or production mutation",
+    "live Agent Runner or model execution",
+    "provider access to consumer code or model context",
+    "default-branch write or auto-merge",
+    "terminal acceptance closure or commercial proof",
+    "hosted control plane, provider PKI, connection receipt billing, or annual platform claims"
+  ],
+  "input_artifacts": [
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/context-brief.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-ledger.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/acceptance-mapping.json",
+    ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
+  ],
+  "upstream_debt_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m2/delivery-debt-record.json"
+  ],
+  "commands": [
+    "make lint-fast",
+    "make test-fast",
+    "make test-coverage",
+    "python3 scripts/validate_repo_pack.py"
+  ],
+  "baseline_commands": [
+    "make lint-fast",
+    "make test-fast"
+  ],
+  "red_first_commands": [
+    "LUMYN_M1_VERIFICATION_TARGET=baseline npm --prefix examples/consumer-repos/det-operation-rename test --silent"
+  ],
+  "validation_commands": [
+    "make lint-fast",
+    "make test-fast",
+    "make test-coverage",
+    "python3 scripts/validate_repo_pack.py"
+  ],
+  "final_validation_commands": [
+    "make prepush-full"
+  ],
+  "acceptance_checks": [
+    "Fixture manifests validate provenance, licensing, stable digests, ground truth, expected route, expected edits, expected commands, and expected verification; every agent route coordinates at least two consumer-side fixture files with distinct context-dependent edits and no deterministic recipe.",
+    "Deterministic scenarios produce byte-stable candidates and manifests for identical pinned inputs.",
+    "Blocked scenarios return needs_input or blocked without speculative edits.",
+    "The generic-agent comparison protocol freezes the same repository, evidence, engine route, budgets, tools, commands, role, and verification opportunity for both arms.",
+    "The walking skeleton reaches a schema-valid manual PR bundle using only public or synthetic inputs, an agent-free deterministic route, real deterministic Git baseline and candidate commits, exact generated candidate bytes in a fresh read-only view at the verified candidate head, separate expected-failing baseline and passing-candidate processes running the authorized pinned offline npm test --silent command with provider reporting disabled, complete normalized semantic artifact digests, digest-bound package, runner, candidate, fixture, command, output, toolchain and verified-cleanup evidence, static_verified only, and no external write.",
+    "Mutation, replay, candidate-substitution, missing/parse/link/top-level baseline failure, isolation, cancellation, scope-escape, live-route, credential, network, and false-verification negative tests fail closed."
+  ],
+  "worker_type": "task-executor",
+  "required_worker_chain": [
+    "task-executor",
+    "validation-gate"
+  ],
+  "lifecycle_gates": {
+    "local_validation_required": true,
+    "ci_required": false,
+    "code_review_required": false,
+    "codex_review_required": false,
+    "holdout_provisioning_required": false,
+    "holdout_evaluation_required": false,
+    "trace_grading_required": false,
+    "evidence_attestation_required": false,
+    "commit_push_required": false,
+    "post_merge_monitor_required": false,
+    "pr_lifecycle_report_required": false,
+    "skip_policy": "approved_exception_required"
+  },
+  "test_matrix_refs": [
+    {
+      "tier": "Tier 1 Unit",
+      "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+      "command_refs": ["make test-fast"]
+    },
+    {
+      "tier": "Tier 2 Integration",
+      "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+      "command_refs": ["go test ./tests -run '^TestM1' -count=1"]
+    },
+    {
+      "tier": "Tier 3 End-to-End",
+      "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+      "command_refs": ["go test ./tests -run '^TestM1WalkingSkeleton' -count=1"]
+    },
+    {
+      "tier": "Tier 5 Hardening",
+      "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+      "command_refs": ["go test ./tests -run '^TestM1.*(Reject|Mutation|Isolation|NoLive)' -count=1"]
+    },
+    {
+      "tier": "Tier 9 Contract",
+      "source_ref": "docs/dev/dev_guides.md#12-level-test-matrix",
+      "command_refs": ["python3 scripts/validate_repo_pack.py"]
+    }
+  ],
+  "ci_lane_refs": [
+    {
+      "lane": "fast",
+      "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+      "command_refs": ["make lint-fast", "make test-fast"]
+    },
+    {
+      "lane": "core-local",
+      "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+      "command_refs": ["make test-coverage", "make prepush-full"]
+    },
+    {
+      "lane": "acceptance-local",
+      "source_ref": "docs/dev/dev_guides.md#ci-lane-mapping",
+      "command_refs": ["python3 scripts/validate_repo_pack.py"]
+    }
+  ],
+  "ci_control_refs": {
+    "required": false,
+    "source_ref": "docs/dev/dev_guides.md#ci-and-pr-lifecycle",
+    "required_check_manifest_ref": ".github/required-checks.json",
+    "exception_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json#/alignment_gate"
+  },
+  "coverage_policy_refs": {
+    "required": true,
+    "source_ref": "docs/dev/dev_guides.md#coverage-gates",
+    "minimums": [
+      {
+        "scope": "go_first_party_packages_overall",
+        "threshold": 75,
+        "command_refs": ["make test-coverage"]
+      },
+      {
+        "scope": "go_stable_command_or_core_packages",
+        "threshold": 85,
+        "command_refs": ["make test-coverage"]
+      }
+    ],
+    "command_refs": ["make test-coverage", "make prepush-full"],
+    "exception_policy": "coverage misses block completion without an approved scoped exception and compensating evidence"
+  },
+  "security_scanner_gates": {
+    "required": false,
+    "scanner": "CodeQL",
+    "workflow_ref": ".github/workflows/codeql.yml",
+    "status_check": "CodeQL analyze",
+    "exception_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json#/alignment_gate",
+    "exception_policy": "the attended implementation phase is local-only; scanner and CI evidence remain mandatory before parent M1 lifecycle promotion"
+  },
+  "engineering_policy_refs": [
+    {
+      "policy": "docs_parity",
+      "source_ref": "docs/dev/dev_guides.md#docs-parity",
+      "rule": "Fixture, manifest, comparison, fake-route, and walking-skeleton behavior stays synchronized with task-readable docs."
+    },
+    {
+      "policy": "output_contracts",
+      "source_ref": "docs/dev/dev_guides.md#result-and-evidence-compatibility",
+      "rule": "Benchmark and skeleton artifacts are versioned, deterministic, provenance-bound contracts."
+    },
+    {
+      "policy": "release_integrity",
+      "source_ref": "docs/dev/dev_guides.md#release-integrity",
+      "rule": "This phase cannot imply supported distribution, live execution, holdout proof, or shipped M1 completion."
+    }
+  ],
+  "architecture_guidance_refs": [
+    {
+      "source_ref": "docs/architecture/architecture_guides.md#systems-thinking-map",
+      "rule": "Freeze source truth, consumers, feedback, blast radius, and rollback before downstream scoring."
+    },
+    {
+      "source_ref": "docs/architecture/architecture_guides.md#tdd-and-red-first-expectations",
+      "rule": "Add the smallest failing M1 fixture, mutation, isolation, or skeleton test before supporting behavior."
+    },
+    {
+      "source_ref": "docs/architecture/architecture_guides.md#trust-mode-posture",
+      "rule": "This phase remains public/synthetic, offline, credential-free, and network-free; deterministic generation is agent-free and the fake adapter is test-only."
+    }
+  ],
+  "structured_parser_policy_refs": [
+    "docs/dev/dev_guides.md#structured-data-policy"
+  ],
+  "agent_native_cli_checks": [
+    "Command-facing test output is stable and machine-readable.",
+    "Non-interactive failures preserve typed status and evidence refs.",
+    "No fake adapter silently falls back to a live executable, model, credential, network, or external-write route."
+  ],
+  "artifact_budget_refs": [
+    "docs/dev/dev_guides.md#redaction-and-evidence-budgets"
+  ],
+  "redaction_posture": {
+    "classification": "public_or_synthetic_source_safe",
+    "customer_safe": true,
+    "redaction_notes": "Private holdout inputs, answers, expected patches, expected labels, raw traces, repository URLs, and plaintext content digests are prohibited.",
+    "recursive_policy": "reject credentials, secrets, machine-local paths, private repository identity, raw holdout content, and resolving answer material"
+  },
+  "evidence_required": [
+    "validation_report",
+    "work_proof_marker",
+    "proof-of-behavior-scorecard"
+  ],
+  "worker_evidence_required": [
+    "validation_report",
+    "work_proof_marker",
+    "proof-of-behavior-scorecard"
+  ],
+  "required_proof_level": "workflow_behavior",
+  "proof_scorecard_required": true,
+  "proof_scorecard_artifact": "proof-of-behavior-scorecard",
+  "semantic_invariants": [
+    "Identical pinned inputs produce byte-stable deterministic candidates and manifests.",
+    "Committed artifacts contain no private holdout material or resolving answer data.",
+    "The comparison protocol gives both arms the same frozen snapshot, evidence, engine route, budgets, tools, commands, engineer role, and verification opportunity except for Lumyn orchestration.",
+    "Deterministic generation invokes no agent; every visible agent-route fixture requires coordinated context-dependent edits across at least two consumer files; the separate fake-adapter conformance route has no credential, network, or external-write authority; and delivery stops at a manual local bundle.",
+    "The walking skeleton proves contract composition and trusted synthetic-fixture static verification only; Node vm is not a qualified isolation boundary, and the task cannot claim repo_verified or close runtime, holdout, delivery, real-repository, or commercial acceptance."
+  ],
+  "changelog_intent": {
+    "impact": "required",
+    "section": "Added",
+    "draft_entry": "Added the public/synthetic M1 benchmark corpus, matched comparison protocol, executable offline fixture verification, and canonical agent-free walking skeleton.",
+    "semver_marker": "[semver:minor]"
+  },
+  "versioning_impact": "Pre-1.0 additive benchmark and test-harness contract with explicit fixture and manifest schema versions.",
+  "migration_impact": "No existing consumer migration; downstream M3, M4, M6, M7, and M10 consume the public corpus and comparison protocol after parent M1 lifecycle completion.",
+  "docs_sync_refs": [
+    {"path": "docs/product/prd.md", "reason": "M1 product boundary, proof claims, and implementation form"},
+    {"path": "docs/product/plan.md", "reason": "M1 source scope and completion boundary"},
+    {"path": "docs/dev/dev_guides.md", "reason": "corpus, test, evidence, and lifecycle rules"},
+    {"path": "docs/architecture/architecture_guides.md", "reason": "trust, fake-route, and failure semantics"},
+    {"path": "CHANGELOG.md", "reason": "required additive M1 implementation entry"}
+  ],
+  "adr_required": false,
+  "adr_trigger_reason": "No ADR while the implementation preserves the approved public/synthetic and private-holdout boundary.",
+  "tdd_first_failing_tests": [
+    "Add the smallest TestM1 fixture, mutation, isolation, or walking-skeleton check before supporting behavior.",
+    "Record the red command and failure signal before implementation makes it pass."
+  ],
+  "cost_perf_impact": {
+    "level": "low_to_medium",
+    "measurement_expectation": "Record local deterministic runtime and fixture counts; no model, network, or external-service cost is permitted.",
+    "budget_trigger": "Split or stop if the corpus cannot remain within local deterministic pre-push and artifact budgets."
+  },
+  "requires_capabilities": [],
+  "conditional_factory_capabilities": [],
+  "product_authority_requirements": [],
+  "optional_product_action_capabilities": [],
+  "requires_human_approval": false,
+  "requires_credentials": false,
+  "requires_network": false,
+  "sovereignty_mode": "local_only",
+  "runtime_pins": {
+    "language": "go_with_parser_backed_typescript_analysis",
+    "toolchain_version": "go1.26.5; node22.16.0; npm11.4.1; dependency-free ESM fixture packages using Node native --experimental-strip-types with lifecycle scripts disabled",
+    "module_or_package_path": "github.com/Clyra-AI/lumyn",
+    "dependency_policy": "standard library first; pinned dependencies only with task evidence and license review",
+    "distribution_target": "no distribution in this attended implementation phase",
+    "provider_policy": "public or synthetic provider-change evidence only; no provider channel, status transmission, or external mutation",
+    "provider_intent_policy": "public or synthetic provider-change evidence only",
+    "agent_runner_policy": "deterministic generation is agent-free; a deterministic fake separately exercises the common adapter contract; live Codex, Claude Code, Cursor, or model execution is forbidden",
+    "model_policy": "no live model route, credential, network, prompt, response, token, or cost activity",
+    "verification_policy": "local deterministic trusted-fixture verification runs independently from generation in fresh processes, creates and verifies real deterministic Git baseline and candidate commits, executes the exact candidate head in a fresh read-only view, accepts only typed target-contract mismatch as red proof, binds complete normalized artifact, fixture, command, output, toolchain, Git-head, and cleanup evidence, and earns static_verified only because the developer process is not a qualified host-isolation backend",
+    "delivery_policy": "The schema-valid manual PR bundle is local data only and does not count as automated PR delivery; branch, push, PR, merge, and provider reporting are forbidden",
+    "artifact_namespace": "source-safe fixtures and task-run evidence only; no private holdout or consumer-private material",
+    "live_work_policy": "no external authority is granted",
+    "dispatch_policy": "attended task-executor only; factoryd and lifecycle dispatch remain paused"
+  },
+  "factory_compatibility": {
+    "factory_contract_version": "1.0",
+    "profile_contract_version": "lumyn-provider-update-delivery-v3.1-2026-07-25",
+    "profile_ref": "profiles/lumyn.yaml",
+    "status": "profile_aligned_runtime_unqualified",
+    "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair",
+    "generated_at": "2026-07-28T16:00:48Z",
+    "deprecated_worker_policy": "block_active_aliases",
+    "deprecated_worker_aliases": [
+      {
+        "deprecated": "ship-pr",
+        "replacement": "commit-push",
+        "status": "deprecated"
+      }
+    ],
+    "unblock_rule": "This packet never unblocks lifecycle or factoryd dispatch; review, holdout, CI, GitHub, merge, and post-merge work require a separately authorized regenerated packet.",
+    "skill_vocabulary_version": "2026-06-09",
+    "skill_inventory_ref": "skills/README.md"
+  },
+  "factory_contract_binding": {
+    "task_packet_schema_ref": "factory://schemas/artifacts/task-packet.schema.json",
+    "task_packet_schema_digest": "sha256:c46a8ff085f5dd0e88181cc70341bfa7ddcad890695a322499e9648dc34b93ab",
+    "vendored_task_packet_schema_ref": ".factory/contracts/factory/task-packet.schema.json",
+    "runtime_control_schema_ref": "factory://schemas/artifacts/runtime-control.schema.json",
+    "runtime_control_schema_digest": "sha256:288fa14a1e3e40b926b0cae19e9753c4415cd8da7c5eb8c1650f4008820f4d9a",
+    "vendored_runtime_control_schema_ref": ".factory/contracts/factory/runtime-control.schema.json",
+    "vendored_schema_validator_ref": "scripts/repo_pack_validation/factory_schema_core.py",
+    "vendored_schema_validator_digest": "sha256:a0748a9d44bf967f7a73dc0026bef31db50b7b47dfc715d049492096319b1a86",
+    "semantic_validator_ref": "factory://scripts/contract_validators/task_packet_shape.py",
+    "semantic_validator_digest": "sha256:e5348377293ffaa73b7a2f31f0fe363bb3f21455cab1d270d2cbc773cdf3f63d",
+    "validated_at": "2026-07-28T16:00:48Z"
+  },
+  "factoryd_runtime": {
+    "state_dir": ".factoryd/",
+    "workspace_root": ".factoryd/workspaces/",
+    "branch_prefix": "codex",
+    "worker_type": "codex_cli",
+    "worker_command": "",
+    "approval_posture": "attended local implementation only; all lifecycle and external actions require separate approval",
+    "credential_posture": "no ambient or task-scoped credentials",
+    "network_posture": "offline",
+    "sovereignty_mode": "local_only",
+    "runtime_control": {
+      "control_id": "runtime-control-lumyn-v3-1-m1-attended-implementation",
+      "owner": "lumyn-maintainers",
+      "autonomy_level": "restricted",
+      "mission_paused": true,
+      "mission_canceled": false,
+      "disabled_adapters": ["codex_cli"],
+      "max_token_budget": 0,
+      "max_write_scope_paths": [],
+      "release_freeze": {
+        "enabled": true,
+        "reason": "factoryd and the full M1 lifecycle are not authorized by this attended implementation packet",
+        "exception_ref": ""
+      },
+      "rollback_route": {
+        "strategy": "discard_uncommitted_attended_work",
+        "owner": "lumyn-maintainers",
+        "artifact_refs": [
+          ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json"
+        ]
+      },
+      "hotfix_route": {
+        "strategy": "separately_authorized_repair_task",
+        "owner": "lumyn-maintainers",
+        "artifact_refs": [
+          ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json"
+        ]
+      },
+      "launch_request": {
+        "requested_action": "continue_mission",
+        "requested_write_paths": ["examples/migration-packs/"],
+        "requested_adapter": "codex_cli",
+        "expected_decision": "block",
+        "reason_code": "factoryd_and_m1_lifecycle_not_authorized"
+      },
+      "conflict_behavior": "fail_closed",
+      "created_at": "2026-07-28T16:00:48Z"
+    },
+    "capability_grants": []
+  },
+  "alignment_gate_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json#/alignment_gate",
+  "plan_drift_policy_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json#/plan_drift_policy",
+  "max_iterations": 2,
+  "retry_budget": 1,
+  "stop_conditions": [
+    "factoryd or lifecycle dispatch is requested",
+    "the implementation packet or parent M1 constraints drift",
+    "a changed path falls outside allowed_paths or overlaps forbidden_paths",
+    "a required deterministic command fails",
+    "private holdout or consumer-private material would be read or written",
+    "credentials, network, live Agent Runner/model, consumer repository, GitHub, provider reporting, or external writes are requested",
+    "terminal acceptance, holdout, real-repository, automated-delivery, or commercial proof would be claimed"
+  ],
+  "execution_state": {
+    "state": "attended_local_implementation_authorized",
+    "acceptance_closure_claimed": false,
+    "lifecycle_authorized": false,
+    "factoryd_authorized": false
+  }
+}
