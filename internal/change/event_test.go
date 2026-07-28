@@ -53,6 +53,7 @@ func TestValidateProviderEventRejectsReplayConflictLifecycleAndRecoveryProof(t *
 		},
 		"replay":         func(event *ProviderEvent, context *EventContext) { event.Sequence = context.LastSequence },
 		"expired":        func(event *ProviderEvent, _ *EventContext) { event.ExpiresAt = now },
+		"past deadline":  func(event *ProviderEvent, _ *EventContext) { event.Deadline = now },
 		"future issued":  func(event *ProviderEvent, _ *EventContext) { event.IssuedAt = now.Add(time.Minute) },
 		"wrong audience": func(event *ProviderEvent, _ *EventContext) { event.Audience = []string{"sdk:other"} },
 		"wrong origin": func(event *ProviderEvent, _ *EventContext) {

@@ -4,6 +4,14 @@
 
 ### Added
 
+- Added the M3 Provider Change Contract runtime: pinned and licensed
+  OpenAPI/documentation/SDK/migration-guide intake, JSON/YAML-equivalent
+  OpenAPI snapshots, source-and-target-bound declarative normalization,
+  fail-closed conflict and ambiguity handling, independently signed provider
+  confirmation, inert publish-kit generation, exact-origin and byte-digest
+  verification, replay/freshness/audience/lifecycle enforcement, and explicit
+  attended-recovery labeling that cannot prove channel delivery or installed
+  preauthorization.
 - Added the M1 public/synthetic migration benchmark: three deterministic and
   three coordinated multi-file wrapper-heavy agent-assisted TypeScript
   scenarios, seven fail-closed blocked classes, provenance and

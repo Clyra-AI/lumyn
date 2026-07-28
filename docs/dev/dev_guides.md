@@ -1,6 +1,6 @@
 # Lumyn Developer Guide
 
-Status: v3.1 executable contract engineering; product runtime not implemented
+Status: v3.1 engineering; M0-M3 bounded runtime slices implemented
 
 Engineering work targets provider-originated API update delivery launched
 through services-assisted, provider-paid sunset campaigns while execution and
@@ -83,10 +83,11 @@ orphan evidence. Include negative cases for a host-home source disguised by an
 allowed class, a program outside its executable root, a writable candidate
 mount, and mismatched credential or network references.
 
-The schemas and validators are not runtime evidence. Provider fetching,
-repository access, agent/model calls, verification commands, GitHub actions,
-and provider transmission remain unavailable until their owning milestones
-ship direct acceptance evidence.
+Schemas and validators alone are not runtime evidence. M3 verifies supplied
+pinned provider bytes and emits inert publish-kit bytes but performs no network
+fetch or external publish. Repository access, agent/model calls, verification
+commands, GitHub actions, and provider transmission remain unavailable until
+their owning milestones ship direct acceptance evidence.
 
 ## Validation Matrix
 

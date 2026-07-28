@@ -1,0 +1,18 @@
+{
+  "change_id": "change.create_payment_intent",
+  "source_operation_id": "createCharge",
+  "target_operation_id": "createPaymentIntent",
+  "intent": "Use Payment Intents for new charge creation.",
+  "applicability": "Calls bound to createCharge in the source API.",
+  "mapping_mode": "repository_specific_reasoning",
+  "declarative_steps": [
+    "Preserve the amount and currency expressions in the target request."
+  ],
+  "source_evidence_ids": [
+    "evidence.openapi.2025-01"
+  ],
+  "target_evidence_ids": [
+    "evidence.openapi.2026-01"
+  ],
+  "non_executable": true
+}

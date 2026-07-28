@@ -102,6 +102,9 @@ func ValidateProviderEvent(event ProviderEvent, context EventContext) error {
 	if context.Now.IsZero() {
 		return errors.New("validation time is required")
 	}
+	if !event.Deadline.After(context.Now) {
+		return errors.New("provider event deadline has passed")
+	}
 	if event.Sequence <= context.LastSequence {
 		return errors.New("provider event is replayed or stale")
 	}
