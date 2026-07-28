@@ -13,6 +13,18 @@ from repo_pack_validation.authority import (
 )
 from repo_pack_validation.acceptance_text import validate_acceptance_text
 from repo_pack_validation.markdown_refs import _markdown_anchors
+from repo_pack_validation.m1_closure import (
+    M1_AUTHORIZATION_REF,
+    M1_EVENT_LOG_REF,
+    M1_HOLDOUT_REF,
+    M1_IMPLEMENTATION_MARKER_REF,
+    M1_POST_MERGE_MARKER_REF,
+    M1_PR_LIFECYCLE_REF,
+    M1_REVIEW_REF,
+    M1_SHIP_PACKET_REF,
+    M1_SCOPE_CLOSURE_REF,
+    M1_VALIDATION_REPORT_REF,
+)
 from repo_pack_validation.task_contracts import (
     M2_IMPLEMENTATION_MARKER_REF,
     M2_PR_LIFECYCLE_REF,
@@ -301,9 +313,9 @@ def run_repo_pack_self_tests(
         ),
         (
             lambda value: value["plan"]["alignment_gate"].__setitem__(
-                "authorized_attended_task_refs", []
+                "authorized_attended_task_refs", ["M1-IMPLEMENTATION"]
             ),
-            "authorize only attended M1",
+            "non-dispatchable history",
         ),
         (
             lambda value: value["m1_implementation"]["validation_contract_inheritance"][
@@ -1018,27 +1030,27 @@ def run_repo_pack_self_tests(
         ),
         (
             lambda value: value["plan"]["alignment_gate"].__setitem__(
-                "implementation_may_start", False
+                "implementation_may_start", True
             ),
-            "authorize only attended M1",
+            "non-dispatchable history",
         ),
         (
             lambda value: value["mapping"].__setitem__(
                 "generated_at", "2026-07-28T15:13:04Z"
             ),
-            "exact regenerated M1 control set",
+            "exact post-M1-closure control set",
         ),
         (
             lambda value: value["plan"]["alignment_gate"][
                 "completed_task_refs"
-            ].remove("M2"),
-            "preserve M0/M2 closure",
+            ].remove("M1"),
+            "preserve M0/M1/M2 closure",
         ),
         (
             lambda value: value["risk"]["current_contract_state"].__setitem__(
-                "M2", "implementation_and_local_validation_complete_lifecycle_pending"
+                "M1", "implementation_and_local_validation_complete_lifecycle_pending"
             ),
-            "preserve M0/M2 closure",
+            "preserve M0/M1/M2 closure",
         ),
         (
             lambda value: _ledger_item(value, "TRUST-001")[
@@ -1117,6 +1129,64 @@ def run_repo_pack_self_tests(
         _expect_failure(base, mutate, expected, validate_loaded)
 
     evidence_mutations = [
+        (
+            lambda value: value[M1_VALIDATION_REPORT_REF][
+                "candidate_binding"
+            ].__setitem__("candidate_digest", "sha256:" + "0" * 64),
+            "validation must remain passing, candidate-bound",
+        ),
+        (
+            lambda value: value[M1_REVIEW_REF].__setitem__("verdict", "changes_requested"),
+            "independent review is not approved, resolved, and current-work bound",
+        ),
+        (
+            lambda value: value[M1_HOLDOUT_REF].__setitem__(
+                "promotion_decision", "blocked"
+            ),
+            "holdout provisioning is not passing",
+        ),
+        (
+            lambda value: value[M1_IMPLEMENTATION_MARKER_REF].__setitem__(
+                "execution_status", "fail"
+            ),
+            "landed work-proof marker is not passing",
+        ),
+        (
+            lambda value: value[M1_PR_LIFECYCLE_REF].__setitem__(
+                "status", "incomplete"
+            ),
+            "PR lifecycle report is incomplete",
+        ),
+        (
+            lambda value: value[M1_SCOPE_CLOSURE_REF].__setitem__(
+                "acceptance_closure_claimed", True
+            ),
+            "scope-closure report is incomplete",
+        ),
+        (
+            lambda value: value[M1_AUTHORIZATION_REF].__setitem__(
+                "status", "active"
+            ),
+            "lifecycle authorization must be consumed",
+        ),
+        (
+            lambda value: value[M1_EVENT_LOG_REF]["events"][1].__setitem__(
+                "previous_digest", "sha256:" + "0" * 64
+            ),
+            "event-log sequence or previous digest drifted",
+        ),
+        (
+            lambda value: value[M1_POST_MERGE_MARKER_REF].__setitem__(
+                "execution_status", "fail"
+            ),
+            "post-merge work-proof marker is not passing",
+        ),
+        (
+            lambda value: value[M1_SHIP_PACKET_REF].__setitem__(
+                "merge_readiness", "ready"
+            ),
+            "ship packet must bind the landed task-specific closure",
+        ),
         (
             lambda value: value[M2_SCORECARD_REF].__setitem__("task_id", "M1"),
             "proof scorecard must bind task M2",

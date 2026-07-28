@@ -1,0 +1,106 @@
+{
+  "artifact_type": "handoff_record",
+  "schema_version": "0.1",
+  "work_item_id": "lumyn-v3-m1",
+  "current_state": "exception_approved",
+  "workspace_ref": ".",
+  "branch_ref": "codex/lumyn-m1-runner-contract",
+  "decisions": [
+    "M1's public/synthetic benchmark and walking-skeleton changes landed through PR #74 and passed required PR and exact-main validate and CodeQL checks.",
+    "The repaired PR head had no terminal latest-head Codex approval or thumbs-up before the repository owner merged it; both earlier-head P1/P2 threads were fixed and resolved, and no late actionable finding appeared.",
+    "On 2026-07-28 the repository owner instructed Codex that main was merged, requested exact-main CI monitoring and local-main synchronization, then instructed continuation in the same manner. This approves truthful task-specific closed-with-debt recording and continuation, but does not retroactively satisfy the skipped review gate."
+  ],
+  "blockers": [],
+  "blocked_reason": "",
+  "validation_status": {
+    "status": "green_with_approved_process_exception",
+    "completed_checks": [
+      "M1 trusted local validation run validation:2026-07-28T17:05:04Z:lumyn-m1-implementation-r2",
+      "M1 independent code review",
+      "M1 private holdout provisioning",
+      "PR #74 validate",
+      "PR #74 CodeQL analyze",
+      "main validate at 702b5be8d53b46a8c2a394f0b00770f626a8bbdd",
+      "main codeql at 702b5be8d53b46a8c2a394f0b00770f626a8bbdd",
+      "post-merge Codex inventory with zero current-head or late actionable findings",
+      "retained original-head to landed-content verification across 81 candidate paths"
+    ],
+    "pending_checks": []
+  },
+  "residual_risks": [
+    "M1 has no terminal latest-head Codex settle evidence for commit 656c1f0bbb61cd558500c2f1b91a5a8f084f4f29.",
+    "The exception is historical and task-specific; it grants no carry-forward review or merge permission to M2.5 or any later task.",
+    "M1 is public/synthetic benchmark and developer-harness proof only; provider intake, real repository analysis, qualified Agent Runner execution, product delivery, provider reporting, and commercial value remain unproved.",
+    "All 15 M1-linked product acceptance items remain nonterminal and retain later owning task refs."
+  ],
+  "next_actions": [
+    "Persist the M1 lifecycle report, post-merge proof, ship packet, scope closure, and delivery debt.",
+    "Synchronize the active compiled controls while retaining all M1-linked product acceptance items as nonterminal.",
+    "Begin M2.5 only after its external paid-provider and five-consumer-unit preflight is explicitly authorized and evidenced outside the repository."
+  ],
+  "owner_needed": "none_for_m1_closure",
+  "promised_followups": [
+    "Do not reuse this exception as review evidence.",
+    "Keep factoryd paused until the compiled controls and runtime are qualified.",
+    "Do not fabricate M2.5 payment, buyer, consumer, consent, or runner-prequalification evidence."
+  ],
+  "checkpoint_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/pr-lifecycle-report.json",
+  "resume_artifact_refs": [
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+    ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+    ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json"
+  ],
+  "artifact_refs": [
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+    ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+    ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/implementation/work-proof-marker.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/delivery-debt-record.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json"
+  ],
+  "human_intervention_count": 2,
+  "human_review_minutes": 0,
+  "blocked_wait_time": "PT27M10S",
+  "attention_reason": "manual_merge_after_nonterminal_codex_review",
+  "avoidable_interruption": true,
+  "automation_candidate": "Reliably trigger or complete latest-head Codex review after a fix push so manual intervention is unnecessary.",
+  "merge_authority_grant": {
+    "capability": "merge_authority",
+    "task_id": "M1",
+    "approved": true,
+    "approved_by": "davidahmann",
+    "approval_source": "The repository owner explicitly approved M1 implementation and Factory commit-push land mode, then confirmed the merge and instructed continuation.",
+    "approved_on": "2026-07-28",
+    "expires_at": "2026-07-29T13:46:58Z"
+  },
+  "approval_card": {
+    "decision_needed": "Approve M1 closed-with-debt lifecycle recording and permit the plan to advance without treating the skipped latest-head Codex settle as satisfied.",
+    "risk_summary": "PR #74 merged with green PR and main checks after its P1/P2 findings were repaired, but the final head lacked terminal Codex review evidence.",
+    "owner": "davidahmann",
+    "timeout": "2026-07-29T13:46:58Z",
+    "evidence_refs": [
+      ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+      ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+      ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-report.json"
+    ],
+    "decision_options": [
+      "approve",
+      "reject",
+      "defer"
+    ],
+    "decision_status": "approved",
+    "followup_artifact_refs": [
+      ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/delivery-debt-record.json"
+    ],
+    "routing_targets": [
+      {
+        "surface_kind": "chat_card",
+        "adapter_hint": "codex",
+        "payload_summary": "Repository owner confirmed the merge, requested exact-main monitoring and local synchronization, and instructed continuation."
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "artifact_type": "ship_packet",
+  "schema_version": "0.1",
+  "task_id": "M1",
+  "work_item_id": "lumyn-v3-m1",
+  "branch_name": "codex/lumyn-m1-runner-contract",
+  "commit_set": [
+    "bc17b58f128bc15c4e715aba15c505c20b224e35",
+    "656c1f0bbb61cd558500c2f1b91a5a8f084f4f29"
+  ],
+  "pr_summary": "Freeze Lumyn's public/synthetic M1 migration benchmark, offline deterministic walking skeleton, matched generic-agent protocol, private holdout commitment, and lifecycle evidence without claiming live product proof.",
+  "validation_reference": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+  "work_proof_marker_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/implementation/work-proof-marker.json"
+  ],
+  "scope_closure_report_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json",
+  "review_policy": "Medium-risk M1 required structured independent code review, source-safe private holdout provisioning, green validate and CodeQL checks, terminal latest-head Codex review, governed merge, and exact-main monitoring.",
+  "merge_readiness": "landed_with_approved_non_reusable_process_exception",
+  "pr_ref": "https://github.com/Clyra-AI/lumyn/pull/74",
+  "merge_ref": "702b5be8d53b46a8c2a394f0b00770f626a8bbdd",
+  "gate_status": {
+    "local_validation": "pass",
+    "independent_code_review": "approved",
+    "holdout_provisioning": "pass",
+    "ci": "pass",
+    "codex_review": "disabled_by_approved_task_specific_exception_after_nonterminal_latest_head",
+    "merge": "merged_by_repository_owner",
+    "post_merge": "healthy",
+    "closure": "closed_with_debt_acceptance_nonterminal"
+  },
+  "process_exception_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/process-exception-handoff.json"
+}

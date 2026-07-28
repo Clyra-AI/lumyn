@@ -34,33 +34,37 @@ projection. It also binds paid qualification and a fair generic-agent
 baseline. Verification runs from a fresh exact-head view in a separate process
 without runner/model credentials or a generation-owned evidence writer.
 
-Execution status: **M0 and M2 closed with explicit, task-specific process debt;
-M1 has a Factory-valid packet for attended, offline fixture/developer-harness
-implementation and local validation only; its private holdout, independent
-review, remote CI execution or monitoring, GitHub, merge, and post-merge
-lifecycle, every later task, and all factoryd dispatch remain paused and fail
-closed until separately authorized**.
+Execution status: **M0, M1, and M2 are task-closed with explicit,
+task-specific process debt. M1's attended implementation packet is immutable
+historical evidence; its benchmark and lifecycle closure does not close any
+linked product acceptance item. M2.5 and every later task, plus all factoryd
+dispatch, remain paused and fail closed until separately authorized**.
 
 The external Factory source profile at `profiles/lumyn.yaml` is aligned to the
 v3.1 product contract and this complete generated control set records that exact
 profile version. factoryd remains unqualified against this active mission,
 bundle, schemas, task, installation, authority, Agent Runner/model, delivery,
-status, evidence, and closure generation. The generation grants only the
-bounded attended M1 public-fixture implementation authority described above;
-it grants no lifecycle, live product runtime, or factoryd authority. M0 remains
+status, evidence, and closure generation. The generation retains the bounded
+attended M1 public-fixture implementation packet only as immutable historical
+evidence; it grants no current execution, live product runtime, or factoryd
+authority. M0 remains
 closed with its approved, non-reusable process debt. M2 is task-closed with
 direct validation, independent security review, landed-content binding,
 healthy exact-main checks, and explicit non-reusable debt for the missing
 latest-head Codex terminal signal. Shared event and installation acceptance
-remains planned for M3 and M5 runtime proof. factoryd may not dispatch until
+remains planned for M3 and M5 runtime proof. M1 is task-closed with direct
+validation, independent code review, private holdout provisioning,
+landed-content binding, and healthy exact-main checks, plus explicit
+non-reusable debt for the missing latest-head Codex terminal signal. All 15
+M1-linked product acceptance items remain nonterminal for their later owning
+tasks. factoryd may not dispatch until
 runtime qualification is evidenced and one bounded task is explicitly
-unpaused with positive budgets and complete grants. M1's attended approval is
-not a factoryd or merge grant and authorizes no private holdout, independent
-review, remote CI execution or monitoring, live Agent Runner/model, credential,
-product-command network, consumer-repository, GitHub, or external-write action.
-Lifecycle-owned remote CI may perform the pinned action, toolchain, and
+unpaused with positive budgets and complete grants. The consumed M1 lifecycle
+authorization and historical implementation packet are not reusable factoryd,
+product, credential, network, repository, GitHub, or external-write grants.
+Lifecycle-owned remote CI performed only the pinned action, toolchain, and
 dependency bootstrap required by the declared workflows; fixture and product
-commands remain offline.
+commands remained offline.
 
 The historical `.factory/artifacts/prd-to-plan/lumyn-mvp/` package remains
 immutable and non-active.

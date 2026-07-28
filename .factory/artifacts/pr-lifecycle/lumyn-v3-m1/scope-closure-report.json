@@ -1,0 +1,177 @@
+{
+  "artifact_type": "scope_closure_report",
+  "schema_version": "0.1",
+  "task_id": "M1",
+  "work_item_id": "lumyn-v3-m1",
+  "mission_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+  "intent_source_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
+  "intent_source_locator": "task:M1",
+  "event_log_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/mission-event-log.json",
+  "work_proof_marker_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/implementation/work-proof-marker.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-work-proof/work-proof-marker.json"
+  ],
+  "validation_report_refs": [
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json"
+  ],
+  "closure_items": [
+    {
+      "intent_item_id": "M1-CORPUS-001",
+      "intent_statement": "Freeze the provenance-backed deterministic, agent-assisted, blocked, and generic-agent benchmark corpus and matched comparison protocol.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "examples/migration-packs/benchmark-manifest.json",
+        "examples/migration-packs/generic-agent-baseline-v1.json",
+        "examples/consumer-repos/",
+        "examples/integration-graphs/",
+        "examples/negative/blocked-scenarios.json"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M1/review-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": [],
+      "acceptance_item_ids": [
+        "PACK-001",
+        "IMPACT-005",
+        "PILOT-005"
+      ],
+      "acceptance_boundary": "nonterminal_partial_only"
+    },
+    {
+      "intent_item_id": "M1-SKELETON-001",
+      "intent_statement": "Prove the agent-free deterministic public-fixture event-to-manual-PR-bundle walking skeleton and separate fake-adapter conformance route without external writes.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "examples/verification/run.mjs",
+        "examples/candidates/",
+        "tests/m1_benchmark_test.go"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M1/review-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": [],
+      "acceptance_item_ids": [
+        "EVENT-001",
+        "EVENT-002",
+        "INSTALL-001",
+        "INSTALL-002",
+        "AGENT-001",
+        "VER-006"
+      ],
+      "acceptance_boundary": "nonterminal_partial_only"
+    },
+    {
+      "intent_item_id": "M1-AGENT-BENCH-001",
+      "intent_statement": "Freeze coordinated multi-file agent-route fixtures and fail-closed blocked classes without launching a live Agent Runner or model.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "examples/migration-packs/agent-related-test-repair/",
+        "examples/migration-packs/agent-signature-type-adaptation/",
+        "examples/migration-packs/agent-wrapper-adaptation/",
+        "examples/integration-graphs/",
+        "tests/m1_benchmark_test.go"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/proof-of-behavior-scorecard.json",
+        ".factory/artifacts/lifecycle-evidence/M1/review-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": [],
+      "acceptance_item_ids": [
+        "AGENT-002",
+        "AGENT-003",
+        "AGENT-004",
+        "AGENT-005",
+        "AGENT-006",
+        "AGENT-007"
+      ],
+      "acceptance_boundary": "nonterminal_partial_only"
+    },
+    {
+      "intent_item_id": "M1-HOLDOUT-001",
+      "intent_statement": "Provision a source-safe opaque private holdout commitment through an independent evaluator without exposing resolving material to implementation workers.",
+      "classification": "implemented",
+      "implementation_refs": [
+        "examples/holdout-manifest.json"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
+        ".factory/artifacts/lifecycle-evidence/M1/review-report.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/implementation/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": [],
+      "acceptance_item_ids": [],
+      "acceptance_boundary": "provisioning_only_no_holdout_evaluation_or_threshold_claim"
+    },
+    {
+      "intent_item_id": "M1-LIFECYCLE-001",
+      "intent_statement": "Complete independent review, pull-request checks, governed repository delivery, merge, and exact-main monitoring for the frozen M1 candidate.",
+      "classification": "implemented_with_debt",
+      "implementation_refs": [
+        ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/pr-lifecycle-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-report.json"
+      ],
+      "evidence_refs": [
+        ".factory/artifacts/lifecycle-evidence/M1/review-report.json",
+        ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-report.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/process-exception-handoff.json"
+      ],
+      "work_proof_marker_refs": [
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/implementation/work-proof-marker.json",
+        ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-work-proof/work-proof-marker.json"
+      ],
+      "repair_task_packet_refs": [],
+      "repair_report_refs": [],
+      "delivery_debt_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/delivery-debt-record.json",
+      "acceptance_item_ids": [],
+      "acceptance_boundary": "task_lifecycle_only_no_product_acceptance_closure"
+    }
+  ],
+  "acceptance_item_results": [
+    {"acceptance_item_id": "PACK-001", "status": "partial", "terminal": false, "remaining_task_refs": ["M3"]},
+    {"acceptance_item_id": "EVENT-001", "status": "partial", "terminal": false, "remaining_task_refs": ["M3"]},
+    {"acceptance_item_id": "EVENT-002", "status": "partial", "terminal": false, "remaining_task_refs": ["M3"]},
+    {"acceptance_item_id": "INSTALL-001", "status": "partial", "terminal": false, "remaining_task_refs": ["M5"]},
+    {"acceptance_item_id": "INSTALL-002", "status": "partial", "terminal": false, "remaining_task_refs": ["M5"]},
+    {"acceptance_item_id": "IMPACT-005", "status": "partial", "terminal": false, "remaining_task_refs": ["M4"]},
+    {"acceptance_item_id": "AGENT-001", "status": "partial", "terminal": false, "remaining_task_refs": ["M6"]},
+    {"acceptance_item_id": "AGENT-002", "status": "partial", "terminal": false, "remaining_task_refs": ["M6"]},
+    {"acceptance_item_id": "AGENT-003", "status": "partial", "terminal": false, "remaining_task_refs": ["M6"]},
+    {"acceptance_item_id": "AGENT-004", "status": "partial", "terminal": false, "remaining_task_refs": ["M6"]},
+    {"acceptance_item_id": "AGENT-005", "status": "partial", "terminal": false, "remaining_task_refs": ["M6"]},
+    {"acceptance_item_id": "AGENT-006", "status": "partial", "terminal": false, "remaining_task_refs": ["M6"]},
+    {"acceptance_item_id": "AGENT-007", "status": "partial", "terminal": false, "remaining_task_refs": ["M6"]},
+    {"acceptance_item_id": "VER-006", "status": "partial", "terminal": false, "remaining_task_refs": ["M7"]},
+    {"acceptance_item_id": "PILOT-005", "status": "partial", "terminal": false, "remaining_task_refs": ["M10"]}
+  ],
+  "acceptance_closure_claimed": false,
+  "delivery_debt_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/delivery-debt-record.json"
+  ],
+  "approved_deferral_refs": [],
+  "blocker_refs": [],
+  "overall_status": "closed_with_debt",
+  "rerun_required": false,
+  "generated_at": "2026-07-28T20:35:59Z"
+}

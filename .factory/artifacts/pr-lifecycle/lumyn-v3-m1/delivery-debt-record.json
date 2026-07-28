@@ -1,0 +1,25 @@
+{
+  "artifact_type": "delivery_debt_record",
+  "schema_version": "0.1",
+  "debt_id": "debt-lumyn-v3-m1-latest-head-codex-settle",
+  "source_run_id": "lumyn-v3-m1-pr74",
+  "work_item_id": "lumyn-v3-m1",
+  "task_id": "M1",
+  "debt_type": "skipped_required_latest_head_codex_review",
+  "severity": "high",
+  "unmet_expectation": "PR #74 must receive terminal latest-head Codex approval or thumbs-up before merge.",
+  "justification": "The repository owner merged PR #74 after all required PR checks passed and all earlier-head P1/P2 findings were fixed and resolved, but before the repaired head received a terminal current-head Codex signal. The repository owner then requested exact-main monitoring, local-main synchronization, and continuation. This task-specific exception records the process escape without converting stale review evidence into merge permission.",
+  "downstream_constraints": [
+    "Do not treat PR #74's earlier-head Codex review or resolved comments as terminal latest-head review evidence.",
+    "Do not reuse this exception for M2.5 or any later pull request.",
+    "M1 closes only its benchmark, public/synthetic walking-skeleton, holdout-provisioning, and lifecycle task scope; no product runtime, real-repository, automated product-delivery, or commercial acceptance item is closed.",
+    "Do not claim Factory or factoryd shipping reliability from this second manual-merge process escape."
+  ],
+  "follow_up_action": "retain_as_non_reusable_process_exception_and_require_clean_later_task_lifecycles",
+  "created_at": "2026-07-28T20:35:54Z",
+  "evidence_refs": [
+    "https://github.com/Clyra-AI/lumyn/pull/74",
+    "https://github.com/Clyra-AI/lumyn/pull/74#pullrequestreview-4799560687",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/process-exception-handoff.json"
+  ]
+}

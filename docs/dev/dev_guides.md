@@ -96,9 +96,10 @@ ship direct acceptance evidence.
 - `make test-contracts`: Go tests, schema tests, active-plan validation,
   historical evidence validation, and repo-pack self-tests.
 - `make prepush-full`: full local gate before PR or merge.
-- `make lifecycle-evidence`: strict M1 marker, task-report, and task-required
-  independent holdout/review binding and mutation gate, run only after those
-  evidence bundles are immutable.
+- `make lifecycle-evidence`: strict historical M1 marker, task-report,
+  independent holdout/review, retained original-head bundle, landed-content,
+  exact-main, consumed-authorization, and non-reusable-exception binding and
+  mutation gate.
 - `make audit-remote-protection`: networked GitHub protection audit.
 
 The checked-in compiled set is regenerated from the approved v3.1 PRD and plan
@@ -113,9 +114,10 @@ bundle/runtime qualification, and an explicit bounded-task unpause.
 
 - Fast: `make lint-fast`, `make test-fast`.
 - Core: `make test-contracts`, `make prepush-full`.
-- Lifecycle evidence: `make lifecycle-evidence` after immutable M1 markers,
-  task reports, and required independent holdout/review reports; CI runs it
-  after the core lane so no marker validates itself.
+- Lifecycle evidence: `make lifecycle-evidence` verifies immutable historical
+  M1 markers, reports, retained original-head bundle, landed-content proof,
+  exact-main evidence, and closure boundaries; CI runs it after the core lane
+  so no marker validates itself.
 - Acceptance: item-level active ledger and closure map.
 - Cross-platform: reserved until supported packaging.
 - Risk: `CodeQL analyze` plus targeted security/architecture review for
@@ -456,8 +458,12 @@ The immutable base SHA defines the candidate path/content comparison; a separate
 marker. The two identities must not be conflated, and candidate-digest validation
 remains authoritative after commit or rebase changes the branch head.
 
-M1 is the only active task compiled to this exact runnable lifecycle shape.
-Later milestone holdout fields remain planning overlays while factoryd is paused;
+M1 is the only task compiled to this exact runnable lifecycle shape, and that
+packet is now immutable historical evidence rather than active authority.
+Candidate-scope validation is reproduced from the retained original PR-head
+bundle and compared with the landed main content across the frozen path set;
+later repository changes are not forced to match M1's candidate digest. Later
+milestone holdout fields remain planning overlays while factoryd is paused;
 they must be recompiled into canonical per-task packets before any later daemon
 dispatch and must not be treated as runner-ready merely because they appear in
 the parent planning collection.

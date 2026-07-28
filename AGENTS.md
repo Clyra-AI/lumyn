@@ -22,9 +22,11 @@ Scope: This repository only.
 - Keep factoryd dispatch paused. The external Factory
   `profiles/lumyn.yaml` profile and the factoryd bundle/runtime have not been
   requalified against this v3.1 generation.
-- Treat this rebaseline as planning and control work plus the explicitly
-  approved attended M1 public/synthetic corpus and developer-harness task. It
-  authorizes no Lumyn product runtime implementation or live product action.
+- Treat the M1 public/synthetic corpus and developer-harness implementation
+  packet as immutable historical task evidence. M1's benchmark and lifecycle
+  scope is closed with recorded process debt, but none of its 15 linked
+  product acceptance items is terminal. This rebaseline authorizes no new
+  Lumyn product runtime implementation or live product action.
 - Keep `.factory/artifacts/prd-to-plan/lumyn-mvp/` and its task, pilot, and
   lifecycle artifacts immutable as historical evidence.
 - Keep Factory run evidence under `.factory/artifacts/`, scratch under
@@ -364,12 +366,14 @@ Before PR or merge, run:
 - `make prepush-full`
 - `make lifecycle-evidence`
 
-`make prepush-full` validates source, planning, candidate controls, tests, and
-build without requiring its own not-yet-written work-proof marker. After all
-M1 markers, task reports, and task-required independent holdout/review reports
-are immutable; `make lifecycle-evidence` strictly validates their exact
-current-work bindings, independence, promotion semantics, and mutation
-self-tests. CI runs both phases.
+`make prepush-full` validates source, planning, historical candidate controls,
+tests, and build without requiring its own not-yet-written work-proof marker.
+The immutable M1 markers, task reports, review, holdout, retained original-head
+bundle, landed-content proof, exact-main checks, and non-reusable process
+exception are checked by `make lifecycle-evidence`. The command validates their
+historical bindings and mutation resistance; it does not re-evaluate the
+frozen M1 candidate against later repository changes or grant reuse. CI runs
+both phases.
 
 If any command is skipped, record the exact reason in validation evidence.
 
@@ -434,10 +438,12 @@ factoryd dispatch remains paused until a separate, reviewed change:
 3. reconciles the checked-in paused configs with that qualified runtime; and
 4. explicitly authorizes the selected task and positive runtime budgets.
 
-The current rebaseline authorizes only the separately packeted attended M1
-public/synthetic corpus and developer-harness implementation. It authorizes no
-Lumyn product runtime, live Agent Runner/model, consumer repository access,
-product command execution, GitHub write, or merge.
+The separately packeted attended M1 public/synthetic corpus and
+developer-harness implementation is closed and historical. The current
+rebaseline authorizes no task implementation, Lumyn product runtime, live
+Agent Runner/model, consumer repository access, product command execution,
+GitHub write, or merge. M2.5 requires a separate external-evidence preflight
+and explicit task authorization.
 
 Runner-ready packets include exact acceptance item IDs, dependencies, paths,
 commands, risk, lifecycle gates, evidence, proof level, runtime pins,
@@ -466,10 +472,12 @@ The canonical implementation-to-merge chain is:
 
 Independent workers must produce task-bound, current-work-proof, passing
 artifacts before `commit-push`. Do not use deprecated lifecycle aliases.
-For active M1, run `code-review` before `holdout-evaluator`; the review must not
-claim access to the later holdout result. The strict gate binds both producers
-against the validation report's task-executor identity and rejects self-review,
-self-provisioning, cross-candidate replay, or reversed chronology.
+For historical M1, `code-review` preceded `holdout-evaluator`; the review does
+not claim access to the later holdout result. The strict gate binds both
+producers against the validation report's task-executor identity and rejects
+self-review, self-provisioning, cross-candidate replay, reversed chronology,
+later-workspace reinterpretation, or reuse of M1's consumed authorization and
+task-specific process exception.
 
 ## 12. Stop Conditions
 

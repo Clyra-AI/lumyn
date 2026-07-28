@@ -92,6 +92,13 @@
 
 ### Changed
 
+- Closed M1's public/synthetic benchmark and repository lifecycle as immutable
+  historical task evidence, including retained original-head-to-landed-content
+  verification, exact-main CI monitoring, consumed lifecycle authorization,
+  and a non-reusable exception for the missing terminal latest-head Codex
+  signal. All 15 M1-linked product acceptance items remain nonterminal under
+  their later runtime or pilot task owners.
+
 - Reframed Lumyn from generic agent-readiness evaluation and the v2
   deterministic/receipt-first migration plan to provider-originated API update
   delivery.

@@ -33,5 +33,11 @@
   ],
   "approved_at": "2026-07-28T13:46:58Z",
   "expires_at": "2026-07-29T13:46:58Z",
-  "status": "active"
+  "consumed_at": "2026-07-28T20:36:00Z",
+  "closure_evidence_refs": [
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/pr-lifecycle-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-report.json",
+    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/scope-closure-report.json"
+  ],
+  "status": "consumed"
 }
