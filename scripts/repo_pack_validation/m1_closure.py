@@ -68,6 +68,9 @@ M1_EXPECTED_BASE = "d7ae311c391775a2517d56add6d57148d5891ef3"
 M1_EXPECTED_VALIDATION_CHECKOUT = "bc17b58f128bc15c4e715aba15c505c20b224e35"
 M1_EXPECTED_PR_HEAD = "656c1f0bbb61cd558500c2f1b91a5a8f084f4f29"
 M1_EXPECTED_LANDED_HEAD = "702b5be8d53b46a8c2a394f0b00770f626a8bbdd"
+M1_EXPECTED_EVENT_TERMINAL_DIGEST = (
+    "sha256:054018ae1fcd2f2e8e6edf60141225a832cade086db8e0b458d78a32c6d156d8"
+)
 M1_EXPECTED_ACCEPTANCE_ITEMS = {
     "PACK-001",
     "EVENT-001",
@@ -373,6 +376,14 @@ def validate_m1_closure_evidence(
 
     review_work = review.get("current_work", {})
     holdout_work = holdout.get("current_work", {})
+    implementation_producer = validation.get("implementation_producer", {})
+    review_producer = review.get("producer", {})
+    holdout_producer = holdout.get("producer", {})
+    producer_ids = [
+        implementation_producer.get("producer_id"),
+        review_producer.get("producer_id"),
+        holdout_producer.get("producer_id"),
+    ]
     _require(
         review.get("verdict") == "approved"
         and review.get("review_type") == "code"
@@ -384,6 +395,18 @@ def validate_m1_closure_evidence(
             for finding in review.get("findings", [])
         ),
         "M1 independent review is not approved, resolved, and current-work bound",
+    )
+    _require(
+        implementation_producer.get("worker") == "task-executor"
+        and implementation_producer.get("producer_class") == "agent"
+        and review_producer.get("worker") == "code-review"
+        and review_producer.get("producer_class") == "peer_agent"
+        and holdout_producer.get("worker") == "holdout-evaluator"
+        and holdout_producer.get("producer_class") == "independent"
+        and review.get("reviewer_id") == review_producer.get("producer_id")
+        and all(isinstance(value, str) and value.strip() for value in producer_ids)
+        and len(set(producer_ids)) == 3,
+        "M1 implementation, review, and holdout producer independence drifted",
     )
     _require(
         holdout.get("policy_mode") == "provision"
@@ -512,6 +535,12 @@ def validate_m1_closure_evidence(
             "M1 mission event-log digest chain is invalid",
         )
         previous_digest = expected_digest
+    _require(
+        previous_digest == M1_EXPECTED_EVENT_TERMINAL_DIGEST
+        and closure.get("event_log_terminal_digest")
+        == M1_EXPECTED_EVENT_TERMINAL_DIGEST,
+        "M1 mission event-log terminal digest is not independently anchored",
+    )
 
     closure_items = {
         item.get("intent_item_id"): item

@@ -7,6 +7,7 @@
   "intent_source_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
   "intent_source_locator": "task:M1",
   "event_log_ref": ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/mission-event-log.json",
+  "event_log_terminal_digest": "sha256:054018ae1fcd2f2e8e6edf60141225a832cade086db8e0b458d78a32c6d156d8",
   "work_proof_marker_refs": [
     ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/implementation/work-proof-marker.json",
     ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/post-merge-work-proof/work-proof-marker.json"
