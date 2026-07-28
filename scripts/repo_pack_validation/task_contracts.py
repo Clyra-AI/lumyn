@@ -822,7 +822,12 @@ def _validate_worker_chain(task: dict[str, Any]) -> None:
 
 def _validate_holdout_contracts(tasks: dict[str, dict[str, Any]]) -> None:
     provision = tasks["M1"].get("holdout_policy")
+    provisioning = tasks["M1"].get("holdout_provisioning_contract")
     _require(isinstance(provision, dict), "M1 holdout policy is required")
+    _require(
+        isinstance(provisioning, dict),
+        "M1 holdout provisioning contract is required",
+    )
     _require(provision.get("mode") == "provision", "M1 must provision the holdout")
     m1_gates = tasks["M1"].get("lifecycle_gates", {})
     _require(
@@ -831,26 +836,26 @@ def _validate_holdout_contracts(tasks: dict[str, dict[str, Any]]) -> None:
         "M1 must provision, not evaluate, the hidden holdout",
     )
     _require(
-        provision.get("task_executor_access") == "forbidden",
+        provisioning.get("task_executor_access") == "forbidden",
         "M1 holdout answers must be hidden from task-executor",
     )
     _require(
-        provision.get("comparison_baseline")
+        provisioning.get("comparison_baseline")
         == "matched_agent_engine_and_budget_status_quo",
         "M1 must freeze a fair generic-agent baseline",
     )
     _require(
-        set(provision.get("comparison_control_variables", []))
+        set(provisioning.get("comparison_control_variables", []))
         == GENERIC_AGENT_CONTROL_FIELDS
-        and provision.get("difference_under_test") == GENERIC_AGENT_TREATMENT
-        and provision.get("unmatched_engine_comparison_is_causal") is False,
+        and provisioning.get("difference_under_test") == GENERIC_AGENT_TREATMENT
+        and provisioning.get("unmatched_engine_comparison_is_causal") is False,
         "M1 baseline must isolate Lumyn from runner, model, auth, funding, and budget effects",
     )
     _require(
         provision.get("policy_digest") == _policy_digest(provision),
         "M1 holdout policy digest drifted",
     )
-    prohibited = set(provision.get("prohibited_committed_fields", []))
+    prohibited = set(provisioning.get("prohibited_committed_fields", []))
     _require(
         {
             "inputs",

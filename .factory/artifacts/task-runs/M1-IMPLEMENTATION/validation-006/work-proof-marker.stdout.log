@@ -68,61 +68,61 @@ grep -q 'audit-remote-protection' WORKFLOW.md
 grep -q 'audit-remote-protection' docs/dev/dev_guides.md
 go vet ./cmd/... ./internal/... ./schemas/...
 go test ./... -count=1
-ok  	github.com/Clyra-AI/lumyn/cmd/lumyn	4.370s
-ok  	github.com/Clyra-AI/lumyn/internal/agent	0.349s
-ok  	github.com/Clyra-AI/lumyn/internal/authorization	0.540s
-ok  	github.com/Clyra-AI/lumyn/internal/change	0.833s
-ok  	github.com/Clyra-AI/lumyn/internal/config	0.987s
-ok  	github.com/Clyra-AI/lumyn/internal/evidence	0.675s
-ok  	github.com/Clyra-AI/lumyn/internal/exitcode	1.957s
-ok  	github.com/Clyra-AI/lumyn/internal/installation	1.796s
-ok  	github.com/Clyra-AI/lumyn/internal/redaction	2.125s
-ok  	github.com/Clyra-AI/lumyn/internal/result	1.147s
-ok  	github.com/Clyra-AI/lumyn/internal/source	1.566s
-ok  	github.com/Clyra-AI/lumyn/internal/source/markdownlinks	1.304s
-ok  	github.com/Clyra-AI/lumyn/internal/status	1.621s
+ok  	github.com/Clyra-AI/lumyn/cmd/lumyn	8.026s
+ok  	github.com/Clyra-AI/lumyn/internal/agent	1.246s
+ok  	github.com/Clyra-AI/lumyn/internal/authorization	1.767s
+ok  	github.com/Clyra-AI/lumyn/internal/change	1.542s
+ok  	github.com/Clyra-AI/lumyn/internal/config	1.950s
+ok  	github.com/Clyra-AI/lumyn/internal/evidence	2.400s
+ok  	github.com/Clyra-AI/lumyn/internal/exitcode	2.190s
+ok  	github.com/Clyra-AI/lumyn/internal/installation	3.057s
+ok  	github.com/Clyra-AI/lumyn/internal/redaction	2.839s
+ok  	github.com/Clyra-AI/lumyn/internal/result	2.572s
+ok  	github.com/Clyra-AI/lumyn/internal/source	4.075s
+ok  	github.com/Clyra-AI/lumyn/internal/source/markdownlinks	3.591s
+ok  	github.com/Clyra-AI/lumyn/internal/status	4.179s
 ?   	github.com/Clyra-AI/lumyn/internal/version	[no test files]
-ok  	github.com/Clyra-AI/lumyn/schemas	2.473s
-ok  	github.com/Clyra-AI/lumyn/tests	5.790s
+ok  	github.com/Clyra-AI/lumyn/schemas	4.540s
+ok  	github.com/Clyra-AI/lumyn/tests	11.797s
 mkdir -p .factory/tmp
 go test ./cmd/... ./internal/... ./schemas/... -count=1 -covermode=atomic -coverprofile=.factory/tmp/coverage.out
-ok  	github.com/Clyra-AI/lumyn/cmd/lumyn	4.194s	coverage: 95.7% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/agent	0.251s	coverage: 61.5% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/authorization	1.931s	coverage: 70.3% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/change	0.405s	coverage: 80.0% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/config	0.574s	coverage: 100.0% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/evidence	1.068s	coverage: 77.4% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/exitcode	1.736s	coverage: [no statements]
-ok  	github.com/Clyra-AI/lumyn/internal/installation	1.412s	coverage: 73.1% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/redaction	1.233s	coverage: 74.4% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/result	0.896s	coverage: [no statements]
-ok  	github.com/Clyra-AI/lumyn/internal/source	2.168s	coverage: 83.6% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/source/markdownlinks	1.565s	coverage: 76.7% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/status	2.229s	coverage: 83.8% of statements
+ok  	github.com/Clyra-AI/lumyn/cmd/lumyn	4.880s	coverage: 95.7% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/agent	0.352s	coverage: 61.5% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/authorization	1.068s	coverage: 70.3% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/change	2.287s	coverage: 80.0% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/config	1.487s	coverage: 100.0% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/evidence	2.874s	coverage: 77.4% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/exitcode	2.104s	coverage: [no statements]
+ok  	github.com/Clyra-AI/lumyn/internal/installation	0.869s	coverage: 73.1% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/redaction	2.680s	coverage: 74.4% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/result	2.517s	coverage: [no statements]
+ok  	github.com/Clyra-AI/lumyn/internal/source	1.359s	coverage: 83.6% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/source/markdownlinks	1.890s	coverage: 76.7% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/status	0.708s	coverage: 83.8% of statements
 ?   	github.com/Clyra-AI/lumyn/internal/version	[no test files]
-ok  	github.com/Clyra-AI/lumyn/schemas	2.592s	coverage: 0.0% of statements
+ok  	github.com/Clyra-AI/lumyn/schemas	1.921s	coverage: 0.0% of statements
 python3 scripts/check_go_coverage.py .factory/tmp/coverage.out 75 \
 		--stable-minimum 85 \
 		--stable-package cmd/lumyn --stable-package internal/config --stable-package internal/exitcode --stable-package internal/result
 go coverage total: 79.9% (minimum 75.0%)
 go stable-package coverage: 95.7% across 117 statements (minimum 85.0%)
 go test ./... -count=1
-ok  	github.com/Clyra-AI/lumyn/cmd/lumyn	4.243s
-ok  	github.com/Clyra-AI/lumyn/internal/agent	0.524s
-ok  	github.com/Clyra-AI/lumyn/internal/authorization	0.217s
-ok  	github.com/Clyra-AI/lumyn/internal/change	1.491s
-ok  	github.com/Clyra-AI/lumyn/internal/config	0.352s
-ok  	github.com/Clyra-AI/lumyn/internal/evidence	1.007s
-ok  	github.com/Clyra-AI/lumyn/internal/exitcode	1.654s
-ok  	github.com/Clyra-AI/lumyn/internal/installation	0.843s
-ok  	github.com/Clyra-AI/lumyn/internal/redaction	1.975s
-ok  	github.com/Clyra-AI/lumyn/internal/result	1.324s
-ok  	github.com/Clyra-AI/lumyn/internal/source	1.908s
-ok  	github.com/Clyra-AI/lumyn/internal/source/markdownlinks	1.161s
-ok  	github.com/Clyra-AI/lumyn/internal/status	2.129s
+ok  	github.com/Clyra-AI/lumyn/cmd/lumyn	6.738s
+ok  	github.com/Clyra-AI/lumyn/internal/agent	2.325s
+ok  	github.com/Clyra-AI/lumyn/internal/authorization	0.332s
+ok  	github.com/Clyra-AI/lumyn/internal/change	3.209s
+ok  	github.com/Clyra-AI/lumyn/internal/config	2.994s
+ok  	github.com/Clyra-AI/lumyn/internal/evidence	1.829s
+ok  	github.com/Clyra-AI/lumyn/internal/exitcode	0.650s
+ok  	github.com/Clyra-AI/lumyn/internal/installation	4.065s
+ok  	github.com/Clyra-AI/lumyn/internal/redaction	3.658s
+ok  	github.com/Clyra-AI/lumyn/internal/result	3.414s
+ok  	github.com/Clyra-AI/lumyn/internal/source	3.978s
+ok  	github.com/Clyra-AI/lumyn/internal/source/markdownlinks	2.742s
+ok  	github.com/Clyra-AI/lumyn/internal/status	4.237s
 ?   	github.com/Clyra-AI/lumyn/internal/version	[no test files]
-ok  	github.com/Clyra-AI/lumyn/schemas	2.466s
-ok  	github.com/Clyra-AI/lumyn/tests	5.780s
+ok  	github.com/Clyra-AI/lumyn/schemas	4.688s
+ok  	github.com/Clyra-AI/lumyn/tests	12.680s
 python3 scripts/audit_branch_protection.py --self-test
 {"self_test": "branch_protection_audit", "status": "pass"}
 python3 scripts/validate_factory_pilot_evidence.py

@@ -4,19 +4,19 @@
   "execution_status": "fail",
   "exit_code": 1,
   "failure_reason_code": "target_contract_mismatch",
-  "finished_at": "2026-07-28T16:01:47Z",
+  "finished_at": "2026-07-28T17:05:04Z",
   "generated_by": "trusted_runner",
-  "git_sha": "d7ae311c391775a2517d56add6d57148d5891ef3",
+  "git_sha": "bc17b58f128bc15c4e715aba15c505c20b224e35",
   "marker_id": "red-first",
   "raw_log_refs": [
     ".factory/artifacts/task-runs/M1-IMPLEMENTATION/red-first/work-proof-marker.stdout.log",
     ".factory/artifacts/task-runs/M1-IMPLEMENTATION/red-first/work-proof-marker.stderr.log"
   ],
   "runner_id": "trusted-runner:factory-reference-validation",
-  "started_at": "2026-07-28T16:01:47Z",
+  "started_at": "2026-07-28T17:05:04Z",
   "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "stdout_digest": "sha256:f018ab3dea80490a217b7d979b467f674b581dd8db5ccb779516e829708015a4",
   "workspace_ref": "baseline:complete-harness-pre-fix-candidate",
-  "validation_run_id": "validation:2026-07-28T16:01:47Z:lumyn-m1-implementation-r2",
-  "candidate_digest": "sha256:ebc26f496732a729d714508c3cfd7908f735beee8afa158fc793fd9f24edab6f"
+  "validation_run_id": "validation:2026-07-28T17:05:04Z:lumyn-m1-implementation-r2",
+  "candidate_digest": "sha256:971af9dd40e66ea47b220bcb4a817c62705e9764926eeb84ab4787564b8b2ed4"
 }

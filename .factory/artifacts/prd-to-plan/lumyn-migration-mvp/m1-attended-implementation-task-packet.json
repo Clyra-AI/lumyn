@@ -4,7 +4,7 @@
   "task_id": "M1-IMPLEMENTATION",
   "work_item_id": "lumyn-v3-m1-attended-implementation",
   "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair",
-  "generated_at": "2026-07-28T16:00:48Z",
+  "generated_at": "2026-07-28T16:56:45Z",
   "blocked_by": ["M0", "M2"],
   "objective": "Implement and locally validate the public/synthetic M1 benchmark corpus, matched-comparison protocol, executable offline fixture checks, canonical event-to-manual-PR-bundle walking skeleton, and the exact local/CI toolchain controls needed to reproduce them, without provisioning the private holdout or performing review, remote CI execution or monitoring, GitHub, merge, or post-merge lifecycle actions.",
   "mission_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/execution-plan.json",
@@ -156,8 +156,8 @@
     "Deterministic scenarios produce byte-stable candidates and manifests for identical pinned inputs.",
     "Blocked scenarios return needs_input or blocked without speculative edits.",
     "The generic-agent comparison protocol freezes the same repository, evidence, engine route, budgets, tools, commands, role, and verification opportunity for both arms.",
-    "The walking skeleton reaches a schema-valid manual PR bundle using only public or synthetic inputs, an agent-free deterministic route, real deterministic Git baseline and candidate commits, exact generated candidate bytes in a fresh read-only view at the verified candidate head, separate expected-failing baseline and passing-candidate processes running the authorized pinned offline npm test --silent command with provider reporting disabled, complete normalized semantic artifact digests, digest-bound package, runner, candidate, fixture, command, output, toolchain and verified-cleanup evidence, static_verified only, and no external write.",
-    "Mutation, replay, candidate-substitution, missing/parse/link/top-level baseline failure, isolation, cancellation, scope-escape, live-route, credential, network, and false-verification negative tests fail closed."
+    "The walking skeleton reaches a schema-valid manual PR bundle using only public or synthetic inputs, an agent-free deterministic route, real deterministic Git baseline and candidate commits, exact generated candidate bytes in a fresh read-only view at the verified candidate head, separate expected-failing baseline and passing-candidate processes running the authorized pinned offline npm test --silent command with provider reporting disabled, a terminable three-second verification worker, complete normalized semantic artifact digests, digest-bound package, runner, candidate, fixture, command, output, toolchain and verified-cleanup evidence, static_verified only, and no external write.",
+    "Mutation, replay, candidate-substitution, missing/parse/link/top-level baseline failure, asynchronous top-level timeout, isolation, cancellation, scope-escape, live-route, credential, network, false-verification, and missing, stale, replayed, widened, or rejected task-required lifecycle-report tests fail closed."
   ],
   "worker_type": "task-executor",
   "required_worker_chain": [
@@ -366,7 +366,7 @@
     "provider_intent_policy": "public or synthetic provider-change evidence only",
     "agent_runner_policy": "deterministic generation is agent-free; a deterministic fake separately exercises the common adapter contract; live Codex, Claude Code, Cursor, or model execution is forbidden",
     "model_policy": "no live model route, credential, network, prompt, response, token, or cost activity",
-    "verification_policy": "local deterministic trusted-fixture verification runs independently from generation in fresh processes, creates and verifies real deterministic Git baseline and candidate commits, executes the exact candidate head in a fresh read-only view, accepts only typed target-contract mismatch as red proof, binds complete normalized artifact, fixture, command, output, toolchain, Git-head, and cleanup evidence, and earns static_verified only because the developer process is not a qualified host-isolation backend",
+    "verification_policy": "local deterministic trusted-fixture verification runs independently from generation in fresh processes, creates and verifies real deterministic Git baseline and candidate commits, executes the exact candidate head in a fresh read-only view and terminable three-second worker, accepts only typed target-contract mismatch as red proof, binds complete normalized artifact, fixture, command, output, toolchain, Git-head, and cleanup evidence, strictly validates task-required independent lifecycle reports after the self-referential core gate, and earns static_verified only because the developer process is not a qualified host-isolation backend",
     "delivery_policy": "The schema-valid manual PR bundle is local data only and does not count as automated PR delivery; branch, push, PR, merge, and provider reporting are forbidden",
     "artifact_namespace": "source-safe fixtures and task-run evidence only; no private holdout or consumer-private material",
     "live_work_policy": "no external authority is granted",
@@ -378,7 +378,7 @@
     "profile_ref": "profiles/lumyn.yaml",
     "status": "profile_aligned_runtime_unqualified",
     "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair",
-    "generated_at": "2026-07-28T16:00:48Z",
+    "generated_at": "2026-07-28T16:56:45Z",
     "deprecated_worker_policy": "block_active_aliases",
     "deprecated_worker_aliases": [
       {
@@ -398,11 +398,17 @@
     "runtime_control_schema_ref": "factory://schemas/artifacts/runtime-control.schema.json",
     "runtime_control_schema_digest": "sha256:288fa14a1e3e40b926b0cae19e9753c4415cd8da7c5eb8c1650f4008820f4d9a",
     "vendored_runtime_control_schema_ref": ".factory/contracts/factory/runtime-control.schema.json",
+    "holdout_result_schema_ref": "factory://schemas/artifacts/holdout-result.schema.json",
+    "holdout_result_schema_digest": "sha256:436c0fb514ea904f2b9c0f304f66bc5b50970a520844b14e9ace03e3213cf4bd",
+    "vendored_holdout_result_schema_ref": ".factory/contracts/factory/holdout-result.schema.json",
+    "review_report_schema_ref": "factory://schemas/artifacts/review-report.schema.json",
+    "review_report_schema_digest": "sha256:7228314ce33630338e0028e0f4b7df2166972f8837aaa832b96b395f4c4dfbf2",
+    "vendored_review_report_schema_ref": ".factory/contracts/factory/review-report.schema.json",
     "vendored_schema_validator_ref": "scripts/repo_pack_validation/factory_schema_core.py",
     "vendored_schema_validator_digest": "sha256:a0748a9d44bf967f7a73dc0026bef31db50b7b47dfc715d049492096319b1a86",
     "semantic_validator_ref": "factory://scripts/contract_validators/task_packet_shape.py",
     "semantic_validator_digest": "sha256:e5348377293ffaa73b7a2f31f0fe363bb3f21455cab1d270d2cbc773cdf3f63d",
-    "validated_at": "2026-07-28T16:00:48Z"
+    "validated_at": "2026-07-28T16:56:45Z"
   },
   "factoryd_runtime": {
     "state_dir": ".factoryd/",
@@ -450,7 +456,7 @@
         "reason_code": "factoryd_and_m1_lifecycle_not_authorized"
       },
       "conflict_behavior": "fail_closed",
-      "created_at": "2026-07-28T16:00:48Z"
+      "created_at": "2026-07-28T16:56:45Z"
     },
     "capability_grants": []
   },

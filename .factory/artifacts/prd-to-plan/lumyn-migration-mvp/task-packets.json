@@ -895,6 +895,11 @@
       },
       "holdout_policy": {
         "mode": "provision",
+        "suite_namespace": "private://lumyn/m1/v1",
+        "commitment_algorithm": "hmac-sha256",
+        "policy_digest": "sha256:c6a0ac3c751f0941542a95cd3e4e9cc3bac1333bdbcf451a21b191c0b9896460"
+      },
+      "holdout_provisioning_contract": {
         "private_root_env": "LUMYN_HOLDOUT_ROOT",
         "task_executor_access": "forbidden",
         "evaluator_access": "holdout-evaluator-only",
@@ -902,7 +907,7 @@
         "result_ref": ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
         "comparison_baseline": "matched_agent_engine_and_budget_status_quo",
         "committed_fields": [
-          "opaque_case_ids",
+          "opaque_case_count",
           "license_posture",
           "frozen_suite_commitment",
           "encrypted_or_hmac_artifact_commitments"
@@ -916,7 +921,6 @@
           "repository_url",
           "plaintext_content_digest"
         ],
-        "policy_digest": "sha256:0ca280dcf2652eb8a90a3f3bafba43c8c08db59dda0dc2ce858aaffba3c14f5b",
         "comparison_control_variables": [
           "actual_model_provider",
           "actual_model_version",
@@ -5099,7 +5103,7 @@
     }
   ],
   "generated_by": "prd-to-plan+execution-compiler+plan-verify-repair",
-  "generated_at": "2026-07-28T16:00:48Z",
+  "generated_at": "2026-07-28T16:56:45Z",
   "execution_state": {
     "completed_task_refs": [
       "M0",

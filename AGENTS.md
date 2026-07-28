@@ -366,8 +366,10 @@ Before PR or merge, run:
 
 `make prepush-full` validates source, planning, candidate controls, tests, and
 build without requiring its own not-yet-written work-proof marker. After all
-M1 markers and reports are immutable, `make lifecycle-evidence` strictly
-validates their bindings and mutation self-tests. CI runs both phases.
+M1 markers, task reports, and task-required independent holdout/review reports
+are immutable; `make lifecycle-evidence` strictly validates their exact
+current-work bindings, independence, promotion semantics, and mutation
+self-tests. CI runs both phases.
 
 If any command is skipped, record the exact reason in validation evidence.
 
@@ -464,6 +466,10 @@ The canonical implementation-to-merge chain is:
 
 Independent workers must produce task-bound, current-work-proof, passing
 artifacts before `commit-push`. Do not use deprecated lifecycle aliases.
+For active M1, run `code-review` before `holdout-evaluator`; the review must not
+claim access to the later holdout result. The strict gate binds both producers
+against the validation report's task-executor identity and rejects self-review,
+self-provisioning, cross-candidate replay, or reversed chronology.
 
 ## 12. Stop Conditions
 

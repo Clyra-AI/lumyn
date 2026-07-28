@@ -6,12 +6,15 @@ import copy
 import hashlib
 import json
 import os
+import re
 import stat
 import subprocess
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
+
+from . import factory_schema_core
 
 
 EVIDENCE_ROOT = ".factory/artifacts/task-runs/M1-IMPLEMENTATION"
@@ -20,6 +23,28 @@ M1_WORK_ITEM_ID = "lumyn-v3-m1-attended-implementation"
 REPORT_REF = f"{EVIDENCE_ROOT}/validation-report.json"
 SCORECARD_REF = f"{EVIDENCE_ROOT}/proof-of-behavior-scorecard.json"
 RED_MARKER_REF = f"{EVIDENCE_ROOT}/red-first/work-proof-marker.json"
+HOLDOUT_RESULT_REF = ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json"
+REVIEW_REPORT_REF = ".factory/artifacts/lifecycle-evidence/M1/review-report.json"
+HOLDOUT_SCHEMA_REF = ".factory/contracts/factory/holdout-result.schema.json"
+HOLDOUT_SCHEMA_DIGEST = "sha256:436c0fb514ea904f2b9c0f304f66bc5b50970a520844b14e9ace03e3213cf4bd"
+REVIEW_SCHEMA_REF = ".factory/contracts/factory/review-report.schema.json"
+REVIEW_SCHEMA_DIGEST = "sha256:7228314ce33630338e0028e0f4b7df2166972f8837aaa832b96b395f4c4dfbf2"
+M1_REQUIRED_WORKER_CHAIN = [
+    "task-executor",
+    "validation-gate",
+    "code-review",
+    "holdout-evaluator",
+    "commit-push",
+    "post-merge-monitor",
+]
+M1_REQUIRED_LIFECYCLE_EVIDENCE = {
+    "ship_packet",
+    "pr_lifecycle_report",
+    "post_merge_report",
+    "scope_closure_report",
+    "review_report",
+    "holdout_result",
+}
 RED_COMMAND = (
     "LUMYN_M1_VERIFICATION_TARGET=baseline npm --prefix "
     "examples/consumer-repos/det-operation-rename test --silent"
@@ -208,10 +233,47 @@ def _load_json(path: Path) -> tuple[dict[str, Any], bytes]:
     return value, raw
 
 
+def _validate_vendored_schema(
+    root: Path,
+    schema_ref: str,
+    expected_digest: str,
+    payload: dict[str, Any],
+    label: str,
+) -> None:
+    schema, raw = _load_json(root / schema_ref)
+    _require(
+        _sha256(raw) == expected_digest,
+        f"{label} vendored Factory schema digest drifted",
+    )
+
+    def fail(message: str) -> None:
+        raise AssertionError(message)
+
+    def load_json(path: Path) -> Any:
+        return json.loads(path.read_text(encoding="utf-8"))
+
+    factory_schema_core.validate_schema(
+        schema,
+        payload,
+        label,
+        root=root,
+        fail=fail,
+        load_json=load_json,
+        validation_error_type=AssertionError,
+    )
+
+
 def load_evidence(root: Path) -> tuple[dict[str, dict[str, Any]], dict[str, bytes]]:
     payloads: dict[str, dict[str, Any]] = {}
     artifacts: dict[str, bytes] = {}
-    for ref in [REPORT_REF, SCORECARD_REF, RED_MARKER_REF, *MARKER_REFS]:
+    for ref in [
+        REPORT_REF,
+        SCORECARD_REF,
+        RED_MARKER_REF,
+        *MARKER_REFS,
+        HOLDOUT_RESULT_REF,
+        REVIEW_REPORT_REF,
+    ]:
         payloads[ref], artifacts[ref] = _load_json(root / ref)
     for marker_ref in [RED_MARKER_REF, *MARKER_REFS]:
         parent = marker_ref.rsplit("/", 1)[0]
@@ -258,7 +320,7 @@ def _validate_marker(
     ref: str,
     command: str,
     marker_id: str,
-    head: str,
+    validation_checkout_sha: str,
     should_pass: bool,
     cwd: str,
     workspace_ref: str,
@@ -268,7 +330,10 @@ def _validate_marker(
     _require(marker.get("command") == command, f"M1 marker command drifted: {ref}")
     _require(marker.get("marker_id") == marker_id, f"M1 marker identity drifted: {ref}")
     _require(marker.get("generated_by") == "trusted_runner", f"M1 marker is not trusted: {ref}")
-    _require(marker.get("git_sha") == head, f"M1 marker base SHA drifted: {ref}")
+    _require(
+        marker.get("git_sha") == validation_checkout_sha,
+        f"M1 marker validation checkout SHA drifted: {ref}",
+    )
     _require(marker.get("cwd") == cwd, f"M1 marker cwd drifted: {ref}")
     _require(marker.get("workspace_ref") == workspace_ref, f"M1 marker workspace drifted: {ref}")
     _require(marker.get("runner_id") == "trusted-runner:factory-reference-validation", f"M1 marker runner drifted: {ref}")
@@ -306,7 +371,7 @@ def _validate_red_marker(
     marker: dict[str, Any],
     artifacts: dict[str, bytes],
     *,
-    head: str,
+    validation_checkout_sha: str,
     validation_run_id: str,
     candidate_digest: str,
 ) -> tuple[datetime, datetime]:
@@ -316,7 +381,7 @@ def _validate_red_marker(
         ref=RED_MARKER_REF,
         command=RED_COMMAND,
         marker_id="red-first",
-        head=head,
+        validation_checkout_sha=validation_checkout_sha,
         should_pass=False,
         cwd=RED_CWD,
         workspace_ref=RED_WORKSPACE_REF,
@@ -336,18 +401,321 @@ def _validate_red_marker(
     return started, finished
 
 
+def _validate_lifecycle_reports(
+    root: Path,
+    lifecycle_task: dict[str, Any],
+    payloads: dict[str, dict[str, Any]],
+    artifacts: dict[str, bytes],
+    *,
+    validation_run_id: str,
+    candidate_digest: str,
+    validation_generated_at: datetime,
+) -> None:
+    gates = lifecycle_task.get("lifecycle_gates", {})
+    declared_refs = lifecycle_task.get("lifecycle_evidence_refs", {})
+    _require(
+        lifecycle_task.get("task_id") == "M1"
+        and lifecycle_task.get("work_item_id") == "lumyn-v3-m1"
+        and lifecycle_task.get("required_worker_chain") == M1_REQUIRED_WORKER_CHAIN
+        and set(lifecycle_task.get("lifecycle_evidence_required", []))
+        == M1_REQUIRED_LIFECYCLE_EVIDENCE
+        and gates.get("local_validation_required") is True
+        and gates.get("ci_required") is True
+        and gates.get("code_review_required") is True
+        and gates.get("codex_review_required") is True
+        and gates.get("holdout_provisioning_required") is True
+        and gates.get("holdout_evaluation_required") is False
+        and gates.get("commit_push_required") is True
+        and gates.get("post_merge_monitor_required") is True
+        and gates.get("pr_lifecycle_report_required") is True
+        and declared_refs.get("holdout_result") == HOLDOUT_RESULT_REF
+        and declared_refs.get("review_report") == REVIEW_REPORT_REF,
+        "M1 task-required lifecycle report declarations drifted",
+    )
+    _require(
+        HOLDOUT_RESULT_REF in payloads and REVIEW_REPORT_REF in payloads,
+        "M1 task-required lifecycle reports are missing",
+    )
+    marker_bindings = [
+        {"ref": ref, "sha256": _sha256(artifacts[ref])}
+        for ref in MARKER_REFS
+    ]
+    holdout = payloads[HOLDOUT_RESULT_REF]
+    review = payloads[REVIEW_REPORT_REF]
+    validation_report = payloads[REPORT_REF]
+    _validate_vendored_schema(
+        root,
+        HOLDOUT_SCHEMA_REF,
+        HOLDOUT_SCHEMA_DIGEST,
+        holdout,
+        "M1 holdout-result",
+    )
+    _validate_vendored_schema(
+        root,
+        REVIEW_SCHEMA_REF,
+        REVIEW_SCHEMA_DIGEST,
+        review,
+        "M1 review-report",
+    )
+
+    holdout_policy = lifecycle_task.get("holdout_policy", {})
+    canonical_policy = {
+        key: value
+        for key, value in holdout_policy.items()
+        if key != "policy_digest"
+    }
+    expected_policy_digest = _sha256(
+        json.dumps(
+            canonical_policy,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode()
+    )
+    _require(
+        canonical_policy
+        == {
+            "mode": "provision",
+            "suite_namespace": "private://lumyn/m1/v1",
+            "commitment_algorithm": "hmac-sha256",
+        }
+        and holdout_policy.get("policy_digest") == expected_policy_digest,
+        "M1 holdout policy is not the exact digest-bound Factory provision contract",
+    )
+    holdout_manifest, _ = _load_json(root / "examples/holdout-manifest.json")
+    provisioning_contract = lifecycle_task.get("holdout_provisioning_contract", {})
+    _require(
+        holdout_manifest.get("suite_namespace") == holdout_policy.get("suite_namespace")
+        and holdout_manifest.get("commitment_algorithm")
+        == holdout_policy.get("commitment_algorithm")
+        and holdout_manifest.get("provisioning_result_ref")
+        == provisioning_contract.get("result_ref")
+        and holdout_manifest.get("committed_fields")
+        == provisioning_contract.get("committed_fields")
+        and set(holdout_manifest.get("prohibited_fields", []))
+        == set(provisioning_contract.get("prohibited_committed_fields", [])),
+        "M1 holdout policy and source-safe provisioning manifest drifted",
+    )
+    implementation_producer = validation_report.get("implementation_producer", {})
+    executor_id = implementation_producer.get("producer_id")
+    _require(
+        implementation_producer.get("worker") == "task-executor"
+        and implementation_producer.get("producer_class") == "agent"
+        and isinstance(executor_id, str)
+        and bool(executor_id)
+        and executor_id != "trusted-runner:factory-reference-validation",
+        "M1 validation report omits the bound task-executor identity",
+    )
+    holdout_producer = holdout.get("producer", {})
+    evaluator_id = holdout.get("evaluator_id")
+    evaluator_class = holdout.get("evaluator_class")
+    _require(
+        holdout.get("artifact_type") == "holdout_result"
+        and holdout.get("schema_version") == "0.1"
+        and holdout.get("task_id") == "M1"
+        and holdout.get("work_item_id") == "lumyn-v3-m1"
+        and holdout.get("policy_mode") == holdout_policy.get("mode") == "provision"
+        and isinstance(holdout.get("run_id"), str)
+        and holdout["run_id"].startswith("holdout-provision:")
+        and isinstance(evaluator_id, str)
+        and bool(evaluator_id)
+        and evaluator_class in {"independent", "human"}
+        and evaluator_id not in {"trusted-runner:factory-reference-validation", executor_id}
+        and holdout_producer.get("worker") == "holdout-evaluator"
+        and holdout_producer.get("producer_class") == evaluator_class
+        and holdout_producer.get("producer_id") == evaluator_id,
+        "M1 holdout provisioning identity or independence drifted",
+    )
+    _require(
+        holdout.get("current_work")
+        == {
+            "validation_run_id": validation_run_id,
+            "candidate_digest": candidate_digest,
+            "work_proof_markers": marker_bindings,
+        }
+        and holdout.get("work_proof_marker_refs") == MARKER_REFS,
+        "M1 holdout provisioning current-work binding drifted",
+    )
+    _require(
+        holdout.get("task_policy_digest") == expected_policy_digest
+        and holdout.get("suite_ref") == holdout_policy.get("suite_namespace")
+        and isinstance(holdout.get("suite_commitment"), str)
+        and holdout["suite_commitment"].startswith(
+            holdout_policy.get("commitment_algorithm") + ":"
+        )
+        and len(holdout["suite_commitment"])
+        == len(holdout_policy.get("commitment_algorithm") + ":") + 64
+        and all(
+            character in "0123456789abcdef"
+            for character in holdout["suite_commitment"][
+                len(holdout_policy.get("commitment_algorithm") + ":") :
+            ]
+        )
+        and type(holdout.get("cases_run")) is int
+        and holdout["cases_run"] >= 1
+        and holdout.get("failing_cases") == []
+        and holdout.get("promotion_decision") == "pass",
+        "M1 holdout provisioning result or policy binding drifted",
+    )
+    prohibited = set(provisioning_contract.get("prohibited_committed_fields", []))
+    _require(
+        prohibited and not _contains_key(holdout, prohibited),
+        "M1 holdout provisioning result contains prohibited private fields",
+    )
+    holdout_created = _timestamp(holdout.get("created_at"), "M1 holdout created_at")
+    _require(
+        holdout_created >= validation_generated_at,
+        "M1 holdout provisioning predates the bound validation run",
+    )
+
+    review_producer = review.get("producer", {})
+    reviewer_id = review.get("reviewer_id")
+    reviewer_class = review.get("reviewer_class")
+    expected_producer_class = {
+        "peer_agent": "peer_agent",
+        "security_reviewer": "security_reviewer",
+        "human_reviewer": "human_reviewer",
+    }.get(reviewer_class)
+    _require(
+        review.get("artifact_type") == "review_report"
+        and review.get("schema_version") == "0.1"
+        and review.get("task_id") == "M1"
+        and review.get("work_item_id") == "lumyn-v3-m1"
+        and review.get("review_type") == "code"
+        and review.get("risk_class") == lifecycle_task.get("risk_class") == "medium"
+        and isinstance(reviewer_id, str)
+        and bool(reviewer_id)
+        and expected_producer_class is not None
+        and reviewer_id
+        not in {"trusted-runner:factory-reference-validation", executor_id, evaluator_id}
+        and review_producer.get("worker") == "code-review"
+        and review_producer.get("producer_id") == reviewer_id
+        and review_producer.get("producer_class") == expected_producer_class,
+        "M1 review identity or independence drifted",
+    )
+    _require(
+        review.get("current_work")
+        == {
+            "validation_run_id": validation_run_id,
+            "candidate_digest": candidate_digest,
+            "work_proof_markers": marker_bindings,
+        }
+        and review.get("work_proof_marker_refs") == MARKER_REFS,
+        "M1 review current-work binding drifted",
+    )
+    findings = review.get("findings")
+    approval = review.get("approval_effect", {})
+    review_scope = review.get("review_scope", [])
+    scope_paths = [
+        item
+        for item in review_scope
+        if isinstance(item, str) and not item.startswith("git diff ")
+    ]
+    _require(
+        isinstance(review_scope, list)
+        and f"git diff {M1_BASE_GIT_SHA}" in review_scope
+        and all(
+            _path_allowed(path, scope_paths)
+            for path in validation_report.get("changed_paths", [])
+        )
+        and isinstance(findings, list)
+        and not any(item.get("status") == "open" for item in findings if isinstance(item, dict))
+        and not any(
+            item.get("severity") in {"P0", "P1"}
+            and (
+                item.get("status") != "resolved"
+                or item.get("verification_status") != "independently_verified"
+                or item.get("claim_source") != "independently_observed"
+            )
+            for item in findings
+            if isinstance(item, dict)
+        )
+        and review.get("verdict") == "approved"
+        and review.get("required_fixes") == []
+        and approval.get("promotion_decision") == "ready_for_pr"
+        and approval.get("approvals_granted")
+        == [
+            "code_review_passed",
+            "medium_risk_structured_review_passed",
+            "independent_candidate_binding_verified",
+        ]
+        and approval.get("blocks_promotion") is False,
+        "M1 independent review does not approve the exact candidate",
+    )
+    evidence_refs = review.get("evidence_refs", [])
+    isolation = review.get("context_isolation", {})
+    allowed_sources = set(isolation.get("allowed_sources", []))
+    disallowed_sources = set(isolation.get("disallowed_sources", []))
+    _require(
+        REPORT_REF in evidence_refs
+        and HOLDOUT_RESULT_REF not in evidence_refs
+        and all(ref in evidence_refs for ref in MARKER_REFS)
+        and not {
+            "private_builder_notes",
+            "unpromoted_chat_reasoning",
+            "private_holdout_inputs",
+            "private_holdout_answers",
+        }.intersection(allowed_sources)
+        and {
+            "private_builder_notes",
+            "unpromoted_chat_reasoning",
+            "private_holdout_inputs",
+            "private_holdout_answers",
+        }.issubset(disallowed_sources)
+        and isolation.get("builder_notes_authoritative") is False,
+        "M1 review evidence refs or context isolation drifted",
+    )
+    systems_questions = review.get("systems_questions", {})
+    _require(
+        all(
+            isinstance(systems_questions.get(key), list)
+            and bool(systems_questions[key])
+            and all(
+                isinstance(item, str) and bool(item.strip())
+                for item in systems_questions[key]
+            )
+            for key in (
+                "state_impact",
+                "source_of_truth_changes",
+                "feedback_plan",
+                "blast_radius",
+                "rollback_or_deletion_test",
+            )
+        )
+        and isinstance(systems_questions.get("system_model_summary"), str)
+        and bool(systems_questions["system_model_summary"].strip()),
+        "M1 review systems analysis is empty or malformed",
+    )
+    residuals = " ".join(str(item).lower() for item in review.get("residual_risks", []))
+    _require(
+        "transition or archive" in residuals
+        and "before unrelated milestone" in residuals,
+        "M1 review omits the required post-main historical transition residual",
+    )
+    review_created = _timestamp(review.get("created_at"), "M1 review created_at")
+    _require(
+        review_created >= validation_generated_at,
+        "M1 review predates the bound validation run",
+    )
+    _require(
+        holdout_created >= review_created,
+        "M1 holdout provisioning predates canonical code-review completion",
+    )
+
+
 def validate_evidence_bundle(
     root: Path,
     packet: dict[str, Any],
+    lifecycle_task: dict[str, Any],
     payloads: dict[str, dict[str, Any]],
     artifacts: dict[str, bytes],
     binding: dict[str, Any],
 ) -> None:
     report = payloads[REPORT_REF]
     scorecard = payloads[SCORECARD_REF]
-    head = str(binding["base_git_sha"])
+    base_git_sha = str(binding["base_git_sha"])
     digest = str(binding["candidate_digest"])
     validation_run_id = report.get("validation_run_id")
+    validation_checkout_sha = report.get("validation_checkout_sha")
     changed_paths = binding["changed_paths"]
     declared_binding = report.get("candidate_binding", {})
     _require(
@@ -372,10 +740,15 @@ def validate_evidence_bundle(
         "M1 validation run identity",
     )
     _require(
-        declared_binding.get("base_git_sha") == head
+        declared_binding.get("base_git_sha") == base_git_sha
         and declared_binding.get("candidate_digest") == digest
         and declared_binding.get("excluded_roots") == CANDIDATE_EXCLUDED_ROOTS,
         "M1 validation report candidate binding drifted",
+    )
+    _require(
+        isinstance(validation_checkout_sha, str)
+        and re.fullmatch(r"[0-9a-f]{40}", validation_checkout_sha) is not None,
+        "M1 validation checkout SHA is missing or malformed",
     )
     _require(report.get("changed_paths") == changed_paths, "M1 validation report changed paths drifted")
     allowed = packet.get("allowed_paths", [])
@@ -418,7 +791,7 @@ def validate_evidence_bundle(
     _, red_finished = _validate_red_marker(
         red,
         artifacts,
-        head=head,
+        validation_checkout_sha=validation_checkout_sha,
         validation_run_id=str(validation_run_id),
         candidate_digest=digest,
     )
@@ -432,7 +805,7 @@ def validate_evidence_bundle(
             ref=ref,
             command=command,
             marker_id=f"validation-{index + 1:03d}",
-            head=head,
+            validation_checkout_sha=validation_checkout_sha,
             should_pass=True,
             cwd=".",
             workspace_ref="branch:codex/lumyn-m1-runner-contract",
@@ -453,11 +826,12 @@ def validate_evidence_bundle(
             and row.get("output_ref") == marker.get("raw_log_refs")[0]
             and row.get("output_sha256") == marker.get("stdout_digest")
             and row.get("runner_identity") == marker.get("runner_id")
-            and row.get("repo_ref") == head,
+            and row.get("repo_ref") == validation_checkout_sha,
             f"M1 validation report row drifted: {command}",
         )
         _require(started <= finished, f"M1 validation command timestamps drifted: {command}")
-    _require(_timestamp(report.get("generated_at"), "M1 report generated_at") >= latest, "M1 report predates green evidence")
+    report_generated_at = _timestamp(report.get("generated_at"), "M1 report generated_at")
+    _require(report_generated_at >= latest, "M1 report predates green evidence")
 
     red_evidence = report.get("red_evidence")
     _require(
@@ -507,6 +881,15 @@ def validate_evidence_bundle(
         },
         "M1 evidence widens authority or lifecycle promotion",
     )
+    _validate_lifecycle_reports(
+        root,
+        lifecycle_task,
+        payloads,
+        artifacts,
+        validation_run_id=str(validation_run_id),
+        candidate_digest=digest,
+        validation_generated_at=report_generated_at,
+    )
 
 
 def validate_candidate_scope(root: Path, packet: dict[str, Any]) -> dict[str, Any]:
@@ -529,20 +912,29 @@ def validate_candidate_scope(root: Path, packet: dict[str, Any]) -> dict[str, An
     return binding
 
 
-def validate_m1_evidence(root: Path, packet: dict[str, Any]) -> None:
+def validate_m1_evidence(
+    root: Path,
+    packet: dict[str, Any],
+    lifecycle_task: dict[str, Any],
+) -> None:
     payloads, artifacts = load_evidence(root)
     declared_paths = payloads[REPORT_REF].get("changed_paths")
     _require(isinstance(declared_paths, list), "M1 validation report changed paths are required")
     validate_evidence_bundle(
         root,
         packet,
+        lifecycle_task,
         payloads,
         artifacts,
         _current_candidate_binding(root, declared_paths),
     )
 
 
-def run_self_tests(root: Path, packet: dict[str, Any]) -> None:
+def run_self_tests(
+    root: Path,
+    packet: dict[str, Any],
+    lifecycle_task: dict[str, Any],
+) -> None:
     payloads, artifacts = load_evidence(root)
     declared_paths = payloads[REPORT_REF].get("changed_paths")
     _require(isinstance(declared_paths, list), "M1 validation report changed paths are required")
@@ -569,6 +961,8 @@ def run_self_tests(root: Path, packet: dict[str, Any]) -> None:
         ("marker candidate replay", lambda values, _: values[MARKER_REFS[0]].__setitem__("candidate_digest", "sha256:" + "9" * 64)),
         ("marker run replay", lambda values, _: values[MARKER_REFS[0]].__setitem__("validation_run_id", "validation:replayed")),
         ("missing validation run identity", lambda values, _: values[REPORT_REF].pop("validation_run_id")),
+        ("missing validation checkout identity", lambda values, _: values[REPORT_REF].pop("validation_checkout_sha")),
+        ("marker checkout substitution", lambda values, _: values[MARKER_REFS[0]].__setitem__("git_sha", "f" * 40)),
         ("validator marker failure", lambda values, _: values[MARKER_REFS[4]].update({"execution_status": "fail", "exit_code": 2})),
         ("full-gate marker failure", lambda values, _: values[MARKER_REFS[5]].update({"execution_status": "fail", "exit_code": 2})),
         ("changed paths", lambda values, _: values[REPORT_REF]["changed_paths"].append("outside-task.txt")),
@@ -578,6 +972,36 @@ def run_self_tests(root: Path, packet: dict[str, Any]) -> None:
         ("red-first candidate replay", lambda values, _: values[RED_MARKER_REF].__setitem__("candidate_digest", "sha256:" + "8" * 64)),
         ("red-first wrong class", replace_red_output_with_missing_manifest),
         ("green marker replay order", reorder_green_markers),
+        ("missing holdout result", lambda values, _: values.pop(HOLDOUT_RESULT_REF)),
+        ("holdout candidate replay", lambda values, _: values[HOLDOUT_RESULT_REF]["current_work"].__setitem__("candidate_digest", "sha256:" + "7" * 64)),
+        ("holdout marker replay", lambda values, _: values[HOLDOUT_RESULT_REF]["current_work"]["work_proof_markers"][0].__setitem__("sha256", "sha256:" + "6" * 64)),
+        ("holdout policy widening", lambda values, _: values[HOLDOUT_RESULT_REF].__setitem__("policy_mode", "evaluate")),
+        ("missing review report", lambda values, _: values.pop(REVIEW_REPORT_REF)),
+        ("review candidate replay", lambda values, _: values[REVIEW_REPORT_REF]["current_work"].__setitem__("candidate_digest", "sha256:" + "5" * 64)),
+        ("review marker replay", lambda values, _: values[REVIEW_REPORT_REF]["current_work"]["work_proof_markers"][0].__setitem__("sha256", "sha256:" + "4" * 64)),
+        ("review rejection", lambda values, _: values[REVIEW_REPORT_REF].__setitem__("verdict", "changes_required")),
+        ("holdout missing evaluator", lambda values, _: values[HOLDOUT_RESULT_REF].__setitem__("evaluator_id", None)),
+        ("holdout suite substitution", lambda values, _: values[HOLDOUT_RESULT_REF].__setitem__("suite_ref", "private://unrelated/suite")),
+        ("holdout non-hex commitment", lambda values, _: values[HOLDOUT_RESULT_REF].__setitem__("suite_commitment", "hmac-sha256:" + "z" * 64)),
+        ("holdout predates validation", lambda values, _: values[HOLDOUT_RESULT_REF].__setitem__("created_at", "2020-01-01T00:00:00Z")),
+        ("review missing reviewer", lambda values, _: values[REVIEW_REPORT_REF].__setitem__("reviewer_id", None)),
+        ("review lens substitution", lambda values, _: values[REVIEW_REPORT_REF].__setitem__("review_type", "architecture")),
+        ("review risk downgrade", lambda values, _: values[REVIEW_REPORT_REF].__setitem__("risk_class", "low")),
+        ("review producer mismatch", lambda values, _: values[REVIEW_REPORT_REF]["producer"].__setitem__("producer_class", "security_reviewer")),
+        ("review malformed finding", lambda values, _: values[REVIEW_REPORT_REF].__setitem__("findings", [None])),
+        ("review predates validation", lambda values, _: values[REVIEW_REPORT_REF].__setitem__("created_at", "2020-01-01T00:00:00Z")),
+        ("review incomplete scope", lambda values, _: values[REVIEW_REPORT_REF].__setitem__("review_scope", ["README.md"])),
+        ("review private source allowed", lambda values, _: values[REVIEW_REPORT_REF]["context_isolation"]["allowed_sources"].append("private_holdout_inputs")),
+        ("review cites future holdout", lambda values, _: values[REVIEW_REPORT_REF]["evidence_refs"].append(HOLDOUT_RESULT_REF)),
+        ("review private exclusions removed", lambda values, _: values[REVIEW_REPORT_REF]["context_isolation"].__setitem__("disallowed_sources", [])),
+        ("review approvals omitted", lambda values, _: values[REVIEW_REPORT_REF]["approval_effect"].__setitem__("approvals_granted", [])),
+        ("review systems analysis omitted", lambda values, _: values[REVIEW_REPORT_REF]["systems_questions"].__setitem__("system_model_summary", "")),
+        ("review self-authored", lambda values, _: values[REVIEW_REPORT_REF].update({"reviewer_id": values[REPORT_REF]["implementation_producer"]["producer_id"], "producer": {"worker": "code-review", "producer_id": values[REPORT_REF]["implementation_producer"]["producer_id"], "producer_class": "peer_agent"}})),
+        ("holdout self-provisioned", lambda values, _: values[HOLDOUT_RESULT_REF].update({"evaluator_id": values[REPORT_REF]["implementation_producer"]["producer_id"], "producer": {"worker": "holdout-evaluator", "producer_id": values[REPORT_REF]["implementation_producer"]["producer_id"], "producer_class": "independent"}})),
+        ("implementation identity omitted", lambda values, _: values[REPORT_REF].pop("implementation_producer")),
+        ("holdout before review", lambda values, _: values[HOLDOUT_RESULT_REF].__setitem__("created_at", values[REPORT_REF]["generated_at"])),
+        ("review accepted critical risk", lambda values, _: values[REVIEW_REPORT_REF].__setitem__("findings", [{"id": "P1-accepted", "severity": "P1", "summary": "critical risk", "status": "accepted_risk", "claim_source": "independently_observed", "verification_status": "independently_verified", "evidence_refs": [REPORT_REF]}])),
+        ("review unverified resolved critical risk", lambda values, _: values[REVIEW_REPORT_REF].__setitem__("findings", [{"id": "P1-unverified", "severity": "P1", "summary": "claimed resolution", "status": "resolved", "claim_source": "builder_provided", "verification_status": "unverified_claim", "evidence_refs": [REPORT_REF]}])),
     ]
     for label, mutate in cases:
         candidate_payloads = copy.deepcopy(payloads)
@@ -587,6 +1011,7 @@ def run_self_tests(root: Path, packet: dict[str, Any]) -> None:
             validate_evidence_bundle(
                 root,
                 packet,
+                lifecycle_task,
                 candidate_payloads,
                 candidate_artifacts,
                 binding,
@@ -594,6 +1019,50 @@ def run_self_tests(root: Path, packet: dict[str, Any]) -> None:
         except AssertionError:
             continue
         raise AssertionError(f"M1 evidence self-test mutation did not fail: {label}")
+
+    def jointly_forge_holdout_policy(
+        task: dict[str, Any], values: dict[str, dict[str, Any]]
+    ) -> None:
+        task["holdout_policy"]["suite_namespace"] = "private://unrelated/v1"
+        canonical = {
+            key: value
+            for key, value in task["holdout_policy"].items()
+            if key != "policy_digest"
+        }
+        digest = _sha256(
+            json.dumps(canonical, sort_keys=True, separators=(",", ":")).encode()
+        )
+        task["holdout_policy"]["policy_digest"] = digest
+        values[HOLDOUT_RESULT_REF]["task_policy_digest"] = digest
+        values[HOLDOUT_RESULT_REF]["suite_ref"] = "private://unrelated/v1"
+
+    task_cases: list[
+        tuple[
+            str,
+            Callable[[dict[str, Any], dict[str, dict[str, Any]]], None],
+        ]
+    ] = [
+        ("parent work item", lambda task, _: task.__setitem__("work_item_id", "other")),
+        ("parent worker chain", lambda task, _: task.__setitem__("required_worker_chain", [])),
+        ("parent lifecycle evidence", lambda task, _: task.__setitem__("lifecycle_evidence_required", [])),
+        ("jointly forged holdout policy", jointly_forge_holdout_policy),
+    ]
+    for label, mutate in task_cases:
+        candidate_task = copy.deepcopy(lifecycle_task)
+        candidate_payloads = copy.deepcopy(payloads)
+        mutate(candidate_task, candidate_payloads)
+        try:
+            validate_evidence_bundle(
+                root,
+                packet,
+                candidate_task,
+                candidate_payloads,
+                copy.deepcopy(artifacts),
+                binding,
+            )
+        except AssertionError:
+            continue
+        raise AssertionError(f"M1 lifecycle-task self-test mutation did not fail: {label}")
     candidate_payloads = copy.deepcopy(payloads)
     candidate_artifacts = copy.deepcopy(artifacts)
     candidate_payloads[MARKER_REFS[4]]["execution_status"] = "fail"
@@ -605,6 +1074,7 @@ def run_self_tests(root: Path, packet: dict[str, Any]) -> None:
             validate_evidence_bundle(
                 root,
                 packet,
+                lifecycle_task,
                 candidate_payloads,
                 candidate_artifacts,
                 binding,
@@ -627,7 +1097,14 @@ def run_self_tests(root: Path, packet: dict[str, Any]) -> None:
 def _run_raw_log_loader_confinement_self_test(root: Path) -> None:
     with tempfile.TemporaryDirectory(prefix="lumyn-m1-log-loader-") as directory:
         test_root = Path(directory)
-        refs = [REPORT_REF, SCORECARD_REF, RED_MARKER_REF, *MARKER_REFS]
+        refs = [
+            REPORT_REF,
+            SCORECARD_REF,
+            RED_MARKER_REF,
+            *MARKER_REFS,
+            HOLDOUT_RESULT_REF,
+            REVIEW_REPORT_REF,
+        ]
         for marker_ref in [RED_MARKER_REF, *MARKER_REFS]:
             parent = marker_ref.rsplit("/", 1)[0]
             refs.extend(

@@ -339,6 +339,105 @@ export function health() {
 	}
 }
 
+func TestM1VerifierEnforcesWallClockDeadline(t *testing.T) {
+	root := repoRoot(t)
+	manifest := readM1JSON[m1Manifest](t, filepath.Join(root, m1ManifestPath))
+	var scenario m1Scenario
+	for _, candidate := range manifest.Scenarios {
+		if candidate.ID == "det-operation-rename" {
+			scenario = candidate
+			break
+		}
+	}
+	if scenario.ID == "" {
+		t.Fatal("wall-clock deadline scenario is missing")
+	}
+	view := createM1ReadOnlyVerificationView(t, root, scenario)
+	t.Cleanup(func() {
+		if !view.Removed {
+			removeM1VerificationView(t, &view, scenario.ID)
+		}
+	})
+	unlockM1VerificationView(t, &view)
+	baselinePath := filepath.Join(
+		view.RepoDir,
+		filepath.FromSlash(m1ScenarioRelativePath(t, scenario, scenario.BeforePath)),
+	)
+	if err := os.Chmod(baselinePath, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(baselinePath, []byte(`
+await (async () => {
+  while (true) await 0;
+})();
+
+export function createCharge() {
+  return "unreachable";
+}
+`), 0o444); err != nil {
+		t.Fatal(err)
+	}
+	lockM1VerificationView(t, &view)
+
+	started := time.Now()
+	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
+	defer cancel()
+	command, cleanup := m1OfflineNodeVerificationCommandWithCleanup(t, ctx, view.RepoDir, scenario.ID, "baseline")
+	output, err := command.CombinedOutput()
+	cleanup()
+	if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+		t.Fatalf("verification process exceeded the test's independent 8s deadline:\n%s", output)
+	}
+	if err == nil {
+		t.Fatalf("asynchronous top-level loop unexpectedly completed:\n%s", output)
+	}
+	if elapsed := time.Since(started); elapsed > 8*time.Second {
+		t.Fatalf("verification wall-clock deadline took %s, want at most 8s", elapsed)
+	}
+	if !strings.Contains(string(output), "verification wall-clock deadline exceeded") {
+		t.Fatalf("verification did not report its wall-clock deadline:\n%s", output)
+	}
+	if strings.Contains(string(output), scenario.ID+": baseline target contract rejected") {
+		t.Fatalf("verification timeout was misclassified as a target mismatch:\n%s", output)
+	}
+	removeM1VerificationView(t, &view, scenario.ID)
+}
+
+func TestM1VerifierRejectsLateWorkerFailure(t *testing.T) {
+	root := repoRoot(t)
+	manifest := readM1JSON[m1Manifest](t, filepath.Join(root, m1ManifestPath))
+	scenario := manifest.Scenarios[0]
+	for _, candidate := range manifest.Scenarios {
+		if candidate.ID == "det-operation-rename" {
+			scenario = candidate
+			break
+		}
+	}
+	view := createM1ReadOnlyVerificationView(t, root, scenario)
+	t.Cleanup(func() {
+		if !view.Removed {
+			removeM1VerificationView(t, &view, scenario.ID)
+		}
+	})
+	candidate := "Promise.reject(new Error(\"late worker failure\"));\n" + readM1File(t, filepath.Join(root, scenario.ExpectedPath))
+	promoteM1VerificationViewCandidate(t, root, scenario, candidate, &view)
+	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
+	defer cancel()
+	command, cleanup := m1OfflineNodeVerificationCommandWithCleanup(t, ctx, view.RepoDir, scenario.ID, "candidate")
+	output, err := command.CombinedOutput()
+	cleanup()
+	if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+		t.Fatalf("late worker failure exceeded the independent test deadline:\n%s", output)
+	}
+	if err == nil || !strings.Contains(string(output), "late worker failure") {
+		t.Fatalf("verifier accepted or obscured a late worker failure: %v\n%s", err, output)
+	}
+	if strings.Contains(string(output), scenario.ID+": exact candidate target contract verified") {
+		t.Fatalf("verifier published success before clean worker exit:\n%s", output)
+	}
+	removeM1VerificationView(t, &view, scenario.ID)
+}
+
 func requireM1PinnedRuntime(t *testing.T) map[string]string {
 	t.Helper()
 	observed := map[string]string{}
@@ -366,6 +465,10 @@ func m1OfflineNPMTestCommand(t *testing.T, repoDir string) *exec.Cmd {
 }
 
 func m1OfflineNPMTestCommandWithCleanup(t *testing.T, repoDir string, target string) (*exec.Cmd, func() string) {
+	return m1OfflineNPMTestCommandContextWithCleanup(t, context.Background(), repoDir, target)
+}
+
+func m1OfflineNPMTestCommandContextWithCleanup(t *testing.T, ctx context.Context, repoDir string, target string) (*exec.Cmd, func() string) {
 	t.Helper()
 	npmPath, err := exec.LookPath("npm")
 	if err != nil {
@@ -375,7 +478,33 @@ func m1OfflineNPMTestCommandWithCleanup(t *testing.T, repoDir string, target str
 	if err != nil {
 		t.Fatalf("resolve pinned node: %v", err)
 	}
-	command := exec.Command(npmPath, "test", "--silent")
+	command := exec.CommandContext(ctx, npmPath, "test", "--silent")
+	command.Dir = repoDir
+	environment, cleanup := m1OfflineCommandEnv(t, nodePath, npmPath, target)
+	command.Env = environment
+	return command, cleanup
+}
+
+func m1OfflineNodeVerificationCommandWithCleanup(t *testing.T, ctx context.Context, repoDir string, scenarioID string, target string) (*exec.Cmd, func() string) {
+	t.Helper()
+	npmPath, err := exec.LookPath("npm")
+	if err != nil {
+		t.Fatalf("resolve pinned npm: %v", err)
+	}
+	nodePath, err := exec.LookPath("node")
+	if err != nil {
+		t.Fatalf("resolve pinned node: %v", err)
+	}
+	command := exec.CommandContext(
+		ctx,
+		nodePath,
+		"--no-warnings",
+		"--experimental-strip-types",
+		"--experimental-vm-modules",
+		filepath.Join(repoDir, "..", "..", "verification", "run.mjs"),
+		scenarioID,
+		filepath.Join("..", "..", "candidates", scenarioID, "src", "client.ts"),
+	)
 	command.Dir = repoDir
 	environment, cleanup := m1OfflineCommandEnv(t, nodePath, npmPath, target)
 	command.Env = environment
@@ -679,8 +808,9 @@ func TestM1BaselineRejectsInfrastructureFailures(t *testing.T) {
 		t.Fatal("baseline infrastructure-failure scenario is missing")
 	}
 	for _, testCase := range []struct {
-		name   string
-		mutate func(string) error
+		name       string
+		mutate     func(string) error
+		wantOutput string
 	}{
 		{name: "missing source", mutate: os.Remove},
 		{name: "syntax error", mutate: func(path string) error {
@@ -688,6 +818,30 @@ func TestM1BaselineRejectsInfrastructureFailures(t *testing.T) {
 				return err
 			}
 			return os.WriteFile(path, []byte("export function broken(\n"), 0o444)
+		}},
+		{name: "forged top-level mismatch", wantOutput: "subject module evaluation failed", mutate: func(path string) error {
+			if err := os.Chmod(path, 0o644); err != nil {
+				return err
+			}
+			return os.WriteFile(path, []byte(`
+const error = new Error("forged top-level mismatch");
+error.code = "LUMYN_TARGET_CONTRACT_MISMATCH";
+throw error;
+`), 0o444)
+		}},
+		{name: "synchronous invocation loop", wantOutput: "verification VM execution timeout", mutate: func(path string) error {
+			if err := os.Chmod(path, 0o644); err != nil {
+				return err
+			}
+			return os.WriteFile(path, []byte(`
+export function createCharge() {
+  while (true) {}
+}
+
+export function health() {
+  return "ok";
+}
+`), 0o444)
 		}},
 	} {
 		t.Run(testCase.name, func(t *testing.T) {
@@ -703,14 +857,22 @@ func TestM1BaselineRejectsInfrastructureFailures(t *testing.T) {
 				t.Fatal(err)
 			}
 			lockM1VerificationView(t, &view)
-			command, cleanup := m1OfflineNPMTestCommandWithCleanup(t, view.RepoDir, "baseline")
+			ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
+			defer cancel()
+			command, cleanup := m1OfflineNodeVerificationCommandWithCleanup(t, ctx, view.RepoDir, scenario.ID, "baseline")
 			output, err := command.CombinedOutput()
 			cleanup()
+			if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+				t.Fatalf("baseline infrastructure test exceeded its independent deadline:\n%s", output)
+			}
 			if err == nil {
 				t.Fatalf("baseline infrastructure failure unexpectedly passed:\n%s", output)
 			}
 			if strings.Contains(string(output), scenario.ID+": baseline target contract rejected") {
 				t.Fatalf("baseline infrastructure failure was misclassified as an expected target mismatch:\n%s", output)
+			}
+			if testCase.wantOutput != "" && !strings.Contains(string(output), testCase.wantOutput) {
+				t.Fatalf("baseline infrastructure failure lost diagnostic %q:\n%s", testCase.wantOutput, output)
 			}
 			removeM1VerificationView(t, &view, scenario.ID)
 		})

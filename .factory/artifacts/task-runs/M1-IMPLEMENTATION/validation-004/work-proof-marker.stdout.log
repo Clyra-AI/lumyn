@@ -1,20 +1,20 @@
 mkdir -p .factory/tmp
 go test ./cmd/... ./internal/... ./schemas/... -count=1 -covermode=atomic -coverprofile=.factory/tmp/coverage.out
-ok  	github.com/Clyra-AI/lumyn/cmd/lumyn	4.384s	coverage: 95.7% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/agent	0.221s	coverage: 61.5% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/authorization	0.990s	coverage: 70.3% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/change	0.603s	coverage: 80.0% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/config	0.780s	coverage: 100.0% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/evidence	2.260s	coverage: 77.4% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/exitcode	2.068s	coverage: [no statements]
-ok  	github.com/Clyra-AI/lumyn/internal/installation	1.336s	coverage: 73.1% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/redaction	2.618s	coverage: 74.4% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/result	1.698s	coverage: [no statements]
-ok  	github.com/Clyra-AI/lumyn/internal/source	2.531s	coverage: 83.6% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/source/markdownlinks	1.151s	coverage: 76.7% of statements
-ok  	github.com/Clyra-AI/lumyn/internal/status	1.519s	coverage: 83.8% of statements
+ok  	github.com/Clyra-AI/lumyn/cmd/lumyn	6.328s	coverage: 95.7% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/agent	0.260s	coverage: 61.5% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/authorization	0.893s	coverage: 70.3% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/change	1.096s	coverage: 80.0% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/config	3.254s	coverage: 100.0% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/evidence	1.499s	coverage: 77.4% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/exitcode	3.449s	coverage: [no statements]
+ok  	github.com/Clyra-AI/lumyn/internal/installation	1.300s	coverage: 73.1% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/redaction	2.985s	coverage: 74.4% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/result	2.720s	coverage: [no statements]
+ok  	github.com/Clyra-AI/lumyn/internal/source	2.199s	coverage: 83.6% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/source/markdownlinks	3.717s	coverage: 76.7% of statements
+ok  	github.com/Clyra-AI/lumyn/internal/status	4.010s	coverage: 83.8% of statements
 ?   	github.com/Clyra-AI/lumyn/internal/version	[no test files]
-ok  	github.com/Clyra-AI/lumyn/schemas	2.091s	coverage: 0.0% of statements
+ok  	github.com/Clyra-AI/lumyn/schemas	1.936s	coverage: 0.0% of statements
 python3 scripts/check_go_coverage.py .factory/tmp/coverage.out 75 \
 		--stable-minimum 85 \
 		--stable-package cmd/lumyn --stable-package internal/config --stable-package internal/exitcode --stable-package internal/result

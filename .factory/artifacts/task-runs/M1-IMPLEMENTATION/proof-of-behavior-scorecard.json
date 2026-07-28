@@ -3,7 +3,7 @@
   "task_id": "M1-IMPLEMENTATION",
   "work_item_id": "lumyn-v3-m1-attended-implementation",
   "required_proof_level": "workflow_behavior",
-  "candidate_digest": "sha256:ebc26f496732a729d714508c3cfd7908f735beee8afa158fc793fd9f24edab6f",
+  "candidate_digest": "sha256:971af9dd40e66ea47b220bcb4a817c62705e9764926eeb84ab4787564b8b2ed4",
   "levels": [
     {
       "level": "syntax",

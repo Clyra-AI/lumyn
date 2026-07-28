@@ -60,7 +60,7 @@ ARTIFACT_REFS = {
     name: path.relative_to(ROOT).as_posix()
     for name, path in ARTIFACT_PATHS.items()
 }
-EXPECTED_CONTROL_GENERATION_AT = "2026-07-28T16:00:48Z"
+EXPECTED_CONTROL_GENERATION_AT = "2026-07-28T16:56:45Z"
 
 EXPECTED_TASK_IDS = tuple(TASK_DEPENDENCIES)
 EXPECTED_PROFILE_CONTRACT_VERSION = (
@@ -1740,6 +1740,47 @@ def validate_task(
             and gates.get("holdout_evaluation_required") is False,
             "M1 parent lifecycle must preserve holdout provisioning before later evaluation",
         )
+        holdout_policy = task.get("holdout_policy", {})
+        canonical_policy = {
+            "commitment_algorithm": "hmac-sha256",
+            "mode": "provision",
+            "suite_namespace": "private://lumyn/m1/v1",
+        }
+        expected_policy_digest = "sha256:" + hashlib.sha256(
+            json.dumps(
+                canonical_policy,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode()
+        ).hexdigest()
+        require(
+            holdout_policy
+            == {
+                **canonical_policy,
+                "policy_digest": expected_policy_digest,
+            },
+            "M1 holdout policy must be the exact canonical Factory provision contract",
+        )
+        holdout_manifest = load_json(ROOT / "examples/holdout-manifest.json")
+        provisioning_contract = task.get("holdout_provisioning_contract", {})
+        require(
+            holdout_manifest.get("status") == "provisioning_required"
+            and holdout_manifest.get("suite_namespace")
+            == holdout_policy.get("suite_namespace")
+            and holdout_manifest.get("commitment_algorithm")
+            == holdout_policy.get("commitment_algorithm")
+            and holdout_manifest.get("provisioning_result_ref")
+            == provisioning_contract.get("result_ref")
+            and holdout_manifest.get("committed_fields")
+            == provisioning_contract.get("committed_fields")
+            and set(holdout_manifest.get("prohibited_fields", []))
+            == set(provisioning_contract.get("prohibited_committed_fields", []))
+            and provisioning_contract.get("private_root_env") == "LUMYN_HOLDOUT_ROOT"
+            and provisioning_contract.get("task_executor_access") == "forbidden"
+            and provisioning_contract.get("evaluator_access") == "holdout-evaluator-only"
+            and provisioning_contract.get("provisioning_worker") == "holdout-evaluator",
+            "M1 holdout provisioning metadata must match the source-safe manifest and cannot expose answer or resolving material",
+        )
         state = task.get("execution_state", {})
         readiness = state.get("runner_readiness", {})
         require(
@@ -2340,9 +2381,13 @@ def run_self_test() -> None:
 
 
 def run_lifecycle_evidence_validation() -> None:
-    packet = load_all()["m1_implementation"]
-    m1_evidence.validate_m1_evidence(ROOT, packet)
-    m1_evidence.run_self_tests(ROOT, packet)
+    data = load_all()
+    packet = data["m1_implementation"]
+    tasks = validate_loaded(data)
+    lifecycle_task = tasks.get("M1")
+    require(isinstance(lifecycle_task, dict), "M1 parent lifecycle task is missing")
+    m1_evidence.validate_m1_evidence(ROOT, packet, lifecycle_task)
+    m1_evidence.run_self_tests(ROOT, packet, lifecycle_task)
 
 
 def main() -> int:

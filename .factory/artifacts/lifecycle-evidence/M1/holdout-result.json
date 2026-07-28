@@ -3,7 +3,7 @@
   "schema_version": "0.1",
   "task_id": "M1",
   "work_item_id": "lumyn-v3-m1",
-  "run_id": "holdout-provision:2026-07-28T16:08:27Z:6f8ac20768773442",
+  "run_id": "holdout-provision:2026-07-28T17:21:16.804039Z:322b7e6da73f7852",
   "evaluator_id": "factory-independent-holdout-evaluator",
   "evaluator_class": "independent",
   "producer": {
@@ -12,39 +12,39 @@
     "producer_class": "independent"
   },
   "current_work": {
-    "validation_run_id": "validation:2026-07-28T16:01:47Z:lumyn-m1-implementation-r2",
-    "candidate_digest": "sha256:ebc26f496732a729d714508c3cfd7908f735beee8afa158fc793fd9f24edab6f",
+    "validation_run_id": "validation:2026-07-28T17:05:04Z:lumyn-m1-implementation-r2",
+    "candidate_digest": "sha256:971af9dd40e66ea47b220bcb4a817c62705e9764926eeb84ab4787564b8b2ed4",
     "work_proof_markers": [
       {
         "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json",
-        "sha256": "sha256:5df52f3dabdab404bdcf83ee29f92d8956f8c5a809634e7adf16231a22096bb6"
+        "sha256": "sha256:f6526b604667f712631f3ea64ac206dcbddbcb6ae53b1683a95b30c20be8f690"
       },
       {
         "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-002/work-proof-marker.json",
-        "sha256": "sha256:cdc3eeddce707f75fda88d2f8ca40f86a2831e586d08eba6637e46087e677fe0"
+        "sha256": "sha256:469314cd909950a2f9653bc221dd233cdcf5414f302443c3d92da13e9d35a36c"
       },
       {
         "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-003/work-proof-marker.json",
-        "sha256": "sha256:aa16a197fad3b5a7bc7c0785dd965261c69e749a11d6be4596c039351b5efa7e"
+        "sha256": "sha256:3ab2e06cfc85ecc72f74ba5bbbeb71094e94199f75f277a79659df511f526474"
       },
       {
         "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-004/work-proof-marker.json",
-        "sha256": "sha256:4135f4de8f307140ccf8ca9a3467dea8ee27e6b1781e720d715c3bd8bfd453c1"
+        "sha256": "sha256:9044b98a1cd40df6f5f50942d747e8656cc27062fcb2c369f0e67b0d28863015"
       },
       {
         "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json",
-        "sha256": "sha256:4d8bd4caf9bdbcd84cc2d9f5f7c4f845befa7bc5387f1eeb4c40d4a694e88ccc"
+        "sha256": "sha256:b04c54c6b2c68d0932534c70b4274377efe878d54911bc5c84ea2585b0c893b3"
       },
       {
         "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json",
-        "sha256": "sha256:2674de06f7c80757daabc0d38817fc510ea998b4e8531042d96376d26265ba0e"
+        "sha256": "sha256:ac249655d16994f03b00b2e173c7e59008931c4d5d1c1915f1203604d08aa09f"
       }
     ]
   },
   "policy_mode": "provision",
   "suite_ref": "private://lumyn/m1/v1",
-  "suite_commitment": "hmac-sha256:98d1ce84d8dcf2f086dcb7c47ece42a10ff4f1dbb1f5ac6bc9ffaf0d4a68e5d8",
-  "task_policy_digest": "sha256:0ca280dcf2652eb8a90a3f3bafba43c8c08db59dda0dc2ce858aaffba3c14f5b",
+  "suite_commitment": "hmac-sha256:a2f180c39661dfb73c47524c880f0f5f464699f0a67dc3d027036999fbf960c3",
+  "task_policy_digest": "sha256:c6a0ac3c751f0941542a95cd3e4e9cc3bac1333bdbcf451a21b191c0b9896460",
   "cases_run": 6,
   "failing_cases": [],
   "promotion_decision": "pass",
@@ -56,5 +56,5 @@
     ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json",
     ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json"
   ],
-  "created_at": "2026-07-28T16:08:27Z"
+  "created_at": "2026-07-28T17:21:16.804039Z"
 }
