@@ -3,12 +3,19 @@ import { stripTypeScriptTypes } from "node:module";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import vm from "node:vm";
+import { Worker, isMainThread, parentPort, workerData } from "node:worker_threads";
 
-const [scenarioID, candidatePath] = process.argv.slice(2);
+const invocation = isMainThread
+  ? {
+      argv: process.argv.slice(2),
+      verificationTarget: process.env.LUMYN_M1_VERIFICATION_TARGET ?? "combined",
+    }
+  : workerData;
+const [scenarioID, candidatePath] = invocation.argv;
 if (!scenarioID || !candidatePath) {
   throw new Error("usage: run.mjs <scenario-id> <candidate-path>");
 }
-const verificationTarget = process.env.LUMYN_M1_VERIFICATION_TARGET ?? "combined";
+const verificationTarget = invocation.verificationTarget;
 if (!new Set(["baseline", "candidate", "combined"]).has(verificationTarget)) {
   throw new Error(`unsupported verification target ${verificationTarget}`);
 }
@@ -133,10 +140,21 @@ async function executeRestrictedAssertion(sourcePath, assertionSource) {
   // Load, link, and evaluate the subject graph before invoking the target
   // contract. Missing files, parse/link failures, and top-level exceptions are
   // verifier infrastructure failures, never valid red-before evidence.
-  await entryModule.evaluate({ timeout: 1_000 });
+  try {
+    await entryModule.evaluate({ timeout: 1_000 });
+  } catch (error) {
+    const infrastructureError = new Error("subject module evaluation failed", { cause: error });
+    infrastructureError.code = "LUMYN_VERIFICATION_INFRASTRUCTURE";
+    throw infrastructureError;
+  }
   try {
     await assertionModule.evaluate({ timeout: 1_000 });
   } catch (error) {
+    if (error?.code === "ERR_SCRIPT_EXECUTION_TIMEOUT") {
+      const infrastructureError = new Error("verification VM execution timeout", { cause: error });
+      infrastructureError.code = "LUMYN_VERIFICATION_INFRASTRUCTURE";
+      throw infrastructureError;
+    }
     if (error?.code === "LUMYN_TARGET_CONTRACT_MISMATCH") {
       throw error;
     }
@@ -270,38 +288,134 @@ async function proveRedBeforeGreenCandidate(label, beforePath, expectedPath, ass
   throw new Error(`${scenarioID} ${label}: pre-migration behavior unexpectedly satisfies the target contract`);
 }
 
-const resolvedCandidatePath = path.resolve(process.env.LUMYN_M1_CANDIDATE_PATH ?? candidatePath);
-if (verificationTarget === "baseline") {
-  try {
-    await executeRestrictedAssertion("src/client.ts", check.primary);
-    console.error(`${scenarioID}: baseline unexpectedly satisfies the target contract`);
-    process.exitCode = 2;
-  } catch (error) {
-    if (error?.code === "LUMYN_TARGET_CONTRACT_MISMATCH") {
-      console.log(`${scenarioID}: baseline target contract rejected`);
-      process.exitCode = 1;
-    } else {
+async function runVerification() {
+  const resolvedCandidatePath = path.resolve(
+    process.env.LUMYN_M1_CANDIDATE_PATH ?? candidatePath,
+  );
+  if (verificationTarget === "baseline") {
+    try {
+      await executeRestrictedAssertion("src/client.ts", check.primary);
+      return {
+        exitCode: 2,
+        stderr: `${scenarioID}: baseline unexpectedly satisfies the target contract\n`,
+      };
+    } catch (error) {
+      if (error?.code === "LUMYN_TARGET_CONTRACT_MISMATCH") {
+        return {
+          exitCode: 1,
+          stdout: `${scenarioID}: baseline target contract rejected\n`,
+        };
+      }
       throw error;
     }
+  } else if (verificationTarget === "candidate") {
+    await executeRestrictedAssertion(resolvedCandidatePath, check.primary);
+    if (check.supportPath) {
+      await executeRestrictedAssertion(
+        path.join(path.dirname(resolvedCandidatePath), check.supportPath),
+        check.support,
+      );
+    }
+    return {
+      exitCode: 0,
+      stdout: `${scenarioID}: exact candidate target contract verified\n`,
+    };
+  } else {
+    await proveRedBeforeGreenCandidate("primary", "src/client.ts", resolvedCandidatePath, check.primary);
+    if (check.supportPath) {
+      await proveRedBeforeGreenCandidate(
+        "supporting",
+        path.join("src", check.supportPath),
+        path.join(path.dirname(resolvedCandidatePath), check.supportPath),
+        check.support,
+      );
+    }
+    return {
+      exitCode: 0,
+      stdout: `${scenarioID}: red-before/green-candidate offline behavior verified\n`,
+    };
   }
-} else if (verificationTarget === "candidate") {
-  await executeRestrictedAssertion(resolvedCandidatePath, check.primary);
-  if (check.supportPath) {
-    await executeRestrictedAssertion(
-      path.join(path.dirname(resolvedCandidatePath), check.supportPath),
-      check.support,
-    );
-  }
-  console.log(`${scenarioID}: exact candidate target contract verified`);
+}
+
+function runVerificationWorker() {
+  return new Promise((resolve, reject) => {
+    const worker = new Worker(new URL(import.meta.url), {
+      workerData: invocation,
+    });
+    let settled = false;
+    let resultMessage;
+    const finish = (callback) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(deadline);
+      callback();
+    };
+    const deadline = setTimeout(() => {
+      finish(() => {
+        void worker.terminate();
+        const error = new Error("verification wall-clock deadline exceeded");
+        error.code = "LUMYN_VERIFICATION_TIMEOUT";
+        reject(error);
+      });
+    }, 3_000);
+    worker.once("message", (message) => {
+      resultMessage = message;
+    });
+    worker.once("error", (error) => finish(() => reject(error)));
+    worker.once("exit", (code) => {
+      if (settled) return;
+      finish(() => {
+        if (code !== 0) {
+          reject(new Error(`verification worker failed after reporting a result (code ${code})`));
+          return;
+        }
+        if (!resultMessage) {
+          reject(new Error("verification worker exited without a result"));
+          return;
+        }
+        if (resultMessage.ok) {
+          if (resultMessage.stdout) process.stdout.write(resultMessage.stdout);
+          if (resultMessage.stderr) process.stderr.write(resultMessage.stderr);
+          resolve(resultMessage.exitCode);
+          return;
+        }
+        reject(deserializeError(resultMessage.error));
+      });
+    });
+  });
+}
+
+function serializeError(error, depth = 0) {
+  return {
+    name: error?.name ?? "Error",
+    message: error?.message ?? String(error),
+    code: error?.code,
+    stack: typeof error?.stack === "string" ? error.stack : undefined,
+    cause: depth < 4 && error?.cause ? serializeError(error.cause, depth + 1) : undefined,
+  };
+}
+
+function deserializeError(payload, depth = 0) {
+  const cause = depth < 4 && payload?.cause
+    ? deserializeError(payload.cause, depth + 1)
+    : undefined;
+  const error = new Error(payload?.message ?? "verification worker failed", { cause });
+  error.name = payload?.name ?? "Error";
+  error.code = payload?.code;
+  if (typeof payload?.stack === "string") error.stack = payload.stack;
+  return error;
+}
+
+if (isMainThread) {
+  process.exitCode = await runVerificationWorker();
 } else {
-  await proveRedBeforeGreenCandidate("primary", "src/client.ts", resolvedCandidatePath, check.primary);
-  if (check.supportPath) {
-    await proveRedBeforeGreenCandidate(
-      "supporting",
-      path.join("src", check.supportPath),
-      path.join(path.dirname(resolvedCandidatePath), check.supportPath),
-      check.support,
-    );
+  try {
+    const result = await runVerification();
+    parentPort.postMessage({ ok: true, ...result });
+  } catch (error) {
+    parentPort.postMessage({
+      ok: false,
+      error: serializeError(error),
+    });
   }
-  console.log(`${scenarioID}: red-before/green-candidate offline behavior verified`);
 }

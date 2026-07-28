@@ -96,8 +96,9 @@ ship direct acceptance evidence.
 - `make test-contracts`: Go tests, schema tests, active-plan validation,
   historical evidence validation, and repo-pack self-tests.
 - `make prepush-full`: full local gate before PR or merge.
-- `make lifecycle-evidence`: strict M1 marker/report binding and mutation gate,
-  run only after the validation-gate evidence bundle is immutable.
+- `make lifecycle-evidence`: strict M1 marker, task-report, and task-required
+  independent holdout/review binding and mutation gate, run only after those
+  evidence bundles are immutable.
 - `make audit-remote-protection`: networked GitHub protection audit.
 
 The checked-in compiled set is regenerated from the approved v3.1 PRD and plan
@@ -112,8 +113,9 @@ bundle/runtime qualification, and an explicit bounded-task unpause.
 
 - Fast: `make lint-fast`, `make test-fast`.
 - Core: `make test-contracts`, `make prepush-full`.
-- Lifecycle evidence: `make lifecycle-evidence` after immutable M1 markers and
-  report; CI runs it after the core lane so no marker validates itself.
+- Lifecycle evidence: `make lifecycle-evidence` after immutable M1 markers,
+  task reports, and required independent holdout/review reports; CI runs it
+  after the core lane so no marker validates itself.
 - Acceptance: item-level active ledger and closure map.
 - Cross-platform: reserved until supported packaging.
 - Risk: `CodeQL analyze` plus targeted security/architecture review for
@@ -385,7 +387,14 @@ SDK mocks, and callbacks are created inside that same context; its linker
 permits only relative modules inside the fixture source root, and a capability
 guard rejects ambient process, dynamic-code, or network entry points. A
 computed-constructor regression proves candidate code cannot recover host
-`process`. This is a trusted synthetic-fixture developer harness; Node `vm`,
+`process`. Each verification runs in a terminable worker with a fixed
+three-second wall-clock deadline, so asynchronous top-level microtask loops
+cannot evade the VM's synchronous execution timeout; deadline expiry is an
+infrastructure failure and never valid red-before evidence. The parent process
+publishes a proof line only after the worker exits cleanly; a late worker error,
+nonzero exit, forged top-level mismatch code, synchronous invocation loop, or
+bounded causal error is retained as failure evidence. This is a trusted
+synthetic-fixture developer harness; Node `vm`,
 environment clearing, and file modes are defense in depth, not a qualified
 host-isolation boundary and not authorization to execute product repository
 commands. The check must create a real deterministic Git baseline commit, copy
@@ -418,6 +427,15 @@ uses the pinned qualified host-isolation backend required by the Lumyn profile.
 case IDs, inputs, answer keys, expected patches, raw traces, repository URLs,
 or plaintext content digests. Only an independently authorized
 `holdout-evaluator` lifecycle packet may create the HMAC-bound private suite.
+The parent M1 task uses Factory's closed, digest-bound provision-mode
+`holdout_policy`; Lumyn-specific source-safety and comparison metadata lives in
+the separate `holdout_provisioning_contract` and must match the public manifest.
+After immutable validation evidence, canonical lifecycle order is independent
+`code-review` followed by independent holdout provisioning. The review cannot
+cite the not-yet-created holdout result. The strict gate validates both vendored
+Factory report schemas and binds their task/work item, candidate digest, marker
+digests, producer identities, chronology, review scope, context isolation,
+promotion semantics, and private-suite policy before shipping.
 The attended implementation packet cannot produce independent review, remote
 CI execution or monitoring, PR, merge, or post-merge evidence and cannot close
 parent M1 acceptance. CI configuration and exact toolchain-pin changes may be
@@ -433,6 +451,16 @@ Factory contracts, schemas, and repo validators shipped in the same change.
 Those planning prerequisites are outside task-executor write scope. Only
 generated task-run and lifecycle outputs are excluded to avoid circular
 self-hashing.
+The immutable base SHA defines the candidate path/content comparison; a separate
+`validation_checkout_sha` records the checkout that produced every work-proof
+marker. The two identities must not be conflated, and candidate-digest validation
+remains authoritative after commit or rebase changes the branch head.
+
+M1 is the only active task compiled to this exact runnable lifecycle shape.
+Later milestone holdout fields remain planning overlays while factoryd is paused;
+they must be recompiled into canonical per-task packets before any later daemon
+dispatch and must not be treated as runner-ready merely because they appear in
+the parent planning collection.
 
 ## Provider Change Contract And Event Policy
 

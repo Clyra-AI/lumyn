@@ -3,19 +3,19 @@
   "cwd": ".",
   "execution_status": "pass",
   "exit_code": 0,
-  "finished_at": "2026-07-28T16:01:51Z",
+  "finished_at": "2026-07-28T17:05:14Z",
   "generated_by": "trusted_runner",
-  "git_sha": "d7ae311c391775a2517d56add6d57148d5891ef3",
+  "git_sha": "bc17b58f128bc15c4e715aba15c505c20b224e35",
   "marker_id": "validation-001",
   "raw_log_refs": [
     ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.stdout.log",
     ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.stderr.log"
   ],
   "runner_id": "trusted-runner:factory-reference-validation",
-  "started_at": "2026-07-28T16:01:47Z",
+  "started_at": "2026-07-28T17:05:04Z",
   "stderr_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_digest": "sha256:5f66fa0fd9812ad842b8348fdd42389474cbde6543f7bead40f583b1715b52a4",
+  "stdout_digest": "sha256:fcbe9071a1fc7ed4a2036c35e8bf008cf786e5d372a209c549f086069a48c55a",
   "workspace_ref": "branch:codex/lumyn-m1-runner-contract",
-  "validation_run_id": "validation:2026-07-28T16:01:47Z:lumyn-m1-implementation-r2",
-  "candidate_digest": "sha256:ebc26f496732a729d714508c3cfd7908f735beee8afa158fc793fd9f24edab6f"
+  "validation_run_id": "validation:2026-07-28T17:05:04Z:lumyn-m1-implementation-r2",
+  "candidate_digest": "sha256:971af9dd40e66ea47b220bcb4a817c62705e9764926eeb84ab4787564b8b2ed4"
 }

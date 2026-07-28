@@ -150,21 +150,18 @@ def _move_task_acceptance(
 
 
 def _remove_holdout_prohibition(payload: Payload, field: str) -> None:
-    policy = _task(payload, "M1")["holdout_policy"]
-    policy["prohibited_committed_fields"].remove(field)
-    policy["policy_digest"] = _policy_digest(policy)
+    contract = _task(payload, "M1")["holdout_provisioning_contract"]
+    contract["prohibited_committed_fields"].remove(field)
 
 
 def _change_holdout_baseline(payload: Payload, value: str) -> None:
-    policy = _task(payload, "M1")["holdout_policy"]
-    policy["comparison_baseline"] = value
-    policy["policy_digest"] = _policy_digest(policy)
+    contract = _task(payload, "M1")["holdout_provisioning_contract"]
+    contract["comparison_baseline"] = value
 
 
 def _remove_holdout_control(payload: Payload, field: str) -> None:
-    policy = _task(payload, "M1")["holdout_policy"]
-    policy["comparison_control_variables"].remove(field)
-    policy["policy_digest"] = _policy_digest(policy)
+    contract = _task(payload, "M1")["holdout_provisioning_contract"]
+    contract["comparison_control_variables"].remove(field)
 
 
 def _weaken_preflight_consent(payload: Payload) -> None:

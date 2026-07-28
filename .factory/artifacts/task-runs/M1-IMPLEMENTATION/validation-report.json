@@ -4,13 +4,13 @@
   "task_id": "M1-IMPLEMENTATION",
   "work_item_id": "lumyn-v3-m1-attended-implementation",
   "worker": "validation-gate",
-  "validation_run_id": "validation:2026-07-28T16:01:47Z:lumyn-m1-implementation-r2",
-  "generated_at": "2026-07-28T16:02:30Z",
+  "validation_run_id": "validation:2026-07-28T17:05:04Z:lumyn-m1-implementation-r2",
+  "generated_at": "2026-07-28T17:06:21Z",
   "validation_contract_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/m1-attended-implementation-task-packet.json#/validation_contract_inheritance",
   "task_packet_ref": ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/m1-attended-implementation-task-packet.json",
   "candidate_binding": {
     "base_git_sha": "d7ae311c391775a2517d56add6d57148d5891ef3",
-    "candidate_digest": "sha256:ebc26f496732a729d714508c3cfd7908f735beee8afa158fc793fd9f24edab6f",
+    "candidate_digest": "sha256:971af9dd40e66ea47b220bcb4a817c62705e9764926eeb84ab4787564b8b2ed4",
     "method": "Factory release-candidate binding over implementation and prerequisite control, contract, schema, and validator paths; only generated task-run and lifecycle outputs are excluded",
     "excluded_roots": [
       ".factory/artifacts/task-runs/M1-IMPLEMENTATION/",
@@ -95,27 +95,27 @@
   "work_proof_markers": [
     {
       "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json",
-      "sha256": "sha256:5df52f3dabdab404bdcf83ee29f92d8956f8c5a809634e7adf16231a22096bb6"
+      "sha256": "sha256:f6526b604667f712631f3ea64ac206dcbddbcb6ae53b1683a95b30c20be8f690"
     },
     {
       "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-002/work-proof-marker.json",
-      "sha256": "sha256:cdc3eeddce707f75fda88d2f8ca40f86a2831e586d08eba6637e46087e677fe0"
+      "sha256": "sha256:469314cd909950a2f9653bc221dd233cdcf5414f302443c3d92da13e9d35a36c"
     },
     {
       "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-003/work-proof-marker.json",
-      "sha256": "sha256:aa16a197fad3b5a7bc7c0785dd965261c69e749a11d6be4596c039351b5efa7e"
+      "sha256": "sha256:3ab2e06cfc85ecc72f74ba5bbbeb71094e94199f75f277a79659df511f526474"
     },
     {
       "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-004/work-proof-marker.json",
-      "sha256": "sha256:4135f4de8f307140ccf8ca9a3467dea8ee27e6b1781e720d715c3bd8bfd453c1"
+      "sha256": "sha256:9044b98a1cd40df6f5f50942d747e8656cc27062fcb2c369f0e67b0d28863015"
     },
     {
       "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json",
-      "sha256": "sha256:4d8bd4caf9bdbcd84cc2d9f5f7c4f845befa7bc5387f1eeb4c40d4a694e88ccc"
+      "sha256": "sha256:b04c54c6b2c68d0932534c70b4274377efe878d54911bc5c84ea2585b0c893b3"
     },
     {
       "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json",
-      "sha256": "sha256:2674de06f7c80757daabc0d38817fc510ea998b4e8531042d96376d26265ba0e"
+      "sha256": "sha256:ac249655d16994f03b00b2e173c7e59008931c4d5d1c1915f1203604d08aa09f"
     }
   ],
   "test_scope": [
@@ -162,62 +162,62 @@
     {
       "command": "go test ./tests -run '^TestM1' -count=1",
       "exit_code": 0,
-      "started_at": "2026-07-28T16:01:47Z",
-      "completed_at": "2026-07-28T16:01:51Z",
-      "output_sha256": "sha256:5f66fa0fd9812ad842b8348fdd42389474cbde6543f7bead40f583b1715b52a4",
+      "started_at": "2026-07-28T17:05:04Z",
+      "completed_at": "2026-07-28T17:05:14Z",
+      "output_sha256": "sha256:fcbe9071a1fc7ed4a2036c35e8bf008cf786e5d372a209c549f086069a48c55a",
       "output_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.stdout.log",
       "runner_identity": "trusted-runner:factory-reference-validation",
-      "repo_ref": "d7ae311c391775a2517d56add6d57148d5891ef3"
+      "repo_ref": "bc17b58f128bc15c4e715aba15c505c20b224e35"
     },
     {
       "command": "make lint-fast",
       "exit_code": 0,
-      "started_at": "2026-07-28T16:01:51Z",
-      "completed_at": "2026-07-28T16:01:52Z",
+      "started_at": "2026-07-28T17:05:14Z",
+      "completed_at": "2026-07-28T17:05:14Z",
       "output_sha256": "sha256:26a2568da1d66c528999665445172acaa610b1ca5a9595500a94a11fd602a83c",
       "output_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-002/work-proof-marker.stdout.log",
       "runner_identity": "trusted-runner:factory-reference-validation",
-      "repo_ref": "d7ae311c391775a2517d56add6d57148d5891ef3"
+      "repo_ref": "bc17b58f128bc15c4e715aba15c505c20b224e35"
     },
     {
       "command": "make test-fast",
       "exit_code": 0,
-      "started_at": "2026-07-28T16:01:52Z",
-      "completed_at": "2026-07-28T16:01:58Z",
-      "output_sha256": "sha256:0fbde7ec92c55266190ef6d4799c77cea3fa880ce0d02a6457b0052e51df3881",
+      "started_at": "2026-07-28T17:05:14Z",
+      "completed_at": "2026-07-28T17:05:33Z",
+      "output_sha256": "sha256:80b2e2c9c20e62c1ab01e8c73ed36b2b8e5f1d140803d01840fea60d7f5a1038",
       "output_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-003/work-proof-marker.stdout.log",
       "runner_identity": "trusted-runner:factory-reference-validation",
-      "repo_ref": "d7ae311c391775a2517d56add6d57148d5891ef3"
+      "repo_ref": "bc17b58f128bc15c4e715aba15c505c20b224e35"
     },
     {
       "command": "make test-coverage",
       "exit_code": 0,
-      "started_at": "2026-07-28T16:01:58Z",
-      "completed_at": "2026-07-28T16:02:03Z",
-      "output_sha256": "sha256:d51001909c06f9e8bfcff68ed5a0e909cbeb3287ec3508886f4c2966c49acaf7",
+      "started_at": "2026-07-28T17:05:33Z",
+      "completed_at": "2026-07-28T17:05:39Z",
+      "output_sha256": "sha256:b5b1526794fae692e15a7a1a77a908ab4a301156526bf21618b8152523788af0",
       "output_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-004/work-proof-marker.stdout.log",
       "runner_identity": "trusted-runner:factory-reference-validation",
-      "repo_ref": "d7ae311c391775a2517d56add6d57148d5891ef3"
+      "repo_ref": "bc17b58f128bc15c4e715aba15c505c20b224e35"
     },
     {
       "command": "python3 scripts/validate_repo_pack.py",
       "exit_code": 0,
-      "started_at": "2026-07-28T16:02:03Z",
-      "completed_at": "2026-07-28T16:02:05Z",
+      "started_at": "2026-07-28T17:05:39Z",
+      "completed_at": "2026-07-28T17:05:41Z",
       "output_sha256": "sha256:c5c211a84ffced0f3c770ee5c32e969c2fcb4ce5de4715144495243303bcf2aa",
       "output_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.stdout.log",
       "runner_identity": "trusted-runner:factory-reference-validation",
-      "repo_ref": "d7ae311c391775a2517d56add6d57148d5891ef3"
+      "repo_ref": "bc17b58f128bc15c4e715aba15c505c20b224e35"
     },
     {
       "command": "make prepush-full",
       "exit_code": 0,
-      "started_at": "2026-07-28T16:02:05Z",
-      "completed_at": "2026-07-28T16:02:30Z",
-      "output_sha256": "sha256:9487e60628a4cd04bfaca28b511cd046d508d0bd4a068520aef8ffd1820f48e7",
+      "started_at": "2026-07-28T17:05:41Z",
+      "completed_at": "2026-07-28T17:06:21Z",
+      "output_sha256": "sha256:b955c29dde04868b106d7c41e6e1b129fa124d0fd2c0864387a57ae08f7d68ae",
       "output_ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.stdout.log",
       "runner_identity": "trusted-runner:factory-reference-validation",
-      "repo_ref": "d7ae311c391775a2517d56add6d57148d5891ef3"
+      "repo_ref": "bc17b58f128bc15c4e715aba15c505c20b224e35"
     }
   ],
   "changed_paths": [
@@ -231,6 +231,8 @@
     ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json",
     ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
     ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
+    ".factory/contracts/factory/holdout-result.schema.json",
+    ".factory/contracts/factory/review-report.schema.json",
     ".factory/contracts/factory/runtime-control.schema.json",
     ".factory/contracts/factory/task-packet.schema.json",
     ".github/action-ref-exceptions.yaml",
@@ -313,6 +315,8 @@
       ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/scope-closure-map.json",
       ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/task-packets.json",
       ".factory/artifacts/prd-to-plan/lumyn-migration-mvp/validation-contract.json",
+      ".factory/contracts/factory/holdout-result.schema.json",
+      ".factory/contracts/factory/review-report.schema.json",
       ".factory/contracts/factory/runtime-control.schema.json",
       ".factory/contracts/factory/task-packet.schema.json",
       ".github/action-ref-exceptions.yaml",
@@ -493,5 +497,11 @@
     "github_actions_performed": false,
     "acceptance_closure_claimed": false
   },
-  "promotion_decision": "blocked"
+  "promotion_decision": "blocked",
+  "implementation_producer": {
+    "worker": "task-executor",
+    "producer_id": "codex-agent:root",
+    "producer_class": "agent"
+  },
+  "validation_checkout_sha": "bc17b58f128bc15c4e715aba15c505c20b224e35"
 }

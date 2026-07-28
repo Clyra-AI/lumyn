@@ -9,6 +9,7 @@
     "docs/product/prd.md",
     "docs/product/plan.md",
     "AGENTS.md",
+    "CHANGELOG.md",
     "WORKFLOW.md",
     "docs/dev/dev_guides.md",
     "docs/architecture/architecture_guides.md",
@@ -28,9 +29,7 @@
     ".github/workflows/validate.yml",
     ".github/action-ref-exceptions.yaml",
     ".tool-versions",
-    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/",
-    ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
-    ".factory/artifacts/pr-lifecycle/lumyn-v3-m1/lifecycle-authorization.json"
+    ".factory/artifacts/task-runs/M1-IMPLEMENTATION/"
   ],
   "reviewer_class": "peer_agent",
   "reviewer_id": "peer-agent:m1-independent-final-review",
@@ -40,32 +39,32 @@
     "producer_class": "peer_agent"
   },
   "current_work": {
-    "validation_run_id": "validation:2026-07-28T16:01:47Z:lumyn-m1-implementation-r2",
-    "candidate_digest": "sha256:ebc26f496732a729d714508c3cfd7908f735beee8afa158fc793fd9f24edab6f",
+    "validation_run_id": "validation:2026-07-28T17:05:04Z:lumyn-m1-implementation-r2",
+    "candidate_digest": "sha256:971af9dd40e66ea47b220bcb4a817c62705e9764926eeb84ab4787564b8b2ed4",
     "work_proof_markers": [
       {
         "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json",
-        "sha256": "sha256:5df52f3dabdab404bdcf83ee29f92d8956f8c5a809634e7adf16231a22096bb6"
+        "sha256": "sha256:f6526b604667f712631f3ea64ac206dcbddbcb6ae53b1683a95b30c20be8f690"
       },
       {
         "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-002/work-proof-marker.json",
-        "sha256": "sha256:cdc3eeddce707f75fda88d2f8ca40f86a2831e586d08eba6637e46087e677fe0"
+        "sha256": "sha256:469314cd909950a2f9653bc221dd233cdcf5414f302443c3d92da13e9d35a36c"
       },
       {
         "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-003/work-proof-marker.json",
-        "sha256": "sha256:aa16a197fad3b5a7bc7c0785dd965261c69e749a11d6be4596c039351b5efa7e"
+        "sha256": "sha256:3ab2e06cfc85ecc72f74ba5bbbeb71094e94199f75f277a79659df511f526474"
       },
       {
         "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-004/work-proof-marker.json",
-        "sha256": "sha256:4135f4de8f307140ccf8ca9a3467dea8ee27e6b1781e720d715c3bd8bfd453c1"
+        "sha256": "sha256:9044b98a1cd40df6f5f50942d747e8656cc27062fcb2c369f0e67b0d28863015"
       },
       {
         "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json",
-        "sha256": "sha256:4d8bd4caf9bdbcd84cc2d9f5f7c4f845befa7bc5387f1eeb4c40d4a694e88ccc"
+        "sha256": "sha256:b04c54c6b2c68d0932534c70b4274377efe878d54911bc5c84ea2585b0c893b3"
       },
       {
         "ref": ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json",
-        "sha256": "sha256:2674de06f7c80757daabc0d38817fc510ea998b4e8531042d96376d26265ba0e"
+        "sha256": "sha256:ac249655d16994f03b00b2e173c7e59008931c4d5d1c1915f1203604d08aa09f"
       }
     ]
   },
@@ -83,9 +82,7 @@
       "validation_report",
       "work_proof_markers",
       "raw_validation_logs",
-      "holdout_provision_result",
-      "reviewer_command_output",
-      "independent_clean_clone_audit"
+      "reviewer_command_output"
     ],
     "disallowed_sources": [
       "private_builder_notes",
@@ -95,12 +92,49 @@
     ],
     "builder_notes_authoritative": false
   },
-  "findings": [],
+  "findings": [
+    {
+      "id": "M1-REV-001",
+      "severity": "P1",
+      "summary": "The verifier could previously publish success before a worker's final failure or fail to terminate asynchronous top-level execution.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": "examples/verification/run.mjs",
+      "failure_scenario": "A candidate posts a passing result and then raises an unhandled rejection, or holds module evaluation in an asynchronous microtask loop, producing false-green or non-terminating validation evidence.",
+      "impact": "Invalid benchmark behavior could be accepted as promotion-grade proof or indefinitely consume the validation lane.",
+      "minimum_fix": "Retain the terminable wall-clock worker, publish results only after clean worker exit, and keep timeout and top-level failures classified as verifier infrastructure failures.",
+      "promotion_effect": "block_until_fixed",
+      "evidence_refs": [
+        "examples/verification/run.mjs",
+        "tests/m1_benchmark_test.go",
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json"
+      ]
+    },
+    {
+      "id": "M1-REV-002",
+      "severity": "P1",
+      "summary": "The strict evidence gate previously conflated the immutable candidate comparison base with the checkout that produced validation evidence.",
+      "status": "resolved",
+      "claim_source": "independently_observed",
+      "verification_status": "independently_verified",
+      "location": "scripts/repo_pack_validation/m1_evidence.py",
+      "failure_scenario": "Correct markers record the validation checkout while the gate compares them with the older immutable diff base, causing valid evidence to fail and encouraging an inaccurate provenance rewrite.",
+      "impact": "Promotion could be blocked by contradictory provenance semantics, and evidence could cease to remain valid after an exact-content commit or rebase.",
+      "minimum_fix": "Keep base_git_sha as the candidate diff/content boundary and bind every marker git_sha and report-row repo_ref to the distinct validation_checkout_sha, with omission and substitution mutations rejected.",
+      "promotion_effect": "block_until_fixed",
+      "evidence_refs": [
+        "scripts/repo_pack_validation/m1_evidence.py",
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-report.json",
+        ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-001/work-proof-marker.json"
+      ]
+    }
+  ],
   "verdict": "approved",
   "required_fixes": [],
   "residual_risks": [
     "M1 proves a public or synthetic benchmark and an offline developer harness with static_verified evidence only; it does not prove a qualified host-isolation backend, repo_verified product execution, a live Agent Runner or model, a real consumer repository, automated product GitHub delivery, provider integration, or commercial value.",
-    "The private M1 holdout is source-safely provisioned and commitment-bound but is not evaluated in this phase; parent acceptance items remain partial, missing, or blocked until their owning milestones and lifecycle evidence close them.",
+    "Independent holdout provisioning is the next lifecycle worker and was not available to or assessed by this review; this approval alone cannot satisfy that gate, and parent acceptance items remain partial, missing, or blocked until their owning milestones and lifecycle evidence close them.",
     "Remote GitHub validate and CodeQL, passive latest-head Codex review, pull-request lifecycle evidence, merge, exact-main monitoring, and post-merge closure remain required after this review.",
     "The active M1 candidate-scope and lifecycle validators are intentionally bound to the immutable M1 base. After exact-main post-merge closure, they must transition or archive as historical evidence before unrelated milestone paths are introduced; otherwise later valid work will fail the active M1 scope gate.",
     "Factoryd remains paused and unqualified for this Lumyn generation; this review grants no factoryd dispatch, product credential, network, consumer-repository, provider-reporting, merge, or external-write authority."
@@ -119,7 +153,6 @@
     ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-004/work-proof-marker.json",
     ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-005/work-proof-marker.json",
     ".factory/artifacts/task-runs/M1-IMPLEMENTATION/validation-006/work-proof-marker.json",
-    ".factory/artifacts/lifecycle-evidence/M1/holdout-result.json",
     "tests/m1_benchmark_test.go",
     "scripts/repo_pack_validation/m1_evidence.py",
     "scripts/repo_pack_validation/m1_packet.py",
@@ -145,12 +178,12 @@
   "systems_questions": {
     "state_impact": [
       "The candidate adds a source-safe public or synthetic migration benchmark, a deterministic offline event-to-manual-PR-bundle developer harness, exact toolchain and CI configuration, and local validation contracts; it creates no live provider, consumer, model, credential, network, GitHub product-delivery, or merge state.",
-      "Lifecycle state gains exact task-run validation evidence, an independently provisioned private-suite commitment, and this independent review, while parent M1 acceptance closure and product runtime authority remain blocked."
+      "Lifecycle state gains exact task-run validation evidence and this independent review; independent holdout provisioning remains the next worker, while parent M1 acceptance closure and product runtime authority remain blocked."
     ],
     "source_of_truth_changes": [
       "docs/product/prd.md and docs/product/plan.md remain the product truth, and the complete active lumyn-migration-mvp compiled set shares one generation identity and separates parent M1 lifecycle obligations from the attended M1-IMPLEMENTATION child packet.",
       "The M2 schemas and production authorization boundary remain authoritative for canonical migration artifacts; the M1 harness consumes them without introducing a second product contract or claiming runtime qualification.",
-      "scripts/repo_pack_validation/m1_evidence.py is the active exact-candidate and lifecycle-evidence binding until post-merge closure transitions that M1 evidence to historical status."
+      "scripts/repo_pack_validation/m1_evidence.py is the active exact-candidate and lifecycle-evidence binding until post-merge closure transitions that M1 evidence to historical status; it keeps immutable base, content digest, validation checkout, run identity, and marker provenance as separate checks."
     ],
     "feedback_plan": [
       "Keep the typed red-before probe, focused M1 suite, coverage, repo-pack self-tests, full pre-push gate, strict lifecycle-evidence gate, remote validate, CodeQL, latest-head review settle, and exact-main monitoring in the promotion loop.",
@@ -159,7 +192,7 @@
     ],
     "blast_radius": [
       "CI now requires full Git history and exact Go 1.26.5, Node.js 22.16.0, and npm 11.4.1 setup; drift in those controls, fixture bytes, graph bindings, candidate bytes, or evidence markers fails closed.",
-      "The fixed M1 base and exact 79-path candidate binding intentionally reject later unrelated paths until the post-merge transition occurs.",
+      "The fixed M1 base and exact 81-path candidate binding intentionally reject later unrelated paths until the post-merge transition occurs.",
       "Changes to the benchmark corpus affect downstream scoring and comparison milestones, so provenance, ground truth, and digest updates must move together."
     ],
     "rollback_or_deletion_test": [
@@ -169,5 +202,5 @@
     ],
     "system_model_summary": "M1 establishes a bounded, source-safe proof layer between provider-authored migration intent and future consumer-repository execution: a deterministic route proves canonical contract composition to a manual PR bundle, a separate fake proves only adapter shape, and the public corpus measures deterministic versus agent-eligible cases without launching an agent. Exact candidate, marker, chronology, schema, toolchain, and task-scope bindings make the attended result reviewable while factoryd, live execution, real-customer proof, automated delivery, acceptance closure, and later milestone work remain governed by separate authorities and lifecycle transitions."
   },
-  "created_at": "2026-07-28T16:09:11Z"
+  "created_at": "2026-07-28T17:09:42Z"
 }

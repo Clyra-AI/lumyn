@@ -91,6 +91,10 @@ Independent lifecycle workers run after implementation validation and before
 shipping. They emit task-bound, current-work-proof, passing artifacts in the
 trusted Factory evidence root. The implementation worker cannot self-review,
 self-grade, self-attest, or write PR-lifecycle evidence.
+For M1 the exact order is validation, independent `code-review`, then independent
+holdout provisioning. Each report is schema- and candidate-bound; review cannot
+cite the later holdout result, and `make lifecycle-evidence` rejects missing,
+replayed, widened, self-produced, out-of-order, or non-promoting evidence.
 
 Acceptance item IDs remain the closure source. Tasks, waves, and delivery slices
 are sequencing and coverage lenses only.
@@ -450,7 +454,8 @@ Historical evidence is immutable and proves only its recorded semantics.
 - Coverage: `make test-coverage`
 - Contract: `make test-contracts`
 - Full: `make prepush-full`
-- Lifecycle evidence after immutable M1 markers/report: `make lifecycle-evidence`
+- Lifecycle evidence after immutable M1 markers, task reports, and required
+  independent holdout/review reports: `make lifecycle-evidence`
 - Risk: GitHub Actions `CodeQL analyze`
 - Acceptance: item-level ledger and closure map
 - Cross-system: separately approved model, sandbox, or GitHub integration
@@ -458,7 +463,8 @@ Historical evidence is immutable and proves only its recorded semantics.
 ## PR Lifecycle Baseline
 
 - Local gates: `make prepush-full`, then `make lifecycle-evidence` after M1
-  markers and reports are immutable.
+  markers, task reports, and required independent lifecycle reports are
+  immutable.
 - GitHub validation: `validate`.
 - Security scanner: `CodeQL analyze`.
 - Owner review: `.github/CODEOWNERS`.

@@ -667,7 +667,13 @@ whose linker accepts only relative modules inside the fixture root and whose
 capability guard rejects process, dynamic-code, and network entry points. All
 assertions, mocks, callbacks, and globals are context-realm values; no host
 object or function crosses into candidate execution, and a computed-constructor
-escape is a required negative test. The walking skeleton validates the full
+escape is a required negative test. A terminable worker enforces a fixed
+three-second wall-clock deadline around each verification, including
+asynchronous module evaluation; timeout is an infrastructure failure, never a
+typed target mismatch. Success output is released only by the parent after a
+clean worker exit, so a posted result cannot hide a later worker error. Module
+load/top-level failures and VM timeouts retain infrastructure provenance rather
+than being reclassified as target mismatch. The walking skeleton validates the full
 canonical artifact chain against the M2
 schemas, production authorization engine, and migration-binding contract. Its
 synthetic-fixture `static_verified` label and manual PR-bundle export are
@@ -687,12 +693,23 @@ item-level acceptance closure. Candidate writes and trusted validation
 evidence are disjoint worker scopes. The exact Factory task-packet
 and runtime-control schemas are vendored and digest-bound; repo validation
 executes the pinned task-packet schema before local work can be treated as
-runnable. The shipping candidate binding includes those prerequisite controls,
+runnable. The Factory holdout-result and review-report schemas are also
+vendored and digest-bound. M1's closed provision-mode policy is separated from
+Lumyn's richer source-safety metadata, and the strict lifecycle gate enforces
+the canonical validation → independent code-review → independent holdout order,
+producer separation, candidate-wide scope, context isolation, promotion
+semantics, and exact current-work bindings. The shipping candidate binding includes those prerequisite controls,
 schemas, contracts, and validators when they land with the implementation;
 only generated task-run and lifecycle outputs are excluded from that digest.
+Its immutable base identifies the comparison boundary, while a distinct
+validation-checkout SHA binds marker provenance; neither is treated as the
+post-commit or post-rebase candidate head. The recomputed content digest is the
+cross-lifecycle identity.
 Lifecycle-owned remote CI may perform the pinned action, toolchain, and
 dependency bootstrap required by the declared workflows; fixture and
 product-command execution stays offline.
+Only M1 has this exact runnable compilation; later milestone holdout declarations
+remain non-runnable planning overlays until recompiled while factoryd is paused.
 Every walking-skeleton artifact digest covers the complete normalized semantic
 artifact; explicit self-digests and the authorization's later plan reference are
 the only normalized cycle breakers, and populated relationships are checked

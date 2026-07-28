@@ -27,6 +27,8 @@ M1_IMPLEMENTATION_REQUIRED_FIELDS = set(
 
 VENDORED_TASK_PACKET_SCHEMA_REF = ".factory/contracts/factory/task-packet.schema.json"
 VENDORED_RUNTIME_CONTROL_SCHEMA_REF = ".factory/contracts/factory/runtime-control.schema.json"
+VENDORED_HOLDOUT_RESULT_SCHEMA_REF = ".factory/contracts/factory/holdout-result.schema.json"
+VENDORED_REVIEW_REPORT_SCHEMA_REF = ".factory/contracts/factory/review-report.schema.json"
 VENDORED_SCHEMA_VALIDATOR_REF = "scripts/repo_pack_validation/factory_schema_core.py"
 FACTORY_CONTRACT_BINDING = {
     "task_packet_schema_ref": "factory://schemas/artifacts/task-packet.schema.json",
@@ -35,6 +37,12 @@ FACTORY_CONTRACT_BINDING = {
     "runtime_control_schema_ref": "factory://schemas/artifacts/runtime-control.schema.json",
     "runtime_control_schema_digest": "sha256:288fa14a1e3e40b926b0cae19e9753c4415cd8da7c5eb8c1650f4008820f4d9a",
     "vendored_runtime_control_schema_ref": VENDORED_RUNTIME_CONTROL_SCHEMA_REF,
+    "holdout_result_schema_ref": "factory://schemas/artifacts/holdout-result.schema.json",
+    "holdout_result_schema_digest": "sha256:436c0fb514ea904f2b9c0f304f66bc5b50970a520844b14e9ace03e3213cf4bd",
+    "vendored_holdout_result_schema_ref": VENDORED_HOLDOUT_RESULT_SCHEMA_REF,
+    "review_report_schema_ref": "factory://schemas/artifacts/review-report.schema.json",
+    "review_report_schema_digest": "sha256:7228314ce33630338e0028e0f4b7df2166972f8837aaa832b96b395f4c4dfbf2",
+    "vendored_review_report_schema_ref": VENDORED_REVIEW_REPORT_SCHEMA_REF,
     "vendored_schema_validator_ref": VENDORED_SCHEMA_VALIDATOR_REF,
     "vendored_schema_validator_digest": "sha256:a0748a9d44bf967f7a73dc0026bef31db50b7b47dfc715d049492096319b1a86",
     "semantic_validator_ref": "factory://scripts/contract_validators/task_packet_shape.py",
@@ -214,6 +222,8 @@ def validate_m1_implementation_packet(
     for ref, digest_key in (
         (VENDORED_TASK_PACKET_SCHEMA_REF, "task_packet_schema_digest"),
         (VENDORED_RUNTIME_CONTROL_SCHEMA_REF, "runtime_control_schema_digest"),
+        (VENDORED_HOLDOUT_RESULT_SCHEMA_REF, "holdout_result_schema_digest"),
+        (VENDORED_REVIEW_REPORT_SCHEMA_REF, "review_report_schema_digest"),
         (VENDORED_SCHEMA_VALIDATOR_REF, "vendored_schema_validator_digest"),
     ):
         path = root / ref
