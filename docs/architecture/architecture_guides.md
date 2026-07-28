@@ -1,6 +1,6 @@
 # Lumyn Architecture Guide
 
-Status: v3.1 executable contract architecture; product runtime not implemented
+Status: v3.1 architecture; M0–M3 bounded runtime slices implemented
 
 ## Architecture Objective
 
@@ -29,9 +29,13 @@ The architecture optimizes for:
 - proof-honest evidence and human merge authority.
 
 This guide defines the active boundaries. M2 implements their executable
-artifact and semantic-policy contracts, while later milestones still own the
-v3.1 runtime. The compiled v3.1 control set is repo-local planning and
-validation authority; neither it nor the M2 contracts authorize a live product
+artifact and semantic-policy contracts. M3 implements pinned source intake,
+Provider Change Contract normalization and confirmation, and signed event
+publish/intake without granting a live consumer action; see
+[Provider Change Contract runtime](provider-change-contract-runtime.md).
+Later milestones still own repository impact, planning, mutation,
+verification, and delivery. The compiled v3.1 control set is repo-local
+planning and validation authority and does not itself authorize a live product
 action.
 
 A v3.1 source update has landed in the external Factory

@@ -492,12 +492,12 @@
     "httpsUrl": {
       "type": "string",
       "format": "uri",
-      "pattern": "^https://"
+      "pattern": "^https://[^/?#@]+(?:/[^?#]*)?$"
     },
     "httpsOrigin": {
       "type": "string",
       "format": "uri",
-      "pattern": "^https://[^/]+$"
+      "pattern": "^https://[^/?#@]+$"
     }
   }
 }

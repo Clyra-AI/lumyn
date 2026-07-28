@@ -16,6 +16,28 @@
     "audience_id": "audience.node_sdk_v4_users",
     "package_version_selector": ">=4.0.0 <5.0.0"
   },
+  "source_evidence": [
+    {
+      "evidence_id": "evidence.sdk_v4_types",
+      "kind": "sdk_types",
+      "version_role": "source",
+      "version": "4.x",
+      "location": "https://updates.payments.example/sdk/node/v4/index.d.ts",
+      "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "license": "Apache-2.0",
+      "source_locator": "PaymentIntentsResource.confirm"
+    },
+    {
+      "evidence_id": "evidence.sdk_v5_types",
+      "kind": "sdk_types",
+      "version_role": "target",
+      "version": "5.x",
+      "location": "https://updates.payments.example/sdk/node/v5/index.d.ts",
+      "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "license": "Apache-2.0",
+      "source_locator": "PaymentIntentsResource.confirm"
+    }
+  ],
   "semantic_changes": [
     {
       "change_id": "change.payment_intent_confirm_options",
@@ -30,7 +52,13 @@
           "Identify direct or statically resolvable wrapper calls to paymentIntents.confirm.",
           "Preserve the existing payment-method expression as the payment_method field."
         ]
-      }
+      },
+      "source_evidence_ids": [
+        "evidence.sdk_v4_types"
+      ],
+      "target_evidence_ids": [
+        "evidence.sdk_v5_types"
+      ]
     }
   ],
   "ambiguities": [],
@@ -51,10 +79,12 @@
   "provenance": {
     "class": "provider_confirmed",
     "source_urls": [
-      "https://updates.payments.example/sdk/node/v5-migration"
+      "https://updates.payments.example/sdk/node/v4/index.d.ts",
+      "https://updates.payments.example/sdk/node/v5/index.d.ts"
     ],
     "source_digests": [
-      "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+      "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "sha256:2222222222222222222222222222222222222222222222222222222222222222"
     ],
     "normalized_at": "2026-07-25T15:00:00Z"
   },
