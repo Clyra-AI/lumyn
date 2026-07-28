@@ -103,8 +103,10 @@ func DigestBytes(data []byte) string {
 	return "sha256:" + hex.EncodeToString(digest[:])
 }
 
-// OpenAPISnapshot is the deterministic semantic subset used to compare source
+// OpenAPISnapshot is the deterministic bounded subset used to compare source
 // and target descriptions. Raw formatting and JSON/YAML syntax are excluded.
+// Body-schema internals are deliberately not flattened; the pack comparer
+// treats any unreviewed schema-bearing operation as ambiguous.
 type OpenAPISnapshot struct {
 	Operations []OpenAPIOperation `json:"operations"`
 }
